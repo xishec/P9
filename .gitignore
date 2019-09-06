@@ -1,0 +1,6 @@
+#ignoring .vscode folder but we keep some files for debuging
+/.vscode/chrome
+/.vs/
+
+# Keep the package-lock.json !
+!package-lock.json

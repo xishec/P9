@@ -1,0 +1,78 @@
+{
+  "name": "server",
+  "description": "Projet de base pour le cours de LOG2990",
+  "version": "1.1.0",
+  "private": true,
+  "scripts": {
+    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
+    "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
+    "test": "mocha",
+    "coverage": "nyc mocha",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "clean": "rimraf out node_modules",
+    "postinstall": "rimraf false"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "include": [
+      "app/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.spec.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "all": true,
+    "cache": true,
+    "sourceMap": true,
+    "instrument": true
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "1.4.4",
+    "cors": "2.8.5",
+    "debug": "^4.1.1",
+    "express": "~4.17.1",
+    "inversify": "^5.0.1",
+    "mongodb": "^3.3.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "reflect-metadata": "^0.1.10",
+    "serve-favicon": "~2.5.0",
+    "ts-node": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "1.17.1",
+    "@types/chai": "~4.2.0",
+    "@types/cookie-parser": "1.4.2",
+    "@types/cors": "2.8.6",
+    "@types/express": "4.17.1",
+    "@types/express-serve-static-core": "4.16.9",
+    "@types/mocha": "5.2.7",
+    "@types/mongodb": "^3.3.0",
+    "@types/morgan": "~1.7.35",
+    "@types/node": "~12.7.2",
+    "@types/node-uuid": "0.0.28",
+    "@types/sinon": "^7.0.3",
+    "chai": "~4.2.0",
+    "concurrently": "^4.0.1",
+    "mocha": "~6.2.0",
+    "nyc": "^14.1.1",
+    "rimraf": "3.0.0",
+    "sinon": "^7.2.2",
+    "tslint": "~5.18.0",
+    "tslint-eslint-rules": "5.4.0",
+    "tslint-microsoft-contrib": "6.2.0",
+    "typescript": "~3.5.3"
+  }
+}
