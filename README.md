@@ -16,17 +16,17 @@ Les commandes commençant par `npm` ou `yarn` devront être exécutées dans les
 
 Pour lancer l'application, il suffit d'exécuter: `npm start` ou `yarn start`. Vous devez lancer cette commande dans le dossier `client` et `server`
 
-Pour le client :
-Une page menant vers `http://localhost:4200/` s'ouvrira automatiquement.
+Pour le client : 
+    Une page menant vers `http://localhost:4200/` s'ouvrira automatiquement.
 
 Pour le serveur :
-Votre serveur est accessible sur `http://localhost:3000`. Par défaut, votre client fait une requête `GET` vers le serveur pour obtenir un message.
+    Votre serveur est accessible sur `http://localhost:3000`. Par défaut, votre client fait une requête `GET` vers le serveur pour obtenir un message.
 
 L'application se relancera automatiquement si vous modifiez le code source de celle-ci.
 
 ## Génération de composants du client
 
-Pour créer de nouveaux composants, nous vous recommandons l'utilisation d'angular CLI. Il suffit d'exécuter `ng generate component component-name` pour créer un nouveau composant.
+Pour créer de nouveaux composants, nous vous recommandons l'utilisation d'angular CLI. Il suffit d'exécuter `ng generate component component-name` pour créer un nouveau composant. 
 
 Il est aussi possible de générer des directives, pipes, services, guards, interfaces, enums, muodules, classes, avec cette commande `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
@@ -78,26 +78,26 @@ Une ligne de code ne devrait JAMAIS dépasser les 140 caractères.
 Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce qui est à l'intérieur de `{ }` dans le `settings.json` de votre VSCode.
 
 ```json
-{
-	"prettier.printWidth": 120,
-	"prettier.tabWidth": 4,
-	"prettier.useTabs": true,
-	"prettier.trailingComma": "es5",
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[html]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"prettier.arrowParens": "always",
-	"prettier.disableLanguages": []
-}
+    {
+        "prettier.printWidth": 120,
+        "prettier.tabWidth": 4,
+        "prettier.useTabs": true,
+        "prettier.trailingComma": "es5",
+        "[javascript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[html]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "prettier.arrowParens": "always",
+        "prettier.disableLanguages": []
+    }
 ```
 
 ## Conventions de nommage
@@ -158,11 +158,38 @@ Nous vous recommandons fortement de suivre le [Github-Flow](https://guides.githu
 
 Si vous n'êtes pas familiers avec Git et le fonctionnement des branches, nous vous recommandons fortement d'explorer [ce guide intéractif](https://onlywei.github.io/explain-git-with-d3/).
 
+## Pull Requests
+
+Lorsque votre code est prêt à être mergé avec la branche master sur le origin (remote), effectuez les commandes `git add` et `git commit`. Ensuite, créez une branche dans le origin avec une des commandes suivantes:
+
+```
+git push -u origin [BRANCH]
+
+git push --set-upstream origin [BRANCH]
+```
+
+Par la suite, dirigez-vous sur le repo P9 sur Github (https://github.com/xishec/P9). Cliquez ensuite sur le message vous indiquant la possibilité de créer un Pull Request. Sur la page de création du Pull Request, nommez votre PR en suivant la convention de nommage des branches Git (expliquée à la section précédente). Complétez la description du commit, mettez les tags correspondants et assignez les membres de l'équipe comme reviewers pour la revue du code. 
+
+## Noms des commits
+Les commits doivent être nommés selon la forme suivante:
+
+**[Initiales]: [Type de code] [Description du commit]**
+
+- Initiales: Les initiales des membres qui ont contribué au commit
+- Type de code: D (développement), B (correction de bogue), T (tout code en lien avec les tests) et R (refactoring du code)
+- Description du commit: Explication courte mais précise du contenu du commit 
+
+Par exemple, si Justin Trudeau corrige un bogue sur l'affichage d'un rectangle: 
+
+```
+JT: B Fixed rectangle display issue on artboard
+```
+
 ## Lectures suggérées
 
 [AntiPatterns](https://sourcemaking.com/antipatterns) (plus spécifiquement [Software Development AntiPatterns](https://sourcemaking.com/antipatterns/software-development-antipatterns))
 
-[Building your first Angular App](https://scrimba.com/g/gyourfirstangularapp)
+[Building your first Angular App](https://scrimba.com/g/gyourfirstangularapp) 
 
 # Cadriciel
 
