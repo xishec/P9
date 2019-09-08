@@ -16,11 +16,11 @@ Les commandes commençant par `npm` ou `yarn` devront être exécutées dans les
 
 Pour lancer l'application, il suffit d'exécuter: `npm start` ou `yarn start`. Vous devez lancer cette commande dans le dossier `client` et `server`
 
-Pour le client : 
-    Une page menant vers `http://localhost:4200/` s'ouvrira automatiquement.
+Pour le client: 
+Une page menant vers `http://localhost:4200/` s'ouvrira automatiquement.
 
-Pour le serveur :
-    Votre serveur est accessible sur `http://localhost:3000`. Par défaut, votre client fait une requête `GET` vers le serveur pour obtenir un message.
+Pour le serveur:
+Votre serveur est accessible sur `http://localhost:3000`. Par défaut, votre client fait une requête `GET` vers le serveur pour obtenir un message.
 
 L'application se relancera automatiquement si vous modifiez le code source de celle-ci.
 
@@ -78,26 +78,26 @@ Une ligne de code ne devrait JAMAIS dépasser les 140 caractères.
 Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce qui est à l'intérieur de `{ }` dans le `settings.json` de votre VSCode.
 
 ```json
-    {
-        "prettier.printWidth": 120,
-        "prettier.tabWidth": 4,
-        "prettier.useTabs": true,
-        "prettier.trailingComma": "es5",
-        "[javascript]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[html]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[typescript]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[json]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "prettier.arrowParens": "always",
-        "prettier.disableLanguages": []
-    }
+{
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true,
+    "prettier.trailingComma": "es5",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.arrowParens": "always",
+    "prettier.disableLanguages": []
+}
 ```
 
 ## Conventions de nommage
