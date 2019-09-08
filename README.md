@@ -58,6 +58,30 @@ Une ligne de code devrait normalement avoir entre 45 et 80 caractères.
 
 Une ligne de code ne devrait JAMAIS dépasser les 140 caractères.
 
+Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce qui est à l'intérieur de `{ }` dans le `settings.json` de votre VSCode. 
+```json
+    {
+        "prettier.printWidth": 120,
+        "prettier.tabWidth": 4,
+        "prettier.useTabs": true,
+        "prettier.trailingComma": "es5",
+        "[javascript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[html]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "prettier.arrowParens": "always",
+        "prettier.disableLanguages": [],
+    }
+```
+
 ## Conventions de nommage
 Utilisez le ALL_CAPS pour les constantes.
 
