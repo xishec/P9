@@ -1,13 +1,9 @@
 <mat-drawer-container id="container">
 	<mat-drawer class="sidebar" mode="side" opened>
-		<mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
-			<mat-button-toggle *ngFor="let toolId of toolIds" (click)="changeTool(toolId)">
-				{{ toolId }}
-			</mat-button-toggle>
-		</mat-button-toggle-group>
+		<app-sidebar-tools></app-sidebar-tools>
 	</mat-drawer>
 
 	<mat-drawer-content>
-		<app-attribute-panel [toolId]="toolId"></app-attribute-panel>
+		<app-work-zone></app-work-zone>
 	</mat-drawer-content>
 </mat-drawer-container>

@@ -9,11 +9,17 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatButtonModule } from "@angular/material/button";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SidebarComponent } from "./components/app/sidebar/sidebar.component";
-import { AttributePanelComponent } from "./components/app/sidebar/attribute-panel/attribute-panel.component";
+import { AttributePanelComponent } from "./components/app/sidebar/sidebar-tools/attribute-panel/attribute-panel.component";
+import { WorkZoneComponent } from "./components/app/work-zone/work-zone.component";
+import { SidebarToolsComponent } from "./components/app/sidebar/sidebar-tools/sidebar-tools.component";
+//************************************************
+
+// *************** Services **********************
+import { ToolsService } from "./services/panel-tools/tools.service";
 //************************************************
 
 @NgModule({
-	declarations: [AppComponent, SidebarComponent, AttributePanelComponent],
+	declarations: [AppComponent, SidebarComponent, AttributePanelComponent, WorkZoneComponent, SidebarToolsComponent],
 	imports: [
 		MatButtonToggleModule,
 		MatSidenavModule,
@@ -22,7 +28,7 @@ import { AttributePanelComponent } from "./components/app/sidebar/attribute-pane
 		BrowserModule,
 		HttpClientModule,
 	],
-	providers: [],
+	providers: [ToolsService],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

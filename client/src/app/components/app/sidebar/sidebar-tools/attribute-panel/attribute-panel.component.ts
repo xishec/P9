@@ -6,9 +6,9 @@ import { Component, OnInit, Input } from "@angular/core";
 	styleUrls: ["./attribute-panel.component.scss"],
 })
 export class AttributePanelComponent implements OnInit {
+	@Input() currentToolId: number;
+
 	constructor() {}
 
 	ngOnInit() {}
-
-	@Input() toolId: number;
 }
