@@ -4,21 +4,24 @@
 		<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
 			<p>Value:{{ myForm.value | json }}</p>
 
-			<div id="colorLine">
+			<div id="userColor">
 				<span> Couleur de fond :</span>
-				<button class="color" type="button" [ngStyle]="{ 'background-color': activeColor.hex }"></button>
+				<button class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+				<br />
 			</div>
+			<button
+				class="color"
+				type="button"
+				*ngFor="let color of colors; let i = index"
+				[ngStyle]="getColorIcon(color)"
+				(click)="changeColor(i)"
+			></button>
 
-			<div id="colors">
-				<button
-					class="color"
-					type="button"
-					*ngFor="let color of colors; let i = index"
-					[ngStyle]="{ 'background-color': color.hex }"
-					(click)="changeColor(i)"
-				></button>
-			</div>
-
+			<mat-form-field>
+				<input matInput type="text" placeholder="Couleur" formControlName="color" (change)="onUserColor()" />
+				<span matPrefix>#</span>
+				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
+			</mat-form-field>
 			<mat-form-field>
 				<input matInput type="number" placeholder="Largeur" formControlName="width" />
 				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>

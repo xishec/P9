@@ -28,6 +28,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.myForm = this.formBuilder.group({
+			color: this.activeColor.hex,
 			width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
 			height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
 		});
@@ -52,5 +53,17 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	changeColor(i: number) {
 		this.activeColor = this.colors[i];
+		this.myForm.controls["color"].setValue(this.activeColor.hex);
+	}
+
+	onUserColor() {
+		this.activeColor = { hex: this.myForm.value.color };
+	}
+
+	getColorIcon(color: Color) {
+		return { "background-color": "#" + color.hex };
+	}
+	getUserColorIcon() {
+		return { "background-color": "#" + this.activeColor.hex };
 	}
 }

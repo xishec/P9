@@ -18,13 +18,13 @@ export class DrawingInfoService {
 	constructor() {}
 
 	colors: Array<Color> = [
-		{ hex: "#FFFFFF" },
-		{ hex: "#eb7070" },
-		{ hex: "#fec771" },
-		{ hex: "#e6e56c" },
-		{ hex: "#64e291" },
-		{ hex: "#64c4ed" },
-		{ hex: "#077bf0" },
+		{ hex: "ffffff" },
+		{ hex: "eb7070" },
+		{ hex: "fec771" },
+		{ hex: "e6e56c" },
+		{ hex: "64e291" },
+		{ hex: "64c4ed" },
+		{ hex: "077bf0" },
 	];
 
 	private infoSource: BehaviorSubject<Info> = new BehaviorSubject({ width: 0, height: 0, color: this.colors[0] });
