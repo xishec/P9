@@ -26,7 +26,6 @@ import { AttributePanelComponent } from "./components/app/sidebar/sidebar-tools/
 import { WorkZoneComponent } from "./components/app/work-zone/work-zone.component";
 import { SidebarToolsComponent } from "./components/app/sidebar/sidebar-tools/sidebar-tools.component";
 import { DrawingModalWindowComponent } from "./components/app/drawing-modal-window/drawing-modal-window.component";
-import { ContentComponent } from "./components/app/drawing-modal-window/content/content.component";
 
 @NgModule({
 	declarations: [
@@ -36,9 +35,7 @@ import { ContentComponent } from "./components/app/drawing-modal-window/content/
 		WorkZoneComponent,
 		SidebarToolsComponent,
 		DrawingModalWindowComponent,
-		ContentComponent,
 	],
-	entryComponents: [ContentComponent],
 	imports: [
 		FormsModule,
 		ReactiveFormsModule,

@@ -1,4 +1,10 @@
 import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+
+export class Info {
+	width: number;
+	height: number;
+}
 
 @Injectable({
 	providedIn: "root",
@@ -6,16 +12,10 @@ import { Injectable } from "@angular/core";
 export class DrawingInfoService {
 	constructor() {}
 
-	width: number;
-	height: number;
+	private infoSource: BehaviorSubject<Info> = new BehaviorSubject({ width: 0, height: 0 });
+	currentInfo = this.infoSource.asObservable();
 
-	getWidth() {
-		console.log("w");
-		return this.width;
-	}
-
-	getHeight() {
-		console.log("h");
-		return this.height;
+	changeInfo(info: Info) {
+		this.infoSource.next(info);
 	}
 }

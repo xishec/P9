@@ -12,14 +12,11 @@ import { Component } from "@angular/core";
 export class AppComponent {
 	//   readonly title: string = 'LOG2990';
 	//   message = new BehaviorSubject<string>('');
-
 	// constructor(private basicService: IndexService) {
-		// this.basicService.basicGet()
-		//   .pipe(
-		//     map((message: Message) => `${message.title} ${message.body}`),
-		//   )
-		//   .subscribe(this.message);
+	// this.basicService.basicGet()
+	//   .pipe(
+	//     map((message: Message) => `${message.title} ${message.body}`),
+	//   )
+	//   .subscribe(this.message);
 	// }
-
-	requireDrawing: boolean = true;
 }

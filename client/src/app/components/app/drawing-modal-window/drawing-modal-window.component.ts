@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
-import { ContentComponent } from "./content/content.component";
+import { Info, DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
 
 @Component({
 	selector: "app-drawing-modal-window",
@@ -9,17 +9,27 @@ import { ContentComponent } from "./content/content.component";
 	styleUrls: ["./drawing-modal-window.component.scss"],
 })
 export class DrawingModalWindowComponent implements OnInit {
-	modalWindow: MatDialog;
+	show: boolean = true;
 
-	ngOnInit() {
-		this.openModalWindow();
+	myForm: FormGroup;
+	formBuilder: FormBuilder;
+	drawingInfoService: DrawingInfoService;
+
+	constructor(formBuilder: FormBuilder, drawingInfoService: DrawingInfoService) {
+		this.formBuilder = formBuilder;
+		this.drawingInfoService = drawingInfoService;
 	}
 
-	constructor(modalWindow: MatDialog) {
-		this.modalWindow = modalWindow;
+	ngOnInit(): void {
+		this.myForm = this.formBuilder.group({
+			width: "",
+			height: "",
+		});
 	}
 
-	openModalWindow() {
-		this.modalWindow.open(ContentComponent);
+	onSubmit() {
+		let info: Info = { width: this.myForm.value.width, height: this.myForm.value.height };
+		this.drawingInfoService.changeInfo(info);
+		this.show = false;
 	}
 }

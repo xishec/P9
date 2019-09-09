@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
+import { Info, DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
 
 @Component({
 	selector: "app-work-zone",
@@ -9,12 +9,17 @@ import { DrawingInfoService } from "../../../services/drawing-info/drawing-info.
 })
 export class WorkZoneComponent implements OnInit {
 	drawingInfoService: DrawingInfoService;
+	info: Info;
 
 	constructor(drawingInfoService: DrawingInfoService) {
 		this.drawingInfoService = drawingInfoService;
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.drawingInfoService.currentInfo.subscribe((info) => {
+			this.info = info;
+		});
+	}
 
 	width: number;
 	height: number;
@@ -22,14 +27,8 @@ export class WorkZoneComponent implements OnInit {
 	hi() {
 		// this.width = this.drawingInfoService.width;
 		// this.height = this.drawingInfoService.height;
-		console.log(this.width, this.height);
+		console.log(this.info.width, this.info.height);
 	}
 
-	getWidth() {
-		this.drawingInfoService.getWidth();
-	}
-
-	getHeight() {
-		this.drawingInfoService.getHeight();
-	}
+	getWidth() {}
 }
