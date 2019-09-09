@@ -1,0 +1,11 @@
+<div id="sidebar">
+	<div id="buttons">
+		<mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
+			<mat-button-toggle *ngFor="let toolId of toolIds" (click)="changeTool(toolId)">
+				{{ toolId }}
+			</mat-button-toggle>
+		</mat-button-toggle-group>
+	</div>
+
+	<app-attribute-panel [currentToolId]="toolsService.getCurrentToolId()"></app-attribute-panel>
+</div>
