@@ -2,20 +2,36 @@
 	<div id="window">
 		<h1 id="title">Création d'un nouveau dessin</h1>
 		<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-			Value:{{ myForm.value | json }}
-			<br />
+			<p>Value:{{ myForm.value | json }}</p>
+
+			<div id="colorLine">
+				<span> Couleur de fond :</span>
+				<button class="color" type="button" [ngStyle]="{ 'background-color': activeColor.hex }"></button>
+			</div>
+
+			<div id="colors">
+				<button
+					class="color"
+					type="button"
+					*ngFor="let color of colors; let i = index"
+					[ngStyle]="{ 'background-color': color.hex }"
+					(click)="changeColor(i)"
+				></button>
+			</div>
 
 			<mat-form-field>
-				<input matInput placeholder="Largeur" formControlName="width" />
+				<input matInput type="number" placeholder="Largeur" formControlName="width" />
+				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
 			</mat-form-field>
 			<br />
 
 			<mat-form-field>
-				<input matInput placeholder="Hauteur" formControlName="height" />
+				<input matInput type="number" placeholder="Hauteur" formControlName="height" />
+				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
 			</mat-form-field>
 			<br />
 
-			<button mat-raised-button type="submits">Submit</button>
+			<button mat-raised-button type="submits" [disabled]="myForm.invalid">Submit</button>
 		</form>
 	</div>
 </div>

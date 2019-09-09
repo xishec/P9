@@ -1,5 +1,3 @@
-<div id="workZone">
-	<svg [attr.width]="info.width" [attr.height]="info.height">
-		<rect [attr.width]="info.width" [attr.height]="info.height" style="fill:white" />
-	</svg>
-</div>
+<svg [attr.width]="info.width" [attr.height]="info.height">
+	<rect [attr.width]="info.width" [attr.height]="info.height" [ngStyle]="{ fill: info.color.hex }" />
+</svg>
