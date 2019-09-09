@@ -18,8 +18,6 @@ export class WorkZoneComponent implements OnInit {
 	ngOnInit() {
 		this.drawingInfoService.currentInfo.subscribe((info) => {
 			this.info = info;
-			let workZone = document.getElementById("workZone");
-			console.log(workZone == null ? "null" : workZone.style.height);
 		});
 	}
 }

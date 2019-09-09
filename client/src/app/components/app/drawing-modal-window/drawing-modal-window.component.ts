@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
 import { Info, DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
@@ -22,8 +22,8 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.myForm = this.formBuilder.group({
-			width: "",
-			height: "",
+			width: window.innerWidth - 360,
+			height: window.innerHeight,
 		});
 	}
 
@@ -31,5 +31,19 @@ export class DrawingModalWindowComponent implements OnInit {
 		let info: Info = { width: this.myForm.value.width, height: this.myForm.value.height };
 		this.drawingInfoService.changeInfo(info);
 		this.show = false;
+	}
+
+	// onResize($event: any) {
+	// 	this.myForm.value.width = window.innerWidth - 360;
+	// 	this.myForm.value.height = window.innerHeight;
+	// 	console.log(this.myForm.value.height);
+	// }
+
+	@HostListener("window:resize", ["$event"])
+	onResize(event: any) {
+		this.myForm.setValue({
+			width: window.innerWidth - 360,
+			height: window.innerHeight,
+		});
 	}
 }
