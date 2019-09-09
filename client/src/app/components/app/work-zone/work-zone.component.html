@@ -1,5 +1,5 @@
-<div id="workZone">
-	<svg width="400" height="400">
-		<rect width="400" height="400" style="fill:white" />
+<div id="workZone" (click)="hi()">
+	<svg [attr.width]="getWidth()" [attr.height]="getHeight()">
+		<rect [attr.width]="getWidth()" [attr.height]="getHeight()" style="fill:white" />
 	</svg>
 </div>
