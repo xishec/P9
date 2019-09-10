@@ -20,4 +20,13 @@ export class WorkZoneComponent implements OnInit {
 			this.info = info;
 		});
 	}
+
+	changeStyle() {
+		return {
+			fill: "#" + this.info.color.hex,
+			"fill-opacity": this.info.opacity,
+			height: this.info.height,
+			width: this.info.width,
+		};
+	}
 }
