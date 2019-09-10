@@ -16,7 +16,7 @@
 	height: 500px;
 	width: 500px;
 	background-color: white;
-	padding: 20px 30px;
+	padding: 30px 30px;
 
 	text-align: center;
 }
@@ -54,13 +54,21 @@ mat-form-field {
 }
 
 #userColor {
-	margin-bottom: 10px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
 	.color {
-		padding: 20px;
+		padding: px;
 		margin-left: 15px;
 	}
+}
+
+.actionButton {
+	width: 90px;
+	margin: 10px 20px;
+}
+
+#confirmation {
+	margin-bottom: 20px;
 }

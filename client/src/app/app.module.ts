@@ -6,7 +6,13 @@ import { AppComponent } from "./components/app/app.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 // *********** Material Angular ******************
-import { MatRadioModule, MatInputModule, MatButtonToggleModule, MatButtonModule } from "@angular/material";
+import {
+	MatCheckboxModule,
+	MatRadioModule,
+	MatInputModule,
+	MatButtonToggleModule,
+	MatButtonModule,
+} from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 //************************************************
 
@@ -29,6 +35,7 @@ import { DrawingModalWindowComponent } from "./components/app/drawing-modal-wind
 		DrawingModalWindowComponent,
 	],
 	imports: [
+		MatCheckboxModule,
 		MatRadioModule,
 		FormsModule,
 		ReactiveFormsModule,

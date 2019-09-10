@@ -2,20 +2,20 @@
 	<div id="window">
 		<h1 id="title">Création d'un nouveau dessin</h1>
 		<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-			<div id="userColor">
-				<span> Couleur de fond :</span>
-				<button class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
-				<br />
-			</div>
-			<button
-				class="color"
-				type="button"
-				*ngFor="let color of colors; let i = index"
-				[ngStyle]="getColorIcon(color)"
-				(click)="changeColor(i)"
-			></button>
+			<div class="formGroup">
+				<div id="userColor">
+					<span> Couleur de fond :</span>
+					<button class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+					<br />
+				</div>
+				<button
+					class="color"
+					type="button"
+					*ngFor="let color of colors; let i = index"
+					[ngStyle]="getColorIcon(color)"
+					(click)="changeColor(i)"
+				></button>
 
-			<div id="colorForm">
 				<mat-form-field class="medium">
 					<input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserColorHex()" />
 					<mat-error>Ce code de couleur n'est pas valide!</mat-error>
@@ -40,20 +40,29 @@
 				</mat-form-field>
 			</div>
 
-			<mat-form-field>
-				<input matInput type="number" placeholder="Largeur" formControlName="width" />
-				<span matSuffix>px</span>
-				<mat-error>La largeur doit être entre 0 et 10000!</mat-error>
-			</mat-form-field>
+			<div class="formGroup">
+				<mat-form-field>
+					<input matInput type="number" placeholder="Largeur" formControlName="width" />
+					<span matSuffix>px</span>
+					<mat-error>La largeur doit être entre 0 et 10000!</mat-error>
+				</mat-form-field>
 
-			<mat-form-field>
-				<input matInput type="number" placeholder="Hauteur" formControlName="height" />
-				<span matSuffix>px</span>
-				<mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
-			</mat-form-field>
-			<br />
+				<mat-form-field>
+					<input matInput type="number" placeholder="Hauteur" formControlName="height" />
+					<span matSuffix>px</span>
+					<mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
+				</mat-form-field>
+			</div>
 
-			<button mat-stroked-button type="submits" [disabled]="myForm.invalid">Créer!</button>
+			<div id="confirmation">
+				<mat-error *ngIf="submitCount > 0">Un dessin existe déja dans votre zone de travail!</mat-error>
+				<mat-checkbox color="primary" formControlName="confirm" required>
+					Je comfire que je veux créer un nouveau dessin.
+				</mat-checkbox>
+			</div>
+
+			<button class="actionButton" mat-stroked-button type="button">Annuler</button>
+			<button class="actionButton" mat-stroked-button type="submits" [disabled]="myForm.invalid">Créer!</button>
 		</form>
 	</div>
 </div>

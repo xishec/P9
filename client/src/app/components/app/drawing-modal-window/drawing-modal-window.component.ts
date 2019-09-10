@@ -19,6 +19,8 @@ export class DrawingModalWindowComponent implements OnInit {
 	colors: Array<Color>;
 	activeColor: Color;
 
+	submitCount: number = 0;
+
 	constructor(formBuilder: FormBuilder, drawingInfoService: DrawingInfoService) {
 		this.formBuilder = formBuilder;
 		this.drawingInfoService = drawingInfoService;
@@ -42,6 +44,7 @@ export class DrawingModalWindowComponent implements OnInit {
 				[Validators.required, Validators.min(0), Validators.max(255)],
 			],
 			A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
+			confirm: this.submitCount == 0,
 			width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
 			height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
 		});
@@ -56,7 +59,8 @@ export class DrawingModalWindowComponent implements OnInit {
 		};
 		this.drawingInfoService.changeInfo(info);
 		this.show = false;
-		console.log(info);
+
+		this.submitCount++;
 	}
 
 	@HostListener("window:resize", ["$event"])
