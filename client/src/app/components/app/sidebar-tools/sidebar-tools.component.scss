@@ -6,7 +6,7 @@
 	right: 0;
 
 	width: 360px;
-	background-color: white;
+	background-color: #ffffff;
 
 	z-index: 1;
 }
@@ -17,8 +17,15 @@
 
 	mat-button-toggle-group {
 		width: 59px;
-		mat-button-toggle {
-			background-color: white;
+		.mat-button-toggle-checked {
+			background-color: red;
 		}
 	}
 }
+
+// mat-button-toggle:active {
+// 	background-color: rgb(243, 232, 77) !important;
+// }
+// mat-button-toggle:focus {
+// 	background-color: rgb(236, 20, 20) !important;
+// }
