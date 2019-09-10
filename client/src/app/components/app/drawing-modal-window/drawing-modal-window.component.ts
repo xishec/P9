@@ -28,7 +28,11 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.myForm = this.formBuilder.group({
-			color: this.activeColor.hex,
+			hex: this.activeColor.hex,
+			R: parseInt(this.activeColor.hex.slice(0, 2), 16),
+			G: parseInt(this.activeColor.hex.slice(2, 4), 16),
+			B: parseInt(this.activeColor.hex.slice(4, 6), 16),
+			A: 1,
 			width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
 			height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
 		});
@@ -53,11 +57,24 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	changeColor(i: number) {
 		this.activeColor = this.colors[i];
-		this.myForm.controls["color"].setValue(this.activeColor.hex);
+		this.myForm.controls["hex"].setValue(this.activeColor.hex);
+		this.myForm.controls["R"].setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
+		this.myForm.controls["G"].setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
+		this.myForm.controls["B"].setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
 	}
 
-	onUserColor() {
-		this.activeColor = { hex: this.myForm.value.color };
+	onUserColorHex() {
+		this.activeColor = { hex: this.myForm.value.hex };
+		this.myForm.controls["R"].setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
+		this.myForm.controls["G"].setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
+		this.myForm.controls["B"].setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
+	}
+	onUserColorRGB() {
+		let r = Number(this.myForm.value.R).toString(16);
+		let g = Number(this.myForm.value.G).toString(16);
+		let b = Number(this.myForm.value.B).toString(16);
+		this.activeColor = { hex: r + g + b };
+		this.myForm.controls["hex"].setValue(this.activeColor.hex);
 	}
 
 	getColorIcon(color: Color) {

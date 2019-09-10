@@ -17,11 +17,29 @@
 				(click)="changeColor(i)"
 			></button>
 
-			<mat-form-field>
-				<input matInput type="text" placeholder="Couleur" formControlName="color" (change)="onUserColor()" />
-				<span matPrefix>#</span>
-				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
-			</mat-form-field>
+			<div id="colorForm">
+				<mat-form-field>
+					<input
+						matInput
+						type="text"
+						placeholder="Couleur"
+						formControlName="hex"
+						(change)="onUserColorHex()"
+					/>
+					<span matPrefix>#</span>
+				</mat-form-field>
+
+				<mat-form-field class="small" (change)="onUserColorRGB()">
+					<input matInput type="colors" placeholder="R:" formControlName="R" />
+				</mat-form-field>
+				<mat-form-field class="small" (change)="onUserColorRGB()">
+					<input matInput type="colors" placeholder="G:" formControlName="G" />
+				</mat-form-field>
+				<mat-form-field class="small" (change)="onUserColorRGB()">
+					<input matInput type="colors" placeholder="B:" formControlName="B" />
+				</mat-form-field>
+			</div>
+
 			<mat-form-field>
 				<input matInput type="number" placeholder="Largeur" formControlName="width" />
 				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
