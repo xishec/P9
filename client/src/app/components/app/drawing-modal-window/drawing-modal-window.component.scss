@@ -46,10 +46,10 @@ mat-form-field {
 	border-radius: 100%;
 	outline: none;
 }
-.color:hover {
+.color:hover:not(#bigColor) {
 	filter: brightness(0.8);
 }
-.color:active {
+.color:active:not(#bigColor) {
 	filter: brightness(1);
 }
 
