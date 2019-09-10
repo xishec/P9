@@ -39,7 +39,12 @@ export class DrawingModalWindowComponent implements OnInit {
 	}
 
 	onSubmit() {
-		let info: Info = { width: this.myForm.value.width, height: this.myForm.value.height, color: this.activeColor };
+		let info: Info = {
+			width: this.myForm.value.width,
+			height: this.myForm.value.height,
+			color: this.activeColor,
+			opacity: this.myForm.value.A,
+		};
 		this.drawingInfoService.changeInfo(info);
 		this.show = false;
 		console.log(info);
