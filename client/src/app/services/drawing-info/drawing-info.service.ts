@@ -35,7 +35,12 @@ export class DrawingInfoService {
 		{ hex: "5057de" },
 	];
 
-	private infoSource: BehaviorSubject<Info> = new BehaviorSubject({ width: 0, height: 0, color: this.colors[0] });
+	private infoSource: BehaviorSubject<Info> = new BehaviorSubject({
+		width: 0,
+		height: 0,
+		color: this.colors[0],
+		opacity: 1,
+	});
 	currentInfo = this.infoSource.asObservable();
 
 	changeInfo(info: Info) {

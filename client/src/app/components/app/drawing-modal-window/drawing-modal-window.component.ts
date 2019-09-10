@@ -28,11 +28,20 @@ export class DrawingModalWindowComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.myForm = this.formBuilder.group({
-			hex: this.activeColor.hex,
-			R: parseInt(this.activeColor.hex.slice(0, 2), 16),
-			G: parseInt(this.activeColor.hex.slice(2, 4), 16),
-			B: parseInt(this.activeColor.hex.slice(4, 6), 16),
-			A: 1,
+			hex: [this.activeColor.hex, [Validators.pattern("^[0-9A-Fa-f]{6}$")]],
+			R: [
+				parseInt(this.activeColor.hex.slice(0, 2), 16),
+				[Validators.required, Validators.min(0), Validators.max(255)],
+			],
+			G: [
+				parseInt(this.activeColor.hex.slice(2, 4), 16),
+				[Validators.required, Validators.min(0), Validators.max(255)],
+			],
+			B: [
+				parseInt(this.activeColor.hex.slice(4, 6), 16),
+				[Validators.required, Validators.min(0), Validators.max(255)],
+			],
+			A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
 			width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
 			height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
 		});
@@ -53,10 +62,8 @@ export class DrawingModalWindowComponent implements OnInit {
 	@HostListener("window:resize", ["$event"])
 	onResize() {
 		if (!this.myForm.dirty) {
-			this.myForm.setValue({
-				width: window.innerWidth - 360,
-				height: window.innerHeight,
-			});
+			this.myForm.controls["width"].setValue(window.innerWidth - 360);
+			this.myForm.controls["height"].setValue(window.innerHeight);
 		}
 	}
 
@@ -78,6 +85,15 @@ export class DrawingModalWindowComponent implements OnInit {
 		let r = Number(this.myForm.value.R).toString(16);
 		let g = Number(this.myForm.value.G).toString(16);
 		let b = Number(this.myForm.value.B).toString(16);
+		if (r.length == 1) {
+			r = "0" + r;
+		}
+		if (g.length == 1) {
+			g = "0" + g;
+		}
+		if (b.length == 1) {
+			b = "0" + b;
+		}
 		this.activeColor = { hex: r + g + b };
 		this.myForm.controls["hex"].setValue(this.activeColor.hex);
 	}
@@ -86,6 +102,6 @@ export class DrawingModalWindowComponent implements OnInit {
 		return { "background-color": "#" + color.hex };
 	}
 	getUserColorIcon() {
-		return { "background-color": "#" + this.activeColor.hex };
+		return { "background-color": "#" + this.activeColor.hex, opacity: String(this.myForm.value.A) };
 	}
 }

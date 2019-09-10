@@ -2,8 +2,6 @@
 	<div id="window">
 		<h1 id="title">Création d'un nouveau dessin</h1>
 		<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-			<p>Value:{{ myForm.value | json }}</p>
-
 			<div id="userColor">
 				<span> Couleur de fond :</span>
 				<button class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
@@ -18,44 +16,44 @@
 			></button>
 
 			<div id="colorForm">
-				<mat-form-field>
-					<input
-						matInput
-						type="text"
-						placeholder="Couleur"
-						formControlName="hex"
-						(change)="onUserColorHex()"
-					/>
+				<mat-form-field class="medium">
+					<input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserColorHex()" />
+					<mat-error>Ce code de couleur n'est pas valide!</mat-error>
 					<span matPrefix>#</span>
 				</mat-form-field>
 
 				<mat-form-field class="small" (change)="onUserColorRGB()">
 					<input matInput type="number" placeholder="R:" formControlName="R" />
+					<mat-error>R doit être entre 0 et 255!</mat-error>
 				</mat-form-field>
 				<mat-form-field class="small" (change)="onUserColorRGB()">
 					<input matInput type="number" placeholder="G:" formControlName="G" />
+					<mat-error>G doit être entre 0 et 255!</mat-error>
 				</mat-form-field>
 				<mat-form-field class="small" (change)="onUserColorRGB()">
 					<input matInput type="number" placeholder="B:" formControlName="B" />
+					<mat-error>B doit être entre 0 et 255!</mat-error>
 				</mat-form-field>
 				<mat-form-field class="small" (change)="onUserColorRGB()">
 					<input matInput type="number" placeholder="A:" formControlName="A" />
+					<mat-error>La transparence doit être entre 0 et 1!</mat-error>
 				</mat-form-field>
 			</div>
 
 			<mat-form-field>
 				<input matInput type="number" placeholder="Largeur" formControlName="width" />
-				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
+				<span matSuffix>px</span>
+				<mat-error>La largeur doit être entre 0 et 10000!</mat-error>
 			</mat-form-field>
-			<br />
 
 			<mat-form-field>
 				<input matInput type="number" placeholder="Hauteur" formControlName="height" />
-				<mat-error>la valeur doit etre entre 0 et 10000</mat-error>
+				<span matSuffix>px</span>
+				<mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
 			</mat-form-field>
 			<br />
 
-			<button mat-raised-button type="submits" [disabled]="myForm.invalid">Submit</button>
+			<button mat-stroked-button type="submits" [disabled]="myForm.invalid">Créer!</button>
 		</form>
 	</div>
 </div>

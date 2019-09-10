@@ -19,20 +19,22 @@
 	padding: 20px 30px;
 
 	text-align: center;
+}
 
-	mat-form-field {
-		margin: 0 10px;
-	}
+mat-form-field {
+	margin: 20px 10px;
 
-	.small {
-		width: 10%;
+	span {
+		color: #888888;
+		margin-right: 5px;
 	}
 }
 
-#userColor {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.medium {
+	width: 20%;
+}
+.small {
+	width: 10%;
 }
 
 .color {
@@ -51,12 +53,14 @@
 	filter: brightness(1);
 }
 
-#white {
-	background-color: white;
-}
-#red {
-	background-color: rgb(211, 58, 58);
-}
-#white {
-	background-color: rgb(28, 101, 211);
+#userColor {
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.color {
+		padding: 20px;
+		margin-left: 15px;
+	}
 }
