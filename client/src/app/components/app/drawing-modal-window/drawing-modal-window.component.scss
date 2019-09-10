@@ -57,10 +57,14 @@ mat-form-field {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin-bottom: 10px;
 
 	.color {
-		padding: px;
 		margin-left: 15px;
+	}
+
+	#bigColor {
+		padding: 15px;
 	}
 }
 
