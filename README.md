@@ -146,9 +146,9 @@ Séparez votre code Typescript du CSS et du HTML. Générez vos component avec A
 
 Une seule fonctionnalité par branche.
 
-Une branche fonctionnalité devrait se nommer `feature/nom-du-feature`.
+Une branche fonctionnalité devrait se nommer `feat/nom-du-feature`.
 
-Une branche correction de bogue devrait se nommer `hotfix/nom-du-bug`.
+Une branche correction de bogue devrait se nommer `fix/nom-du-bug`.
 
 Les messages de commit doivent être concis et significatifs. Ne mettez pas des messages trop long ou trop courts. On devrait être capable de comprendre ce que le commit fait sans lire les changements.
 
@@ -157,33 +157,6 @@ Vous devez garder le même courriel, peu importe l'ordinateur que vous utilisez.
 Nous vous recommandons fortement de suivre le [Github-Flow](https://guides.github.com/introduction/flow/). [Lecture suggérée](http://scottchacon.com/2011/08/31/github-flow.html)
 
 Si vous n'êtes pas familiers avec Git et le fonctionnement des branches, nous vous recommandons fortement d'explorer [ce guide intéractif](https://onlywei.github.io/explain-git-with-d3/).
-
-## Pull Requests
-
-Lorsque votre code est prêt à être mergé avec la branche master sur le origin (remote), effectuez les commandes `git add` et `git commit`. Ensuite, créez une branche dans le origin avec une des commandes suivantes:
-
-```
-git push -u origin [BRANCH]
-
-git push --set-upstream origin [BRANCH]
-```
-
-Par la suite, dirigez-vous sur le repo P9 sur Github (https://github.com/xishec/P9). Cliquez ensuite sur le message vous indiquant la possibilité de créer un Pull Request. Sur la page de création du Pull Request, nommez votre PR en suivant la convention de nommage des branches Git (expliquée à la section précédente). Complétez la description du commit, mettez les tags correspondants et assignez les membres de l'équipe comme reviewers pour la revue du code. 
-
-## Noms des commits
-Les commits doivent être nommés selon la forme suivante:
-
-**[Initiales]: [Type de code] [Description du commit]**
-
-- Initiales: Les initiales des membres qui ont contribué au commit
-- Type de code: D (développement), B (correction de bogue), T (tout code en lien avec les tests) et R (refactoring du code)
-- Description du commit: Explication courte mais précise du contenu du commit 
-
-Par exemple, si Justin Trudeau corrige un bogue sur l'affichage d'un rectangle: 
-
-```
-JT: B Fixed rectangle display issue on artboard
-```
 
 ## Lectures suggérées
 
