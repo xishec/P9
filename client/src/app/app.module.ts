@@ -2,12 +2,12 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './components/app/app.component';
-import { PenComponent } from './components/pen/pen.component';
+import { PencilComponent } from './components/pencil/pencil.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PenComponent,
+    PencilComponent,
   ],
   imports: [
     BrowserModule,

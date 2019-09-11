@@ -1,6 +1,6 @@
 import {Coordinate} from './coordinate';
 
-export abstract class Stroke {
+export class Stroke {
     coordinates: Coordinate[];
     constructor(x: number, y: number) {
         this.coordinates = []; // NOT SURE IF NECESSARY
