@@ -1,27 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { ToolsService } from "../../../services/tootls/tools.service";
+import { ToolsService } from '../../../services/tootls/tools.service';
 
 @Component({
-	selector: "app-sidebar-tools",
-	templateUrl: "./sidebar-tools.component.html",
-	styleUrls: ["./sidebar-tools.component.scss"],
+    selector: 'app-sidebar-tools',
+    templateUrl: './sidebar-tools.component.html',
+    styleUrls: ['./sidebar-tools.component.scss'],
 })
-export class SidebarToolsComponent implements OnInit {
-	toolsService: ToolsService;
+export class SidebarToolsComponent {
+    toolsService: ToolsService;
 
-	toolIds: Array<number>;
-	currentToolId: number;
+    toolIds: number[];
+    currentToolId: number;
 
-	constructor(toolsService: ToolsService) {
-		this.toolsService = toolsService;
-		this.toolIds = toolsService.getToolIds();
-		this.currentToolId = toolsService.getCurrentToolId();
-	}
+    constructor(toolsService: ToolsService) {
+        this.toolsService = toolsService;
+        this.toolIds = toolsService.getToolIds();
+        this.currentToolId = toolsService.getCurrentToolId();
+    }
 
-	ngOnInit() {}
-
-	changeTool(toolId: number) {
-		this.toolsService.changeTool(toolId);
-	}
+    changeTool(toolId: number) {
+        this.toolsService.changeTool(toolId);
+    }
 }

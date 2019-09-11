@@ -1,32 +1,33 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { Info, DrawingModalWindow } from "../../../services/drawing-modal-window/drawing-modal-window.service";
+import { DrawingInfo } from '../../../../class/DrawingInfo';
+import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
-	selector: "app-work-zone",
-	templateUrl: "./work-zone.component.html",
-	styleUrls: ["./work-zone.component.scss"],
+    selector: 'app-work-zone',
+    templateUrl: './work-zone.component.html',
+    styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-	DrawingModalWindow: DrawingModalWindow;
-	info: Info;
+    drawingModalWindow: DrawingModalWindow;
+    drawingInfo: DrawingInfo;
 
-	constructor(DrawingModalWindow: DrawingModalWindow) {
-		this.DrawingModalWindow = DrawingModalWindow;
-	}
+    constructor(drawingModalWindow: DrawingModalWindow) {
+        this.drawingModalWindow = drawingModalWindow;
+    }
 
-	ngOnInit() {
-		this.DrawingModalWindow.currentInfo.subscribe((info) => {
-			this.info = info;
-		});
-	}
+    ngOnInit() {
+        this.drawingModalWindow.currentInfo.subscribe((drawingInfo) => {
+            this.drawingInfo = drawingInfo;
+        });
+    }
 
-	changeStyle() {
-		return {
-			fill: "#" + this.info.color.hex,
-			"fill-opacity": this.info.opacity,
-			height: this.info.height,
-			width: this.info.width,
-		};
-	}
+    changeStyle() {
+        return {
+            fill: '#' + this.drawingInfo.color.hex,
+            'fill-opacity': this.drawingInfo.opacity,
+            height: this.drawingInfo.height,
+            width: this.drawingInfo.width,
+        };
+    }
 }
