@@ -1,6 +1,9 @@
 <div id="sidebar">
 	<div id="buttons">
 		<mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
+			<mat-button-toggle color="primary" (click)="changeTool(1)">
+				<i class="fas fa-plus"></i>
+			</mat-button-toggle>
 			<mat-button-toggle color="primary" *ngFor="let toolId of toolIds" (click)="changeTool(toolId)">
 				{{ toolId }}
 			</mat-button-toggle>
