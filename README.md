@@ -81,8 +81,11 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 {
 	"prettier.printWidth": 120,
 	"prettier.tabWidth": 4,
-	"prettier.useTabs": true,
 	"prettier.trailingComma": "es5",
+	"prettier.arrowParens": "always",
+	"prettier.disableLanguages": [],
+	"prettier.singleQuote": true,
+	"prettier.endOfLine": "lf",
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
@@ -94,13 +97,7 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 	},
 	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"prettier.arrowParens": "always",
-	"prettier.disableLanguages": [],
-	"prettier.arrowParens": "always",
-	"prettier.disableLanguages": [],
-	"prettier.singleQuote": true,
-	"prettier.endOfLine": "lf"
+	}
 }
 ```
 
