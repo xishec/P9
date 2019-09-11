@@ -1,5 +1,5 @@
 <div id="mask" *ngIf="ifShowWindow">
-	<div id="window">
+	<div id="window" [ngStyle]="setWindowHeight()">
 		<h1 id="title">Création d'un nouveau dessin</h1>
 		<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
 			<div class="formGroup">
@@ -55,7 +55,11 @@
 			</div>
 
 			<div id="confirmation" [hidden]="submitCount == 0">
-				<mat-error>Un dessin existe déja dans votre zone de travail!</mat-error>
+				<mat-error>
+					<i class="fas fa-exclamation-triangle"></i>
+					Un dessin existe déja dans votre zone de travail!
+					<i class="fas fa-exclamation-triangle"></i>
+				</mat-error>
 				<mat-checkbox color="warn" formControlName="confirm" required>
 					Je comfire que je veux créer un nouveau dessin.
 				</mat-checkbox>

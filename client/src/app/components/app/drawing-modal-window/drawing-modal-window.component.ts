@@ -111,7 +111,11 @@ export class DrawingModalWindowComponent implements OnInit {
 		this.ifShowWindow = false;
 	}
 
-	setRequired() {
-		return this.submitCount > 0;
+	setWindowHeight() {
+		if (this.submitCount == 0) {
+			return { height: "450px" };
+		} else {
+			return { height: "500px" };
+		}
 	}
 }
