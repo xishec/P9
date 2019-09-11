@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { TracingTool } from 'src/classes/TracingTool/tracing-tool';
 
 @Component({
@@ -7,23 +7,33 @@ import { TracingTool } from 'src/classes/TracingTool/tracing-tool';
   styleUrls: ['./pencil.component.scss'],
 })
 export class PencilComponent extends TracingTool {
+  private svgRef: ElementRef<SVGElement>;
 
-  paths: string[];
-
-  constructor() {
-    super();
-    this.paths = [];
+  constructor(elementReference: ElementRef<SVGElement>) {
+    super(elementReference);
+    this.svgRef = elementReference;
   }
 
   mouseDown(e: MouseEvent) {
     super.mouseDown(e);
-    this.paths.push(`M${e.offsetX} ${e.offsetY}`);
+    this.createSVGCircle(e.offsetX, e.offsetY, 3);
+  }
+
+  createSVGCircle(x: number, y: number, w: number){
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    el.setAttribute('x1', x.toString());
+    el.setAttribute('y1', y.toString());
+    el.setAttribute('x2', x.toString());
+    el.setAttribute('y2', y.toString());
+    el.setAttribute('stroke-width', w.toString());
+    el.setAttribute('stroke-linecap', 'round');
+    el.setAttribute('stroke', 'black');
+    this.svgRef.nativeElement.appendChild(el);
   }
 
   mouseMove(e: MouseEvent) {
-    super.mouseMove(e);
     if (this.isDrawing) {
-      this.paths[this.nbStrokes] += ` L${e.offsetX} ${e.offsetY}`;
+      this.createSVGCircle(e.offsetX, e.offsetY, 3);
     }
   }
 
