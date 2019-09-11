@@ -1,19 +1,19 @@
 import { OnInit } from '@angular/core';
 import { Stroke } from './Stroke/stroke';
 
-export abstract class TracingTool implements OnInit {
+export class TracingTool implements OnInit {
     strokes: Stroke[];
     nbStrokes = 0;
     color: string;
     isDrawing = false;
     // WIDTH
 
-    // tslint:disable-next-line: no-empty
-    constructor() { }
+    constructor() {
+        this.strokes = [];
+    }
 
     mouseDown(e: MouseEvent): void {
         this.isDrawing = true;
-        this.strokes = [];
         this.strokes.push(new Stroke(e.offsetX, e.offsetY));
     }
 
