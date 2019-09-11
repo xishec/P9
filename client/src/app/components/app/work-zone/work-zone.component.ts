@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { Info, DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
+import { Info, DrawingModalWindow } from "../../../services/drawing-modal-window/drawing-modal-window.service";
 
 @Component({
 	selector: "app-work-zone",
@@ -8,15 +8,15 @@ import { Info, DrawingInfoService } from "../../../services/drawing-info/drawing
 	styleUrls: ["./work-zone.component.scss"],
 })
 export class WorkZoneComponent implements OnInit {
-	drawingInfoService: DrawingInfoService;
+	DrawingModalWindow: DrawingModalWindow;
 	info: Info;
 
-	constructor(drawingInfoService: DrawingInfoService) {
-		this.drawingInfoService = drawingInfoService;
+	constructor(DrawingModalWindow: DrawingModalWindow) {
+		this.DrawingModalWindow = DrawingModalWindow;
 	}
 
 	ngOnInit() {
-		this.drawingInfoService.currentInfo.subscribe((info) => {
+		this.DrawingModalWindow.currentInfo.subscribe((info) => {
 			this.info = info;
 		});
 	}

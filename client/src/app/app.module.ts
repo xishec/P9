@@ -17,8 +17,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 //************************************************
 
 // *************** Services **********************
-import { ToolsService } from "./services/panel-tools/tools.service";
-import { DrawingInfoService } from "./services/drawing-info/drawing-info.service";
+import { ToolsService } from "./services/tootls/tools.service";
+import { DrawingModalWindow } from "./services/drawing-modal-window/drawing-modal-window.service";
 //************************************************
 
 import { AttributePanelComponent } from "./components/app/sidebar-tools/attribute-panel/attribute-panel.component";
@@ -46,7 +46,7 @@ import { DrawingModalWindowComponent } from "./components/app/drawing-modal-wind
 		BrowserModule,
 		HttpClientModule,
 	],
-	providers: [ToolsService, DrawingInfoService],
+	providers: [ToolsService, DrawingModalWindow],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

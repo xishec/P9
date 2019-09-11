@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { Info, Color, DrawingInfoService } from "../../../services/drawing-info/drawing-info.service";
+import { Info, Color, DrawingModalWindow } from "../../../services/drawing-modal-window/drawing-modal-window.service";
 
 @Component({
 	selector: "app-drawing-modal-window",
@@ -9,40 +9,36 @@ import { Info, Color, DrawingInfoService } from "../../../services/drawing-info/
 	styleUrls: ["./drawing-modal-window.component.scss"],
 })
 export class DrawingModalWindowComponent implements OnInit {
-	show: boolean = true;
+	DrawingModalWindow: DrawingModalWindow;
 
 	myForm: FormGroup;
 	formBuilder: FormBuilder;
 
-	drawingInfoService: DrawingInfoService;
-
 	colors: Array<Color>;
 	activeColor: Color;
-
 	submitCount: number = 0;
+	ifShowWindow: boolean;
 
-	constructor(formBuilder: FormBuilder, drawingInfoService: DrawingInfoService) {
+	constructor(formBuilder: FormBuilder, DrawingModalWindow: DrawingModalWindow) {
 		this.formBuilder = formBuilder;
-		this.drawingInfoService = drawingInfoService;
-		this.colors = drawingInfoService.colors;
-		this.activeColor = drawingInfoService.colors[0];
+		this.DrawingModalWindow = DrawingModalWindow;
+		this.colors = DrawingModalWindow.colors;
+		this.activeColor = DrawingModalWindow.colors[0];
 	}
 
 	ngOnInit(): void {
+		this.initializeForm();
+		this.DrawingModalWindow.currentIfShowWindow.subscribe((ifShowWindow) => {
+			this.ifShowWindow = ifShowWindow;
+		});
+	}
+
+	initializeForm() {
 		this.myForm = this.formBuilder.group({
-			hex: [this.activeColor.hex, [Validators.pattern("^[0-9A-Fa-f]{6}$")]],
-			R: [
-				parseInt(this.activeColor.hex.slice(0, 2), 16),
-				[Validators.required, Validators.min(0), Validators.max(255)],
-			],
-			G: [
-				parseInt(this.activeColor.hex.slice(2, 4), 16),
-				[Validators.required, Validators.min(0), Validators.max(255)],
-			],
-			B: [
-				parseInt(this.activeColor.hex.slice(4, 6), 16),
-				[Validators.required, Validators.min(0), Validators.max(255)],
-			],
+			hex: ["ffffff", [Validators.pattern("^[0-9A-Fa-f]{6}$")]],
+			R: ["255", [Validators.required, Validators.min(0), Validators.max(255)]],
+			G: ["255", [Validators.required, Validators.min(0), Validators.max(255)]],
+			B: ["255", [Validators.required, Validators.min(0), Validators.max(255)]],
 			A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
 			confirm: this.submitCount == 0,
 			width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
@@ -57,10 +53,12 @@ export class DrawingModalWindowComponent implements OnInit {
 			color: this.activeColor,
 			opacity: this.myForm.value.A,
 		};
-		this.drawingInfoService.changeInfo(info);
-		this.show = false;
+		this.DrawingModalWindow.changeInfo(info);
+		this.DrawingModalWindow.changeIfShowWindow(false);
 
 		this.submitCount++;
+		this.initializeForm();
+		this.activeColor = { hex: "ffffff" };
 	}
 
 	@HostListener("window:resize", ["$event"])
@@ -107,5 +105,13 @@ export class DrawingModalWindowComponent implements OnInit {
 	}
 	getUserColorIcon() {
 		return { "background-color": "#" + this.activeColor.hex, opacity: String(this.myForm.value.A) };
+	}
+
+	cancel() {
+		this.ifShowWindow = false;
+	}
+
+	setRequired() {
+		return this.submitCount > 0;
 	}
 }

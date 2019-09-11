@@ -15,7 +15,7 @@ export class Color {
 @Injectable({
 	providedIn: "root",
 })
-export class DrawingInfoService {
+export class DrawingModalWindow {
 	constructor() {}
 
 	colors: Array<Color> = [
@@ -41,9 +41,15 @@ export class DrawingInfoService {
 		color: this.colors[0],
 		opacity: 1,
 	});
+	private ifShowWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
 	currentInfo = this.infoSource.asObservable();
+	currentIfShowWindow = this.ifShowWindow.asObservable();
 
 	changeInfo(info: Info) {
 		this.infoSource.next(info);
+	}
+	changeIfShowWindow(ifShowWindow: boolean) {
+		this.ifShowWindow.next(ifShowWindow);
 	}
 }
