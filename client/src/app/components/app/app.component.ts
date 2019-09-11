@@ -29,15 +29,15 @@ export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		this.currentTool = new RectangleTool(this.svgReference);
 	}
-	@HostListener("window:mousemove", ["$event"]) onMouseMove(event: MouseEvent): void {
+	@HostListener("mousemove", ["$event"]) onMouseMove(event: MouseEvent): void {
 		this.currentTool.onMouseMove(event);
 	}
 
-	@HostListener("window:mousedown", ["$event"]) onMouseClick(event: MouseEvent): void {
+	@HostListener("mousedown", ["$event"]) onMouseClick(event: MouseEvent): void {
 		this.currentTool.onMouseDown(event);
 	}
 
-	@HostListener("window:mouseup", ["$event"]) onMouseRelease(event: MouseEvent): void {
+	@HostListener("mouseup", ["$event"]) onMouseRelease(event: MouseEvent): void {
 		this.currentTool.onMouseUp(event);
 	}
 
