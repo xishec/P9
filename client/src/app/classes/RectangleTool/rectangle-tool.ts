@@ -1,6 +1,6 @@
-import { ElementRef } from "@angular/core";
-import { Keys } from "src/app/keys.enum";
-import { AbstractShapeTool } from "../AbstractShapeTool/abstract-shape-tool";
+import { ElementRef } from '@angular/core';
+import { Keys } from 'src/app/keys.enum';
+import { AbstractShapeTool } from '../AbstractShapeTool/abstract-shape-tool';
 
 export class RectangleTool extends AbstractShapeTool {
 	private fillColor: string;
@@ -10,8 +10,8 @@ export class RectangleTool extends AbstractShapeTool {
 
 	constructor(elementReference: ElementRef<SVGElement>) {
 		super(elementReference);
-		this.fillColor = "red";
-		this.strokeColor = "black";
+		this.fillColor = 'red';
+		this.strokeColor = 'black';
 		this.strokeWidth = 1;
 		this.isSquarePreview = false;
 	}
@@ -29,7 +29,7 @@ export class RectangleTool extends AbstractShapeTool {
 	}
 
 	onMouseUp(event: MouseEvent): void {
-		let button = event.button;
+		const button = event.button;
 
 		switch (button) {
 			case 0:
@@ -51,7 +51,7 @@ export class RectangleTool extends AbstractShapeTool {
 		const key = event.key;
 		switch (key) {
 			case Keys.Shift:
-				console.log(key + " -> Adjusting rectangle to a square");
+				console.log(key + ' -> Adjusting rectangle to a square');
 				if (this.isPreviewing) {
 					this.isSquarePreview = true;
 					this.updatePreviewSquare();
@@ -59,7 +59,7 @@ export class RectangleTool extends AbstractShapeTool {
 				break;
 
 			default:
-				console.log(key + " -> Key not handled");
+				console.log(key + ' -> Key not handled');
 				break;
 		}
 	}
@@ -80,23 +80,23 @@ export class RectangleTool extends AbstractShapeTool {
 	}
 
 	createSVG(): void {
-		const el = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-		el.setAttribute("x", this.previewRectangle.x.baseVal.valueAsString);
-		el.setAttribute("y", this.previewRectangle.y.baseVal.valueAsString);
-		el.setAttribute("width", this.previewRectangle.width.baseVal.valueAsString);
-		el.setAttribute("height", this.previewRectangle.height.baseVal.valueAsString);
-		el.setAttribute("fill", this.fillColor.toString());
-		el.setAttribute("stroke", this.strokeColor.toString());
-		el.setAttribute("stroke-width", this.strokeWidth.toString());
-		el.addEventListener("mousedown", () => {
-			el.setAttribute("fill", "blue");
+		const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+		el.setAttribute('x', this.previewRectangle.x.baseVal.valueAsString);
+		el.setAttribute('y', this.previewRectangle.y.baseVal.valueAsString);
+		el.setAttribute('width', this.previewRectangle.width.baseVal.valueAsString);
+		el.setAttribute('height', this.previewRectangle.height.baseVal.valueAsString);
+		el.setAttribute('fill', this.fillColor.toString());
+		el.setAttribute('stroke', this.strokeColor.toString());
+		el.setAttribute('stroke-width', this.strokeWidth.toString());
+		el.addEventListener('mousedown', () => {
+			el.setAttribute('fill', 'blue');
 		});
 		this.svgReference.nativeElement.appendChild(el);
 	}
 
 	private updatePreviewSquare(): void {
-		let x = this.initialMouseX;
-		let y = this.initialMouseY;
+		const x = this.initialMouseX;
+		const y = this.initialMouseY;
 		let w = this.currentMouseX - this.initialMouseX;
 		let h = this.currentMouseY - this.initialMouseY;
 		const minLen = Math.min(w, h);
@@ -104,21 +104,21 @@ export class RectangleTool extends AbstractShapeTool {
 		// adjust x
 		if (w < 0) {
 			w *= -1;
-			this.previewRectangle.setAttribute("x", x.toString());
-			this.previewRectangle.setAttribute("width", minLen.toString());
+			this.previewRectangle.setAttribute('x', x.toString());
+			this.previewRectangle.setAttribute('width', minLen.toString());
 		} else {
-			this.previewRectangle.setAttribute("x", x.toString());
-			this.previewRectangle.setAttribute("width", minLen.toString());
+			this.previewRectangle.setAttribute('x', x.toString());
+			this.previewRectangle.setAttribute('width', minLen.toString());
 		}
 
 		// adjust y
 		if (h < 0) {
 			h *= -1;
-			this.previewRectangle.setAttribute("y", y.toString());
-			this.previewRectangle.setAttribute("height", minLen.toString());
+			this.previewRectangle.setAttribute('y', y.toString());
+			this.previewRectangle.setAttribute('height', minLen.toString());
 		} else {
-			this.previewRectangle.setAttribute("y", y.toString());
-			this.previewRectangle.setAttribute("height", minLen.toString());
+			this.previewRectangle.setAttribute('y', y.toString());
+			this.previewRectangle.setAttribute('height', minLen.toString());
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { ElementRef } from "@angular/core";
+import { ElementRef } from '@angular/core';
 
 export abstract class AbstractShapeTool {
 	protected currentMouseX: number;
@@ -27,7 +27,7 @@ export abstract class AbstractShapeTool {
 	abstract createSVG(): void;
 
 	onMouseUp(event: MouseEvent): void {
-		let button = event.button;
+		const button = event.button;
 
 		switch (button) {
 			case 0:
@@ -45,7 +45,7 @@ export abstract class AbstractShapeTool {
 	}
 
 	onMouseDown(event: MouseEvent): void {
-		let button = event.button;
+		const button = event.button;
 
 		switch (button) {
 			case 0:
@@ -73,39 +73,39 @@ export abstract class AbstractShapeTool {
 	}
 
 	private buildPreviewRectangle(): void {
-		this.previewRectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+		this.previewRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		this.updatePreviewRectangle();
 	}
 
 	protected updatePreviewRectangle(): void {
-		let x = this.initialMouseX;
-		let y = this.initialMouseY;
+		const x = this.initialMouseX;
+		const y = this.initialMouseY;
 		let w = this.currentMouseX - this.initialMouseX;
 		let h = this.currentMouseY - this.initialMouseY;
 		// adjust x
 		if (w < 0) {
 			w *= -1;
-			this.previewRectangle.setAttribute("x", (x - w).toString());
-			this.previewRectangle.setAttribute("width", w.toString());
+			this.previewRectangle.setAttribute('x', (x - w).toString());
+			this.previewRectangle.setAttribute('width', w.toString());
 			this.previewIsDecenteredX = true;
 		} else {
-			this.previewRectangle.setAttribute("x", x.toString());
-			this.previewRectangle.setAttribute("width", w.toString());
+			this.previewRectangle.setAttribute('x', x.toString());
+			this.previewRectangle.setAttribute('width', w.toString());
 			this.previewIsDecenteredX = false;
 		}
 		// adjust y
 		if (h < 0) {
 			h *= -1;
-			this.previewRectangle.setAttribute("y", (y - h).toString());
-			this.previewRectangle.setAttribute("height", h.toString());
+			this.previewRectangle.setAttribute('y', (y - h).toString());
+			this.previewRectangle.setAttribute('height', h.toString());
 			this.previewIsDecenteredY = true;
 		} else {
-			this.previewRectangle.setAttribute("y", y.toString());
-			this.previewRectangle.setAttribute("height", h.toString());
+			this.previewRectangle.setAttribute('y', y.toString());
+			this.previewRectangle.setAttribute('height', h.toString());
 			this.previewIsDecenteredY = false;
 		}
-		this.previewRectangle.setAttribute("fill", "white");
-		this.previewRectangle.setAttribute("fill-opacity", "0.3");
-		this.previewRectangle.setAttribute("stroke", "black");
+		this.previewRectangle.setAttribute('fill', 'white');
+		this.previewRectangle.setAttribute('fill-opacity', '0.3');
+		this.previewRectangle.setAttribute('stroke', 'black');
 	}
 }
