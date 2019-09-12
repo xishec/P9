@@ -10,6 +10,8 @@ export class PencilComponent extends TracingTool {
   private svgRef: ElementRef<SVGElement>;
   private svgPath: SVGPathElement;
   private currentPath: string;
+  private currentWidth = 2;
+  private currentColor = 'black';
 
   constructor(elementReference: ElementRef<SVGElement>) {
     super(elementReference);
@@ -19,13 +21,13 @@ export class PencilComponent extends TracingTool {
   mouseDown(e: MouseEvent) {
     super.mouseDown(e);
     this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-    this.createSVGCircle(e.offsetX, e.offsetY, 2);
+    this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
     this.createSVGPath();
   }
 
   mouseMove(e: MouseEvent) {
     if (this.isDrawing) {
-      this.createSVGCircle(e.offsetX, e.offsetY, 2);
+      this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
       this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
       this.svgPath.setAttribute('d', this.currentPath);
     }
@@ -44,7 +46,7 @@ export class PencilComponent extends TracingTool {
     el.setAttribute('y2', y.toString());
     el.setAttribute('stroke-width', w.toString());
     el.setAttribute('stroke-linecap', 'round');
-    el.setAttribute('stroke', 'black');
+    el.setAttribute('stroke', this.currentColor);
     this.svgRef.nativeElement.appendChild(el);
   }
 
@@ -52,8 +54,8 @@ export class PencilComponent extends TracingTool {
     this.svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.svgPath.setAttribute('d', this.currentPath);
     this.svgPath.setAttribute('fill', 'none');
-    this.svgPath.setAttribute('stroke', 'black');
-    this.svgPath.setAttribute('stroke-width', '2');
+    this.svgPath.setAttribute('stroke', this.currentColor);
+    this.svgPath.setAttribute('stroke-width', this.currentWidth.toString());
     this.svgRef.nativeElement.appendChild(this.svgPath);
   }
 
