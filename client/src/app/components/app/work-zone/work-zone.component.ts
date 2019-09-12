@@ -11,6 +11,7 @@ import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawi
 export class WorkZoneComponent implements OnInit {
     drawingModalWindow: DrawingModalWindow;
     drawingInfo: DrawingInfo;
+    ifShowWindow: boolean;
 
     constructor(drawingModalWindow: DrawingModalWindow) {
         this.drawingModalWindow = drawingModalWindow;
@@ -19,6 +20,9 @@ export class WorkZoneComponent implements OnInit {
     ngOnInit() {
         this.drawingModalWindow.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
+        });
+        this.drawingModalWindow.currentIfShowWindow.subscribe((ifShowWindow) => {
+            this.ifShowWindow = ifShowWindow;
         });
     }
 
