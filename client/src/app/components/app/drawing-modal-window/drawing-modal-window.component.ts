@@ -5,6 +5,8 @@ import { Color } from '../../../../class/Color';
 import { DrawingInfo } from '../../../../class/DrawingInfo';
 import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
+import { CONSTANTS } from '../CONSTANTS';
+
 @Component({
     selector: 'app-drawing-modal-window',
     templateUrl: './drawing-modal-window.component.html',
@@ -43,7 +45,10 @@ export class DrawingModalWindowComponent implements OnInit {
             B: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
             confirm: this.submitCount === 0,
-            width: [window.innerWidth - 360, [Validators.required, Validators.min(0), Validators.max(10000)]],
+            width: [
+                window.innerWidth - CONSTANTS.SIDEBAR_WIDTH,
+                [Validators.required, Validators.min(0), Validators.max(10000)],
+            ],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
     }
@@ -66,7 +71,7 @@ export class DrawingModalWindowComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize() {
         if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
-            this.myForm.controls.width.setValue(window.innerWidth - 360);
+            this.myForm.controls.width.setValue(window.innerWidth - CONSTANTS.SIDEBAR_WIDTH);
             this.myForm.controls.height.setValue(window.innerHeight);
         }
     }
