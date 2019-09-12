@@ -7,6 +7,7 @@ import { AppComponent } from "./components/app/app.component";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatButtonModule } from "@angular/material/button";
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SidebarComponent } from "./components/app/sidebar/sidebar.component";
 import { AttributePanelComponent } from "./components/app/sidebar/attribute-panel/attribute-panel.component";
@@ -17,7 +18,8 @@ import { AttributePanelComponent } from "./components/app/sidebar/attribute-pane
 	imports: [
 		MatButtonToggleModule,
 		MatSidenavModule,
-		MatButtonModule,
+        MatButtonModule,
+        MatTooltipModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		HttpClientModule,

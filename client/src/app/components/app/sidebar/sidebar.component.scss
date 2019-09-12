@@ -4,12 +4,27 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
+	i {
+		color: aliceblue;
+	}
+	border: 0;
 }
 
 .sidebar {
-	width: 60px;
+	width: auto;
+	background-color: rgb(126, 29, 5) !important;
 }
 
 mat-button-toggle {
-	width: 60px;
+	width: 60.4px;
+	background: inherit;
+	color: aliceblue;
+}
+
+.mat-button-toggle-checked {
+	background: rgb(245, 245, 220);
+	color: black;
+	i {
+		color: black !important;
+	}
 }
