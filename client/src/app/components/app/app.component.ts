@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   private currentTool: PencilComponent;
 
   ngOnInit(): void {
-    this.currentTool = new PencilComponent();
+    this.currentTool = new PencilComponent(this.svgReference);
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
