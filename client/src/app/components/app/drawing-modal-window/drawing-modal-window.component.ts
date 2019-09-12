@@ -1,8 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Color } from '../../../../class/Color';
-import { DrawingInfo } from '../../../../class/DrawingInfo';
+import { Color } from '../../../../classes/Color';
+import { DrawingInfo } from '../../../../classes/DrawingInfo';
 import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 import { CONSTANTS } from '../CONSTANTS';

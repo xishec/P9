@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DrawingInfo } from '../../../../class/DrawingInfo';
+import { DrawingInfo } from '../../../../classes/DrawingInfo';
 import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({

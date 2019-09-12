@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ToolsService } from '../../../services/tootls/tools.service';
+import { ToolsService } from '../../../services/tools/tools.service';
 
 @Component({
     selector: 'app-sidebar-tools',

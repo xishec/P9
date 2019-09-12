@@ -18,7 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // *************** Services **********************
 import { DrawingModalWindow } from './services/drawing-modal-window/drawing-modal-window.service';
-import { ToolsService } from './services/tootls/tools.service';
+import { ToolsService } from './services/tools/tools.service';
 // ************************************************
 
 import { DrawingModalWindowComponent } from './components/app/drawing-modal-window/drawing-modal-window.component';
