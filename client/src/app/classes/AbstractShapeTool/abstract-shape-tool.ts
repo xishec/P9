@@ -31,7 +31,9 @@ export abstract class AbstractShapeTool {
 
 		switch (button) {
 			case 0:
-				this.createSVG();
+				if(this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0){
+					this.createSVG();
+				}
 				this.isPreviewing = false;
 				this.svgReference.nativeElement.removeChild(this.previewRectangle);
 				break;
