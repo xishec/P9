@@ -65,7 +65,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     @HostListener('window:resize', ['$event'])
     onResize() {
-        if (!this.myForm.dirty) {
+        if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
             this.myForm.controls.width.setValue(window.innerWidth - 360);
             this.myForm.controls.height.setValue(window.innerHeight);
         }
