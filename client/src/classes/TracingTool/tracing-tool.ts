@@ -13,10 +13,11 @@ export abstract class TracingTool {
         this.isDrawing = true;
     }
 
-    // tslint:disable-next-line: no-empty
-    onMouseMove(e: MouseEvent): void { }
+    abstract onMouseMove(e: MouseEvent): void;
 
     onMouseUp(e: MouseEvent): void {
         this.isDrawing = false;
     }
+
+    abstract onMouseLeave(e: MouseEvent): void;
 }
