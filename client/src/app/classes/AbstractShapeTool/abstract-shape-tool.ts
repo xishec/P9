@@ -8,8 +8,8 @@ export abstract class AbstractShapeTool {
 	protected svgReference: ElementRef<SVGElement>;
 	protected previewRectangle: SVGRectElement;
 	protected isPreviewing: boolean;
-	protected previewIsDecenteredX: boolean;
-	protected previewIsDecenteredY: boolean;
+	protected isGone: boolean;
+	protected isIn: boolean;
 
 	constructor(elementReference: ElementRef<SVGElement>) {
 		this.currentMouseX = 0;
@@ -17,8 +17,6 @@ export abstract class AbstractShapeTool {
 		this.initialMouseX = 0;
 		this.initialMouseY = 0;
 		this.isPreviewing = false;
-		this.previewIsDecenteredX = false;
-		this.previewIsDecenteredY = false;
 		this.svgReference = elementReference;
 	}
 
@@ -50,7 +48,7 @@ export abstract class AbstractShapeTool {
 		const button = event.button;
 
 		switch (button) {
-			case 0:
+			case 0 && this.isIn:
 				this.isPreviewing = true;
 				this.initialMouseX = this.currentMouseX;
 				this.initialMouseY = this.currentMouseY;
@@ -74,6 +72,16 @@ export abstract class AbstractShapeTool {
 		}
 	}
 
+	onMouseEnter(event: MouseEvent): void{
+		this.isIn = true;
+		this.isGone = false;
+	}
+
+	onMouseLeave(event: MouseEvent): void{
+		this.isGone = true;
+		this.isIn = false;
+	}
+
 	private buildPreviewRectangle(): void {
 		this.previewRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		this.updatePreviewRectangle();
@@ -89,22 +97,18 @@ export abstract class AbstractShapeTool {
 			w *= -1;
 			this.previewRectangle.setAttribute('x', (x - w).toString());
 			this.previewRectangle.setAttribute('width', w.toString());
-			this.previewIsDecenteredX = true;
 		} else {
 			this.previewRectangle.setAttribute('x', x.toString());
 			this.previewRectangle.setAttribute('width', w.toString());
-			this.previewIsDecenteredX = false;
 		}
 		// adjust y
 		if (h < 0) {
 			h *= -1;
 			this.previewRectangle.setAttribute('y', (y - h).toString());
 			this.previewRectangle.setAttribute('height', h.toString());
-			this.previewIsDecenteredY = true;
 		} else {
 			this.previewRectangle.setAttribute('y', y.toString());
 			this.previewRectangle.setAttribute('height', h.toString());
-			this.previewIsDecenteredY = false;
 		}
 		this.previewRectangle.setAttribute('fill', 'white');
 		this.previewRectangle.setAttribute('fill-opacity', '0.3');

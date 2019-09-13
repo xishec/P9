@@ -33,7 +33,7 @@ export class RectangleTool extends AbstractShapeTool {
 
 		switch (button) {
 			case 0:
-				if(this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0){
+				if(this.isIn && this.previewRectangle.width.baseVal.value > 1 && this.previewRectangle.height.baseVal.value > 1){
 					this.createSVG();
 				}
 				this.isPreviewing = false;

@@ -42,8 +42,16 @@ export class AppComponent implements OnInit {
 		this.currentTool.onMouseDown(event);
 	}
 
-	@HostListener("mouseup", ["$event"]) onMouseRelease(event: MouseEvent): void {
+	@HostListener("mouseup", ["$event"]) onMouseUp(event: MouseEvent): void {
 		this.currentTool.onMouseUp(event);
+	}
+
+	@HostListener("mouseenter", ["$event"]) onMouseEnter(event: MouseEvent): void{
+		this.currentTool.onMouseEnter(event);
+	}
+
+	@HostListener("mouseleave", ["$event"]) onMouseLeave(event: MouseEvent): void{
+		this.currentTool.onMouseLeave(event);
 	}
 
 	@HostListener("window:keydown", ["$event"]) onKeyPress(event: KeyboardEvent): void {
