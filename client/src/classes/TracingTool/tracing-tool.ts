@@ -9,14 +9,14 @@ export abstract class TracingTool {
         this.isDrawing = false;
     }
 
-    mouseDown(e: MouseEvent): void {
+    onMouseDown(e: MouseEvent): void {
         this.isDrawing = true;
     }
 
     // tslint:disable-next-line: no-empty
-    mouseMove(e: MouseEvent): void { }
+    onMouseMove(e: MouseEvent): void { }
 
-    mouseUp(e: MouseEvent): void {
+    onMouseUp(e: MouseEvent): void {
         this.isDrawing = false;
     }
 }

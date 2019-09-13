@@ -18,14 +18,14 @@ export class PencilComponent extends TracingTool {
     this.svgRef = elementReference;
   }
 
-  mouseDown(e: MouseEvent) {
-    super.mouseDown(e);
+  onMouseDown(e: MouseEvent) {
+    super.onMouseDown(e);
     this.currentPath = `M${e.offsetX} ${e.offsetY}`;
     this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
     this.createSVGPath();
   }
 
-  mouseMove(e: MouseEvent) {
+  onMouseMove(e: MouseEvent) {
     if (this.isDrawing) {
       this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
       this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
@@ -33,8 +33,8 @@ export class PencilComponent extends TracingTool {
     }
   }
 
-  mouseUp(e: MouseEvent) {
-    super.mouseUp(e);
+  onMouseUp(e: MouseEvent) {
+    super.onMouseUp(e);
     this.currentPath = '';
   }
 

@@ -23,15 +23,15 @@ export class AppComponent implements OnInit{
   }
 
   @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-    this.currentTool.mouseDown(e);
+    this.currentTool.onMouseDown(e);
   }
 
   @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
-    this.currentTool.mouseMove(e);
+    this.currentTool.onMouseMove(e);
   }
 
   @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
-    this.currentTool.mouseUp(e);
+    this.currentTool.onMouseUp(e);
   }
   // To there
 
