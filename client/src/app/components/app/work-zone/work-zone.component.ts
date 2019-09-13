@@ -26,7 +26,7 @@ export class WorkZoneComponent implements OnInit {
         });
     }
 
-    changeStyle() {
+    changeStyle(): Object {
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,

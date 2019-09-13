@@ -14,10 +14,10 @@ export class ToolsService {
     private currentToolId: number = -999;
     private drawingModalWindow: DrawingModalWindow;
 
-    getToolIds() {
+    getToolIds(): Array<number> {
         return this.toolIds;
     }
-    getCurrentToolId() {
+    getCurrentToolId(): number {
         return this.currentToolId;
     }
 

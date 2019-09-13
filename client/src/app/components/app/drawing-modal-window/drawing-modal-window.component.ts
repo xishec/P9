@@ -101,10 +101,10 @@ export class DrawingModalWindowComponent implements OnInit {
         this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
     }
 
-    getColorIcon(color: Color) {
+    getColorIcon(color: Color): Object {
         return { 'background-color': '#' + color.hex };
     }
-    getUserColorIcon() {
+    getUserColorIcon(): Object {
         return { 'background-color': '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
     }
 
@@ -112,7 +112,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.ifShowWindow = false;
     }
 
-    setWindowHeight() {
+    setWindowHeight(): Object {
         if (this.submitCount === 0) {
             return { height: '450px' };
         } else {
