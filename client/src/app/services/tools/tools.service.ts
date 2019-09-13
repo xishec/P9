@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 
-import { DrawingModalWindow } from '../drawing-modal-window/drawing-modal-window.service';
+import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolsService {
-    constructor(drawingModalWindow: DrawingModalWindow) {
-        this.drawingModalWindow = drawingModalWindow;
+    constructor(drawingModalWindowService: DrawingModalWindowService) {
+        this.drawingModalWindowService = drawingModalWindowService;
     }
 
     private toolIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
     private currentToolId: number = -999;
-    private drawingModalWindow: DrawingModalWindow;
+    private drawingModalWindowService: DrawingModalWindowService;
 
     getToolIds(): Array<number> {
         return this.toolIds;
@@ -24,7 +24,7 @@ export class ToolsService {
     changeTool(toolId: number) {
         this.currentToolId = toolId;
         if (toolId === 1) {
-            this.drawingModalWindow.changeIfShowWindow(true);
+            this.drawingModalWindowService.changeIfShowWindow(true);
         }
     }
 }

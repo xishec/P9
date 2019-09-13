@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { DrawingInfo } from '../../../../classes/DrawingInfo';
-import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -9,19 +9,19 @@ import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawi
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingModalWindow: DrawingModalWindow;
+    drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo;
     ifShowWindow: boolean;
 
-    constructor(drawingModalWindow: DrawingModalWindow) {
-        this.drawingModalWindow = drawingModalWindow;
+    constructor(drawingModalWindowService: DrawingModalWindowService) {
+        this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit() {
-        this.drawingModalWindow.currentInfo.subscribe((drawingInfo) => {
+        this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
         });
-        this.drawingModalWindow.currentIfShowWindow.subscribe((ifShowWindow) => {
+        this.drawingModalWindowService.currentIfShowWindow.subscribe((ifShowWindow) => {
             this.ifShowWindow = ifShowWindow;
         });
     }

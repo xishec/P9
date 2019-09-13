@@ -1,34 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { Color } from '../../../classes/Color';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { CONSTANTS } from '../../components/app/CONSTANTS';
 
 @Injectable({
     providedIn: 'root',
 })
-export class DrawingModalWindow {
-    colors: Color[] = [
-        { hex: 'ffffff' },
-        { hex: 'bbbbbb' },
-        { hex: '888888' },
-        { hex: '000000' },
-        { hex: 'a970eb' },
-        { hex: 'eb70e9' },
-        { hex: 'eb70a7' },
-        { hex: 'eb7070' },
-        { hex: 'fec771' },
-        { hex: 'e6e56c' },
-        { hex: '64e291' },
-        { hex: '07e4f0' },
-        { hex: '077bf0' },
-        { hex: '5057de' },
-    ];
-
+export class DrawingModalWindowService {
     private infoSource: BehaviorSubject<DrawingInfo> = new BehaviorSubject({
         width: 0,
         height: 0,
-        color: this.colors[0],
+        color: CONSTANTS.COLORS[0],
         opacity: 1,
     });
     private ifShowWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Color } from '../../../../classes/Color';
 import { DrawingInfo } from '../../../../classes/DrawingInfo';
-import { DrawingModalWindow } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 import { CONSTANTS } from '../CONSTANTS';
 
@@ -13,7 +13,7 @@ import { CONSTANTS } from '../CONSTANTS';
     styleUrls: ['./drawing-modal-window.component.scss'],
 })
 export class DrawingModalWindowComponent implements OnInit {
-    drawingModalWindow: DrawingModalWindow;
+    drawingModalWindowService: DrawingModalWindowService;
 
     myForm: FormGroup;
     formBuilder: FormBuilder;
@@ -23,16 +23,16 @@ export class DrawingModalWindowComponent implements OnInit {
     submitCount: number = 0;
     ifShowWindow: boolean;
 
-    constructor(formBuilder: FormBuilder, drawingModalWindow: DrawingModalWindow) {
+    constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
-        this.drawingModalWindow = drawingModalWindow;
-        this.colors = drawingModalWindow.colors;
-        this.activeColor = drawingModalWindow.colors[0];
+        this.drawingModalWindowService = drawingModalWindowService;
+        this.colors = CONSTANTS.COLORS;
+        this.activeColor = CONSTANTS.COLORS[0];
     }
 
     ngOnInit(): void {
         this.initializeForm();
-        this.drawingModalWindow.currentIfShowWindow.subscribe((ifShowWindow) => {
+        this.drawingModalWindowService.currentIfShowWindow.subscribe((ifShowWindow) => {
             this.ifShowWindow = ifShowWindow;
         });
     }
@@ -60,8 +60,8 @@ export class DrawingModalWindowComponent implements OnInit {
             color: this.activeColor,
             opacity: this.myForm.value.A,
         };
-        this.drawingModalWindow.changeInfo(drawingInfo);
-        this.drawingModalWindow.changeIfShowWindow(false);
+        this.drawingModalWindowService.changeInfo(drawingInfo);
+        this.drawingModalWindowService.changeIfShowWindow(false);
 
         this.submitCount++;
         this.initializeForm();
