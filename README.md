@@ -16,10 +16,10 @@ Les commandes commençant par `npm` ou `yarn` devront être exécutées dans les
 
 Pour lancer l'application, il suffit d'exécuter: `npm start` ou `yarn start`. Vous devez lancer cette commande dans le dossier `client` et `server`
 
-Pour le client :
+Pour le client:
 Une page menant vers `http://localhost:4200/` s'ouvrira automatiquement.
 
-Pour le serveur :
+Pour le serveur:
 Votre serveur est accessible sur `http://localhost:3000`. Par défaut, votre client fait une requête `GET` vers le serveur pour obtenir un message.
 
 L'application se relancera automatiquement si vous modifiez le code source de celle-ci.
@@ -81,8 +81,11 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 {
 	"prettier.printWidth": 120,
 	"prettier.tabWidth": 4,
-	"prettier.useTabs": true,
 	"prettier.trailingComma": "es5",
+	"prettier.arrowParens": "always",
+	"prettier.disableLanguages": [],
+	"prettier.singleQuote": true,
+	"prettier.endOfLine": "lf",
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
@@ -94,9 +97,7 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 	},
 	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"prettier.arrowParens": "always",
-	"prettier.disableLanguages": []
+	}
 }
 ```
 
@@ -146,9 +147,9 @@ Séparez votre code Typescript du CSS et du HTML. Générez vos component avec A
 
 Une seule fonctionnalité par branche.
 
-Une branche fonctionnalité devrait se nommer `feature/nom-du-feature`.
+Une branche fonctionnalité devrait se nommer `feat/nom-du-feature`.
 
-Une branche correction de bogue devrait se nommer `hotfix/nom-du-bug`.
+Une branche correction de bogue devrait se nommer `fix/nom-du-bug`.
 
 Les messages de commit doivent être concis et significatifs. Ne mettez pas des messages trop long ou trop courts. On devrait être capable de comprendre ce que le commit fait sans lire les changements.
 

@@ -1,0 +1,21 @@
+#sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 360px;
+    background-color: #ffffff;
+
+    z-index: 1;
+}
+
+#buttons {
+    width: 60px;
+    height: 100vh;
+
+    mat-button-toggle-group {
+        width: 59px;
+    }
+}
