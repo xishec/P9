@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { PencilComponent } from '../pencil/pencil.component';
 
 @Component({
     selector: 'app-work-zone',
@@ -24,6 +25,8 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
+
+        this.currentTool = new PencilComponent(this.svgRef);
     }
 
     changeStyle() {
@@ -33,5 +36,18 @@ export class WorkZoneComponent implements OnInit {
             height: this.drawingInfo.height,
             width: this.drawingInfo.width,
         };
+    }
+
+    private currentTool: PencilComponent;
+    @ViewChild('svgpad', {static : true}) svgRef: ElementRef<SVGElement>;
+    
+    @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
+        this.currentTool.onMouseDown(e);
+    }
+    @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
+        this.currentTool.onMouseMove(e);
+    }
+    @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
+        this.currentTool.onMouseUp(e);
     }
 }
