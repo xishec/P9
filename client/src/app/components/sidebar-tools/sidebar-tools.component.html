@@ -1,14 +1,56 @@
 <div id="sidebar">
     <div id="buttons">
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle color="primary" (click)="onChangeTool(1)">
+                <mat-button-toggle matTooltip="Sélection" matTooltipPosition = "after"  (click)="onChangeTool(1)">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Crayon" matTooltipPosition = "after"  (click)="onChangeTool(2)">
+                        <i class="fas fa-pencil-alt"></i>
+                     </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Pinceau" matTooltipPosition = "after"  (click)="onChangeTool(3)">
+                        <i class="fas fa-paint-brush"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Plume" matTooltipPosition = "after"  (click)="onChangeTool(4)">
+                        <i class="fas fa-pen-nib"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Stylo" matTooltipPosition = "after"  (click)="onChangeTool(5)">
+                        <i class="fas fa-pen-alt"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Aérosol" matTooltipPosition = "after"  (click)="onChangeTool(6)">
+                        <i class="fas fa-spray-can"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Ligne" matTooltipPosition = "after"  (click)="onChangeTool(7)">
+                        <strong>/</strong>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Carré" matTooltipPosition = "after"  (click)="onChangeTool(8)">
+                        <i class="far fa-square"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Polygone" matTooltipPosition = "after"  (click)="onChangeTool(14)">
+                        <i class="fas fa-draw-polygon"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Ellipse" matTooltipPosition = "after"  (click)="onChangeTool(9)">
+                        <i class="far fa-circle"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Applicateur de couleur" matTooltipPosition = "after"  (click)="onChangeTool(10)">
+                        <i class="fas fa-fill-drip">
+                            
+                        </i></mat-button-toggle>
+                    <mat-button-toggle matTooltip="Sélecteur de couleur" matTooltipPosition = "after"  (click)="onChangeTool(11)"><i class="fas fa-eye-dropper"></i></mat-button-toggle>
+                    <mat-button-toggle matTooltip="Efface" matTooltipPosition = "after"  (click)="onChangeTool(12)">
+                        <i class="fas fa-eraser"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Pallete de couleur" matTooltipPosition = "after"  (click)="onChangeTool(13)">
+                        <i class="fas fa-palette"></i>
+                    </mat-button-toggle>
+                    <mat-button-toggle matTooltip="Texte" matTooltipPosition = "after"  (click)="onChangeTool(14)">
+                         <strong>T</strong>
+                        </mat-button-toggle>
+                
+            <mat-button-toggle color="primary" (click)="ononChangeTool(1)">
                 <i class="fas fa-plus"></i>
             </mat-button-toggle>
-            <mat-button-toggle color="primary" *ngFor="let toolId of toolIds" (click)="onChangeTool(toolId)">
-                {{ toolId }}
-            </mat-button-toggle>
+            
         </mat-button-toggle-group>
     </div>
-
     <app-attribute-panel [currentToolId]="toolsService.getCurrentToolId()"></app-attribute-panel>
 </div>
