@@ -6,13 +6,13 @@ import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal
     providedIn: 'root',
 })
 export class ToolsService {
-    constructor(drawingModalWindowService: DrawingModalWindowService) {
-        this.drawingModalWindowService = drawingModalWindowService;
-    }
-
     private toolIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
     private currentToolId: number = -999;
     private drawingModalWindowService: DrawingModalWindowService;
+
+    constructor(drawingModalWindowService: DrawingModalWindowService) {
+        this.drawingModalWindowService = drawingModalWindowService;
+    }
 
     getToolIds(): Array<number> {
         return this.toolIds;
