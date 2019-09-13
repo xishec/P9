@@ -131,7 +131,7 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 }
 
-class IconStyle {
+interface IconStyle {
     backgroundColor: string;
     opacity: String;
 }
