@@ -5,7 +5,7 @@ import { Color } from '../../../../classes/Color';
 import { DrawingInfo } from '../../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
-import { CONSTANTS } from '../CONSTANTS';
+import { SIDEBAR_WIDTH, COLORS } from '../CONSTANTS';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -26,8 +26,8 @@ export class DrawingModalWindowComponent implements OnInit {
     constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
         this.drawingModalWindowService = drawingModalWindowService;
-        this.colors = CONSTANTS.COLORS;
-        this.activeColor = CONSTANTS.COLORS[0];
+        this.colors = COLORS;
+        this.activeColor = COLORS[0];
     }
 
     ngOnInit(): void {
@@ -45,10 +45,7 @@ export class DrawingModalWindowComponent implements OnInit {
             B: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
             confirm: this.submitCount === 0,
-            width: [
-                window.innerWidth - CONSTANTS.SIDEBAR_WIDTH,
-                [Validators.required, Validators.min(0), Validators.max(10000)],
-            ],
+            width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
     }
@@ -71,7 +68,7 @@ export class DrawingModalWindowComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize() {
         if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
-            this.myForm.controls.width.setValue(window.innerWidth - CONSTANTS.SIDEBAR_WIDTH);
+            this.myForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
             this.myForm.controls.height.setValue(window.innerHeight);
         }
     }
@@ -116,7 +113,7 @@ export class DrawingModalWindowComponent implements OnInit {
         if (this.submitCount === 0) {
             return { height: '450px' };
         } else {
-            return { height: '500px' };
+            return { height: '510px' };
         }
     }
 

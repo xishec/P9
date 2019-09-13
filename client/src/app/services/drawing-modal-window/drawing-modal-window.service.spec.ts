@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DrawingModalWindow } from './drawing-modal-window.service';
+import { DrawingModalWindowService } from './drawing-modal-window.service';
 
-describe('DrawingModalWindow', () => {
+describe('DrawingModalWindowService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: DrawingModalWindow = TestBed.get(DrawingModalWindow);
+        const service: DrawingModalWindowService = TestBed.get(DrawingModalWindowService);
         expect(service).toBeTruthy();
     });
 });
