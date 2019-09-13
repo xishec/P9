@@ -20,7 +20,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     colors: Color[];
     activeColor: Color;
-    submitCount = 0;
+    submitCount: number = 0;
     ifShowWindow: boolean;
 
     constructor(formBuilder: FormBuilder, drawingModalWindow: DrawingModalWindow) {

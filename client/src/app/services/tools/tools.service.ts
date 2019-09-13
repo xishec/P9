@@ -11,7 +11,7 @@ export class ToolsService {
     }
 
     private toolIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-    private currentToolId = -999;
+    private currentToolId: number = -999;
     private drawingModalWindow: DrawingModalWindow;
 
     getToolIds() {
