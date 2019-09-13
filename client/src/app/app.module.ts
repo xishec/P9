@@ -5,7 +5,7 @@ import { AppComponent } from './components/app/app.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// *********** Material Angular ******************
+// *********** Angular Material ******************
 import {
     MatButtonModule,
     MatButtonToggleModule,
