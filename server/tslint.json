@@ -1,7 +1,6 @@
 {
-  "extends": "../common/tslint.json",
-  "rulesDirectory": [],
-  "defaultSeverity": "error",
-  "rules": {
-  }
+    "extends": "../common/tslint.json",
+    "rulesDirectory": [],
+    "defaultSeverity": "error",
+    "rules": {}
 }
