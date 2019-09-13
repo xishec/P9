@@ -13,18 +13,18 @@ import {
     MatInputModule,
     MatRadioModule,
 } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // ************************************************
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // *************** Services **********************
 import { DrawingModalWindowService } from './services/drawing-modal-window/drawing-modal-window.service';
-import { ToolsService} from './services/tools/tools.service';
+import { ToolsService } from './services/tools/tools.service';
 // ************************************************
 
-import { DrawingModalWindowComponent } from './components/app/drawing-modal-window/drawing-modal-window.component';
-import { AttributePanelComponent } from './components/app/sidebar-tools/attribute-panel/attribute-panel.component';
-import { SidebarToolsComponent } from './components/app/sidebar-tools/sidebar-tools.component';
-import { WorkZoneComponent } from './components/app/work-zone/work-zone.component';
+import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
+import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
+import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
+import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 
 @NgModule({
     declarations: [

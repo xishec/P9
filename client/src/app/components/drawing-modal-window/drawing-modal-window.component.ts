@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Color } from '../../../../classes/Color';
-import { DrawingInfo } from '../../../../classes/DrawingInfo';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { Color } from '../../../classes/Color';
+import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
-import { SIDEBAR_WIDTH, COLORS } from '../CONSTANTS';
+import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -18,10 +18,10 @@ export class DrawingModalWindowComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
 
-    colors: Color[];
-    activeColor: Color;
-    submitCount: number = 0;
-    ifShowWindow: boolean;
+    colors: Color[] = [];
+    activeColor: Color = new Color();
+    submitCount = 0;
+    displayNewDrawingModalWindow = false;
 
     constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
@@ -32,8 +32,8 @@ export class DrawingModalWindowComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.drawingModalWindowService.currentIfShowWindow.subscribe((ifShowWindow) => {
-            this.ifShowWindow = ifShowWindow;
+        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
+            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
     }
 
@@ -62,7 +62,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
         this.submitCount++;
         this.initializeForm();
-        this.activeColor = { hex: 'ffffff' };
+        this.activeColor = { hex: DEFAULT_COLOR };
     }
 
     @HostListener('window:resize', ['$event'])
@@ -72,19 +72,20 @@ export class DrawingModalWindowComponent implements OnInit {
             this.myForm.controls.height.setValue(window.innerHeight);
         }
     }
-
-    changeColor(i: number) {
+    onChangeColor(i: number) {
         this.activeColor = this.colors[i];
         this.setHex();
         this.setRGBFromHex();
     }
-
+    onCancel() {
+        this.displayNewDrawingModalWindow = false;
+    }
     onUserColorHex() {
         this.activeColor = { hex: this.myForm.value.hex };
         this.setRGBFromHex();
     }
     onUserColorRGB() {
-        let newHex = this.rgbToHex();
+        const newHex = this.rgbToHex();
         this.activeColor = { hex: newHex };
         this.setHex();
     }
@@ -98,18 +99,14 @@ export class DrawingModalWindowComponent implements OnInit {
         this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
     }
 
-    getColorIcon(color: Color): Object {
-        return { 'background-color': '#' + color.hex };
+    getColorIcon(color: Color) {
+        return { backgroundColor: '#' + color.hex };
     }
-    getUserColorIcon(): Object {
-        return { 'background-color': '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
-    }
-
-    cancel() {
-        this.ifShowWindow = false;
+    getUserColorIcon() {
+        return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
     }
 
-    setWindowHeight(): Object {
+    setWindowHeight() {
         if (this.submitCount === 0) {
             return { height: '450px' };
         } else {

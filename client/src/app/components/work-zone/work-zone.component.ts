@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DrawingInfo } from '../../../../classes/DrawingInfo';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -10,8 +10,8 @@ import { DrawingModalWindowService } from '../../../services/drawing-modal-windo
 })
 export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
-    drawingInfo: DrawingInfo;
-    ifShowWindow: boolean;
+    drawingInfo: DrawingInfo = new DrawingInfo();
+    displayNewDrawingModalWindow = false;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
@@ -21,12 +21,12 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
         });
-        this.drawingModalWindowService.currentIfShowWindow.subscribe((ifShowWindow) => {
-            this.ifShowWindow = ifShowWindow;
+        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
+            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
     }
 
-    changeStyle(): Object {
+    changeStyle() {
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,

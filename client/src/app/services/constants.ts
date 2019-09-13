@@ -1,7 +1,7 @@
-import { Color } from '../../../classes/Color';
+import { Color } from '../../classes/Color';
 
-let SIDEBAR_WIDTH: number = 360;
-let COLORS: Array<Color> = [
+const SIDEBAR_WIDTH = 360;
+const COLORS: Color[] = [
     { hex: 'ffffff' },
     { hex: 'bbbbbb' },
     { hex: '888888' },
@@ -17,5 +17,6 @@ let COLORS: Array<Color> = [
     { hex: '077bf0' },
     { hex: '5057de' },
 ];
+const DEFAULT_COLOR = 'ffffff';
 
-export { SIDEBAR_WIDTH, COLORS };
+export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR };

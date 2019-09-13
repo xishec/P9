@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ToolsService } from '../../../services/tools/tools.service';
+import { ToolsService } from '../../services/tools/tools.service';
 
 @Component({
     selector: 'app-sidebar-tools',
@@ -10,8 +10,8 @@ import { ToolsService } from '../../../services/tools/tools.service';
 export class SidebarToolsComponent {
     toolsService: ToolsService;
 
-    toolIds: number[];
-    currentToolId: number;
+    toolIds: number[] = [];
+    currentToolId = 0;
 
     constructor(toolsService: ToolsService) {
         this.toolsService = toolsService;
@@ -19,7 +19,7 @@ export class SidebarToolsComponent {
         this.currentToolId = toolsService.getCurrentToolId();
     }
 
-    changeTool(toolId: number) {
+    onChangeTool(toolId: number) {
         this.toolsService.changeTool(toolId);
     }
 }

@@ -1,4 +1,4 @@
-<div id="mask" *ngIf="ifShowWindow">
+<div id="mask" *ngIf="displayNewDrawingModalWindow">
     <div id="window" [ngStyle]="setWindowHeight()">
         <h1 id="title">Création d'un nouveau dessin</h1>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
@@ -13,7 +13,7 @@
                     type="button"
                     *ngFor="let color of colors; let i = index"
                     [ngStyle]="getColorIcon(color)"
-                    (click)="changeColor(i)"
+                    (click)="onChangeColor(i)"
                 ></button>
 
                 <mat-form-field class="medium">
@@ -65,8 +65,8 @@
                 </mat-checkbox>
             </div>
 
-            <button class="actionButton" mat-stroked-button type="button" (click)="cancel()">Annuler</button>
-            <button class="actionButton" mat-stroked-button type="submits" [disabled]="myForm.invalid">Créer!</button>
+            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+            <button class="actionButton" mat-stroked-button type="submit" [disabled]="myForm.invalid">Créer!</button>
         </form>
     </div>
 </div>

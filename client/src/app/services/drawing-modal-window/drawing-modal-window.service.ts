@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { COLORS } from '../../components/app/CONSTANTS';
+import { COLORS } from '../constants';
 
 @Injectable({
     providedIn: 'root',
@@ -14,15 +14,16 @@ export class DrawingModalWindowService {
         color: COLORS[0],
         opacity: 1,
     });
-    private ifShowWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
+    private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     currentInfo = this.infoSource.asObservable();
-    currentIfShowWindow = this.ifShowWindow.asObservable();
+    currentDisplayNewDrawingModalWindow = this.displayNewDrawingModalWindow.asObservable();
 
     changeInfo(drawingInfo: DrawingInfo) {
         this.infoSource.next(drawingInfo);
     }
-    changeIfShowWindow(ifShowWindow: boolean) {
-        this.ifShowWindow.next(ifShowWindow);
+    changeIfShowWindow(displayNewDrawingModalWindow: boolean) {
+        this.displayNewDrawingModalWindow.next(displayNewDrawingModalWindow);
     }
 }
