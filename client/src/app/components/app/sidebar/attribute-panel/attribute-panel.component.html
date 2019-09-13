@@ -2,6 +2,10 @@
 	<mat-sidenav mode="side" opened class="sidebar">
 		<p>Attribute Panel</p>
 		<p>Tool : {{ toolId }}</p>
+
+		Épaisseur
+		<input type="range" #rangeColor (click)="this.displayValue()" >
+		<button (click)= "displayValue()">{{this.nomBoutton}}</button>
 	</mat-sidenav>
 
 	<mat-sidenav-content>
