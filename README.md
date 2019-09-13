@@ -101,18 +101,6 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 }
 ```
 
-Pour utiliser TSLint:
-
-```
-ng lint --type-check --format stylish
-```
-
-Pour que utiliser l'autocorrection de TSLint:
-
-```
-ng lint --fix --project
-```
-
 ## Conventions de nommage
 
 Utilisez le ALL_CAPS pour les constantes.
