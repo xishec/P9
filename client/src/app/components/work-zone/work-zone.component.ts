@@ -1,8 +1,8 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { PencilComponent } from '../pencil/pencil.component';
+import { PencilToolService } from '../../services/tracing-tools/pencil-tool/pencil-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -13,9 +13,11 @@ export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
+    pencilToolService: PencilToolService;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService) {
+    constructor(drawingModalWindowService: DrawingModalWindowService, pencilToolService: PencilToolService) {
         this.drawingModalWindowService = drawingModalWindowService;
+        this.pencilToolService = pencilToolService;
     }
 
     ngOnInit() {
@@ -25,8 +27,6 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-
-        this.currentTool = new PencilComponent(this.svgRef);
     }
 
     changeStyle() {
@@ -38,19 +38,17 @@ export class WorkZoneComponent implements OnInit {
         };
     }
 
-    private currentTool: PencilComponent;
     @ViewChild('svgpad', {static : true}) svgRef: ElementRef<SVGElement>;
-    
     @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-        this.currentTool.onMouseDown(e);
+        this.pencilToolService.onMouseDown(e, this.svgRef);
     }
     @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
-        this.currentTool.onMouseMove(e);
+        this.pencilToolService.onMouseMove(e, this.svgRef);
     }
     @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
-        this.currentTool.onMouseUp(e);
+        this.pencilToolService.onMouseUp(e, this.svgRef);
     }
     @HostListener('mouseleave', ['$event']) onMouseLeave(e: MouseEvent): void {
-        this.currentTool.onMouseLeave(e);
+        this.pencilToolService.onMouseLeave(e, this.svgRef);
     }
 }

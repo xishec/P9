@@ -1,47 +1,45 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { TracingToolService } from '../tracing-tool.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-  private svgRef: ElementRef<SVGElement>;
   private svgPath: SVGPathElement;
   private currentPath: string;
   // They Could be in TracingToolService
   private currentWidth = 2;
   private currentColor = 'black';
 
-  constructor(elementRef: ElementRef<SVGElement>){
+  constructor(){
     super();
-    this.svgRef = elementRef;
   }
 
-  onMouseDown(e: MouseEvent): void {
-    super.onMouseDown(e);
+  onMouseDown(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
+    super.onMouseDown(e, elementRef);
     this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-    this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
-    this.createSVGPath();
+    this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth, elementRef);
+    this.createSVGPath(elementRef);
   }
 
-  onMouseMove(e: MouseEvent): void {
+  onMouseMove(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
     if (this.isDrawing) {
-      this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
+      this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth, elementRef);
       this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
       this.svgPath.setAttribute('d', this.currentPath);
     }
   }
 
-  onMouseUp(e: MouseEvent): void {
-    super.onMouseUp(e);
+  onMouseUp(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
+    super.onMouseUp(e, elementRef);
     this.currentPath = '';
   }
 
-  onMouseLeave(e: MouseEvent): void {
+  onMouseLeave(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
     this.isDrawing = false;
   }
 
-  createSVGCircle(x: number, y: number, w: number) {
+  createSVGCircle(x: number, y: number, w: number, elementRef: ElementRef<SVGElement>) {
     const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     el.setAttribute('x1', x.toString());
     el.setAttribute('y1', y.toString());
@@ -50,15 +48,15 @@ export class PencilToolService extends TracingToolService {
     el.setAttribute('stroke-width', w.toString());
     el.setAttribute('stroke-linecap', 'round');
     el.setAttribute('stroke', this.currentColor);
-    this.svgRef.nativeElement.appendChild(el);
+    elementRef.nativeElement.appendChild(el);
   }
 
-  createSVGPath(): void {
+  createSVGPath(elementRef: ElementRef<SVGElement>): void {
     this.svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.svgPath.setAttribute('d', this.currentPath);
     this.svgPath.setAttribute('fill', 'none');
     this.svgPath.setAttribute('stroke', this.currentColor);
     this.svgPath.setAttribute('stroke-width', this.currentWidth.toString());
-    this.svgRef.nativeElement.appendChild(this.svgPath);
+    elementRef.nativeElement.appendChild(this.svgPath);
   }
 }

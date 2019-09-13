@@ -10,17 +10,17 @@ export abstract class TracingToolService {
     this.isDrawing = false;
   }
 
-  onMouseDown(e: MouseEvent): void {
+  onMouseDown(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
     this.isDrawing = true;
   }
 
-  onMouseUp(e: MouseEvent): void {
+  onMouseUp(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
     this.isDrawing = false;
   }
 
-  onMouseLeave(e: MouseEvent): void {
+  onMouseLeave(e: MouseEvent, elementRef: ElementRef<SVGElement>): void {
     this.isDrawing = false;
   }
 
-  abstract onMouseMove(e: MouseEvent): void;
+  abstract onMouseMove(e: MouseEvent, elementRef: ElementRef<SVGElement>): void;
 }
