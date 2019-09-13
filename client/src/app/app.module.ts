@@ -53,5 +53,6 @@ import { StrokeComponent } from './components/SVGComponents/stroke/stroke.compon
     ],
     providers: [ToolsService, DrawingModalWindowService, PencilToolService],
     bootstrap: [AppComponent],
+    entryComponents: [StrokeComponent]
 })
 export class AppModule {}

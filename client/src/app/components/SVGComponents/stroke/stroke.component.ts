@@ -8,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class StrokeComponent implements OnInit {
 
   constructor() { }
+  private x = 10;
+  right() {
+    this.x += 5;
+  }
 
   ngOnInit() {
   }
