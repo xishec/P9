@@ -78,33 +78,27 @@ export class DrawingModalWindowComponent implements OnInit {
 
     changeColor(i: number) {
         this.activeColor = this.colors[i];
-        this.myForm.controls.hex.setValue(this.activeColor.hex);
-        this.myForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
-        this.myForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
-        this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
+        this.setHex();
+        this.setRGBFromHex();
     }
 
     onUserColorHex() {
         this.activeColor = { hex: this.myForm.value.hex };
+        this.setRGBFromHex();
+    }
+    onUserColorRGB() {
+        let newHex = this.rgbToHex();
+        this.activeColor = { hex: newHex };
+        this.setHex();
+    }
+
+    setHex() {
+        this.myForm.controls.hex.setValue(this.activeColor.hex);
+    }
+    setRGBFromHex() {
         this.myForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
         this.myForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
         this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
-    }
-    onUserColorRGB() {
-        let r = Number(this.myForm.value.R).toString(16);
-        let g = Number(this.myForm.value.G).toString(16);
-        let b = Number(this.myForm.value.B).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        this.activeColor = { hex: r + g + b };
-        this.myForm.controls.hex.setValue(this.activeColor.hex);
     }
 
     getColorIcon(color: Color) {
@@ -124,5 +118,21 @@ export class DrawingModalWindowComponent implements OnInit {
         } else {
             return { height: '500px' };
         }
+    }
+
+    rgbToHex(): string {
+        let r = Number(this.myForm.value.R).toString(16);
+        let g = Number(this.myForm.value.G).toString(16);
+        let b = Number(this.myForm.value.B).toString(16);
+        if (r.length === 1) {
+            r = '0' + r;
+        }
+        if (g.length === 1) {
+            g = '0' + g;
+        }
+        if (b.length === 1) {
+            b = '0' + b;
+        }
+        return r + g + b;
     }
 }
