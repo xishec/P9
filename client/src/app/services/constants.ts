@@ -1,4 +1,5 @@
 import { Color } from '../../classes/Color';
+import { SidebarButtonInfo } from '../../classes/SidebarButtonInfo';
 
 const SIDEBAR_WIDTH = 360;
 const COLORS: Color[] = [
@@ -19,4 +20,41 @@ const COLORS: Color[] = [
 ];
 const DEFAULT_COLOR = 'ffffff';
 
-export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR };
+const FILES_ICON_NAME: string[] = ['fas fa-plus', 'far fa-save', 'fas fa-folder-open', 'fas fa-file-export'];
+
+const FILES_TOOLTIP_NAME: string[] = ['Nouveau dessin', 'Sauvegarder', 'Gallerie de dessin', 'Exporter'];
+
+const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-mouse-pointer', tooltipName: 'Sélection' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: 'Crayon' },
+    { iconName: 'fas fa-paint-brush', tooltipName: 'Plume' },
+    { iconName: 'fas fa-pen-nib', tooltipName: 'Stylo' },
+    { iconName: 'fas fa-pen-alt', tooltipName: 'Plume' },
+    { iconName: 'fas fa-spray-can', tooltipName: 'Aérosol' },
+    { iconName: 'fas fa-slash', tooltipName: 'Ligne' },
+    { iconName: 'far fa-square', tooltipName: 'Carré' },
+    { iconName: 'fas fa-draw-polygon', tooltipName: 'Polygone' },
+    { iconName: 'far fa-circle', tooltipName: 'Ellipse' },
+    { iconName: 'fas fa-fill-drip', tooltipName: 'Applicateur de couleur' },
+    { iconName: 'fas fa-eye-dropper', tooltipName: 'Sélecteur de couleur' },
+    { iconName: 'fas fa-eraser', tooltipName: 'Efface' },
+    { iconName: 'fas fa-palette', tooltipName: 'Pallete de couleur' },
+    { iconName: 'fas fa-font', tooltipName: 'Zone de texte' },
+];
+
+const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-plus', tooltipName: 'Nouveau dessin' },
+    { iconName: 'far fa-save', tooltipName: 'Sauvegarder' },
+    { iconName: 'fas fa-folder-open', tooltipName: 'Gallerie de dessin' },
+    { iconName: 'fas fa-file-export', tooltipName: 'Exporter' },
+];
+
+export {
+    SIDEBAR_WIDTH,
+    COLORS,
+    DEFAULT_COLOR,
+    FILES_ICON_NAME,
+    FILES_TOOLTIP_NAME,
+    TOOLS_BUTTON_INFO,
+    FILES_BUTTON_INFO,
+};

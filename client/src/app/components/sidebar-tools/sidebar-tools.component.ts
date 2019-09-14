@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ToolsService } from '../../services/tools/tools.service';
-
+import { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO } from '../../services/constants';
 @Component({
     selector: 'app-sidebar-tools',
     templateUrl: './sidebar-tools.component.html',
@@ -12,6 +12,9 @@ export class SidebarToolsComponent {
 
     toolIds: number[] = [];
     currentToolId = 0;
+
+    toolsButtonInfo = TOOLS_BUTTON_INFO;
+    filesButtonInfo = FILES_BUTTON_INFO;
 
     constructor(toolsService: ToolsService) {
         this.toolsService = toolsService;
