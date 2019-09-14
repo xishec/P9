@@ -1,4 +1,4 @@
-import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, HostListener } from '@angular/core';
+import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, HostListener, ElementRef } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -17,7 +17,7 @@ export class WorkZoneComponent implements OnInit {
     pencilToolService: PencilToolService;
 
     constructor(drawingModalWindowService: DrawingModalWindowService, pencilToolService: PencilToolService,
-    private resolver: ComponentFactoryResolver) {
+                private resolver: ComponentFactoryResolver) {
         this.drawingModalWindowService = drawingModalWindowService;
         this.pencilToolService = pencilToolService;
     }
@@ -41,26 +41,32 @@ export class WorkZoneComponent implements OnInit {
     }
 
     componentRef: ComponentRef;
-    @ViewChild('container', { read: ViewContainerRef }) container;
-    createComponent(): void {
+    @ViewChild('container', {read: ViewContainerRef, static: true }) container;
+    // Should be executed by the pencil-tool.service
+    @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
+        this.createComponent(e.offsetX, e.offsetY);
+        console.log('clicked');
+    }
+    createComponent(x: number, y: number): void {
         const factory: ComponentFactory<StrokeComponent> = this.resolver.resolveComponentFactory(StrokeComponent);
         this.componentRef = this.container.createComponent(factory);
+        this.componentRef.instance.move(x, y);
     }
     moveRight(): void {
         this.componentRef.instance.right();
     }
 
-    // @ViewChild('svgpad', {static : true}) svgRef: ElementRef<SVGElement>;
-    // @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-    //     this.pencilToolService.onMouseDown(e, this.svgRef);
-    // }
-    // @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
-    //     this.pencilToolService.onMouseMove(e, this.svgRef);
-    // }
-    // @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
-    //     this.pencilToolService.onMouseUp(e, this.svgRef);
-    // }
-    // @HostListener('mouseleave', ['$event']) onMouseLeave(e: MouseEvent): void {
-    //     this.pencilToolService.onMouseLeave(e, this.svgRef);
-    // }
+//     @ViewChild('container', {static : true}) svgRef: ElementRef<SVGElement>;
+//     @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
+//         this.pencilToolService.onMouseDown(e, this.svgRef);
+//     }
+//     @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
+//         this.pencilToolService.onMouseMove(e, this.svgRef);
+//     }
+//     @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
+//         this.pencilToolService.onMouseUp(e, this.svgRef);
+//     }
+//     @HostListener('mouseleave', ['$event']) onMouseLeave(e: MouseEvent): void {
+//         this.pencilToolService.onMouseLeave(e, this.svgRef);
+//     }
 }

@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './components/app/app.component';
-import { PencilComponent } from './components/pencil/pencil.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -26,8 +25,8 @@ import { PencilToolService } from './services/tracing-tools/pencil-tool/pencil-t
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
-import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { StrokeComponent } from './components/SVGComponents/stroke/stroke.component';
+import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +35,6 @@ import { StrokeComponent } from './components/SVGComponents/stroke/stroke.compon
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
-        PencilComponent,
         StrokeComponent,
     ],
     imports: [
@@ -53,6 +51,6 @@ import { StrokeComponent } from './components/SVGComponents/stroke/stroke.compon
     ],
     providers: [ToolsService, DrawingModalWindowService, PencilToolService],
     bootstrap: [AppComponent],
-    entryComponents: [StrokeComponent]
+    entryComponents: [StrokeComponent,]
 })
 export class AppModule {}
