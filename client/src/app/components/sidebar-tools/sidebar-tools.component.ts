@@ -13,8 +13,8 @@ export class SidebarToolsComponent {
     toolIds: number[] = [];
     currentToolId = 0;
 
-    toolsButtonInfo = TOOLS_BUTTON_INFO;
-    filesButtonInfo = FILES_BUTTON_INFO;
+    readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
+    readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
     constructor(toolsService: ToolsService) {
         this.toolsService = toolsService;
