@@ -20,10 +20,6 @@ const COLORS: Color[] = [
 ];
 const DEFAULT_COLOR = 'ffffff';
 
-const FILES_ICON_NAME: string[] = ['fas fa-plus', 'far fa-save', 'fas fa-folder-open', 'fas fa-file-export'];
-
-const FILES_TOOLTIP_NAME: string[] = ['Nouveau dessin', 'Sauvegarder', 'Gallerie de dessin', 'Exporter'];
-
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: 'Sélection' },
     { iconName: 'fas fa-pencil-alt', tooltipName: 'Crayon' },
@@ -49,12 +45,4 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-file-export', tooltipName: 'Exporter' },
 ];
 
-export {
-    SIDEBAR_WIDTH,
-    COLORS,
-    DEFAULT_COLOR,
-    FILES_ICON_NAME,
-    FILES_TOOLTIP_NAME,
-    TOOLS_BUTTON_INFO,
-    FILES_BUTTON_INFO,
-};
+export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR, TOOLS_BUTTON_INFO, FILES_BUTTON_INFO };
