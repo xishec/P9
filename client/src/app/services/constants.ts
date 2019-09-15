@@ -23,9 +23,9 @@ const DEFAULT_COLOR = 'ffffff';
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: 'Sélection' },
     { iconName: 'fas fa-pencil-alt', tooltipName: 'Crayon' },
-    { iconName: 'fas fa-paint-brush', tooltipName: 'Plume' },
-    { iconName: 'fas fa-pen-nib', tooltipName: 'Stylo' },
-    { iconName: 'fas fa-pen-alt', tooltipName: 'Plume' },
+    { iconName: 'fas fa-paint-brush', tooltipName: 'Pinceau' },
+    { iconName: 'fas fa-pen-nib', tooltipName: 'Plume' },
+    { iconName: 'fas fa-pen-alt', tooltipName: 'Stylo' },
     { iconName: 'fas fa-spray-can', tooltipName: 'Aérosol' },
     { iconName: 'fas fa-slash', tooltipName: 'Ligne' },
     { iconName: 'far fa-square', tooltipName: 'Carré' },
