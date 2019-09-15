@@ -16,10 +16,17 @@ export class PencilToolService extends TracingToolService {
   }
 
   onMouseDown(e: MouseEvent): void {
-    super.onMouseDown(e);
-    this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-    this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
-    this.createSVGPath();
+    switch (e.button){
+      case 0:
+        super.onMouseDown(e);
+        this.currentPath = `M${e.offsetX} ${e.offsetY}`;
+        this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
+        this.createSVGPath();
+        break;
+
+      default:
+        break;
+    }
   }
 
   onMouseMove(e: MouseEvent): void {
@@ -31,8 +38,14 @@ export class PencilToolService extends TracingToolService {
   }
 
   onMouseUp(e: MouseEvent): void {
-    super.onMouseUp(e);
-    this.currentPath = '';
+    switch(e.button){
+      case 0:
+        super.onMouseUp(e);
+        this.currentPath = '';
+
+      default:
+        break;
+    }
   }
 
   onMouseLeave(e: MouseEvent): void {
