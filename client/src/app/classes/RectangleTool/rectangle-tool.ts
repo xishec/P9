@@ -1,4 +1,4 @@
-import { ElementRef } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { Keys } from 'src/app/keys.enum';
 import { AbstractShapeTool } from '../AbstractShapeTool/abstract-shape-tool';
 
@@ -8,16 +8,16 @@ export class RectangleTool extends AbstractShapeTool {
 	private strokeWidth: number;
 	private isSquarePreview: boolean;
 
-	constructor(elementReference: ElementRef<SVGElement>) {
-		super(elementReference);
+	constructor(elementReference: ElementRef<SVGElement>, renderer : Renderer2) {
+		super(elementReference, renderer);
 		this.fillColor = 'red';
 		this.strokeColor = 'black';
-		this.strokeWidth = 1;
-		this.isSquarePreview = false;
+        this.strokeWidth = 1;
+        this.isSquarePreview = false;
 	}
 
-	onMouseMove(event: MouseEvent): void {
-		this.currentMouseX = event.offsetX;
+    onMouseMove(event: MouseEvent): void {
+        this.currentMouseX = event.offsetX;
 		this.currentMouseY = event.offsetY;
 		if (this.isPreviewing) {
 			if (this.isSquarePreview) {
@@ -33,12 +33,13 @@ export class RectangleTool extends AbstractShapeTool {
 
 		switch (button) {
 			case 0:
-				if(this.isIn && this.previewRectangle.width.baseVal.value > 1 && this.previewRectangle.height.baseVal.value > 1){
+				if(this.previewRectangle.width.baseVal.value > 1 && this.previewRectangle.height.baseVal.value > 1){
 					this.createSVG();
 				}
 				this.isPreviewing = false;
-				this.isSquarePreview = false;
-				this.svgReference.nativeElement.removeChild(this.previewRectangle);
+                this.isSquarePreview = false;
+                this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+				// this.svgReference.nativeElement.removeChild(this.previewRectangle);
 				break;
 
 			case 1:
@@ -82,18 +83,24 @@ export class RectangleTool extends AbstractShapeTool {
 	}
 
 	createSVG(): void {
-		const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-		el.setAttribute('x', this.previewRectangle.x.baseVal.valueAsString);
-		el.setAttribute('y', this.previewRectangle.y.baseVal.valueAsString);
-		el.setAttribute('width', this.previewRectangle.width.baseVal.valueAsString);
-		el.setAttribute('height', this.previewRectangle.height.baseVal.valueAsString);
-		el.setAttribute('fill', this.fillColor.toString());
-		el.setAttribute('stroke', this.strokeColor.toString());
-		el.setAttribute('stroke-width', this.strokeWidth.toString());
-		el.addEventListener('mousedown', () => {
-			el.setAttribute('fill', 'blue');
-		});
-		this.svgReference.nativeElement.appendChild(el);
+        const el = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
+        // const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        this.renderer.setAttribute(el, 'x', this.previewRectangle.x.baseVal.valueAsString);
+        this.renderer.setAttribute(el, 'y', this.previewRectangle.y.baseVal.valueAsString);
+        this.renderer.setAttribute(el, 'width', this.previewRectangle.width.baseVal.valueAsString);
+        this.renderer.setAttribute(el, 'height', this.previewRectangle.height.baseVal.valueAsString);
+        this.renderer.setAttribute(el, 'fill', this.fillColor.toString());
+        this.renderer.setAttribute(el, 'stroke', this.strokeColor.toString());
+        this.renderer.setAttribute(el, 'stroke-width', this.strokeWidth.toString());
+        this.renderer.appendChild(this.svgReference.nativeElement, el);
+		// el.setAttribute('x', this.previewRectangle.x.baseVal.valueAsString);
+		// el.setAttribute('y', this.previewRectangle.y.baseVal.valueAsString);
+		// el.setAttribute('width', this.previewRectangle.width.baseVal.valueAsString);
+		// el.setAttribute('height', this.previewRectangle.height.baseVal.valueAsString);
+		// el.setAttribute('fill', this.fillColor.toString());
+		// el.setAttribute('stroke', this.strokeColor.toString());
+		// el.setAttribute('stroke-width', this.strokeWidth.toString());
+		// this.svgReference.nativeElement.appendChild(el);
 	}
 
 	private updatePreviewSquare(): void {
@@ -105,22 +112,30 @@ export class RectangleTool extends AbstractShapeTool {
 
 		// adjust x
 		if (w < 0) {
-			w *= -1;
-			this.previewRectangle.setAttribute('x', x.toString());
-			this.previewRectangle.setAttribute('width', minLen.toString());
+            w *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'x', x.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
+			// this.previewRectangle.setAttribute('x', x.toString());
+            // this.previewRectangle.setAttribute('width', minLen.toString());
 		} else {
-			this.previewRectangle.setAttribute('x', x.toString());
-			this.previewRectangle.setAttribute('width', minLen.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', x.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
+			// this.previewRectangle.setAttribute('x', x.toString());
+			// this.previewRectangle.setAttribute('width', minLen.toString());
 		}
 
 		// adjust y
 		if (h < 0) {
-			h *= -1;
-			this.previewRectangle.setAttribute('y', y.toString());
-			this.previewRectangle.setAttribute('height', minLen.toString());
+            h *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'y', y.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
+			// this.previewRectangle.setAttribute('y', y.toString());
+			// this.previewRectangle.setAttribute('height', minLen.toString());
 		} else {
-			this.previewRectangle.setAttribute('y', y.toString());
-			this.previewRectangle.setAttribute('height', minLen.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', y.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
+			// this.previewRectangle.setAttribute('y', y.toString());
+			// this.previewRectangle.setAttribute('height', minLen.toString());
 		}
 	}
 }
