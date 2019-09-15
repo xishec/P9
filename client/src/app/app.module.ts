@@ -27,7 +27,7 @@ import { AttributePanelComponent } from './components/sidebar-tools/attribute-pa
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { StrokeComponent } from './components/SVGComponents/stroke/stroke.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-
+ 
 @NgModule({
     declarations: [
         AppComponent,
@@ -35,7 +35,6 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
-        StrokeComponent,
     ],
     imports: [
         MatCheckboxModule,
@@ -49,8 +48,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         BrowserModule,
         HttpClientModule,
     ],
-    providers: [ToolsService, DrawingModalWindowService, PencilToolService],
+    providers: [ToolsService, DrawingModalWindowService],
     bootstrap: [AppComponent],
-    entryComponents: [StrokeComponent,]
 })
 export class AppModule {}

@@ -1,9 +1,9 @@
-import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Renderer2 } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { PencilToolService } from '../../services/tracing-tools/pencil-tool/pencil-tool.service';
-import { StrokeComponent } from '../SVGComponents/stroke/stroke.component';
+import { TracingToolService } from 'src/app/services/tracing-tools/tracing-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -14,12 +14,12 @@ export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
-    pencilToolService: PencilToolService;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService, pencilToolService: PencilToolService,
-                private resolver: ComponentFactoryResolver) {
+    @ViewChild('container', {static : true}) container: ElementRef<SVGElement>;
+    private currentTool: TracingToolService;
+
+    constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2) {
         this.drawingModalWindowService = drawingModalWindowService;
-        this.pencilToolService = pencilToolService;
     }
 
     ngOnInit() {
@@ -29,6 +29,8 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
+
+        this.currentTool = new PencilToolService(this.container, this.renderer);
     }
 
     changeStyle() {
@@ -40,33 +42,16 @@ export class WorkZoneComponent implements OnInit {
         };
     }
 
-    componentRef: ComponentRef;
-    // @ViewChild('container', {read: ViewContainerRef, static: true }) container;
-    // // Should be executed by the pencil-tool.service
-    // @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-    //     this.createComponent(e.offsetX, e.offsetY);
-    //     console.log('clicked');
-    // }
-    // createComponent(x: number, y: number): void {
-    //     const factory: ComponentFactory<StrokeComponent> = this.resolver.resolveComponentFactory(StrokeComponent);
-    //     this.componentRef = this.container.createComponent(factory);
-    //     this.componentRef.instance.move(x, y);
-    // }
-    // moveRight(): void {
-    //     this.componentRef.instance.right();
-    // }
-
-    @ViewChild('container', {static : true}) svgRef: ElementRef<SVGElement>;
     @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-        this.pencilToolService.onMouseDown(e, this.svgRef);
+        this.currentTool.onMouseDown(e);
     }
     @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
-        this.pencilToolService.onMouseMove(e, this.svgRef);
+        this.currentTool.onMouseMove(e);
     }
     @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
-        this.pencilToolService.onMouseUp(e, this.svgRef);
+        this.currentTool.onMouseUp(e);
     }
     @HostListener('mouseleave', ['$event']) onMouseLeave(e: MouseEvent): void {
-        this.pencilToolService.onMouseLeave(e, this.svgRef);
+        this.currentTool.onMouseLeave(e);
     }
 }
