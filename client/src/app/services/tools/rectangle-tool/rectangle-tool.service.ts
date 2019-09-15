@@ -10,6 +10,9 @@ export class RectangleToolService extends AbstractShapeToolService {
     private strokeColor: string;
     private strokeWidth: number;
     private isSquarePreview: boolean;
+    // private centerX: number;
+    // private centerY: number;
+    // private radius: number;
 
     constructor(elementReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(elementReference, renderer);
@@ -85,7 +88,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing) {
+                if (this.isPreviewing && !this.isSquarePreview) {
                     this.isSquarePreview = true;
                     this.updatePreviewSquare();
                 }
@@ -101,7 +104,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing) {
+                if (this.isPreviewing && this.isSquarePreview) {
                     this.isSquarePreview = false;
                     this.updatePreviewRectangle();
                 }
@@ -125,37 +128,39 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     squareTransition(): void{
+        // this.centerX = Math.abs((this.currentMouseX - this.initialMouseX) / 2);
+        // this.centerY = Math.abs((this.currentMouseY - this.initialMouseY) / 2);
 
     }
 
     updatePreviewSquare(): void {
         let w = this.currentMouseX - this.initialMouseX;
         let h = this.currentMouseY - this.initialMouseY;
-        // const minLen = Math.min(Math.abs(w), Math.abs(h));
-        let r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
+        const minLen = Math.min(Math.abs(w), Math.abs(h));
+        //let r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
 
-        this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
-        this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
-        this.renderer.setAttribute(this.previewRectangle, 'width', r.toString());
-        this.renderer.setAttribute(this.previewRectangle, 'height', r.toString());
+        // this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
+        // this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
+        // this.renderer.setAttribute(this.previewRectangle, 'width', r.toString());
+        // this.renderer.setAttribute(this.previewRectangle, 'height', r.toString());
         // adjust x
-        // if (w < 0) {
-        //     w *= -1;
-        //     this.renderer.setAttribute(this.previewRectangle, 'x', ((this.initialMouseX) - minLen).toString());
-        //     this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
-        // } else {
-        //     this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX).toString());
-        //     this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
-        // }
+        if (w < 0) {
+            w *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'x', ((this.initialMouseX) - minLen).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
+        } else {
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLen.toString());
+        }
 
         // adjust y
-        // if (h < 0) {
-        //     h *= -1;
-        //     this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLen).toString());
-        //     this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
-        // } else {
-        //     this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY).toString());
-        //     this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
-        // }
+        if (h < 0) {
+            h *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLen).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
+        } else {
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLen.toString());
+        }
     }
 }
