@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { RectangleTool } from 'src/app/classes/RectangleTool/rectangle-tool';
+import { RectangleToolService } from 'src/app/services/tools/rectangle-tool/rectangle-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
@@ -14,11 +14,8 @@ export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
-    // NOT CLEAN //
     @ViewChild('svgpad', {static: true}) ref: ElementRef<SVGElement>;
-    // @ViewChild(DrawableDirective, {static: true}) drawDir: DrawableDirective;
-    private currentTool: RectangleTool;
-    // NOT CLEAN //
+    private currentTool: RectangleToolService;
 
     constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2) {
         this.drawingModalWindowService = drawingModalWindowService;
@@ -32,9 +29,7 @@ export class WorkZoneComponent implements OnInit {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
 
-        // NOT CLEAN //
-        this.currentTool = new RectangleTool(this.ref, this.renderer);
-        // NOT CLEAN //
+        this.currentTool = new RectangleToolService(this.ref, this.renderer);
     }
 
     changeStyle() {
@@ -67,11 +62,11 @@ export class WorkZoneComponent implements OnInit {
         this.currentTool.onMouseLeave(event);
     }
 
-    @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent): void{
+    @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void{
         this.currentTool.onKeyDown(event);
     }
 
-    @HostListener('keyup', ['$event']) onKeyUp(event: KeyboardEvent): void{
+    @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void{
         this.currentTool.onKeyUp(event);
     }
     // LISTENERS //
