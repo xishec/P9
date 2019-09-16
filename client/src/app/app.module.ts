@@ -19,13 +19,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // *************** Services **********************
 import { DrawingModalWindowService } from './services/drawing-modal-window/drawing-modal-window.service';
 import { ToolsService } from './services/tools/tools.service';
-import { PencilToolService } from './services/tracing-tools/pencil-tool/pencil-tool.service';
 // ************************************************
 
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
-import { StrokeComponent } from './components/SVGComponents/stroke/stroke.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
  
 @NgModule({
