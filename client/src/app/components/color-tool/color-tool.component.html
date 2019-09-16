@@ -1,20 +1,35 @@
-<p>color-tool works!</p>
-
 <button id="color-tool-button" (click)="showColorOptions()">
     <i class="fas fa-paint-roller"></i>
 </button>
 
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" *ngIf="colorToolOn">
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" *ngIf="colorToolOn" id="color-tool-form">
     <div class="formGroup">
         <div id="userColor">
-            <span> Couleur principale :</span>
-            <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+            <span id=""> Couleur principale :</span>
+            <button
+                id="primaryColor"
+                (click)="chosePrimaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getPrimaryColor()"
+            ></button>
             <br />
             <!-- to do... -->
             <span> Couleur secondaire :</span>
-            <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+            <button
+                id="secondaryColor"
+                (click)="choseSecondaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getSecondaryColor()"
+            ></button>
             <br />
         </div>
+        <button (click)="showColorPalette()">
+            <i class="fas fa-palette"></i>
+        </button>
+        <img *ngIf="ColorPaletteShown" id="color-pick-image" src="../../../../assets/colorImage.jpg" />
+
         <button
             class="color"
             type="button"
@@ -45,6 +60,10 @@
             <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
             <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
         </mat-form-field>
+        <!-- could be also a div... -->
+        <button id="last-10-colors">
+            Les dix dernières couleurs
+        </button>
     </div>
 
     <!-- <canvas width="600" height="440" id="canvas_picker"></canvas>

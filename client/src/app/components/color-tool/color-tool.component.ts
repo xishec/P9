@@ -19,7 +19,8 @@ export class ColorToolComponent implements OnInit {
     formBuilder: FormBuilder;
 
     colors: Color[] = [];
-    activeColor: Color = new Color();
+    primaryColor: Color = new Color();
+    secondaryColor: Color = new Color();
     submitCount = 0;
     displayNewDrawingModalWindow = false;
 
@@ -32,11 +33,20 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
+    ColorPaletteShown: boolean = false;
+    showColorPalette() {
+        if (!this.ColorPaletteShown) {
+            this.ColorPaletteShown = true;
+        } else {
+            this.ColorPaletteShown = false;
+        }
+    }
+
     constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
         this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
-        this.activeColor = COLORS[0];
+        this.primaryColor = COLORS[3];
     }
 
     ngOnInit(): void {
@@ -63,7 +73,7 @@ export class ColorToolComponent implements OnInit {
         const drawingInfo: DrawingInfo = {
             width: this.myForm.value.width,
             height: this.myForm.value.height,
-            color: this.activeColor,
+            color: this.primaryColor,
             opacity: this.myForm.value.A,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
@@ -71,7 +81,7 @@ export class ColorToolComponent implements OnInit {
 
         this.submitCount++;
         this.initializeForm();
-        this.activeColor = { hex: DEFAULT_COLOR };
+        this.primaryColor = { hex: DEFAULT_COLOR };
     }
 
     @HostListener('window:resize', ['$event'])
@@ -82,7 +92,11 @@ export class ColorToolComponent implements OnInit {
         }
     }
     onChangeColor(i: number) {
-        this.activeColor = this.colors[i];
+        if (this.primaryColorOn) {
+            this.primaryColor = this.colors[i];
+        } else {
+            this.secondaryColor = this.colors[i];
+        }
         this.setHex();
         this.setRGBFromHex();
     }
@@ -90,29 +104,43 @@ export class ColorToolComponent implements OnInit {
         this.displayNewDrawingModalWindow = false;
     }
     onUserColorHex() {
-        this.activeColor = { hex: this.myForm.value.hex };
+        this.primaryColor = { hex: this.myForm.value.hex };
         this.setRGBFromHex();
     }
     onUserColorRGB() {
         const newHex = this.rgbToHex();
-        this.activeColor = { hex: newHex };
+        this.primaryColor = { hex: newHex };
         this.setHex();
     }
 
     setHex() {
-        this.myForm.controls.hex.setValue(this.activeColor.hex);
+        this.myForm.controls.hex.setValue(this.primaryColor.hex);
     }
     setRGBFromHex() {
-        this.myForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
-        this.myForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
-        this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
+        this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
+        this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
+        this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
     }
 
     getColorIcon(color: Color) {
         return { backgroundColor: '#' + color.hex };
     }
-    getUserColorIcon() {
-        return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
+    getPrimaryColor() {
+        return { backgroundColor: '#' + this.primaryColor.hex, opacity: String(this.myForm.value.A) };
+    }
+    getSecondaryColor() {
+        return { backgroundColor: '#' + this.secondaryColor.hex, opacity: String(this.myForm.value.A) };
+    }
+
+    primaryColorOn: boolean = true;
+    secondaryColorOn: boolean = false;
+    chosePrimaryColor() {
+        this.primaryColorOn = true;
+        this.secondaryColorOn = false;
+    }
+    choseSecondaryColor() {
+        this.primaryColorOn = false;
+        this.secondaryColorOn = true;
     }
 
     setWindowHeight() {

@@ -4,6 +4,21 @@
 .fas {
 }
 
+#color-tool-form {
+    background-color: white;
+    width: 500px;
+    height: 225px;
+}
+
+#color-pick-image {
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+
+#last-10-colors {
+}
+
 #mask {
     position: absolute;
     top: 0;
@@ -69,7 +84,10 @@ mat-form-field {
         margin-left: 15px;
     }
 
-    #bigColor {
+    #primaryColor {
+        padding: 15px;
+    }
+    #secondaryColor {
         padding: 15px;
     }
 }
