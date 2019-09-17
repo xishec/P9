@@ -40,10 +40,16 @@ export class RectangleToolService extends AbstractShapeToolService {
         const button = event.button;
 
         switch (button) {
-            case 0:
+            case 0 && this.isIn:
                 this.initialMouseX = this.currentMouseX;
                 this.initialMouseY = this.currentMouseY;
                 this.isPreviewing = true;
+                if (this.isSquarePreview) {
+                    this.updatePreviewSquare();
+                } else {
+                    this.updatePreviewRectangle();
+                }
+
                 this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
                 break;
 
@@ -57,6 +63,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
+
         switch (button) {
             case 0:
                 if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
@@ -76,11 +83,13 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     onMouseEnter(event: MouseEvent): void {
-        console.log('mouse in');
+        this.isIn = true;
+        this.isOut = false;
     }
 
     onMouseLeave(event: MouseEvent): void {
-        console.log('mouse out');
+        this.isIn = false;
+        this.isOut = true;
     }
 
     onKeyDown(event: KeyboardEvent): void {
