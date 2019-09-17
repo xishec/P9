@@ -12,6 +12,8 @@ export abstract class AbstractShapeToolService {
     protected renderer: Renderer2;
     protected previewRectangle: SVGRectElement;
     protected isPreviewing: boolean;
+    protected isIn: boolean;
+    protected isOut: boolean;
 
     constructor(elementReference: ElementRef<SVGElement>, renderer: Renderer2) {
         this.currentMouseX = 0;
@@ -22,6 +24,8 @@ export abstract class AbstractShapeToolService {
         this.renderer = renderer;
         this.previewRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
         this.isPreviewing = false;
+        this.isIn = false;
+        this.isOut = false;
     }
 
     abstract onMouseMove(event: MouseEvent): void;

@@ -50,7 +50,7 @@ export class WorkZoneComponent implements OnInit {
         this.currentTool.onMouseDown(event);
     }
 
-    @HostListener('mouseup', ['$event']) onMouseUp(event: MouseEvent): void{
+    @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void{
         this.currentTool.onMouseUp(event);
     }
 
