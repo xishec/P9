@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
+import { FILES_BUTTON_INFO, TOOLS_BUTTON_INFO } from '../../services/constants';
 import { ToolsService } from '../../services/tools/tools.service';
-import { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO } from '../../services/constants';
 
 @Component({
     selector: 'app-sidebar-tools',
