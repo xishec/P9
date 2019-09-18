@@ -1,8 +1,5 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-// import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { AbstractShapeToolService } from 'src/app/services/tools/abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
-import { ToolsService } from 'src/app/services/tools/tools.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
@@ -17,14 +14,10 @@ export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
-    @ViewChild('svgpad', {static: true}) ref: ElementRef<SVGElement>;
-    private currentTool: AbstractShapeToolService;
+    // @ViewChild('svgpad', {static: true}) ref: ElementRef<SVGElement>;
+    // private currentTool: AbstractShapeToolService;
 
-    constructor(
-        private toolsService: ToolsService,
-        private renderer: Renderer2,
-        /*private drawStack: DrawStackService,*/
-        drawingModalWindowService: DrawingModalWindowService) {
+    constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
@@ -39,10 +32,10 @@ export class WorkZoneComponent implements OnInit {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
 
-        this.toolsService.currTool.subscribe(()=>{
-            this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);});
+        // this.toolsService.currTool.subscribe(()=>{
+        //     this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);});
 
-        this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);
+        // this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);
     }
 
     changeStyle() {
@@ -55,32 +48,32 @@ export class WorkZoneComponent implements OnInit {
     }
 
     // LISTENERS //
-    @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void{
-        this.currentTool.onMouseMove(event);
-    }
+    // @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void{
+    //     this.currentTool.onMouseMove(event);
+    // }
 
-    @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void{
-        this.currentTool.onMouseDown(event);
-    }
+    // @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void{
+    //     this.currentTool.onMouseDown(event);
+    // }
 
-    @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void{
-        this.currentTool.onMouseUp(event);
-    }
+    // @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void{
+    //     this.currentTool.onMouseUp(event);
+    // }
 
-    @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void{
-        this.currentTool.onMouseEnter(event);
-    }
+    // @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void{
+    //     this.currentTool.onMouseEnter(event);
+    // }
 
-    @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void{
-        this.currentTool.onMouseLeave(event);
-    }
+    // @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void{
+    //     this.currentTool.onMouseLeave(event);
+    // }
 
-    @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void{
-        this.currentTool.onKeyDown(event);
-    }
+    // @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void{
+    //     this.currentTool.onKeyDown(event);
+    // }
 
-    @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void{
-        this.currentTool.onKeyUp(event);
-    }
+    // @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void{
+    //     this.currentTool.onKeyUp(event);
+    // }
     // LISTENERS //
 }
