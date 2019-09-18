@@ -19,7 +19,7 @@ export class ToolsService {
     toolid: BehaviorSubject<number> = new BehaviorSubject(0);
     currTool = this.toolid.asObservable();
 
-    constructor(drawingModalWindowService: DrawingModalWindowService) {
+    constructor(drawingModalWindowService: DrawingModalWindowService, public rectTool : RectangleToolService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
@@ -39,10 +39,10 @@ export class ToolsService {
         this.toolid.next(toolId);
     }
 
-    getCurrentTool(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): AbstractShapeToolService{
+    getCurrentTool(/*drawStack: DrawStackService,*/ ref: ElementRef<SVGElement>, renderer: Renderer2): AbstractShapeToolService{
         switch (this.getCurrentToolId()){
             case 7:
-                return new RectangleToolService(drawStack, ref, renderer);
+                return this.rectTool;
             default:
                 return new PointerToolService(renderer);
         }

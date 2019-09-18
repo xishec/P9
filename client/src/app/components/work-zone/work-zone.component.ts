@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+// import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from 'src/app/services/tools/abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { ToolsService } from 'src/app/services/tools/tools.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
@@ -23,7 +23,7 @@ export class WorkZoneComponent implements OnInit {
     constructor(
         private toolsService: ToolsService,
         private renderer: Renderer2,
-        private drawStack: DrawStackService,
+        /*private drawStack: DrawStackService,*/
         drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
@@ -31,16 +31,17 @@ export class WorkZoneComponent implements OnInit {
     ngOnInit() {
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
-            for(let el of this.drawStack.reset()) {
-                this.renderer.removeChild(this.ref, el);
-            }
+            // for(let el of this.drawStack.reset()) {
+            //     this.renderer.removeChild(this.ref, el);
+            // }
         });
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.toolsService.currTool.subscribe(()=>{this.currentTool = this.toolsService.getCurrentTool(this.drawStack, this.ref, this.renderer);});
 
-        this.currentTool = this.toolsService.getCurrentTool(this.drawStack, this.ref, this.renderer);
+        this.toolsService.currTool.subscribe(()=>{this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);});
+
+        this.currentTool = this.toolsService.getCurrentTool(/*this.drawStack,*/ this.ref, this.renderer);
     }
 
     changeStyle() {
