@@ -23,7 +23,7 @@ export class ToolsService {
 
     changeTool(toolId: number) {
         this.currentToolId = toolId;
-        if (this.currentToolId === 1) {
+        if (toolId === 1) {
             this.drawingModalWindowService.changeIfShowWindow(true);
         }
     }
