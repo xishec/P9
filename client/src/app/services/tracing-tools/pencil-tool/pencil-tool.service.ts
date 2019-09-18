@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../tracing-tool.service';
 
@@ -6,8 +7,7 @@ import { TracingToolService } from '../tracing-tool.service';
   providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-  private currentPath: string;
-  // They Could be in TracingToolService
+  private currentPath = '';
   private currentWidth = 2;
   private currentColor = 'black';
   private svgPathRef: SVGPathElement;
