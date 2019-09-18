@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../tracing-tool.service';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class PencilToolService extends TracingToolService {
   private svgPathRef: SVGPathElement;
   private svgWrapRef: SVGElement;
 
-  constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2){
+  constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService){
     super();
   }
 
@@ -44,7 +45,7 @@ export class PencilToolService extends TracingToolService {
       case 0:
         super.onMouseUp(e);
         this.currentPath = '';
-        // this.drawStack.push(this.svgWrapRef);
+        this.drawStack.push(this.svgWrapRef);
         break;
 
       default:
@@ -54,6 +55,8 @@ export class PencilToolService extends TracingToolService {
 
   onMouseLeave(e: MouseEvent): void {
     this.isDrawing = false;
+    this.currentPath = '';
+    this.drawStack.push(this.svgWrapRef);
   }
 
   createSVGWrapper() {

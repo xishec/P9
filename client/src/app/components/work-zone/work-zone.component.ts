@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { PencilToolService } from '../../services/tracing-tools/pencil-tool/pencil-tool.service';
-import { TracingToolService } from 'src/app/services/tracing-tools/tracing-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -16,9 +14,8 @@ export class WorkZoneComponent implements OnInit {
     displayNewDrawingModalWindow = false;
 
     @ViewChild('container', {static : true}) container: ElementRef<SVGElement>;
-    private currentTool: TracingToolService;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2) {
+    constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
@@ -29,8 +26,6 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-
-        this.currentTool = new PencilToolService(this.container, this.renderer);
     }
 
     changeStyle() {
@@ -40,18 +35,5 @@ export class WorkZoneComponent implements OnInit {
             height: this.drawingInfo.height,
             width: this.drawingInfo.width,
         };
-    }
-
-    @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent): void {
-        this.currentTool.onMouseDown(e);
-    }
-    @HostListener('mousemove', ['$event']) onMouseMove(e: MouseEvent): void {
-        this.currentTool.onMouseMove(e);
-    }
-    @HostListener('mouseup', ['$event']) onMouseUp(e: MouseEvent): void {
-        this.currentTool.onMouseUp(e);
-    }
-    @HostListener('mouseleave', ['$event']) onMouseLeave(e: MouseEvent): void {
-        this.currentTool.onMouseLeave(e);
     }
 }
