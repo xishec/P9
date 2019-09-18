@@ -18,8 +18,8 @@ export class DrawStackService {
   }
 
   pop(): void{
-    this.drawCount_--;
     this.drawStack_.pop();
+    this.drawCount_--;
   }
 
   reset(): SVGElement[]{
