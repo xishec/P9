@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Keys } from 'src/app/keys.enum';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     private isSquarePreview: boolean;
 
 
-    constructor(elementReference: ElementRef<SVGElement>, renderer: Renderer2) {
-        super(elementReference, renderer);
+    constructor(private drawStack: DrawStackService, private svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
+        super(renderer);
         this.fillColor = 'green';
         this.strokeColor = 'black';
         this.strokeWidth = 1;
@@ -41,8 +42,9 @@ export class RectangleToolService extends AbstractShapeToolService {
                 this.initialMouseY = this.currentMouseY;
                 this.isPreviewing = true;
 
-                this.updateDrawing();
                 this.updatePreviewRectangle();
+                this.updateDrawing();
+
 
                 this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
                 this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
@@ -122,14 +124,17 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     createSVG(): void {
-        const el = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
-        this.renderer.setAttribute(el, 'x', this.drawRectangle.x.baseVal.valueAsString);
-        this.renderer.setAttribute(el, 'y', this.drawRectangle.y.baseVal.valueAsString);
-        this.renderer.setAttribute(el, 'width', this.drawRectangle.width.baseVal.valueAsString);
-        this.renderer.setAttribute(el, 'height', this.drawRectangle.height.baseVal.valueAsString);
-        this.renderer.setAttribute(el, 'fill', this.fillColor.toString());
-        this.renderer.setAttribute(el, 'stroke', this.strokeColor.toString());
-        this.renderer.setAttribute(el, 'stroke-width', this.strokeWidth.toString());
+        const el = this.renderer.createElement('svg', 'http://www.w3.org/2000/svg');
+        const drawRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
+        this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangle.height.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
+        this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
+        this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
+        this.renderer.appendChild(el, drawRectangle);
+        this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
@@ -137,6 +142,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (this.isSquarePreview) {
             this.updatePreviewSquare();
         } else {
+            this.updatePreviewRectangle();
             this.renderer.setAttribute(this.drawRectangle, 'x', this.previewRectangle.x.baseVal.valueAsString);
             this.renderer.setAttribute(this.drawRectangle, 'y', this.previewRectangle.y.baseVal.valueAsString);
             this.renderer.setAttribute(this.drawRectangle, 'width', this.previewRectangle.width.baseVal.valueAsString);

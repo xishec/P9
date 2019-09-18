@@ -2,10 +2,10 @@
     <div id="tools-buttons">
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
             <mat-button-toggle
-                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO; index as toolId"
                 matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(3)"
+                (click)="onChangeTool(toolId)"
             >
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
@@ -13,10 +13,10 @@
 
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
             <mat-button-toggle
-                *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
+                *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO; index as fileId"
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(1)"
+                (click)="onChangeFileTool(fileId)"
             >
                 <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
             </mat-button-toggle>

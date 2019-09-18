@@ -3,6 +3,8 @@ import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } fro
 import { RectangleToolService } from 'src/app/services/tools/rectangle-tool/rectangle-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+
 
 @Component({
     selector: 'app-work-zone',
@@ -17,19 +19,22 @@ export class WorkZoneComponent implements OnInit {
     @ViewChild('svgpad', {static: true}) ref: ElementRef<SVGElement>;
     private currentTool: RectangleToolService;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2) {
+    constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2, private drawStack: DrawStackService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit() {
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
+            for(let el of this.drawStack.reset()) {
+                this.renderer.removeChild(this.ref, el);
+            }
         });
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
 
-        this.currentTool = new RectangleToolService(this.ref, this.renderer);
+        this.currentTool = new RectangleToolService(this.drawStack, this.ref, this.renderer);
     }
 
     changeStyle() {

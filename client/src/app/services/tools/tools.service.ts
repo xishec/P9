@@ -8,6 +8,7 @@ import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal
 export class ToolsService {
     private toolIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
     private currentToolId = -999;
+    private currentFileToolId = -999;
     private drawingModalWindowService: DrawingModalWindowService;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
@@ -21,9 +22,17 @@ export class ToolsService {
         return this.currentToolId;
     }
 
+    getCurrentFileToolId(): number{
+        return this.currentFileToolId;
+    }
+
     changeTool(toolId: number) {
         this.currentToolId = toolId;
-        if (toolId === 1) {
+    }
+
+    changeFileTool(fileId: number): void{
+        this.currentFileToolId = fileId;
+        if (this.currentFileToolId === 0) {
             this.drawingModalWindowService.changeIfShowWindow(true);
         }
     }

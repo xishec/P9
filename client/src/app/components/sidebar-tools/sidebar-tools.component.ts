@@ -9,15 +9,13 @@ import { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO } from '../../services/constants';
     styleUrls: ['./sidebar-tools.component.scss'],
 })
 export class SidebarToolsComponent {
-    toolsService: ToolsService;
-
     toolIds: number[] = [];
     currentToolId = 0;
 
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
-    constructor(toolsService: ToolsService) {
+    constructor(public toolsService: ToolsService) {
         this.toolsService = toolsService;
         this.toolIds = toolsService.getToolIds();
         this.currentToolId = toolsService.getCurrentToolId();
@@ -25,5 +23,9 @@ export class SidebarToolsComponent {
 
     onChangeTool(toolId: number) {
         this.toolsService.changeTool(toolId);
+    }
+
+    onChangeFileTool(fileId: number){
+        this.toolsService.changeFileTool(fileId);
     }
 }
