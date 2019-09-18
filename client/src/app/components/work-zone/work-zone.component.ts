@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { RectangleToolService } from 'src/app/services/tools/rectangle-tool/rectangle-tool.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { AbstractShapeToolService } from 'src/app/services/tools/abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { ToolsService } from 'src/app/services/tools/tools.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 
 @Component({
@@ -17,9 +18,13 @@ export class WorkZoneComponent implements OnInit {
     displayNewDrawingModalWindow = false;
 
     @ViewChild('svgpad', {static: true}) ref: ElementRef<SVGElement>;
-    private currentTool: RectangleToolService;
+    private currentTool: AbstractShapeToolService;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2, private drawStack: DrawStackService) {
+    constructor(
+        private toolsService: ToolsService,
+        private renderer: Renderer2,
+        private drawStack: DrawStackService,
+        drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
@@ -33,8 +38,9 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
+        this.toolsService.currTool.subscribe(()=>{this.currentTool = this.toolsService.getCurrentTool(this.drawStack, this.ref, this.renderer);});
 
-        this.currentTool = new RectangleToolService(this.drawStack, this.ref, this.renderer);
+        this.currentTool = this.toolsService.getCurrentTool(this.drawStack, this.ref, this.renderer);
     }
 
     changeStyle() {

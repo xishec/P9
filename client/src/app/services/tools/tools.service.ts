@@ -1,6 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
+import { AbstractShapeToolService } from './abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { RectangleToolService } from './rectangle-tool/rectangle-tool.service';
+import { PointerToolService } from './pointer-tool/pointer-tool.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +15,9 @@ export class ToolsService {
     private currentToolId = -999;
     private currentFileToolId = -999;
     private drawingModalWindowService: DrawingModalWindowService;
+
+    toolid: BehaviorSubject<number> = new BehaviorSubject(0);
+    currTool = this.toolid.asObservable();
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
@@ -28,6 +36,16 @@ export class ToolsService {
 
     changeTool(toolId: number) {
         this.currentToolId = toolId;
+        this.toolid.next(toolId);
+    }
+
+    getCurrentTool(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): AbstractShapeToolService{
+        switch (this.getCurrentToolId()){
+            case 7:
+                return new RectangleToolService(drawStack, ref, renderer);
+            default:
+                return new PointerToolService(renderer);
+        }
     }
 
     changeFileTool(fileId: number): void{
