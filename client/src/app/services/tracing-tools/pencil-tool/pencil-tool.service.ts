@@ -10,15 +10,17 @@ export class PencilToolService extends TracingToolService {
   private currentWidth = 2;
   private currentColor = 'black';
   private svgPathRef: SVGPathElement;
+  private svgWrapRef: SVGElement;
 
-  constructor(private elementRef : ElementRef<SVGElement>, private renderer: Renderer2){
+  constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2){
     super();
   }
 
   onMouseDown(e: MouseEvent): void {
-    switch (e.button){
+    switch (e.button) {
       case 0:
         super.onMouseDown(e);
+        this.createSVGWrapper();
         this.currentPath = `M${e.offsetX} ${e.offsetY}`;
         this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
         this.createSVGPath();
@@ -38,10 +40,12 @@ export class PencilToolService extends TracingToolService {
   }
 
   onMouseUp(e: MouseEvent): void {
-    switch(e.button){
+    switch (e.button) {
       case 0:
         super.onMouseUp(e);
         this.currentPath = '';
+        // this.drawStack.push(this.svgWrapRef);
+        break;
 
       default:
         break;
@@ -50,6 +54,12 @@ export class PencilToolService extends TracingToolService {
 
   onMouseLeave(e: MouseEvent): void {
     this.isDrawing = false;
+  }
+
+  createSVGWrapper() {
+    const el = this.renderer.createElement('svg', 'http://www.w3.org/2000/svg');
+    this.svgWrapRef = el;
+    this.renderer.appendChild(this.elementRef.nativeElement, el);
   }
 
   createSVGCircle(x: number, y: number, w: number) {
@@ -61,7 +71,7 @@ export class PencilToolService extends TracingToolService {
     this.renderer.setAttribute(el, 'stroke-width', w.toString());
     this.renderer.setAttribute(el, 'stroke-linecap', 'round');
     this.renderer.setAttribute(el, 'stroke', this.currentColor);
-    this.renderer.appendChild(this.elementRef.nativeElement, el);
+    this.renderer.appendChild(this.svgWrapRef, el);
   }
 
   createSVGPath(): void {
@@ -69,7 +79,7 @@ export class PencilToolService extends TracingToolService {
     this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
     this.renderer.setAttribute(this.svgPathRef, 'stroke', this.currentColor);
     this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
-    this.renderer.appendChild(this.elementRef.nativeElement, this.svgPathRef);
+    this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
   }
 
   updateSVGPath(): void {
