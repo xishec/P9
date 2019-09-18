@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -12,8 +12,6 @@ export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
-
-    @ViewChild('container', {static : true}) container: ElementRef<SVGElement>;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
