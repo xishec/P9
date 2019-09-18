@@ -6,6 +6,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
 import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
+//import { bindCallback } from 'rxjs';
 
 @Component({
     selector: 'app-color-tool',
@@ -47,6 +48,7 @@ export class ColorToolComponent implements OnInit {
         this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
         this.primaryColor = COLORS[3];
+        this.secondaryColor = COLORS[1];
     }
 
     ngOnInit(): void {
@@ -81,7 +83,11 @@ export class ColorToolComponent implements OnInit {
 
         this.submitCount++;
         this.initializeForm();
-        this.primaryColor = { hex: DEFAULT_COLOR };
+        if (this.primaryColorOn) {
+            this.primaryColor = { hex: DEFAULT_COLOR };
+        } else {
+            this.secondaryColor = { hex: DEFAULT_COLOR };
+        }
     }
 
     @HostListener('window:resize', ['$event'])
@@ -104,43 +110,112 @@ export class ColorToolComponent implements OnInit {
         this.displayNewDrawingModalWindow = false;
     }
     onUserColorHex() {
-        this.primaryColor = { hex: this.myForm.value.hex };
+        if (this.primaryColorOn) {
+            this.primaryColor = { hex: this.myForm.value.hex };
+        } else {
+            this.secondaryColor = { hex: this.myForm.value.hex };
+        }
         this.setRGBFromHex();
     }
     onUserColorRGB() {
         const newHex = this.rgbToHex();
-        this.primaryColor = { hex: newHex };
+        if (this.primaryColorOn) {
+            this.primaryColor = { hex: newHex };
+        } else {
+            this.secondaryColor = { hex: newHex };
+        }
         this.setHex();
     }
 
     setHex() {
-        this.myForm.controls.hex.setValue(this.primaryColor.hex);
+        if (this.primaryColorOn) {
+            this.myForm.controls.hex.setValue(this.primaryColor.hex);
+        } else {
+            this.myForm.controls.hex.setValue(this.secondaryColor.hex);
+        }
     }
     setRGBFromHex() {
-        this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
-        this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
-        this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
+        if (this.primaryColorOn) {
+            this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
+            this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
+            this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
+        } else {
+            this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
+            this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
+            this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
+        }
     }
 
     getColorIcon(color: Color) {
         return { backgroundColor: '#' + color.hex };
     }
-    getPrimaryColor() {
-        return { backgroundColor: '#' + this.primaryColor.hex, opacity: String(this.myForm.value.A) };
-    }
-    getSecondaryColor() {
-        return { backgroundColor: '#' + this.secondaryColor.hex, opacity: String(this.myForm.value.A) };
-    }
-
+    lastPrimaryOpacity: String = '1';
     primaryColorOn: boolean = true;
     secondaryColorOn: boolean = false;
+    selectedColor: Color = this.primaryColor;
+    getPrimaryColor() {
+        if (this.primaryColorOn) {
+            this.lastPrimaryOpacity = String(this.myForm.value.A);
+            return {
+                backgroundColor: '#' + this.primaryColor.hex,
+                opacity: String(this.myForm.value.A),
+                border: 'solid 1px black',
+            };
+        }
+        return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity };
+    }
+    lastSecondaryOpacity: String = '1';
+    getSecondaryColor() {
+        if (this.secondaryColorOn) {
+            this.lastSecondaryOpacity = String(this.myForm.value.A);
+            return {
+                backgroundColor: '#' + this.secondaryColor.hex,
+                opacity: String(this.myForm.value.A),
+                border: 'solid 1px black',
+            };
+        }
+        return { backgroundColor: '#' + this.secondaryColor.hex, opacity: this.lastSecondaryOpacity };
+    }
+
+    // getSelectedColor(){
+    //     return {font-weight: bold};
+    // }
+
     chosePrimaryColor() {
         this.primaryColorOn = true;
         this.secondaryColorOn = false;
+        // document.getElementById('primaryColorText').style.backgroundColor = 'aqua';
     }
     choseSecondaryColor() {
         this.primaryColorOn = false;
         this.secondaryColorOn = true;
+    }
+
+    switchColors() {
+        let temporaryColor: Color = new Color();
+        temporaryColor = this.primaryColor;
+        console.log('BEFORE');
+        console.log('temporaryColor');
+        console.log(temporaryColor);
+        console.log('primaryColor');
+        console.log(this.primaryColor);
+        console.log('secondaryColor');
+        console.log(this.secondaryColor);
+
+        this.primaryColor = this.secondaryColor;
+
+        this.secondaryColor = temporaryColor;
+
+        // this.setHex();
+        // this.setRGBFromHex();
+
+        console.log('AFTER');
+        console.log('temporaryColor');
+        console.log(temporaryColor);
+        console.log('primaryColor');
+        console.log(this.primaryColor);
+        console.log('secondaryColor');
+        console.log(this.secondaryColor);
     }
 
     setWindowHeight() {

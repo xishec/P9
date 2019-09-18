@@ -5,7 +5,9 @@
 <form [formGroup]="myForm" (ngSubmit)="onSubmit()" *ngIf="colorToolOn" id="color-tool-form">
     <div class="formGroup">
         <div id="userColor">
-            <span id=""> Couleur principale :</span>
+            <span id="primaryColorText" [ngStyle]="{ 'font-weight': primaryColorOn ? 'bold' : 'normal' }">
+                Couleur principale :</span
+            >
             <button
                 id="primaryColor"
                 (click)="chosePrimaryColor()"
@@ -14,8 +16,12 @@
                 [ngStyle]="getPrimaryColor()"
             ></button>
             <br />
-            <!-- to do... -->
-            <span> Couleur secondaire :</span>
+            <button (click)="switchColors()">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+            <span id="secondaryColorText" [ngStyle]="{ 'font-weight': secondaryColorOn ? 'bold' : 'normal' }">
+                Couleur secondaire :</span
+            >
             <button
                 id="secondaryColor"
                 (click)="choseSecondaryColor()"
