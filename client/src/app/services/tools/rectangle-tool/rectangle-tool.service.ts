@@ -146,27 +146,27 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     updatePreviewSquare(): void {
-        let w = this.currentMouseX - this.initialMouseX;
-        let h = this.currentMouseY - this.initialMouseY;
-        const minLen = Math.min(Math.abs(w), Math.abs(h));
+        let deltaX = this.currentMouseX - this.initialMouseX;
+        let deltaY = this.currentMouseY - this.initialMouseY;
+        const minLen = Math.min(Math.abs(deltaX), Math.abs(deltaY));
 
         // adjust x
-        if (w < 0) {
-            w *= -1;
-            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX - w + w / 2 - minLen / 2).toString());
+        if (deltaX < 0) {
+            deltaX *= -1;
+            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX - deltaX + deltaX / 2 - minLen / 2).toString());
             this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX + w / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX + deltaX / 2 - minLen / 2).toString());
             this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
         }
 
         // adjust y
-        if (h < 0) {
-            h *= -1;
-            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY - h + h / 2 - minLen / 2).toString());
+        if (deltaY < 0) {
+            deltaY *= -1;
+            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY - deltaY + deltaY / 2 - minLen / 2).toString());
             this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY + h / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY + deltaY / 2 - minLen / 2).toString());
             this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
         }
     }

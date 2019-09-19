@@ -27,28 +27,29 @@ export abstract class AbstractShapeToolService {
     abstract createSVG(): void;
 
     protected updatePreviewRectangle(): void {
-        let w = this.currentMouseX - this.initialMouseX;
-        let h = this.currentMouseY - this.initialMouseY;
+        let deltaX = this.currentMouseX - this.initialMouseX;
+        let deltaY = this.currentMouseY - this.initialMouseY;
 
         // adjust x
-        if (w < 0) {
-            w *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - w).toString());
-            this.renderer.setAttribute(this.previewRectangle, 'width', w.toString());
+        if (deltaX < 0) {
+            deltaX *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - deltaX).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'deltaXidth', deltaX.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
-            this.renderer.setAttribute(this.previewRectangle, 'width', w.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', deltaX.toString());
         }
 
         // adjust y
-        if (h < 0) {
-            h *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - h).toString());
-            this.renderer.setAttribute(this.previewRectangle, 'height', h.toString());
+        if (deltaY < 0) {
+            deltaY *= -1;
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - deltaY).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', deltaY.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
-            this.renderer.setAttribute(this.previewRectangle, 'height', h.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', deltaY.toString());
         }
+
         this.renderer.setAttribute(this.previewRectangle, 'fill', 'white');
         this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
         this.renderer.setAttribute(this.previewRectangle, 'stroke', 'black');
