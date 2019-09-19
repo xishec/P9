@@ -103,6 +103,9 @@ export class ColorToolComponent implements OnInit {
         } else {
             this.secondaryColor = this.colors[i];
         }
+        this.setHexValues();
+    }
+    setHexValues() {
         this.setHex();
         this.setRGBFromHex();
     }
@@ -184,11 +187,13 @@ export class ColorToolComponent implements OnInit {
     chosePrimaryColor() {
         this.primaryColorOn = true;
         this.secondaryColorOn = false;
+        this.setHexValues();
         // document.getElementById('primaryColorText').style.backgroundColor = 'aqua';
     }
     choseSecondaryColor() {
         this.primaryColorOn = false;
         this.secondaryColorOn = true;
+        this.setHexValues();
     }
 
     switchColors() {
@@ -206,8 +211,8 @@ export class ColorToolComponent implements OnInit {
 
         this.secondaryColor = temporaryColor;
 
-        // this.setHex();
-        // this.setRGBFromHex();
+        this.setHex();
+        this.setRGBFromHex();
 
         console.log('AFTER');
         console.log('temporaryColor');
