@@ -1,21 +1,19 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export abstract class AbstractShapeToolService {
     protected currentMouseX = 0;
     protected currentMouseY = 0;
     protected initialMouseX = 0;
     protected initialMouseY = 0;
-    // protected svgReference: ElementRef<SVGElement>;
-    // protected renderer: Renderer2;
     protected previewRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
     protected isPreviewing = false;
     protected isIn = false;
     protected isOut = false;
 
-    constructor(/*private svgReference: ElementRef<SVGElement>,*/ protected renderer: Renderer2) {}
+    constructor(protected renderer: Renderer2) {}
 
     abstract onMouseMove(event: MouseEvent): void;
     abstract onMouseDown(event: MouseEvent): void;
