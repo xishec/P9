@@ -51,8 +51,8 @@ enum Keys {
 
 enum Mouse {
     LeftButton = 0,
-    RightButton = 2,
     MouseWheel = 1,
+    RightButton = 2,
 }
 
 export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR, TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, Keys, Mouse, };
