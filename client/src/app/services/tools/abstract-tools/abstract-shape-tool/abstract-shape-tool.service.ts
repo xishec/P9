@@ -26,7 +26,7 @@ export abstract class AbstractShapeToolService {
     abstract onKeyUp(event: KeyboardEvent): void;
     abstract createSVG(): void;
 
-    protected updatePreviewRectangle(): void{
+    protected updatePreviewRectangle(): void {
         let w = this.currentMouseX - this.initialMouseX;
         let h = this.currentMouseY - this.initialMouseY;
 
