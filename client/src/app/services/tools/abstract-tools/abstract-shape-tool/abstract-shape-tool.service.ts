@@ -4,29 +4,18 @@ import { Injectable, Renderer2 } from '@angular/core';
   providedIn: 'root',
 })
 export abstract class AbstractShapeToolService {
-    protected currentMouseX: number;
-    protected currentMouseY: number;
-    protected initialMouseX: number;
-    protected initialMouseY: number;
+    protected currentMouseX = 0;
+    protected currentMouseY = 0;
+    protected initialMouseX = 0;
+    protected initialMouseY = 0;
     // protected svgReference: ElementRef<SVGElement>;
     // protected renderer: Renderer2;
-    protected previewRectangle: SVGRectElement;
-    protected isPreviewing: boolean;
-    protected isIn: boolean;
-    protected isOut: boolean;
+    protected previewRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
+    protected isPreviewing = false;
+    protected isIn = false;
+    protected isOut = false;
 
-    constructor(/*private svgReference: ElementRef<SVGElement>,*/ protected renderer: Renderer2) {
-        this.currentMouseX = 0;
-        this.currentMouseY = 0;
-        this.initialMouseX = 0;
-        this.initialMouseY = 0;
-        // this.svgReference = elementReference;
-        // this.renderer = renderer;
-        this.previewRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
-        this.isPreviewing = false;
-        this.isIn = false;
-        this.isOut = false;
-    }
+    constructor(/*private svgReference: ElementRef<SVGElement>,*/ protected renderer: Renderer2) {}
 
     abstract onMouseMove(event: MouseEvent): void;
     abstract onMouseDown(event: MouseEvent): void;
