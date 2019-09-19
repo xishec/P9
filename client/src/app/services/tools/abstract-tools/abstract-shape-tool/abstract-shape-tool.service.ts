@@ -1,5 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
+import { SVG_NS } from '../../../constants';
+
 @Injectable({
     providedIn: 'root',
 })
@@ -8,7 +10,7 @@ export abstract class AbstractShapeToolService {
     protected currentMouseY = 0;
     protected initialMouseX = 0;
     protected initialMouseY = 0;
-    protected previewRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
+    protected previewRectangle = this.renderer.createElement('rect', SVG_NS);
     protected isPreviewing = false;
     protected isIn = false;
     protected isOut = false;
