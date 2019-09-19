@@ -7,20 +7,14 @@ import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/
   providedIn: 'root',
 })
 export class RectangleToolService extends AbstractShapeToolService {
-    private drawRectangle: SVGRectElement;
-    private fillColor: string;
-    private strokeColor: string;
-    private strokeWidth: number;
-    private isSquarePreview: boolean;
-
+    private drawRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
+    private fillColor = 'green';
+    private strokeColor = 'black';
+    private strokeWidth = 1;
+    private isSquarePreview = false;
 
     constructor(/*private drawStack: DrawStackService,*/ private svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
-        this.fillColor = 'green';
-        this.strokeColor = 'black';
-        this.strokeWidth = 1;
-        this.isSquarePreview = false;
-        this.drawRectangle = this.renderer.createElement('rect', 'http://www.w3.org/2000/svg');
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -44,7 +38,6 @@ export class RectangleToolService extends AbstractShapeToolService {
 
                 this.updatePreviewRectangle();
                 this.updateDrawing();
-
 
                 this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
                 this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
@@ -138,7 +131,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
-    updateDrawing(): void{
+    updateDrawing(): void {
         if (this.isSquarePreview) {
             this.updatePreviewSquare();
         } else {
