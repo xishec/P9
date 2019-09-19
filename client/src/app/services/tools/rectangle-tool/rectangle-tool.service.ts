@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Keys } from 'src/app/keys.enum';
+import { Keys, Mouse } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 
@@ -36,7 +36,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         const button = event.button;
 
         switch (button) {
-            case 0 && this.isIn:
+            case Mouse.LeftButton && this.isIn:
                 this.initialMouseX = this.currentMouseX;
                 this.initialMouseY = this.currentMouseY;
                 this.isPreviewing = true;
@@ -48,9 +48,6 @@ export class RectangleToolService extends AbstractShapeToolService {
                 this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
                 break;
 
-            case 1:
-                break;
-
             default:
                 break;
         }
@@ -60,7 +57,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         const button = event.button;
 
         switch (button) {
-            case 0:
+            case Mouse.LeftButton:
                 if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                     this.createSVG();
                 }
@@ -68,9 +65,6 @@ export class RectangleToolService extends AbstractShapeToolService {
                 this.isSquarePreview = false;
                 this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
                 this.renderer.removeChild(this.svgReference, this.drawRectangle);
-                break;
-
-            case 1:
                 break;
 
             default:
