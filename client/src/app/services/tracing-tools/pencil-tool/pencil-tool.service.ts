@@ -13,7 +13,10 @@ export class PencilToolService extends TracingToolService {
   private svgPathRef: SVGPathElement;
   private svgWrapRef: SVGElement;
 
-  constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService){
+  constructor(
+    private elementRef: ElementRef<SVGElement>,
+    private renderer: Renderer2,
+    private drawStack: DrawStackService) {
     super();
   }
 
