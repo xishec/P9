@@ -59,13 +59,13 @@ export class PencilToolService extends TracingToolService {
     this.drawStack.push(this.svgWrapRef);
   }
 
-  createSVGWrapper() {
+  createSVGWrapper(): void {
     const el = this.renderer.createElement('svg', 'http://www.w3.org/2000/svg');
     this.svgWrapRef = el;
     this.renderer.appendChild(this.elementRef.nativeElement, el);
   }
 
-  createSVGCircle(x: number, y: number, w: number) {
+  createSVGCircle(x: number, y: number, w: number): void {
     const el = this.renderer.createElement('line', 'http://www.w3.org/2000/svg');
     this.renderer.setAttribute(el, 'x1', x.toString());
     this.renderer.setAttribute(el, 'x2', x.toString());

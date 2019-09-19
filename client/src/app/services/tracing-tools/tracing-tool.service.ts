@@ -6,9 +6,8 @@ import { Injectable } from '@angular/core';
 export abstract class TracingToolService {
   protected isDrawing = false;
 
-  constructor() {
-    this.isDrawing = false;
-  }
+  // tslint:disable-next-line: no-empty
+  constructor() { }
 
   onMouseDown(e: MouseEvent): void {
     this.isDrawing = true;
