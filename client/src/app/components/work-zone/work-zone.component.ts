@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
