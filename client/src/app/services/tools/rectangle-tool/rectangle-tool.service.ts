@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Keys } from 'src/app/keys.enum';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
-// import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     private strokeWidth = 1;
     private isSquarePreview = false;
 
-    constructor(/*private drawStack: DrawStackService,*/ private svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
+    constructor(private drawStack: DrawStackService, private svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
     }
 
@@ -127,7 +127,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
         this.renderer.appendChild(el, drawRectangle);
-        // this.drawStack.push(el);
+        this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
