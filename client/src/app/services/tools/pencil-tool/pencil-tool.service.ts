@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { TracingToolService } from '../tracing-tool.service';
+import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 
 @Injectable({
     providedIn: 'root',
