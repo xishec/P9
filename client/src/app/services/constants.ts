@@ -45,4 +45,16 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-file-export', tooltipName: 'Exporter' },
 ];
 
-export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR, TOOLS_BUTTON_INFO, FILES_BUTTON_INFO };
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+enum Keys {
+    Shift = 'Shift',
+}
+
+enum Mouse {
+    LeftButton = 0,
+    MouseWheel = 1,
+    RightButton = 2,
+}
+
+export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR, TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, SVG_NS, Keys, Mouse };
