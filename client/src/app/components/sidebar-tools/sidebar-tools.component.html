@@ -1,14 +1,26 @@
 <div id="sidebar">
-    <div id="buttons">
+    <div id="tools-buttons">
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle color="primary" (click)="onChangeTool(1)">
-                <i class="fas fa-plus"></i>
+            <mat-button-toggle
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
+                matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }}"
+                matTooltipPosition="after"
+                (click)="onChangeTool(3)"
+            >
+                <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
-            <mat-button-toggle color="primary" *ngFor="let toolId of toolIds" (click)="onChangeTool(toolId)">
-                {{ toolId }}
+        </mat-button-toggle-group>
+
+        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
+            <mat-button-toggle
+                *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
+                matTooltip="{{ FILE_BUTTON_INFO.tooltipName }}"
+                matTooltipPosition="after"
+                (click)="onChangeTool(1)"
+            >
+                <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
-
     <app-attribute-panel [currentToolId]="toolsService.getCurrentToolId()"></app-attribute-panel>
 </div>

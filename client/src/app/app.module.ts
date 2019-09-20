@@ -13,7 +13,9 @@ import {
     MatDialogModule,
     MatInputModule,
     MatRadioModule,
+    MatTooltipModule,
 } from '@angular/material';
+
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -50,6 +52,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         BrowserAnimationsModule,
         BrowserModule,
         HttpClientModule,
+        MatTooltipModule,
     ],
     entryComponents: [
         WelcomeModalWindowComponent,

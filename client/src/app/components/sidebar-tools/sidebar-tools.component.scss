@@ -11,11 +11,30 @@
     z-index: 1;
 }
 
-#buttons {
-    width: 60px;
+#tools-buttons {
+    width: 35px;
     height: 100vh;
 
     mat-button-toggle-group {
-        width: 59px;
+        width: 35px;
+    }
+}
+
+#file-buttons {
+    position: fixed;
+    bottom: 0;
+
+    .mat-button-toggle-checked {
+        background: #ffffff;
+    }
+}
+
+.mat-button-toggle {
+    width: 35px;
+    height: 35px;
+    border: none;
+
+    i {
+        font-size: 75%;
     }
 }

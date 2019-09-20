@@ -5,7 +5,6 @@ body {
     background-image: url(./assets/paper.jpg);
 }
 
-
 @import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
@@ -30,3 +29,8 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($candy-app-theme);
+
+.mat-button-toggle-label-content {
+    line-height: 0px !important;
+    padding: 12px 10px 10px 10px !important;
+}
