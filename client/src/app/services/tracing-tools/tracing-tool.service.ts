@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export abstract class TracingToolService {
-  protected isDrawing = false;
+    protected isDrawing = false;
 
-  // tslint:disable-next-line: no-empty
-  constructor() { }
+    // tslint:disable-next-line: no-empty
+    constructor() {}
 
-  onMouseDown(e: MouseEvent): void {
-    this.isDrawing = true;
-  }
+    onMouseDown(e: MouseEvent): void {
+        this.isDrawing = true;
+    }
 
-  onMouseUp(e: MouseEvent): void {
-    this.isDrawing = false;
-  }
+    onMouseUp(e: MouseEvent): void {
+        this.isDrawing = false;
+    }
 
-  onMouseLeave(e: MouseEvent): void {
-    this.isDrawing = false;
-  }
+    onMouseLeave(e: MouseEvent): void {
+        this.isDrawing = false;
+    }
 
-  abstract onMouseMove(e: MouseEvent): void;
+    abstract onMouseMove(e: MouseEvent): void;
 }
