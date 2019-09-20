@@ -7,7 +7,7 @@ import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal
 })
 export class ToolsService {
     private toolIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
-    private currentToolId = -999;
+    private currentToolId = 0;
     private drawingModalWindowService: DrawingModalWindowService;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {

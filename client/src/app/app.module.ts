@@ -15,6 +15,8 @@ import {
     MatTooltipModule,
 } from '@angular/material';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -49,6 +51,8 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         HttpClientModule,
         MatTooltipModule,
         MatSliderModule,
+        MatSelectModule,
+        MatFormFieldModule,
     ],
     providers: [ToolsService, DrawingModalWindowService],
     bootstrap: [AppComponent],

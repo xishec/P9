@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent {
-    @Input() currentToolId = -1;
+    @Input() currentToolId = 0;
     thickness: number = 0;
+    borderThickness: number = 0;
 }

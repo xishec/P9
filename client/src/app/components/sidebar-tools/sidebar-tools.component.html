@@ -1,11 +1,12 @@
 <div id="sidebar">
     <div id="tools-buttons">
-        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" value="0">
             <mat-button-toggle
-                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO; let index = index"
                 matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(3)"
+                (click)="onChangeTool(index)"
+                value="{{ index }}"
             >
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
