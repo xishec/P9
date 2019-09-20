@@ -1,11 +1,7 @@
-import { Component, HostListener, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Color } from '../../../classes/Color';
-//import { DrawingInfo } from '../../../classes/DrawingInfo';
-
 import { COLORS } from '../../services/constants';
-//import { bindCallback } from 'rxjs';
 
 @Component({
     selector: 'app-color-tool',
@@ -65,37 +61,9 @@ export class ColorToolComponent implements OnInit {
             G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
-            // confirm: this.submitCount === 0,
-            // width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
-            // height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
     }
 
-    //onSubmit() {
-    //     const drawingInfo: DrawingInfo = {
-    //         width: this.myForm.value.width,
-    //         height: this.myForm.value.height,
-    //         color: this.primaryColor,
-    //         opacity: this.myForm.value.A,
-    //     };
-    //     this.drawingModalWindowService.changeInfo(drawingInfo);
-    //     this.drawingModalWindowService.changeIfShowWindow(false);
-    //     this.submitCount++;
-    //     this.initializeForm();
-    //     if (this.primaryColorOn) {
-    //         this.primaryColor = { hex: DEFAULT_COLOR };
-    //     } else {
-    //         this.secondaryColor = { hex: DEFAULT_COLOR };
-    //     }
-    // }
-
-    @HostListener('window:resize', ['$event'])
-    // onResize() {
-    //     if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
-    //         this.myForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
-    //         this.myForm.controls.height.setValue(window.innerHeight);
-    //     }
-    // }
     indexOfTenColorArray: number = 0;
     addColorToColorList(color: Color) {
         if (this.lastTenColors.length < 10) {
@@ -168,7 +136,6 @@ export class ColorToolComponent implements OnInit {
     }
     lastPrimaryOpacity: number = 1;
     lastSecondaryOpacity: number = 1;
-    selectedLastOpacity: number = 1;
     primaryColorOn: boolean = true;
     secondaryColorOn: boolean = false;
     selectedColor: Color = this.primaryColor;
@@ -177,10 +144,8 @@ export class ColorToolComponent implements OnInit {
     secondaryColorClicked: boolean = false;
     getPrimaryColor() {
         //return iconStyle...
-
         if (this.primaryColorOn) {
             this.secondaryColorClicked = false;
-            this.selectedLastOpacity = this.lastPrimaryOpacity;
             if (this.primaryColorClicked) {
                 this.lastPrimaryOpacity = this.myForm.value.A;
             }
@@ -193,14 +158,13 @@ export class ColorToolComponent implements OnInit {
                 border: 'solid 1px black',
             };
         }
-        //console.log('opacité pas changé primary');
+
         return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity };
     }
 
     getSecondaryColor() {
         if (this.secondaryColorOn) {
             this.primaryColorClicked = false;
-            this.selectedLastOpacity = this.lastSecondaryOpacity;
             if (this.secondaryColorClicked) {
                 this.lastSecondaryOpacity = this.myForm.value.A;
             }
@@ -213,7 +177,7 @@ export class ColorToolComponent implements OnInit {
                 border: 'solid 1px black',
             };
         }
-        //console.log('opacité pas changé secondary');
+
         return { backgroundColor: '#' + this.secondaryColor.hex, opacity: this.lastSecondaryOpacity };
     }
 
@@ -238,14 +202,6 @@ export class ColorToolComponent implements OnInit {
         this.setHex();
         this.setRGBFromHex();
     }
-
-    // setWindowHeight() {
-    //     if (this.submitCount === 0) {
-    //         return { height: '450px' };
-    //     } else {
-    //         return { height: '510px' };
-    //     }
-    // }
 
     rgbToHex(): string {
         let r = Number(this.myForm.value.R).toString(16);
