@@ -16,7 +16,7 @@
     <p>Consultez le guide d'utilisateur pour <br> les détails concernant l'utilisation de l'application.</p>
   </div>
 </mat-dialog-content>
-<mat-checkbox>Ne plus montrer ce message.</mat-checkbox>
-<mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Commencer</button>
+<mat-dialog-actions id='footer' align="end">
+    <mat-checkbox color='primary' id='checkbox' [(ngModel)]='displayWelcomeModalWindow'><p>Ne plus montrer ce message.</p></mat-checkbox>
+    <button id='start-button' mat-button [mat-dialog-close]="true" cdkFocusInitial (click)='submitForm()'>Commencer</button>
 </mat-dialog-actions>
