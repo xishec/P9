@@ -33,12 +33,12 @@ export class AppComponent {
 
     openWelcomeModalWindow(): void {
         if (this.welcomeModalWindowService.getValueFromLocalStorage()) {
-            const dialogRef = this.dialog.open(WelcomeModalWindowComponent);
-            dialogRef.afterClosed().subscribe((result) => {
-                console.log(`Dialog result: ${result}`);
+            const dialogRef = this.dialog.open(WelcomeModalWindowComponent, { disableClose: true, maxWidth: '650px' });
+            dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
+                displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
+                this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
             });
         }
-        console.log('localStorage', this.welcomeModalWindowService.getValueFromLocalStorage);
     }
 
     ngOnInit(): void {
