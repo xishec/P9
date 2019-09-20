@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Mouse, SVG_NS } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 
@@ -10,8 +11,8 @@ export class PencilToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 2;
     private currentColor = 'black';
-    private svgPathRef: SVGPathElement;
-    private svgWrapRef: SVGElement;
+    private svgPathRef = this.renderer.createElement('path', SVG_NS);
+    private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -22,22 +23,17 @@ export class PencilToolService extends TracingToolService {
     }
 
     onMouseDown(e: MouseEvent): void {
-        switch (e.button) {
-            case 0:
-                super.onMouseDown(e);
-                this.createSVGWrapper();
-                this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-                this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
-                this.createSVGPath();
-                break;
-
-            default:
-                break;
+        if (e.button === Mouse.LeftButton) {
+            super.onMouseDown(e);
+            this.createSVGWrapper();
+            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
+            this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
+            this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
-        if (this.isDrawing) {
+        if (e.button === Mouse.LeftButton){
             this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
             this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
             this.updateSVGPath();
@@ -45,32 +41,29 @@ export class PencilToolService extends TracingToolService {
     }
 
     onMouseUp(e: MouseEvent): void {
-        switch (e.button) {
-            case 0:
-                super.onMouseUp(e);
-                this.currentPath = '';
-                this.drawStack.push(this.svgWrapRef);
-                break;
-
-            default:
-                break;
+        if (e.button === Mouse.LeftButton){
+            super.onMouseUp(e);
+            this.currentPath = '';
+            this.drawStack.push(this.svgWrapRef);
         }
     }
 
     onMouseLeave(e: MouseEvent): void {
-        this.isDrawing = false;
-        this.currentPath = '';
-        this.drawStack.push(this.svgWrapRef);
+        if (this.isDrawing) {
+            this.isDrawing = false;
+            this.currentPath = '';
+            this.drawStack.push(this.svgWrapRef);
+        }
     }
 
     createSVGWrapper(): void {
-        const el = this.renderer.createElement('svg', 'http://www.w3.org/2000/svg');
+        const el = this.renderer.createElement('svg', SVG_NS);
         this.svgWrapRef = el;
         this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
     createSVGCircle(x: number, y: number, w: number): void {
-        const el = this.renderer.createElement('line', 'http://www.w3.org/2000/svg');
+        const el = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(el, 'x1', x.toString());
         this.renderer.setAttribute(el, 'x2', x.toString());
         this.renderer.setAttribute(el, 'y1', y.toString());
@@ -82,7 +75,7 @@ export class PencilToolService extends TracingToolService {
     }
 
     createSVGPath(): void {
-        this.svgPathRef = this.renderer.createElement('path', 'http://www.w3.org/2000/svg');
+        this.svgPathRef = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
         this.renderer.setAttribute(this.svgPathRef, 'stroke', this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
