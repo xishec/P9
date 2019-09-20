@@ -14,7 +14,7 @@ import {
     MatRadioModule,
     MatTooltipModule,
 } from '@angular/material';
-
+import { MatSliderModule } from '@angular/material/slider';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -48,6 +48,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         BrowserModule,
         HttpClientModule,
         MatTooltipModule,
+        MatSliderModule,
     ],
     providers: [ToolsService, DrawingModalWindowService],
     bootstrap: [AppComponent],

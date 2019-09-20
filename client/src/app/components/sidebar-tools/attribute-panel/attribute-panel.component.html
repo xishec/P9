@@ -1,4 +1,11 @@
 <div id="container">
+    <div id="attribute-header">
+        Attribute Header
+    </div>
     <p>Attribute Panel</p>
     <p>Tool : {{ currentToolId }}</p>
+
+    <label for="Thickness">Thickness</label>
+    <mat-slider (input)="thickness = $event.value" [value]="thickness" thumbLabel="true"></mat-slider>
+    {{ thickness }}
 </div>

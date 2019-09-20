@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class AttributePanelComponent {
     @Input() currentToolId = -1;
+    thickness: number = 0;
 }
