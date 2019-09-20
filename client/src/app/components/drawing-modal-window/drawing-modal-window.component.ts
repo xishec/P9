@@ -13,8 +13,6 @@ import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
     styleUrls: ['./drawing-modal-window.component.scss'],
 })
 export class DrawingModalWindowComponent implements OnInit {
-    drawingModalWindowService: DrawingModalWindowService;
-
     myForm: FormGroup;
     formBuilder: FormBuilder;
 
@@ -22,8 +20,9 @@ export class DrawingModalWindowComponent implements OnInit {
     activeColor: Color = new Color();
     submitCount = 0;
     displayNewDrawingModalWindow = false;
+    displayColorWheel: boolean = false;
 
-    constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
+    constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
         this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
@@ -34,6 +33,9 @@ export class DrawingModalWindowComponent implements OnInit {
         this.initializeForm();
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
+        });
+        this.drawingModalWindowService.currentActiveColor.subscribe((activeColor) => {
+            this.activeColor = activeColor;
         });
     }
 
@@ -58,7 +60,7 @@ export class DrawingModalWindowComponent implements OnInit {
             opacity: this.myForm.value.A,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
-        this.drawingModalWindowService.changeIfShowWindow(false);
+        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
 
         this.submitCount++;
         this.initializeForm();
@@ -77,6 +79,11 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setHex();
         this.setRGBFromHex();
     }
+    onClickColorPicker() {
+        if (this.activeColor.hex == undefined) return;
+        this.setHex();
+        this.setRGBFromHex();
+    }
     onCancel() {
         this.displayNewDrawingModalWindow = false;
     }
@@ -85,7 +92,11 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setRGBFromHex();
     }
     onUserColorRGB() {
-        const newHex = this.rgbToHex();
+        const newHex = this.drawingModalWindowService.rgbToHex(
+            this.myForm.value.R,
+            this.myForm.value.G,
+            this.myForm.value.B
+        );
         this.activeColor = { hex: newHex };
         this.setHex();
     }
@@ -108,26 +119,20 @@ export class DrawingModalWindowComponent implements OnInit {
 
     setWindowHeight() {
         if (this.submitCount === 0) {
+            if (this.displayColorWheel) {
+                return { height: '650px' };
+            }
             return { height: '450px' };
         } else {
+            if (this.displayColorWheel) {
+                return { height: '750px' };
+            }
             return { height: '510px' };
         }
     }
 
-    rgbToHex(): string {
-        let r = Number(this.myForm.value.R).toString(16);
-        let g = Number(this.myForm.value.G).toString(16);
-        let b = Number(this.myForm.value.B).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
+    onClickColorWheel() {
+        this.displayColorWheel = !this.displayColorWheel;
     }
 }
 

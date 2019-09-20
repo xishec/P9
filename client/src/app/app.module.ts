@@ -13,6 +13,7 @@ import {
     MatInputModule,
     MatRadioModule,
     MatTooltipModule,
+    MatSliderModule,
 } from '@angular/material';
 
 // ************************************************
@@ -27,6 +28,7 @@ import { DrawingModalWindowComponent } from './components/drawing-modal-window/d
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { ColorPickerComponent } from './components/drawing-modal-window/color-picker/color-picker.component';
 
 @NgModule({
     declarations: [
@@ -35,8 +37,10 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
+        ColorPickerComponent,
     ],
     imports: [
+        MatSliderModule,
         MatCheckboxModule,
         MatRadioModule,
         FormsModule,

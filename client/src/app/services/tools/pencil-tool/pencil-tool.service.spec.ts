@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ColorPickerService } from './color-picker.service';
+import { PencilToolService } from './pencil-tool.service';
 
-describe('ColorPickerService', () => {
+describe('PencilToolService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ColorPickerService = TestBed.get(ColorPickerService);
+    const service: PencilToolService = TestBed.get(PencilToolService);
     expect(service).toBeTruthy();
   });
 });
