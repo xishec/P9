@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { WelcomeModalWindowService } from '../../services/welcome-modal-window/w
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     readonly title: string = 'LOG2990';
     message = new BehaviorSubject<string>('');
 
@@ -23,7 +23,7 @@ export class AppComponent {
         private basicService: IndexService,
         welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
-        ) {
+    ) {
         this.welcomeModalWindowService = welcomeModalWindowService;
         this.basicService
             .basicGet()
