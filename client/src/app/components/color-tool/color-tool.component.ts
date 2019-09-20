@@ -2,10 +2,10 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Color } from '../../../classes/Color';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
+//import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
-import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
+import { COLORS, SIDEBAR_WIDTH } from '../../services/constants';
 //import { bindCallback } from 'rxjs';
 
 @Component({
@@ -24,6 +24,7 @@ export class ColorToolComponent implements OnInit {
     secondaryColor: Color = new Color();
     submitCount = 0;
     displayNewDrawingModalWindow = false;
+    lastTenColors: Color[] = [];
 
     colorToolOn: boolean = false;
     showColorOptions() {
@@ -53,17 +54,17 @@ export class ColorToolComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
+        // this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
+        //     this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
+        // });
     }
 
     initializeForm() {
         this.myForm = this.formBuilder.group({
-            hex: ['ffffff', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
-            R: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
-            G: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
-            B: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
+            hex: ['000000', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
+            R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
+            G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
+            B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
             confirm: this.submitCount === 0,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
@@ -71,37 +72,48 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-    onSubmit() {
-        const drawingInfo: DrawingInfo = {
-            width: this.myForm.value.width,
-            height: this.myForm.value.height,
-            color: this.primaryColor,
-            opacity: this.myForm.value.A,
-        };
-        this.drawingModalWindowService.changeInfo(drawingInfo);
-        this.drawingModalWindowService.changeIfShowWindow(false);
+    // onSubmit() {
+    //     const drawingInfo: DrawingInfo = {
+    //         width: this.myForm.value.width,
+    //         height: this.myForm.value.height,
+    //         color: this.primaryColor,
+    //         opacity: this.myForm.value.A,
+    //     };
+    //     this.drawingModalWindowService.changeInfo(drawingInfo);
+    //     this.drawingModalWindowService.changeIfShowWindow(false);
 
-        this.submitCount++;
-        this.initializeForm();
-        if (this.primaryColorOn) {
-            this.primaryColor = { hex: DEFAULT_COLOR };
-        } else {
-            this.secondaryColor = { hex: DEFAULT_COLOR };
-        }
-    }
+    //     this.submitCount++;
+    //     this.initializeForm();
+    //     if (this.primaryColorOn) {
+    //         this.primaryColor = { hex: DEFAULT_COLOR };
+    //     } else {
+    //         this.secondaryColor = { hex: DEFAULT_COLOR };
+    //     }
+    // }
 
     @HostListener('window:resize', ['$event'])
-    onResize() {
-        if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
-            this.myForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
-            this.myForm.controls.height.setValue(window.innerHeight);
+    // onResize() {
+    //     if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
+    //         this.myForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
+    //         this.myForm.controls.height.setValue(window.innerHeight);
+    //     }
+    // }
+    addColorToColorList(color: Color) {
+        if (this.lastTenColors.length < 10) {
+            this.lastTenColors.push(color);
+        } else {
+            //if the length == 10
+            this.lastTenColors[this.lastTenColors.length - 1] = color;
         }
     }
+
     onChangeColor(i: number) {
         if (this.primaryColorOn) {
             this.primaryColor = this.colors[i];
+            this.addColorToColorList(this.colors[i]);
         } else {
             this.secondaryColor = this.colors[i];
+            this.addColorToColorList(this.colors[i]);
         }
         this.setHexValues();
     }
@@ -109,9 +121,9 @@ export class ColorToolComponent implements OnInit {
         this.setHex();
         this.setRGBFromHex();
     }
-    onCancel() {
-        this.displayNewDrawingModalWindow = false;
-    }
+    // onCancel() {
+    //     this.displayNewDrawingModalWindow = false;
+    // }
     onUserColorHex() {
         if (this.primaryColorOn) {
             this.primaryColor = { hex: this.myForm.value.hex };
@@ -152,59 +164,56 @@ export class ColorToolComponent implements OnInit {
     getColorIcon(color: Color) {
         return { backgroundColor: '#' + color.hex };
     }
-    lastPrimaryOpacity: String = '1';
+    lastPrimaryOpacity: Number = 1;
     primaryColorOn: boolean = true;
     secondaryColorOn: boolean = false;
     selectedColor: Color = this.primaryColor;
     getPrimaryColor() {
         if (this.primaryColorOn) {
-            this.lastPrimaryOpacity = String(this.myForm.value.A);
+            this.lastPrimaryOpacity = this.myForm.value.A;
+
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
-                opacity: String(this.myForm.value.A),
+                opacity: this.lastPrimaryOpacity,
                 border: 'solid 1px black',
             };
         }
+        //console.log('opacité pas changé primary');
         return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity };
     }
-    lastSecondaryOpacity: String = '1';
+    lastSecondaryOpacity: Number = 1;
     getSecondaryColor() {
         if (this.secondaryColorOn) {
-            this.lastSecondaryOpacity = String(this.myForm.value.A);
+            this.lastSecondaryOpacity = this.myForm.value.A;
+
             return {
                 backgroundColor: '#' + this.secondaryColor.hex,
-                opacity: String(this.myForm.value.A),
+                opacity: this.lastSecondaryOpacity,
                 border: 'solid 1px black',
             };
         }
+        //console.log('opacité pas changé secondary');
         return { backgroundColor: '#' + this.secondaryColor.hex, opacity: this.lastSecondaryOpacity };
     }
-
-    // getSelectedColor(){
-    //     return {font-weight: bold};
-    // }
 
     chosePrimaryColor() {
         this.primaryColorOn = true;
         this.secondaryColorOn = false;
+        this.myForm.value.A = this.lastPrimaryOpacity;
         this.setHexValues();
         // document.getElementById('primaryColorText').style.backgroundColor = 'aqua';
     }
     choseSecondaryColor() {
         this.primaryColorOn = false;
         this.secondaryColorOn = true;
+        this.myForm.value.A = this.lastSecondaryOpacity;
         this.setHexValues();
     }
 
     switchColors() {
         let temporaryColor: Color = new Color();
         temporaryColor = this.primaryColor;
-        console.log('BEFORE');
-        console.log('temporaryColor');
-        console.log(temporaryColor);
-        console.log('primaryColor');
-        console.log(this.primaryColor);
-        console.log('secondaryColor');
+
         console.log(this.secondaryColor);
 
         this.primaryColor = this.secondaryColor;
@@ -213,23 +222,15 @@ export class ColorToolComponent implements OnInit {
 
         this.setHex();
         this.setRGBFromHex();
-
-        console.log('AFTER');
-        console.log('temporaryColor');
-        console.log(temporaryColor);
-        console.log('primaryColor');
-        console.log(this.primaryColor);
-        console.log('secondaryColor');
-        console.log(this.secondaryColor);
     }
 
-    setWindowHeight() {
-        if (this.submitCount === 0) {
-            return { height: '450px' };
-        } else {
-            return { height: '510px' };
-        }
-    }
+    // setWindowHeight() {
+    //     if (this.submitCount === 0) {
+    //         return { height: '450px' };
+    //     } else {
+    //         return { height: '510px' };
+    //     }
+    // }
 
     rgbToHex(): string {
         let r = Number(this.myForm.value.R).toString(16);

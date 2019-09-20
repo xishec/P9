@@ -63,13 +63,27 @@
             <mat-error>B doit être entre 0 et 255!</mat-error>
         </mat-form-field>
         <mat-form-field class="small" (change)="onUserColorRGB()">
-            <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
+            <input
+                matInput
+                ng-value="'primaryColorOn' ? 'lastPrimaryOpacity' : 'lastSecondaryOpacity'"
+                type="number"
+                placeholder="A:"
+                formControlName="A"
+                step="0.1"
+            />
             <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
         </mat-form-field>
         <!-- could be also a div... -->
-        <button id="last-10-colors">
+        <div id="last-10-colors">
             Les dix dernières couleurs
-        </button>
+            <button
+                class="color"
+                type="button"
+                *ngFor="let color of lastTenColors; let i = index"
+                [ngStyle]="getColorIcon(color)"
+                (click)="onChangeColor(i)"
+            ></button>
+        </div>
     </div>
 
     <!-- <canvas width="600" height="440" id="canvas_picker"></canvas>
