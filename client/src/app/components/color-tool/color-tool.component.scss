@@ -8,12 +8,24 @@
     background-color: white;
     width: 500px;
     height: 330px;
+    text-align: center;
+}
+
+#switch-colors-button {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+#color-palette-show-button {
+    display: block;
+    text-align: center;
 }
 
 #color-pick-image {
-    width: 50px;
-    height: 50px;
+    width: 200px;
+    height: 150px;
     display: block;
+    text-align: center;
 }
 
 #last-10-colors {
@@ -81,7 +93,7 @@ mat-form-field {
     margin-bottom: 10px;
 
     .color {
-        margin-left: 15px;
+        margin-left: 5px;
     }
 
     #primaryColor {
