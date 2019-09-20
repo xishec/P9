@@ -1,3 +1,18 @@
 #footer {
   justify-content: space-between;
 }
+
+#user-guide-button {
+  padding: 0 6px 0 6px;
+  margin: 6px 8px 6px 12px;
+  min-width: 250px;
+  line-height: 24px;
+  border-radius: 3px;
+  border-color: white;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  background-color: orange;
+  cursor: pointer;
+}
