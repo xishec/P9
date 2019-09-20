@@ -49,7 +49,9 @@ export class ColorToolComponent implements OnInit {
         this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
         this.primaryColor = COLORS[3];
+        this.addColorToColorList(COLORS[3]);
         this.secondaryColor = COLORS[1];
+        this.addColorToColorList(COLORS[1]);
     }
 
     ngOnInit(): void {
@@ -72,7 +74,7 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-    // onSubmit() {
+    //onSubmit() {
     //     const drawingInfo: DrawingInfo = {
     //         width: this.myForm.value.width,
     //         height: this.myForm.value.height,
@@ -81,7 +83,6 @@ export class ColorToolComponent implements OnInit {
     //     };
     //     this.drawingModalWindowService.changeInfo(drawingInfo);
     //     this.drawingModalWindowService.changeIfShowWindow(false);
-
     //     this.submitCount++;
     //     this.initializeForm();
     //     if (this.primaryColorOn) {
@@ -98,22 +99,26 @@ export class ColorToolComponent implements OnInit {
     //         this.myForm.controls.height.setValue(window.innerHeight);
     //     }
     // }
+    indexOfTenColorArray: number = 0;
     addColorToColorList(color: Color) {
         if (this.lastTenColors.length < 10) {
             this.lastTenColors.push(color);
         } else {
-            //if the length == 10
-            this.lastTenColors[this.lastTenColors.length - 1] = color;
+            if (this.indexOfTenColorArray >= 10) {
+                this.indexOfTenColorArray = 0;
+            }
+            this.lastTenColors[this.indexOfTenColorArray.valueOf()] = color;
+            this.indexOfTenColorArray++;
         }
     }
 
-    onChangeColor(i: number) {
+    onChangeColor(color: Color) {
         if (this.primaryColorOn) {
-            this.primaryColor = this.colors[i];
-            this.addColorToColorList(this.colors[i]);
+            this.primaryColor = color;
+            this.addColorToColorList(color);
         } else {
-            this.secondaryColor = this.colors[i];
-            this.addColorToColorList(this.colors[i]);
+            this.secondaryColor = color;
+            this.addColorToColorList(color);
         }
         this.setHexValues();
     }
@@ -201,7 +206,6 @@ export class ColorToolComponent implements OnInit {
         this.secondaryColorOn = false;
         this.myForm.value.A = this.lastPrimaryOpacity;
         this.setHexValues();
-        // document.getElementById('primaryColorText').style.backgroundColor = 'aqua';
     }
     choseSecondaryColor() {
         this.primaryColorOn = false;
@@ -213,13 +217,8 @@ export class ColorToolComponent implements OnInit {
     switchColors() {
         let temporaryColor: Color = new Color();
         temporaryColor = this.primaryColor;
-
-        console.log(this.secondaryColor);
-
         this.primaryColor = this.secondaryColor;
-
         this.secondaryColor = temporaryColor;
-
         this.setHex();
         this.setRGBFromHex();
     }

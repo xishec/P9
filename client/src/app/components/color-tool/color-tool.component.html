@@ -2,7 +2,7 @@
     <i class="fas fa-paint-roller"></i>
 </button>
 
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" *ngIf="colorToolOn" id="color-tool-form">
+<form [formGroup]="myForm" *ngIf="colorToolOn" id="color-tool-form">
     <div class="formGroup">
         <div id="userColor">
             <span id="primaryColorText" [ngStyle]="{ 'font-weight': primaryColorOn ? 'bold' : 'normal' }">
@@ -41,7 +41,7 @@
             type="button"
             *ngFor="let color of colors; let i = index"
             [ngStyle]="getColorIcon(color)"
-            (click)="onChangeColor(i)"
+            (click)="onChangeColor(color)"
         ></button>
 
         <mat-form-field class="medium">
@@ -76,14 +76,14 @@
         <!-- could be also a div... -->
         <div id="last-10-colors">
             Les dix dernières couleurs
-            <button
-                class="color"
-                type="button"
-                *ngFor="let color of lastTenColors; let i = index"
-                [ngStyle]="getColorIcon(color)"
-                (click)="onChangeColor(i)"
-            ></button>
         </div>
+        <button
+            class="color"
+            type="button"
+            *ngFor="let color of lastTenColors; let i = index"
+            [ngStyle]="getColorIcon(color)"
+            (click)="onChangeColor(color)"
+        ></button>
     </div>
 
     <!-- <canvas width="600" height="440" id="canvas_picker"></canvas>
