@@ -8,7 +8,7 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 })
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
-
+    private currentWidth = 2;
     private currentColor = 'black';
     private svgPathRef = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
@@ -29,10 +29,29 @@ export class BrushToolService extends TracingToolService {
 
     createSVGWrapper(): void {
         this.svgWrapRef = this.renderer.createElement('svg', SVG_NS);
+        this.renderer.appendChild(this.svgWrapRef, this.createPattern());
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrapRef);
     }
 
-    createSVGCircle(): void {}
+    createPattern(): SVGPatternElement {
+        const pattern = this.renderer.createElement('pattern', SVG_NS);
+
+        // design a pattern
+
+        return pattern;
+    }
+
+    createSVGCircle(x: number, y: number): void {
+        const el = this.renderer.createElement('line', SVG_NS);
+        this.renderer.setAttribute(el, 'x1', x.toString());
+        this.renderer.setAttribute(el, 'x2', x.toString());
+        this.renderer.setAttribute(el, 'y1', y.toString());
+        this.renderer.setAttribute(el, 'y2', y.toString());
+        this.renderer.setAttribute(el, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(el, 'stroke-linecap', 'round');
+        this.renderer.setAttribute(el, 'stroke', this.currentColor);
+        this.renderer.appendChild(this.svgWrapRef, el);
+    }
 
     onMouseMove(e: MouseEvent){}
 }
