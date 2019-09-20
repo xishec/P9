@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material';
 export class WelcomeModalWindowComponent {
   displayWelcomeModalWindow = false;
 
-  constructor(public dialogRef: MatDialogRef<WelcomeModalWindowComponent>) {}
+  constructor(private dialogRef: MatDialogRef<WelcomeModalWindowComponent>) {}
 
   submitForm() {
     this.dialogRef.close(!this.displayWelcomeModalWindow);

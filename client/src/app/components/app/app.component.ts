@@ -14,17 +14,14 @@ import { WelcomeModalWindowService } from '../../services/welcome-modal-window/w
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-    readonly title: string = 'LOG2990';
+    readonly title = 'LOG2990';
     message = new BehaviorSubject<string>('');
-
-    welcomeModalWindowService: WelcomeModalWindowService;
 
     constructor(
         private basicService: IndexService,
-        welcomeModalWindowService: WelcomeModalWindowService,
+        private welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
     ) {
-        this.welcomeModalWindowService = welcomeModalWindowService;
         this.basicService
             .basicGet()
             .pipe(map((message: Message) => `${message.title} ${message.body}`))
