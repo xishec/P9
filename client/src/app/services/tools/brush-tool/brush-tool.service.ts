@@ -9,11 +9,11 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 })
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
-    private currentWidth = 2;
+    private currentWidth = 8;
     private currentColor = 'black';
     private currentPatternId = '';
-    private svgPathRef = this.renderer.createElement('path', SVG_NS);
-    private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
+    private svgPath = this.renderer.createElement('path', SVG_NS);
+    private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -45,30 +45,27 @@ export class BrushToolService extends TracingToolService {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
             super.onMouseUp(e);
             this.currentPath = '';
-            this.drawStack.push(this.svgWrapRef);
+            this.drawStack.push(this.svgWrap);
         }
     }
 
     createSVGWrapper(): void {
-        this.svgWrapRef = this.renderer.createElement('svg', SVG_NS);
-        this.renderer.appendChild(this.svgWrapRef, this.createPattern());
-        this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrapRef);
+        this.svgWrap = this.renderer.createElement('svg', SVG_NS);
+        const filter = this.createFilter();
+        this.renderer.appendChild(this.svgWrap, filter);
+        this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    createPattern(): SVGPatternElement {
-        this.currentPatternId = 'myPattern';
-        const pattern = this.renderer.createElement('pattern', SVG_NS);
-        this.renderer.setAttribute(pattern, 'id', this.currentPatternId);
-        // design a pattern
-        const c = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(c, 'cx', '10');
-        this.renderer.setAttribute(c, 'cy', '10');
-        this.renderer.setAttribute(c, 'r', '10');
-        this.renderer.setAttribute(c, 'fill', '#393');
-        this.renderer.setAttribute(c, 'stroke', 'none');
-        this.renderer.appendChild(pattern, c);
+    createFilter(): SVGFilterElement {
+        const filter = this.renderer.createElement('filter', SVG_NS);
+        this.renderer.setAttribute(filter, 'id', 'myFilter');
+        this.renderer.setAttribute(filter, 'filterUnits', 'userSpaceOnUse');
 
-        return pattern;
+        const feGaussianBlur = this.renderer.createElement('feGaussianBlur', SVG_NS);
+        this.renderer.setAttribute(feGaussianBlur, 'stdDeviation', '3');
+        this.renderer.appendChild(filter, feGaussianBlur);
+
+        return filter;
     }
 
     createSVGCircle(x: number, y: number): void {
@@ -79,19 +76,23 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'stroke', `url(#${this.currentPatternId})`);
-        this.renderer.appendChild(this.svgWrapRef, el);
+        this.renderer.setAttribute(el, 'stroke', 'black');
+
+        this.renderer.setAttribute(el, 'filter', 'url(#myFilter)');
+
+        this.renderer.appendChild(this.svgWrap, el);
     }
 
     createSVGPath(): void {
-        this.svgPathRef = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPathRef, 'stroke', `url(#${this.currentPatternId})`);
-        this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
-        this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
+        this.svgPath = this.renderer.createElement('path', SVG_NS);
+        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
+        this.renderer.setAttribute(this.svgPath, 'stroke', 'black');
+        this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPath, 'filter', 'url(#myFilter)');
+        this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     updateSVGPath(): void {
-        this.renderer.setAttribute(this.svgPathRef, 'd', this.currentPath);
+        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 }

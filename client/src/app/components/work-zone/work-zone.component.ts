@@ -1,9 +1,9 @@
-import { Component, HostListener, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 @Component({
     selector: 'app-work-zone',
