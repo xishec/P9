@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { Color } from '../../../classes/Color';
+import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { COLORS } from '../constants';
 
 @Injectable({
