@@ -1,21 +1,19 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Color } from '../../../classes/Color';
 //import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
-import { COLORS, SIDEBAR_WIDTH } from '../../services/constants';
+import { COLORS } from '../../services/constants';
 //import { bindCallback } from 'rxjs';
 
 @Component({
     selector: 'app-color-tool',
     templateUrl: './color-tool.component.html',
     styleUrls: ['./color-tool.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorToolComponent implements OnInit {
-    drawingModalWindowService: DrawingModalWindowService;
-
     myForm: FormGroup;
     formBuilder: FormBuilder;
 
@@ -44,9 +42,8 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    constructor(formBuilder: FormBuilder, drawingModalWindowService: DrawingModalWindowService) {
+    constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
-        this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
         this.primaryColor = COLORS[3];
         this.addColorToColorList(COLORS[3]);
@@ -68,9 +65,9 @@ export class ColorToolComponent implements OnInit {
             G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
-            confirm: this.submitCount === 0,
-            width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
-            height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
+            // confirm: this.submitCount === 0,
+            // width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
+            // height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
     }
 
@@ -169,13 +166,26 @@ export class ColorToolComponent implements OnInit {
     getColorIcon(color: Color) {
         return { backgroundColor: '#' + color.hex };
     }
-    lastPrimaryOpacity: Number = 1;
+    lastPrimaryOpacity: number = 1;
+    lastSecondaryOpacity: number = 1;
+    selectedLastOpacity: number = 1;
     primaryColorOn: boolean = true;
     secondaryColorOn: boolean = false;
     selectedColor: Color = this.primaryColor;
+
+    primaryColorClicked: boolean = true;
+    secondaryColorClicked: boolean = false;
     getPrimaryColor() {
+        //return iconStyle...
+
         if (this.primaryColorOn) {
-            this.lastPrimaryOpacity = this.myForm.value.A;
+            this.secondaryColorClicked = false;
+            this.selectedLastOpacity = this.lastPrimaryOpacity;
+            if (this.primaryColorClicked) {
+                this.lastPrimaryOpacity = this.myForm.value.A;
+            }
+            this.primaryColorClicked = true;
+            this.myForm.controls.A.setValue(this.lastPrimaryOpacity);
 
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
@@ -186,10 +196,16 @@ export class ColorToolComponent implements OnInit {
         //console.log('opacité pas changé primary');
         return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity };
     }
-    lastSecondaryOpacity: Number = 1;
+
     getSecondaryColor() {
         if (this.secondaryColorOn) {
-            this.lastSecondaryOpacity = this.myForm.value.A;
+            this.primaryColorClicked = false;
+            this.selectedLastOpacity = this.lastSecondaryOpacity;
+            if (this.secondaryColorClicked) {
+                this.lastSecondaryOpacity = this.myForm.value.A;
+            }
+            this.secondaryColorClicked = true;
+            this.myForm.controls.A.setValue(this.lastSecondaryOpacity);
 
             return {
                 backgroundColor: '#' + this.secondaryColor.hex,
