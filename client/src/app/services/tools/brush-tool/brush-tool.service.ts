@@ -2,6 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Mouse, SVG_NS } from '../../constants';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,11 @@ export class BrushToolService extends TracingToolService {
     private svgPathRef = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
 
-    constructor(private renderer: Renderer2, private elementRef: ElementRef<SVGElement>) {
+    constructor(
+        private elementRef: ElementRef<SVGElement>,
+        private renderer: Renderer2,
+        private drawStack: DrawStackService,
+    ) {
         super();
     }
 
@@ -36,6 +41,14 @@ export class BrushToolService extends TracingToolService {
         }
     }
 
+    onMouseUp(e: MouseEvent): void {
+        if (this.isDrawing && e.button === Mouse.LeftButton) {
+            super.onMouseUp(e);
+            this.currentPath = '';
+            this.drawStack.push(this.svgWrapRef);
+        }
+    }
+
     createSVGWrapper(): void {
         this.svgWrapRef = this.renderer.createElement('svg', SVG_NS);
         this.renderer.appendChild(this.svgWrapRef, this.createPattern());
@@ -47,6 +60,13 @@ export class BrushToolService extends TracingToolService {
         const pattern = this.renderer.createElement('pattern', SVG_NS);
         this.renderer.setAttribute(pattern, 'id', this.currentPatternId);
         // design a pattern
+        const c = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(c, 'cx', '10');
+        this.renderer.setAttribute(c, 'cy', '10');
+        this.renderer.setAttribute(c, 'r', '10');
+        this.renderer.setAttribute(c, 'fill', '#393');
+        this.renderer.setAttribute(c, 'stroke', 'none');
+        this.renderer.appendChild(pattern, c);
 
         return pattern;
     }
