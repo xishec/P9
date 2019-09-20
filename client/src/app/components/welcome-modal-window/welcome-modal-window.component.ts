@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-welcome-modal-window',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./welcome-modal-window.component.scss'],
 })
 export class WelcomeModalWindowComponent {
+  displayWelcomeModalWindow = false;
 
+  constructor(public dialogRef: MatDialogRef<WelcomeModalWindowComponent>) {}
+
+  submitForm() {
+    this.dialogRef.close(!this.displayWelcomeModalWindow);
+  }
 }
