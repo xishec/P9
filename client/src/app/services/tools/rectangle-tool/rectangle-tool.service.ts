@@ -35,40 +35,30 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        switch (button) {
-            case Mouse.LeftButton && this.isIn:
-                this.initialMouseX = this.currentMouseX;
-                this.initialMouseY = this.currentMouseY;
-                this.isPreviewing = true;
+        if (button === Mouse.LeftButton && this.isIn) {
+            this.initialMouseX = this.currentMouseX;
+            this.initialMouseY = this.currentMouseY;
+            this.isPreviewing = true;
 
-                this.updatePreviewRectangle();
-                this.updateDrawing();
+            this.updatePreviewRectangle();
+            this.updateDrawing();
 
-                this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
-                this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
-                break;
-
-            default:
-                break;
+            this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
         }
     }
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        switch (button) {
-            case Mouse.LeftButton:
-                if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
-                    this.createSVG();
-                }
-                this.isPreviewing = false;
-                this.isSquarePreview = false;
-                this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
-                this.renderer.removeChild(this.svgReference, this.drawRectangle);
-                break;
-
-            default:
-                break;
+        if (button === Mouse.LeftButton) {
+            if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
+                this.createSVG();
+            }
+            this.isPreviewing = false;
+            this.isSquarePreview = false;
+            this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.removeChild(this.svgReference, this.drawRectangle);
         }
     }
 
