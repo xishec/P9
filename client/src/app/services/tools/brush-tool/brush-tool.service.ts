@@ -18,7 +18,7 @@ export class BrushToolService extends TracingToolService {
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService
+        private drawStack: DrawStackService,
     ) {
         super();
     }
@@ -27,9 +27,10 @@ export class BrushToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton) {
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
             this.createSVGCircle(e.offsetX, e.offsetY);
+            this.currentPath = `M${e.offsetX} ${e.offsetY} L${e.offsetX + 1} ${e.offsetY - 1}`;
             this.createSVGPath();
+            this.updateSVGPath();
         }
     }
 
