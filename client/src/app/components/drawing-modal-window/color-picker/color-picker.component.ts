@@ -12,10 +12,10 @@ import { DrawingModalWindowService } from '../../../services/drawing-modal-windo
 export class ColorPickerComponent implements OnInit {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    blackLevel = 0;
+    obscurity = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
-    @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLElement>;
+    @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLDivElement>;
 
     constructor(private drawingModalWindowService: DrawingModalWindowService, private renderer: Renderer2) {}
 
@@ -35,11 +35,11 @@ export class ColorPickerComponent implements OnInit {
         if (event.value === null) {
             return;
         }
-        this.blackLevel = event.value;
+        this.obscurity = event.value;
         this.renderer.setStyle(
             this.canvasPicker.nativeElement,
             'filter',
-            'brightness(' + (1 - this.blackLevel) * 100 + '%)',
+            'brightness(' + (1 - this.obscurity) * 100 + '%)',
         );
     }
 
@@ -48,17 +48,17 @@ export class ColorPickerComponent implements OnInit {
         const y = event.offsetY;
 
         const pixel = this.context.getImageData(x, y, 1, 1).data;
-        if (this.blackLevel === undefined) {
-            this.blackLevel = 0;
+        if (this.obscurity === undefined) {
+            this.obscurity = 0;
         }
-        if (this.blackLevel !== 1 && pixel[0] + pixel[1] + pixel[2] + pixel[3] === 0) {
+        if (this.obscurity !== 1 && pixel[0] + pixel[1] + pixel[2] + pixel[3] === 0) {
             return;
         }
 
         const newHex = this.drawingModalWindowService.rgbToHex(
-            pixel[0] - pixel[0] * this.blackLevel,
-            pixel[1] - pixel[1] * this.blackLevel,
-            pixel[2] - pixel[2] * this.blackLevel,
+            pixel[0] - pixel[0] * this.obscurity,
+            pixel[1] - pixel[1] * this.obscurity,
+            pixel[2] - pixel[2] * this.obscurity,
         );
         this.drawingModalWindowService.changeActiveColor({ hex: newHex });
 
