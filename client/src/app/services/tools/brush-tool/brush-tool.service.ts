@@ -10,15 +10,15 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 8;
-    private currentColor = 'black';
-    private currentPatternId = '';
+    // private currentColor = 'black';
+    // private currentPatternId = '';
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService,
+        private drawStack: DrawStackService
     ) {
         super();
     }
@@ -59,7 +59,12 @@ export class BrushToolService extends TracingToolService {
     createFilter(): SVGFilterElement {
         const filter = this.renderer.createElement('filter', SVG_NS);
         this.renderer.setAttribute(filter, 'id', 'myFilter');
-        this.renderer.setAttribute(filter, 'filterUnits', 'userSpaceOnUse');
+        this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
+
+        this.renderer.setAttribute(filter, 'height', '100px');
+        this.renderer.setAttribute(filter, 'width', '100px');
+        this.renderer.setAttribute(filter, 'x', '-50px');
+        this.renderer.setAttribute(filter, 'y', '-50px');
 
         const feGaussianBlur = this.renderer.createElement('feGaussianBlur', SVG_NS);
         this.renderer.setAttribute(feGaussianBlur, 'stdDeviation', '3');
