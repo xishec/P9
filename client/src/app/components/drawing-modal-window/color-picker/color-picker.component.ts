@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, Renderer2, HostListener } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
 
 import { MatSliderChange } from '@angular/material';
 import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
