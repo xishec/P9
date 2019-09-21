@@ -99,10 +99,10 @@ export class DrawingModalWindowComponent implements OnInit {
         this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
     }
 
-    getColorIcon(color: Color) {
-        return { backgroundColor: '#' + color.hex };
+    getColorIcon(color: Color): IconStyle {
+        return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
-    getUserColorIcon() {
+    getUserColorIcon(): IconStyle {
         return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
     }
 
@@ -129,4 +129,9 @@ export class DrawingModalWindowComponent implements OnInit {
         }
         return r + g + b;
     }
+}
+
+interface IconStyle {
+    backgroundColor: string;
+    opacity: string;
 }
