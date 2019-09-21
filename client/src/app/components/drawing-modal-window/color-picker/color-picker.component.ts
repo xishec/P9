@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { MatSliderChange } from '@angular/material';
 import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
@@ -12,7 +12,7 @@ import { DrawingModalWindowService } from '../../../services/drawing-modal-windo
 export class ColorPickerComponent implements OnInit {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    blackLevel: number = 0;
+    blackLevel = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
     @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLElement>;
@@ -36,8 +36,11 @@ export class ColorPickerComponent implements OnInit {
             return;
         }
         this.blackLevel = event.value;
-        let brightness = 'brightness(' + (1 - this.blackLevel) * 100 + '%)';
-        this.renderer.setStyle(this.canvasPicker.nativeElement, 'filter', brightness);
+        this.renderer.setStyle(
+            this.canvasPicker.nativeElement,
+            'filter',
+            'brightness(' + (1 - this.blackLevel) * 100 + '%)',
+        );
     }
 
     onCanvasClick(event: MouseEvent): void {
@@ -55,7 +58,7 @@ export class ColorPickerComponent implements OnInit {
         const newHex = this.drawingModalWindowService.rgbToHex(
             pixel[0] - pixel[0] * this.blackLevel,
             pixel[1] - pixel[1] * this.blackLevel,
-            pixel[2] - pixel[2] * this.blackLevel
+            pixel[2] - pixel[2] * this.blackLevel,
         );
         this.drawingModalWindowService.changeActiveColor({ hex: newHex });
 
@@ -63,13 +66,13 @@ export class ColorPickerComponent implements OnInit {
         this.renderer.setStyle(
             this.currentColor.nativeElement,
             'top',
-            (event.y - COLOR_SELECTION_SHIFT).toString() + 'px'
+            (event.y - COLOR_SELECTION_SHIFT).toString() + 'px',
         );
         this.renderer.setStyle(
             this.currentColor.nativeElement,
             'left',
-            (event.x - COLOR_SELECTION_SHIFT).toString() + 'px'
-        );
+            (event.x - COLOR_SELECTION_SHIFT).toString() + 'px',
+    );
         this.renderer.setStyle(this.currentColor.nativeElement, 'background-color', '#' + newHex);
     }
 }
