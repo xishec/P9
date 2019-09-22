@@ -19,6 +19,7 @@ const COLORS: Color[] = [
     { hex: '5057de' },
 ];
 const DEFAULT_COLOR = 'ffffff';
+const COLOR_SELECTION_SHIFT = 17;
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: 'Sélection' },
@@ -57,4 +58,14 @@ enum Mouse {
     RightButton = 2,
 }
 
-export { SIDEBAR_WIDTH, COLORS, DEFAULT_COLOR, TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, SVG_NS, Keys, Mouse };
+export {
+    COLOR_SELECTION_SHIFT,
+    SIDEBAR_WIDTH,
+    COLORS,
+    DEFAULT_COLOR,
+    TOOLS_BUTTON_INFO,
+    FILES_BUTTON_INFO,
+    SVG_NS,
+    Keys,
+    Mouse,
+};

@@ -34,7 +34,7 @@ export abstract class AbstractShapeToolService {
         if (deltaX < 0) {
             deltaX *= -1;
             this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - deltaX).toString());
-            this.renderer.setAttribute(this.previewRectangle, 'deltaXidth', deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', deltaX.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
             this.renderer.setAttribute(this.previewRectangle, 'width', deltaX.toString());
