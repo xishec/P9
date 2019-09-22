@@ -9,9 +9,9 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 })
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
-    private currentWidth = 8;
-    private currentColor = 'black';
-    private currentPattern = 2;
+    private currentWidth = 2;
+    private currentColor = 'red';
+    private currentPattern = 3;
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
@@ -28,14 +28,15 @@ export class BrushToolService extends TracingToolService {
             super.onMouseDown(e);
             this.createSVGWrapper();
             this.createSVGCircle(e.offsetX, e.offsetY);
-            this.currentPath = `M${e.offsetX} ${e.offsetY} L${e.offsetX + 1} ${e.offsetY - 1}`;
+            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
+            this.createSVGCircle(e.offsetX, e.offsetY);
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            this.createSVGCircle(e.offsetX, e.offsetY);
+            //this.createSVGCircle(e.offsetX, e.offsetY);
             this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
             this.updateSVGPath();
         }
@@ -58,6 +59,7 @@ export class BrushToolService extends TracingToolService {
 
     createFilter(patternId: number): object {
         let filter;
+        let path;
         switch (patternId) {
             case 1:
                 filter = this.renderer.createElement('filter', SVG_NS);
@@ -79,12 +81,33 @@ export class BrushToolService extends TracingToolService {
                 this.renderer.setAttribute(filter, 'width', '4');
                 this.renderer.setAttribute(filter, 'height', '4');
 
-                const path = this.renderer.createElement('path', SVG_NS);
+                path = this.renderer.createElement('path', SVG_NS);
                 this.renderer.setAttribute(path, 'd', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2');
                 this.renderer.setAttribute(path, 'stroke', this.currentColor);
-                this.renderer.setAttribute(path, 'stroke-width', this.currentWidth.toString());
+                this.renderer.setAttribute(path, 'stroke-width', '1');
 
                 this.renderer.appendChild(filter, path);
+                break;
+            case 3:
+                filter = this.renderer.createElement('pattern', SVG_NS);
+                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
+                this.renderer.setAttribute(filter, 'patternUnits', 'userSpaceOnUse');
+                this.renderer.setAttribute(filter, 'width', '8');
+                this.renderer.setAttribute(filter, 'height', '8');
+
+                path = this.renderer.createElement('path', SVG_NS);
+                this.renderer.setAttribute(path, 'd', 'M0,4 H8 M4,8 V0');
+                this.renderer.setAttribute(path, 'stroke', this.currentColor);
+                this.renderer.setAttribute(path, 'stroke-width', '1');
+
+                const path2 = this.renderer.createElement('path', SVG_NS);
+                this.renderer.setAttribute(path2, 'd', 'M0,3 H8 M3,8 V0 M0,5 H8 M5,8 V0');
+                this.renderer.setAttribute(path2, 'stroke', this.currentColor);
+                this.renderer.setAttribute(path2, 'stroke-width', '2');
+                this.renderer.setAttribute(path2, 'stroke-opacity', '0.1');
+
+                this.renderer.appendChild(filter, path);
+                this.renderer.appendChild(filter, path2);
                 break;
         }
         return filter;
@@ -98,19 +121,40 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'stroke', this.currentColor);
-
-        this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
+        
+        
+        switch (this.currentPattern) {
+            case 1:
+                this.renderer.setAttribute(el, 'stroke', this.currentColor);
+                this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
+                break;
+            case 2:
+            case 3:
+                this.renderer.setAttribute(el, 'stroke', `url(#${this.currentPattern.toString()})`);
+                break;
+            
+        }
+        
 
         this.renderer.appendChild(this.svgWrap, el);
     }
 
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
+
+        switch (this.currentPattern) {
+            case 1:
+                this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentPattern})`);
+                this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
+                break;
+            case 2:
+            case 3:
+                this.renderer.setAttribute(this.svgPath, 'stroke', `url(#${this.currentPattern})`);
+                break;
+        }
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
-        this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentPattern})`);
+        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
+        
         this.renderer.appendChild(this.svgWrap, this.svgPath);
         this.updateSVGPath();
     }
