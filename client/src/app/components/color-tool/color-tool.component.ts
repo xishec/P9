@@ -37,9 +37,10 @@ export class ColorToolComponent implements OnInit {
     }
 
     onClickColorPicker() {
-        if (this.primaryColor.hex === undefined) {
+        if (this.primaryColor.hex === undefined && this.secondaryColor.hex === undefined) {
             return;
         }
+        //this.onChangeColor(color: Color);
         // else if (this.secondaryColor.hex === undefined){
         //     return;
         // }
