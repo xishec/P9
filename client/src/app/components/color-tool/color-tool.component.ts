@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Color } from '../../../classes/Color';
 import { COLORS } from '../../services/constants';
+import { ColorPickerComponent } from '../drawing-modal-window/color-picker/color-picker.component';
 
 @Component({
     selector: 'app-color-tool',
@@ -12,6 +13,7 @@ import { COLORS } from '../../services/constants';
 export class ColorToolComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
+    colorPicker: ColorPickerComponent;
 
     colors: Color[] = [];
     primaryColor: Color = new Color();
@@ -27,6 +29,22 @@ export class ColorToolComponent implements OnInit {
         } else {
             this.colorToolOn = false;
         }
+    }
+
+    displayColorWheel: boolean = false;
+    onClickColorWheel() {
+        this.displayColorWheel = !this.displayColorWheel;
+    }
+
+    onClickColorPicker() {
+        if (this.primaryColor.hex === undefined) {
+            return;
+        }
+        // else if (this.secondaryColor.hex === undefined){
+        //     return;
+        // }
+        this.setHex();
+        this.setRGBFromHex();
     }
 
     ColorPaletteShown: boolean = false;

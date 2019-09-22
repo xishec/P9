@@ -41,11 +41,8 @@ import { ColorToolComponent } from './components/color-tool/color-tool.component
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
-<<<<<<< HEAD
         ColorToolComponent,
-=======
         ColorPickerComponent,
->>>>>>> dev
         WelcomeModalWindowComponent,
     ],
     imports: [
