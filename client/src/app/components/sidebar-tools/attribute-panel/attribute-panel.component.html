@@ -1,6 +1,6 @@
 <div id="container">
     <div id="attribute-header">
-        Attribute Header
+        {{ toolName[currentToolId] }}
     </div>
     <p>Attribute Panel</p>
     <p>Tool : {{ currentToolId }}</p>
@@ -9,14 +9,16 @@
         <label for="thickness">Épaisseur du trait</label>
         <div>
             <mat-slider (input)="thickness = $event.value" [value]="thickness"></mat-slider>
-            <span> {{ thickness }}</span>
+            <mat-form-field>
+                <input matInput value="{{ thickness }}" type="number" (keyup)="onInput($event)" id="attributeInput" />
+            </mat-form-field>
         </div>
     </div>
 
     <div class="attribute">
         <label for="borderThickness">Épaisseur du trait de contour</label>
         <div>
-            <mat-slider (input)="borderThickness = $event.value" [value]="borderThickness"></mat-slider>
+            <mat-slider (input)="thickness = $event.value" [value]="borderThickness"></mat-slider>
             <span> {{ borderThickness }}</span>
         </div>
     </div>
