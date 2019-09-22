@@ -8,13 +8,23 @@
                     <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
                     <br />
                 </div>
-                <button
-                    class="color"
-                    type="button"
-                    *ngFor="let color of colors; let i = index"
-                    [ngStyle]="getColorIcon(color)"
-                    (click)="onChangeColor(i)"
-                ></button>
+                <div id="colorButtons">
+                    <button
+                        class="color"
+                        type="button"
+                        *ngFor="let color of colors; let i = index"
+                        [ngStyle]="getColorIcon(color)"
+                        (click)="onChangeColor(i)"
+                    ></button>
+                    <img
+                        draggable="false"
+                        src="../../../assets/color-wheel.png"
+                        class="color"
+                        alt="Color Wheel"
+                        (click)="onClickColorWheel()"
+                    />
+                </div>
+                <app-color-picker *ngIf="displayColorWheel" (click)="onClickColorPicker()"></app-color-picker>
 
                 <mat-form-field class="medium">
                     <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserColorHex()" />

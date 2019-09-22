@@ -13,6 +13,7 @@ import {
     MatDialogModule,
     MatInputModule,
     MatRadioModule,
+    MatSliderModule,
     MatTooltipModule,
 } from '@angular/material';
 
@@ -25,6 +26,7 @@ import { ToolsService } from './services/tools/tools.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
+import { ColorPickerComponent } from './components/drawing-modal-window/color-picker/color-picker.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
@@ -39,10 +41,15 @@ import { ColorToolComponent } from './components/color-tool/color-tool.component
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
+<<<<<<< HEAD
         ColorToolComponent,
+=======
+        ColorPickerComponent,
+>>>>>>> dev
         WelcomeModalWindowComponent,
     ],
     imports: [
+        MatSliderModule,
         MatCheckboxModule,
         MatDialogModule,
         MatRadioModule,
