@@ -11,7 +11,7 @@ export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 7;
     private currentColor = 'red';
-    private currentPattern = 5;
+    private currentPattern = 1;
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
@@ -47,7 +47,9 @@ export class BrushToolService extends TracingToolService {
             super.onMouseUp(e);
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
+            this.currentPattern = this.currentPattern + 1;
         }
+        
     }
 
     createSVGWrapper(): void {
@@ -74,39 +76,54 @@ export class BrushToolService extends TracingToolService {
                 this.renderer.appendChild(filter, effect);
                 break;
             case 2:
-                filter = this.renderer.createElement('pattern', SVG_NS);
+                filter = this.renderer.createElement('filter', SVG_NS);
                 this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'patternUnits', 'userSpaceOnUse');
-                this.renderer.setAttribute(filter, 'width', '4');
-                this.renderer.setAttribute(filter, 'height', '4');
+                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
+                this.renderer.setAttribute(filter, 'height', '100px');
+                this.renderer.setAttribute(filter, 'width', '100px');
+                this.renderer.setAttribute(filter, 'x', '-50px');
+                this.renderer.setAttribute(filter, 'y', '-50px');
+                
+                const turbulence2 = this.renderer.createElement('feTurbulence', SVG_NS);
+                this.renderer.setAttribute(turbulence2, 'type', 'turbulence');
+                this.renderer.setAttribute(turbulence2, 'baseFrequency', '0.3');
+                this.renderer.setAttribute(turbulence2, 'result', 'turbulence');
+                this.renderer.setAttribute(turbulence2, 'numOctaves', '1');
 
-                let path2 = this.renderer.createElement('path', SVG_NS);
-                this.renderer.setAttribute(path2, 'd', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2');
-                this.renderer.setAttribute(path2, 'stroke', this.currentColor);
-                this.renderer.setAttribute(path2, 'stroke-width', '1');
+                const displacementMap2 = this.renderer.createElement('feDisplacementMap', SVG_NS);
+                this.renderer.setAttribute(displacementMap2, 'in2', 'turbulence');
+                this.renderer.setAttribute(displacementMap2, 'in', 'SourceGraphic');
+                this.renderer.setAttribute(displacementMap2, 'scale', '40')
+                this.renderer.setAttribute(displacementMap2, 'xChannelSelector', 'R');
+                this.renderer.setAttribute(displacementMap2, 'yChannelSelector', 'G');
 
-                this.renderer.appendChild(filter, path2);
+                this.renderer.appendChild(filter, turbulence2);
+                this.renderer.appendChild(filter, displacementMap2);
                 break;
             case 3:
-                filter = this.renderer.createElement('pattern', SVG_NS);
+                filter = this.renderer.createElement('filter', SVG_NS);
                 this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'patternUnits', 'userSpaceOnUse');
-                this.renderer.setAttribute(filter, 'width', '8');
-                this.renderer.setAttribute(filter, 'height', '8');
+                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
+                this.renderer.setAttribute(filter, 'height', '100px');
+                this.renderer.setAttribute(filter, 'width', '100px');
+                this.renderer.setAttribute(filter, 'x', '-50px');
+                this.renderer.setAttribute(filter, 'y', '-50px');
+                
+                const turbulence3 = this.renderer.createElement('feTurbulence', SVG_NS);
+                this.renderer.setAttribute(turbulence3, 'type', 'turbulence');
+                this.renderer.setAttribute(turbulence3, 'baseFrequency', '0.01 0.57');
+                this.renderer.setAttribute(turbulence3, 'result', 'turbulence');
+                this.renderer.setAttribute(turbulence3, 'numOctaves', '2');
 
-                let path3 = this.renderer.createElement('path', SVG_NS);
-                this.renderer.setAttribute(path3, 'd', 'M0,4 H8 M4,8 V0');
-                this.renderer.setAttribute(path3, 'stroke', this.currentColor);
-                this.renderer.setAttribute(path3, 'stroke-width', '1');
+                const displacementMap3 = this.renderer.createElement('feDisplacementMap', SVG_NS);
+                this.renderer.setAttribute(displacementMap3, 'in2', 'turbulence');
+                this.renderer.setAttribute(displacementMap3, 'in', 'SourceGraphic');
+                this.renderer.setAttribute(displacementMap3, 'scale', '10')
+                this.renderer.setAttribute(displacementMap3, 'xChannelSelector', 'R');
+                this.renderer.setAttribute(displacementMap3, 'yChannelSelector', 'G');
 
-                const secondPath3 = this.renderer.createElement('path', SVG_NS);
-                this.renderer.setAttribute(secondPath3, 'd', 'M0,3 H8 M3,8 V0 M0,5 H8 M5,8 V0');
-                this.renderer.setAttribute(secondPath3, 'stroke', this.currentColor);
-                this.renderer.setAttribute(secondPath3, 'stroke-width', '2');
-                this.renderer.setAttribute(secondPath3, 'stroke-opacity', '0.1');
-
-                this.renderer.appendChild(filter, path3);
-                this.renderer.appendChild(filter, secondPath3);
+                this.renderer.appendChild(filter, turbulence3);
+                this.renderer.appendChild(filter, displacementMap3);
                 break;
             case 4:
                 filter = this.renderer.createElement('filter', SVG_NS);
@@ -172,20 +189,9 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
         
         
-        switch (this.currentPattern) {
-            case 1:
-            case 4:
-            case 5:
-                this.renderer.setAttribute(el, 'stroke', this.currentColor);
-                this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
-                break;
-            case 2:
-            case 3:
-                this.renderer.setAttribute(el, 'stroke', `url(#${this.currentPattern.toString()})`);
-                break;
+        this.renderer.setAttribute(el, 'stroke', this.currentColor);
+        this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
             
-        }
-        
 
         this.renderer.appendChild(this.svgWrap, el);
     }
@@ -193,18 +199,9 @@ export class BrushToolService extends TracingToolService {
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
 
-        switch (this.currentPattern) {
-            case 1:
-            case 4:
-            case 5:
-                this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentPattern})`);
-                this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
-                break;
-            case 2:
-            case 3:
-                this.renderer.setAttribute(this.svgPath, 'stroke', `url(#${this.currentPattern})`);
-                break;
-        }
+        this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentPattern})`);
+        this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
+
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         
