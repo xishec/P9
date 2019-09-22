@@ -10,8 +10,8 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 8;
-    // private currentColor = 'black';
-    // private currentPatternId = '';
+    private currentColor = 'black';
+    private currentPattern = 1;
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
@@ -30,7 +30,6 @@ export class BrushToolService extends TracingToolService {
             this.createSVGCircle(e.offsetX, e.offsetY);
             this.currentPath = `M${e.offsetX} ${e.offsetY} L${e.offsetX + 1} ${e.offsetY - 1}`;
             this.createSVGPath();
-            this.updateSVGPath();
         }
     }
 
@@ -52,25 +51,38 @@ export class BrushToolService extends TracingToolService {
 
     createSVGWrapper(): void {
         this.svgWrap = this.renderer.createElement('svg', SVG_NS);
-        const filter = this.createFilter();
+        const filter = this.createFilter(this.currentPattern;
         this.renderer.appendChild(this.svgWrap, filter);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    createFilter(): SVGFilterElement {
-        const filter = this.renderer.createElement('filter', SVG_NS);
-        this.renderer.setAttribute(filter, 'id', 'myFilter');
-        this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
+    createFilter(patternId: number): SVGFilterElement {
 
+        const filter = this.renderer.createElement('filter', SVG_NS);
+        this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
         this.renderer.setAttribute(filter, 'height', '100px');
         this.renderer.setAttribute(filter, 'width', '100px');
         this.renderer.setAttribute(filter, 'x', '-50px');
         this.renderer.setAttribute(filter, 'y', '-50px');
 
-        const feGaussianBlur = this.renderer.createElement('feGaussianBlur', SVG_NS);
-        this.renderer.setAttribute(feGaussianBlur, 'stdDeviation', '3');
-        this.renderer.appendChild(filter, feGaussianBlur);
+        let effect: SVGElement;
 
+        switch (patternId) {
+            case 1:
+                this.renderer.setAttribute(filter, 'id', 'myFilter');
+                effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
+                this.renderer.setAttribute(effect, 'stdDeviation', '3');
+                this.renderer.appendChild(filter, effect);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
         return filter;
     }
 
@@ -82,7 +94,7 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'stroke', 'black');
+        this.renderer.setAttribute(el, 'stroke', this.currentColor);
 
         this.renderer.setAttribute(el, 'filter', 'url(#myFilter)');
 
@@ -92,10 +104,11 @@ export class BrushToolService extends TracingToolService {
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPath, 'stroke', 'black');
+        this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'filter', 'url(#myFilter)');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
+        this.updateSVGPath();
     }
 
     updateSVGPath(): void {
