@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { COLOR_SELECTION_SHIFT } from '../../services/constants';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-color-picker',
