@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
-//import { FormBuilder } from '@angular/forms';
 
 import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
@@ -25,17 +24,12 @@ export class ColorPickerComponent implements OnInit {
         private colorToolComponent: ColorToolComponent
     ) {}
 
-    //formBuilder: FormBuilder;
-    //colorToolComponent: ColorToolComponent;
-
     ngOnInit() {
         const img = new Image();
         img.src = '../../../assets/color-wheel.png';
 
         this.canvas = this.canvasPicker.nativeElement;
         this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-        // this.formBuilder = new FormBuilder();
-        // this.colorToolComponent = new ColorToolComponent(this.formBuilder);
 
         img.onload = () => {
             this.context.drawImage(img, 0, 0);

@@ -37,13 +37,6 @@
             <br />
         </div>
 
-        <!-- <div id="color-palette-show-button">
-            <button (click)="showColorPalette()">
-                <i class="fas fa-palette"></i>
-            </button>
-            <img *ngIf="ColorPaletteShown" id="color-pick-image" src="../../../../assets/colorImage.jpg" />
-        </div> -->
-
         <div id="colorButtons">
             <button
                 class="color"
@@ -61,7 +54,7 @@
                 (click)="onClickColorWheel()"
             />
         </div>
-        <app-color-picker *ngIf="displayColorWheel" (click)="onClickColorPicker()"></app-color-picker>
+        <app-color-picker *ngIf="displayColorWheel"></app-color-picker>
 
         <mat-form-field class="medium">
             <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserColorHex()" />
@@ -85,7 +78,7 @@
             <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
             <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
         </mat-form-field>
-        <!-- could be also a div... -->
+
         <div id="last-10-colors">
             Les dix dernières couleurs
         </div>
@@ -97,8 +90,4 @@
             (click)="onChangeColor(color)"
         ></button>
     </div>
-
-    <!-- <canvas width="600" height="440" id="canvas_picker"></canvas>
-<div id="hex">HEX: <input type="text" /></div>
-<div id="rgb">RGB: <input type="text" /></div> -->
 </form>

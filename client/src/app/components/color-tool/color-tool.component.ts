@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Color } from '../../../classes/Color';
 import { COLORS } from '../../services/constants';
@@ -7,53 +7,15 @@ import { COLORS } from '../../services/constants';
     selector: 'app-color-tool',
     templateUrl: './color-tool.component.html',
     styleUrls: ['./color-tool.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    //hangeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorToolComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
-
-    colors: Color[] = [];
+    readonly colors: Color[] = [];
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
-    submitCount = 0;
-    displayNewDrawingModalWindow = false;
     lastTenColors: Color[] = [];
-
-    colorToolOn: boolean = false;
-    showColorOptions() {
-        if (!this.colorToolOn) {
-            this.colorToolOn = true;
-        } else {
-            this.colorToolOn = false;
-        }
-    }
-
-    displayColorWheel: boolean = false;
-    onClickColorWheel() {
-        this.displayColorWheel = !this.displayColorWheel;
-    }
-
-    onClickColorPicker() {
-        if (this.primaryColor.hex === undefined && this.secondaryColor.hex === undefined) {
-            return;
-        }
-        //this.onChangeColor(color: Color);
-        // else if (this.secondaryColor.hex === undefined){
-        //     return;
-        // }
-        this.setHex();
-        this.setRGBFromHex();
-    }
-
-    // ColorPaletteShown: boolean = false;
-    // showColorPalette() {
-    //     if (!this.ColorPaletteShown) {
-    //         this.ColorPaletteShown = true;
-    //     } else {
-    //         this.ColorPaletteShown = false;
-    //     }
-    // }
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
@@ -65,11 +27,7 @@ export class ColorToolComponent implements OnInit {
         this.initializeForm();
     }
 
-    ngOnInit(): void {
-        // this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-        //     this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        // });
-    }
+    ngOnInit(): void {}
 
     initializeForm() {
         this.myForm = this.formBuilder.group({
@@ -79,6 +37,16 @@ export class ColorToolComponent implements OnInit {
             B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
         });
+    }
+
+    colorToolOn: boolean = false;
+    showColorOptions() {
+        this.colorToolOn = !this.colorToolOn;
+    }
+
+    displayColorWheel: boolean = false;
+    onClickColorWheel() {
+        this.displayColorWheel = !this.displayColorWheel;
     }
 
     indexOfTenColorArray: number = 0;
@@ -97,20 +65,22 @@ export class ColorToolComponent implements OnInit {
     onChangeColor(color: Color) {
         if (this.primaryColorOn) {
             this.primaryColor = color;
-            this.addColorToColorList(color);
         } else {
             this.secondaryColor = color;
-            this.addColorToColorList(color);
         }
+        this.addColorToColorList(color);
         this.setHexValues();
     }
+
     setHexValues() {
         this.setHex();
         this.setRGBFromHex();
     }
+
     // onCancel() {
     //     this.displayNewDrawingModalWindow = false;
     // }
+
     onUserColorHex() {
         if (this.primaryColorOn) {
             this.primaryColor = { hex: this.myForm.value.hex };
@@ -119,6 +89,7 @@ export class ColorToolComponent implements OnInit {
         }
         this.setRGBFromHex();
     }
+
     onUserColorRGB() {
         const newHex = this.rgbToHex();
         if (this.primaryColorOn) {
@@ -136,6 +107,7 @@ export class ColorToolComponent implements OnInit {
             this.myForm.controls.hex.setValue(this.secondaryColor.hex);
         }
     }
+
     setRGBFromHex() {
         if (this.primaryColorOn) {
             this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
@@ -148,9 +120,10 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    getColorIcon(color: Color) {
+    getColorIcon(color: Color): ColorButtonStyle {
         return { backgroundColor: '#' + color.hex };
     }
+
     lastPrimaryOpacity: number = 1;
     lastSecondaryOpacity: number = 1;
     primaryColorOn: boolean = true;
@@ -159,8 +132,7 @@ export class ColorToolComponent implements OnInit {
 
     primaryColorClicked: boolean = true;
     secondaryColorClicked: boolean = false;
-    getPrimaryColor() {
-        //return iconStyle...
+    getPrimaryColor(): ColorIconStyle {
         if (this.primaryColorOn) {
             this.secondaryColorClicked = false;
             if (this.primaryColorClicked) {
@@ -176,10 +148,10 @@ export class ColorToolComponent implements OnInit {
             };
         }
 
-        return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity };
+        return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity, border: 'solid 0px' };
     }
 
-    getSecondaryColor() {
+    getSecondaryColor(): ColorIconStyle {
         if (this.secondaryColorOn) {
             this.primaryColorClicked = false;
             if (this.secondaryColorClicked) {
@@ -195,7 +167,11 @@ export class ColorToolComponent implements OnInit {
             };
         }
 
-        return { backgroundColor: '#' + this.secondaryColor.hex, opacity: this.lastSecondaryOpacity };
+        return {
+            backgroundColor: '#' + this.secondaryColor.hex,
+            opacity: this.lastSecondaryOpacity,
+            border: 'solid 0px',
+        };
     }
 
     chosePrimaryColor() {
@@ -235,4 +211,14 @@ export class ColorToolComponent implements OnInit {
         }
         return r + g + b;
     }
+}
+
+interface ColorIconStyle {
+    backgroundColor: string;
+    opacity: number;
+    border: string;
+}
+
+interface ColorButtonStyle {
+    backgroundColor: string;
 }
