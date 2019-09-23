@@ -15,7 +15,13 @@ export class ColorToolComponent implements OnInit {
     readonly colors: Color[] = [];
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
+<<<<<<< HEAD
     lastTenColors: Color[] = [];
+=======
+    submitCount = 0;
+    displayNewDrawingModalWindow = false;
+    lastTenColorsQueue: Color[] = [];
+>>>>>>> 48c5480a241a8b3df94dd9b0a8305c1555dfe6c3
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
@@ -39,6 +45,7 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
+<<<<<<< HEAD
     colorToolOn: boolean = false;
     showColorOptions() {
         this.colorToolOn = !this.colorToolOn;
@@ -50,15 +57,14 @@ export class ColorToolComponent implements OnInit {
     }
 
     indexOfTenColorArray: number = 0;
+=======
+>>>>>>> 48c5480a241a8b3df94dd9b0a8305c1555dfe6c3
     addColorToColorList(color: Color) {
-        if (this.lastTenColors.length < 10) {
-            this.lastTenColors.push(color);
+        if (this.lastTenColorsQueue.length < 10) {
+            this.lastTenColorsQueue.push(color);
         } else {
-            if (this.indexOfTenColorArray >= 10) {
-                this.indexOfTenColorArray = 0;
-            }
-            this.lastTenColors[this.indexOfTenColorArray.valueOf()] = color;
-            this.indexOfTenColorArray++;
+            this.lastTenColorsQueue.shift();
+            this.lastTenColorsQueue.push(color);
         }
     }
 
