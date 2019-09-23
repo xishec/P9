@@ -18,7 +18,7 @@ export class ColorToolComponent implements OnInit {
     secondaryColor: Color = new Color();
     submitCount = 0;
     displayNewDrawingModalWindow = false;
-    lastTenColors: Color[] = [];
+    lastTenColorsQueue: Color[] = [];
 
     colorToolOn: boolean = false;
     showColorOptions() {
@@ -81,16 +81,12 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-    indexOfTenColorArray: number = 0;
     addColorToColorList(color: Color) {
-        if (this.lastTenColors.length < 10) {
-            this.lastTenColors.push(color);
+        if (this.lastTenColorsQueue.length < 10) {
+            this.lastTenColorsQueue.push(color);
         } else {
-            if (this.indexOfTenColorArray >= 10) {
-                this.indexOfTenColorArray = 0;
-            }
-            this.lastTenColors[this.indexOfTenColorArray.valueOf()] = color;
-            this.indexOfTenColorArray++;
+            this.lastTenColorsQueue.shift();
+            this.lastTenColorsQueue.push(color);
         }
     }
 
