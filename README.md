@@ -81,7 +81,7 @@ Voici les configurations pour le formateur de code `Prettier`. Ajoutez tout ce q
 {
 	"prettier.printWidth": 120,
 	"prettier.tabWidth": 4,
-	"prettier.trailingComma": "es5",
+	"prettier.trailingComma": "all",
 	"prettier.arrowParens": "always",
 	"prettier.disableLanguages": [],
 	"prettier.singleQuote": true,
