@@ -41,7 +41,7 @@
             <button
                 class="color"
                 type="button"
-                *ngFor="let color of colors; let i = index"
+                *ngFor="let color of colors"
                 [ngStyle]="getColorIcon(color)"
                 (click)="onChangeColor(color)"
             ></button>

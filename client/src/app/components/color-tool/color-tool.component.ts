@@ -7,7 +7,6 @@ import { COLORS } from '../../services/constants';
     selector: 'app-color-tool',
     templateUrl: './color-tool.component.html',
     styleUrls: ['./color-tool.component.scss'],
-    //hangeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorToolComponent implements OnInit {
     myForm: FormGroup;
@@ -15,13 +14,18 @@ export class ColorToolComponent implements OnInit {
     readonly colors: Color[] = [];
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
-<<<<<<< HEAD
-    lastTenColors: Color[] = [];
-=======
-    submitCount = 0;
-    displayNewDrawingModalWindow = false;
     lastTenColorsQueue: Color[] = [];
->>>>>>> 48c5480a241a8b3df94dd9b0a8305c1555dfe6c3
+
+    colorToolOn: boolean = false;
+    displayColorWheel: boolean = false;
+    indexOfTenColorArray: number = 0;
+
+    lastPrimaryOpacity: number = 1;
+    lastSecondaryOpacity: number = 1;
+    primaryColorOn: boolean = true;
+    secondaryColorOn: boolean = false;
+    primaryColorClicked: boolean = true;
+    secondaryColorClicked: boolean = false;
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
@@ -45,20 +49,14 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-<<<<<<< HEAD
-    colorToolOn: boolean = false;
     showColorOptions() {
         this.colorToolOn = !this.colorToolOn;
     }
 
-    displayColorWheel: boolean = false;
     onClickColorWheel() {
         this.displayColorWheel = !this.displayColorWheel;
     }
 
-    indexOfTenColorArray: number = 0;
-=======
->>>>>>> 48c5480a241a8b3df94dd9b0a8305c1555dfe6c3
     addColorToColorList(color: Color) {
         if (this.lastTenColorsQueue.length < 10) {
             this.lastTenColorsQueue.push(color);
@@ -82,10 +80,6 @@ export class ColorToolComponent implements OnInit {
         this.setHex();
         this.setRGBFromHex();
     }
-
-    // onCancel() {
-    //     this.displayNewDrawingModalWindow = false;
-    // }
 
     onUserColorHex() {
         if (this.primaryColorOn) {
@@ -130,14 +124,6 @@ export class ColorToolComponent implements OnInit {
         return { backgroundColor: '#' + color.hex };
     }
 
-    lastPrimaryOpacity: number = 1;
-    lastSecondaryOpacity: number = 1;
-    primaryColorOn: boolean = true;
-    secondaryColorOn: boolean = false;
-    selectedColor: Color = this.primaryColor;
-
-    primaryColorClicked: boolean = true;
-    secondaryColorClicked: boolean = false;
     getPrimaryColor(): ColorIconStyle {
         if (this.primaryColorOn) {
             this.secondaryColorClicked = false;
@@ -183,13 +169,12 @@ export class ColorToolComponent implements OnInit {
     chosePrimaryColor() {
         this.primaryColorOn = true;
         this.secondaryColorOn = false;
-        this.myForm.value.A = this.lastPrimaryOpacity;
         this.setHexValues();
     }
+
     choseSecondaryColor() {
         this.primaryColorOn = false;
         this.secondaryColorOn = true;
-        this.myForm.value.A = this.lastSecondaryOpacity;
         this.setHexValues();
     }
 
@@ -198,8 +183,7 @@ export class ColorToolComponent implements OnInit {
         temporaryColor = this.primaryColor;
         this.primaryColor = this.secondaryColor;
         this.secondaryColor = temporaryColor;
-        this.setHex();
-        this.setRGBFromHex();
+        this.setHexValues();
     }
 
     rgbToHex(): string {
