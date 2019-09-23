@@ -11,7 +11,7 @@
                 <button
                     class="color"
                     type="button"
-                    *ngFor="let color of colors; let i = index"
+                    *ngFor="let color of colors; let i = index"attributeInput
                     [ngStyle]="getColorIcon(color)"
                     (click)="onChangeColor(i)"
                 ></button>
