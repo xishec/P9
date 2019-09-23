@@ -51,7 +51,6 @@ export class BrushToolService extends TracingToolService {
             super.onMouseUp(e);
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
-            this.currentPattern = this.currentPattern + 1;
         }
         
     }
@@ -63,7 +62,7 @@ export class BrushToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    createFilter(patternId: number): object {
+    createFilter(patternId: number): SVGFilterElement {
         let filter = this.renderer.createElement('filter', SVG_NS);
         
         this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
