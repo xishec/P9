@@ -30,7 +30,10 @@ export class AppComponent implements OnInit {
 
     openWelcomeModalWindow(): void {
         if (this.welcomeModalWindowService.getValueFromLocalStorage()) {
-            const dialogRef = this.dialog.open(WelcomeModalWindowComponent, { disableClose: true, maxWidth: '650px' });
+            const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
+                panelClass: 'myapp-max-width-dialog',
+                disableClose: true,
+            });
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
                 displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
                 this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);

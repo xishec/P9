@@ -7,7 +7,7 @@ export class WelcomeModalWindowService {
     readonly storageKey = 'display welcome modal';
     displayWelcomeModalWindow = true;
 
-    getValueFromLocalStorage() {
+    getValueFromLocalStorage(): boolean {
         if (localStorage.getItem(this.storageKey)) {
             this.displayWelcomeModalWindow = localStorage.getItem(this.storageKey) === 'true';
             this.displayWelcomeModalWindow = !(localStorage.getItem(this.storageKey) === 'false');
@@ -16,7 +16,7 @@ export class WelcomeModalWindowService {
         return this.displayWelcomeModalWindow;
     }
 
-    setValueToLocalStorage(value: string) {
+    setValueToLocalStorage(value: string): void {
         localStorage.setItem(this.storageKey, value);
     }
 }
