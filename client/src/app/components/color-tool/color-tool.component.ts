@@ -8,7 +8,7 @@ import { COLORS } from '../../services/constants';
     templateUrl: './color-tool.component.html',
     styleUrls: ['./color-tool.component.scss'],
 })
-export class ColorToolComponent implements OnInit {
+export class ColorToolComponent {
     myForm: FormGroup;
     formBuilder: FormBuilder;
     readonly colors: Color[] = [];
@@ -16,16 +16,16 @@ export class ColorToolComponent implements OnInit {
     secondaryColor: Color = new Color();
     lastTenColorsQueue: Color[] = [];
 
-    colorToolOn: boolean = false;
-    displayColorWheel: boolean = false;
-    indexOfTenColorArray: number = 0;
+    colorToolOn = false;
+    displayColorWheel = false;
+    indexOfTenColorArray = 0;
 
-    lastPrimaryOpacity: number = 1;
-    lastSecondaryOpacity: number = 1;
-    primaryColorOn: boolean = true;
-    secondaryColorOn: boolean = false;
-    primaryColorClicked: boolean = true;
-    secondaryColorClicked: boolean = false;
+    lastPrimaryOpacity = 1;
+    lastSecondaryOpacity = 1;
+    primaryColorOn = true;
+    secondaryColorOn = false;
+    primaryColorClicked = true;
+    secondaryColorClicked = false;
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
@@ -36,8 +36,6 @@ export class ColorToolComponent implements OnInit {
         this.addColorToColorList(COLORS[1]);
         this.initializeForm();
     }
-
-    ngOnInit(): void {}
 
     initializeForm() {
         this.myForm = this.formBuilder.group({
