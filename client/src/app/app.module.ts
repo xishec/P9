@@ -61,7 +61,7 @@ import { ColorToolComponent } from './components/color-tool/color-tool.component
         MatTooltipModule,
     ],
     entryComponents: [WelcomeModalWindowComponent],
-    providers: [ToolsService, DrawingModalWindowService, WelcomeModalWindowService],
+    providers: [ToolsService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolComponent],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

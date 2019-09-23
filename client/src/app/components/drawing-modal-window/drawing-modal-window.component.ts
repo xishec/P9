@@ -80,7 +80,9 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setRGBFromHex();
     }
     onClickColorPicker() {
-        if (this.activeColor.hex === undefined) { return; }
+        if (this.activeColor.hex === undefined) {
+            return;
+        }
         this.setHex();
         this.setRGBFromHex();
     }
@@ -95,7 +97,7 @@ export class DrawingModalWindowComponent implements OnInit {
         const newHex = this.drawingModalWindowService.rgbToHex(
             this.myForm.value.R,
             this.myForm.value.G,
-            this.myForm.value.B,
+            this.myForm.value.B
         );
         this.activeColor = { hex: newHex };
         this.setHex();
