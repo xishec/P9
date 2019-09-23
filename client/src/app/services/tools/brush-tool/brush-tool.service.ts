@@ -30,7 +30,6 @@ export class BrushToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton) {
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.createSVGCircle(e.offsetX, e.offsetY);
             this.currentPath = `M${e.offsetX} ${e.offsetY}`;
             this.createSVGCircle(e.offsetX, e.offsetY);
             this.createSVGPath();
@@ -39,7 +38,6 @@ export class BrushToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            // this.createSVGCircle(e.offsetX, e.offsetY);
             this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
             this.updateSVGPath();
         }
@@ -92,7 +90,6 @@ export class BrushToolService extends TracingToolService {
                 case 2:
                     this.renderer.setAttribute(turbulence, 'baseFrequency', '0.3');
                     this.renderer.setAttribute(turbulence, 'numOctaves', '1');
-
                     this.renderer.setAttribute(displacementMap, 'scale', '18')
                     break;
                 case 3:
@@ -116,19 +113,14 @@ export class BrushToolService extends TracingToolService {
     }
 
     createSVGCircle(x: number, y: number): void {
-        const el = this.renderer.createElement('line', SVG_NS);
-        this.renderer.setAttribute(el, 'x1', x.toString());
-        this.renderer.setAttribute(el, 'x2', x.toString());
-        this.renderer.setAttribute(el, 'y1', y.toString());
-        this.renderer.setAttribute(el, 'y2', y.toString());
-        this.renderer.setAttribute(el, 'stroke-width', this.currentWidth.toString());
+        const el = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(el, 'cx', x.toString());
+        this.renderer.setAttribute(el, 'cy', y.toString());
+        this.renderer.setAttribute(el, 'r', this.currentWidth.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        
-        
+        this.renderer.setAttribute(el, 'fill', this.currentColor);
         this.renderer.setAttribute(el, 'stroke', this.currentColor);
         this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
-            
-
         this.renderer.appendChild(this.svgWrap, el);
     }
 
