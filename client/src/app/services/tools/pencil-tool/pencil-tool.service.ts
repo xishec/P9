@@ -33,7 +33,7 @@ export class PencilToolService extends TracingToolService {
     }
 
     onMouseMove(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton) {
+        if (e.button === Mouse.LeftButton && this.isDrawing) {
             this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
             this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
             this.updateSVGPath();
@@ -41,7 +41,7 @@ export class PencilToolService extends TracingToolService {
     }
 
     onMouseUp(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton) {
+        if (e.button === Mouse.LeftButton && this.isDrawing) {
             super.onMouseUp(e);
             this.currentPath = '';
             this.drawStack.push(this.svgWrapRef);
