@@ -8,10 +8,13 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
     providedIn: 'root',
 })
 export class BrushToolService extends TracingToolService {
-    private currentPath = '';
-    private currentWidth = 7;
+    // should be from toolsAttributes
+    private currentWidth = 3;
     private currentColor = 'red';
     private currentPattern = 1;
+    //
+
+    private currentPath = '';
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
 
@@ -60,121 +63,54 @@ export class BrushToolService extends TracingToolService {
     }
 
     createFilter(patternId: number): object {
-        let filter;
-        switch (patternId) {
-            case 1:
-                filter = this.renderer.createElement('filter', SVG_NS);
-                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-                this.renderer.setAttribute(filter, 'height', '100px');
-                this.renderer.setAttribute(filter, 'width', '100px');
-                this.renderer.setAttribute(filter, 'x', '-50px');
-                this.renderer.setAttribute(filter, 'y', '-50px');
-                
-                const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
-                this.renderer.setAttribute(effect, 'stdDeviation', '3');
-                this.renderer.appendChild(filter, effect);
-                break;
-            case 2:
-                filter = this.renderer.createElement('filter', SVG_NS);
-                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-                this.renderer.setAttribute(filter, 'height', '100px');
-                this.renderer.setAttribute(filter, 'width', '100px');
-                this.renderer.setAttribute(filter, 'x', '-50px');
-                this.renderer.setAttribute(filter, 'y', '-50px');
-                
-                const turbulence2 = this.renderer.createElement('feTurbulence', SVG_NS);
-                this.renderer.setAttribute(turbulence2, 'type', 'turbulence');
-                this.renderer.setAttribute(turbulence2, 'baseFrequency', '0.3');
-                this.renderer.setAttribute(turbulence2, 'result', 'turbulence');
-                this.renderer.setAttribute(turbulence2, 'numOctaves', '1');
+        let filter = this.renderer.createElement('filter', SVG_NS);
+        
+        this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
+        this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
+        this.renderer.setAttribute(filter, 'height', '100px');
+        this.renderer.setAttribute(filter, 'width', '100px');
+        this.renderer.setAttribute(filter, 'x', '-50px');
+        this.renderer.setAttribute(filter, 'y', '-50px');
+        
+        if(patternId == 1){
+            const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
+            this.renderer.setAttribute(effect, 'stdDeviation', '3');
+            this.renderer.appendChild(filter, effect);
+        } else {
+            const turbulence = this.renderer.createElement('feTurbulence', SVG_NS);
+            this.renderer.setAttribute(turbulence, 'type', 'turbulence');
+            this.renderer.setAttribute(turbulence, 'result', 'turbulence');
 
-                const displacementMap2 = this.renderer.createElement('feDisplacementMap', SVG_NS);
-                this.renderer.setAttribute(displacementMap2, 'in2', 'turbulence');
-                this.renderer.setAttribute(displacementMap2, 'in', 'SourceGraphic');
-                this.renderer.setAttribute(displacementMap2, 'scale', '40')
-                this.renderer.setAttribute(displacementMap2, 'xChannelSelector', 'R');
-                this.renderer.setAttribute(displacementMap2, 'yChannelSelector', 'G');
+            const displacementMap = this.renderer.createElement('feDisplacementMap', SVG_NS);
+            this.renderer.setAttribute(displacementMap, 'in2', 'turbulence');
+            this.renderer.setAttribute(displacementMap, 'in', 'SourceGraphic');
+            this.renderer.setAttribute(displacementMap, 'scale', '10');
+            this.renderer.setAttribute(displacementMap, 'xChannelSelector', 'R');
+            this.renderer.setAttribute(displacementMap, 'yChannelSelector', 'G');
 
-                this.renderer.appendChild(filter, turbulence2);
-                this.renderer.appendChild(filter, displacementMap2);
-                break;
-            case 3:
-                filter = this.renderer.createElement('filter', SVG_NS);
-                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-                this.renderer.setAttribute(filter, 'height', '100px');
-                this.renderer.setAttribute(filter, 'width', '100px');
-                this.renderer.setAttribute(filter, 'x', '-50px');
-                this.renderer.setAttribute(filter, 'y', '-50px');
-                
-                const turbulence3 = this.renderer.createElement('feTurbulence', SVG_NS);
-                this.renderer.setAttribute(turbulence3, 'type', 'turbulence');
-                this.renderer.setAttribute(turbulence3, 'baseFrequency', '0.01 0.57');
-                this.renderer.setAttribute(turbulence3, 'result', 'turbulence');
-                this.renderer.setAttribute(turbulence3, 'numOctaves', '2');
+            switch (patternId){
+                case 2:
+                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.3');
+                    this.renderer.setAttribute(turbulence, 'numOctaves', '1');
 
-                const displacementMap3 = this.renderer.createElement('feDisplacementMap', SVG_NS);
-                this.renderer.setAttribute(displacementMap3, 'in2', 'turbulence');
-                this.renderer.setAttribute(displacementMap3, 'in', 'SourceGraphic');
-                this.renderer.setAttribute(displacementMap3, 'scale', '10')
-                this.renderer.setAttribute(displacementMap3, 'xChannelSelector', 'R');
-                this.renderer.setAttribute(displacementMap3, 'yChannelSelector', 'G');
-
-                this.renderer.appendChild(filter, turbulence3);
-                this.renderer.appendChild(filter, displacementMap3);
-                break;
-            case 4:
-                filter = this.renderer.createElement('filter', SVG_NS);
-                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-                this.renderer.setAttribute(filter, 'height', '100px');
-                this.renderer.setAttribute(filter, 'width', '100px');
-                this.renderer.setAttribute(filter, 'x', '-50px');
-                this.renderer.setAttribute(filter, 'y', '-50px');
-                
-                const turbulence4 = this.renderer.createElement('feTurbulence', SVG_NS);
-                this.renderer.setAttribute(turbulence4, 'type', 'turbulence');
-                this.renderer.setAttribute(turbulence4, 'baseFrequency', '0.05');
-                this.renderer.setAttribute(turbulence4, 'result', 'turbulence');
-                this.renderer.setAttribute(turbulence4, 'numOctaves', '2');
-
-                const displacementMap4 = this.renderer.createElement('feDisplacementMap', SVG_NS);
-                this.renderer.setAttribute(displacementMap4, 'in2', 'turbulence');
-                this.renderer.setAttribute(displacementMap4, 'in', 'SourceGraphic');
-                this.renderer.setAttribute(displacementMap4, 'scale', '10')
-                this.renderer.setAttribute(displacementMap4, 'xChannelSelector', 'R');
-                this.renderer.setAttribute(displacementMap4, 'yChannelSelector', 'G');
-
-                this.renderer.appendChild(filter, turbulence4);
-                this.renderer.appendChild(filter, displacementMap4);
-                break;
-            case 5:
-                filter = this.renderer.createElement('filter', SVG_NS);
-                this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
-                this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-                this.renderer.setAttribute(filter, 'height', '100px');
-                this.renderer.setAttribute(filter, 'width', '100px');
-                this.renderer.setAttribute(filter, 'x', '-50px');
-                this.renderer.setAttribute(filter, 'y', '-50px');
-                
-                const turbulence5 = this.renderer.createElement('feTurbulence', SVG_NS);
-                this.renderer.setAttribute(turbulence5, 'type', 'fractalNoise');
-                this.renderer.setAttribute(turbulence5, 'baseFrequency', '0.9');
-                this.renderer.setAttribute(turbulence5, 'result', 'turbulence');
-                this.renderer.setAttribute(turbulence5, 'numOctaves', '4');
-
-                const displacementMap5 = this.renderer.createElement('feDisplacementMap', SVG_NS);
-                this.renderer.setAttribute(displacementMap5, 'in2', 'turbulence');
-                this.renderer.setAttribute(displacementMap5, 'in', 'SourceGraphic');
-                this.renderer.setAttribute(displacementMap5, 'scale', '10')
-                this.renderer.setAttribute(displacementMap5, 'xChannelSelector', 'R');
-                this.renderer.setAttribute(displacementMap5, 'yChannelSelector', 'G');
-
-                this.renderer.appendChild(filter, turbulence5);
-                this.renderer.appendChild(filter, displacementMap5);
-            break;
+                    this.renderer.setAttribute(displacementMap, 'scale', '18')
+                    break;
+                case 3:
+                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.01 0.57');
+                    this.renderer.setAttribute(turbulence, 'numOctaves', '2');
+                    break;
+                case 4:
+                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.05');
+                    this.renderer.setAttribute(turbulence, 'numOctaves', '2');
+                    break;
+                case 5:
+                    this.renderer.setAttribute(turbulence, 'type', 'fractalNoise');
+                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.9');
+                    this.renderer.setAttribute(turbulence, 'numOctaves', '4');
+                    break;
+            }
+            this.renderer.appendChild(filter, turbulence);
+            this.renderer.appendChild(filter, displacementMap);
         }
         return filter;
     }
