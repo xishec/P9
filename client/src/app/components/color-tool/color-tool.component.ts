@@ -84,8 +84,10 @@ export class ColorToolComponent implements OnInit {
     onUserColorHex() {
         if (this.primaryColorOn) {
             this.primaryColor = { hex: this.myForm.value.hex };
+            this.onChangeColor(this.primaryColor);
         } else {
             this.secondaryColor = { hex: this.myForm.value.hex };
+            this.onChangeColor(this.secondaryColor);
         }
         this.setRGBFromHex();
     }
@@ -94,8 +96,10 @@ export class ColorToolComponent implements OnInit {
         const newHex = this.rgbToHex();
         if (this.primaryColorOn) {
             this.primaryColor = { hex: newHex };
+            this.onChangeColor(this.primaryColor);
         } else {
             this.secondaryColor = { hex: newHex };
+            this.onChangeColor(this.secondaryColor);
         }
         this.setHex();
     }
