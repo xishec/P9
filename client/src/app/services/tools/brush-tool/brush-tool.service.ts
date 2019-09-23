@@ -9,7 +9,7 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 })
 export class BrushToolService extends TracingToolService {
     // should be from toolsAttributes
-    private currentWidth = 3;
+    private currentWidth = 5;
     private currentColor = 'red';
     private currentPattern = 1;
     //
@@ -70,11 +70,12 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(filter, 'x', '-50px');
         this.renderer.setAttribute(filter, 'y', '-50px');
         
-        if(patternId == 1){
+        if (patternId == 1 || patternId == 2){
             const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
             this.renderer.setAttribute(effect, 'stdDeviation', '3');
             this.renderer.appendChild(filter, effect);
-        } else {
+        }
+        if (patternId !== 1){
             const turbulence = this.renderer.createElement('feTurbulence', SVG_NS);
             this.renderer.setAttribute(turbulence, 'type', 'turbulence');
             this.renderer.setAttribute(turbulence, 'result', 'turbulence');
@@ -88,9 +89,9 @@ export class BrushToolService extends TracingToolService {
 
             switch (patternId){
                 case 2:
-                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.3');
-                    this.renderer.setAttribute(turbulence, 'numOctaves', '1');
-                    this.renderer.setAttribute(displacementMap, 'scale', '18')
+                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.1 0.9');
+                    this.renderer.setAttribute(turbulence, 'numOctaves', '10');
+                    this.renderer.setAttribute(displacementMap, 'scale', '20')
                     break;
                 case 3:
                     this.renderer.setAttribute(turbulence, 'baseFrequency', '0.01 0.57');
@@ -116,7 +117,7 @@ export class BrushToolService extends TracingToolService {
         const el = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(el, 'cx', x.toString());
         this.renderer.setAttribute(el, 'cy', y.toString());
-        this.renderer.setAttribute(el, 'r', this.currentWidth.toString());
+        this.renderer.setAttribute(el, 'r', (this.currentWidth/2).toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
         this.renderer.setAttribute(el, 'fill', this.currentColor);
         this.renderer.setAttribute(el, 'stroke', this.currentColor);
