@@ -1,16 +1,18 @@
 <div id="container">
     <div id="attribute-header">
-        {{ toolName[currentToolId] }}
+        {{ toolName }}
     </div>
 
-    <div class="attribute">
-        <label for="thickness">Épaisseur du trait</label>
-        <mat-slider (input)="thickness = $event.value" [value]="thickness"></mat-slider>
-        <mat-form-field class="small">
-            <input matInput value="{{ thickness }}" type="number" (keyup)="onInput($event)" id="attributeInput" />
-            <span matSuffix>px</span>
-        </mat-form-field>
-    </div>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider placeholder="Hex" formControlName="thickness"></mat-slider>
+            <mat-form-field class="small">
+                <input matInput type="number" formControlName="thickness" />
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
 
     <!-- <div class="attribute">
         <label for="borderThickness">Épaisseur du trait de contour</label>

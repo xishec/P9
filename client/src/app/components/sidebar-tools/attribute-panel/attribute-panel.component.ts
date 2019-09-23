@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-attribute-panel',
@@ -6,12 +7,26 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent {
-    @Input() currentToolId = 0;
-    thickness: number = 0;
-    borderThickness: number = 0;
-    toolName: string[] = ['Sélecteur', 'Crayon', 'Paint'];
+    toolName = 'Crayon';
 
-    onInput(event: any) {
-        this.thickness = event.target.value;
+    myForm: FormGroup;
+    formBuilder: FormBuilder;
+
+    constructor(formBuilder: FormBuilder) {
+        this.formBuilder = formBuilder;
     }
+
+    ngOnInit(): void {
+        this.initializeForm();
+    }
+
+    initializeForm() {
+        this.myForm = this.formBuilder.group({
+            thickness: ['5', [Validators.required, Validators.min(0), Validators.max(100)]],
+        });
+    }
+
+    // onInput(event: any) {
+    //     this.thickness = event.target.value;
+    // }
 }
