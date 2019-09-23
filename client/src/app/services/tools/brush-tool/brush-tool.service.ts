@@ -17,6 +17,7 @@ export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
+    private svgPreviewCircle = this.renderer.createElement('circle', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -32,6 +33,7 @@ export class BrushToolService extends TracingToolService {
             this.createSVGWrapper();
             this.currentPath = `M${e.offsetX} ${e.offsetY}`;
             this.createSVGCircle(e.offsetX, e.offsetY);
+            this.svgPreviewCircle = this.createSVGCircle(e.offsetX, e.offsetY);
             this.createSVGPath();
         }
     }
@@ -40,6 +42,7 @@ export class BrushToolService extends TracingToolService {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
             this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
             this.updateSVGPath();
+            this.updatePreviewCircle(e.offsetX, e.offsetY);
         }
     }
 
@@ -113,16 +116,22 @@ export class BrushToolService extends TracingToolService {
         return filter;
     }
 
-    createSVGCircle(x: number, y: number): void {
-        const el = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(el, 'cx', x.toString());
-        this.renderer.setAttribute(el, 'cy', y.toString());
-        this.renderer.setAttribute(el, 'r', (this.currentWidth/2).toString());
-        this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'fill', this.currentColor);
-        this.renderer.setAttribute(el, 'stroke', this.currentColor);
-        this.renderer.setAttribute(el, 'filter', `url(#${this.currentPattern.toString()})`);
-        this.renderer.appendChild(this.svgWrap, el);
+    createSVGCircle(x: number, y: number): SVGCircleElement {
+        const circle = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(circle, 'cx', x.toString());
+        this.renderer.setAttribute(circle, 'cy', y.toString());
+        this.renderer.setAttribute(circle, 'r', (this.currentWidth/2).toString());
+        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
+        this.renderer.setAttribute(circle, 'fill', this.currentColor);
+        this.renderer.setAttribute(circle, 'stroke', this.currentColor);
+        this.renderer.setAttribute(circle, 'filter', `url(#${this.currentPattern.toString()})`);
+        this.renderer.appendChild(this.svgWrap, circle);
+        return circle;
+    }
+
+    updatePreviewCircle(x: number, y: number): void {
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
     }
 
     createSVGPath(): void {
