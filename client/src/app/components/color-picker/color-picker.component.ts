@@ -1,8 +1,8 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, HostListener } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { COLOR_SELECTION_SHIFT } from '../../services/constants';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-color-picker',
@@ -12,7 +12,7 @@ import { DrawingModalWindowService } from '../../../services/drawing-modal-windo
 export class ColorPickerComponent implements OnInit {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    obscurity = 0;
+    obscurity: number = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
     @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLDivElement>;
@@ -72,7 +72,12 @@ export class ColorPickerComponent implements OnInit {
             this.currentColor.nativeElement,
             'left',
             (event.x - COLOR_SELECTION_SHIFT).toString() + 'px',
-    );
+        );
         this.renderer.setStyle(this.currentColor.nativeElement, 'background-color', '#' + newHex);
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize() {
+        this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'none');
     }
 }
