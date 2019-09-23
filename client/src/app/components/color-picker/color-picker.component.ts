@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, HostListener } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
 import { COLOR_SELECTION_SHIFT } from '../../services/constants';
@@ -74,5 +74,10 @@ export class ColorPickerComponent implements OnInit {
             (event.x - COLOR_SELECTION_SHIFT).toString() + 'px'
         );
         this.renderer.setStyle(this.currentColor.nativeElement, 'background-color', '#' + newHex);
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize() {
+        this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'none');
     }
 }
