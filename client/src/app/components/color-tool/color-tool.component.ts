@@ -62,10 +62,10 @@ export class ColorToolComponent implements OnInit {
         this.addColorToColorList(COLORS[3]);
         this.secondaryColor = COLORS[1];
         this.addColorToColorList(COLORS[1]);
+        this.initializeForm();
     }
 
     ngOnInit(): void {
-        this.initializeForm();
         // this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
         //     this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         // });

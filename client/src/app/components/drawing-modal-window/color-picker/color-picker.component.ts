@@ -73,7 +73,6 @@ export class ColorPickerComponent implements OnInit {
         );
         this.drawingModalWindowService.changeActiveColor({ hex: newHex });
 
-        console.log(this.colorToolComponent);
         if (this.colorToolComponent !== undefined) {
             this.colorToolComponent.onChangeColor({ hex: newHex });
         }
