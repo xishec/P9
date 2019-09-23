@@ -26,7 +26,7 @@ import { ToolsService } from './services/tools/tools.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
-import { ColorPickerComponent } from './components/drawing-modal-window/color-picker/color-picker.component';
+import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
@@ -58,9 +58,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         HttpClientModule,
         MatTooltipModule,
     ],
-    entryComponents: [
-        WelcomeModalWindowComponent,
-    ],
+    entryComponents: [WelcomeModalWindowComponent],
     providers: [ToolsService, DrawingModalWindowService, WelcomeModalWindowService],
     bootstrap: [AppComponent],
 })
