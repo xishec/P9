@@ -114,19 +114,17 @@ export class ColorToolComponent implements OnInit {
     }
 
         // GOOD
-        this.displayColorWheel = !this.displayColorWheel;
     setHexValues() {
         this.setHex();
         this.setRGBFromHex();
     }
 
-    onUserColorHex() {
-        if (this.primaryColorOn) {
-            this.primaryColor = { hex: this.myForm.value.hex };
-            this.onChangeColor(this.primaryColor);
-        } else {
-            this.secondaryColor = { hex: this.myForm.value.hex };
-            this.onChangeColor(this.secondaryColor);
+        // GOOD
+    onUserHexInput(): void {
+        if (this.selectedColor === ColorType.primaryColor) {
+            this.changeColor(this.myForm.value.hex);
+        } else if (this.selectedColor === ColorType.secondaryColor) {
+            this.changeColor(this.myForm.value.hex);
         }
         this.setRGBFromHex();
     }
