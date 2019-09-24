@@ -164,49 +164,34 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    getColorIcon(color: Color): ColorButtonStyle {
-        return { backgroundColor: '#' + color.hex };
-    }
+    // getColorIcon(color: Color): ColorButtonStyle {
+    //     return { backgroundColor: '#' + color.hex };
+    // }
 
-    getPrimaryColor(): ColorIconStyle {
-        if (this.primaryColorOn) {
-            this.secondaryColorClicked = false;
-            if (this.primaryColorClicked) {
-                this.lastPrimaryOpacity = this.myForm.value.A;
-            }
-            this.primaryColorClicked = true;
-            this.myForm.controls.A.setValue(this.lastPrimaryOpacity);
-
+    onClickPrimaryColorStyle() {
+        console.log("Color ", this.selectedColor);
+        if (this.selectedColor === ColorType.primaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
-                opacity: this.lastPrimaryOpacity,
                 border: 'solid 1px black',
             };
         }
 
-        return { backgroundColor: '#' + this.primaryColor.hex, opacity: this.lastPrimaryOpacity, border: 'solid 0px' };
+        return {
+            backgroundColor: '#' + this.primaryColor.hex,
+        };
     }
 
-    getSecondaryColor(): ColorIconStyle {
-        if (this.secondaryColorOn) {
-            this.primaryColorClicked = false;
-            if (this.secondaryColorClicked) {
-                this.lastSecondaryOpacity = this.myForm.value.A;
-            }
-            this.secondaryColorClicked = true;
-            this.myForm.controls.A.setValue(this.lastSecondaryOpacity);
-
+    onClickSecondaryColorStyle() {
+        if (this.selectedColor === ColorType.secondaryColor) {
             return {
                 backgroundColor: '#' + this.secondaryColor.hex,
-                opacity: this.lastSecondaryOpacity,
                 border: 'solid 1px black',
             };
         }
 
         return {
             backgroundColor: '#' + this.secondaryColor.hex,
-            opacity: this.lastSecondaryOpacity,
-            border: 'solid 0px',
         };
     }
 
