@@ -63,6 +63,12 @@ export class PencilToolService extends TracingToolService {
         }
     }
 
+    onMouseEnter(event: MouseEvent): void { }
+
+    onKeyDown(event: KeyboardEvent): void { }
+
+    onKeyUp(event: KeyboardEvent): void { }
+
     createSVGWrapper(): void {
         const el = this.renderer.createElement('svg', SVG_NS);
         this.svgWrapRef = el;
