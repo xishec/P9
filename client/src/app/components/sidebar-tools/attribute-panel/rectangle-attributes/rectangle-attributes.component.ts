@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
+import { MIN_THICKNESS, DEFAULT_THICKNESS, MAX_THICKNESS } from '../../../../services/constants';
 
 @Component({
     selector: 'app-rectangle-attributes',
@@ -11,6 +12,9 @@ import { AttributesManagerService } from '../../../../services/tools/attributes-
 })
 export class RectangleAttributesComponent implements OnInit {
     toolName: string = 'Carré';
+
+    readonly MIN_THICKNESS: number = MIN_THICKNESS;
+    readonly MAX_THICKNESS: number = MAX_THICKNESS;
 
     myForm: FormGroup;
 
@@ -25,7 +29,10 @@ export class RectangleAttributesComponent implements OnInit {
 
     initializeForm(): void {
         this.myForm = this.formBuilder.group({
-            thickness: ['20', [Validators.required, Validators.min(0), Validators.max(100)]],
+            thickness: [
+                DEFAULT_THICKNESS,
+                [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
+            ],
         });
     }
 
@@ -35,6 +42,8 @@ export class RectangleAttributesComponent implements OnInit {
     }
     onThicknessChange(): void {
         const thickness = this.myForm.value.thickness;
-        this.attributesManagerService.changeThickness(thickness);
+        if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
+            this.attributesManagerService.changeThickness(thickness);
+        }
     }
 }

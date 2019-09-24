@@ -57,6 +57,10 @@ enum Mouse {
     RightButton = 2,
 }
 
+const MIN_THICKNESS: number = 1;
+const DEFAULT_THICKNESS: number = 5;
+const MAX_THICKNESS: number = 100;
+
 export {
     COLOR_SELECTION_SHIFT,
     SIDEBAR_WIDTH,
@@ -67,4 +71,7 @@ export {
     SVG_NS,
     Keys,
     Mouse,
+    MIN_THICKNESS,
+    DEFAULT_THICKNESS,
+    MAX_THICKNESS,
 };
