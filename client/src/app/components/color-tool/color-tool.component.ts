@@ -232,12 +232,13 @@ export class ColorToolComponent implements OnInit {
 
 // }
 
-interface ColorIconStyle {
-    backgroundColor: string;
-    opacity: number;
-    border: string;
-}
+// interface ColorIconStyle {
+//     backgroundColor: string;
+//     opacity: number;
+//     border: string;
+// }
 
-interface ColorButtonStyle {
-    backgroundColor: string;
+// interface ColorButtonStyle {
+//     backgroundColor: string;
+// }
 }
