@@ -17,7 +17,7 @@ export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
-    currentTool: AbstractToolService;
+    currentTool: AbstractToolService | undefined;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
 
     constructor(

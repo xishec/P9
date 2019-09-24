@@ -19,8 +19,7 @@ export class ToolsService {
 
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
-    private voidTool: PencilToolService;
-    currentTool: AbstractToolService;
+    currentTool: AbstractToolService | undefined;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService = drawingModalWindowService;
@@ -31,7 +30,7 @@ export class ToolsService {
         ref: ElementRef<SVGElement>,
         renderer: Renderer2,
         attributesManagerService: AttributesManagerService,
-        ): void {
+    ): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer, attributesManagerService);
         this.pencilTool = new PencilToolService(ref, renderer, drawStack, attributesManagerService);
     }
@@ -46,6 +45,9 @@ export class ToolsService {
                 break;
             case 'Crayon':
                 this.currentTool = this.pencilTool;
+                break;
+            default:
+                this.currentTool = undefined;
                 break;
         }
 
