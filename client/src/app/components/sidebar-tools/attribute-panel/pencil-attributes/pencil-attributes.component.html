@@ -1,0 +1,50 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider placeholder="Hex" formControlName="thickness"></mat-slider>
+            <mat-form-field class="small">
+                <input matInput type="number" formControlName="thickness" />
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
+
+    <!-- <div class="attribute">
+        <label for="borderThickness">Épaisseur du trait de contour</label>
+        <div>
+            <mat-slider (input)="thickness = $event.value" [value]="borderThickness"></mat-slider>
+            <span> {{ borderThickness }}</span>
+        </div>
+    </div>
+
+    <div class="attribute">
+        <label for="lineType">Type de tracé</label>
+        <div>
+            <mat-form-field>
+                <mat-select value="Contour">
+                    <mat-option value="Contour">Contour</mat-option>
+                    <mat-option value="Plein">Plein</mat-option>
+                    <mat-option value="Plein avec contour">Plein avec contour</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="attribute">
+        <label for="lineType">Texture</label>
+        <div>
+            <mat-form-field>
+                <mat-select value="Texture1">
+                    <mat-option value="Texture1">Texture1</mat-option>
+                    <mat-option value="Texture2">Texture2</mat-option>
+                    <mat-option value="Texture3">Texture3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div> -->
+</div>

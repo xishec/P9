@@ -29,6 +29,7 @@ import { DrawingModalWindowComponent } from './components/drawing-modal-window/d
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { PencilAttributesComponent } from './components/sidebar-tools/attribute-panel/pencil-attributes/pencil-attributes.component';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WorkZoneComponent,
         SidebarToolsComponent,
         DrawingModalWindowComponent,
+        PencilAttributesComponent,
     ],
     imports: [
         MatCheckboxModule,
