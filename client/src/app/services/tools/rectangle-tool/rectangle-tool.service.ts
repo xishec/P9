@@ -112,7 +112,6 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     createSVG(): void {
-        console.log("wtf");
         const el = this.renderer.createElement('svg', SVG_NS);
         const drawRectangle = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);

@@ -1,11 +1,11 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 
-// import { PencilToolService } from '../../services/tools/pencil-tool/pencil-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../../services/tools/attributes-manager/attributes-manager.service';
-import { RectangleToolService } from 'src/app/services/tools/rectangle-tool/rectangle-tool.service';
+import { ToolsService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -17,7 +17,7 @@ export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
-    currentTool: RectangleToolService;
+    currentTool: AbstractToolService;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
 
     constructor(
@@ -25,23 +25,32 @@ export class WorkZoneComponent implements OnInit {
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
         private attributesManagerService: AttributesManagerService,
+        private toolSelector: ToolsService,
     ) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit() {
+        console.log("wtf");
+        this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer, this.attributesManagerService);
+        this.currentTool = this.toolSelector.currentTool;
+
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
             this.drawingInfo = drawingInfo;
+
+            for(const el of this.drawStackService.reset()){
+                this.renderer.removeChild(this.ref.nativeElement, el);
+            }
         });
+
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.currentTool = new RectangleToolService(
-            this.drawStackService,
-            this.ref,
-            this.renderer,
-            this.attributesManagerService,
-        );
+
+        this.toolSelector.currentToolName.subscribe(() => {
+            console.log("Getting");
+            this.currentTool = this.toolSelector.currentTool;
+        });
     }
 
     changeStyle() {
