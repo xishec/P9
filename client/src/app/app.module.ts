@@ -23,7 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // *************** Services **********************
 import { DrawingModalWindowService } from './services/drawing-modal-window/drawing-modal-window.service';
-import { ToolsService } from './services/tools/tool-selector/tool-selector.service';
+import { ToolSelectorService } from './services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
@@ -67,7 +67,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatFormFieldModule,
     ],
     entryComponents: [WelcomeModalWindowComponent],
-    providers: [ToolsService, DrawingModalWindowService, WelcomeModalWindowService],
+    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

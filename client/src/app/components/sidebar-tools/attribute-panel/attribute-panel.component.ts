@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ToolsService } from '../../../services/tools/tool-selector/tool-selector.service';
+import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-attribute-panel',
@@ -10,10 +10,10 @@ import { ToolsService } from '../../../services/tools/tool-selector/tool-selecto
 export class AttributePanelComponent implements OnInit {
     toolName = '';
 
-    constructor(private toolsService: ToolsService) {}
+    constructor(private toolSelectorService: ToolSelectorService) {}
 
     ngOnInit(): void {
-        this.toolsService.currentToolName.subscribe((toolName) => {
+        this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
         });
     }

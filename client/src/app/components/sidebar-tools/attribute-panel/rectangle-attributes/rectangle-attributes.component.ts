@@ -5,7 +5,7 @@ import { MatSliderChange } from '@angular/material';
 import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
-import { ToolsService } from '../../../../services/tools/tool-selector/tool-selector.service';
+import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-rectangle-attributes',
@@ -23,7 +23,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolsService: ToolsService,
+        private toolSelectorService: ToolSelectorService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -34,7 +34,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.rectangleToolService = this.toolsService.getRectangleTool();
+        this.rectangleToolService = this.toolSelectorService.getRectangleTool();
         this.rectangleToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 

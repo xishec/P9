@@ -10,7 +10,7 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 @Injectable({
     providedIn: 'root',
 })
-export class ToolsService {
+export class ToolSelectorService {
     private toolName: BehaviorSubject<string> = new BehaviorSubject('');
     private drawingModalWindowService: DrawingModalWindowService;
 

@@ -5,7 +5,7 @@ import { MatSliderChange } from '@angular/material';
 import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
-import { ToolsService } from '../../../../services/tools/tool-selector/tool-selector.service';
+import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-pencil-attributes',
@@ -24,7 +24,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolsService: ToolsService,
+        private toolSelectorService: ToolSelectorService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -35,7 +35,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.pencilToolService = this.toolsService.getPencilTool();
+        this.pencilToolService = this.toolSelectorService.getPencilTool();
         this.pencilToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 

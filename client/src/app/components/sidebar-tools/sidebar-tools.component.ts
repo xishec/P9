@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FILES_BUTTON_INFO, TOOLS_BUTTON_INFO } from '../../services/constants';
-import { ToolsService } from '../../services/tools/tool-selector/tool-selector.service';
+import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-sidebar-tools',
@@ -9,22 +9,22 @@ import { ToolsService } from '../../services/tools/tool-selector/tool-selector.s
     styleUrls: ['./sidebar-tools.component.scss'],
 })
 export class SidebarToolsComponent implements OnInit {
-    toolsService: ToolsService;
+    toolSelectorService: ToolSelectorService;
 
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
-    constructor(toolsService: ToolsService) {
-        this.toolsService = toolsService;
+    constructor(toolSelectorService: ToolSelectorService) {
+        this.toolSelectorService = toolSelectorService;
     }
 
     ngOnInit(): void {
-        this.toolsService.changeTool('Sélection');
+        this.toolSelectorService.changeTool('Sélection');
     }
 
     onChangeTool(tooltipName: string): void {
         console.log(tooltipName);
-        this.toolsService.changeTool(tooltipName);
+        this.toolSelectorService.changeTool(tooltipName);
     }
 
     onSecondaryClick(): void {
