@@ -131,17 +131,18 @@ export class ColorToolComponent implements OnInit {
         this.setRGBFromHex();
     }
 
-    onUserColorRGB() {
-        const newHex = this.rgbToHex();
-        if (this.primaryColorOn) {
-            this.primaryColor = { hex: newHex };
-            this.onChangeColor(this.primaryColor);
-        } else {
-            this.secondaryColor = { hex: newHex };
-            this.onChangeColor(this.secondaryColor);
-        }
-        this.setHex();
-    }
+    //     // GOOD
+    // onUserColorRGBInput() {
+    //     const newHex = this.rgbToHex();
+    //     if (this.primaryColorOn) {
+    //         this.primaryColor = { hex: newHex };
+    //         this.onChangeColor(this.primaryColor);
+    //     } else {
+    //         this.secondaryColor = { hex: newHex };
+    //         this.onChangeColor(this.secondaryColor);
+    //     }
+    //     this.setHex();
+    // }
 
     setHex() {
         if (this.primaryColorOn) {
@@ -229,22 +230,7 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
-    rgbToHex(): string {
-        let r = Number(this.myForm.value.R).toString(16);
-        let g = Number(this.myForm.value.G).toString(16);
-        let b = Number(this.myForm.value.B).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
-    }
-}
+// }
 
 interface ColorIconStyle {
     backgroundColor: string;
