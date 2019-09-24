@@ -144,20 +144,22 @@ export class ColorToolComponent implements OnInit {
     //     this.setHex();
     // }
 
+        // GOOD
     setHex() {
-        if (this.primaryColorOn) {
+        if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.hex.setValue(this.primaryColor.hex);
-        } else {
+        } else if (this.selectedColor === ColorType.secondaryColor) {
             this.myForm.controls.hex.setValue(this.secondaryColor.hex);
         }
     }
 
+        // GOOD
     setRGBFromHex() {
-        if (this.primaryColorOn) {
+        if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
             this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
             this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
-        } else {
+        } else if (this.selectedColor === ColorType.secondaryColor) {
             this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
             this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
             this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
@@ -195,15 +197,15 @@ export class ColorToolComponent implements OnInit {
         };
     }
 
-    chosePrimaryColor() {
-        this.primaryColorOn = true;
-        this.secondaryColorOn = false;
-        this.setHexValues();
-    }
+    //     return {
+    //         backgroundColor: '#' + this.secondaryColor.hex,
+    //         opacity: this.lastSecondaryOpacity,
+    //         border: 'solid 0px',
+    //     };
+    // }
 
-    choseSecondaryColor() {
-        this.primaryColorOn = false;
-        this.secondaryColorOn = true;
+    onClickPrimaryColor() {
+        this.selectedColor = ColorType.primaryColor;
         this.setHexValues();
     }
 
