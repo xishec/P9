@@ -48,31 +48,20 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-    showColorOptions() {
-        this.colorToolOn = !this.colorToolOn;
+    changeColor(color: Color): void {
+        this.setColor(color);
+        // this.addColorToColorList(color);
+        // this.setHexValues();
     }
 
-    onClickColorWheel() {
-        this.displayColorWheel = !this.displayColorWheel;
-    }
-
-    addColorToColorList(color: Color) {
-        if (this.lastTenColorsQueue.length < 10) {
-            this.lastTenColorsQueue.push(color);
-        } else {
-            this.lastTenColorsQueue.shift();
-            this.lastTenColorsQueue.push(color);
-        }
-    }
-
-    onChangeColor(color: Color) {
-        if (this.primaryColorOn) {
+    setColor(color: Color): void {
+        if (this.selectedColor === ColorType.primaryColor) {
             this.primaryColor = color;
-        } else {
+            this.colorToolService.changeColor(color, ColorType.primaryColor);
+        } else if (this.selectedColor === ColorType.secondaryColor) {
             this.secondaryColor = color;
+            this.colorToolService.changeColor(color, ColorType.secondaryColor);
         }
-        this.addColorToColorList(color);
-        this.setHexValues();
     }
 
      // switchColors() {
