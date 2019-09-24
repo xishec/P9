@@ -3,6 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse, SVG_NS } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -18,8 +19,16 @@ export class PencilToolService extends TracingToolService {
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
         private drawStack: DrawStackService,
+        private attributesManagerService: AttributesManagerService,
     ) {
         super();
+    }
+
+    ngOnInit(): void {
+        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+            this.currentWidth = thickness;
+        });
+        this.currentColor = 'black';
     }
 
     onMouseDown(e: MouseEvent): void {

@@ -8,7 +8,7 @@
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider placeholder="Hex" formControlName="thickness"></mat-slider>
             <mat-form-field class="small">
-                <input matInput type="number" formControlName="thickness" />
+                <input matInput type="number" formControlName="thickness" (change)="onThicknessChange()" />
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
