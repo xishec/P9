@@ -1,10 +1,11 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 
-import { PencilToolService } from '../../services/tools/pencil-tool/pencil-tool.service';
+// import { PencilToolService } from '../../services/tools/pencil-tool/pencil-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../../services/tools/attributes-manager/attributes-manager.service';
+import { RectangleToolService } from 'src/app/services/tools/rectangle-tool/rectangle-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -16,7 +17,7 @@ export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
-    currentTool: PencilToolService;
+    currentTool: RectangleToolService;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
 
     constructor(
@@ -35,10 +36,10 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.currentTool = new PencilToolService(
+        this.currentTool = new RectangleToolService(
+            this.drawStackService,
             this.ref,
             this.renderer,
-            this.drawStackService,
             this.attributesManagerService,
         );
     }
@@ -65,20 +66,20 @@ export class WorkZoneComponent implements OnInit {
         this.currentTool.onMouseUp(event);
     }
 
-    // @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
-    //     this.currentTool.onMouseEnter(event);
-    // }
+    @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
+        this.currentTool.onMouseEnter(event);
+    }
 
-    // @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
-    //     this.currentTool.onMouseLeave(event);
-    // }
+    @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
+        this.currentTool.onMouseLeave(event);
+    }
 
-    // @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
-    //     this.currentTool.onKeyDown(event);
-    // }
+    @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
+        this.currentTool.onKeyDown(event);
+    }
 
-    // @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
-    //     this.currentTool.onKeyUp(event);
-    // }
+    @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
+        this.currentTool.onKeyUp(event);
+    }
     // LISTENERS //
 }
