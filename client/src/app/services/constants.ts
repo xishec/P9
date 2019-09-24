@@ -35,7 +35,6 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-fill-drip', tooltipName: 'Applicateur de couleur' },
     { iconName: 'fas fa-eye-dropper', tooltipName: 'Sélecteur de couleur' },
     { iconName: 'fas fa-eraser', tooltipName: 'Efface' },
-    { iconName: 'fas fa-palette', tooltipName: 'Pallete de couleur' },
     { iconName: 'fas fa-font', tooltipName: 'Zone de texte' },
 ];
 
