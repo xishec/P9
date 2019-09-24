@@ -19,6 +19,7 @@ export class ToolsService {
 
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
+    private voidTool: PencilToolService;
     currentTool: AbstractToolService;
 
     constructor(drawingModalWindowService: DrawingModalWindowService) {
@@ -33,7 +34,6 @@ export class ToolsService {
         ): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer, attributesManagerService);
         this.pencilTool = new PencilToolService(ref, renderer, drawStack, attributesManagerService);
-        this.currentTool = this.pencilTool;
     }
 
     changeTool(tooltipName: string) {
