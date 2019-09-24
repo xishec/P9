@@ -75,6 +75,46 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
+     // switchColors() {
+    //     let temporaryColor: Color = new Color();
+    //     temporaryColor = this.primaryColor;
+    //     this.primaryColor = this.secondaryColor;
+    //     this.secondaryColor = temporaryColor;
+    //     this.setHexValues();
+    // }
+
+    // addColorToColorList(color: Color) {
+    //     if (this.lastTenColorsQueue.length < 10) {
+    //         this.lastTenColorsQueue.push(color);
+    //     } else {
+    //         this.lastTenColorsQueue.shift();
+    //         this.lastTenColorsQueue.push(color);
+    //     }
+    // }
+
+    // rgbToHex(): string {
+    //     let r = Number(this.myForm.value.R).toString(16);
+    //     let g = Number(this.myForm.value.G).toString(16);
+    //     let b = Number(this.myForm.value.B).toString(16);
+    //     if (r.length === 1) {
+    //         r = '0' + r;
+    //     }
+    //     if (g.length === 1) {
+    //         g = '0' + g;
+    //     }
+    //     if (b.length === 1) {
+    //         b = '0' + b;
+    //     }
+    //     return r + g + b;
+    // }
+
+        // GOOD
+    onClickColorWheel() {
+        this.displayColorWheel = !this.displayColorWheel;
+    }
+
+        // GOOD
+        this.displayColorWheel = !this.displayColorWheel;
     setHexValues() {
         this.setHex();
         this.setRGBFromHex();
