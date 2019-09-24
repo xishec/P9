@@ -23,7 +23,6 @@ export class SidebarToolsComponent implements OnInit {
     }
 
     onChangeTool(tooltipName: string): void {
-        console.log(tooltipName);
         this.toolSelectorService.changeTool(tooltipName);
     }
 

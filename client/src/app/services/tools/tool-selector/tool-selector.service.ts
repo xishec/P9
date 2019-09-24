@@ -12,7 +12,6 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<string> = new BehaviorSubject('');
-    private drawingModalWindowService: DrawingModalWindowService;
 
     currentToolName: Observable<string> = this.toolName.asObservable();
 
@@ -20,8 +19,7 @@ export class ToolSelectorService {
     private pencilTool: PencilToolService;
     currentTool: AbstractToolService | undefined;
 
-    constructor(drawingModalWindowService: DrawingModalWindowService) {
-        this.drawingModalWindowService = drawingModalWindowService;
+    constructor(private drawingModalWindowService: DrawingModalWindowService) {
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
