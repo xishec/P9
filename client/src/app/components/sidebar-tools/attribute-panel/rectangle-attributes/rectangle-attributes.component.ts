@@ -14,7 +14,7 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
 })
 export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     toolName = 'Carré';
-    myForm: FormGroup;
+    rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
 
     readonly MIN_THICKNESS: number = MIN_THICKNESS;
@@ -39,7 +39,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     initializeForm(): void {
-        this.myForm = this.formBuilder.group({
+        this.rectangleAttributesForm = this.formBuilder.group({
             thickness: [
                 DEFAULT_THICKNESS,
                 [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
@@ -48,11 +48,11 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.myForm.controls.thickness.setValue(event.value);
+        this.rectangleAttributesForm.controls.thickness.setValue(event.value);
         this.onThicknessChange();
     }
     onThicknessChange(): void {
-        const thickness = this.myForm.value.thickness;
+        const thickness = this.rectangleAttributesForm.value.thickness;
         if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
             this.attributesManagerService.changeThickness(thickness);
         }

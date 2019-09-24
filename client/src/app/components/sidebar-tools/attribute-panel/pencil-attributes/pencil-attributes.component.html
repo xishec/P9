@@ -3,7 +3,7 @@
         {{ toolName }}
     </div>
 
-    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="pencilAttributesForm" (ngSubmit)="onSubmit()">
         <div class="attribute">
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider
@@ -11,7 +11,7 @@
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
                 [min]="MIN_THICKNESS"
-                value="{{ myForm.value.thickness }}"
+                value="{{ pencilAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
