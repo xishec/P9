@@ -3,20 +3,19 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse, SVG_NS } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class BrushToolService extends TracingToolService {
-    // should be from toolsAttributes
-    private currentWidth = 5;
-    private currentColor = 'red';
-    private currentPattern = 1;
-    //
-
     private currentPath = '';
+    private currentWidth = 0;
+    private currentColor = 'black';
+    private currentPattern = 1;
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
+    private attributesManagerService: AttributesManagerService;
     private svgPreviewCircle = this.renderer.createElement('circle', SVG_NS);
 
     constructor(
@@ -25,6 +24,13 @@ export class BrushToolService extends TracingToolService {
         private drawStack: DrawStackService,
     ) {
         super();
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+            this.currentWidth = thickness;
+        })
     }
 
     onMouseDown(e: MouseEvent): void {
@@ -74,21 +80,21 @@ export class BrushToolService extends TracingToolService {
     }
 
     createFilter(patternId: number): SVGFilterElement {
-        let filter = this.renderer.createElement('filter', SVG_NS);
-        
+        const filter = this.renderer.createElement('filter', SVG_NS);
+
         this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
         this.renderer.setAttribute(filter, 'height', '100px');
         this.renderer.setAttribute(filter, 'width', '100px');
         this.renderer.setAttribute(filter, 'x', '-50px');
         this.renderer.setAttribute(filter, 'y', '-50px');
-        
-        if (patternId == 1 || patternId == 2){
+
+        if (patternId === 1 || patternId === 2){
             const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
             this.renderer.setAttribute(effect, 'stdDeviation', '3');
             this.renderer.appendChild(filter, effect);
         }
-        if (patternId !== 1){
+        if (patternId !== 1) {
             const turbulence = this.renderer.createElement('feTurbulence', SVG_NS);
             this.renderer.setAttribute(turbulence, 'type', 'turbulence');
             this.renderer.setAttribute(turbulence, 'result', 'turbulence');
@@ -152,7 +158,7 @@ export class BrushToolService extends TracingToolService {
 
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
-        
+
         this.renderer.appendChild(this.svgWrap, this.svgPath);
         this.updateSVGPath();
     }
@@ -161,4 +167,3 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 }
-
