@@ -16,17 +16,17 @@
             <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
                 <i class="fas fa-exchange-alt"></i>
             </button>
-            <span id="secondaryColorText" [ngStyle]="{ 'font-weight': secondaryColorOn ? 'bold' : 'normal' }">
-                Couleur secondaire :</span
-            >
-            <button
-                id="secondaryColor"
-                (click)="choseSecondaryColor()"
-                class="color"
-                type="button"
-                [ngStyle]="getSecondaryColor()"
-            ></button>
-            <br />
+                <span id="secondaryColorText" [ngStyle]="{ 'font-weight': secondaryColorOn ? 'bold' : 'normal' }">
+                    Couleur secondaire :</span
+                >
+                <button
+                    id="secondary-color-button"
+                    (click)="onClickSecondaryColor()"
+                    class="color"
+                    type="button"
+                    [ngStyle]="onClickSecondaryColorStyle()"
+                ></button>
+            </div>
         </div>
 
         <div id="colorButtons">
