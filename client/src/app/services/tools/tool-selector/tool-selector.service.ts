@@ -42,16 +42,16 @@ export class ToolsService {
                 break;
             case 'Carré':
                 this.currentTool = this.rectangleTool;
+                this.changeCurrentToolName(tooltipName);
                 break;
             case 'Crayon':
                 this.currentTool = this.pencilTool;
+                this.changeCurrentToolName(tooltipName);
                 break;
             default:
                 this.currentTool = undefined;
                 break;
         }
-
-        this.changeCurrentToolName(tooltipName);
     }
 
     changeCurrentToolName(toolName: string): void {
