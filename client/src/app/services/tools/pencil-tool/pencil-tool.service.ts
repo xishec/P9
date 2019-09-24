@@ -26,16 +26,20 @@ export class PencilToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton) {
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-            this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
+            this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
+            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top, this.currentWidth);
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
-            this.createSVGCircle(e.offsetX, e.offsetY, this.currentWidth);
-            this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
+            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top, this.currentWidth);
+            this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
         }
     }
