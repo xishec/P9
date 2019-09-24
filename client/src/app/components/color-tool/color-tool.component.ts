@@ -209,11 +209,8 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
-    switchColors() {
-        let temporaryColor: Color = new Color();
-        temporaryColor = this.primaryColor;
-        this.primaryColor = this.secondaryColor;
-        this.secondaryColor = temporaryColor;
+    onClickSecondaryColor() {
+        this.selectedColor = ColorType.secondaryColor;
         this.setHexValues();
     }
 
