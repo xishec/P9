@@ -18,6 +18,10 @@ export class SidebarToolsComponent {
         this.toolsService = toolsService;
     }
 
+    ngOnInit(): void {
+        this.toolsService.changeTool('Sélection');
+    }
+
     onChangeTool(tooltipName: string) {
         console.log(tooltipName);
         this.toolsService.changeTool(tooltipName);
