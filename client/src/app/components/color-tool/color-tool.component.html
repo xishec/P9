@@ -1,13 +1,4 @@
-<button id="color-tool-button" (click)="showColorOptions()">
-    <i class="fas fa-paint-roller"></i>
-</button>
-
-<form
-    [formGroup]="myForm"
-    *ngIf="colorToolOn"
-    id="color-tool-form"
-    [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }"
->
+<form [formGroup]="myForm" id="color-tool-form" [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }">
     <div class="formGroup">
         <div id="userColor">
             <span id="primaryColorText" [ngStyle]="{ 'font-weight': primaryColorOn ? 'bold' : 'normal' }">
