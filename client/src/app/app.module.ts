@@ -15,10 +15,9 @@ import {
     MatRadioModule,
     MatSliderModule,
     MatTooltipModule,
+    MatSelectModule,
+    MatFormFieldModule,
 } from '@angular/material';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
