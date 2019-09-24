@@ -9,7 +9,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class RectangleToolService extends AbstractShapeToolService {
-    private drawRectangle = this.renderer.createElement('rect', SVG_NS);
+    private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     private fillColor: string = 'green';
     private strokeColor: string = 'black';
     private strokeWidth: number = 1;
@@ -112,8 +112,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     createSVG(): void {
-        const el = this.renderer.createElement('svg', SVG_NS);
-        const drawRectangle = this.renderer.createElement('rect', SVG_NS);
+        const el: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
