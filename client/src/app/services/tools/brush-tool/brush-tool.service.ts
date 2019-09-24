@@ -52,7 +52,18 @@ export class BrushToolService extends TracingToolService {
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
         }
-        
+    }
+
+    onMouseEnter(event: MouseEvent): undefined {
+        return undefined;
+    }
+
+    onKeyDown(event: KeyboardEvent): undefined {
+        return undefined;
+    }
+
+    onKeyUp(event: KeyboardEvent): undefined {
+        return undefined;
     }
 
     createSVGWrapper(): void {
