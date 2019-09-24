@@ -38,3 +38,22 @@
         font-size: 75%;
     }
 }
+
+#color {
+    padding: 3px;
+    width: 35px;
+    button {
+        width: 20px;
+        height: 20px;
+        border: 0;
+    }
+    #secondary {
+        background-color: pink;
+    }
+    #primary {
+        background-color: palevioletred;
+        position: relative;
+        top: -10px;
+        left: 10px;
+    }
+}

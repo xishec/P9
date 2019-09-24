@@ -11,6 +11,10 @@
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
         </mat-button-toggle-group>
+        <div id="color">
+            <button id="secondary" (click)="onSecondaryClick()"></button>
+            <button id="primary" (click)="onPrimaryClick()"></button>
+        </div>
 
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
             <mat-button-toggle

@@ -26,4 +26,12 @@ export class SidebarToolsComponent implements OnInit {
         console.log(tooltipName);
         this.toolsService.changeTool(tooltipName);
     }
+
+    onSecondaryClick(): void {
+        console.log('onSecondaryClick');
+    }
+
+    onPrimaryClick(): void {
+        console.log('onPrimaryClick');
+    }
 }
