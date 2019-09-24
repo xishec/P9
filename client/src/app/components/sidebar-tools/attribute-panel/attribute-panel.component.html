@@ -1,4 +1,4 @@
 <div id="container">
-    <p>Attribute Panel</p>
-    <p>Tool : {{ currentToolId }}</p>
+    <app-pencil-attributes [hidden]="toolName !== 'Crayon'"></app-pencil-attributes>
+    <app-rectangle-attributes [hidden]="toolName !== 'Carré'"></app-rectangle-attributes>
 </div>

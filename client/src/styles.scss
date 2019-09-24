@@ -34,3 +34,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     line-height: 0px !important;
     padding: 12px 10px 10px 10px !important;
 }
+
+.myapp-max-width-dialog .mat-dialog-container {
+    max-width: 650px;
+  }

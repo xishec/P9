@@ -1,7 +1,7 @@
 <div id="mask" *ngIf="displayNewDrawingModalWindow">
     <div id="window" [ngStyle]="setWindowHeight()">
         <h1 id="title">Création d'un nouveau dessin</h1>
-        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="drawingModalForm" (ngSubmit)="onSubmit()">
             <div class="formGroup">
                 <div id="userColor">
                     <span> Couleur de fond :</span>
@@ -76,7 +76,7 @@
             </div>
 
             <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-            <button class="actionButton" mat-stroked-button type="submit" [disabled]="myForm.invalid">Créer!</button>
+            <button class="actionButton" mat-stroked-button type="submit" [disabled]="drawingModalForm.invalid">Créer!</button>
         </form>
     </div>
 </div>

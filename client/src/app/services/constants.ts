@@ -35,7 +35,6 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-fill-drip', tooltipName: 'Applicateur de couleur' },
     { iconName: 'fas fa-eye-dropper', tooltipName: 'Sélecteur de couleur' },
     { iconName: 'fas fa-eraser', tooltipName: 'Efface' },
-    { iconName: 'fas fa-palette', tooltipName: 'Pallete de couleur' },
     { iconName: 'fas fa-font', tooltipName: 'Zone de texte' },
 ];
 
@@ -58,6 +57,10 @@ enum Mouse {
     RightButton = 2,
 }
 
+const MIN_THICKNESS = 1;
+const DEFAULT_THICKNESS = 5;
+const MAX_THICKNESS = 100;
+
 export {
     COLOR_SELECTION_SHIFT,
     SIDEBAR_WIDTH,
@@ -68,4 +71,7 @@ export {
     SVG_NS,
     Keys,
     Mouse,
+    MIN_THICKNESS,
+    DEFAULT_THICKNESS,
+    MAX_THICKNESS,
 };
