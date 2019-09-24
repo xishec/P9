@@ -5,7 +5,6 @@ import { ToolsService } from 'src/app/services/tools/tool-selector/tool-selector
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { AttributesManagerService } from '../../services/tools/attributes-manager/attributes-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -15,7 +14,7 @@ import { AttributesManagerService } from '../../services/tools/attributes-manage
 export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
-    displayNewDrawingModalWindow: boolean = false;
+    displayNewDrawingModalWindow = false;
 
     currentTool: AbstractToolService | undefined;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
@@ -24,14 +23,13 @@ export class WorkZoneComponent implements OnInit {
         drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
-        private attributesManagerService: AttributesManagerService,
         private toolSelector: ToolsService,
     ) {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit(): void {
-        this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer, this.attributesManagerService);
+        this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
@@ -51,7 +49,7 @@ export class WorkZoneComponent implements OnInit {
         });
     }
 
-    changeStyle(): returnStyle {
+    changeStyle(): ReturnStyle {
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,
@@ -105,7 +103,7 @@ export class WorkZoneComponent implements OnInit {
     // LISTENERS //
 }
 
-interface returnStyle {
+interface ReturnStyle {
     fill: string;
     'fill-opacity': number;
     height: number;

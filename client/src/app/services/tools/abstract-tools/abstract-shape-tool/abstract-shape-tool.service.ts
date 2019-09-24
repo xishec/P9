@@ -7,14 +7,14 @@ import { AbstractToolService } from '../abstract-tool.service';
     providedIn: 'root',
 })
 export abstract class AbstractShapeToolService extends AbstractToolService {
-    protected currentMouseX: number = 0;
-    protected currentMouseY: number = 0;
-    protected initialMouseX: number = 0;
-    protected initialMouseY: number = 0;
+    protected currentMouseX = 0;
+    protected currentMouseY = 0;
+    protected initialMouseX = 0;
+    protected initialMouseY = 0;
     protected previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    protected isPreviewing: boolean = false;
-    protected isIn: boolean = false;
-    protected isOut: boolean = false;
+    protected isPreviewing = false;
+    protected isIn = false;
+    protected isOut = false;
 
     constructor(protected renderer: Renderer2) {
         super();

@@ -10,19 +10,22 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 })
 export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    private fillColor: string = 'green';
-    private strokeColor: string = 'black';
-    private strokeWidth: number = 1;
-    private isSquarePreview: boolean = false;
+    private fillColor = 'green';
+    private strokeColor = 'black';
+    private strokeWidth = 1;
+    private isSquarePreview = false;
+    private attributesManagerService: AttributesManagerService;
 
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
         renderer: Renderer2,
-        private attributesManagerService: AttributesManagerService,
     ) {
         super(renderer);
+    }
 
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.strokeWidth = thickness;
         });

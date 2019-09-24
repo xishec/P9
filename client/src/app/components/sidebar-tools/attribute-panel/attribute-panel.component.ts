@@ -8,7 +8,7 @@ import { ToolsService } from '../../../services/tools/tool-selector/tool-selecto
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent implements OnInit {
-    toolName: string = '';
+    toolName = '';
 
     constructor(private toolsService: ToolsService) {}
 

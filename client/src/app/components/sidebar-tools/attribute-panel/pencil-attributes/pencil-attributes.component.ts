@@ -1,30 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
+import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { MIN_THICKNESS, DEFAULT_THICKNESS, MAX_THICKNESS } from '../../../../services/constants';
+import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
+import { ToolsService } from '../../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-pencil-attributes',
     templateUrl: './pencil-attributes.component.html',
     styleUrls: ['./pencil-attributes.component.scss'],
+    providers: [AttributesManagerService],
 })
-export class PencilAttributesComponent implements OnInit {
-    toolName: string = 'Crayon';
+export class PencilAttributesComponent implements OnInit, AfterViewInit {
+    toolName = 'Crayon';
+    myForm: FormGroup;
+    pencilToolService: PencilToolService;
 
     readonly MIN_THICKNESS: number = MIN_THICKNESS;
     readonly MAX_THICKNESS: number = MAX_THICKNESS;
 
-    myForm: FormGroup;
-
-    constructor(private formBuilder: FormBuilder, private attributesManagerService: AttributesManagerService) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private attributesManagerService: AttributesManagerService,
+        private toolsService: ToolsService,
+    ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit(): void {
         this.initializeForm();
         this.onThicknessChange();
+    }
+
+    ngAfterViewInit(): void {
+        this.pencilToolService = this.toolsService.getPencilTool();
+        this.pencilToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
     initializeForm(): void {

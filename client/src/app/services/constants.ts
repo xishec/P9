@@ -57,9 +57,9 @@ enum Mouse {
     RightButton = 2,
 }
 
-const MIN_THICKNESS: number = 1;
-const DEFAULT_THICKNESS: number = 5;
-const MAX_THICKNESS: number = 100;
+const MIN_THICKNESS = 1;
+const DEFAULT_THICKNESS = 5;
+const MAX_THICKNESS = 100;
 
 export {
     COLOR_SELECTION_SHIFT,

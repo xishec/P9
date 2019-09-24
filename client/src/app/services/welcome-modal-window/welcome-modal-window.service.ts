@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class WelcomeModalWindowService {
     readonly storageKey: string = 'display welcome modal';
-    displayWelcomeModalWindow: boolean = true;
+    displayWelcomeModalWindow = true;
 
     getValueFromLocalStorage(): boolean {
         if (localStorage.getItem(this.storageKey)) {

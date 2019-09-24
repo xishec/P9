@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material';
     styleUrls: ['./welcome-modal-window.component.scss'],
 })
 export class WelcomeModalWindowComponent {
-    displayWelcomeModalWindow: boolean = false;
+    displayWelcomeModalWindow = false;
 
     constructor(private dialogRef: MatDialogRef<WelcomeModalWindowComponent>) {}
 

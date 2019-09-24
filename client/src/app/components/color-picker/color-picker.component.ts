@@ -12,7 +12,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class ColorPickerComponent implements OnInit {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    obscurity: number = 0;
+    obscurity = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
     @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLDivElement>;

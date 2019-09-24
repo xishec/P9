@@ -1,30 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
+import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { MIN_THICKNESS, DEFAULT_THICKNESS, MAX_THICKNESS } from '../../../../services/constants';
+import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
+import { ToolsService } from '../../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-rectangle-attributes',
     templateUrl: './rectangle-attributes.component.html',
     styleUrls: ['./rectangle-attributes.component.scss'],
 })
-export class RectangleAttributesComponent implements OnInit {
-    toolName: string = 'Carré';
+export class RectangleAttributesComponent implements OnInit, AfterViewInit {
+    toolName = 'Carré';
+    myForm: FormGroup;
+    rectangleToolService: RectangleToolService;
 
     readonly MIN_THICKNESS: number = MIN_THICKNESS;
     readonly MAX_THICKNESS: number = MAX_THICKNESS;
 
-    myForm: FormGroup;
-
-    constructor(private formBuilder: FormBuilder, private attributesManagerService: AttributesManagerService) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private attributesManagerService: AttributesManagerService,
+        private toolsService: ToolsService,
+    ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit(): void {
         this.initializeForm();
         this.onThicknessChange();
+    }
+
+    ngAfterViewInit(): void {
+        this.rectangleToolService = this.toolsService.getRectangleTool();
+        this.rectangleToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
     initializeForm(): void {

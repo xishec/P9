@@ -9,24 +9,26 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    private currentPath: string = '';
-    private currentWidth: number = 0;
-    private currentColor: string = 'black';
+    private currentPath = '';
+    private currentWidth = 0;
+    private currentColor = 'black';
     private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef: SVGElement = this.renderer.createElement('svg', SVG_NS);
+    private attributesManagerService: AttributesManagerService;
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
         private drawStack: DrawStackService,
-        private attributesManagerService: AttributesManagerService,
     ) {
         super();
+    }
 
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
         });
-        this.currentColor = 'black';
     }
 
     onMouseDown(e: MouseEvent): void {

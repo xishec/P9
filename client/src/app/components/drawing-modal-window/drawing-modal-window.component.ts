@@ -18,9 +18,9 @@ export class DrawingModalWindowComponent implements OnInit {
 
     colors: Color[] = [];
     activeColor: Color = new Color();
-    submitCount: number = 0;
-    displayNewDrawingModalWindow: boolean = false;
-    displayColorWheel: boolean = false;
+    submitCount = 0;
+    displayNewDrawingModalWindow = false;
+    displayColorWheel = false;
 
     constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;

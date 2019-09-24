@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class DrawStackService {
     private drawStack: SVGElement[];
-    drawCount: number = 0;
+    drawCount = 0;
 
     constructor() {
         this.drawStack = new Array<SVGElement>();
