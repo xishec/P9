@@ -53,6 +53,18 @@ mat-form-field {
     filter: brightness(1);
 }
 
+#colorButtons {
+    display: flex;
+    align-items: center;
+
+    img {
+        border: 0px solid #d0d0d0;
+        padding: 0px;
+        width: 23px;
+        height: 23px;
+    }
+}
+
 #userColor {
     display: flex;
     justify-content: center;
@@ -65,6 +77,14 @@ mat-form-field {
 
     #bigColor {
         padding: 15px;
+    }
+
+    #colorPalette {
+        padding: 10px;
+        border: 1px solid #d0d0d0;
+        margin: 5px;
+        border-radius: 100%;
+        outline: none;
     }
 }
 

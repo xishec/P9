@@ -24,7 +24,7 @@ export class ToolsService {
     changeTool(toolId: number) {
         this.currentToolId = toolId;
         if (toolId === 1) {
-            this.drawingModalWindowService.changeIfShowWindow(true);
+            this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
         }
     }
 }
