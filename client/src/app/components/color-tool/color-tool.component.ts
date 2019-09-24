@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from '../../../classes/Color';
-import { COLORS } from '../../services/constants';
+import { /*COLORS,*/ ColorType } from '../../services/constants';
 
 @Component({
     selector: 'app-color-tool',
@@ -11,21 +12,22 @@ import { COLORS } from '../../services/constants';
 export class ColorToolComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
-    readonly colors: Color[] = [];
+
+    selectedColor: ColorType = ColorType.primaryColor;
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
+
     lastTenColorsQueue: Color[] = [];
 
-    colorToolOn = false;
     displayColorWheel = false;
-    indexOfTenColorArray = 0;
+    // indexOfTenColorArray = 0;
 
     lastPrimaryOpacity = 1;
     // lastSecondaryOpacity = 1;
     // primaryColorClicked = true;
     // secondaryColorClicked = false;
 
-    constructor(formBuilder: FormBuilder) {
+    constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
 
         // this.addColorToColorList(COLORS[3]);
@@ -38,6 +40,7 @@ export class ColorToolComponent implements OnInit {
         this.secondaryColor = this.colorToolService.secondaryColor;
     }
 
+    // GOOD
     initializeForm() {
         this.myForm = this.formBuilder.group({
             hex: ['000000', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
