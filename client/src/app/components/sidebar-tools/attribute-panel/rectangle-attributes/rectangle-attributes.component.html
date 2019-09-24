@@ -11,6 +11,7 @@
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
                 [min]="MIN_THICKNESS"
+                value="{{ myForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
