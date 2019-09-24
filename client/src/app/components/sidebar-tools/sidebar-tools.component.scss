@@ -23,7 +23,7 @@
 #file-buttons {
     position: fixed;
     bottom: 0;
-
+    display: flex;
     .mat-button-toggle-checked {
         background: #ffffff;
     }
