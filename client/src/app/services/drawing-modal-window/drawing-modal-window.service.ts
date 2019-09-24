@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Color } from '../../../classes/Color';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
@@ -18,9 +18,9 @@ export class DrawingModalWindowService {
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
     private activeColor: BehaviorSubject<Color> = new BehaviorSubject(new Color());
 
-    currentInfo = this.infoSource.asObservable();
-    currentDisplayNewDrawingModalWindow = this.displayNewDrawingModalWindow.asObservable();
-    currentActiveColor = this.activeColor.asObservable();
+    currentInfo: Observable<DrawingInfo> = this.infoSource.asObservable();
+    currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
+    currentActiveColor: Observable<Color> = this.activeColor.asObservable();
 
     changeInfo(drawingInfo: DrawingInfo) {
         this.infoSource.next(drawingInfo);

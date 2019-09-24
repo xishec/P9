@@ -23,7 +23,7 @@
 #file-buttons {
     position: fixed;
     bottom: 0;
-
+    display: flex;
     .mat-button-toggle-checked {
         background: #ffffff;
     }
@@ -36,5 +36,25 @@
 
     i {
         font-size: 75%;
+    }
+}
+
+#color {
+    margin-top: 3px;
+    padding: 3px;
+    width: 35px;
+    button {
+        width: 20px;
+        height: 20px;
+        border: 0;
+    }
+    #secondary {
+        background-color: pink;
+    }
+    #primary {
+        background-color: palevioletred;
+        position: relative;
+        top: -10px;
+        left: 10px;
     }
 }

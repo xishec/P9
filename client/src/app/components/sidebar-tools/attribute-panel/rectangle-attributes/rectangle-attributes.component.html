@@ -1,0 +1,30 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="thickness"
+                (input)="onSliderChange($event)"
+                [min]="MIN_THICKNESS"
+                value="{{ myForm.value.thickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    matInput
+                    type="number"
+                    formControlName="thickness"
+                    (change)="onThicknessChange()"
+                    [min]="MIN_THICKNESS"
+                    [max]="MAX_THICKNESS"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ MIN_THICKNESS }} et {{ MAX_THICKNESS }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
