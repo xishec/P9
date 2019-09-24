@@ -12,8 +12,8 @@ export class PencilToolService extends TracingToolService {
     private currentPath: string = '';
     private currentWidth: number = 0;
     private currentColor: string = 'black';
-    private svgPathRef: SVGAElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrapRef: SVGAElement = this.renderer.createElement('svg', SVG_NS);
+    private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+    private svgWrapRef: SVGElement = this.renderer.createElement('svg', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -76,13 +76,13 @@ export class PencilToolService extends TracingToolService {
     }
 
     createSVGWrapper(): void {
-        const el = this.renderer.createElement('svg', SVG_NS);
+        const el: SVGElement = this.renderer.createElement('svg', SVG_NS);
         this.svgWrapRef = el;
         this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
     createSVGCircle(x: number, y: number, w: number): void {
-        const el = this.renderer.createElement('line', SVG_NS);
+        const el: SVGLineElement = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(el, 'x1', x.toString());
         this.renderer.setAttribute(el, 'x2', x.toString());
         this.renderer.setAttribute(el, 'y1', y.toString());
