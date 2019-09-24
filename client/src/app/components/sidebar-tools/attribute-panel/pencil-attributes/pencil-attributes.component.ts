@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSliderChange } from '@angular/material';
 
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 
@@ -23,13 +24,16 @@ export class PencilAttributesComponent implements OnInit {
 
     initializeForm() {
         this.myForm = this.formBuilder.group({
-            thickness: ['2', [Validators.required, Validators.min(0), Validators.max(100)]],
+            thickness: ['20', [Validators.required, Validators.min(0), Validators.max(100)]],
         });
     }
 
-    onThicknessChange() {
-        this.attributesManagerService.changeThickness(10);
+    onSliderChange(event: MatSliderChange) {
+        this.myForm.controls.thickness.setValue(event.value);
+        this.onThicknessChange();
     }
-
-    onSubmit() {}
+    onThicknessChange() {
+        let thickness = this.myForm.value.thickness;
+        this.attributesManagerService.changeThickness(thickness);
+    }
 }

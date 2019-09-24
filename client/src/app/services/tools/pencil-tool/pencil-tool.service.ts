@@ -10,7 +10,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 })
 export class PencilToolService extends TracingToolService {
     private currentPath = '';
-    private currentWidth = 2;
+    private currentWidth: number = 10;
     private currentColor = 'black';
     private svgPathRef = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
@@ -22,9 +22,7 @@ export class PencilToolService extends TracingToolService {
         private attributesManagerService: AttributesManagerService,
     ) {
         super();
-    }
 
-    ngOnInit(): void {
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
         });
