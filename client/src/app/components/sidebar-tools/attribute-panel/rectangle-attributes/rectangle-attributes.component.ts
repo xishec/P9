@@ -34,7 +34,7 @@ export class RectangleAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
     onThicknessChange() {
-        let thickness = this.myForm.value.thickness;
+        const thickness = this.myForm.value.thickness;
         this.attributesManagerService.changeThickness(thickness);
     }
 }

@@ -8,7 +8,7 @@ describe('RectangleAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RectangleAttributesComponent ]
+      declarations: [ RectangleAttributesComponent ],
     })
     .compileComponents();
   }));

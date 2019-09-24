@@ -1,11 +1,11 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
-import { AttributesManagerService } from '../../services/tools/attributes-manager/attributes-manager.service';
-import { ToolsService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
+import { ToolsService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { AttributesManagerService } from '../../services/tools/attributes-manager/attributes-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -62,43 +62,43 @@ export class WorkZoneComponent implements OnInit {
 
     // LISTENERS //
     @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onMouseMove(event);
         }
     }
 
     @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onMouseDown(event);
         }
     }
 
     @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onMouseUp(event);
         }
     }
 
     @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onMouseEnter(event);
         }
     }
 
     @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onMouseLeave(event);
         }
     }
 
     @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onKeyDown(event);
         }
     }
 
     @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
-        if (this.currentTool != undefined) {
+        if (this.currentTool !== undefined) {
             this.currentTool.onKeyUp(event);
         }
     }

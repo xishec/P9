@@ -16,7 +16,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     protected isIn = false;
     protected isOut = false;
 
-    constructor(protected renderer: Renderer2) {super();}
+    constructor(protected renderer: Renderer2) {super(); }
 
     abstract onMouseMove(event: MouseEvent): void;
     abstract onMouseDown(event: MouseEvent): void;

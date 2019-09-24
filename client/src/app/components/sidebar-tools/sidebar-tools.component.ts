@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FILES_BUTTON_INFO, TOOLS_BUTTON_INFO } from '../../services/constants';
 import { ToolsService } from '../../services/tools/tool-selector/tool-selector.service';
@@ -8,7 +8,7 @@ import { ToolsService } from '../../services/tools/tool-selector/tool-selector.s
     templateUrl: './sidebar-tools.component.html',
     styleUrls: ['./sidebar-tools.component.scss'],
 })
-export class SidebarToolsComponent {
+export class SidebarToolsComponent implements OnInit {
     toolsService: ToolsService;
 
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;

@@ -8,7 +8,7 @@ export abstract class TracingToolService extends AbstractToolService {
     protected isDrawing = false;
 
     // tslint:disable-next-line: no-empty
-    constructor() {super();}
+    constructor() {super(); }
 
     onMouseDown(e: MouseEvent): void {
         this.isDrawing = true;

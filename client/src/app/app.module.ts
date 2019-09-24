@@ -11,12 +11,12 @@ import {
     MatButtonToggleModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     MatSliderModule,
     MatTooltipModule,
-    MatSelectModule,
-    MatFormFieldModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,14 +27,14 @@ import { ToolsService } from './services/tools/tool-selector/tool-selector.servi
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
+import { AttributePanelComponent } from '@attribute-panel/attribute-panel.component';
+import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
+import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
-import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { PencilAttributesComponent } from './components/sidebar-tools/attribute-panel/pencil-attributes/pencil-attributes.component';
-import { RectangleAttributesComponent } from './components/sidebar-tools/attribute-panel/rectangle-attributes/rectangle-attributes.component';
 
 @NgModule({
     declarations: [

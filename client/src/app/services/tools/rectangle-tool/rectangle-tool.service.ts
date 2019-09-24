@@ -12,7 +12,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle = this.renderer.createElement('rect', SVG_NS);
     private fillColor = 'green';
     private strokeColor = 'black';
-    private strokeWidth: number = 1;
+    private strokeWidth = 1;
     private isSquarePreview = false;
 
     constructor(

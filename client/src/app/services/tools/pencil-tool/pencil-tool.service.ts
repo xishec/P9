@@ -10,7 +10,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 })
 export class PencilToolService extends TracingToolService {
     private currentPath = '';
-    private currentWidth: number = 0;
+    private currentWidth = 0;
     private currentColor = 'black';
     private svgPathRef = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef = this.renderer.createElement('svg', SVG_NS);

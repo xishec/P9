@@ -8,7 +8,7 @@ describe('PencilAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PencilAttributesComponent ]
+      declarations: [ PencilAttributesComponent ],
     })
     .compileComponents();
   }));
