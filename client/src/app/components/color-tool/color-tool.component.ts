@@ -21,19 +21,15 @@ export class ColorToolComponent implements OnInit {
     indexOfTenColorArray = 0;
 
     lastPrimaryOpacity = 1;
-    lastSecondaryOpacity = 1;
-    primaryColorOn = true;
-    secondaryColorOn = false;
-    primaryColorClicked = true;
-    secondaryColorClicked = false;
+    // lastSecondaryOpacity = 1;
+    // primaryColorClicked = true;
+    // secondaryColorClicked = false;
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
-        this.colors = COLORS;
-        this.primaryColor = COLORS[3];
-        this.addColorToColorList(COLORS[3]);
-        this.secondaryColor = COLORS[1];
-        this.addColorToColorList(COLORS[1]);
+
+        // this.addColorToColorList(COLORS[3]);
+        // this.addColorToColorList(COLORS[1]);
         this.initializeForm();
     }
 
