@@ -98,6 +98,7 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
         this.renderer.setAttribute(this.svgPathRef, 'stroke', this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
     }
 
