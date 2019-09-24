@@ -8,7 +8,7 @@ import { COLORS } from '../../services/constants';
     templateUrl: './color-tool.component.html',
     styleUrls: ['./color-tool.component.scss'],
 })
-export class ColorToolComponent {
+export class ColorToolComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
     readonly colors: Color[] = [];
@@ -35,6 +35,11 @@ export class ColorToolComponent {
         this.secondaryColor = COLORS[1];
         this.addColorToColorList(COLORS[1]);
         this.initializeForm();
+    }
+
+    ngOnInit(): void {
+        this.primaryColor = this.colorToolService.primaryColor;
+        this.secondaryColor = this.colorToolService.secondaryColor;
     }
 
     initializeForm() {
