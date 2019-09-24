@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -15,7 +15,7 @@ export class ToolsService {
     private toolName: BehaviorSubject<string> = new BehaviorSubject('');
     private drawingModalWindowService: DrawingModalWindowService;
 
-    currentToolName = this.toolName.asObservable();
+    currentToolName: Observable<string> = this.toolName.asObservable();
 
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
@@ -35,7 +35,7 @@ export class ToolsService {
         this.pencilTool = new PencilToolService(ref, renderer, drawStack, attributesManagerService);
     }
 
-    changeTool(tooltipName: string) {
+    changeTool(tooltipName: string): void {
         switch (tooltipName) {
             case 'Nouveau dessin':
                 this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
@@ -54,7 +54,7 @@ export class ToolsService {
         this.changeCurrentToolName(tooltipName);
     }
 
-    changeCurrentToolName(toolName: string) {
+    changeCurrentToolName(toolName: string): void {
         this.toolName.next(toolName);
     }
 }

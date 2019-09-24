@@ -10,7 +10,7 @@ import { AttributesManagerService } from '../../../../services/tools/attributes-
     styleUrls: ['./rectangle-attributes.component.scss'],
 })
 export class RectangleAttributesComponent implements OnInit {
-    toolName = 'Carré';
+    toolName: string = 'Carré';
 
     myForm: FormGroup;
 
@@ -23,17 +23,17 @@ export class RectangleAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
-    initializeForm() {
+    initializeForm(): void {
         this.myForm = this.formBuilder.group({
             thickness: ['20', [Validators.required, Validators.min(0), Validators.max(100)]],
         });
     }
 
-    onSliderChange(event: MatSliderChange) {
+    onSliderChange(event: MatSliderChange): void {
         this.myForm.controls.thickness.setValue(event.value);
         this.onThicknessChange();
     }
-    onThicknessChange() {
+    onThicknessChange(): void {
         const thickness = this.myForm.value.thickness;
         this.attributesManagerService.changeThickness(thickness);
     }

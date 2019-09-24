@@ -9,11 +9,11 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    private currentPath = '';
-    private currentWidth = 0;
-    private currentColor = 'black';
-    private svgPathRef = this.renderer.createElement('path', SVG_NS);
-    private svgWrapRef = this.renderer.createElement('svg', SVG_NS);
+    private currentPath: string = '';
+    private currentWidth: number = 0;
+    private currentColor: string = 'black';
+    private svgPathRef: SVGAElement = this.renderer.createElement('path', SVG_NS);
+    private svgWrapRef: SVGAElement = this.renderer.createElement('svg', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,

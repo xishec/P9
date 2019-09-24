@@ -15,7 +15,7 @@ import { AttributesManagerService } from '../../services/tools/attributes-manage
 export class WorkZoneComponent implements OnInit {
     drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
-    displayNewDrawingModalWindow = false;
+    displayNewDrawingModalWindow: boolean = false;
 
     currentTool: AbstractToolService | undefined;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
@@ -30,7 +30,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer, this.attributesManagerService);
         this.currentTool = this.toolSelector.currentTool;
 
@@ -51,7 +51,7 @@ export class WorkZoneComponent implements OnInit {
         });
     }
 
-    changeStyle() {
+    changeStyle(): returnStyle {
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,
@@ -103,4 +103,11 @@ export class WorkZoneComponent implements OnInit {
         }
     }
     // LISTENERS //
+}
+
+interface returnStyle {
+    fill: string;
+    'fill-opacity': number;
+    height: number;
+    width: number;
 }

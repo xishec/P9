@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -7,9 +7,9 @@ import { BehaviorSubject } from 'rxjs';
 export class AttributesManagerService {
     private thickness: BehaviorSubject<number> = new BehaviorSubject(2);
 
-    currentThickness = this.thickness.asObservable();
+    currentThickness: Observable<number> = this.thickness.asObservable();
 
-    changeThickness(thickness: number) {
+    changeThickness(thickness: number): void {
         this.thickness.next(thickness);
     }
 }

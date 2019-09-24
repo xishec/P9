@@ -5,10 +5,12 @@ import { AbstractToolService } from '../abstract-tool.service';
     providedIn: 'root',
 })
 export abstract class TracingToolService extends AbstractToolService {
-    protected isDrawing = false;
+    protected isDrawing: boolean = false;
 
     // tslint:disable-next-line: no-empty
-    constructor() {super(); }
+    constructor() {
+        super();
+    }
 
     onMouseDown(e: MouseEvent): void {
         this.isDrawing = true;

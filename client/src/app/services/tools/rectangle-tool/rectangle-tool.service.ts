@@ -10,10 +10,10 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 })
 export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle = this.renderer.createElement('rect', SVG_NS);
-    private fillColor = 'green';
-    private strokeColor = 'black';
-    private strokeWidth = 1;
-    private isSquarePreview = false;
+    private fillColor: string = 'green';
+    private strokeColor: string = 'black';
+    private strokeWidth: number = 1;
+    private isSquarePreview: boolean = false;
 
     constructor(
         private drawStack: DrawStackService,

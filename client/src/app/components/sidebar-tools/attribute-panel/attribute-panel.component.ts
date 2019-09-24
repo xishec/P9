@@ -8,11 +8,11 @@ import { ToolsService } from '../../../services/tools/tool-selector/tool-selecto
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent implements OnInit {
-    toolName = '';
+    toolName: string = '';
 
     constructor(private toolsService: ToolsService) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.toolsService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
         });
