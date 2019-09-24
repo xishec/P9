@@ -23,7 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // *************** Services **********************
 import { DrawingModalWindowService } from './services/drawing-modal-window/drawing-modal-window.service';
-import { ToolsService } from './services/tools/tools.service';
+import { ToolsService } from './services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
@@ -34,6 +34,7 @@ import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { PencilAttributesComponent } from './components/sidebar-tools/attribute-panel/pencil-attributes/pencil-attributes.component';
+import { RectangleAttributesComponent } from './components/sidebar-tools/attribute-panel/rectangle-attributes/rectangle-attributes.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { PencilAttributesComponent } from './components/sidebar-tools/attribute-
         ColorPickerComponent,
         WelcomeModalWindowComponent,
         PencilAttributesComponent,
+        RectangleAttributesComponent,
     ],
     imports: [
         MatSliderModule,

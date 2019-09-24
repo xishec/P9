@@ -5,12 +5,12 @@ import { MatSliderChange } from '@angular/material';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 
 @Component({
-    selector: 'app-pencil-attributes',
-    templateUrl: './pencil-attributes.component.html',
-    styleUrls: ['./pencil-attributes.component.scss'],
+    selector: 'app-rectangle-attributes',
+    templateUrl: './rectangle-attributes.component.html',
+    styleUrls: ['./rectangle-attributes.component.scss'],
 })
-export class PencilAttributesComponent implements OnInit {
-    toolName = 'Crayon';
+export class RectangleAttributesComponent implements OnInit {
+    toolName = 'Carré';
 
     myForm: FormGroup;
 

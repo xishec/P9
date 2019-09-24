@@ -2,11 +2,10 @@
     <div id="tools-buttons">
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" value="0">
             <mat-button-toggle
-                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO; let index = index"
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
                 matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(index)"
-                value="{{ index }}"
+                (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
             >
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
@@ -17,7 +16,7 @@
                 *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(1)"
+                (click)="onChangeTool(FILE_BUTTON_INFO.tooltipName)"
             >
                 <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
             </mat-button-toggle>

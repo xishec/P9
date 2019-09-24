@@ -1,3 +1,5 @@
 <div id="container">
-    <app-pencil-attributes></app-pencil-attributes>
+    {{ toolName }}
+    <app-pencil-attributes *ngIf="toolName === 'Crayon' "></app-pencil-attributes>
+    <app-rectangle-attributes *ngIf="toolName === 'Carré'"></app-rectangle-attributes>
 </div>
