@@ -13,9 +13,12 @@
                     [ngStyle]="onClickPrimaryColorStyle()"
                 ></button>
             </div>
-            <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
-                <i class="fas fa-exchange-alt"></i>
-            </button>
+            <!-- <div id="switch-color">
+                <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+            </div> -->
+            <div id="secondary-color">
                 <span id="secondaryColorText" [ngStyle]="{ 'font-weight': secondaryColorOn ? 'bold' : 'normal' }">
                     Couleur secondaire :</span
                 >
