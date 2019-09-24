@@ -57,7 +57,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
+        if (button === Mouse.LeftButton && this.isIn) {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
@@ -112,6 +112,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     createSVG(): void {
+        console.log("wtf");
         const el = this.renderer.createElement('svg', SVG_NS);
         const drawRectangle = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
