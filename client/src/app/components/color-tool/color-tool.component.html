@@ -1,17 +1,18 @@
 <form [formGroup]="myForm" id="color-tool-form" [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }">
     <div class="formGroup">
         <div id="userColor">
-            <span id="primaryColorText" [ngStyle]="{ 'font-weight': primaryColorOn ? 'bold' : 'normal' }">
-                Couleur principale :</span
-            >
-            <button
-                id="primaryColor"
-                (click)="chosePrimaryColor()"
-                class="color"
-                type="button"
-                [ngStyle]="getPrimaryColor()"
-            ></button>
-            <br />
+            <div id="primary-color">
+                <span id="primaryColorText" [ngStyle]="{ 'font-weight': !!primaryColor ? 'bold' : 'normal' }">
+                    Couleur principale :</span
+                >
+                <button
+                    id="primary-color-button"
+                    (click)="onClickPrimaryColor()"
+                    class="color"
+                    type="button"
+                    [ngStyle]="onClickPrimaryColorStyle()"
+                ></button>
+            </div>
             <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
                 <i class="fas fa-exchange-alt"></i>
             </button>
