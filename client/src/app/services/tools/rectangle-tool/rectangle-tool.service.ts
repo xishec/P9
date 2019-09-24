@@ -23,8 +23,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.offsetX;
-        this.currentMouseY = event.offsetY;
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updatePreviewRectangle();
