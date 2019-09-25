@@ -51,10 +51,11 @@ export class ColorToolComponent implements OnInit {
         });
     }
 
-    changeColor(color: Color): void {
-        this.setColor(color);
+    changeColor(colorHex: string): void {
+        const newColor = new Color(colorHex);
+        this.setColor(newColor);
         // this.addColorToColorList(color);
-        // this.setHexValues();
+        this.setColorNumericValues();
     }
 
     setColor(color: Color): void {
