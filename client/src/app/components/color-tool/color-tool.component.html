@@ -52,24 +52,24 @@
         <app-color-picker *ngIf="displayColorWheel"></app-color-picker>
 
         <mat-form-field class="medium">
-            <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserColorHex()" />
+            <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()"/>
             <mat-error>Ce code de couleur n'est pas valide!</mat-error>
             <span matPrefix>#</span>
         </mat-form-field>
 
-        <mat-form-field class="small" (change)="onUserColorRGB()">
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input matInput type="number" placeholder="R:" formControlName="R" />
             <mat-error>R doit être entre 0 et 255!</mat-error>
         </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGB()">
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input matInput type="number" placeholder="G:" formControlName="G" />
             <mat-error>G doit être entre 0 et 255!</mat-error>
         </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGB()">
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input matInput type="number" placeholder="B:" formControlName="B" />
             <mat-error>B doit être entre 0 et 255!</mat-error>
         </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGB()">
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
             <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
         </mat-form-field>
