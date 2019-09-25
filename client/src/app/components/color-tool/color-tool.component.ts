@@ -48,11 +48,14 @@ export class ColorToolComponent implements OnInit {
 
     setColor(color: Color): void {
         if (this.selectedColor === ColorType.primaryColor) {
-            this.primaryColor = color;
             this.colorToolService.changeColor(color, ColorType.primaryColor);
+            this.primaryColor = color;
         } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.secondaryColor = color;
             this.colorToolService.changeColor(color, ColorType.secondaryColor);
+            this.secondaryColor = color;
+        }
+    }
+
     setColorNumericValues() {
         this.setHexValues();
         this.setRGBValues();
@@ -96,11 +99,7 @@ export class ColorToolComponent implements OnInit {
     // }
 
     onUserHexInput(): void {
-            this.changeColor(this.myForm.value.hex);
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.changeColor(this.myForm.value.hex);
-    }
-        this.setRGBFromHex();
+        this.changeColor(this.myForm.value.hex);
     }
 
     onUserColorRGBInput(): void {
@@ -136,12 +135,12 @@ export class ColorToolComponent implements OnInit {
 
     onClickPrimaryColor() {
         this.selectedColor = ColorType.primaryColor;
-        this.setHexValues();
+        this.setColorNumericValues();
     }
 
     onClickSecondaryColor() {
         this.selectedColor = ColorType.secondaryColor;
-        this.setHexValues();
+        this.setColorNumericValues();
     }
 
     translateRGBToHex(): string {
