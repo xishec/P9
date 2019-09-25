@@ -50,8 +50,6 @@ export class WorkZoneComponent implements OnInit {
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,
-            height: this.drawingInfo.height,
-            width: this.drawingInfo.width,
         };
     }
 
@@ -104,6 +102,4 @@ export class WorkZoneComponent implements OnInit {
 interface ReturnStyle {
     fill: string;
     'fill-opacity': number;
-    height: number;
-    width: number;
 }
