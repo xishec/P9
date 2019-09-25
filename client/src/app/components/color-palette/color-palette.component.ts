@@ -10,11 +10,11 @@ interface ColorStyle {
     border?: string;
 }
 @Component({
-    selector: 'app-color-tool',
-    templateUrl: './color-tool.component.html',
-    styleUrls: ['./color-tool.component.scss'],
+    selector: 'app-color-palette',
+    templateUrl: './color-palette.component.html',
+    styleUrls: ['./color-palette.component.scss'],
 })
-export class ColorToolComponent implements OnInit {
+export class ColorPaletteComponent implements OnInit {
     myForm: FormGroup;
     formBuilder: FormBuilder;
 

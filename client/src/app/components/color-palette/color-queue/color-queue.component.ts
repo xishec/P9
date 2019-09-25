@@ -4,8 +4,8 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { Color } from '../../../../classes/Color';
 
 interface IconStyle {
-  backgroundColor: string;
-  opacity: string;
+    backgroundColor: string;
+    opacity: string;
 }
 
 @Component({
@@ -20,16 +20,16 @@ export class ColorQueueComponent implements OnInit {
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit(): void {
-      this.colorToolService.colorQueueBSubject.subscribe((colorQueue) => {
-        this.colorQueue = colorQueue;
-      });
+        this.colorToolService.colorQueueBSubject.subscribe((colorQueue) => {
+            this.colorQueue = colorQueue;
+        });
     }
 
     onClickColorButton(color: Color): void {
-      this.clickedColorButton.emit(color);
+        this.clickedColorButton.emit(color);
     }
 
     getColorIcon(color: Color): IconStyle {
-      return { backgroundColor: '#' + color.hex, opacity: '1' };
-  }
+        return { backgroundColor: '#' + color.hex, opacity: '1' };
+    }
 }

@@ -12,6 +12,7 @@ export class ColorAttributesComponent implements OnInit {
     selectedColor: ColorType = ColorType.primaryColor;
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
+    showColorPalette = false;
 
     constructor() {}
 
@@ -39,5 +40,9 @@ export class ColorAttributesComponent implements OnInit {
         return {
             backgroundColor: '#' + this.secondaryColor.hex,
         };
+    }
+
+    switchColors() {
+        this.showColorPalette = !this.showColorPalette;
     }
 }

@@ -2,8 +2,8 @@
 // import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 // import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-// import { ColorToolComponent } from './color-tool.component';
+// import { ColorToolService } from 'src/app/services/tools/color-palette/color-palette.service';
+// import { ColorToolComponent } from './color-palette.component';
 
 // fdescribe('ColorToolComponent', () => {
 //     let component: ColorToolComponent;

@@ -1,9 +1,8 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { ColorToolComponent } from '../../components/color-tool/color-tool.component';
-import { COLOR_SELECTION_SHIFT } from '../../services/constants';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
+import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-color-picker',
@@ -21,7 +20,6 @@ export class ColorPickerComponent implements OnInit {
     constructor(
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
-        private colorToolComponent: ColorToolComponent,
     ) {}
 
     ngOnInit(): void {
@@ -66,10 +64,6 @@ export class ColorPickerComponent implements OnInit {
             pixel[2] - pixel[2] * this.obscurity,
         );
         this.drawingModalWindowService.changeActiveColor({ hex: newHex });
-
-        if (this.colorToolComponent !== undefined) {
-            this.colorToolComponent.changeColor(newHex);
-        }
 
         this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'inline');
         this.renderer.setStyle(
