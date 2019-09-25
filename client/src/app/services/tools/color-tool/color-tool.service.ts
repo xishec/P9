@@ -15,7 +15,7 @@ export class ColorToolService {
     colorQueue: Color[] = [];
     colorQueueBSubject = new BehaviorSubject(this.colorQueue);
 
-    changeColor(color: Color, colorType: ColorType) {
+    changeColor(color: Color, colorType: ColorType): void {
         if (colorType === ColorType.primaryColor) {
             this.primaryColor = color;
         } else if (colorType === ColorType.secondaryColor) {
@@ -23,7 +23,7 @@ export class ColorToolService {
         }
     }
 
-    addColorToQueue(color: Color) {
+    addColorToQueue(color: Color): void {
         if (this.colorQueue.length < 10) {
             this.colorQueue.push(color);
         } else {

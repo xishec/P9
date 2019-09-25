@@ -26,14 +26,14 @@ import { ToolsService } from './services/tools/tools.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
 // ************************************************
 
+import { ColorQueueComponent } from './components/color-tool/color-queue/color-queue.component';
+import { ColorToolComponent } from './components/color-tool/color-tool.component';
 import { ColorPickerComponent } from './components/drawing-modal-window/color-picker/color-picker.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { AttributePanelComponent } from './components/sidebar-tools/attribute-panel/attribute-panel.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { ColorToolComponent } from './components/color-tool/color-tool.component';
-import { ColorQueueComponent } from './components/color-tool/color-queue/color-queue.component';
 
 @NgModule({
     declarations: [

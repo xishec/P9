@@ -8,7 +8,7 @@ describe('ColorQueueComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColorQueueComponent ]
+      declarations: [ ColorQueueComponent ],
     })
     .compileComponents();
   }));

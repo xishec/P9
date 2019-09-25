@@ -4,6 +4,10 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { Color } from '../../../classes/Color';
 import { ColorType } from '../../services/constants';
 
+interface ColorStyle {
+    backgroundColor: string;
+    border?: string;
+}
 @Component({
     selector: 'app-color-tool',
     templateUrl: './color-tool.component.html',
@@ -28,7 +32,7 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
-    initializeForm() {
+    initializeForm(): void {
         this.myForm = this.formBuilder.group({
             hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
             R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
@@ -55,12 +59,12 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    setColorNumericValues() {
+    setColorNumericValues(): void {
         this.setHexValues();
         this.setRGBValues();
     }
 
-    setHexValues() {
+    setHexValues(): void {
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.hex.setValue(this.primaryColor.hex);
         } else if (this.selectedColor === ColorType.secondaryColor) {
@@ -68,7 +72,7 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    setRGBValues() {
+    setRGBValues(): void {
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
             this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
@@ -102,7 +106,7 @@ export class ColorToolComponent implements OnInit {
         this.changeColor(newColorinHex);
     }
 
-    onClickPrimaryColorStyle() {
+    onClickPrimaryColorStyle(): ColorStyle {
         if (this.selectedColor === ColorType.primaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
@@ -115,7 +119,7 @@ export class ColorToolComponent implements OnInit {
         };
     }
 
-    onClickSecondaryColorStyle() {
+    onClickSecondaryColorStyle(): ColorStyle {
         if (this.selectedColor === ColorType.secondaryColor) {
             return {
                 backgroundColor: '#' + this.secondaryColor.hex,
@@ -128,12 +132,12 @@ export class ColorToolComponent implements OnInit {
         };
     }
 
-    onClickPrimaryColor() {
+    onClickPrimaryColor(): void {
         this.selectedColor = ColorType.primaryColor;
         this.setColorNumericValues();
     }
 
-    onClickSecondaryColor() {
+    onClickSecondaryColor(): void {
         this.selectedColor = ColorType.secondaryColor;
         this.setColorNumericValues();
     }
@@ -154,7 +158,7 @@ export class ColorToolComponent implements OnInit {
         return r + g + b;
     }
 
-    onClickColorQueueButton(color: Color) {
+    onClickColorQueueButton(color: Color): void {
         this.changeColor(color.hex);
     }
 }

@@ -1,44 +1,44 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ColorToolComponent } from './color-tool.component';
-//import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+// import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-fdescribe('ColorToolComponent', () => {
-    let component: ColorToolComponent;
-    let fixture: ComponentFixture<ColorToolComponent>;
+// import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+// import { ColorToolComponent } from './color-tool.component';
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule, FormsModule],
-            declarations: [ColorToolComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        }).compileComponents();
-    }));
+// fdescribe('ColorToolComponent', () => {
+//     let component: ColorToolComponent;
+//     let fixture: ComponentFixture<ColorToolComponent>;
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ColorToolComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+//     beforeEach(async(() => {
+//         TestBed.configureTestingModule({
+//             imports: [ReactiveFormsModule, FormsModule],
+//             declarations: [ColorToolComponent],
+//             schemas: [CUSTOM_ELEMENTS_SCHEMA],
+//         }).compileComponents();
+//     }));
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+//     beforeEach(() => {
+//         fixture = TestBed.createComponent(ColorToolComponent);
+//         component = fixture.componentInstance;
+//         fixture.detectChanges();
+//     });
 
-    let colortool: ColorToolComponent;
-    let colorToolService: ColorToolService = new ColorToolService();
-    let formBuilder: FormBuilder = new FormBuilder();
-    colortool = new ColorToolComponent(formBuilder, colorToolService);
+//     it('should create', () => {
+//         expect(component).toBeTruthy();
+//     });
 
-    it('should return true when "clicked" on the color wheel button', () => {
-        colortool.onClickColorWheel();
-        expect(colortool.displayColorWheel).toBeTruthy();
-    });
+//     // //let colortool: ColorToolComponent;
+//     // const colorToolService: ColorToolService = new ColorToolService();
+//     // const formBuilder: FormBuilder = new FormBuilder();
+//     // colortool = new ColorToolComponent(formBuilder, colorToolService);
 
-    it('should return false when "clicked" twice on the color wheel button', () => {
-        colortool.onClickColorWheel();
-        expect(colortool.displayColorWheel).toBeFalsy();
-    });
-});
+//     // it('should return true when "clicked" on the color wheel button', () => {
+//     //     colortool.onClickColorWheel();
+//     //     expect(colortool.displayColorWheel).toBeTruthy();
+//     // });
+
+//     // it('should return false when "clicked" twice on the color wheel button', () => {
+//     //     colortool.onClickColorWheel();
+//     //     expect(colortool.displayColorWheel).toBeFalsy();
+//     // });
+// });

@@ -97,7 +97,7 @@ export class DrawingModalWindowComponent implements OnInit {
         const newHex = this.drawingModalWindowService.rgbToHex(
             this.myForm.value.R,
             this.myForm.value.G,
-            this.myForm.value.B
+            this.myForm.value.B,
         );
         this.activeColor = { hex: newHex };
         this.setHex();
