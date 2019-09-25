@@ -2,7 +2,7 @@
     <div class="formGroup">
         <div id="userColor">
             <div id="primary-color">
-                <span id="primaryColorText" [ngStyle]="{ 'font-weight': !!primaryColor ? 'bold' : 'normal' }">
+                <span id="primaryColorText">
                     Couleur principale :</span
                 >
                 <button
@@ -13,13 +13,13 @@
                     [ngStyle]="onClickPrimaryColorStyle()"
                 ></button>
             </div>
-            <!-- <div id="switch-color">
+            <div id="switch-color">
                 <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
                     <i class="fas fa-exchange-alt"></i>
                 </button>
-            </div> -->
+            </div>
             <div id="secondary-color">
-                <span id="secondaryColorText" [ngStyle]="{ 'font-weight': secondaryColorOn ? 'bold' : 'normal' }">
+                <span id="secondaryColorText">
                     Couleur secondaire :</span
                 >
                 <button

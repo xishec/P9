@@ -80,13 +80,18 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-    // switchColors() {
-    //     let temporaryColor: Color = new Color();
-    //     temporaryColor = this.primaryColor;
-    //     this.primaryColor = this.secondaryColor;
-    //     this.secondaryColor = temporaryColor;
-    //     this.setHexValues();
-    // }
+    switchColors(): void {
+        let temporaryColor: Color = new Color();
+        temporaryColor = this.primaryColor;
+
+        this.primaryColor = this.secondaryColor;
+        this.colorToolService.changeColor(this.secondaryColor, ColorType.primaryColor);
+
+        this.secondaryColor = temporaryColor;
+        this.colorToolService.changeColor(temporaryColor, ColorType.secondaryColor);
+
+        this.setColorNumericValues();
+    }
 
     onUserHexInput(): void {
         this.changeColor(this.myForm.value.hex);
