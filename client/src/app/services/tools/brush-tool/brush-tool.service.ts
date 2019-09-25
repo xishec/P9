@@ -13,10 +13,10 @@ export class BrushToolService extends TracingToolService {
     private currentWidth = 0;
     private currentColor = 'black';
     private currentStyle = 1;
-    private svgPath = this.renderer.createElement('path', SVG_NS);
-    private svgWrap = this.renderer.createElement('svg', SVG_NS);
+    private svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+    private svgWrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+    private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
-    private svgPreviewCircle = this.renderer.createElement('circle', SVG_NS);
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -40,29 +40,21 @@ export class BrushToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton) {
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.createSVGCircle(
-                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-            );
-            this.svgPreviewCircle = this.createSVGCircle(
-                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-            );
+            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            this.currentPath = `M${x} ${y}`;
+            this.createSVGCircle(x, y);
+            this.svgPreviewCircle = this.createSVGCircle(x, y);
             this.createSVGPath();
         }
     }
-
     onMouseMove(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
+            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
-            this.updatePreviewCircle(
-                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-            );
+            this.updatePreviewCircle(x, y);
         }
     }
 
