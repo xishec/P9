@@ -124,6 +124,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
+        drawRectangle.addEventListener('mousedown', (event) => {
+            if (event.button === Mouse.LeftButton) {
+                this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
+            } else if (event.button === Mouse.RightButton) {
+                this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
+            }
+        });
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
