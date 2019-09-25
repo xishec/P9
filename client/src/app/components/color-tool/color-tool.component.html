@@ -32,24 +32,7 @@
             </div>
         </div>
 
-        <div id="colorButtons">
-            <button
-                class="color"
-                type="button"
-                *ngFor="let color of colors"
-                [ngStyle]="getColorIcon(color)"
-                (click)="onChangeColor(color)"
-            ></button>
-
-            <img
-                draggable="false"
-                src="../../../assets/color-wheel.png"
-                class="color"
-                alt="Color Wheel"
-                (click)="onClickColorWheel()"
-            />
-        </div>
-        <app-color-picker *ngIf="displayColorWheel"></app-color-picker>
+        <app-color-picker></app-color-picker>
 
         <mat-form-field class="medium">
             <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()"/>
