@@ -42,22 +42,33 @@ export class BrushToolService extends TracingToolService {
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
             e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
-            this.svgPreviewCircle = this.createSVGCircle(e.offsetX, e.offsetY);
+            this.svgPreviewCircle = this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
+            this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
-            this.updatePreviewCircle(e.offsetX, e.offsetY);
+            this.updatePreviewCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
         }
     }
 
     onMouseUp(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
             super.onMouseUp(e);
+            this.currentPath = '';
+            this.drawStack.push(this.svgWrap);
+        }
+    }
+
+    onMouseLeave(e: MouseEvent): void {
+        if (this.isDrawing) {
+            this.isDrawing = false;
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
         }
@@ -76,7 +87,8 @@ export class BrushToolService extends TracingToolService {
     }
 
     createSVGWrapper(): void {
-        this.svgWrap = this.renderer.createElement('svg', SVG_NS);
+        const wrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        this.svgWrap = wrap;
         const filter = this.createFilter(this.currentPattern);
         this.renderer.appendChild(this.svgWrap, filter);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
