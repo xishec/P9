@@ -12,7 +12,6 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingModalWindowService: DrawingModalWindowService;
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
 
@@ -20,13 +19,11 @@ export class WorkZoneComponent implements OnInit {
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
 
     constructor(
-        drawingModalWindowService: DrawingModalWindowService,
+        private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
         private toolSelector: ToolSelectorService,
-    ) {
-        this.drawingModalWindowService = drawingModalWindowService;
-    }
+    ) {}
 
     ngOnInit(): void {
         this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer);
@@ -66,6 +63,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
+        console.log(this.currentTool);
         if (this.currentTool !== undefined) {
             this.currentTool.onMouseDown(event);
         }

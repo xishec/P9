@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class DrawStackService {
     private drawStack: SVGElement[];
-    drawCount = 0;
 
     constructor() {
         this.drawStack = new Array<SVGElement>();
@@ -13,17 +12,14 @@ export class DrawStackService {
 
     push(el: SVGElement): void {
         this.drawStack.push(el);
-        this.drawCount++;
     }
 
-    pop(): void {
-        this.drawStack.pop();
-        this.drawCount--;
+    pop(): SVGElement | undefined {
+        return this.drawStack.pop();
     }
 
     reset(): SVGElement[] {
-        const ret = this.drawStack.splice(0, this.drawCount);
-        this.drawCount = 0;
+        const ret = this.drawStack.splice(0, this.drawStack.length);
         return ret;
     }
 }

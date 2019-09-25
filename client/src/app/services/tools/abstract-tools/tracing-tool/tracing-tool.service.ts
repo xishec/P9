@@ -7,7 +7,6 @@ import { AbstractToolService } from '../abstract-tool.service';
 export abstract class TracingToolService extends AbstractToolService {
     protected isDrawing = false;
 
-    // tslint:disable-next-line: no-empty
     constructor() {
         super();
     }

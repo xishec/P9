@@ -15,7 +15,7 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
 })
 export class PencilAttributesComponent implements OnInit, AfterViewInit {
     toolName = 'Crayon';
-    myForm: FormGroup;
+    pencilAttributesForm: FormGroup;
     pencilToolService: PencilToolService;
 
     readonly MIN_THICKNESS: number = MIN_THICKNESS;
@@ -40,7 +40,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     initializeForm(): void {
-        this.myForm = this.formBuilder.group({
+        this.pencilAttributesForm = this.formBuilder.group({
             thickness: [
                 DEFAULT_THICKNESS,
                 [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
@@ -49,11 +49,11 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.myForm.controls.thickness.setValue(event.value);
+        this.pencilAttributesForm.controls.thickness.setValue(event.value);
         this.onThicknessChange();
     }
     onThicknessChange(): void {
-        const thickness:number = this.myForm.value.thickness;
+        const thickness:number = this.pencilAttributesForm.value.thickness;
         if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
             this.attributesManagerService.changeThickness(thickness);
         }

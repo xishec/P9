@@ -13,7 +13,7 @@ import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
     styleUrls: ['./drawing-modal-window.component.scss'],
 })
 export class DrawingModalWindowComponent implements OnInit {
-    myForm: FormGroup;
+    drawingModalForm: FormGroup;
     formBuilder: FormBuilder;
 
     colors: Color[] = [];
@@ -40,7 +40,7 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     initializeForm(): void {
-        this.myForm = this.formBuilder.group({
+        this.drawingModalForm = this.formBuilder.group({
             hex: ['ffffff', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
             R: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
             G: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
@@ -54,10 +54,10 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onSubmit() {
         const drawingInfo: DrawingInfo = {
-            width: this.myForm.value.width,
-            height: this.myForm.value.height,
+            width: this.drawingModalForm.value.width,
+            height: this.drawingModalForm.value.height,
             color: this.activeColor,
-            opacity: this.myForm.value.A,
+            opacity: this.drawingModalForm.value.A,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
@@ -69,9 +69,9 @@ export class DrawingModalWindowComponent implements OnInit {
 
     @HostListener('window:resize', ['$event'])
     onResize(): void {
-        if (!this.myForm.controls.width.dirty && !this.myForm.controls.height.dirty) {
-            this.myForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
-            this.myForm.controls.height.setValue(window.innerHeight);
+        if (!this.drawingModalForm.controls.width.dirty && !this.drawingModalForm.controls.height.dirty) {
+            this.drawingModalForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
+            this.drawingModalForm.controls.height.setValue(window.innerHeight);
         }
     }
     onChangeColor(i: number): void {
@@ -90,33 +90,33 @@ export class DrawingModalWindowComponent implements OnInit {
         this.displayNewDrawingModalWindow = false;
     }
     onUserColorHex(): void {
-        this.activeColor = { hex: this.myForm.value.hex };
+        this.activeColor = { hex: this.drawingModalForm.value.hex };
         this.setRGBFromHex();
     }
     onUserColorRGB(): void {
         const newHex = this.drawingModalWindowService.rgbToHex(
-            this.myForm.value.R,
-            this.myForm.value.G,
-            this.myForm.value.B,
+            this.drawingModalForm.value.R,
+            this.drawingModalForm.value.G,
+            this.drawingModalForm.value.B,
         );
         this.activeColor = { hex: newHex };
         this.setHex();
     }
 
     setHex(): void {
-        this.myForm.controls.hex.setValue(this.activeColor.hex);
+        this.drawingModalForm.controls.hex.setValue(this.activeColor.hex);
     }
     setRGBFromHex(): void {
-        this.myForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
-        this.myForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
-        this.myForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
+        this.drawingModalForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
+        this.drawingModalForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
+        this.drawingModalForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
     }
 
     getColorIcon(color: Color): IconStyle {
         return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.myForm.value.A) };
+        return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.drawingModalForm.value.A) };
     }
 
     setWindowHeight(): HeightStyle {
