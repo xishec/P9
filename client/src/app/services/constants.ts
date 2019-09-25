@@ -21,6 +21,8 @@ const COLORS: Color[] = [
 const DEFAULT_COLOR = 'ffffff';
 const COLOR_SELECTION_SHIFT = 17;
 
+const BRUSH_STYLES = [1, 2, 3, 4, 5];
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: 'Sélection' },
     { iconName: 'fas fa-pencil-alt', tooltipName: 'Crayon' },
@@ -74,4 +76,5 @@ export {
     MIN_THICKNESS,
     DEFAULT_THICKNESS,
     MAX_THICKNESS,
+    BRUSH_STYLES,
 };
