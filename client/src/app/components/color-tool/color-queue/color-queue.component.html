@@ -1,0 +1,7 @@
+<button
+    class="color"
+    type="button"
+    *ngFor="let color of lastTenColorsQueue; let i = index"
+    [ngStyle]="getColorIcon(color)"
+    (click)="onChangeColor(color)"
+></button>

@@ -60,12 +60,5 @@
         <div id="last-10-colors">
             Les dix dernières couleurs
         </div>
-        <button
-            class="color"
-            type="button"
-            *ngFor="let color of lastTenColorsQueue; let i = index"
-            [ngStyle]="getColorIcon(color)"
-            (click)="onChangeColor(color)"
-        ></button>
     </div>
 </form>

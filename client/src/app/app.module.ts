@@ -33,6 +33,7 @@ import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { ColorToolComponent } from './components/color-tool/color-tool.component';
+import { ColorQueueComponent } from './components/color-tool/color-queue/color-queue.component';
 
 @NgModule({
     declarations: [
@@ -44,6 +45,7 @@ import { ColorToolComponent } from './components/color-tool/color-tool.component
         ColorToolComponent,
         ColorPickerComponent,
         WelcomeModalWindowComponent,
+        ColorQueueComponent,
     ],
     imports: [
         MatSliderModule,

@@ -11,12 +11,22 @@ export class ColorToolService {
 
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color('000000');
+    colorQueue: Color[] = [];
 
     changeColor(color: Color, colorType: ColorType) {
-      if (colorType === ColorType.primaryColor) {
-        this.primaryColor = color;
-      } else if (colorType === ColorType.secondaryColor) {
-        this.secondaryColor = color;
-      }
+        if (colorType === ColorType.primaryColor) {
+            this.primaryColor = color;
+        } else if (colorType === ColorType.secondaryColor) {
+            this.secondaryColor = color;
+        }
+    }
+
+    addColorToQueue(color: Color) {
+        if (this.colorQueue.length < 10) {
+            this.colorQueue.push(color);
+        } else {
+            this.colorQueue.shift();
+            this.colorQueue.push(color);
+        }
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from '../../../classes/Color';
-import { /*COLORS,*/ ColorType } from '../../services/constants';
+import { ColorType } from '../../services/constants';
 
 @Component({
     selector: 'app-color-tool',
@@ -16,8 +16,6 @@ export class ColorToolComponent implements OnInit {
     selectedColor: ColorType = ColorType.primaryColor;
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
-
-    // lastTenColorsQueue: Color[] = [];
 
     constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
@@ -43,8 +41,8 @@ export class ColorToolComponent implements OnInit {
     changeColor(colorHex: string): void {
         const newColor = new Color(colorHex);
         this.setColor(newColor);
-        // this.addColorToColorList(color);
         this.setColorNumericValues();
+        this.colorToolService.addColorToQueue(newColor);
     }
 
     setColor(color: Color): void {
@@ -57,84 +55,12 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-<<<<<<< HEAD
     setColorNumericValues() {
         this.setHexValues();
         this.setRGBValues();
     }
 
     setHexValues() {
-=======
-    // switchColors() {
-    //     let temporaryColor: Color = new Color();
-    //     temporaryColor = this.primaryColor;
-    //     this.primaryColor = this.secondaryColor;
-    //     this.secondaryColor = temporaryColor;
-    //     this.setHexValues();
-    // }
-
-    // addColorToColorList(color: Color) {
-    //     if (this.lastTenColorsQueue.length < 10) {
-    //         this.lastTenColorsQueue.push(color);
-    //     } else {
-    //         this.lastTenColorsQueue.shift();
-    //         this.lastTenColorsQueue.push(color);
-    //     }
-    // }
-
-    // rgbToHex(): string {
-    //     let r = Number(this.myForm.value.R).toString(16);
-    //     let g = Number(this.myForm.value.G).toString(16);
-    //     let b = Number(this.myForm.value.B).toString(16);
-    //     if (r.length === 1) {
-    //         r = '0' + r;
-    //     }
-    //     if (g.length === 1) {
-    //         g = '0' + g;
-    //     }
-    //     if (b.length === 1) {
-    //         b = '0' + b;
-    //     }
-    //     return r + g + b;
-    // }
-
-    // GOOD
-    onClickColorWheel() {
-        this.displayColorWheel = !this.displayColorWheel;
-    }
-
-    // GOOD
-    setHexValues() {
-        this.setHex();
-        this.setRGBFromHex();
-    }
-
-    // GOOD
-    onUserHexInput(): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.changeColor(this.myForm.value.hex);
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.changeColor(this.myForm.value.hex);
-        }
-        this.setRGBFromHex();
-    }
-
-    //     // GOOD
-    // onUserColorRGBInput() {
-    //     const newHex = this.rgbToHex();
-    //     if (this.primaryColorOn) {
-    //         this.primaryColor = { hex: newHex };
-    //         this.onChangeColor(this.primaryColor);
-    //     } else {
-    //         this.secondaryColor = { hex: newHex };
-    //         this.onChangeColor(this.secondaryColor);
-    //     }
-    //     this.setHex();
-    // }
-
-    // GOOD
-    setHex() {
->>>>>>> 51f43d5b0dd733ea0214f0017938a2337a4dc8fd
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.hex.setValue(this.primaryColor.hex);
         } else if (this.selectedColor === ColorType.secondaryColor) {
@@ -142,12 +68,7 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-<<<<<<< HEAD
     setRGBValues() {
-=======
-    // GOOD
-    setRGBFromHex() {
->>>>>>> 51f43d5b0dd733ea0214f0017938a2337a4dc8fd
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
             this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
@@ -167,15 +88,6 @@ export class ColorToolComponent implements OnInit {
     //     this.setHexValues();
     // }
 
-    // addColorToColorList(color: Color) {
-    //     if (this.lastTenColorsQueue.length < 10) {
-    //         this.lastTenColorsQueue.push(color);
-    //     } else {
-    //         this.lastTenColorsQueue.shift();
-    //         this.lastTenColorsQueue.push(color);
-    //     }
-    // }
-
     onUserHexInput(): void {
         this.changeColor(this.myForm.value.hex);
     }
@@ -186,10 +98,6 @@ export class ColorToolComponent implements OnInit {
     }
 
     onClickPrimaryColorStyle() {
-<<<<<<< HEAD
-=======
-        console.log('Color ', this.selectedColor);
->>>>>>> 51f43d5b0dd733ea0214f0017938a2337a4dc8fd
         if (this.selectedColor === ColorType.primaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
@@ -225,7 +133,6 @@ export class ColorToolComponent implements OnInit {
         this.setColorNumericValues();
     }
 
-<<<<<<< HEAD
     translateRGBToHex(): string {
         let r = Number(this.myForm.value.R).toString(16);
         let g = Number(this.myForm.value.G).toString(16);
@@ -241,17 +148,4 @@ export class ColorToolComponent implements OnInit {
         }
         return r + g + b;
     }
-=======
-    // }
-
-    // interface ColorIconStyle {
-    //     backgroundColor: string;
-    //     opacity: number;
-    //     border: string;
-    // }
-
-    // interface ColorButtonStyle {
-    //     backgroundColor: string;
-    // }
->>>>>>> 51f43d5b0dd733ea0214f0017938a2337a4dc8fd
 }
