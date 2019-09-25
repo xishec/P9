@@ -26,5 +26,15 @@
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
+        <div id="attribute">
+            <label for="traceType">Type de tracé</label>
+            <mat-form-field>
+                <mat-select formControlName="traceType">
+                    <mat-option value="Contour">Contour</mat-option>
+                    <mat-option value="Plein">Plein</mat-option>
+                    <mat-option value="Plein avec contour">Plein avec contour</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </form>
 </div>
