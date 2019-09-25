@@ -42,6 +42,8 @@ enum ToolName {
     Export = 'Exporter',
 }
 
+const BRUSH_STYLES = [1, 2, 3, 4, 5];
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil },
@@ -103,4 +105,8 @@ export {
     Thickness,
     TraceType,
     ToolName,
+    MIN_THICKNESS,
+    DEFAULT_THICKNESS,
+    MAX_THICKNESS,
+    BRUSH_STYLES,
 };

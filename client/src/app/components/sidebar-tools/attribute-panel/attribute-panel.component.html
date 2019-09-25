@@ -1,4 +1,5 @@
 <div id="container">
-    <app-pencil-attributes [hidden]="toolName !== ToolName.Pencil"></app-pencil-attributes>
-    <app-rectangle-attributes [hidden]="toolName !== ToolName.Rectangle"></app-rectangle-attributes>
+    <app-pencil-attributes [hidden]="toolName !== 'Crayon'"></app-pencil-attributes>
+    <app-rectangle-attributes [hidden]="toolName !== 'Carré'"></app-rectangle-attributes>
+    <app-brush-attributes [hidden]="toolName !== 'Pinceau'"></app-brush-attributes>
 </div>

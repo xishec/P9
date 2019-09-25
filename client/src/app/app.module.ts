@@ -28,6 +28,7 @@ import { WelcomeModalWindowService } from './services/welcome-modal-window/welco
 // ************************************************
 
 import { AttributePanelComponent } from '@attribute-panel/attribute-panel.component';
+import { BrushAttributesComponent } from '@attribute-panel/brush-attributes/brush-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
@@ -47,6 +48,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WelcomeModalWindowComponent,
         PencilAttributesComponent,
         RectangleAttributesComponent,
+        BrushAttributesComponent,
     ],
     imports: [
         MatSliderModule,
