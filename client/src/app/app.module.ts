@@ -35,7 +35,6 @@ import { DrawingModalWindowComponent } from './components/drawing-modal-window/d
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { BrushAttributesComponent } from './components/sidebar-tools/attribute-panel/brush-attributes/brush-attributes.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +47,6 @@ import { BrushAttributesComponent } from './components/sidebar-tools/attribute-p
         WelcomeModalWindowComponent,
         PencilAttributesComponent,
         RectangleAttributesComponent,
-        BrushAttributesComponent,
     ],
     imports: [
         MatSliderModule,
