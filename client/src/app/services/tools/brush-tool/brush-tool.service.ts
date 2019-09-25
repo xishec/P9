@@ -173,6 +173,7 @@ export class BrushToolService extends TracingToolService {
 
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
+        this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
 
         this.renderer.appendChild(this.svgWrap, this.svgPath);
         this.updateSVGPath();
