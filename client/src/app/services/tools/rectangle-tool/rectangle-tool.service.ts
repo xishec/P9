@@ -29,7 +29,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.strokeWidth = thickness;
         });
-        this.attributesManagerService.currentTraceType.subscribe((traceType) =>{
+        this.attributesManagerService.currentTraceType.subscribe((traceType) => {
             this.updateTraceType(traceType);
         });
     }
@@ -127,6 +127,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
+
         drawRectangle.addEventListener('mousedown', (event) => {
             if (event.button === Mouse.LeftButton) {
                 this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
@@ -134,6 +135,7 @@ export class RectangleToolService extends AbstractShapeToolService {
                 this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
             }
         });
+
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
@@ -144,13 +146,25 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.updatePreviewSquare();
         } else {
             this.updatePreviewRectangle();
-            this.renderer.setAttribute(this.drawRectangle, 'x', this.previewRectangle.x.baseVal.valueAsString);
-            this.renderer.setAttribute(this.drawRectangle, 'y', this.previewRectangle.y.baseVal.valueAsString);
-            this.renderer.setAttribute(this.drawRectangle, 'width', this.previewRectangle.width.baseVal.valueAsString);
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.previewRectangle.x.baseVal.value + this.strokeWidth / 2).toString()
+            );
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.previewRectangle.y.baseVal.value + this.strokeWidth / 2).toString()
+            );
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'width',
+                (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString()
+            );
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'height',
-                this.previewRectangle.height.baseVal.valueAsString,
+                (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString()
             );
         }
         this.renderer.setAttribute(this.drawRectangle, 'fill', this.fillColor.toString());
@@ -169,16 +183,12 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseX - minLen).toString(),
+                (this.initialMouseX - minLen + this.strokeWidth / 2).toString()
             );
-            this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
+            this.renderer.setAttribute(this.drawRectangle, 'width', (minLen - this.strokeWidth).toString());
         } else {
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'x',
-                (this.initialMouseX).toString(),
-            );
-            this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
+            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX + this.strokeWidth / 2).toString());
+            this.renderer.setAttribute(this.drawRectangle, 'width', (minLen - this.strokeWidth).toString());
         }
 
         // adjust y
@@ -187,35 +197,31 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseY - minLen).toString(),
+                (this.initialMouseY - minLen + this.strokeWidth / 2).toString()
             );
-            this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
+            this.renderer.setAttribute(this.drawRectangle, 'height', (minLen - this.strokeWidth).toString());
         } else {
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'y',
-                (this.initialMouseY).toString(),
-            );
-            this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
+            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY + this.strokeWidth / 2).toString());
+            this.renderer.setAttribute(this.drawRectangle, 'height', (minLen - this.strokeWidth).toString());
         }
     }
 
-    updateTraceType(traceType:string){
-        switch (traceType){
-        case TraceType.Outline:{
-            this.fillColor ='#ffffff00';
-            this.strokeColor ='black';
-            break;
+    updateTraceType(traceType: string) {
+        switch (traceType) {
+            case TraceType.Outline: {
+                this.fillColor = '#ffffff00';
+                this.strokeColor = 'black';
+                break;
             }
-        case TraceType.Full:{
-            this.fillColor ='Green';
-            this.strokeColor ='#ffffff00';
-            break;
+            case TraceType.Full: {
+                this.fillColor = 'Green';
+                this.strokeColor = '#ffffff00';
+                break;
+            }
+            case TraceType.Both: {
+                this.fillColor = 'Green';
+                this.strokeColor = 'black';
+            }
         }
-        case TraceType.Both:{
-            this.fillColor ='Green';
-            this.strokeColor ='black';
-        }
-        }
-    }   
+    }
 }
