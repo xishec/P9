@@ -7,22 +7,22 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { ToolName } from '../../constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolSelectorService {
-    private toolName: BehaviorSubject<string> = new BehaviorSubject('');
+    private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
 
-    currentToolName: Observable<string> = this.toolName.asObservable();
+    currentToolName: Observable<ToolName> = this.toolName.asObservable();
 
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
     currentTool: AbstractToolService | undefined;
 
-    constructor(private drawingModalWindowService: DrawingModalWindowService) {
-    }
+    constructor(private drawingModalWindowService: DrawingModalWindowService) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -44,28 +44,29 @@ export class ToolSelectorService {
 
     changeTool(tooltipName: string): void {
         switch (tooltipName) {
-            case 'Nouveau dessin':
+            case ToolName.NewDrawing:
                 this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
                 break;
-            case 'Carré':
+            case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case 'Crayon':
+            case ToolName.Pencil:
                 this.currentTool = this.pencilTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case 'Pinceau':
+            case ToolName.Brush:
                 this.currentTool = this.brushTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             default:
                 this.currentTool = undefined;
+                this.changeCurrentToolName(ToolName.Selection);
                 break;
         }
     }
 
-    changeCurrentToolName(toolName: string): void {
+    changeCurrentToolName(toolName: ToolName): void {
         this.toolName.next(toolName);
     }
 }

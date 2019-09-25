@@ -10,7 +10,7 @@
                 placeholder="Hex"
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
-                [min]="MIN_THICKNESS"
+                [min]="thickness.Min"
                 value="{{ rectangleAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -19,11 +19,21 @@
                     type="number"
                     formControlName="thickness"
                     (change)="onThicknessChange()"
-                    [min]="MIN_THICKNESS"
-                    [max]="MAX_THICKNESS"
+                    [min]="thickness.Min"
+                    [max]="thickness.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ MIN_THICKNESS }} et {{ MAX_THICKNESS }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error>
                 <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+        <div id="attribute">
+            <label for="traceType">Type de tracé</label>
+            <mat-form-field>
+                <mat-select formControlName="traceType" (selectionChange)="onTraceTypeChange()">
+                    <mat-option value="Contour">Contour</mat-option>
+                    <mat-option value="Plein">Plein</mat-option>
+                    <mat-option value="Plein avec contour">Plein avec contour</mat-option>
+                </mat-select>
             </mat-form-field>
         </div>
     </form>

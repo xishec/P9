@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Keys, Mouse, SVG_NS } from '../../constants';
+import { Keys, Mouse, SVG_NS, TraceType } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -28,6 +28,9 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.strokeWidth = thickness;
+        });
+        this.attributesManagerService.currentTraceType.subscribe((traceType) =>{
+            this.updateTraceType(traceType);
         });
     }
 
@@ -196,4 +199,23 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
         }
     }
+
+    updateTraceType(traceType:string){
+        switch (traceType){
+        case TraceType.Outline:{
+            this.fillColor ='#ffffff00';
+            this.strokeColor ='black';
+            break;
+            }
+        case TraceType.Full:{
+            this.fillColor ='Green';
+            this.strokeColor ='#ffffff00';
+            break;
+        }
+        case TraceType.Both:{
+            this.fillColor ='Green';
+            this.strokeColor ='black';
+        }
+        }
+    }   
 }

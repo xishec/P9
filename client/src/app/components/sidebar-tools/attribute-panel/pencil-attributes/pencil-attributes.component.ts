@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
+import { Thickness, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -14,17 +14,16 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
     providers: [AttributesManagerService],
 })
 export class PencilAttributesComponent implements OnInit, AfterViewInit {
-    toolName = 'Crayon';
+    toolName = ToolName.Pencil;
     pencilAttributesForm: FormGroup;
     pencilToolService: PencilToolService;
 
-    readonly MIN_THICKNESS: number = MIN_THICKNESS;
-    readonly MAX_THICKNESS: number = MAX_THICKNESS;
+    readonly Thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService,
+        private toolSelectorService: ToolSelectorService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -42,8 +41,8 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.pencilAttributesForm = this.formBuilder.group({
             thickness: [
-                DEFAULT_THICKNESS,
-                [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
         });
     }
@@ -53,8 +52,8 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
         this.onThicknessChange();
     }
     onThicknessChange(): void {
-        const thickness = this.pencilAttributesForm.value.thickness;
-        if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
+        const thickness: number = this.pencilAttributesForm.value.thickness;
+        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }

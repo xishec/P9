@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
+import { ToolName } from '../../../services/constants';
 
 @Component({
     selector: 'app-attribute-panel',
@@ -8,7 +9,8 @@ import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent implements OnInit {
-    toolName = '';
+    readonly ToolName = ToolName;
+    toolName: ToolName;
 
     constructor(private toolSelectorService: ToolSelectorService) {}
 
