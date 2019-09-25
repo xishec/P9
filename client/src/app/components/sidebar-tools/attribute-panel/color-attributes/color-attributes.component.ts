@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Color } from '../../../../../classes/Color';
-import { ColorType } from 'src/app/services/constants';
+import { ColorType, COLORS } from 'src/app/services/constants';
+import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 @Component({
     selector: 'app-color-attributes',
@@ -10,13 +11,19 @@ import { ColorType } from 'src/app/services/constants';
 })
 export class ColorAttributesComponent implements OnInit {
     selectedColor: ColorType = ColorType.primaryColor;
-    primaryColor: Color = new Color();
-    secondaryColor: Color = new Color();
     showColorPalette = false;
 
-    constructor() {}
+    backgroundColor: Color = COLORS[0];
+    primaryColor: Color = COLORS[1];
+    secondaryColor: Color = COLORS[2];
 
-    ngOnInit() {}
+    constructor(private colorToolService: ColorToolService) {}
+
+    ngOnInit() {
+        this.backgroundColor = this.colorToolService.backgroundColor;
+        this.primaryColor = this.colorToolService.primaryColor;
+        this.secondaryColor = this.colorToolService.secondaryColor;
+    }
 
     onClickPrimaryColor(): void {
         this.selectedColor = ColorType.primaryColor;
@@ -28,12 +35,12 @@ export class ColorAttributesComponent implements OnInit {
 
     getBackgroundColorIcon() {
         return {
-            backgroundColor: '#' + this.secondaryColor.hex,
+            backgroundColor: '#' + this.backgroundColor.hex,
         };
     }
     getPrimaryColorIcon() {
         return {
-            backgroundColor: '#' + this.secondaryColor.hex,
+            backgroundColor: '#' + this.primaryColor.hex,
         };
     }
     getSecondaryColorIcon() {

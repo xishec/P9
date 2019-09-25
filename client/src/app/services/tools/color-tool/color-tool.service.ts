@@ -10,8 +10,10 @@ import { COLORS, ColorType } from '../../../services/constants';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
-    primaryColor: Color = new Color();
-    secondaryColor: Color = new Color('000000');
+    backgroundColor:Color = COLORS[0]
+    primaryColor: Color = COLORS[1];
+    secondaryColor: Color = COLORS[2];
+
     colorQueue: Color[] = [];
     colorQueueBSubject = new BehaviorSubject(this.colorQueue);
 
