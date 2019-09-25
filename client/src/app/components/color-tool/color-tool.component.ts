@@ -95,20 +95,9 @@ export class ColorToolComponent implements OnInit {
         this.setRGBFromHex();
     }
 
-    //     // GOOD
-    // onUserColorRGBInput() {
-    //     const newHex = this.rgbToHex();
-    //     if (this.primaryColorOn) {
-    //         this.primaryColor = { hex: newHex };
-    //         this.onChangeColor(this.primaryColor);
-    //     } else {
-    //         this.secondaryColor = { hex: newHex };
-    //         this.onChangeColor(this.secondaryColor);
-    //     }
-    //     this.setHex();
-    // }
-
-        // GOOD
+    onUserColorRGBInput(): void {
+        const newColorinHex = this.translateRGBToHex();
+        this.changeColor(newColorinHex);
     setHex() {
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.hex.setValue(this.primaryColor.hex);
@@ -118,10 +107,6 @@ export class ColorToolComponent implements OnInit {
     }
 
     }
-
-    // getColorIcon(color: Color): ColorButtonStyle {
-    //     return { backgroundColor: '#' + color.hex };
-    // }
 
     onClickPrimaryColorStyle() {
         console.log("Color ", this.selectedColor);
@@ -149,13 +134,6 @@ export class ColorToolComponent implements OnInit {
             backgroundColor: '#' + this.secondaryColor.hex,
         };
     }
-
-    //     return {
-    //         backgroundColor: '#' + this.secondaryColor.hex,
-    //         opacity: this.lastSecondaryOpacity,
-    //         border: 'solid 0px',
-    //     };
-    // }
 
     onClickPrimaryColor() {
         this.selectedColor = ColorType.primaryColor;
