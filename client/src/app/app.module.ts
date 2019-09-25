@@ -28,6 +28,7 @@ import { WelcomeModalWindowService } from './services/welcome-modal-window/welco
 // ************************************************
 
 import { AttributePanelComponent } from '@attribute-panel/attribute-panel.component';
+import { BrushAttributesComponent } from '@attribute-panel/brush-attributes/brush-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
@@ -35,7 +36,6 @@ import { DrawingModalWindowComponent } from './components/drawing-modal-window/d
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { BrushAttributesComponent } from './components/sidebar-tools/attribute-panel/brush-attributes/brush-attributes/brush-attributes.component';
 
 @NgModule({
     declarations: [
