@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { ColorToolComponent } from '../../../components/color-tool/color-tool.component';
-import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { ColorToolComponent } from '../../components/color-tool/color-tool.component';
+import { COLOR_SELECTION_SHIFT } from '../../services/constants';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
 @Component({
     selector: 'app-color-picker',
@@ -24,7 +24,7 @@ export class ColorPickerComponent implements OnInit {
         private colorToolComponent: ColorToolComponent,
     ) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         const img = new Image();
         img.src = '../../../assets/color-wheel.png';
 
@@ -83,5 +83,10 @@ export class ColorPickerComponent implements OnInit {
             (event.x - COLOR_SELECTION_SHIFT).toString() + 'px',
         );
         this.renderer.setStyle(this.currentColor.nativeElement, 'background-color', '#' + newHex);
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(): void {
+        this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'none');
     }
 }

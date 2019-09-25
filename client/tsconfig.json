@@ -2,6 +2,9 @@
     "compileOnSave": false,
     "compilerOptions": {
         "baseUrl": "./",
+        "paths": {
+            "@attribute-panel/*": ["src/app/components/sidebar-tools/attribute-panel/*"]
+        },
         "outDir": "./dist/out-tsc",
         "sourceMap": true,
         "declaration": false,

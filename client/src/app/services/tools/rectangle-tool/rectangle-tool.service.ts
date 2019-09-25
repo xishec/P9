@@ -1,18 +1,20 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Keys, Mouse, SVG_NS } from '../../constants';
+import { Keys, Mouse, SVG_NS, TraceType } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RectangleToolService extends AbstractShapeToolService {
-    private drawRectangle = this.renderer.createElement('rect', SVG_NS);
+    private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     private fillColor = 'green';
     private strokeColor = 'black';
     private strokeWidth = 1;
     private isSquarePreview = false;
+    private attributesManagerService: AttributesManagerService;
 
     constructor(
         private drawStack: DrawStackService,
@@ -22,9 +24,19 @@ export class RectangleToolService extends AbstractShapeToolService {
         super(renderer);
     }
 
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+            this.strokeWidth = thickness;
+        });
+        this.attributesManagerService.currentTraceType.subscribe((traceType) =>{
+            this.updateTraceType(traceType);
+        });
+    }
+
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.offsetX;
-        this.currentMouseY = event.offsetY;
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updatePreviewRectangle();
@@ -51,7 +63,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
+        if (button === Mouse.LeftButton && this.isIn) {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
@@ -106,8 +118,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     createSVG(): void {
-        const el = this.renderer.createElement('svg', SVG_NS);
-        const drawRectangle = this.renderer.createElement('rect', SVG_NS);
+        const el: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
@@ -115,6 +127,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
         this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
+        drawRectangle.addEventListener('mousedown', (event) => {
+            if (event.button === Mouse.LeftButton) {
+                this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
+            } else if (event.button === Mouse.RightButton) {
+                this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
+            }
+        });
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
@@ -128,11 +147,15 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(this.drawRectangle, 'x', this.previewRectangle.x.baseVal.valueAsString);
             this.renderer.setAttribute(this.drawRectangle, 'y', this.previewRectangle.y.baseVal.valueAsString);
             this.renderer.setAttribute(this.drawRectangle, 'width', this.previewRectangle.width.baseVal.valueAsString);
-            this.renderer.setAttribute(this.drawRectangle, 'height', this.previewRectangle.height.baseVal.valueAsString);
-            this.renderer.setAttribute(this.drawRectangle, 'fill', this.fillColor.toString());
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', this.strokeColor.toString());
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'height',
+                this.previewRectangle.height.baseVal.valueAsString,
+            );
         }
+        this.renderer.setAttribute(this.drawRectangle, 'fill', this.fillColor.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'stroke', this.strokeColor.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
     }
 
     updatePreviewSquare(): void {
@@ -143,21 +166,56 @@ export class RectangleToolService extends AbstractShapeToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX - deltaX + deltaX / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.initialMouseX - minLen).toString(),
+            );
             this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX + deltaX / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.initialMouseX).toString(),
+            );
             this.renderer.setAttribute(this.drawRectangle, 'width', minLen.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY - deltaY + deltaY / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.initialMouseY - minLen).toString(),
+            );
             this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY + deltaY / 2 - minLen / 2).toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.initialMouseY).toString(),
+            );
             this.renderer.setAttribute(this.drawRectangle, 'height', minLen.toString());
         }
     }
+
+    updateTraceType(traceType:string){
+        switch (traceType){
+        case TraceType.Outline:{
+            this.fillColor ='#ffffff00';
+            this.strokeColor ='black';
+            break;
+            }
+        case TraceType.Full:{
+            this.fillColor ='Green';
+            this.strokeColor ='#ffffff00';
+            break;
+        }
+        case TraceType.Both:{
+            this.fillColor ='Green';
+            this.strokeColor ='black';
+        }
+        }
+    }   
 }

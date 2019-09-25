@@ -1,29 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FILES_BUTTON_INFO, TOOLS_BUTTON_INFO } from '../../services/constants';
-import { ToolsService } from '../../services/tools/tools.service';
+import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
+import { ToolName } from '../../services/constants';
 
 @Component({
     selector: 'app-sidebar-tools',
     templateUrl: './sidebar-tools.component.html',
     styleUrls: ['./sidebar-tools.component.scss'],
 })
-export class SidebarToolsComponent {
-    toolsService: ToolsService;
-
-    toolIds: number[] = [];
-    currentToolId = 0;
+export class SidebarToolsComponent implements OnInit {
+    toolSelectorService: ToolSelectorService;
 
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
-    constructor(toolsService: ToolsService) {
-        this.toolsService = toolsService;
-        this.toolIds = toolsService.getToolIds();
-        this.currentToolId = toolsService.getCurrentToolId();
+    constructor(toolSelectorService: ToolSelectorService) {
+        this.toolSelectorService = toolSelectorService;
     }
 
-    onChangeTool(toolId: number) {
-        this.toolsService.changeTool(toolId);
+    ngOnInit(): void {
+        this.toolSelectorService.changeTool(ToolName.Selection);
+    }
+
+    onChangeTool(tooltipName: string): void {
+        this.toolSelectorService.changeTool(tooltipName);
+    }
+
+    onSecondaryClick(): void {
+        console.log('onSecondaryClick');
+    }
+
+    onPrimaryClick(): void {
+        console.log('onPrimaryClick');
     }
 }
