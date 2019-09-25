@@ -12,7 +12,7 @@ export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 0;
     private currentColor = 'black';
-    private currentPattern = 1;
+    private currentStyle = 1;
     private svgPath = this.renderer.createElement('path', SVG_NS);
     private svgWrap = this.renderer.createElement('svg', SVG_NS);
     private attributesManagerService: AttributesManagerService;
@@ -32,43 +32,36 @@ export class BrushToolService extends TracingToolService {
             this.currentWidth = thickness;
         });
         this.attributesManagerService.currentStyle.subscribe((style) => {
-            this.currentPattern = style;
+            this.currentStyle = style;
         });
     }
 
     onMouseDown(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton) {
-            console.log(`on brush down, pat id = ${this.currentPattern}`);
             super.onMouseDown(e);
             this.createSVGWrapper();
-            // this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            // ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-            // this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            // e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
-            this.createSVGCircle(e.offsetX, e.offsetY);
-            // this.svgPreviewCircle = this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            // e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
-            this.svgPreviewCircle = this.createSVGCircle(e.offsetX, e.offsetY);
+            this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
+            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
+            this.svgPreviewCircle = this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            // this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            // ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.currentPath += ` L${e.offsetX} ${e.offsetY}`;
+            this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
-            // this.updatePreviewCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            // e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
-            this.updatePreviewCircle(e.offsetX, e.offsetY);
+            this.updatePreviewCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
         }
     }
 
     onMouseUp(e: MouseEvent): void {
         if (this.isDrawing && e.button === Mouse.LeftButton) {
-            console.log('finished Drawing');
             super.onMouseUp(e);
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
@@ -98,8 +91,7 @@ export class BrushToolService extends TracingToolService {
     createSVGWrapper(): void {
         const wrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
         this.svgWrap = wrap;
-        console.log(`in createSvgWrapper, pat id : ${this.currentPattern}`);
-        const filter = this.createFilter(this.currentPattern);
+        const filter = this.createFilter(this.currentStyle);
         this.renderer.appendChild(this.svgWrap, filter);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
@@ -107,7 +99,7 @@ export class BrushToolService extends TracingToolService {
     createFilter(patternId: number): SVGFilterElement {
         const filter = this.renderer.createElement('filter', SVG_NS);
 
-        this.renderer.setAttribute(filter, 'id', this.currentPattern.toString());
+        this.renderer.setAttribute(filter, 'id', this.currentStyle.toString());
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
         this.renderer.setAttribute(filter, 'height', '100px');
         this.renderer.setAttribute(filter, 'width', '100px');
@@ -165,7 +157,7 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
         this.renderer.setAttribute(circle, 'fill', this.currentColor);
         this.renderer.setAttribute(circle, 'stroke', this.currentColor);
-        this.renderer.setAttribute(circle, 'filter', `url(#${this.currentPattern.toString()})`);
+        this.renderer.setAttribute(circle, 'filter', `url(#${this.currentStyle.toString()})`);
         this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
@@ -178,7 +170,7 @@ export class BrushToolService extends TracingToolService {
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
 
-        this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentPattern})`);
+        this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentStyle})`);
         this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
 
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());

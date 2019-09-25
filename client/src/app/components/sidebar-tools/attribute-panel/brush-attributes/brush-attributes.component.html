@@ -27,11 +27,11 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>
-                    Brush Style MY BOI
+                    Style de pinceau
                 </mat-label>
                 <mat-select
                     formControlName="style"
-                    (selectionChange)="change(style)"
+                    (selectionChange)="change($event.value)"
                 >
                     <mat-option *ngFor="let style of styles" [value]="style">
                         {{style}}
