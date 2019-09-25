@@ -55,7 +55,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
 
   onThicknessChange(): void {
     const thickness = this.brushAttributesForm.value.thickness;
-    if(thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
+    if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
       this.attributesManagerService.changeThickness(thickness);
     }
   }
