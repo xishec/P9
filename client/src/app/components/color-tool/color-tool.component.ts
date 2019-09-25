@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from '../../../classes/Color';
 import { ColorType } from '../../services/constants';
