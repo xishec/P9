@@ -17,7 +17,7 @@ export class ColorToolComponent implements OnInit {
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
 
-    lastTenColorsQueue: Color[] = [];
+    // lastTenColorsQueue: Color[] = [];
 
     constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
@@ -27,11 +27,12 @@ export class ColorToolComponent implements OnInit {
     ngOnInit(): void {
         this.primaryColor = this.colorToolService.primaryColor;
         this.secondaryColor = this.colorToolService.secondaryColor;
+        this.setHexValues();
     }
 
     initializeForm() {
         this.myForm = this.formBuilder.group({
-            hex: ['000000', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
+            hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
             R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
