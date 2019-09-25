@@ -1,0 +1,7 @@
+<button
+    class="color"
+    type="button"
+    *ngFor="let color of colorQueue"
+    [ngStyle]="getColorIcon(color)"
+    (click)="onClickColorButton(color)"
+></button>
