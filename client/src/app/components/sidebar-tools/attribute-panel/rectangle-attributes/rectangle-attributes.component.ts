@@ -44,6 +44,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
                 DEFAULT_THICKNESS,
                 [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
             ],
+            traceType:['Contour'],
         });
     }
 
@@ -51,10 +52,16 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         this.myForm.controls.thickness.setValue(event.value);
         this.onThicknessChange();
     }
+
     onThicknessChange(): void {
-        const thickness = this.myForm.value.thickness;
+        const thickness:number = this.myForm.value.thickness;
         if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
             this.attributesManagerService.changeThickness(thickness);
         }
+    }
+    
+    onTraceTypeChange():void{
+        const tracetype:string = this.myForm.value.traceType;
+        this.attributesManagerService.changeTraceType(tracetype);
     }
 }

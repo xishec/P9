@@ -61,6 +61,11 @@ const MIN_THICKNESS = 1;
 const DEFAULT_THICKNESS = 5;
 const MAX_THICKNESS = 100;
 
+enum TraceType{
+    Outline = "Contour",
+    Full = "Plein",
+    Both = "Plein avec contour",
+}
 export {
     COLOR_SELECTION_SHIFT,
     SIDEBAR_WIDTH,
@@ -74,4 +79,5 @@ export {
     MIN_THICKNESS,
     DEFAULT_THICKNESS,
     MAX_THICKNESS,
+    TraceType,
 };
