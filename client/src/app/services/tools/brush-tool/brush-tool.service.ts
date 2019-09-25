@@ -89,7 +89,7 @@ export class BrushToolService extends TracingToolService {
     createSVGWrapper(): void {
         const wrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
         this.svgWrap = wrap;
-        const filter = this.createFilter(this.currentStyle);
+        const filter: SVGFilterElement = this.createFilter(this.currentStyle);
         this.renderer.appendChild(this.svgWrap, filter);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
