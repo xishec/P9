@@ -17,8 +17,6 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
 
-    readonly Thickness = Thickness;
-
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,

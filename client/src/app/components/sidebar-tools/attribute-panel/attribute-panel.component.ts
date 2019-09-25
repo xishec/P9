@@ -9,7 +9,7 @@ import { ToolName } from '../../../services/constants';
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent implements OnInit {
-    ToolName = ToolName;
+    readonly ToolName = ToolName;
     toolName = '';
 
     constructor(private toolSelectorService: ToolSelectorService) {}

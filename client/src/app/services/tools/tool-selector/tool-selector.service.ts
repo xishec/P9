@@ -6,7 +6,6 @@ import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-mo
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
-
 import { ToolName } from '../../constants';
 
 @Injectable({
