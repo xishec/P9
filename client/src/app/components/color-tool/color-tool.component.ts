@@ -117,17 +117,6 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-        // GOOD
-    setRGBFromHex() {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
-        }
     }
 
     // getColorIcon(color: Color): ColorButtonStyle {
@@ -178,15 +167,19 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
-// }
-
-// interface ColorIconStyle {
-//     backgroundColor: string;
-//     opacity: number;
-//     border: string;
-// }
-
-// interface ColorButtonStyle {
-//     backgroundColor: string;
-// }
+    translateRGBToHex(): string {
+        let r = Number(this.myForm.value.R).toString(16);
+        let g = Number(this.myForm.value.G).toString(16);
+        let b = Number(this.myForm.value.B).toString(16);
+        if (r.length === 1) {
+            r = '0' + r;
+        }
+        if (g.length === 1) {
+            g = '0' + g;
+        }
+        if (b.length === 1) {
+            b = '0' + b;
+        }
+        return r + g + b;
+    }
 }
