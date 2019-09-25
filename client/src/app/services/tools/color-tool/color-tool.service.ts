@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs';
 import { Color } from '../../../../classes/Color';
 import { COLORS, ColorType } from '../../../services/constants';
 
@@ -12,6 +13,7 @@ export class ColorToolService {
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color('000000');
     colorQueue: Color[] = [];
+    colorQueueBSubject = new BehaviorSubject(this.colorQueue);
 
     changeColor(color: Color, colorType: ColorType) {
         if (colorType === ColorType.primaryColor) {
@@ -28,5 +30,6 @@ export class ColorToolService {
             this.colorQueue.shift();
             this.colorQueue.push(color);
         }
+        this.colorQueueBSubject.next(this.colorQueue);
     }
 }

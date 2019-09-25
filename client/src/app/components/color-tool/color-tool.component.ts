@@ -148,4 +148,8 @@ export class ColorToolComponent implements OnInit {
         }
         return r + g + b;
     }
+
+    onClickColorQueueButton(color: Color) {
+        this.changeColor(color.hex);
+    }
 }
