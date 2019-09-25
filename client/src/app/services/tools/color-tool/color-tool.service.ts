@@ -14,6 +14,7 @@ export class ColorToolService {
     primaryColor: Color = COLORS[1];
     secondaryColor: Color = COLORS[2];
     selectedColor: ColorType | undefined = undefined;
+    showColorPalette: false;
 
     currentBackgroundColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
     currentPrimaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[1]);
@@ -21,6 +22,7 @@ export class ColorToolService {
     currentSelectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
         undefined,
     );
+    currentShowColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     colorQueue: Color[] = [];
     colorQueueBSubject = new BehaviorSubject(this.colorQueue);
@@ -43,16 +45,29 @@ export class ColorToolService {
         this.colorQueueBSubject.next(this.colorQueue);
     }
 
-    changeCurrentBackgroundColor(backgroundColor: Color) {
-        this.currentBackgroundColor.next(backgroundColor);
-    }
-    changeCurrentPrimaryColor(primaryColor: Color) {
-        this.currentPrimaryColor.next(primaryColor);
-    }
-    changeCurrentSecondaryColor(secondaryColor: Color) {
-        this.currentSecondaryColor.next(secondaryColor);
+    changeColorOnFocus(colorOnFocus: Color) {
+        switch (this.currentSelectedColor.value) {
+            case ColorType.backgroundColor:
+                this.currentBackgroundColor.next(colorOnFocus);
+                this.changeCurrentShowColorPalette(false);
+                break;
+            case ColorType.primaryColor:
+                this.currentPrimaryColor.next(colorOnFocus);
+                this.changeCurrentShowColorPalette(false);
+                break;
+            case ColorType.secondaryColor:
+                this.currentSecondaryColor.next(colorOnFocus);
+                this.changeCurrentShowColorPalette(false);
+                break;
+            default:
+                console.warn('color selection undefined');
+                break;
+        }
     }
     changeSelectedColor(selectedColor: ColorType | undefined) {
         this.currentSelectedColor.next(selectedColor);
+    }
+    changeCurrentShowColorPalette(showColorPalette: boolean) {
+        this.currentShowColorPalette.next(showColorPalette);
     }
 }

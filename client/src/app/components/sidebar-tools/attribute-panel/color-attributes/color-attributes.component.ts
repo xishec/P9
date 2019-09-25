@@ -14,16 +14,18 @@ interface ColorStyle {
     styleUrls: ['./color-attributes.component.scss'],
 })
 export class ColorAttributesComponent implements OnInit {
-    selectedColor: ColorType | undefined = undefined;
     showColorPalette = false;
-
     backgroundColor: Color = COLORS[0];
     primaryColor: Color = COLORS[1];
     secondaryColor: Color = COLORS[2];
+    selectedColor: ColorType | undefined = undefined;
 
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit() {
+        this.colorToolService.currentShowColorPalette.subscribe((showColorPalette: boolean) => {
+            this.showColorPalette = showColorPalette;
+        });
         this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: Color) => {
             this.backgroundColor = backgroundColor;
         });
@@ -40,15 +42,15 @@ export class ColorAttributesComponent implements OnInit {
 
     onClickBackgroundColor(): void {
         this.colorToolService.changeSelectedColor(ColorType.backgroundColor);
-        this.showColorPalette = true;
+        this.colorToolService.changeCurrentShowColorPalette(true);
     }
     onClickPrimaryColor(): void {
         this.colorToolService.changeSelectedColor(ColorType.primaryColor);
-        this.showColorPalette = true;
+        this.colorToolService.changeCurrentShowColorPalette(true);
     }
     onClickSecondaryColor(): void {
         this.colorToolService.changeSelectedColor(ColorType.secondaryColor);
-        this.showColorPalette = true;
+        this.colorToolService.changeCurrentShowColorPalette(true);
     }
 
     getBackgroundColorIcon(): ColorStyle {
@@ -86,6 +88,6 @@ export class ColorAttributesComponent implements OnInit {
     }
 
     switchColors() {
-        this.showColorPalette = false;
+        this.colorToolService.changeCurrentShowColorPalette(false);
     }
 }

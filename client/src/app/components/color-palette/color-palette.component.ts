@@ -48,6 +48,7 @@ export class ColorPaletteComponent implements OnInit {
         this.setColor(newColor);
         this.setColorNumericValues();
         this.colorToolService.addColorToQueue(newColor);
+        this.colorToolService.changeColorOnFocus(newColor);
     }
 
     setColor(color: Color): void {
@@ -105,42 +106,6 @@ export class ColorPaletteComponent implements OnInit {
     onUserColorRGBInput(): void {
         const newColorinHex = this.translateRGBToHex();
         this.changeColor(newColorinHex);
-    }
-
-    onClickPrimaryColorStyle(): ColorStyle {
-        if (this.selectedColor === ColorType.primaryColor) {
-            return {
-                backgroundColor: '#' + this.primaryColor.hex,
-                border: 'solid 1px black',
-            };
-        }
-
-        return {
-            backgroundColor: '#' + this.primaryColor.hex,
-        };
-    }
-
-    onClickSecondaryColorStyle(): ColorStyle {
-        if (this.selectedColor === ColorType.secondaryColor) {
-            return {
-                backgroundColor: '#' + this.secondaryColor.hex,
-                border: 'solid 1px black',
-            };
-        }
-
-        return {
-            backgroundColor: '#' + this.secondaryColor.hex,
-        };
-    }
-
-    onClickPrimaryColor(): void {
-        this.selectedColor = ColorType.primaryColor;
-        this.setColorNumericValues();
-    }
-
-    onClickSecondaryColor(): void {
-        this.selectedColor = ColorType.secondaryColor;
-        this.setColorNumericValues();
     }
 
     translateRGBToHex(): string {
