@@ -10,7 +10,7 @@ import { ToolName } from '../../../services/constants';
 })
 export class AttributePanelComponent implements OnInit {
     readonly ToolName = ToolName;
-    toolName = '';
+    toolName: ToolName;
 
     constructor(private toolSelectorService: ToolSelectorService) {}
 

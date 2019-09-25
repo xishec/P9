@@ -16,11 +16,12 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Rectangle;
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
+    readonly thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService
+        private toolSelectorService: ToolSelectorService,
     ) {
         this.formBuilder = formBuilder;
     }

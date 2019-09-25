@@ -12,9 +12,9 @@ import { ToolName } from '../../constants';
     providedIn: 'root',
 })
 export class ToolSelectorService {
-    private toolName: BehaviorSubject<string> = new BehaviorSubject('');
+    private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
 
-    currentToolName: Observable<string> = this.toolName.asObservable();
+    currentToolName: Observable<ToolName> = this.toolName.asObservable();
 
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
@@ -50,11 +50,12 @@ export class ToolSelectorService {
                 break;
             default:
                 this.currentTool = undefined;
+                this.changeCurrentToolName(ToolName.Selection);
                 break;
         }
     }
 
-    changeCurrentToolName(toolName: string): void {
+    changeCurrentToolName(toolName: ToolName): void {
         this.toolName.next(toolName);
     }
 }

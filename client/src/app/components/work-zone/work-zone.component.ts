@@ -63,7 +63,6 @@ export class WorkZoneComponent implements OnInit {
     }
 
     @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-        console.log(this.currentTool);
         if (this.currentTool !== undefined) {
             this.currentTool.onMouseDown(event);
         }
