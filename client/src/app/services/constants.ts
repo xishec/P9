@@ -78,9 +78,11 @@ enum Mouse {
     RightButton = 2,
 }
 
-const MIN_THICKNESS = 1;
-const DEFAULT_THICKNESS = 5;
-const MAX_THICKNESS = 100;
+enum Thickness {
+    Min = 1,
+    Default = 5,
+    Max = 100,
+}
 
 enum TraceType {
     Outline = 'Contour',
@@ -98,9 +100,7 @@ export {
     SVG_NS,
     Keys,
     Mouse,
-    MIN_THICKNESS,
-    DEFAULT_THICKNESS,
-    MAX_THICKNESS,
+    Thickness,
     TraceType,
     ToolName,
 };

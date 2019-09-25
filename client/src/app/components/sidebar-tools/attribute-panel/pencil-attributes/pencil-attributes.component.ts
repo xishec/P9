@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS, ToolName } from '../../../../services/constants';
+import { Thickness, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -18,8 +18,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     pencilAttributesForm: FormGroup;
     pencilToolService: PencilToolService;
 
-    readonly MIN_THICKNESS: number = MIN_THICKNESS;
-    readonly MAX_THICKNESS: number = MAX_THICKNESS;
+    readonly Thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -42,8 +41,8 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.pencilAttributesForm = this.formBuilder.group({
             thickness: [
-                DEFAULT_THICKNESS,
-                [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
         });
     }
@@ -54,7 +53,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
     onThicknessChange(): void {
         const thickness: number = this.pencilAttributesForm.value.thickness;
-        if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
+        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
