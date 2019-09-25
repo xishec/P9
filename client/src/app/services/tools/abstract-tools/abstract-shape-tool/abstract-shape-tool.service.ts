@@ -56,5 +56,6 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewRectangle, 'fill', 'white');
         this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
         this.renderer.setAttribute(this.previewRectangle, 'stroke', 'black');
+        this.renderer.setAttribute(this.previewRectangle, 'stroke-dasharray', '5 5');
     }
 }
