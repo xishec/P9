@@ -75,6 +75,7 @@ enum Keys {
 }
 
 enum ColorType {
+    backgroundColor = 'background-color',
     primaryColor = 'primary-color',
     secondaryColor = 'secondary-color',
 }
