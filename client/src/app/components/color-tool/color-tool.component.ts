@@ -67,7 +67,7 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-     // switchColors() {
+    // switchColors() {
     //     let temporaryColor: Color = new Color();
     //     temporaryColor = this.primaryColor;
     //     this.primaryColor = this.secondaryColor;
@@ -100,18 +100,18 @@ export class ColorToolComponent implements OnInit {
     //     return r + g + b;
     // }
 
-        // GOOD
+    // GOOD
     onClickColorWheel() {
         this.displayColorWheel = !this.displayColorWheel;
     }
 
-        // GOOD
+    // GOOD
     setHexValues() {
         this.setHex();
         this.setRGBFromHex();
     }
 
-        // GOOD
+    // GOOD
     onUserHexInput(): void {
         if (this.selectedColor === ColorType.primaryColor) {
             this.changeColor(this.myForm.value.hex);
@@ -134,7 +134,7 @@ export class ColorToolComponent implements OnInit {
     //     this.setHex();
     // }
 
-        // GOOD
+    // GOOD
     setHex() {
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.hex.setValue(this.primaryColor.hex);
@@ -143,7 +143,7 @@ export class ColorToolComponent implements OnInit {
         }
     }
 
-        // GOOD
+    // GOOD
     setRGBFromHex() {
         if (this.selectedColor === ColorType.primaryColor) {
             this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
@@ -161,7 +161,7 @@ export class ColorToolComponent implements OnInit {
     // }
 
     onClickPrimaryColorStyle() {
-        console.log("Color ", this.selectedColor);
+        console.log('Color ', this.selectedColor);
         if (this.selectedColor === ColorType.primaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor.hex,
@@ -204,15 +204,15 @@ export class ColorToolComponent implements OnInit {
         this.setHexValues();
     }
 
-// }
+    // }
 
-// interface ColorIconStyle {
-//     backgroundColor: string;
-//     opacity: number;
-//     border: string;
-// }
+    // interface ColorIconStyle {
+    //     backgroundColor: string;
+    //     opacity: number;
+    //     border: string;
+    // }
 
-// interface ColorButtonStyle {
-//     backgroundColor: string;
-// }
+    // interface ColorButtonStyle {
+    //     backgroundColor: string;
+    // }
 }

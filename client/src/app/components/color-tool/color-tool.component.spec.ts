@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ColorToolComponent } from './color-tool.component';
 //import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 fdescribe('ColorToolComponent', () => {
     let component: ColorToolComponent;
@@ -11,6 +13,7 @@ fdescribe('ColorToolComponent', () => {
         TestBed.configureTestingModule({
             imports: [ReactiveFormsModule, FormsModule],
             declarations: [ColorToolComponent],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
 
@@ -25,10 +28,12 @@ fdescribe('ColorToolComponent', () => {
     });
 
     let colortool: ColorToolComponent;
-    colortool = new ColorToolComponent(new FormBuilder());
-    it('should change primaryColorOn to true and return true', () => {
-        colortool.primaryColorOn = false;
-        colortool.chosePrimaryColor();
-        expect(colortool.primaryColorOn).toBeTruthy();
+    let colorToolService: ColorToolService = new ColorToolService();
+    let formBuilder: FormBuilder = new FormBuilder();
+    colortool = new ColorToolComponent(formBuilder, colorToolService);
+
+    it('should return true when "clicked" on the color wheel button', () => {
+        colortool.onClickColorWheel();
+        expect(colortool.displayColorWheel).toBeTruthy();
     });
 });
