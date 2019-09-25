@@ -5,22 +5,17 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { Color } from '../../../classes/Color';
 import { ColorType } from '../../services/constants';
 
-interface ColorStyle {
-    backgroundColor: string;
-    border?: string;
-}
 @Component({
     selector: 'app-color-palette',
     templateUrl: './color-palette.component.html',
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements OnInit {
-    myForm: FormGroup;
+    colorPaletteForm: FormGroup;
     formBuilder: FormBuilder;
 
     selectedColor: ColorType = ColorType.primaryColor;
-    primaryColor: Color = new Color();
-    secondaryColor: Color = new Color();
+    currentColor: Color = new Color();
 
     constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
@@ -28,13 +23,19 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.primaryColor = this.colorToolService.primaryColor;
-        this.secondaryColor = this.colorToolService.secondaryColor;
-        this.setHexValues();
+        this.updateWithColorToolService();
+        this.colorToolService.currentSelectedColor.subscribe(() => {
+            this.updateWithColorToolService();
+        });
+    }
+
+    updateWithColorToolService() {
+        this.currentColor = this.colorToolService.getColorOnFocus();
+        this.setColorNumericValues();
     }
 
     initializeForm(): void {
-        this.myForm = this.formBuilder.group({
+        this.colorPaletteForm = this.formBuilder.group({
             hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
             R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
@@ -44,21 +45,9 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     changeColor(colorHex: string): void {
-        const newColor = new Color(colorHex);
-        this.setColor(newColor);
+        this.currentColor.hex = colorHex;
         this.setColorNumericValues();
-        this.colorToolService.addColorToQueue(newColor);
-        this.colorToolService.changeColorOnFocus(newColor);
-    }
-
-    setColor(color: Color): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.colorToolService.changeColor(color, ColorType.primaryColor);
-            this.primaryColor = color;
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.colorToolService.changeColor(color, ColorType.secondaryColor);
-            this.secondaryColor = color;
-        }
+        this.colorToolService.addColorToQueue(this.currentColor);
     }
 
     setColorNumericValues(): void {
@@ -67,40 +56,17 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     setHexValues(): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.myForm.controls.hex.setValue(this.primaryColor.hex);
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.myForm.controls.hex.setValue(this.secondaryColor.hex);
-        }
+        this.colorPaletteForm.controls.hex.setValue(this.currentColor.hex);
     }
 
     setRGBValues(): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
-        }
-    }
-
-    switchColors(): void {
-        let temporaryColor: Color = new Color();
-        temporaryColor = this.primaryColor;
-
-        this.primaryColor = this.secondaryColor;
-        this.colorToolService.changeColor(this.secondaryColor, ColorType.primaryColor);
-
-        this.secondaryColor = temporaryColor;
-        this.colorToolService.changeColor(temporaryColor, ColorType.secondaryColor);
-
-        this.setColorNumericValues();
+        this.colorPaletteForm.controls.R.setValue(parseInt(this.currentColor.hex.slice(0, 2), 16));
+        this.colorPaletteForm.controls.G.setValue(parseInt(this.currentColor.hex.slice(2, 4), 16));
+        this.colorPaletteForm.controls.B.setValue(parseInt(this.currentColor.hex.slice(4, 6), 16));
     }
 
     onUserHexInput(): void {
-        this.changeColor(this.myForm.value.hex);
+        this.changeColor(this.colorPaletteForm.value.hex);
     }
 
     onUserColorRGBInput(): void {
@@ -109,9 +75,9 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     translateRGBToHex(): string {
-        let r = Number(this.myForm.value.R).toString(16);
-        let g = Number(this.myForm.value.G).toString(16);
-        let b = Number(this.myForm.value.B).toString(16);
+        let r = Number(this.colorPaletteForm.value.R).toString(16);
+        let g = Number(this.colorPaletteForm.value.G).toString(16);
+        let b = Number(this.colorPaletteForm.value.B).toString(16);
         if (r.length === 1) {
             r = '0' + r;
         }
@@ -127,4 +93,18 @@ export class ColorPaletteComponent implements OnInit {
     onClickColorQueueButton(color: Color): void {
         this.changeColor(color.hex);
     }
+    onCancel(): void {
+        console.log('onCancel');
+    }
+    onSubmit(): void {
+        console.log('onSubmit');
+        this.colorToolService.changeColorOnFocus(this.currentColor);
+    }
+
+    getUserColorIcon(): IconStyle {
+        return { backgroundColor: '#' + this.currentColor.hex };
+    }
+}
+interface IconStyle {
+    backgroundColor: string;
 }

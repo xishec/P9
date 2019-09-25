@@ -70,4 +70,17 @@ export class ColorToolService {
     changeCurrentShowColorPalette(showColorPalette: boolean) {
         this.currentShowColorPalette.next(showColorPalette);
     }
+
+    getColorOnFocus(): Color {
+        switch (this.currentSelectedColor.value) {
+            case ColorType.backgroundColor:
+                return this.currentBackgroundColor.value;
+            case ColorType.primaryColor:
+                return this.currentPrimaryColor.value;
+            case ColorType.secondaryColor:
+                return this.currentSecondaryColor.value;
+            default:
+                return new Color();
+        }
+    }
 }

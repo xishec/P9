@@ -40,5 +40,5 @@
         </div>
     </div>
 
-    <app-color-palette *ngIf="showColorPalette"></app-color-palette>
+    <app-color-palette [hidden]="!showColorPalette"></app-color-palette>
 </div>

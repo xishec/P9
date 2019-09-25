@@ -1,5 +1,15 @@
-<form [formGroup]="myForm" id="color-palette-form" [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }">
+<form
+    [formGroup]="colorPaletteForm"
+    id="color-palette-form"
+    [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }"
+>
     <div class="formGroup">
+        <div id="userColor">
+            <span> Couleur courrente :</span>
+            <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+            <br />
+        </div>
+
         <app-color-picker></app-color-picker>
 
         <mat-form-field class="medium">
@@ -7,7 +17,7 @@
             <mat-error>Ce code de couleur n'est pas valide!</mat-error>
             <span matPrefix>#</span>
         </mat-form-field>
-
+        <br />
         <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input matInput type="number" placeholder="R:" formControlName="R" />
             <mat-error>R doit être entre 0 et 255!</mat-error>
@@ -28,6 +38,17 @@
         <div id="last-10-colors">
             Les dix dernières couleurs
         </div>
-        <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
+        <!-- <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue> -->
     </div>
+
+    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+    <button
+        class="actionButton"
+        mat-stroked-button
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="colorPaletteForm.invalid"
+    >
+        Choisir
+    </button>
 </form>
