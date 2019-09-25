@@ -42,10 +42,14 @@ export class BrushToolService extends TracingToolService {
             this.createSVGWrapper();
             this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
-            this.svgPreviewCircle = this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
+            this.createSVGCircle(
+                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+            );
+            this.svgPreviewCircle = this.createSVGCircle(
+                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+            );
             this.createSVGPath();
         }
     }
@@ -55,8 +59,10 @@ export class BrushToolService extends TracingToolService {
             this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
-            this.updatePreviewCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
+            this.updatePreviewCircle(
+                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+            );
         }
     }
 
@@ -123,11 +129,11 @@ export class BrushToolService extends TracingToolService {
             this.renderer.setAttribute(displacementMap, 'xChannelSelector', 'R');
             this.renderer.setAttribute(displacementMap, 'yChannelSelector', 'G');
 
-            switch (patternId){
+            switch (patternId) {
                 case 2:
                     this.renderer.setAttribute(turbulence, 'baseFrequency', '0.1 0.9');
                     this.renderer.setAttribute(turbulence, 'numOctaves', '10');
-                    this.renderer.setAttribute(displacementMap, 'scale', '20')
+                    this.renderer.setAttribute(displacementMap, 'scale', '20');
                     break;
                 case 3:
                     this.renderer.setAttribute(turbulence, 'baseFrequency', '0.01 0.57');
@@ -153,7 +159,7 @@ export class BrushToolService extends TracingToolService {
         const circle = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
-        this.renderer.setAttribute(circle, 'r', (this.currentWidth/2).toString());
+        this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
         this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
         this.renderer.setAttribute(circle, 'fill', this.currentColor);
         this.renderer.setAttribute(circle, 'stroke', this.currentColor);

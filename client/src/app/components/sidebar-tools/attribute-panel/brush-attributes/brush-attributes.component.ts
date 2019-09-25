@@ -25,7 +25,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService
+        private toolSelectorService: ToolSelectorService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -47,7 +47,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
                 [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(this.MAX_THICKNESS)],
             ],
             style: [
-              1,
+                1,
             ],
         });
     }
