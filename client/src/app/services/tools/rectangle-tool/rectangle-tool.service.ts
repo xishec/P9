@@ -19,7 +19,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
-        renderer: Renderer2
+        renderer: Renderer2,
     ) {
         super(renderer);
     }
