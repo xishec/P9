@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
-import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from 'src/app/services/constants';
+
+import { BRUSH_STYLES, DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from 'src/app/services/constants';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
@@ -17,7 +17,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     toolName = 'Pinceau';
     brushAttributesForm: FormGroup;
     brushToolService: BrushToolService;
-    styles = [1, 2, 3, 4, 5];
+    styles = BRUSH_STYLES;
 
     readonly MIN_THICKNESS = MIN_THICKNESS;
     readonly MAX_THICKNESS = MAX_THICKNESS;
@@ -58,7 +58,6 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onThicknessChange(): void {
-        console.log('called');
         const thickness = this.brushAttributesForm.value.thickness;
         if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
             this.attributesManagerService.changeThickness(thickness);
