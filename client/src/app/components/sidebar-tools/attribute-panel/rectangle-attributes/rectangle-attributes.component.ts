@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS } from '../../../../services/constants';
+import { DEFAULT_THICKNESS, MAX_THICKNESS, MIN_THICKNESS, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -13,7 +13,7 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
     styleUrls: ['./rectangle-attributes.component.scss'],
 })
 export class RectangleAttributesComponent implements OnInit, AfterViewInit {
-    toolName = 'Carré';
+    toolName = ToolName.Rectangle;
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
 
@@ -23,7 +23,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService,
+        private toolSelectorService: ToolSelectorService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -44,7 +44,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
                 DEFAULT_THICKNESS,
                 [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(MAX_THICKNESS)],
             ],
-            traceType:['Contour'],
+            traceType: ['Contour'],
         });
     }
 
@@ -54,14 +54,14 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onThicknessChange(): void {
-        const thickness:number = this.rectangleAttributesForm.value.thickness;
+        const thickness: number = this.rectangleAttributesForm.value.thickness;
         if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
 
-    onTraceTypeChange():void{
-        const tracetype:string = this.rectangleAttributesForm.value.traceType;
+    onTraceTypeChange(): void {
+        const tracetype: string = this.rectangleAttributesForm.value.traceType;
         this.attributesManagerService.changeTraceType(tracetype);
     }
 }
