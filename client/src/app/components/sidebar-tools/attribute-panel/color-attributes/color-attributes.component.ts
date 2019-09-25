@@ -24,9 +24,15 @@ export class ColorAttributesComponent implements OnInit {
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit() {
-        this.backgroundColor = this.colorToolService.backgroundColor;
-        this.primaryColor = this.colorToolService.primaryColor;
-        this.secondaryColor = this.colorToolService.secondaryColor;
+        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: Color) => {
+            this.backgroundColor = backgroundColor;
+        });
+        this.colorToolService.currentPrimaryColor.subscribe((primaryColor: Color) => {
+            this.primaryColor = primaryColor;
+        });
+        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor: Color) => {
+            this.secondaryColor = secondaryColor;
+        });
         this.colorToolService.currentSelectedColor.subscribe((selectedColor: ColorType | undefined) => {
             this.selectedColor = selectedColor;
         });
