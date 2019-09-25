@@ -12,10 +12,13 @@ export class AttributesManagerService {
     currentStyle: Observable<number> = this.style.asObservable();
 
     changeThickness(thickness: number): void {
+        console.log('change pixel width from att manager');
         this.thickness.next(thickness);
     }
 
     changeStyle(style: number): void {
+
+        console.log(`change style from att manager ${style}`);
         this.style.next(style);
     }
 }
