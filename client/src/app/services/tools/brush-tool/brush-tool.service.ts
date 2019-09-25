@@ -30,15 +30,18 @@ export class BrushToolService extends TracingToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
-        })
+        });
     }
 
     onMouseDown(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton) {
+            console.log('brush down!');
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.currentPath = `M${e.offsetX} ${e.offsetY}`;
-            this.createSVGCircle(e.offsetX, e.offsetY);
+            this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
+            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
+            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top);
             this.svgPreviewCircle = this.createSVGCircle(e.offsetX, e.offsetY);
             this.createSVGPath();
         }
