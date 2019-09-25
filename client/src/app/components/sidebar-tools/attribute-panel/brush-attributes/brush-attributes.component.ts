@@ -18,6 +18,10 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
   brushAttributesForm: FormGroup;
   brushToolService: BrushToolService;
 
+  // should not be here
+  private styles = [1,2,3,4,5];
+  //
+
   readonly MIN_THICKNESS = MIN_THICKNESS;
   readonly MAX_THICKNESS = MAX_THICKNESS;
 
@@ -25,7 +29,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private attributesManagerService: AttributesManagerService,
     private toolSelectorService: ToolSelectorService,
-  ) { 
+  ) {
     this.formBuilder = formBuilder;
   }
 
@@ -45,6 +49,9 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
         DEFAULT_THICKNESS,
         [Validators.required, Validators.min(MIN_THICKNESS), Validators.max(this.MAX_THICKNESS),]
       ],
+      style : [
+        1,
+      ],
     });
   }
 
@@ -54,9 +61,15 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
   }
 
   onThicknessChange(): void {
+    console.log('called');
     const thickness = this.brushAttributesForm.value.thickness;
     if (thickness >= MIN_THICKNESS && thickness <= MAX_THICKNESS) {
       this.attributesManagerService.changeThickness(thickness);
     }
+  }
+
+  change(style: number): void {
+    console.log("changed style");
+    this.attributesManagerService.changeStyle(style);
   }
 }

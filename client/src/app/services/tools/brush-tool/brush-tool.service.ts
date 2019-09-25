@@ -31,6 +31,9 @@ export class BrushToolService extends TracingToolService {
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
         });
+        this.attributesManagerService.currentStyle.subscribe((style) => {
+            this.currentPattern = style;
+        });
     }
 
     onMouseDown(e: MouseEvent): void {
@@ -104,7 +107,7 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(filter, 'x', '-50px');
         this.renderer.setAttribute(filter, 'y', '-50px');
 
-        if (patternId === 1 || patternId === 2){
+        if (patternId === 1 || patternId === 2) {
             const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
             this.renderer.setAttribute(effect, 'stdDeviation', '3');
             this.renderer.appendChild(filter, effect);

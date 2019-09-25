@@ -25,6 +25,19 @@
                 <mat-error>La valeur inscrite doit être entre {{ MIN_THICKNESS }} et {{ MAX_THICKNESS }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
+            <mat-form-field>
+                <mat-label>
+                    Brush Style MY BOI
+                </mat-label>
+                <mat-select
+                    formControlName="style"
+                    (selectionChange)="change(style)"
+                >
+                    <mat-option *ngFor="let style of styles" [value]="style">
+                        {{style}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </form>
 </div>
