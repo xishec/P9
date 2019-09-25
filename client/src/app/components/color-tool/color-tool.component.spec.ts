@@ -36,4 +36,9 @@ fdescribe('ColorToolComponent', () => {
         colortool.onClickColorWheel();
         expect(colortool.displayColorWheel).toBeTruthy();
     });
+
+    it('should return false when "clicked" twice on the color wheel button', () => {
+        colortool.onClickColorWheel();
+        expect(colortool.displayColorWheel).toBeFalsy();
+    });
 });
