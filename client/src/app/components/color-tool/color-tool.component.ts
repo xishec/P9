@@ -53,6 +53,28 @@ export class ColorToolComponent implements OnInit {
         } else if (this.selectedColor === ColorType.secondaryColor) {
             this.secondaryColor = color;
             this.colorToolService.changeColor(color, ColorType.secondaryColor);
+    setColorNumericValues() {
+        this.setHexValues();
+        this.setRGBValues();
+    }
+
+    setHexValues() {
+        if (this.selectedColor === ColorType.primaryColor) {
+            this.myForm.controls.hex.setValue(this.primaryColor.hex);
+        } else if (this.selectedColor === ColorType.secondaryColor) {
+            this.myForm.controls.hex.setValue(this.secondaryColor.hex);
+        }
+    }
+
+    setRGBValues() {
+        if (this.selectedColor === ColorType.primaryColor) {
+            this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
+            this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
+            this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
+        } else if (this.selectedColor === ColorType.secondaryColor) {
+            this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
+            this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
+            this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
         }
     }
 
