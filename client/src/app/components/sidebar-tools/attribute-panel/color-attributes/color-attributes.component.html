@@ -1,0 +1,42 @@
+<div id="container">
+    <div id="userColorButtons">
+        <div id="background-color">
+            <span id="primaryColorText"> Couleur de fond :</span>
+            <button
+                id="background-color-button"
+                (click)="onClickPrimaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getBackgroundColorIcon()"
+            ></button>
+        </div>
+
+        <div id="primary-color">
+            <span id="primaryColorText"> Couleur principale :</span>
+            <button
+                id="primary-color-button"
+                (click)="onClickPrimaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getPrimaryColorIcon()"
+            ></button>
+        </div>
+
+        <div id="switch-color">
+            <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+        </div>
+
+        <div id="secondary-color">
+            <span id="secondaryColorText"> Couleur secondaire :</span>
+            <button
+                id="secondary-color-button"
+                (click)="onClickSecondaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getSecondaryColorIcon()"
+            ></button>
+        </div>
+    </div>
+</div>

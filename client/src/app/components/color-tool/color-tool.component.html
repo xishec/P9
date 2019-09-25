@@ -1,10 +1,51 @@
-<form [formGroup]="myForm" id="color-tool-form" [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }">
+<div id="container">
+    <div id="userColorButtons">
+        <div id="background-color">
+            <span id="primaryColorText"> Couleur de fond :</span>
+            <button
+                id="primary-color-button"
+                (click)="onClickPrimaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="onClickPrimaryColorStyle()"
+            ></button>
+        </div>
+
+        <div id="primary-color">
+            <span id="primaryColorText"> Couleur principale :</span>
+            <button
+                id="primary-color-button"
+                (click)="onClickPrimaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="onClickPrimaryColorStyle()"
+            ></button>
+        </div>
+
+        <div id="switch-color">
+            <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+        </div>
+
+        <div id="secondary-color">
+            <span id="secondaryColorText"> Couleur secondaire :</span>
+            <button
+                id="secondary-color-button"
+                (click)="onClickSecondaryColor()"
+                class="color"
+                type="button"
+                [ngStyle]="onClickSecondaryColorStyle()"
+            ></button>
+        </div>
+    </div>
+</div>
+
+<!-- <form [formGroup]="myForm" id="color-tool-form" [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }">
     <div class="formGroup">
         <div id="userColor">
             <div id="primary-color">
-                <span id="primaryColorText">
-                    Couleur principale :</span
-                >
+                <span id="primaryColorText"> Couleur principale :</span>
                 <button
                     id="primary-color-button"
                     (click)="onClickPrimaryColor()"
@@ -19,9 +60,7 @@
                 </button>
             </div>
             <div id="secondary-color">
-                <span id="secondaryColorText">
-                    Couleur secondaire :</span
-                >
+                <span id="secondaryColorText"> Couleur secondaire :</span>
                 <button
                     id="secondary-color-button"
                     (click)="onClickSecondaryColor()"
@@ -35,7 +74,7 @@
         <app-color-picker></app-color-picker>
 
         <mat-form-field class="medium">
-            <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()"/>
+            <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()" />
             <mat-error>Ce code de couleur n'est pas valide!</mat-error>
             <span matPrefix>#</span>
         </mat-form-field>
@@ -60,6 +99,6 @@
         <div id="last-10-colors">
             Les dix dernières couleurs
         </div>
-        <app-color-queue (clickedColorButton)=onClickColorQueueButton($event)></app-color-queue>
+        <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
     </div>
-</form>
+</form> -->

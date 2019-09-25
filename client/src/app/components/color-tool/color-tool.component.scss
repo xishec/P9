@@ -68,22 +68,15 @@ mat-form-field {
     }
 }
 
-#userColor {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
+#container {
+    margin: 30px 40px;
 
-    .color {
-        margin-left: 5px;
-    }
+    #userColorButtons {
+        margin-bottom: 10px;
 
-    #primaryColor {
-        padding: 15px;
-    }
-
-    #secondaryColor {
-        padding: 15px;
+        .color {
+            margin-left: 5px;
+        }
     }
 }
 

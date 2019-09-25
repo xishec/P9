@@ -1,0 +1,28 @@
+#container {
+    margin: 30px 40px;
+
+    #userColorButtons {
+        margin-bottom: 10px;
+
+        div {
+            display: flex;
+            align-items: center;
+        }
+
+        .color {
+            width: 0;
+            height: 0;
+            padding: 10px;
+            border: 1px solid #d0d0d0;
+            margin: 5px;
+            border-radius: 100%;
+            outline: none;
+        }
+        .color:hover:not(#bigColor) {
+            filter: brightness(0.8);
+        }
+        .color:active:not(#bigColor) {
+            filter: brightness(1);
+        }
+    }
+}
