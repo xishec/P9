@@ -105,8 +105,5 @@ export {
     Thickness,
     TraceType,
     ToolName,
-    MIN_THICKNESS,
-    DEFAULT_THICKNESS,
-    MAX_THICKNESS,
     BRUSH_STYLES,
 };

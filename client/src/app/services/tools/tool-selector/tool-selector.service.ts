@@ -55,7 +55,7 @@ export class ToolSelectorService {
                 this.currentTool = this.pencilTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case 'Pinceau':
+            case ToolName.Brush:
                 this.currentTool = this.brushTool;
                 this.changeCurrentToolName(tooltipName);
                 break;

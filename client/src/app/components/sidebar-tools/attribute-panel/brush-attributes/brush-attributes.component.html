@@ -10,7 +10,7 @@
                 placeholder="Hex"
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
-                [min]="MIN_THICKNESS"
+                [min]="Thickness.Min"
                 value="{{ brushAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -19,22 +19,19 @@
                     type="number"
                     formControlName="thickness"
                     (change)="onThicknessChange()"
-                    [min]="MIN_THICKNESS"
-                    [max]="MAX_THICKNESS"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ MIN_THICKNESS }} et {{ MAX_THICKNESS }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>
                     Style de pinceau
                 </mat-label>
-                <mat-select
-                    formControlName="style"
-                    (selectionChange)="change($event.value)"
-                >
+                <mat-select formControlName="style" (selectionChange)="change($event.value)">
                     <mat-option *ngFor="let style of styles" [value]="style">
-                        {{style}}
+                        {{ style }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
