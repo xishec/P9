@@ -16,7 +16,7 @@ export class DrawingModalWindowService {
         opacity: 1,
     });
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private activeColor: BehaviorSubject<Color> = new BehaviorSubject(new Color());
+    private activeColor: BehaviorSubject<Color> = new BehaviorSubject(COLORS[0]);
 
     currentInfo: Observable<DrawingInfo> = this.infoSource.asObservable();
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
