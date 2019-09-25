@@ -74,6 +74,11 @@ enum Keys {
     Shift = 'Shift',
 }
 
+enum ColorType {
+    primaryColor = 'primary-color',
+    secondaryColor = 'secondary-color',
+}
+
 enum Mouse {
     LeftButton = 0,
     MouseWheel = 1,
@@ -102,6 +107,7 @@ export {
     SVG_NS,
     Keys,
     Mouse,
+    ColorType,
     Thickness,
     TraceType,
     ToolName,

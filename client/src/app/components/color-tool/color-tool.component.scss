@@ -1,0 +1,105 @@
+#switch-colors-button {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+#color-palette-show-button {
+    display: block;
+    text-align: -webkit-center;
+}
+
+#color-pick-image {
+    width: 200px;
+    height: 150px;
+    display: block;
+    text-align: center;
+}
+
+#window {
+    height: 450px;
+    width: 500px;
+    background-color: white;
+    padding: 30px 30px;
+
+    text-align: center;
+}
+
+mat-form-field {
+    margin: 20px 10px;
+
+    span {
+        color: #888888;
+        margin-right: 5px;
+    }
+}
+
+.medium {
+    width: 20%;
+}
+.small {
+    width: 10%;
+}
+
+.color {
+    width: 0;
+    height: 0;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    margin: 5px;
+    border-radius: 100%;
+    outline: none;
+}
+.color:hover:not(#bigColor) {
+    filter: brightness(0.8);
+}
+.color:active:not(#bigColor) {
+    filter: brightness(1);
+}
+
+#colorButtons {
+    display: flex;
+    align-items: center;
+
+    img {
+        border: 0px solid #d0d0d0;
+        padding: 0px;
+        width: 23px;
+        height: 23px;
+    }
+}
+
+#userColor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .color {
+        margin-left: 5px;
+    }
+
+    #primaryColor {
+        padding: 15px;
+    }
+
+    #secondaryColor {
+        padding: 15px;
+    }
+}
+
+.actionButton {
+    width: 90px;
+    margin: 10px 20px;
+}
+
+#confirmation {
+    margin-bottom: 20px;
+
+    #warning {
+        background-color: red;
+    }
+
+    mat-error {
+        margin-bottom: 10px;
+    }
+}

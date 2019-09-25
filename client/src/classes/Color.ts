@@ -1,3 +1,9 @@
 export class Color {
-    hex: string;
+    hex = 'ffffff';
+
+    constructor(hex?: string) {
+        if (hex) {
+            this.hex = hex;
+        }
+    }
 }
