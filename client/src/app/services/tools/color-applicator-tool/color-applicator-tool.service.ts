@@ -10,6 +10,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 export class ColorApplicatorToolService extends AbstractToolService {
     currentTargetPosition = 0;
     private buttonClick = 0;
+    private wasUsed = false;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
@@ -17,11 +18,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
         this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
-            console.log('triggered');
             this.currentTargetPosition = targetPosition;
             const butt = this.buttonClick;
-            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined) {
-                console.log('sub mouse ' + butt);
+            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined && this.wasUsed) {
                 switch (butt) {
                     case Mouse.LeftButton:
                         this.renderer.setAttribute(
@@ -40,6 +39,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     default:
                         break;
                 }
+                this.wasUsed = false;
             }
         });
     }
@@ -57,6 +57,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         this.buttonClick = event.button;
+        this.wasUsed = true;
         console.log('mouse ' + this.buttonClick);
     }
     onMouseUp(event: MouseEvent): void {}
