@@ -136,9 +136,9 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
             if (event.button === Mouse.LeftButton) {
-                this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.userFillColor);
+                this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.fillColor);
             } else if (event.button === Mouse.RightButton) {
-                this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.userStrokeColor);
+                this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.strokeColor);
             }
         });
 
