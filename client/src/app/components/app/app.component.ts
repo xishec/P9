@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
     message = new BehaviorSubject<string>('');
     displayNewDrawingModalWindow = false;
     displayWelcomeModalWindow = false;
+    welcomeModalWindowClosed = false;
     isOnInput = false;
 
     constructor(
@@ -39,7 +40,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.openWelcomeModalWindow();
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
@@ -48,11 +48,17 @@ export class AppComponent implements OnInit {
         this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
         });
+        this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
+            (welcomeModalWindowClosed: boolean) => {
+                this.welcomeModalWindowClosed = welcomeModalWindowClosed;
+            },
+        );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
+        this.openWelcomeModalWindow();
     }
 
     openWelcomeModalWindow(): void {
-        if (this.welcomeModalWindowService.getValueFromLocalStorage()) {
+        if (this.displayWelcomeModalWindow) {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
                 disableClose: true,
@@ -70,33 +76,53 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
         }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
 
     @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
