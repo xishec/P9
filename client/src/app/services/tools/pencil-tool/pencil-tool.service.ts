@@ -21,7 +21,7 @@ export class PencilToolService extends TracingToolService {
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService,
+        private drawStack: DrawStackService
     ) {
         super();
     }
@@ -56,11 +56,11 @@ export class PencilToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
-            this.createSVGCircle(
-                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-                this.currentWidth,
-            );
+            // this.createSVGCircle(
+            //     e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+            //     e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+            //     this.currentWidth,
+            // );
             this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
@@ -111,6 +111,12 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'stroke-width', w.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
         // this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        this.svgPathRef.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
+        });
         this.renderer.appendChild(this.svgWrapRef, el);
     }
 
@@ -120,6 +126,12 @@ export class PencilToolService extends TracingToolService {
         // this.renderer.setAttribute(this.svgPathRef, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        this.svgPathRef.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 5);
+        });
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
     }
 

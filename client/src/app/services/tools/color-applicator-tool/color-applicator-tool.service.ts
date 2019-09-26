@@ -17,6 +17,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
         this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
+            console.log('triggered');
             this.currentTargetPosition = targetPosition;
             const butt = this.buttonClick;
             if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined) {
