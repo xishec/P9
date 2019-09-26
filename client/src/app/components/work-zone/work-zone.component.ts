@@ -19,7 +19,9 @@ export class WorkZoneComponent implements OnInit {
     toolName: ToolName = ToolName.Selection;
 
     currentTool: AbstractToolService | undefined;
-    @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
+    empty = true;
+
+    @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
         private drawingModalWindowService: DrawingModalWindowService,
@@ -30,14 +32,15 @@ export class WorkZoneComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.toolSelector.initTools(this.drawStackService, this.ref, this.renderer);
+        this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
         this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
+            this.empty = false;
             this.drawingInfo = drawingInfo;
 
             for (const el of this.drawStackService.reset()) {
-                this.renderer.removeChild(this.ref.nativeElement, el);
+                this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
         });
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
@@ -51,6 +54,17 @@ export class WorkZoneComponent implements OnInit {
         this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color.hex = backgroundColor;
         });
+
+        this.drawingInfo.height = window.innerHeight;
+        this.drawingInfo.width = window.innerWidth;
+        this.drawingInfo.opacity = 0;
+        this.empty = true;
+    }
+
+    onClickRectangle() {
+        if (this.empty) {
+            alert('Veuillez créer un nouveau dessin!');
+        }
     }
 
     changeStyle(): ReturnStyle {

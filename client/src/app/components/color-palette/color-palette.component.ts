@@ -103,10 +103,12 @@ export class ColorPaletteComponent implements OnInit {
     }
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changeSelectedColor(undefined);
     }
     onSubmit(): void {
         this.colorToolService.changeColorOnFocus(this.previewColor);
         this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changeSelectedColor(undefined);
     }
 
     getUserColorIcon(): IconStyle {
