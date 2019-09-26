@@ -41,16 +41,31 @@ export class ColorAttributesComponent implements OnInit {
     }
 
     onClickBackgroundColor(): void {
-        this.colorToolService.changeSelectedColor(ColorType.backgroundColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        if (this.selectedColor === ColorType.backgroundColor) {
+            this.colorToolService.changeSelectedColor(undefined);
+            this.colorToolService.changeCurrentShowColorPalette(false);
+        } else {
+            this.colorToolService.changeSelectedColor(ColorType.backgroundColor);
+            this.colorToolService.changeCurrentShowColorPalette(true);
+        }
     }
     onClickPrimaryColor(): void {
-        this.colorToolService.changeSelectedColor(ColorType.primaryColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        if (this.selectedColor === ColorType.primaryColor) {
+            this.colorToolService.changeSelectedColor(undefined);
+            this.colorToolService.changeCurrentShowColorPalette(false);
+        } else {
+            this.colorToolService.changeSelectedColor(ColorType.primaryColor);
+            this.colorToolService.changeCurrentShowColorPalette(true);
+        }
     }
     onClickSecondaryColor(): void {
-        this.colorToolService.changeSelectedColor(ColorType.secondaryColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        if (this.selectedColor === ColorType.secondaryColor) {
+            this.colorToolService.changeSelectedColor(undefined);
+            this.colorToolService.changeCurrentShowColorPalette(false);
+        } else {
+            this.colorToolService.changeSelectedColor(ColorType.secondaryColor);
+            this.colorToolService.changeCurrentShowColorPalette(true);
+        }
     }
 
     getBackgroundColorIcon(): ColorStyle {
