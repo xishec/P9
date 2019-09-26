@@ -12,9 +12,14 @@ export class SidebarToolsComponent implements OnInit {
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
+    currentToolName = '';
+
     constructor(private toolSelectorService: ToolSelectorService) {}
 
     ngOnInit(): void {
+        this.toolSelectorService.currentToolName.subscribe((currentToolName) => {
+            this.currentToolName = currentToolName;
+        });
         this.toolSelectorService.changeTool(ToolName.Selection);
     }
 

@@ -15,12 +15,11 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
-
-    currentToolName: Observable<ToolName> = this.toolName.asObservable();
-
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+
+    currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
 
     constructor(
