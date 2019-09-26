@@ -8,6 +8,7 @@ import { WelcomeModalWindowComponent } from '../../components/welcome-modal-wind
 import { IndexService } from '../../services/index/index.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { ShortcutsManagerService } from '../../services/shortcuts-manager/shortcuts-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { ToolName } from '../../services/constants';
 
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
     message = new BehaviorSubject<string>('');
     displayNewDrawingModalWindow = false;
     displayWelcomeModalWindow = false;
+    isOnInput = false;
 
     constructor(
         private basicService: IndexService,
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
+        private shortcutsManagerService: ShortcutsManagerService,
     ) {
         this.basicService
             .basicGet()
@@ -42,6 +45,9 @@ export class AppComponent implements OnInit {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
             },
         );
+        this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
+            this.isOnInput = isOnInput;
+        });
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
     }
 
@@ -64,34 +70,34 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
         }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
-        event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+            event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
 
     @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
-        event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+            event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
-        event.preventDefault();
-        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow && !this.isOnInput) {
+            event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
     }
