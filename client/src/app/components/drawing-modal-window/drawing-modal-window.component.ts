@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Color } from '../../../classes/Color';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
 
 import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
 
@@ -22,7 +23,11 @@ export class DrawingModalWindowComponent implements OnInit {
     displayNewDrawingModalWindow = false;
     displayColorWheel = false;
 
-    constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
+    constructor(
+        formBuilder: FormBuilder,
+        private drawingModalWindowService: DrawingModalWindowService,
+        private colorToolService: ColorToolService,
+    ) {
         this.formBuilder = formBuilder;
         this.drawingModalWindowService = drawingModalWindowService;
         this.colors = COLORS;
@@ -94,7 +99,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setRGBFromHex();
     }
     onUserColorRGB(): void {
-        const newHex = this.drawingModalWindowService.rgbToHex(
+        const newHex = this.colorToolService.rgbToHex(
             this.drawingModalForm.value.R,
             this.drawingModalForm.value.G,
             this.drawingModalForm.value.B,

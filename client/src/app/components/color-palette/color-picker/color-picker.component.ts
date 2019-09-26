@@ -1,7 +1,6 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { Color } from '../../../../classes/Color';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 
 @Component({
@@ -59,6 +58,6 @@ export class ColorPickerComponent implements OnInit {
             pixel[1] - pixel[1] * this.obscurity,
             pixel[2] - pixel[2] * this.obscurity,
         );
-        this.colorToolService.changePreviewColor(new Color(newHex));
+        this.colorToolService.changePreviewColor(newHex);
     }
 }

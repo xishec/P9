@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Color } from '../../../../../classes/Color';
 import { ColorType, COLORS } from 'src/app/services/constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
@@ -15,9 +14,9 @@ interface ColorStyle {
 })
 export class ColorAttributesComponent implements OnInit {
     showColorPalette = false;
-    backgroundColor: Color = COLORS[0];
-    primaryColor: Color = COLORS[1];
-    secondaryColor: Color = COLORS[2];
+    backgroundColor = COLORS[0].hex;
+    primaryColor = COLORS[1].hex;
+    secondaryColor = COLORS[2].hex;
     selectedColor: ColorType | undefined = undefined;
 
     constructor(private colorToolService: ColorToolService) {}
@@ -26,13 +25,13 @@ export class ColorAttributesComponent implements OnInit {
         this.colorToolService.currentShowColorPalette.subscribe((showColorPalette: boolean) => {
             this.showColorPalette = showColorPalette;
         });
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: Color) => {
+        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
             this.backgroundColor = backgroundColor;
         });
-        this.colorToolService.currentPrimaryColor.subscribe((primaryColor: Color) => {
+        this.colorToolService.currentPrimaryColor.subscribe((primaryColor: string) => {
             this.primaryColor = primaryColor;
         });
-        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor: Color) => {
+        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor: string) => {
             this.secondaryColor = secondaryColor;
         });
         this.colorToolService.currentSelectedColor.subscribe((selectedColor: ColorType | undefined) => {
@@ -56,34 +55,34 @@ export class ColorAttributesComponent implements OnInit {
     getBackgroundColorIcon(): ColorStyle {
         if (this.selectedColor === ColorType.backgroundColor) {
             return {
-                backgroundColor: '#' + this.backgroundColor.hex,
+                backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
             };
         }
         return {
-            backgroundColor: '#' + this.backgroundColor.hex,
+            backgroundColor: '#' + this.backgroundColor,
         };
     }
     getPrimaryColorIcon(): ColorStyle {
         if (this.selectedColor === ColorType.primaryColor) {
             return {
-                backgroundColor: '#' + this.primaryColor.hex,
+                backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
             };
         }
         return {
-            backgroundColor: '#' + this.primaryColor.hex,
+            backgroundColor: '#' + this.primaryColor,
         };
     }
     getSecondaryColorIcon(): ColorStyle {
         if (this.selectedColor === ColorType.secondaryColor) {
             return {
-                backgroundColor: '#' + this.secondaryColor.hex,
+                backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',
             };
         }
         return {
-            backgroundColor: '#' + this.secondaryColor.hex,
+            backgroundColor: '#' + this.secondaryColor,
         };
     }
 

@@ -10,19 +10,19 @@ import { COLORS, ColorType } from '../../../services/constants';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
-    private previewColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
-    private backgroundColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
-    private primaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[1]);
-    private secondaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[2]);
+    private previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
+    private backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
+    private primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
+    private secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
     private selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
         undefined,
     );
     private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    currentPreviewColor: Observable<Color> = this.previewColor.asObservable();
-    currentBackgroundColor: Observable<Color> = this.backgroundColor.asObservable();
-    currentPrimaryColor: Observable<Color> = this.primaryColor.asObservable();
-    currentSecondaryColor: Observable<Color> = this.secondaryColor.asObservable();
+    currentPreviewColor: Observable<string> = this.previewColor.asObservable();
+    currentBackgroundColor: Observable<string> = this.backgroundColor.asObservable();
+    currentPrimaryColor: Observable<string> = this.primaryColor.asObservable();
+    currentSecondaryColor: Observable<string> = this.secondaryColor.asObservable();
     currentSelectedColor: Observable<ColorType | undefined> = this.selectedColor.asObservable();
     currentShowColorPalette: Observable<boolean> = this.showColorPalette.asObservable();
 
@@ -39,10 +39,10 @@ export class ColorToolService {
     //     this.colorQueueBSubject.next(this.colorQueue);
     // }
 
-    changePreviewColor(previewColor: Color) {
+    changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);
     }
-    changeColorOnFocus(colorOnFocus: Color) {
+    changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
                 this.backgroundColor.next(colorOnFocus);
@@ -68,11 +68,11 @@ export class ColorToolService {
     getColorOnFocus(): string {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
-                return this.backgroundColor.value.hex;
+                return this.backgroundColor.value;
             case ColorType.primaryColor:
-                return this.primaryColor.value.hex;
+                return this.primaryColor.value;
             case ColorType.secondaryColor:
-                return this.secondaryColor.value.hex;
+                return this.secondaryColor.value;
             default:
                 return new Color().hex;
         }

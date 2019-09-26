@@ -1,6 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { Color } from '../../../classes/Color';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
@@ -46,8 +45,8 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.currentToolName.subscribe(() => {
             this.currentTool = this.toolSelector.currentTool;
         });
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: Color) => {
-            this.drawingInfo.color = backgroundColor;
+        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
+            this.drawingInfo.color.hex = backgroundColor;
         });
     }
 
