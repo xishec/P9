@@ -7,6 +7,7 @@ import { AttributesManagerService } from '../../../../services/tools/attributes-
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
 
 @Component({
     selector: 'app-rectangle-attributes',
@@ -24,6 +25,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
+        private shortcutsManagerService: ShortcutsManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -64,5 +66,12 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     onTraceTypeChange(): void {
         const tracetype: string = this.rectangleAttributesForm.value.traceType;
         this.attributesManagerService.changeTraceType(tracetype);
+    }
+
+    onFocus() {
+        this.shortcutsManagerService.changeIsOnInput(true);
+    }
+    onFocusOut() {
+        this.shortcutsManagerService.changeIsOnInput(false);
     }
 }
