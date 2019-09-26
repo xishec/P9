@@ -17,8 +17,8 @@ export class DrawingModalWindowComponent implements OnInit {
     drawingModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    colors: Color[] = [];
-    activeColor: Color = new Color();
+    readonly colors: Color[] = COLORS;
+    previewColor: Color = new Color();
     submitCount = 0;
     displayNewDrawingModalWindow = false;
     displayColorWheel = false;
@@ -29,9 +29,6 @@ export class DrawingModalWindowComponent implements OnInit {
         private colorToolService: ColorToolService,
     ) {
         this.formBuilder = formBuilder;
-        this.drawingModalWindowService = drawingModalWindowService;
-        this.colors = COLORS;
-        this.activeColor = COLORS[0];
     }
 
     ngOnInit(): void {
@@ -39,8 +36,8 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.drawingModalWindowService.currentActiveColor.subscribe((activeColor) => {
-            this.activeColor = activeColor;
+        this.colorToolService.currentPreviewColor.subscribe((previewColor) => {
+            this.previewColor.hex = previewColor;
         });
     }
 
@@ -61,15 +58,16 @@ export class DrawingModalWindowComponent implements OnInit {
         const drawingInfo: DrawingInfo = {
             width: this.drawingModalForm.value.width,
             height: this.drawingModalForm.value.height,
-            color: this.activeColor,
+            color: this.previewColor,
             opacity: this.drawingModalForm.value.A,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
+        this.colorToolService.changeBackgroundColor(this.previewColor.hex);
 
         this.submitCount++;
         this.initializeForm();
-        this.activeColor = { hex: DEFAULT_COLOR };
+        this.previewColor = { hex: DEFAULT_COLOR };
     }
 
     @HostListener('window:resize', ['$event'])
@@ -80,12 +78,12 @@ export class DrawingModalWindowComponent implements OnInit {
         }
     }
     onChangeColor(i: number): void {
-        this.activeColor = this.colors[i];
+        this.previewColor = this.colors[i];
         this.setHex();
         this.setRGBFromHex();
     }
     onClickColorPicker(): void {
-        if (this.activeColor.hex === undefined) {
+        if (this.previewColor.hex === undefined) {
             return;
         }
         this.setHex();
@@ -95,7 +93,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.displayNewDrawingModalWindow = false;
     }
     onUserColorHex(): void {
-        this.activeColor = { hex: this.drawingModalForm.value.hex };
+        this.previewColor = { hex: this.drawingModalForm.value.hex };
         this.setRGBFromHex();
     }
     onUserColorRGB(): void {
@@ -104,24 +102,24 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.G,
             this.drawingModalForm.value.B,
         );
-        this.activeColor = { hex: newHex };
+        this.previewColor = { hex: newHex };
         this.setHex();
     }
 
     setHex(): void {
-        this.drawingModalForm.controls.hex.setValue(this.activeColor.hex);
+        this.drawingModalForm.controls.hex.setValue(this.previewColor.hex);
     }
     setRGBFromHex(): void {
-        this.drawingModalForm.controls.R.setValue(parseInt(this.activeColor.hex.slice(0, 2), 16));
-        this.drawingModalForm.controls.G.setValue(parseInt(this.activeColor.hex.slice(2, 4), 16));
-        this.drawingModalForm.controls.B.setValue(parseInt(this.activeColor.hex.slice(4, 6), 16));
+        this.drawingModalForm.controls.R.setValue(parseInt(this.previewColor.hex.slice(0, 2), 16));
+        this.drawingModalForm.controls.G.setValue(parseInt(this.previewColor.hex.slice(2, 4), 16));
+        this.drawingModalForm.controls.B.setValue(parseInt(this.previewColor.hex.slice(4, 6), 16));
     }
 
     getColorIcon(color: Color): IconStyle {
         return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.activeColor.hex, opacity: String(this.drawingModalForm.value.A) };
+        return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
     }
 
     setWindowHeight(): HeightStyle {

@@ -41,6 +41,9 @@ export class ColorToolService {
     changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);
     }
+    changeBackgroundColor(backgroundColor: string) {
+        this.backgroundColor.next(backgroundColor);
+    }
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
