@@ -29,7 +29,7 @@ export class ColorToolService {
     currentColorQueue: Observable<string[]> = this.colorQueue.asObservable();
 
     addColorToQueue(color: string): void {
-            if (this.colorQueue.value.length < 10) {
+        if (this.colorQueue.value.length < 10) {
             this.colorQueue.value.push(color);
         } else {
             this.colorQueue.value.shift();
@@ -91,5 +91,11 @@ export class ColorToolService {
             b = '0' + b;
         }
         return r + g + b;
+    }
+
+    switchPrimarySecondary() {
+        let temp: string = this.primaryColor.value;
+        this.primaryColor.next(this.secondaryColor.value);
+        this.secondaryColor.next(temp);
     }
 }

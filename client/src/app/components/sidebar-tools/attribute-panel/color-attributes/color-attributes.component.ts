@@ -87,6 +87,6 @@ export class ColorAttributesComponent implements OnInit {
     }
 
     switchColors() {
-        this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.switchPrimarySecondary();
     }
 }
