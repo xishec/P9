@@ -6,6 +6,7 @@ import { Thickness, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
+import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
 
 @Component({
     selector: 'app-pencil-attributes',
@@ -24,6 +25,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
+        private shortcutsManagerService: ShortcutsManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -56,5 +58,12 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
         if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
             this.attributesManagerService.changeThickness(thickness);
         }
+    }
+
+    onFocus() {
+        this.shortcutsManagerService.changeIsOnInput(true);
+    }
+    onFocusOut() {
+        this.shortcutsManagerService.changeIsOnInput(false);
     }
 }

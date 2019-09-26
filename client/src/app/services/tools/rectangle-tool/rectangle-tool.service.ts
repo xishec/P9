@@ -132,20 +132,13 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     createSVG(): void {
         const el: SVGElement = this.renderer.createElement('svg', SVG_NS);
-        const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangle.height.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.userFillColor);
-        this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.userStrokeColor);
-        this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
+        const drawRectangle = this.drawRectangle.cloneNode(true);
 
-        drawRectangle.addEventListener('mousedown', (event) => {
+        drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
             if (event.button === Mouse.LeftButton) {
-                this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.userFillColor);
+                this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.fillColor);
             } else if (event.button === Mouse.RightButton) {
-                this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.userStrokeColor);
+                this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.strokeColor);
             }
         });
 

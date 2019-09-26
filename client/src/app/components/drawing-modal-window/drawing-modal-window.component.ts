@@ -124,7 +124,6 @@ export class DrawingModalWindowComponent implements OnInit {
         return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
     getUserColorIcon(): IconStyle {
-        console.log(this.previewColor.hex);
         return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
     }
 

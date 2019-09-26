@@ -7,6 +7,7 @@
                 matTooltipPosition="after"
                 (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
+                [checked]="currentToolName === TOOL_BUTTON_INFO.tooltipName"
             >
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
