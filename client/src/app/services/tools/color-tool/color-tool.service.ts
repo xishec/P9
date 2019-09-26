@@ -18,6 +18,7 @@ export class ColorToolService {
         undefined,
     );
     private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
     currentPreviewColor: Observable<string> = this.previewColor.asObservable();
     currentBackgroundColor: Observable<string> = this.backgroundColor.asObservable();
@@ -25,19 +26,17 @@ export class ColorToolService {
     currentSecondaryColor: Observable<string> = this.secondaryColor.asObservable();
     currentSelectedColor: Observable<ColorType | undefined> = this.selectedColor.asObservable();
     currentShowColorPalette: Observable<boolean> = this.showColorPalette.asObservable();
+    currentColorQueue: Observable<string[]> = this.colorQueue.asObservable();
 
-    colorQueue: Color[] = [];
-    colorQueueBSubject = new BehaviorSubject(this.colorQueue);
-
-    // addColorToQueue(color: Color): void {
-    //     if (this.colorQueue.length < 10) {
-    //         this.colorQueue.push(color);
-    //     } else {
-    //         this.colorQueue.shift();
-    //         this.colorQueue.push(color);
-    //     }
-    //     this.colorQueueBSubject.next(this.colorQueue);
-    // }
+    addColorToQueue(color: string): void {
+            if (this.colorQueue.value.length < 10) {
+            this.colorQueue.value.push(color);
+        } else {
+            this.colorQueue.value.shift();
+            this.colorQueue.value.push(color);
+        }
+        this.colorQueue.next(this.colorQueue.value);
+    }
 
     changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);

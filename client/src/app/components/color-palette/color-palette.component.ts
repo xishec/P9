@@ -28,8 +28,7 @@ export class ColorPaletteComponent implements OnInit {
             this.updateWithColorToolService();
         });
         this.colorToolService.currentPreviewColor.subscribe((previewColor: string) => {
-            this.previewColor = previewColor;
-            this.setColorNumericValues();
+            this.changeColor(previewColor);
         });
     }
 
@@ -48,10 +47,10 @@ export class ColorPaletteComponent implements OnInit {
         });
     }
 
-    changeColor(colorHex: string): void {
-        this.previewColor = colorHex;
+    changeColor(previewColor: string): void {
+        this.previewColor = previewColor;
         this.setColorNumericValues();
-        // this.colorToolService.addColorToQueue(this.previewColor);
+        this.colorToolService.addColorToQueue(this.previewColor);
     }
 
     setColorNumericValues(): void {
@@ -94,8 +93,8 @@ export class ColorPaletteComponent implements OnInit {
         return r + g + b;
     }
 
-    onClickColorQueueButton(color: Color): void {
-        this.changeColor(color.hex);
+    onClickColorQueueButton(color: string): void {
+        this.changeColor(color);
     }
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);

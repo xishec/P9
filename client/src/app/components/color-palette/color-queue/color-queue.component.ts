@@ -14,13 +14,13 @@ interface IconStyle {
     styleUrls: ['./color-queue.component.scss'],
 })
 export class ColorQueueComponent implements OnInit {
-    colorQueue: Color[] = [];
+    colorQueue: string[] = [];
     @Output() clickedColorButton = new EventEmitter<Color>();
 
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit(): void {
-        this.colorToolService.colorQueueBSubject.subscribe((colorQueue) => {
+        this.colorToolService.currentColorQueue.subscribe((colorQueue) => {
             this.colorQueue = colorQueue;
         });
     }
@@ -29,7 +29,7 @@ export class ColorQueueComponent implements OnInit {
         this.clickedColorButton.emit(color);
     }
 
-    getColorIcon(color: Color): IconStyle {
-        return { backgroundColor: '#' + color.hex, opacity: '1' };
+    getColorIcon(color: string): IconStyle {
+        return { backgroundColor: '#' + color, opacity: '1' };
     }
 }
