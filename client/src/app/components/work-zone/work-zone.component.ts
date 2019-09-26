@@ -6,6 +6,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { ToolName } from 'src/app/services/constants';
 
 @Component({
     selector: 'app-work-zone',
@@ -15,6 +16,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo();
     displayNewDrawingModalWindow = false;
+    toolName: ToolName = ToolName.Selection;
 
     currentTool: AbstractToolService | undefined;
     @ViewChild('svgpad', { static: true }) ref: ElementRef<SVGElement>;
@@ -42,7 +44,8 @@ export class WorkZoneComponent implements OnInit {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
 
-        this.toolSelector.currentToolName.subscribe(() => {
+        this.toolSelector.currentToolName.subscribe((toolName) => {
+            this.toolName = toolName;
             this.currentTool = this.toolSelector.currentTool;
         });
         this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
@@ -100,6 +103,14 @@ export class WorkZoneComponent implements OnInit {
         }
     }
     // LISTENERS //
+
+    getCursorStyle() {
+        if (this.toolName === ToolName.Brush) {
+            return { cursor: 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/meh.png"), auto' };
+        } else {
+            return { cursor: 'default' };
+        }
+    }
 }
 
 interface ReturnStyle {

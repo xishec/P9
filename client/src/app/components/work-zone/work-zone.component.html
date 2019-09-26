@@ -3,6 +3,7 @@
     [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
     [attr.width]="drawingInfo.width"
     [attr.height]="drawingInfo.height"
+    [ngStyle]="getCursorStyle()"
 >
     <rect
         [ngStyle]="changeStyle()"
