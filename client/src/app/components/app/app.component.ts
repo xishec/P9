@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -43,5 +43,9 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.openWelcomeModalWindow();
+    }
+
+    @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {
+        event.preventDefault();
     }
 }
