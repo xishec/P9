@@ -14,7 +14,7 @@ export class PencilToolService extends TracingToolService {
     private currentWidth = 0;
     currentColor = '';
     private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrapRef: SVGElement = this.renderer.createElement('svg', SVG_NS);
+    private svgWrapRef: SVGGElement = this.renderer.createElement('g', SVG_NS);
     private attributesManagerService: AttributesManagerService;
     private colorToolService: ColorToolService;
 
@@ -96,7 +96,8 @@ export class PencilToolService extends TracingToolService {
     }
 
     createSVGWrapper(): void {
-        const el: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         this.svgWrapRef = el;
         this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
@@ -109,14 +110,14 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', w.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
+        // this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         this.renderer.appendChild(this.svgWrapRef, el);
     }
 
     createSVGPath(): void {
         this.svgPathRef = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPathRef, 'stroke', '#' + this.currentColor);
+        // this.renderer.setAttribute(this.svgPathRef, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);

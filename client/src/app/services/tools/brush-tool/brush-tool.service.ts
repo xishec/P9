@@ -15,7 +15,7 @@ export class BrushToolService extends TracingToolService {
     private currentColor = '';
     private currentStyle = 1;
     private svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+    private svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
     private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
     private colorToolService: ColorToolService;
@@ -95,7 +95,7 @@ export class BrushToolService extends TracingToolService {
     }
 
     createSVGWrapper(): void {
-        const wrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.svgWrap = wrap;
         const filter: SVGFilterElement = this.createFilter(this.currentStyle);
         this.renderer.appendChild(this.svgWrap, filter);
