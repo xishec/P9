@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.openWelcomeModalWindow();
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
@@ -49,10 +48,11 @@ export class AppComponent implements OnInit {
             this.isOnInput = isOnInput;
         });
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
+        this.openWelcomeModalWindow();
     }
 
     openWelcomeModalWindow(): void {
-        if (this.welcomeModalWindowService.getValueFromLocalStorage()) {
+        if (this.displayWelcomeModalWindow) {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
                 disableClose: true,
