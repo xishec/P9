@@ -5,6 +5,7 @@
     [attr.height]="drawingInfo.height"
 >
     <rect
+        (click)="onClickRectangle()"
         [ngStyle]="changeStyle()"
         [attr.height]="this.drawingInfo.height + 'px'"
         [attr.width]="this.drawingInfo.width + 'px'"
