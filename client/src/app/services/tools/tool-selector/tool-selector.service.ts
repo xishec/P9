@@ -9,6 +9,7 @@ import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -18,6 +19,7 @@ export class ToolSelectorService {
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+    private colorApplicatorTool: ColorApplicatorToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -36,6 +38,9 @@ export class ToolSelectorService {
 
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
+
+        this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
+        this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
     }
 
     getPencilTool(): PencilToolService {
@@ -48,6 +53,10 @@ export class ToolSelectorService {
 
     getBrushTool(): BrushToolService {
         return this.brushTool;
+    }
+
+    getColorApplicatorTool(): ColorApplicatorToolService {
+        return this.colorApplicatorTool;
     }
 
     changeTool(tooltipName: string): void {
@@ -65,6 +74,27 @@ export class ToolSelectorService {
                 break;
             case ToolName.Brush:
                 this.currentTool = this.brushTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.ColorApplicator:
+                this.currentTool = this.colorApplicatorTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Quill:
+            case ToolName.Selection:
+            case ToolName.Pen:
+            case ToolName.SprayCan:
+            case ToolName.Line:
+            case ToolName.Polygon:
+            case ToolName.Ellipsis:
+            case ToolName.Fill:
+            case ToolName.Dropper:
+            case ToolName.Eraser:
+            case ToolName.Text:
+            case ToolName.Save:
+            case ToolName.ArtGallery:
+            case ToolName.Export:
+                this.currentTool = undefined;
                 this.changeCurrentToolName(tooltipName);
                 break;
             default:
