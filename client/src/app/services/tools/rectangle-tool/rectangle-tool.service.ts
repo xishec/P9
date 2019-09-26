@@ -39,7 +39,6 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
-            this.updatePreviewRectangle();
             this.updateDrawing();
         }
     }
@@ -52,7 +51,6 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.initialMouseY = this.currentMouseY;
             this.isPreviewing = true;
 
-            this.updatePreviewRectangle();
             this.updateDrawing();
 
             this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
@@ -107,7 +105,6 @@ export class RectangleToolService extends AbstractShapeToolService {
             case Keys.Shift:
                 if (this.isPreviewing && this.isSquarePreview) {
                     this.isSquarePreview = false;
-                    this.updatePreviewRectangle();
                     this.updateDrawing();
                 }
                 break;
@@ -142,10 +139,10 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     updateDrawing(): void {
+        this.updatePreviewRectangle();
         if (this.isSquarePreview) {
             this.updatePreviewSquare();
         } else {
-            this.updatePreviewRectangle();
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
