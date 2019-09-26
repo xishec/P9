@@ -1,103 +1,163 @@
-#switch-colors-button {
-    margin-right: 10px;
-    margin-left: 5px;
-}
+// #switch-colors-button {
+//     margin-right: 10px;
+//     margin-left: 5px;
+// }
 
-#color-palette-show-button {
-    display: block;
-    text-align: -webkit-center;
-}
+// #color-palette-show-button {
+//     display: block;
+//     text-align: -webkit-center;
+// }
 
-#color-pick-image {
-    width: 200px;
-    height: 150px;
-    display: block;
-    text-align: center;
-}
+// #color-pick-image {
+//     width: 200px;
+//     height: 150px;
+//     display: block;
+//     text-align: center;
+// }
 
-#window {
-    height: 450px;
-    width: 500px;
-    background-color: white;
-    padding: 30px 30px;
+// #window {
+//     height: 450px;
+//     width: 500px;
+//     background-color: white;
+//     padding: 30px 30px;
 
-    text-align: center;
-}
+//     text-align: center;
+// }
 
-mat-form-field {
-    margin: 20px 10px;
+// mat-form-field {
+//     margin: 20px 10px;
 
-    span {
-        color: #888888;
-        margin-right: 5px;
-    }
-}
+//     span {
+//         color: #888888;
+//         margin-right: 5px;
+//     }
+// }
 
-.medium {
-    width: 30%;
-}
-.small {
-    width: 16%;
-}
+// .medium {
+//     width: 30%;
+// }
+// .small {
+//     width: 16%;
+// }
 
-.color {
-    width: 0;
-    height: 0;
-    padding: 10px;
-    border: 1px solid #d0d0d0;
-    margin: 5px;
-    border-radius: 100%;
-    outline: none;
-}
-.color:hover:not(#bigColor) {
-    filter: brightness(0.8);
-}
-.color:active:not(#bigColor) {
-    filter: brightness(1);
-}
+// .color {
+//     width: 0;
+//     height: 0;
+//     padding: 10px;
+//     border: 1px solid #d0d0d0;
+//     margin: 5px;
+//     border-radius: 100%;
+//     outline: none;
+// }
+// .color:hover:not(#bigColor) {
+//     filter: brightness(0.8);
+// }
+// .color:active:not(#bigColor) {
+//     filter: brightness(1);
+// }
 
-#colorButtons {
-    display: flex;
-    align-items: center;
+// #colorButtons {
+//     display: flex;
+//     align-items: center;
 
-    img {
-        border: 0px solid #d0d0d0;
-        padding: 0px;
-        width: 23px;
-        height: 23px;
-    }
-}
+//     img {
+//         border: 0px solid #d0d0d0;
+//         padding: 0px;
+//         width: 23px;
+//         height: 23px;
+//     }
+// }
+
+// #container {
+//     margin: 30px 40px;
+
+//     #userColorButtons {
+//         margin-bottom: 10px;
+
+//         .color {
+//             margin-left: 5px;
+//         }
+//     }
+// }
+
+// .actionButton {
+//     width: 90px;
+//     margin: 10px 20px;
+// }
+
+// #confirmation {
+//     margin-bottom: 20px;
+
+//     #warning {
+//         background-color: red;
+//     }
+
+//     mat-error {
+//         margin-bottom: 10px;
+//     }
+// }
+
+// #userColor {
+//     display: flex;
+//     align-items: center;
+// }
 
 #container {
-    margin: 30px 40px;
-
-    #userColorButtons {
-        margin-bottom: 10px;
-
-        .color {
-            margin-left: 5px;
-        }
-    }
+    height: 500px;
 }
 
-.actionButton {
-    width: 90px;
-    margin: 10px 20px;
-}
-
-#confirmation {
+#color-palette-form {
     margin-bottom: 20px;
 
-    #warning {
-        background-color: red;
+    #userColor {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            width: 190px;
+        }
     }
 
-    mat-error {
-        margin-bottom: 10px;
+    .color {
+        width: 0;
+        height: 0;
+        padding: 10px;
+        border: 1px solid #d0d0d0;
+        margin: 5px;
+        border-radius: 100%;
+        outline: none;
+        transition: ease-in-out 0.1s;
     }
-}
+    .color:hover:not(#bigColor) {
+        transform: scale(1.2);
+    }
+    .color:active:not(#bigColor) {
+        transform: scale(1);
+    }
 
-#userColor {
-    display: flex;
-    align-items: center;
+    .medium {
+        width: 100px;
+    }
+    .small {
+        margin: 0 10px;
+        width: 40px;
+    }
+
+    #buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+            margin: 0px 15px;
+            margin-bottom: 40px;
+        }
+    }
+
+    p {
+        color: rgb(153, 153, 153);
+        font-size: 11.2px;
+        margin: 5px 0;
+    }
 }

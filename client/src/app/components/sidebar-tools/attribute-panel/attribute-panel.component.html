@@ -1,6 +1,6 @@
 <div id="container">
-    <app-pencil-attributes [hidden]="toolName !== ToolName.Pencil"></app-pencil-attributes>
-    <app-rectangle-attributes [hidden]="toolName !== ToolName.Rectangle"></app-rectangle-attributes>
-    <app-brush-attributes [hidden]="toolName !== ToolName.Brush"></app-brush-attributes>
-    <app-color-attributes></app-color-attributes>
+    <div><app-pencil-attributes [hidden]="toolName !== ToolName.Pencil"></app-pencil-attributes></div>
+    <div><app-rectangle-attributes [hidden]="toolName !== ToolName.Rectangle"></app-rectangle-attributes></div>
+    <div><app-brush-attributes [hidden]="toolName !== ToolName.Brush"></app-brush-attributes></div>
+    <div id="color"><app-color-attributes></app-color-attributes></div>
 </div>

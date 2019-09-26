@@ -6,6 +6,7 @@ import { ColorToolService } from '../../../../services/tools/color-tool/color-to
 interface ColorStyle {
     backgroundColor: string;
     border?: string;
+    transform?: string;
 }
 @Component({
     selector: 'app-color-attributes',
@@ -57,6 +58,7 @@ export class ColorAttributesComponent implements OnInit {
             return {
                 backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
+                transform: 'scale(1.3)',
             };
         }
         return {
@@ -68,6 +70,7 @@ export class ColorAttributesComponent implements OnInit {
             return {
                 backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
+                transform: 'scale(1.3)',
             };
         }
         return {
@@ -79,6 +82,7 @@ export class ColorAttributesComponent implements OnInit {
             return {
                 backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',
+                transform: 'scale(1.3)',
             };
         }
         return {

@@ -1,15 +1,20 @@
-.color {
-  width: 0;
-  height: 0;
-  padding: 10px;
-  border: 1px solid #d0d0d0;
-  margin: 5px;
-  border-radius: 100%;
-  outline: none;
-}
-.color:hover:not(#bigColor) {
-  filter: brightness(0.8);
-}
-.color:active:not(#bigColor) {
-  filter: brightness(1);
+#buttons {
+    margin-bottom: 20px;
+
+    .color {
+        width: 0;
+        height: 0;
+        padding: 8px;
+        border: 1px solid #d0d0d0;
+        margin: 2px;
+        border-radius: 100%;
+        outline: none;
+        transition: ease-in-out 0.1s;
+    }
+    .color:hover:not(#bigColor) {
+        transform: scale(1.2);
+    }
+    .color:active:not(#bigColor) {
+        transform: scale(1);
+    }
 }

@@ -7,6 +7,11 @@
         div {
             display: flex;
             align-items: center;
+            justify-content: center;
+        }
+
+        span {
+            width: 190px;
         }
 
         .color {
@@ -17,12 +22,21 @@
             margin: 5px;
             border-radius: 100%;
             outline: none;
+            transition: ease-in-out 0.1s;
         }
         .color:hover:not(#bigColor) {
-            filter: brightness(0.8);
+            transform: scale(1.2);
         }
         .color:active:not(#bigColor) {
-            filter: brightness(1);
+            transform: scale(1);
+        }
+
+        i {
+            padding: 0 20px;
+        }
+
+        button {
+            margin: 5px 0;
         }
     }
 }
