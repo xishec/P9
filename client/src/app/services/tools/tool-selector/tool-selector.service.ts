@@ -33,7 +33,7 @@ export class ToolSelectorService {
         this.rectangleTool.initializeColorToolService(this.colorToolService);
 
         this.pencilTool = new PencilToolService(ref, renderer, drawStack);
-        // this.pencilTool.initializeColorToolService(this.colorToolService);
+        this.pencilTool.initializeColorToolService(this.colorToolService);
 
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         // this.brushTool.initializeColorToolService(this.colorToolService);

@@ -4,6 +4,7 @@ import { Mouse, SVG_NS } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,10 +12,11 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 export class PencilToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 0;
-    private currentColor = 'black';
+    currentColor = '';
     private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef: SVGElement = this.renderer.createElement('svg', SVG_NS);
     private attributesManagerService: AttributesManagerService;
+    private colorToolService: ColorToolService;
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -30,6 +32,12 @@ export class PencilToolService extends TracingToolService {
             this.currentWidth = thickness;
         });
     }
+    initializeColorToolService(colorToolService: ColorToolService) {
+        this.colorToolService = colorToolService;
+        this.colorToolService.currentSecondaryColor.subscribe((currentColor: string) => {
+            this.currentColor = currentColor;
+        });
+    }
 
     onMouseDown(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton) {
@@ -37,16 +45,22 @@ export class PencilToolService extends TracingToolService {
             this.createSVGWrapper();
             this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top, this.currentWidth);
+            this.createSVGCircle(
+                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+                this.currentWidth,
+            );
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
-            this.createSVGCircle(e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top, this.currentWidth);
+            this.createSVGCircle(
+                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
+                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
+                this.currentWidth,
+            );
             this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
@@ -95,14 +109,14 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', w.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(el, 'stroke', this.currentColor);
+        this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         this.renderer.appendChild(this.svgWrapRef, el);
     }
 
     createSVGPath(): void {
         this.svgPathRef = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPathRef, 'stroke', this.currentColor);
+        this.renderer.setAttribute(this.svgPathRef, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
