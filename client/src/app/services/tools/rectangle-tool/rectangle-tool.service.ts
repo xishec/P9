@@ -81,10 +81,10 @@ export class RectangleToolService extends AbstractShapeToolService {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
-            // this.isPreviewing = false;
-            // this.isSquarePreview = false;
-            // this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
-            // this.renderer.removeChild(this.svgReference, this.drawRectangle);
+            this.isPreviewing = false;
+            this.isSquarePreview = false;
+            this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.removeChild(this.svgReference, this.drawRectangle);
         }
     }
 

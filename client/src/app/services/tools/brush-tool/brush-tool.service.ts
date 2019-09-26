@@ -96,7 +96,7 @@ export class BrushToolService extends TracingToolService {
 
     createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
+        // this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
         this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
         this.svgWrap = wrap;
         const filter: SVGFilterElement = this.createFilter(this.currentStyle);
@@ -166,6 +166,12 @@ export class BrushToolService extends TracingToolService {
         // this.renderer.setAttribute(circle, 'fill', '#' + this.currentColor);
         // this.renderer.setAttribute(circle, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(circle, 'filter', `url(#${this.currentStyle.toString()})`);
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        circle.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
+        });
         this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
@@ -184,6 +190,13 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
+        });
 
         this.renderer.appendChild(this.svgWrap, this.svgPath);
         this.updateSVGPath();

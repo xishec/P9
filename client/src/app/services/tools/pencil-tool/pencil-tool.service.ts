@@ -112,7 +112,7 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
         // this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPathRef.addEventListener('mousedown', (event: MouseEvent) => {
+        el.addEventListener('mousedown', (event: MouseEvent) => {
             setTimeout(() => {
                 this.drawStack.changeTargetElement(currentDrawStackLength);
             }, 10);
