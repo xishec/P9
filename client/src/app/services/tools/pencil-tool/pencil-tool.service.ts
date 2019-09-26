@@ -21,7 +21,7 @@ export class PencilToolService extends TracingToolService {
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService
+        private drawStack: DrawStackService,
     ) {
         super();
     }
@@ -130,7 +130,7 @@ export class PencilToolService extends TracingToolService {
         this.svgPathRef.addEventListener('mousedown', (event: MouseEvent) => {
             setTimeout(() => {
                 this.drawStack.changeTargetElement(currentDrawStackLength);
-            }, 5);
+            }, 10);
         });
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
     }

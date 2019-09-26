@@ -77,25 +77,23 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
+        if (button === Mouse.LeftButton) {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
-            this.isPreviewing = false;
-            this.isSquarePreview = false;
-            this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
-            this.renderer.removeChild(this.svgReference, this.drawRectangle);
+            // this.isPreviewing = false;
+            // this.isSquarePreview = false;
+            // this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+            // this.renderer.removeChild(this.svgReference, this.drawRectangle);
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
         this.isIn = true;
-        this.isOut = false;
     }
 
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
-        this.isOut = true;
     }
 
     onKeyDown(event: KeyboardEvent): void {
