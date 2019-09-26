@@ -76,43 +76,43 @@ export class WorkZoneComponent implements OnInit {
 
     // LISTENERS //
     @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseMove(event);
         }
     }
 
     @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseDown(event);
         }
     }
 
     @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseUp(event);
         }
     }
 
     @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseEnter(event);
         }
     }
 
     @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseLeave(event);
         }
     }
 
     @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onKeyDown(event);
         }
     }
 
     @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
-        if (this.currentTool !== undefined) {
+        if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onKeyUp(event);
         }
     }
