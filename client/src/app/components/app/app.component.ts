@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
 import { IndexService } from '../../services/index/index.service';
+import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { ToolName } from '../../services/constants';
@@ -18,17 +19,30 @@ import { ToolName } from '../../services/constants';
 export class AppComponent implements OnInit {
     readonly title = 'LOG2990';
     message = new BehaviorSubject<string>('');
+    displayNewDrawingModalWindow = false;
+    displayWelcomeModalWindow = false;
 
     constructor(
         private basicService: IndexService,
         private welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
+        private drawingModalWindowService: DrawingModalWindowService,
     ) {
         this.basicService
             .basicGet()
             .pipe(map((message: Message) => `${message.title} ${message.body}`))
             .subscribe(this.message);
+    }
+
+    ngOnInit(): void {
+        this.openWelcomeModalWindow();
+        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
+            (displayNewDrawingModalWindow: boolean) => {
+                this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
+            },
+        );
+        this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
     }
 
     openWelcomeModalWindow(): void {
@@ -44,40 +58,41 @@ export class AppComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
-        this.openWelcomeModalWindow();
-    }
-
     @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {
         event.preventDefault();
     }
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        console.log('onControlS');
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+        }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        console.log('onControlO');
-        this.toolSelectorService.changeTool(ToolName.NewDrawing);
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+            this.toolSelectorService.changeTool(ToolName.NewDrawing);
+        }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
         event.preventDefault();
-        console.log('onC -> Pencil');
-        this.toolSelectorService.changeTool(ToolName.Pencil);
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+            this.toolSelectorService.changeTool(ToolName.Pencil);
+        }
     }
 
     @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
         event.preventDefault();
-        console.log('onP -> Brush');
-        this.toolSelectorService.changeTool(ToolName.Brush);
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+            this.toolSelectorService.changeTool(ToolName.Brush);
+        }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
         event.preventDefault();
-        console.log('on1 -> Rectangle');
-        this.toolSelectorService.changeTool(ToolName.Rectangle);
+        if (!this.displayNewDrawingModalWindow && !this.displayWelcomeModalWindow) {
+            this.toolSelectorService.changeTool(ToolName.Rectangle);
+        }
     }
 }
