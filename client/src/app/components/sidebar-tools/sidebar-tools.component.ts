@@ -9,16 +9,17 @@ import { ToolSelectorService } from '../../services/tools/tool-selector/tool-sel
     styleUrls: ['./sidebar-tools.component.scss'],
 })
 export class SidebarToolsComponent implements OnInit {
-    toolSelectorService: ToolSelectorService;
-
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
-    constructor(toolSelectorService: ToolSelectorService) {
-        this.toolSelectorService = toolSelectorService;
-    }
+    currentToolName = '';
+
+    constructor(private toolSelectorService: ToolSelectorService) {}
 
     ngOnInit(): void {
+        this.toolSelectorService.currentToolName.subscribe((currentToolName) => {
+            this.currentToolName = currentToolName;
+        });
         this.toolSelectorService.changeTool(ToolName.Selection);
     }
 
