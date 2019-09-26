@@ -15,7 +15,7 @@ export class ColorPaletteComponent implements OnInit {
     formBuilder: FormBuilder;
 
     selectedColor: ColorType = ColorType.primaryColor;
-    currentColor: Color = new Color();
+    previewColor: Color = new Color();
 
     constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
@@ -27,10 +27,14 @@ export class ColorPaletteComponent implements OnInit {
         this.colorToolService.currentSelectedColor.subscribe(() => {
             this.updateWithColorToolService();
         });
+        this.colorToolService.currentPreviewColor.subscribe((previewColor: Color) => {
+            this.previewColor = previewColor;
+            this.setColorNumericValues();
+        });
     }
 
     updateWithColorToolService() {
-        this.currentColor.hex = this.colorToolService.getColorOnFocus();
+        this.previewColor.hex = this.colorToolService.getColorOnFocus();
         this.setColorNumericValues();
     }
 
@@ -45,9 +49,9 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     changeColor(colorHex: string): void {
-        this.currentColor.hex = colorHex;
+        this.previewColor.hex = colorHex;
         this.setColorNumericValues();
-        // this.colorToolService.addColorToQueue(this.currentColor);
+        // this.colorToolService.addColorToQueue(this.previewColor);
     }
 
     setColorNumericValues(): void {
@@ -56,13 +60,13 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     setHexValues(): void {
-        this.colorPaletteForm.controls.hex.setValue(this.currentColor.hex);
+        this.colorPaletteForm.controls.hex.setValue(this.previewColor.hex);
     }
 
     setRGBValues(): void {
-        this.colorPaletteForm.controls.R.setValue(parseInt(this.currentColor.hex.slice(0, 2), 16));
-        this.colorPaletteForm.controls.G.setValue(parseInt(this.currentColor.hex.slice(2, 4), 16));
-        this.colorPaletteForm.controls.B.setValue(parseInt(this.currentColor.hex.slice(4, 6), 16));
+        this.colorPaletteForm.controls.R.setValue(parseInt(this.previewColor.hex.slice(0, 2), 16));
+        this.colorPaletteForm.controls.G.setValue(parseInt(this.previewColor.hex.slice(2, 4), 16));
+        this.colorPaletteForm.controls.B.setValue(parseInt(this.previewColor.hex.slice(4, 6), 16));
     }
 
     onUserHexInput(): void {
@@ -97,12 +101,12 @@ export class ColorPaletteComponent implements OnInit {
         this.colorToolService.changeCurrentShowColorPalette(false);
     }
     onSubmit(): void {
-        this.colorToolService.changeColorOnFocus(this.currentColor);
+        this.colorToolService.changeColorOnFocus(this.previewColor);
         this.colorToolService.changeCurrentShowColorPalette(false);
     }
 
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.currentColor.hex };
+        return { backgroundColor: '#' + this.previewColor.hex };
     }
 }
 interface IconStyle {

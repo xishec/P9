@@ -10,6 +10,7 @@ import { COLORS, ColorType } from '../../../services/constants';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
+    private previewColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
     private backgroundColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
     private primaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[1]);
     private secondaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[2]);
@@ -18,6 +19,7 @@ export class ColorToolService {
     );
     private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+    currentPreviewColor: Observable<Color> = this.previewColor.asObservable();
     currentBackgroundColor: Observable<Color> = this.backgroundColor.asObservable();
     currentPrimaryColor: Observable<Color> = this.primaryColor.asObservable();
     currentSecondaryColor: Observable<Color> = this.secondaryColor.asObservable();
@@ -37,6 +39,9 @@ export class ColorToolService {
     //     this.colorQueueBSubject.next(this.colorQueue);
     // }
 
+    changePreviewColor(previewColor: Color) {
+        this.previewColor.next(previewColor);
+    }
     changeColorOnFocus(colorOnFocus: Color) {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
@@ -71,5 +76,21 @@ export class ColorToolService {
             default:
                 return new Color().hex;
         }
+    }
+
+    rgbToHex(R: number, G: number, B: number): string {
+        let r = Number(Math.ceil(R)).toString(16);
+        let g = Number(Math.ceil(G)).toString(16);
+        let b = Number(Math.ceil(B)).toString(16);
+        if (r.length === 1) {
+            r = '0' + r;
+        }
+        if (g.length === 1) {
+            g = '0' + g;
+        }
+        if (b.length === 1) {
+            b = '0' + b;
+        }
+        return r + g + b;
     }
 }

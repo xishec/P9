@@ -1,7 +1,9 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { Color } from '../../../classes/Color';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -23,6 +25,7 @@ export class WorkZoneComponent implements OnInit {
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
         private toolSelector: ToolSelectorService,
+        private colorToolService: ColorToolService,
     ) {}
 
     ngOnInit(): void {
@@ -36,13 +39,15 @@ export class WorkZoneComponent implements OnInit {
                 this.renderer.removeChild(this.ref.nativeElement, el);
             }
         });
-
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
 
         this.toolSelector.currentToolName.subscribe(() => {
             this.currentTool = this.toolSelector.currentTool;
+        });
+        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: Color) => {
+            this.drawingInfo.color = backgroundColor;
         });
     }
 

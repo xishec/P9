@@ -31,20 +31,4 @@ export class DrawingModalWindowService {
     changeActiveColor(activeColor: Color) {
         this.activeColor.next(activeColor);
     }
-
-    rgbToHex(R: number, G: number, B: number): string {
-        let r = Number(Math.ceil(R)).toString(16);
-        let g = Number(Math.ceil(G)).toString(16);
-        let b = Number(Math.ceil(B)).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
-    }
 }
