@@ -4,33 +4,49 @@ import { Keys, Mouse, SVG_NS, TraceType } from '../../constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    private fillColor = 'green';
-    private strokeColor = 'black';
+    fillColor: string = '';
+    strokeColor: string = '';
+    userFillColor: string = '';
+    userStrokeColor: string = '';
+    traceType: string = '';
     private strokeWidth = 1;
     private isSquarePreview = false;
     private attributesManagerService: AttributesManagerService;
+    private colorToolService: ColorToolService;
 
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
-        renderer: Renderer2
+        renderer: Renderer2,
     ) {
         super(renderer);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+        this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
         });
-        this.attributesManagerService.currentTraceType.subscribe((traceType) => {
+        this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
+        });
+    }
+    initializeColorToolService(colorToolService: ColorToolService) {
+        this.colorToolService = colorToolService;
+        this.colorToolService.currentPrimaryColor.subscribe((fillColor: string) => {
+            this.fillColor = fillColor;
+            this.updateTraceType(this.traceType);
+        });
+        this.colorToolService.currentSecondaryColor.subscribe((strokeColor: string) => {
+            this.strokeColor = strokeColor;
+            this.updateTraceType(this.traceType);
         });
     }
 
@@ -121,15 +137,15 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
         this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangle.height.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
-        this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
+        this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.userFillColor);
+        this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.userStrokeColor);
         this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
 
         drawRectangle.addEventListener('mousedown', (event) => {
             if (event.button === Mouse.LeftButton) {
-                this.renderer.setAttribute(drawRectangle, 'fill', this.fillColor.toString());
+                this.renderer.setAttribute(drawRectangle, 'fill', '#' + this.userFillColor);
             } else if (event.button === Mouse.RightButton) {
-                this.renderer.setAttribute(drawRectangle, 'stroke', this.strokeColor.toString());
+                this.renderer.setAttribute(drawRectangle, 'stroke', '#' + this.userStrokeColor);
             }
         });
 
@@ -157,31 +173,31 @@ export class RectangleToolService extends AbstractShapeToolService {
                 this.renderer.setAttribute(
                     this.drawRectangle,
                     'width',
-                    (-(this.previewRectangle.width.baseVal.value - this.strokeWidth)).toString()
+                    (-(this.previewRectangle.width.baseVal.value - this.strokeWidth)).toString(),
                 );
             } else {
                 this.renderer.setAttribute(
                     this.drawRectangle,
                     'width',
-                    (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString()
+                    (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString(),
                 );
             }
             if (this.previewRectangle.height.baseVal.value - this.strokeWidth < 0) {
                 this.renderer.setAttribute(
                     this.drawRectangle,
                     'height',
-                    (-(this.previewRectangle.height.baseVal.value - this.strokeWidth)).toString()
+                    (-(this.previewRectangle.height.baseVal.value - this.strokeWidth)).toString(),
                 );
             } else {
                 this.renderer.setAttribute(
                     this.drawRectangle,
                     'height',
-                    (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString()
+                    (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString(),
                 );
             }
         }
-        this.renderer.setAttribute(this.drawRectangle, 'fill', this.fillColor.toString());
-        this.renderer.setAttribute(this.drawRectangle, 'stroke', this.strokeColor.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
+        this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
         this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
     }
 
@@ -230,20 +246,22 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     updateTraceType(traceType: string) {
+        this.traceType = traceType;
         switch (traceType) {
             case TraceType.Outline: {
-                this.fillColor = '#ffffff00';
-                this.strokeColor = 'black';
+                this.userFillColor = 'ffffff00';
+                this.userStrokeColor = this.strokeColor;
                 break;
             }
             case TraceType.Full: {
-                this.fillColor = 'Green';
-                this.strokeColor = '#ffffff00';
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = 'ffffff00';
                 break;
             }
             case TraceType.Both: {
-                this.fillColor = 'Green';
-                this.strokeColor = 'black';
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = this.strokeColor;
+                break;
             }
         }
     }
