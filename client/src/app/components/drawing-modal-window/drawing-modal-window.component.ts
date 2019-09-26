@@ -31,9 +31,6 @@ export class DrawingModalWindowComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
         this.drawingModalWindowService.currentActiveColor.subscribe((activeColor) => {
             this.activeColor = activeColor;
         });
@@ -60,8 +57,6 @@ export class DrawingModalWindowComponent implements OnInit {
             opacity: this.drawingModalForm.value.A,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
-
         this.submitCount++;
         this.initializeForm();
         this.activeColor = { hex: DEFAULT_COLOR };
