@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DrawingModalWindowService } from './services/drawing-modal-window/drawing-modal-window.service';
 import { ToolSelectorService } from './services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
+import { ColorToolService } from './services/tools/color-tool/color-tool.service';
 // ************************************************
 
 import { AttributePanelComponent } from '@attribute-panel/attribute-panel.component';
@@ -75,7 +76,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatFormFieldModule,
     ],
     entryComponents: [WelcomeModalWindowComponent],
-    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService],
+    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

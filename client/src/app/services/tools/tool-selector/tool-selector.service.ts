@@ -8,6 +8,7 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,12 +23,20 @@ export class ToolSelectorService {
     private brushTool: BrushToolService;
     currentTool: AbstractToolService | undefined;
 
-    constructor(private drawingModalWindowService: DrawingModalWindowService) {}
+    constructor(
+        private drawingModalWindowService: DrawingModalWindowService,
+        private colorToolService: ColorToolService,
+    ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
+        this.rectangleTool.initializeColorToolService(this.colorToolService);
+
         this.pencilTool = new PencilToolService(ref, renderer, drawStack);
+        this.pencilTool.initializeColorToolService(this.colorToolService);
+
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
+        this.brushTool.initializeColorToolService(this.colorToolService);
     }
 
     getPencilTool(): PencilToolService {

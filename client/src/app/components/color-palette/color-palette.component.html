@@ -1,54 +1,60 @@
-<form
-    [formGroup]="colorPaletteForm"
-    id="color-palette-form"
-    [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }"
->
-    <div class="formGroup">
-        <div id="userColor">
-            <span> Couleur courrente :</span>
-            <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
-            <br />
-        </div>
-
-        <app-color-picker></app-color-picker>
-
-        <mat-form-field class="medium">
-            <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()" />
-            <mat-error>Ce code de couleur n'est pas valide!</mat-error>
-            <span matPrefix>#</span>
-        </mat-form-field>
-        <br />
-        <mat-form-field class="small" (change)="onUserColorRGBInput()">
-            <input matInput type="number" placeholder="R:" formControlName="R" />
-            <mat-error>R doit être entre 0 et 255!</mat-error>
-        </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGBInput()">
-            <input matInput type="number" placeholder="G:" formControlName="G" />
-            <mat-error>G doit être entre 0 et 255!</mat-error>
-        </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGBInput()">
-            <input matInput type="number" placeholder="B:" formControlName="B" />
-            <mat-error>B doit être entre 0 et 255!</mat-error>
-        </mat-form-field>
-        <mat-form-field class="small" (change)="onUserColorRGBInput()">
-            <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
-            <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
-        </mat-form-field>
-
-        <div id="last-10-colors">
-            Les dix dernières couleurs
-        </div>
-        <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
-    </div>
-
-    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        (click)="onSubmit()"
-        [disabled]="colorPaletteForm.invalid"
+<div id="container">
+    <form
+        [formGroup]="colorPaletteForm"
+        id="color-palette-form"
+        [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }"
     >
-        Choisir
-    </button>
-</form>
+        <div class="formGroup">
+            <div id="userColor">
+                <span> Couleur courrente :</span>
+                <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+                <br />
+            </div>
+
+            <div>
+                <app-color-picker></app-color-picker>
+            </div>
+
+            <mat-form-field class="medium">
+                <input matInput type="text" placeholder="Hex" formControlName="hex" (change)="onUserHexInput()" />
+                <mat-error>Ce code de couleur n'est pas valide!</mat-error>
+                <span matPrefix>#</span>
+            </mat-form-field>
+            <br />
+            <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <input matInput type="number" placeholder="R:" formControlName="R" />
+                <mat-error>R doit être entre 0 et 255!</mat-error>
+            </mat-form-field>
+            <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <input matInput type="number" placeholder="G:" formControlName="G" />
+                <mat-error>G doit être entre 0 et 255!</mat-error>
+            </mat-form-field>
+            <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <input matInput type="number" placeholder="B:" formControlName="B" />
+                <mat-error>B doit être entre 0 et 255!</mat-error>
+            </mat-form-field>
+            <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
+                <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
+            </mat-form-field>
+
+            <p id="last-10-colors">
+                Dix dernières couleurs :
+            </p>
+            <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
+        </div>
+
+        <div id="buttons">
+            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+            <button
+                class="actionButton"
+                mat-stroked-button
+                type="submit"
+                (click)="onSubmit()"
+                [disabled]="colorPaletteForm.invalid"
+            >
+                Choisir
+            </button>
+        </div>
+    </form>
+</div>

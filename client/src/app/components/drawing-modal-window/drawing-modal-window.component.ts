@@ -37,7 +37,12 @@ export class DrawingModalWindowComponent implements OnInit {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
         this.colorToolService.currentPreviewColor.subscribe((previewColor) => {
-            this.previewColor.hex = previewColor;
+            if (this.displayColorWheel) {
+                this.previewColor.hex = previewColor;
+            }
+        });
+        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor) => {
+            this.previewColor.hex = backgroundColor;
         });
     }
 
@@ -119,6 +124,7 @@ export class DrawingModalWindowComponent implements OnInit {
         return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
     getUserColorIcon(): IconStyle {
+        console.log(this.previewColor.hex);
         return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
     }
 
