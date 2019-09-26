@@ -31,7 +31,7 @@ import { AttributePanelComponent } from '@attribute-panel/attribute-panel.compon
 import { BrushAttributesComponent } from '@attribute-panel/brush-attributes/brush-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
-import { ColorPickerComponent } from './components/color-picker/color-picker.component';
+import { ColorPickerComponent } from './components/color-tool/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-tool/color-queue/color-queue.component';
 import { ColorToolComponent } from './components/color-tool/color-tool.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
@@ -72,7 +72,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatSelectModule,
         MatFormFieldModule,
     ],
-    entryComponents: [WelcomeModalWindowComponent],
+    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolComponent],
     bootstrap: [AppComponent],
 })
