@@ -80,6 +80,23 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Quill:
+            case ToolName.Selection:
+            case ToolName.Pen:
+            case ToolName.SprayCan:
+            case ToolName.Line:
+            case ToolName.Polygon:
+            case ToolName.Ellipsis:
+            case ToolName.Fill:
+            case ToolName.Dropper:
+            case ToolName.Eraser:
+            case ToolName.Text:
+            case ToolName.Save:
+            case ToolName.ArtGallery:
+            case ToolName.Export:
+                this.currentTool = undefined;
+                this.changeCurrentToolName(tooltipName);
+                break;
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
