@@ -97,7 +97,7 @@ export class ColorToolService {
     }
 
     switchPrimarySecondary() {
-        let temp: string = this.primaryColor.value;
+        const temp: string = this.primaryColor.value;
         this.primaryColor.next(this.secondaryColor.value);
         this.secondaryColor.next(temp);
     }

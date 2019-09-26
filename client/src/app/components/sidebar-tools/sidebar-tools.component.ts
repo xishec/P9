@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FILES_BUTTON_INFO, TOOLS_BUTTON_INFO } from '../../services/constants';
+import { FILES_BUTTON_INFO, ToolName, TOOLS_BUTTON_INFO } from '../../services/constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
-import { ToolName } from '../../services/constants';
 
 @Component({
     selector: 'app-sidebar-tools',

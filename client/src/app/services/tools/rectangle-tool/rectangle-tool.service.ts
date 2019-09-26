@@ -149,22 +149,22 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.previewRectangle.x.baseVal.value + this.strokeWidth / 2).toString()
+                (this.previewRectangle.x.baseVal.value + this.strokeWidth / 2).toString(),
             );
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.previewRectangle.y.baseVal.value + this.strokeWidth / 2).toString()
+                (this.previewRectangle.y.baseVal.value + this.strokeWidth / 2).toString(),
             );
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'width',
-                (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString()
+                (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString(),
             );
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'height',
-                (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString()
+                (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString(),
             );
         }
         this.renderer.setAttribute(this.drawRectangle, 'fill', this.fillColor.toString());
@@ -183,7 +183,7 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseX - minLen + this.strokeWidth / 2).toString()
+                (this.initialMouseX - minLen + this.strokeWidth / 2).toString(),
             );
             this.renderer.setAttribute(this.drawRectangle, 'width', (minLen - this.strokeWidth).toString());
         } else {
@@ -197,7 +197,7 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseY - minLen + this.strokeWidth / 2).toString()
+                (this.initialMouseY - minLen + this.strokeWidth / 2).toString(),
             );
             this.renderer.setAttribute(this.drawRectangle, 'height', (minLen - this.strokeWidth).toString());
         } else {

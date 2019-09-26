@@ -31,14 +31,14 @@ import { AttributePanelComponent } from '@attribute-panel/attribute-panel.compon
 import { BrushAttributesComponent } from '@attribute-panel/brush-attributes/brush-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
+import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
-import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
+import { ColorAttributesComponent } from './components/sidebar-tools/attribute-panel/color-attributes/color-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { ColorAttributesComponent } from './components/sidebar-tools/attribute-panel/color-attributes/color-attributes.component';
 
 @NgModule({
     declarations: [

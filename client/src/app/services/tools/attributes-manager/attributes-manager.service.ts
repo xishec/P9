@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { TraceType, Thickness } from '../../constants';
+import { Thickness, TraceType } from '../../constants';
 
 @Injectable({
     providedIn: 'root',

@@ -23,7 +23,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService
+        private toolSelectorService: ToolSelectorService,
     ) {
         this.formBuilder = formBuilder;
     }
