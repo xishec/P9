@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Color } from '../../../../classes/Color';
 import { COLORS, ColorType } from '../../../services/constants';
 
@@ -10,54 +10,43 @@ import { COLORS, ColorType } from '../../../services/constants';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
-    backgroundColor: Color = COLORS[0];
-    primaryColor: Color = COLORS[1];
-    secondaryColor: Color = COLORS[2];
-    selectedColor: ColorType | undefined = undefined;
-    showColorPalette: false;
-
-    currentBackgroundColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
-    currentPrimaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[1]);
-    currentSecondaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[2]);
-    currentSelectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
+    private backgroundColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[0]);
+    private primaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[1]);
+    private secondaryColor: BehaviorSubject<Color> = new BehaviorSubject<Color>(COLORS[2]);
+    private selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
         undefined,
     );
-    currentShowColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    currentBackgroundColor: Observable<Color> = this.backgroundColor.asObservable();
+    currentPrimaryColor: Observable<Color> = this.primaryColor.asObservable();
+    currentSecondaryColor: Observable<Color> = this.secondaryColor.asObservable();
+    currentSelectedColor: Observable<ColorType | undefined> = this.selectedColor.asObservable();
+    currentShowColorPalette: Observable<boolean> = this.showColorPalette.asObservable();
 
     colorQueue: Color[] = [];
     colorQueueBSubject = new BehaviorSubject(this.colorQueue);
 
-    changeColor(color: Color, colorType: ColorType): void {
-        if (colorType === ColorType.primaryColor) {
-            this.primaryColor = color;
-        } else if (colorType === ColorType.secondaryColor) {
-            this.secondaryColor = color;
-        }
-    }
-
-    addColorToQueue(color: Color): void {
-        if (this.colorQueue.length < 10) {
-            this.colorQueue.push(color);
-        } else {
-            this.colorQueue.shift();
-            this.colorQueue.push(color);
-        }
-        this.colorQueueBSubject.next(this.colorQueue);
-    }
+    // addColorToQueue(color: Color): void {
+    //     if (this.colorQueue.length < 10) {
+    //         this.colorQueue.push(color);
+    //     } else {
+    //         this.colorQueue.shift();
+    //         this.colorQueue.push(color);
+    //     }
+    //     this.colorQueueBSubject.next(this.colorQueue);
+    // }
 
     changeColorOnFocus(colorOnFocus: Color) {
-        switch (this.currentSelectedColor.value) {
+        switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
-                this.currentBackgroundColor.next(colorOnFocus);
-                this.changeCurrentShowColorPalette(false);
+                this.backgroundColor.next(colorOnFocus);
                 break;
             case ColorType.primaryColor:
-                this.currentPrimaryColor.next(colorOnFocus);
-                this.changeCurrentShowColorPalette(false);
+                this.primaryColor.next(colorOnFocus);
                 break;
             case ColorType.secondaryColor:
-                this.currentSecondaryColor.next(colorOnFocus);
-                this.changeCurrentShowColorPalette(false);
+                this.secondaryColor.next(colorOnFocus);
                 break;
             default:
                 console.warn('color selection undefined');
@@ -65,22 +54,22 @@ export class ColorToolService {
         }
     }
     changeSelectedColor(selectedColor: ColorType | undefined) {
-        this.currentSelectedColor.next(selectedColor);
+        this.selectedColor.next(selectedColor);
     }
     changeCurrentShowColorPalette(showColorPalette: boolean) {
-        this.currentShowColorPalette.next(showColorPalette);
+        this.showColorPalette.next(showColorPalette);
     }
 
-    getColorOnFocus(): Color {
-        switch (this.currentSelectedColor.value) {
+    getColorOnFocus(): string {
+        switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
-                return this.currentBackgroundColor.value;
+                return this.backgroundColor.value.hex;
             case ColorType.primaryColor:
-                return this.currentPrimaryColor.value;
+                return this.primaryColor.value.hex;
             case ColorType.secondaryColor:
-                return this.currentSecondaryColor.value;
+                return this.secondaryColor.value.hex;
             default:
-                return new Color();
+                return new Color().hex;
         }
     }
 }

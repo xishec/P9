@@ -30,7 +30,7 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     updateWithColorToolService() {
-        this.currentColor = this.colorToolService.getColorOnFocus();
+        this.currentColor.hex = this.colorToolService.getColorOnFocus();
         this.setColorNumericValues();
     }
 
@@ -47,7 +47,7 @@ export class ColorPaletteComponent implements OnInit {
     changeColor(colorHex: string): void {
         this.currentColor.hex = colorHex;
         this.setColorNumericValues();
-        this.colorToolService.addColorToQueue(this.currentColor);
+        // this.colorToolService.addColorToQueue(this.currentColor);
     }
 
     setColorNumericValues(): void {
@@ -94,11 +94,11 @@ export class ColorPaletteComponent implements OnInit {
         this.changeColor(color.hex);
     }
     onCancel(): void {
-        console.log('onCancel');
+        this.colorToolService.changeCurrentShowColorPalette(false);
     }
     onSubmit(): void {
-        console.log('onSubmit');
         this.colorToolService.changeColorOnFocus(this.currentColor);
+        this.colorToolService.changeCurrentShowColorPalette(false);
     }
 
     getUserColorIcon(): IconStyle {
