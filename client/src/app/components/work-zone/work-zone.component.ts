@@ -119,10 +119,14 @@ export class WorkZoneComponent implements OnInit {
     // LISTENERS //
 
     getCursorStyle() {
-        if (this.toolName === ToolName.Brush) {
-            return { cursor: 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/meh.png"), auto' };
-        } else {
-            return { cursor: 'default' };
+        if (this.empty) return { cursor: 'not-allowed' };
+        switch (this.toolName) {
+            case ToolName.Brush:
+            case ToolName.Pencil:
+            case ToolName.Rectangle:
+                return { cursor: 'crosshair' };
+            default:
+                return { cursor: 'default' };
         }
     }
 }
