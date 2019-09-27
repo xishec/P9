@@ -5,7 +5,6 @@ import { Color } from '../../../../classes/Color';
 
 interface IconStyle {
     backgroundColor: string;
-    opacity: string;
 }
 
 @Component({
@@ -30,6 +29,6 @@ export class ColorQueueComponent implements OnInit {
     }
 
     getColorIcon(color: string): IconStyle {
-        return { backgroundColor: '#' + color, opacity: '1' };
+        return { backgroundColor: '#' + color };
     }
 }
