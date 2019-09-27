@@ -88,11 +88,10 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setRGBFromHex();
     }
     onClickColorPicker(): void {
-        if (this.previewColor.hex === undefined) {
-            return;
+        if (this.previewColor.hex) {
+            this.setHex();
+            this.setRGBFromHex();
         }
-        this.setHex();
-        this.setRGBFromHex();
     }
     onCancel(): void {
         this.displayNewDrawingModalWindow = false;
