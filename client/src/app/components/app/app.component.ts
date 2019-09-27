@@ -70,71 +70,55 @@ export class AppComponent implements OnInit {
         }
     }
 
+    checkEventPreventionCondition(): boolean {
+        return (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        );
+    }
+
     @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {
         event.preventDefault();
     }
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             // will be implemented later
         }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
 
     @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
     }
 
     @HostListener('window:keydown.r', ['$event']) onR(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.ColorApplicator);
         }
