@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ToolName } from 'src/constants/tool-constants';
-import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-attribute-panel',

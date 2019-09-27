@@ -48,7 +48,7 @@ export class PencilToolService extends TracingToolService {
             const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
             this.currentPath = `M${x} ${y}`;
             this.createSVGCircle(x, y);
-            this.svgPreviewCircle = this.createSVGCircle(x,y);
+            this.svgPreviewCircle = this.createSVGCircle(x, y);
             this.createSVGPath();
         }
     }
