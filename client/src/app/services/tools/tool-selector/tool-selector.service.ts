@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ToolName } from '../../../../constants/constants';
+import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';

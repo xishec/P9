@@ -4,7 +4,7 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { Thickness, ToolName } from '../../../../../constants/constants';
+import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';

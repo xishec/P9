@@ -2,11 +2,11 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/constants';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-brush-attributes',

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { COLORS } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { COLORS } from '../../../constants/constants';
 
 @Injectable({
     providedIn: 'root',
