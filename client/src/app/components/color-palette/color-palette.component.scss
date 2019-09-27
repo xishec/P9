@@ -1,5 +1,5 @@
 #container {
-    height: 510px;
+    height: 455px;
 }
 
 #color-palette-form {
@@ -35,6 +35,10 @@
     }
     .color:active:not(#bigColor) {
         transform: scale(1);
+    }
+
+    #form-inputs {
+        margin-left: 40px;
     }
 
     .medium {

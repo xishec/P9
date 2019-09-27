@@ -124,7 +124,7 @@ export class ColorPaletteComponent implements OnInit {
 
     getUserColorIcon(): IconStyle {
         return {
-            backgroundColor: '#' + this.previewColor + this.getOpacity(),
+            backgroundColor: '#' + this.previewColor.slice(0, 6) + this.getOpacity(),
         };
     }
 

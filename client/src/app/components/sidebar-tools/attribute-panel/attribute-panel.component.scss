@@ -5,14 +5,16 @@
     left: 36px;
     right: 0;
     overflow: scroll;
+    overflow-x: hidden;
 
     border-left: 1px solid #d0d0d0;
     border-right: 2px solid #d0d0d0;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
-    #color {
-        margin-top: auto;
+    #color-palette {
+        margin: 30px 40px;
     }
 }

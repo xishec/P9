@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ToolName } from 'src/constants/tool-constants';
 import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
+import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 
 @Component({
     selector: 'app-attribute-panel',
@@ -10,13 +11,18 @@ import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-
 })
 export class AttributePanelComponent implements OnInit {
     readonly ToolName = ToolName;
-    currentToolName: ToolName;
 
-    constructor(private toolSelectorService: ToolSelectorService) {}
+    currentToolName: ToolName;
+    showColorPalette = false;
+
+    constructor(private toolSelectorService: ToolSelectorService, private colorToolService: ColorToolService) {}
 
     ngOnInit(): void {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.currentToolName = toolName;
+        });
+        this.colorToolService.currentShowColorPalette.subscribe((showColorPalette: boolean) => {
+            this.showColorPalette = showColorPalette;
         });
     }
 }

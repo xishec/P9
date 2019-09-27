@@ -102,7 +102,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing && !this.isSquarePreview) {
+                if (!this.isSquarePreview) {
                     this.isSquarePreview = true;
                     this.updateDrawing();
                 }
@@ -118,7 +118,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing && this.isSquarePreview) {
+                if (this.isSquarePreview) {
                     this.isSquarePreview = false;
                     this.updateDrawing();
                 }
