@@ -39,38 +39,49 @@ export class ColorPaletteComponent implements OnInit {
 
     updateWithColorToolService() {
         this.previewColor = this.colorToolService.getColorOnFocus();
-        this.setColorNumericValues();
+        this.setColorNumericValues(this.previewColor);
     }
 
     initializeForm(): void {
         this.colorPaletteForm = this.formBuilder.group({
             hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
-            R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
-            G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
-            B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
+            R: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
+            G: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
+            B: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
         });
     }
 
     changeColor(previewColor: string): void {
-        this.previewColor = previewColor;
-        this.setColorNumericValues();
-        this.colorToolService.addColorToQueue(this.previewColor);
+        this.previewColor = previewColor.slice(0, 6);
+        this.setColorNumericValues(previewColor);
+        this.colorToolService.addColorToQueue(this.previewColor + this.getOpacity());
     }
 
-    setColorNumericValues(): void {
-        this.setHexValues();
-        this.setRGBValues();
+    setColorNumericValues(previewColor: string): void {
+        this.setHexValues(previewColor);
+        this.setRGBValues(previewColor);
     }
 
-    setHexValues(): void {
-        this.colorPaletteForm.controls.hex.setValue(this.previewColor);
+    setHexValues(previewColor: string): void {
+        this.colorPaletteForm.controls.hex.setValue(previewColor.slice(0, 6));
     }
 
-    setRGBValues(): void {
-        this.colorPaletteForm.controls.R.setValue(parseInt(this.previewColor.slice(0, 2), 16));
-        this.colorPaletteForm.controls.G.setValue(parseInt(this.previewColor.slice(2, 4), 16));
-        this.colorPaletteForm.controls.B.setValue(parseInt(this.previewColor.slice(4, 6), 16));
+    setRGBValues(previewColor: string): void {
+        this.colorPaletteForm.controls.R.setValue(parseInt(previewColor.slice(0, 2), 16));
+        this.colorPaletteForm.controls.G.setValue(parseInt(previewColor.slice(2, 4), 16));
+        this.colorPaletteForm.controls.B.setValue(parseInt(previewColor.slice(4, 6), 16));
+        if (previewColor.length == 8) {
+            this.colorPaletteForm.controls.A.setValue((parseInt(previewColor.slice(6, 8), 16) / 255).toFixed(1));
+        }
+    }
+
+    getOpacity(): string {
+        let color = Math.round(this.colorPaletteForm.value.A * 255).toString(16);
+        if (color.length === 1) {
+            color += '0';
+        }
+        return color;
     }
 
     onUserHexInput(): void {
@@ -106,13 +117,13 @@ export class ColorPaletteComponent implements OnInit {
         this.colorToolService.changeSelectedColor(undefined);
     }
     onSubmit(): void {
-        this.colorToolService.changeColorOnFocus(this.previewColor);
+        this.colorToolService.changeColorOnFocus(this.previewColor + this.getOpacity());
         this.colorToolService.changeCurrentShowColorPalette(false);
         this.colorToolService.changeSelectedColor(undefined);
     }
 
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.previewColor };
+        return { backgroundColor: '#' + this.previewColor + this.getOpacity() };
     }
 
     onFocus() {
