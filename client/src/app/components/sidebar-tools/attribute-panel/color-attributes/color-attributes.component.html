@@ -1,4 +1,6 @@
 <div id="container">
+    <app-color-palette [hidden]="!showColorPalette"></app-color-palette>
+
     <div id="userColorButtons">
         <div>
             <span> Couleur de fond :</span>
@@ -39,6 +41,4 @@
             </button>
         </div>
     </div>
-
-    <app-color-palette [hidden]="!showColorPalette"></app-color-palette>
 </div>

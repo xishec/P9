@@ -8,4 +8,11 @@
 
     border-left: 1px solid #d0d0d0;
     border-right: 2px solid #d0d0d0;
+
+    display: flex;
+    flex-direction: column;
+
+    #color {
+        margin-top: auto;
+    }
 }

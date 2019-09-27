@@ -55,7 +55,6 @@ export class ColorPaletteComponent implements OnInit {
     changeColor(previewColor: string): void {
         this.previewColor = previewColor.slice(0, 6);
         this.setColorNumericValues(previewColor);
-        this.colorToolService.addColorToQueue(this.previewColor + this.getOpacity());
     }
 
     setColorNumericValues(previewColor: string): void {
@@ -118,12 +117,15 @@ export class ColorPaletteComponent implements OnInit {
     }
     onSubmit(): void {
         this.colorToolService.changeColorOnFocus(this.previewColor + this.getOpacity());
+        this.colorToolService.addColorToQueue(this.previewColor + this.getOpacity());
         this.colorToolService.changeCurrentShowColorPalette(false);
         this.colorToolService.changeSelectedColor(undefined);
     }
 
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.previewColor + this.getOpacity() };
+        return {
+            backgroundColor: '#' + this.previewColor + this.getOpacity(),
+        };
     }
 
     onFocus() {
