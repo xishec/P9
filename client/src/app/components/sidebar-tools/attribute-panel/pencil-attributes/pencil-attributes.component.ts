@@ -56,7 +56,6 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.pencilAttributesForm.value.thickness;
         if (this.pencilAttributesForm.valid) {
-            console.log('hi');
             this.attributesManagerService.changeThickness(thickness);
         }
     }
