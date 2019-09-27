@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
-        private shortcutsManagerService: ShortcutsManagerService,
+        private shortcutsManagerService: ShortcutsManagerService
     ) {
         this.basicService
             .basicGet()
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-            },
+            }
         );
         this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
             (welcomeModalWindowClosed: boolean) => {
                 this.welcomeModalWindowClosed = welcomeModalWindowClosed;
-            },
+            }
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
         }
     }
 
-    @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
+    @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
         if (
             !this.displayNewDrawingModalWindow &&
             (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
@@ -125,6 +125,17 @@ export class AppComponent implements OnInit {
         ) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
+        }
+    }
+
+    @HostListener('window:keydown.r', ['$event']) onR(event: KeyboardEvent) {
+        if (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        ) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.ColorApplicator);
         }
     }
 }
