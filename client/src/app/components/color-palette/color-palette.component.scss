@@ -1,5 +1,5 @@
 #container {
-    height: 500px;
+    height: 510px;
 }
 
 #color-palette-form {
@@ -23,9 +23,10 @@
         width: 0;
         height: 0;
         padding: 10px;
-        border: 1px solid #d0d0d0;
-        margin: 5px;
         border-radius: 100%;
+        border: 1px solid black;
+        border-style: dashed;
+        margin: 5px;
         outline: none;
         transition: ease-in-out 0.2s;
     }
@@ -54,11 +55,5 @@
             margin: 0px 15px;
             margin-bottom: 40px;
         }
-    }
-
-    p {
-        color: rgb(153, 153, 153);
-        font-size: 11.2px;
-        margin: 5px 0;
     }
 }
