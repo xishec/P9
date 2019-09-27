@@ -1,10 +1,10 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { SVG_NS, Mouse } from 'src/constants/constants';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
-import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,6 +25,20 @@ export abstract class TracingToolService extends AbstractToolService {
                 protected renderer: Renderer2,
                 protected drawStack: DrawStackService) {
         super();
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+            this.currentWidth = thickness;
+        });
+    }
+
+    initializeColorToolService(colorToolService: ColorToolService) {
+        this.colorToolService = colorToolService;
+        this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
+            this.currentColor = currentColor;
+        });
     }
 
     onMouseDown(e: MouseEvent): void {
@@ -50,6 +64,18 @@ export abstract class TracingToolService extends AbstractToolService {
         }
     }
 
+    onMouseUp(e: MouseEvent): void {
+        if (e.button === Mouse.LeftButton && this.isDrawing) {
+            this.isDrawing = false;
+            this.currentPath = '';
+            this.drawStack.push(this.svgWrap);
+        }
+    }
+
+    onMouseLeave(e: MouseEvent): void {
+        this.onMouseUp(e);
+    }
+
     onMouseEnter(event: MouseEvent): undefined {
         return undefined;
     }
@@ -62,22 +88,12 @@ export abstract class TracingToolService extends AbstractToolService {
         return undefined;
     }
 
-    updatePreviewCircle(x: number, y: number): void {
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
-    }
-
-    updateSVGPath(): void {
-        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
-    }
-
-
     createSVGWrapper(): void {
-        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
-        this.renderer.setAttribute(el, 'fill', '#' + this.currentColor);
-        this.svgWrap = el;
-        this.renderer.appendChild(this.elementRef.nativeElement, el);
+        const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
+        this.svgWrap = wrap;
+        this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
@@ -85,9 +101,8 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        circle.addEventListener('mousedown', (event: MouseEvent) => {
+        circle.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(currentDrawStackLength);
         });
         this.renderer.appendChild(this.svgWrap, circle);
@@ -100,21 +115,18 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
+        this.svgPath.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(currentDrawStackLength);
         });
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
-    onMouseUp(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
-            this.isDrawing = false;
-            this.currentPath = '';
-            this.drawStack.push(this.svgWrap);
-        }
+    updatePreviewCircle(x: number, y: number): void {
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
     }
 
-    onMouseLeave(e: MouseEvent): void {
-        this.onMouseUp(e);
+    updateSVGPath(): void {
+        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 }
