@@ -1,5 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ColorType, SIDEBAR_WIDTH } from 'src/app/services/constants';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from 'src/classes/Color';
 
 import { DrawingInfo } from '../../../classes/DrawingInfo';
@@ -15,15 +17,19 @@ export class DrawingModalWindowComponent implements OnInit {
     drawingModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    submitCount = 0;
+    drawingZoneColor = new Color();
 
     constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
+        private colorToolService: ColorToolService,
         this.formBuilder = formBuilder;
         this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit(): void {
         this.initializeForm();
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.drawingZoneColor = primaryColor;
+        });
     }
 
     initializeForm(): void {
@@ -54,15 +60,24 @@ export class DrawingModalWindowComponent implements OnInit {
         }
     }
 
-    setWindowHeight(): HeightStyle {
-        if (this.submitCount === 0) {
-            return { height: '450px' };
-        } else {
-            return { height: '510px' };
-        }
+    currentColor(): Color {
+        return this.drawingZoneColor;
     }
 
-}
-interface HeightStyle {
-    height: string;
+    changeColor(colorHex: string): void {
+        const newColor = new Color(colorHex);
+        this.colorToolService.changeColor(newColor, ColorType.primaryColor);
+        this.colorToolService.addColorToQueue(newColor);
+    }
+
+    colorButtonStyle(): ColorStyle {
+        return {
+            backgroundColor: '#' + this.drawingZoneColor.hex,
+            border: 'solid 1px black',
+        };
+    }
+
+    onClickColorQueueButton(color: Color): void {
+        this.changeColor(color.hex);
+    }
 }
