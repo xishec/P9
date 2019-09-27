@@ -56,11 +56,6 @@ export class PencilToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
-            // this.createSVGCircle(
-            //     e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-            //     e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-            //     this.currentWidth,
-            // );
             this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
             ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
             this.updateSVGPath();
@@ -110,7 +105,6 @@ export class PencilToolService extends TracingToolService {
         this.renderer.setAttribute(el, 'y2', y.toString());
         this.renderer.setAttribute(el, 'stroke-width', w.toString());
         this.renderer.setAttribute(el, 'stroke-linecap', 'round');
-        // this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         el.addEventListener('mousedown', (event: MouseEvent) => {
             setTimeout(() => {
@@ -123,7 +117,6 @@ export class PencilToolService extends TracingToolService {
     createSVGPath(): void {
         this.svgPathRef = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
-        // this.renderer.setAttribute(this.svgPathRef, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();

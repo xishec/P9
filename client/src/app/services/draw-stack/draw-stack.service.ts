@@ -9,7 +9,6 @@ export class DrawStackService {
     private targetStackElementPosition: BehaviorSubject<number> = new BehaviorSubject(0);
     currentStackTargetPosition = this.targetStackElementPosition.asObservable();
 
-
     constructor() {
         this.drawStack = new Array<SVGGElement>();
     }
