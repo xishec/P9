@@ -10,18 +10,15 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrapRef: SVGGElement = this.renderer.createElement('g', SVG_NS);
-    private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
     private colorToolService: ColorToolService;
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
-        private renderer: Renderer2,
+        renderer: Renderer2,
         private drawStack: DrawStackService,
     ) {
-        super();
+        super(renderer);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
@@ -64,7 +61,7 @@ export class PencilToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
             super.onMouseUp(e);
             this.currentPath = '';
-            this.drawStack.push(this.svgWrapRef);
+            this.drawStack.push(this.svgWrap);
         }
     }
 
@@ -72,7 +69,7 @@ export class PencilToolService extends TracingToolService {
         if (this.isDrawing) {
             this.isDrawing = false;
             this.currentPath = '';
-            this.drawStack.push(this.svgWrapRef);
+            this.drawStack.push(this.svgWrap);
         }
     }
 
@@ -92,7 +89,7 @@ export class PencilToolService extends TracingToolService {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(el, 'fill', '#' + this.currentColor);
-        this.svgWrapRef = el;
+        this.svgWrap = el;
         this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
@@ -108,22 +105,22 @@ export class PencilToolService extends TracingToolService {
                 this.drawStack.changeTargetElement(currentDrawStackLength);
             }, 10);
         });
-        this.renderer.appendChild(this.svgWrapRef, circle);
+        this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
 
     createSVGPath(): void {
-        this.svgPathRef = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPathRef, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPathRef, 'stroke-width', this.currentWidth.toString());
-        this.renderer.setAttribute(this.svgPathRef, 'stroke-linejoin', 'round');
+        this.svgPath = this.renderer.createElement('path', SVG_NS);
+        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
+        this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPathRef.addEventListener('mousedown', (event: MouseEvent) => {
+        this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
             setTimeout(() => {
                 this.drawStack.changeTargetElement(currentDrawStackLength);
             }, 10);
         });
-        this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
+        this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     updatePreviewCircle(x: number, y: number): void {
@@ -132,6 +129,6 @@ export class PencilToolService extends TracingToolService {
     }
 
     updateSVGPath(): void {
-        this.renderer.setAttribute(this.svgPathRef, 'd', this.currentPath);
+        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 }

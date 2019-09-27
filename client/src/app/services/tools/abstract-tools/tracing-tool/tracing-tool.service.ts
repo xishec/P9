@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { AbstractToolService } from '../abstract-tool.service';
+import { SVG_NS } from 'src/constants/constants';
 
 @Injectable({
     providedIn: 'root',
@@ -9,8 +10,11 @@ export abstract class TracingToolService extends AbstractToolService {
     protected currentPath = '';
     protected currentWidth = 0;
     protected currentColor = '';
+    protected svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+    protected svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+    protected svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
 
-    constructor() {
+    constructor(protected renderer: Renderer2) {
         super();
     }
 

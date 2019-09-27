@@ -11,18 +11,15 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class BrushToolService extends TracingToolService {
     private currentStyle = 1;
-    private svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-    private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
     private colorToolService: ColorToolService;
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
-        private renderer: Renderer2,
+        renderer: Renderer2,
         private drawStack: DrawStackService,
     ) {
-        super();
+        super(renderer);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
