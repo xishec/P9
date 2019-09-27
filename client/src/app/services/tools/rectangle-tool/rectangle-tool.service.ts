@@ -16,6 +16,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     private strokeColor = '';
     private userFillColor = '';
     private userStrokeColor = '';
+    private userStrokeWidth = 0;
     private traceType = '';
     private strokeWidth = 1;
     private isSquarePreview = false;
@@ -25,7 +26,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
-        renderer: Renderer2,
+        renderer: Renderer2
     ) {
         super(renderer);
     }
@@ -34,11 +35,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
+            this.updateTraceType(this.traceType);
         });
         this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
         });
     }
+
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.currentPrimaryColor.subscribe((fillColor: string) => {
@@ -49,6 +52,161 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.strokeColor = strokeColor;
             this.updateTraceType(this.traceType);
         });
+    }
+
+    isValideRectangle(): boolean {
+        return this.previewRectangle.width.baseVal.value >= 2 * this.userStrokeWidth &&
+        this.previewRectangle.height.baseVal.value >= 2 * this.userStrokeWidth && (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0);
+    }
+
+    createSVG(): void {
+        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
+        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangle.height.baseVal.valueAsString);
+        this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
+        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
+
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
+            this.drawStack.changeTargetElement(currentDrawStackLength);
+        });
+
+        this.renderer.appendChild(el, drawRectangle);
+        this.drawStack.push(el);
+        this.renderer.appendChild(this.svgReference.nativeElement, el);
+    }
+
+    updateDrawing(): void {
+        this.updatePreviewRectangle();
+        if (this.isSquarePreview) {
+            this.updatePreviewSquare();
+        } else {
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.previewRectangle.x.baseVal.value + this.userStrokeWidth / 2).toString()
+            );
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.previewRectangle.y.baseVal.value + this.userStrokeWidth / 2).toString()
+            );
+            if (this.previewRectangle.width.baseVal.value - this.userStrokeWidth < 0) {
+                this.renderer.setAttribute(
+                    this.drawRectangle,
+                    'width',
+                    (-(this.previewRectangle.width.baseVal.value - this.userStrokeWidth)).toString()
+                );
+            } else {
+                this.renderer.setAttribute(
+                    this.drawRectangle,
+                    'width',
+                    (this.previewRectangle.width.baseVal.value - this.userStrokeWidth).toString()
+                );
+            }
+            if (this.previewRectangle.height.baseVal.value - this.userStrokeWidth < 0) {
+                this.renderer.setAttribute(
+                    this.drawRectangle,
+                    'height',
+                    (-(this.previewRectangle.height.baseVal.value - this.userStrokeWidth)).toString()
+                );
+            } else {
+                this.renderer.setAttribute(
+                    this.drawRectangle,
+                    'height',
+                    (this.previewRectangle.height.baseVal.value - this.userStrokeWidth).toString()
+                );
+            }
+        }
+        if (this.isValideRectangle()) {
+            this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.userStrokeWidth.toString());
+        } else {
+            this.renderer.setAttribute(this.drawRectangle, 'fill', 'none');
+            this.renderer.setAttribute(this.drawRectangle, 'stroke', 'none');
+            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', '0');
+        }
+    }
+
+    updatePreviewSquare(): void {
+        let deltaX = this.currentMouseX - this.initialMouseX;
+        let deltaY = this.currentMouseY - this.initialMouseY;
+        const minLen = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+
+        // adjust x
+        if (deltaX < 0) {
+            deltaX *= -1;
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.initialMouseX - minLen + this.userStrokeWidth / 2).toString()
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'x',
+                (this.initialMouseX + this.userStrokeWidth / 2).toString()
+            );
+        }
+
+        // set width
+        if (minLen - this.userStrokeWidth < 0) {
+            this.renderer.setAttribute(this.drawRectangle, 'width', (-(minLen - this.userStrokeWidth)).toString());
+        } else {
+            this.renderer.setAttribute(this.drawRectangle, 'width', (minLen - this.userStrokeWidth).toString());
+        }
+
+        // adjust y
+        if (deltaY < 0) {
+            deltaY *= -1;
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.initialMouseY - minLen + this.userStrokeWidth / 2).toString()
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                'y',
+                (this.initialMouseY + this.userStrokeWidth / 2).toString()
+            );
+        }
+
+        // set height
+        if (minLen - this.userStrokeWidth < 0) {
+            this.renderer.setAttribute(this.drawRectangle, 'height', (-(minLen - this.userStrokeWidth)).toString());
+        } else {
+            this.renderer.setAttribute(this.drawRectangle, 'height', (minLen - this.userStrokeWidth).toString());
+        }
+    }
+
+    updateTraceType(traceType: string) {
+        this.traceType = traceType;
+        switch (traceType) {
+            case TraceType.Outline: {
+                this.userFillColor = 'ffffff00';
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+            case TraceType.Full: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = 'ffffff00';
+                this.userStrokeWidth = 0;
+                break;
+            }
+            case TraceType.Both: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+        }
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -79,7 +237,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         const button = event.button;
 
         if (button === Mouse.LeftButton && this.isIn) {
-            if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
+            if (this.isValideRectangle()) {
                 this.createSVG();
             }
             this.isPreviewing = false;
@@ -126,144 +284,6 @@ export class RectangleToolService extends AbstractShapeToolService {
 
             default:
                 break;
-        }
-    }
-
-    createSVG(): void {
-        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangle.y.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangle.width.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangle.height.baseVal.valueAsString);
-        this.renderer.setAttribute(drawRectangle, 'stroke-width', this.strokeWidth.toString());
-        this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
-        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
-        });
-
-        this.renderer.appendChild(el, drawRectangle);
-        this.drawStack.push(el);
-        this.renderer.appendChild(this.svgReference.nativeElement, el);
-    }
-
-    updateDrawing(): void {
-        this.updatePreviewRectangle();
-        if (this.isSquarePreview) {
-            this.updatePreviewSquare();
-        } else {
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'x',
-                (this.previewRectangle.x.baseVal.value + this.strokeWidth / 2).toString(),
-            );
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'y',
-                (this.previewRectangle.y.baseVal.value + this.strokeWidth / 2).toString(),
-            );
-            if (this.previewRectangle.width.baseVal.value - this.strokeWidth < 0) {
-                this.renderer.setAttribute(
-                    this.drawRectangle,
-                    'width',
-                    (-(this.previewRectangle.width.baseVal.value - this.strokeWidth)).toString(),
-                );
-            } else {
-                this.renderer.setAttribute(
-                    this.drawRectangle,
-                    'width',
-                    (this.previewRectangle.width.baseVal.value - this.strokeWidth).toString(),
-                );
-            }
-            if (this.previewRectangle.height.baseVal.value - this.strokeWidth < 0) {
-                this.renderer.setAttribute(
-                    this.drawRectangle,
-                    'height',
-                    (-(this.previewRectangle.height.baseVal.value - this.strokeWidth)).toString(),
-                );
-            } else {
-                this.renderer.setAttribute(
-                    this.drawRectangle,
-                    'height',
-                    (this.previewRectangle.height.baseVal.value - this.strokeWidth).toString(),
-                );
-            }
-        }
-        if (this.previewRectangle.width.baseVal.value >= 2 * this.strokeWidth && this.previewRectangle.height.baseVal.value >= 2 * this.strokeWidth) {
-            this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'fill', 'none');
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', 'none');
-        }
-        this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
-    }
-
-    updatePreviewSquare(): void {
-        let deltaX = this.currentMouseX - this.initialMouseX;
-        let deltaY = this.currentMouseY - this.initialMouseY;
-        const minLen = Math.min(Math.abs(deltaX), Math.abs(deltaY));
-
-        // adjust x
-        if (deltaX < 0) {
-            deltaX *= -1;
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'x',
-                (this.initialMouseX - minLen + this.strokeWidth / 2).toString(),
-            );
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'x', (this.initialMouseX + this.strokeWidth / 2).toString());
-        }
-
-        // set width
-        if (minLen - this.strokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (-(minLen - this.strokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (minLen - this.strokeWidth).toString());
-        }
-
-        // adjust y
-        if (deltaY < 0) {
-            deltaY *= -1;
-            this.renderer.setAttribute(
-                this.drawRectangle,
-                'y',
-                (this.initialMouseY - minLen + this.strokeWidth / 2).toString(),
-            );
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'y', (this.initialMouseY + this.strokeWidth / 2).toString());
-        }
-
-        // set height
-        if (minLen - this.strokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (-(minLen - this.strokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (minLen - this.strokeWidth).toString());
-        }
-    }
-
-    updateTraceType(traceType: string) {
-        this.traceType = traceType;
-        switch (traceType) {
-            case TraceType.Outline: {
-                this.userFillColor = 'ffffff00';
-                this.userStrokeColor = this.strokeColor;
-                break;
-            }
-            case TraceType.Full: {
-                this.userFillColor = this.fillColor;
-                this.userStrokeColor = 'ffffff00';
-                break;
-            }
-            case TraceType.Both: {
-                this.userFillColor = this.fillColor;
-                this.userStrokeColor = this.strokeColor;
-                break;
-            }
         }
     }
 }
