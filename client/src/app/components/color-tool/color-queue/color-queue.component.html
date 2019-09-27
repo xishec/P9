@@ -4,7 +4,7 @@
 <button
     class="color"
     type="button"
-    *ngFor="let color of colorQueue"
+    *ngFor="let color of colorQueue.reverse()"
     [ngStyle]="getColorIcon(color)"
     (click)="onClickColorButton(color)"
 ></button>
