@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from 'src/classes/Color';
 
 @Component({
@@ -15,7 +16,7 @@ export class ColorPaletteComponent implements OnChanges {
     @Input() currentColor: Color = new Color();
     @Output() changeColorEvent = new EventEmitter<string>();
 
-    constructor(formBuilder: FormBuilder) {
+    constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
         this.formBuilder = formBuilder;
         this.initializeForm();
     }
@@ -58,7 +59,11 @@ export class ColorPaletteComponent implements OnChanges {
     }
 
     onUserColorRGBInput(): void {
-        const newColorinHex = this.translateRGBToHex();
+        const newColorinHex = this.colorToolService.translateRGBToHex(
+            this.myForm.value.R,
+            this.myForm.value.G,
+            this.myForm.value.B,
+        );
         this.changeColor(newColorinHex);
     }
 }
