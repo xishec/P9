@@ -1,16 +1,16 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { IndexService } from '../../services/index/index.service';
+import { ToolName } from '../../services/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { IndexService } from '../../services/index/index.service';
 import { ShortcutsManagerService } from '../../services/shortcuts-manager/shortcuts-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
-import { ToolName } from '../../services/constants';
+import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 
 @Component({
     selector: 'app-root',
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
-        private shortcutsManagerService: ShortcutsManagerService
+        private shortcutsManagerService: ShortcutsManagerService,
     ) {
         this.basicService
             .basicGet()
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-            }
+            },
         );
         this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
             (welcomeModalWindowClosed: boolean) => {
                 this.welcomeModalWindowClosed = welcomeModalWindowClosed;
-            }
+            },
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
@@ -81,6 +81,7 @@ export class AppComponent implements OnInit {
             (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
             !this.isOnInput
         ) {
+            // will be implemented later
         }
     }
 

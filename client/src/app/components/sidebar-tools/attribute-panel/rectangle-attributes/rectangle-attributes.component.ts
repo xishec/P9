@@ -2,12 +2,12 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
+import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Thickness, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
 
 @Component({
     selector: 'app-rectangle-attributes',

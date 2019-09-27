@@ -14,7 +14,7 @@ export class WelcomeModalWindowService {
 
     getValueFromLocalStorage(): boolean {
         if (localStorage.getItem(this.storageKey)) {
-            let key = localStorage.getItem(this.storageKey);
+            const key = localStorage.getItem(this.storageKey);
             if (key === 'true') {
                 this.displayWelcomeModalWindow.next(true);
             }
@@ -30,7 +30,7 @@ export class WelcomeModalWindowService {
         localStorage.setItem(this.storageKey, value);
         if (value === 'true') {
             this.displayWelcomeModalWindow.next(true);
-        } else if (value == 'false') {
+        } else if (value === 'false') {
             this.displayWelcomeModalWindow.next(false);
         }
     }

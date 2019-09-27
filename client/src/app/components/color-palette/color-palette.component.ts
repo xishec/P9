@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from '../../../classes/Color';
 import { ColorType } from '../../services/constants';
-import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
 
 @Component({
     selector: 'app-color-palette',
@@ -70,7 +70,7 @@ export class ColorPaletteComponent implements OnInit {
         this.colorPaletteForm.controls.R.setValue(parseInt(previewColor.slice(0, 2), 16));
         this.colorPaletteForm.controls.G.setValue(parseInt(previewColor.slice(2, 4), 16));
         this.colorPaletteForm.controls.B.setValue(parseInt(previewColor.slice(4, 6), 16));
-        if (previewColor.length == 8) {
+        if (previewColor.length === 8) {
             this.colorPaletteForm.controls.A.setValue((parseInt(previewColor.slice(6, 8), 16) / 255).toFixed(1));
         }
     }

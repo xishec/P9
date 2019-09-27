@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { ToolName } from 'src/app/services/constants';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { ToolName } from 'src/app/services/constants';
 
 @Component({
     selector: 'app-work-zone',
@@ -119,7 +119,9 @@ export class WorkZoneComponent implements OnInit {
     // LISTENERS //
 
     getCursorStyle() {
-        if (this.empty) return { cursor: 'not-allowed' };
+        if (this.empty) {
+            return { cursor: 'not-allowed' };
+        }
         switch (this.toolName) {
             case ToolName.Brush:
             case ToolName.Pencil:

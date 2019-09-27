@@ -6,10 +6,10 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
+import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
-import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 
 @Injectable({
     providedIn: 'root',

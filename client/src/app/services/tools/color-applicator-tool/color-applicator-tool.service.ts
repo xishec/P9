@@ -1,7 +1,8 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+
 import { Mouse } from '../../constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
@@ -54,15 +55,21 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         this.buttonClick = event.button;
         this.wasUsed = true;
         console.log('mouse ' + this.buttonClick);
     }
+    // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
 }

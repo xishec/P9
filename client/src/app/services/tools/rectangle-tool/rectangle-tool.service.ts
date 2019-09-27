@@ -11,11 +11,11 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    fillColor: string = '';
-    strokeColor: string = '';
-    userFillColor: string = '';
-    userStrokeColor: string = '';
-    traceType: string = '';
+    fillColor = '';
+    strokeColor = '';
+    userFillColor = '';
+    userStrokeColor = '';
+    traceType = '';
     private strokeWidth = 1;
     private isSquarePreview = false;
     private attributesManagerService: AttributesManagerService;
@@ -24,7 +24,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
-        renderer: Renderer2
+        renderer: Renderer2,
     ) {
         super(renderer);
     }
