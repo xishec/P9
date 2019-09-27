@@ -14,13 +14,11 @@ interface ColorStyle {
     styleUrls: ['./color-tool.component.scss'],
 })
 export class ColorToolComponent implements OnInit {
-
     selectedColor: ColorType = ColorType.primaryColor;
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
 
-    constructor(private colorToolService: ColorToolService) {
-    }
+    constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit(): void {
         this.colorToolService.primaryColor.subscribe((primaryColor) => {
