@@ -1,9 +1,9 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { COLOR_SELECTION_SHIFT } from '../../../services/constants';
-import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
-import { ColorToolComponent } from '../color-tool.component';
+import { ColorToolComponent } from 'src/app/components/color-tool/color-tool.component';
+import { COLOR_SELECTION_SHIFT } from 'src/app/services/constants';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 
 @Component({
     selector: 'app-color-picker',
@@ -19,9 +19,9 @@ export class ColorPickerComponent implements OnInit {
     @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLDivElement>;
 
     constructor(
-        private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private colorToolComponent: ColorToolComponent,
+        private colorToolService: ColorToolService,
     ) {}
 
     ngOnInit(): void {
@@ -60,12 +60,11 @@ export class ColorPickerComponent implements OnInit {
             return;
         }
 
-        const newHex = this.drawingModalWindowService.rgbToHex(
+        const newHex = this.colorToolService.translateRGBToHex(
             pixel[0] - pixel[0] * this.obscurity,
             pixel[1] - pixel[1] * this.obscurity,
             pixel[2] - pixel[2] * this.obscurity,
         );
-        this.drawingModalWindowService.changeActiveColor({ hex: newHex });
 
         if (this.colorToolComponent !== undefined) {
             this.colorToolComponent.changeColor(newHex);
