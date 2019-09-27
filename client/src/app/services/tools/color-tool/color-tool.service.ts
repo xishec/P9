@@ -10,16 +10,16 @@ import { COLORS, ColorType } from '../../../services/constants';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
-    primaryColor: Color = new Color();
-    secondaryColor: Color = new Color('000000');
+    primaryColor = new BehaviorSubject(new Color());
+    secondaryColor = new BehaviorSubject(new Color('000000'));
     colorQueue: Color[] = [];
     colorQueueBSubject = new BehaviorSubject(this.colorQueue);
 
     changeColor(color: Color, colorType: ColorType): void {
         if (colorType === ColorType.primaryColor) {
-            this.primaryColor = color;
+            this.primaryColor.next(color);
         } else if (colorType === ColorType.secondaryColor) {
-            this.secondaryColor = color;
+            this.secondaryColor.next(color);
         }
     }
 
