@@ -25,7 +25,6 @@
         padding: 10px;
         border-radius: 100%;
         border: 1px solid black;
-        border-style: dashed;
         margin: 5px;
         outline: none;
         transition: ease-in-out 0.2s;
@@ -65,6 +64,9 @@
             i {
                 color: green;
                 zoom: 1.5;
+                margin-left: 5px;
+                margin-right: -5px;
+                margin-top: -1px;
             }
         }
     }

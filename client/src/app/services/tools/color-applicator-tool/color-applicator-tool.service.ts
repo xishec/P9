@@ -9,9 +9,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class ColorApplicatorToolService extends AbstractToolService {
-    currentTargetPosition = 0;
-    private buttonClick = 0;
-    private wasUsed = false;
+    private currentTargetPosition = 0;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
@@ -20,27 +18,6 @@ export class ColorApplicatorToolService extends AbstractToolService {
         super();
         this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
             this.currentTargetPosition = targetPosition;
-            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined && this.wasUsed) {
-                switch (this.buttonClick) {
-                    case Mouse.LeftButton:
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentTargetPosition),
-                            'fill',
-                            this.primaryColor,
-                        );
-                        break;
-                    case Mouse.RightButton:
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentTargetPosition),
-                            'stroke',
-                            this.secondaryColor,
-                        );
-                        break;
-                    default:
-                        break;
-                }
-                this.wasUsed = false;
-            }
         });
     }
 
@@ -57,9 +34,27 @@ export class ColorApplicatorToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        this.buttonClick = event.button;
-        this.wasUsed = true;
-        console.log('mouse ' + this.buttonClick);
+        const button = event.button;
+        if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined) {
+            switch (button) {
+                case Mouse.LeftButton:
+                    this.renderer.setAttribute(
+                        this.drawStack.getElementByPosition(this.currentTargetPosition),
+                        'fill',
+                        this.primaryColor,
+                    );
+                    break;
+                case Mouse.RightButton:
+                    this.renderer.setAttribute(
+                        this.drawStack.getElementByPosition(this.currentTargetPosition),
+                        'stroke',
+                        this.secondaryColor,
+                    );
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}

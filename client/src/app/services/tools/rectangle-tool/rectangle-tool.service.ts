@@ -12,11 +12,11 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class RectangleToolService extends AbstractShapeToolService {
     private drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    fillColor = '';
-    strokeColor = '';
-    userFillColor = '';
-    userStrokeColor = '';
-    traceType = '';
+    private fillColor = '';
+    private strokeColor = '';
+    private userFillColor = '';
+    private userStrokeColor = '';
+    private traceType = '';
     private strokeWidth = 1;
     private isSquarePreview = false;
     private attributesManagerService: AttributesManagerService;
@@ -141,9 +141,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            setTimeout(() => {
-                this.drawStack.changeTargetElement(currentDrawStackLength);
-            }, 10);
+            this.drawStack.changeTargetElement(currentDrawStackLength);
         });
 
         this.renderer.appendChild(el, drawRectangle);

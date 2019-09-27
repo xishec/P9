@@ -16,8 +16,8 @@
                     (click)="onSubmit()"
                     [disabled]="colorPaletteForm.invalid"
                 >
-                    <i class="fas fa-check-circle"></i>
                     Choisir
+                    <i class="fas fa-check-circle"></i>
                 </button>
             </div>
 
@@ -32,20 +32,22 @@
             <div id="form-inputs">
                 <mat-form-field class="medium">
                     <input
+                        autocomplete="off"
                         (focus)="onFocus()"
                         (focusout)="onFocusOut()"
                         matInput
                         type="text"
                         placeholder="Hex"
                         formControlName="hex"
-                        (change)="onUserHexInput()"
+                        (input)="onUserHexInput()"
                     />
                     <mat-error>Ce code de couleur n'est pas valide!</mat-error>
                     <span matPrefix>#</span>
                 </mat-form-field>
                 <br />
-                <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <mat-form-field class="small" (input)="onUserColorRGBInput()">
                     <input
+                        autocomplete="off"
                         (focus)="onFocus()"
                         (focusout)="onFocusOut()"
                         matInput
@@ -57,8 +59,9 @@
                     />
                     <mat-error>R doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <mat-form-field class="small" (input)="onUserColorRGBInput()">
                     <input
+                        autocomplete="off"
                         (focus)="onFocus()"
                         (focusout)="onFocusOut()"
                         matInput
@@ -70,8 +73,9 @@
                     />
                     <mat-error>G doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <mat-form-field class="small" (input)="onUserColorRGBInput()">
                     <input
+                        autocomplete="off"
                         (focus)="onFocus()"
                         (focusout)="onFocusOut()"
                         matInput
@@ -83,8 +87,9 @@
                     />
                     <mat-error>B doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGBInput()">
+                <mat-form-field class="small" (input)="onUserColorRGBInput()">
                     <input
+                        autocomplete="off"
                         (focus)="onFocus()"
                         (focusout)="onFocusOut()"
                         matInput
