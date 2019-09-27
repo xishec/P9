@@ -32,4 +32,20 @@ export class ColorToolService {
         }
         this.colorQueueBSubject.next(this.colorQueue);
     }
+
+    translateRGBToHex(R: number, G: number, B: number): string {
+        let r = Number(R).toString(16);
+        let g = Number(G).toString(16);
+        let b = Number(B).toString(16);
+        if (r.length === 1) {
+            r = '0' + r;
+        }
+        if (g.length === 1) {
+            g = '0' + g;
+        }
+        if (b.length === 1) {
+            b = '0' + b;
+        }
+        return r + g + b;
+    }
 }
