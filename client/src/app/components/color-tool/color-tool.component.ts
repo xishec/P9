@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from '../../../classes/Color';
@@ -15,73 +14,34 @@ interface ColorStyle {
     styleUrls: ['./color-tool.component.scss'],
 })
 export class ColorToolComponent implements OnInit {
-    myForm: FormGroup;
-    formBuilder: FormBuilder;
 
     selectedColor: ColorType = ColorType.primaryColor;
     primaryColor: Color = new Color();
     secondaryColor: Color = new Color();
 
-    constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
-        this.formBuilder = formBuilder;
-        this.initializeForm();
+    constructor(private colorToolService: ColorToolService) {
     }
 
     ngOnInit(): void {
-        this.primaryColor = this.colorToolService.primaryColor;
-        this.secondaryColor = this.colorToolService.secondaryColor;
-        this.setHexValues();
-    }
-
-    initializeForm(): void {
-        this.myForm = this.formBuilder.group({
-            hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
-            R: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
-            G: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
-            B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
-            A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.primaryColor = primaryColor;
+        });
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
+            this.secondaryColor = secondaryColor;
         });
     }
 
     changeColor(colorHex: string): void {
         const newColor = new Color(colorHex);
         this.setColor(newColor);
-        this.setColorNumericValues();
         this.colorToolService.addColorToQueue(newColor);
     }
 
     setColor(color: Color): void {
         if (this.selectedColor === ColorType.primaryColor) {
             this.colorToolService.changeColor(color, ColorType.primaryColor);
-            this.primaryColor = color;
         } else if (this.selectedColor === ColorType.secondaryColor) {
             this.colorToolService.changeColor(color, ColorType.secondaryColor);
-            this.secondaryColor = color;
-        }
-    }
-
-    setColorNumericValues(): void {
-        this.setHexValues();
-        this.setRGBValues();
-    }
-
-    setHexValues(): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.myForm.controls.hex.setValue(this.primaryColor.hex);
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.myForm.controls.hex.setValue(this.secondaryColor.hex);
-        }
-    }
-
-    setRGBValues(): void {
-        if (this.selectedColor === ColorType.primaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.primaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.primaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.primaryColor.hex.slice(4, 6), 16));
-        } else if (this.selectedColor === ColorType.secondaryColor) {
-            this.myForm.controls.R.setValue(parseInt(this.secondaryColor.hex.slice(0, 2), 16));
-            this.myForm.controls.G.setValue(parseInt(this.secondaryColor.hex.slice(2, 4), 16));
-            this.myForm.controls.B.setValue(parseInt(this.secondaryColor.hex.slice(4, 6), 16));
         }
     }
 
@@ -89,22 +49,8 @@ export class ColorToolComponent implements OnInit {
         let temporaryColor: Color = new Color();
         temporaryColor = this.primaryColor;
 
-        this.primaryColor = this.secondaryColor;
         this.colorToolService.changeColor(this.secondaryColor, ColorType.primaryColor);
-
-        this.secondaryColor = temporaryColor;
         this.colorToolService.changeColor(temporaryColor, ColorType.secondaryColor);
-
-        this.setColorNumericValues();
-    }
-
-    onUserHexInput(): void {
-        this.changeColor(this.myForm.value.hex);
-    }
-
-    onUserColorRGBInput(): void {
-        const newColorinHex = this.translateRGBToHex();
-        this.changeColor(newColorinHex);
     }
 
     onClickPrimaryColorStyle(): ColorStyle {
