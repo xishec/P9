@@ -15,6 +15,7 @@ export class PencilToolService extends TracingToolService {
     currentColor = '';
     private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef: SVGGElement = this.renderer.createElement('g', SVG_NS);
+    private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
     private colorToolService: ColorToolService;
 
@@ -43,22 +44,22 @@ export class PencilToolService extends TracingToolService {
         if (e.button === Mouse.LeftButton) {
             super.onMouseDown(e);
             this.createSVGWrapper();
-            this.currentPath = `M${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
-            this.createSVGCircle(
-                e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left,
-                e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top,
-                this.currentWidth,
-            );
+            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            this.currentPath = `M${x} ${y}`;
+            this.createSVGCircle(x, y);
+            this.svgPreviewCircle = this.createSVGCircle(x,y);
             this.createSVGPath();
         }
     }
 
     onMouseMove(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
-            this.currentPath += ` L${e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left}
-            ${e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top}`;
+            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
+            this.updatePreviewCircle(x, y);
         }
     }
 
@@ -93,25 +94,25 @@ export class PencilToolService extends TracingToolService {
     createSVGWrapper(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
+        this.renderer.setAttribute(el, 'fill', '#' + this.currentColor);
         this.svgWrapRef = el;
         this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
-    createSVGCircle(x: number, y: number, w: number): void {
-        const el: SVGLineElement = this.renderer.createElement('line', SVG_NS);
-        this.renderer.setAttribute(el, 'x1', x.toString());
-        this.renderer.setAttribute(el, 'x2', x.toString());
-        this.renderer.setAttribute(el, 'y1', y.toString());
-        this.renderer.setAttribute(el, 'y2', y.toString());
-        this.renderer.setAttribute(el, 'stroke-width', w.toString());
-        this.renderer.setAttribute(el, 'stroke-linecap', 'round');
+    createSVGCircle(x: number, y: number): SVGCircleElement {
+        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(circle, 'cx', x.toString());
+        this.renderer.setAttribute(circle, 'cy', y.toString());
+        this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
+        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        el.addEventListener('mousedown', (event: MouseEvent) => {
+        circle.addEventListener('mousedown', (event: MouseEvent) => {
             setTimeout(() => {
                 this.drawStack.changeTargetElement(currentDrawStackLength);
             }, 10);
         });
-        this.renderer.appendChild(this.svgWrapRef, el);
+        this.renderer.appendChild(this.svgWrapRef, circle);
+        return circle;
     }
 
     createSVGPath(): void {
@@ -126,6 +127,11 @@ export class PencilToolService extends TracingToolService {
             }, 10);
         });
         this.renderer.appendChild(this.svgWrapRef, this.svgPathRef);
+    }
+
+    updatePreviewCircle(x: number, y: number): void {
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
     }
 
     updateSVGPath(): void {
