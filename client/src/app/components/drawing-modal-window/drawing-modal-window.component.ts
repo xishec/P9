@@ -16,8 +16,6 @@ export class DrawingModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     submitCount = 0;
-    displayNewDrawingModalWindow = false;
-    displayColorWheel = false;
 
     constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
         this.formBuilder = formBuilder;
