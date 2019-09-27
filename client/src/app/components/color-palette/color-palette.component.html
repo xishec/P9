@@ -5,8 +5,23 @@
         [ngStyle]="{ height: displayColorWheel ? '460px' : '275px' }"
     >
         <div class="form-group">
+            <div id="buttons">
+                <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                    Annuler
+                </button>
+                <button
+                    class="actionButton"
+                    mat-stroked-button
+                    type="submit"
+                    (click)="onSubmit()"
+                    [disabled]="colorPaletteForm.invalid"
+                >
+                    Choisir
+                </button>
+            </div>
+
             <div id="user-color">
-                <span> Couleur courante :</span>
+                <span> Aperçu de couleur :</span>
                 <button id="big-color" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
                 <br />
             </div>
@@ -86,22 +101,6 @@
             </div>
 
             <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
-        </div>
-
-        <div id="buttons">
-            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
-                Annuler
-            </button>
-            <button
-                class="actionButton"
-                mat-flat-button
-                color="accent"
-                type="submit"
-                (click)="onSubmit()"
-                [disabled]="colorPaletteForm.invalid"
-            >
-                Choisir
-            </button>
         </div>
     </form>
 </div>
