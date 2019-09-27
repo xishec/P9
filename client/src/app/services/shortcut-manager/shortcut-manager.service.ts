@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
     providedIn: 'root',
 })
-export class ShortcutsManagerService {
+export class ShortcutManagerService {
     private isOnInput: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     currentIsOnInput: Observable<boolean> = this.isOnInput.asObservable();

@@ -8,7 +8,7 @@ import { WelcomeModalWindowComponent } from '../../components/welcome-modal-wind
 import { ToolName } from '../../services/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/index/index.service';
-import { ShortcutsManagerService } from '../../services/shortcuts-manager/shortcuts-manager.service';
+import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
-        private shortcutsManagerService: ShortcutsManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.basicService
             .basicGet()
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
             },
         );
-        this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
+        this.shortcutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
         });
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(

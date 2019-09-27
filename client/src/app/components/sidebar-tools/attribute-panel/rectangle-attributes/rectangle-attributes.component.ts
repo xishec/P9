@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Thickness, ToolName } from '../../../../services/constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
@@ -25,7 +25,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutsManagerService: ShortcutsManagerService,
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -69,9 +69,9 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onFocus() {
-        this.shortcutsManagerService.changeIsOnInput(true);
+        this.shortcutManagerService.changeIsOnInput(true);
     }
     onFocusOut() {
-        this.shortcutsManagerService.changeIsOnInput(false);
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 }
