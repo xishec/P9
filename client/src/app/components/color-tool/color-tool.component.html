@@ -1,31 +1,29 @@
-<div class="formGroup">
-    <div id="userColor">
-        <div id="primary-color">
-            <span id="primaryColorText"> Couleur principale :</span>
-            <button
-                id="primary-color-button"
-                (click)="onClickPrimaryColor()"
-                class="color"
-                type="button"
-                [ngStyle]="onClickPrimaryColorStyle()"
-            ></button>
-        </div>
-        <div id="switch-color">
-            <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
-                <i class="fas fa-exchange-alt"></i>
-            </button>
-        </div>
-        <div id="secondary-color">
-            <span id="secondaryColorText"> Couleur secondaire :</span>
-            <button
-                id="secondary-color-button"
-                (click)="onClickSecondaryColor()"
-                class="color"
-                type="button"
-                [ngStyle]="onClickSecondaryColorStyle()"
-            ></button>
-        </div>
+<div id="userColor">
+    <div id="primary-color">
+        <span id="primaryColorText"> Couleur principale :</span>
+        <button
+            id="primary-color-button"
+            (click)="onClickPrimaryColor()"
+            class="color"
+            type="button"
+            [ngStyle]="onClickPrimaryColorStyle()"
+        ></button>
     </div>
-    <app-color-palette [currentColor]="currentColor()"></app-color-palette>
-    <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
+    <div id="switch-color">
+        <button (click)="switchColors()" id="switch-colors-button" title="Intervertir">
+            <i class="fas fa-exchange-alt"></i>
+        </button>
+    </div>
+    <div id="secondary-color">
+        <span id="secondaryColorText"> Couleur secondaire :</span>
+        <button
+            id="secondary-color-button"
+            (click)="onClickSecondaryColor()"
+            class="color"
+            type="button"
+            [ngStyle]="onClickSecondaryColorStyle()"
+        ></button>
+    </div>
 </div>
+<app-color-palette [currentColor]="currentColor()" (changeColorEvent)="changeColor($event)"></app-color-palette>
+<app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
