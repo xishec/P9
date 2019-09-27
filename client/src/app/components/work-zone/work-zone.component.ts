@@ -56,7 +56,7 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingInfo.height = window.innerHeight;
-        this.drawingInfo.width = window.innerWidth;
+        this.drawingInfo.width = window.innerWidth - window.innerWidth;
         this.drawingInfo.opacity = 0;
         this.empty = true;
     }
