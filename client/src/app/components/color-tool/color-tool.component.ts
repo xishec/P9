@@ -81,31 +81,22 @@ export class ColorToolComponent implements OnInit {
 
     onClickPrimaryColor(): void {
         this.selectedColor = ColorType.primaryColor;
-        this.setColorNumericValues();
     }
 
     onClickSecondaryColor(): void {
         this.selectedColor = ColorType.secondaryColor;
-        this.setColorNumericValues();
-    }
-
-    translateRGBToHex(): string {
-        let r = Number(this.myForm.value.R).toString(16);
-        let g = Number(this.myForm.value.G).toString(16);
-        let b = Number(this.myForm.value.B).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
     }
 
     onClickColorQueueButton(color: Color): void {
         this.changeColor(color.hex);
+    }
+
+    currentColor(): Color {
+        if (this.selectedColor === ColorType.primaryColor) {
+            return this.primaryColor;
+        } else if (this.selectedColor === ColorType.secondaryColor) {
+            return this.secondaryColor;
+        }
+        throw Error('Wrong color selected!');
     }
 }

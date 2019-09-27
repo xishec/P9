@@ -26,6 +26,6 @@
             ></button>
         </div>
     </div>
-    <app-color-palette></app-color-palette>
+    <app-color-palette [currentColor]="currentColor()"></app-color-palette>
     <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
 </div>
