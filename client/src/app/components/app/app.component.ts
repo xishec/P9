@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
         }
     }
 
-    @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
+    @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
         if (
             !this.displayNewDrawingModalWindow &&
             (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
