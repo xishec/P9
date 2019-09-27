@@ -1,13 +1,17 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+
 import { ColorType, SIDEBAR_WIDTH } from 'src/app/services/constants';
+import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from 'src/classes/Color';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 
-import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { SIDEBAR_WIDTH } from '../../services/constants';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-
+interface ColorStyle {
+    backgroundColor: string;
+    border: string;
+}
 @Component({
     selector: 'app-drawing-modal-window',
     templateUrl: './drawing-modal-window.component.html',
@@ -21,10 +25,13 @@ export class DrawingModalWindowComponent implements OnInit {
     blankWorkZone = true;
     modalDisplayed = false;
 
-    constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
+    constructor(
+        formBuilder: FormBuilder,
+        private dialogRef: MatDialogRef<DrawingModalWindowComponent>,
         private colorToolService: ColorToolService,
+        private drawingModalWindowService: DrawingModalWindowService,
+    ) {
         this.formBuilder = formBuilder;
-        this.drawingModalWindowService = drawingModalWindowService;
     }
 
     ngOnInit(): void {
