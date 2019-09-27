@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Keys, Mouse, SVG_NS, TraceType } from '../../constants';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
+import { TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -101,7 +102,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing && !this.isSquarePreview) {
+                if (!this.isSquarePreview) {
                     this.isSquarePreview = true;
                     this.updateDrawing();
                 }
@@ -117,7 +118,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         switch (key) {
             case Keys.Shift:
-                if (this.isPreviewing && this.isSquarePreview) {
+                if (this.isSquarePreview) {
                     this.isSquarePreview = false;
                     this.updateDrawing();
                 }

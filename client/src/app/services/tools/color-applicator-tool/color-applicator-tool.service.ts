@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
-import { Mouse } from '../../constants';
+import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';

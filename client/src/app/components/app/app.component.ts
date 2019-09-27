@@ -3,12 +3,12 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ToolName } from 'src/constants/tool-constants';
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { ToolName } from '../../services/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/index/index.service';
-import { ShortcutsManagerService } from '../../services/shortcuts-manager/shortcuts-manager.service';
+import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
-        private shortcutsManagerService: ShortcutsManagerService,
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.basicService
             .basicGet()
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
             },
         );
-        this.shortcutsManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
+        this.shortcutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
         });
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
@@ -70,71 +70,55 @@ export class AppComponent implements OnInit {
         }
     }
 
+    checkEventPreventionCondition(): boolean {
+        return (
+            !this.displayNewDrawingModalWindow &&
+            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
+            !this.isOnInput
+        );
+    }
+
     @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {
         event.preventDefault();
     }
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             // will be implemented later
         }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
 
     @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
     }
 
     @HostListener('window:keydown.r', ['$event']) onR(event: KeyboardEvent) {
-        if (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        ) {
+        if (this.checkEventPreventionCondition()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.ColorApplicator);
         }

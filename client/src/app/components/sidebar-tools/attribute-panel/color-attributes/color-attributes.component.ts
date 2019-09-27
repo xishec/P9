@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { COLORS, ColorType } from 'src/app/services/constants';
+import { COLORS, ColorType } from 'src/constants/color-constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 interface ColorStyle {
@@ -15,7 +15,6 @@ interface ColorStyle {
     styleUrls: ['./color-attributes.component.scss'],
 })
 export class ColorAttributesComponent implements OnInit {
-    showColorPalette = false;
     backgroundColor = COLORS[0].hex;
     primaryColor = COLORS[1].hex;
     secondaryColor = COLORS[2].hex;
@@ -24,9 +23,6 @@ export class ColorAttributesComponent implements OnInit {
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit() {
-        this.colorToolService.currentShowColorPalette.subscribe((showColorPalette: boolean) => {
-            this.showColorPalette = showColorPalette;
-        });
         this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
             this.backgroundColor = backgroundColor;
         });

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ShortcutsManagerService } from 'src/app/services/shortcuts-manager/shortcuts-manager.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { ColorType } from 'src/constants/color-constants';
 import { Color } from '../../../classes/Color';
-import { ColorType } from '../../services/constants';
 
 @Component({
     selector: 'app-color-palette',
@@ -21,7 +21,7 @@ export class ColorPaletteComponent implements OnInit {
     constructor(
         formBuilder: FormBuilder,
         private colorToolService: ColorToolService,
-        private shortcutsManagerService: ShortcutsManagerService,
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
         this.initializeForm();
@@ -124,15 +124,15 @@ export class ColorPaletteComponent implements OnInit {
 
     getUserColorIcon(): IconStyle {
         return {
-            backgroundColor: '#' + this.previewColor + this.getOpacity(),
+            backgroundColor: '#' + this.previewColor.slice(0, 6) + this.getOpacity(),
         };
     }
 
     onFocus() {
-        this.shortcutsManagerService.changeIsOnInput(true);
+        this.shortcutManagerService.changeIsOnInput(true);
     }
     onFocusOut() {
-        this.shortcutsManagerService.changeIsOnInput(false);
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 }
 interface IconStyle {

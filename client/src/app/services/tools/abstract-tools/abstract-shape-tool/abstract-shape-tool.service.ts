@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
-import { SVG_NS } from '../../../constants';
+import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
 
 @Injectable({

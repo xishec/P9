@@ -1,12 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { COLORS, DEFAULT_COLOR } from 'src/constants/color-constants';
+import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { Color } from '../../../classes/Color';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
-
-import { COLORS, DEFAULT_COLOR, SIDEBAR_WIDTH } from '../../services/constants';
 
 @Component({
     selector: 'app-drawing-modal-window',

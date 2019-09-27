@@ -1,11 +1,11 @@
 #container {
-    height: 510px;
+    height: 455px;
 }
 
 #color-palette-form {
     margin-bottom: 20px;
 
-    #userColor {
+    #user-color {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -15,7 +15,7 @@
         }
     }
 
-    #bigColor {
+    #big-color {
         transform: scale(1.4);
     }
 
@@ -35,6 +35,10 @@
     }
     .color:active:not(#bigColor) {
         transform: scale(1);
+    }
+
+    #form-inputs {
+        margin-left: 40px;
     }
 
     .medium {
