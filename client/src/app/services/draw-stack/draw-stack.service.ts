@@ -18,8 +18,7 @@ export class DrawStackService {
     }
 
     getElementByPosition(elementPosition: number): SVGGElement {
-        const ret = this.drawStack[elementPosition];
-        return ret;
+        return this.drawStack[elementPosition];
     }
 
     getDrawStackLength(): number {
@@ -35,7 +34,6 @@ export class DrawStackService {
     }
 
     reset(): SVGGElement[] {
-        const ret = this.drawStack.splice(0, this.drawStack.length);
-        return ret;
+        return this.drawStack.splice(0, this.drawStack.length);
     }
 }
