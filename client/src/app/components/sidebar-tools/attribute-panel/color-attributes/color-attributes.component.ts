@@ -7,7 +7,6 @@ interface ColorStyle {
     backgroundColor: string;
     border?: string;
     transform?: string;
-    borderStyle?: string;
 }
 @Component({
     selector: 'app-color-attributes',
@@ -56,7 +55,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {
@@ -69,7 +67,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {
@@ -82,7 +79,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {
