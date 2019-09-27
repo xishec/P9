@@ -46,4 +46,29 @@ export class ColorPaletteComponent implements OnChanges {
         this.myForm.controls.G.setValue(parseInt(color.hex.slice(2, 4), 16));
         this.myForm.controls.B.setValue(parseInt(color.hex.slice(4, 6), 16));
     }
+
+  //   onUserHexInput(): void {
+  //       this.changeColor(this.myForm.value.hex);
+  //   }
+
+  //   onUserColorRGBInput(): void {
+  //       const newColorinHex = this.translateRGBToHex();
+  //       this.changeColor(newColorinHex);
+  //   }
+
+  //   translateRGBToHex(): string {
+  //     let r = Number(this.myForm.value.R).toString(16);
+  //     let g = Number(this.myForm.value.G).toString(16);
+  //     let b = Number(this.myForm.value.B).toString(16);
+  //     if (r.length === 1) {
+  //         r = '0' + r;
+  //     }
+  //     if (g.length === 1) {
+  //         g = '0' + g;
+  //     }
+  //     if (b.length === 1) {
+  //         b = '0' + b;
+  //     }
+  //     return r + g + b;
+  // }
 }
