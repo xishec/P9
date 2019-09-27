@@ -89,10 +89,13 @@
         </div>
 
         <div id="buttons">
-            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                Annuler
+            </button>
             <button
                 class="actionButton"
-                mat-stroked-button
+                mat-raised-button
+                color="accent"
                 type="submit"
                 (click)="onSubmit()"
                 [disabled]="colorPaletteForm.invalid"
