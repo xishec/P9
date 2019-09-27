@@ -6,6 +6,9 @@ import { AbstractToolService } from '../abstract-tool.service';
 })
 export abstract class TracingToolService extends AbstractToolService {
     protected isDrawing = false;
+    protected currentPath = '';
+    protected currentWidth = 0;
+    protected currentColor = '';
 
     constructor() {
         super();

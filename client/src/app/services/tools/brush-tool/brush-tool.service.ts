@@ -10,9 +10,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class BrushToolService extends TracingToolService {
-    private currentPath = '';
-    private currentWidth = 0;
-    private currentColor = '';
     private currentStyle = 1;
     private svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     private svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);

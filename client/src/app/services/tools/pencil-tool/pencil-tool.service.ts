@@ -10,9 +10,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    private currentPath = '';
-    private currentWidth = 0;
-    currentColor = '';
     private svgPathRef: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     private svgWrapRef: SVGGElement = this.renderer.createElement('g', SVG_NS);
     private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
