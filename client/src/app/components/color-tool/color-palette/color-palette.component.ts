@@ -1,21 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Color } from 'src/classes/Color';
 
 @Component({
     selector: 'app-color-palette',
     templateUrl: './color-palette.component.html',
     styleUrls: ['./color-palette.component.scss'],
 })
-export class ColorPaletteComponent implements OnInit {
+export class ColorPaletteComponent implements OnChanges {
     myForm: FormGroup;
     formBuilder: FormBuilder;
+
+    @Input() currentColor: Color = new Color();
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
         this.initializeForm();
     }
 
-    ngOnInit() {}
+    ngOnChanges(changes: SimpleChanges): void {
+      this.setColorNumericValues(this.currentColor);
+    }
 
     initializeForm(): void {
         this.myForm = this.formBuilder.group({
@@ -25,5 +30,20 @@ export class ColorPaletteComponent implements OnInit {
             B: ['0', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
         });
+    }
+
+    setColorNumericValues(color: Color): void {
+        this.setHexValues(color);
+        this.setRGBValues(color);
+    }
+
+    setHexValues(color: Color): void {
+        this.myForm.controls.hex.setValue(color.hex);
+    }
+
+    setRGBValues(color: Color): void {
+        this.myForm.controls.R.setValue(parseInt(color.hex.slice(0, 2), 16));
+        this.myForm.controls.G.setValue(parseInt(color.hex.slice(2, 4), 16));
+        this.myForm.controls.B.setValue(parseInt(color.hex.slice(4, 6), 16));
     }
 }
