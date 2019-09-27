@@ -1,1 +1,73 @@
-<p>color-numeric-values works!</p>
+<form
+    [formGroup]="colorNumericValuesForm"
+>
+    <div id="form-inputs">
+        <mat-form-field class="medium">
+            <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                matInput
+                type="text"
+                placeholder="Hex"
+                formControlName="hex"
+                (change)="onUserHexInput()"
+            />
+            <mat-error>Ce code de couleur n'est pas valide!</mat-error>
+            <span matPrefix>#</span>
+        </mat-form-field>
+        <br />
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
+            <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                matInput
+                type="number"
+                placeholder="R:"
+                formControlName="R"
+                min="0"
+                max="255"
+            />
+            <mat-error>R doit être entre 0 et 255!</mat-error>
+        </mat-form-field>
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
+            <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                matInput
+                type="number"
+                placeholder="G:"
+                formControlName="G"
+                min="0"
+                max="255"
+            />
+            <mat-error>G doit être entre 0 et 255!</mat-error>
+        </mat-form-field>
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
+            <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                matInput
+                type="number"
+                placeholder="B:"
+                formControlName="B"
+                min="0"
+                max="255"
+            />
+            <mat-error>B doit être entre 0 et 255!</mat-error>
+        </mat-form-field>
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
+            <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                matInput
+                type="number"
+                placeholder="A:"
+                formControlName="A"
+                min="0"
+                max="1"
+                step="0.1"
+            />
+            <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
+        </mat-form-field>
+    </div>
+</form>
