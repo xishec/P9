@@ -18,6 +18,8 @@ export class DrawingModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     drawingZoneColor = new Color();
+    blankWorkZone = true;
+    modalDisplayed = false;
 
     constructor(formBuilder: FormBuilder, private drawingModalWindowService: DrawingModalWindowService) {
         private colorToolService: ColorToolService,
@@ -30,11 +32,14 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.primaryColor.subscribe((primaryColor) => {
             this.drawingZoneColor = primaryColor;
         });
+        this.drawingModalWindowService.blankDrawingZone.subscribe((isBlank) => {
+            this.blankWorkZone = isBlank;
+        });
     }
 
     initializeForm(): void {
         this.drawingModalForm = this.formBuilder.group({
-            confirm: this.submitCount === 0,
+            confirm: this.blankWorkZone,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
@@ -48,8 +53,8 @@ export class DrawingModalWindowComponent implements OnInit {
             height: this.drawingModalForm.value.height,
         };
         this.drawingModalWindowService.changeInfo(drawingInfo);
-        this.submitCount++;
-        this.initializeForm();
+        this.modalDisplayed = true;
+        this.drawingModalWindowService.updateDrawingZoneState(false);
     }
 
     @HostListener('window:resize', ['$event'])
