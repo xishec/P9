@@ -77,7 +77,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
+        if (button === Mouse.LeftButton && this.isIn) {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
