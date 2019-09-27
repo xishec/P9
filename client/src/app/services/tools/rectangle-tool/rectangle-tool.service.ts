@@ -141,9 +141,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            setTimeout(() => {
-                this.drawStack.changeTargetElement(currentDrawStackLength);
-            }, 10);
+            this.drawStack.changeTargetElement(currentDrawStackLength);
         });
 
         this.renderer.appendChild(el, drawRectangle);
