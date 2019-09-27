@@ -10,13 +10,13 @@ import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-
 })
 export class AttributePanelComponent implements OnInit {
     readonly ToolName = ToolName;
-    toolName: ToolName;
+    currentToolName: ToolName;
 
     constructor(private toolSelectorService: ToolSelectorService) {}
 
     ngOnInit(): void {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
-            this.toolName = toolName;
+            this.currentToolName = toolName;
         });
     }
 }
