@@ -33,13 +33,13 @@
                         type="text"
                         placeholder="Hex"
                         formControlName="hex"
-                        (change)="onUserColorHex()"
+                        (input)="onUserColorHex()"
                     />
                     <mat-error>Ce code de couleur n'est pas valide!</mat-error>
                     <span matPrefix>#</span>
                 </mat-form-field>
 
-                <mat-form-field class="small" (change)="onUserColorRGB()">
+                <mat-form-field class="small" (input)="onUserColorRGB()">
                     <input
                         autocomplete="off"
                         matInput
@@ -51,7 +51,7 @@
                     />
                     <mat-error>R doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGB()">
+                <mat-form-field class="small" (input)="onUserColorRGB()">
                     <input
                         autocomplete="off"
                         matInput
@@ -63,7 +63,7 @@
                     />
                     <mat-error>G doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGB()">
+                <mat-form-field class="small" (input)="onUserColorRGB()">
                     <input
                         autocomplete="off"
                         matInput
@@ -75,7 +75,7 @@
                     />
                     <mat-error>B doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
-                <mat-form-field class="small" (change)="onUserColorRGB()">
+                <mat-form-field class="small" (input)="onUserColorRGB()">
                     <input
                         autocomplete="off"
                         matInput
