@@ -54,7 +54,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onSubmit() {
         const drawingInfo: DrawingInfo = {
-            color: new Color(),
+            color: this.drawingZoneColor,
             opacity: 1,
             width: this.drawingModalForm.value.width,
             height: this.drawingModalForm.value.height,
@@ -62,6 +62,11 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.changeInfo(drawingInfo);
         this.modalDisplayed = true;
         this.drawingModalWindowService.updateDrawingZoneState(false);
+        this.dialogRef.close();
+    }
+
+    onCancel(): void {
+        this.dialogRef.close();
     }
 
     @HostListener('window:resize', ['$event'])
