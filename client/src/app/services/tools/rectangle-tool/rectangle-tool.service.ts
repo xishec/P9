@@ -54,14 +54,14 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
     }
 
-    isValideRectangle(): boolean {
+    private isValideRectangle(): boolean {
         let height = this.previewRectangle.height.baseVal.value;
         let width = this.previewRectangle.width.baseVal.value;
 
         return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
     }
 
-    copyPreviewRectangleAttributes(): void {
+    private copyPreviewRectangleAttributes(): void {
         this.renderer.setAttribute(
             this.drawRectangle,
             'x',
@@ -100,7 +100,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
     }
 
-    renderDrawRectangle(): void {
+    private renderDrawRectangle(): void {
         if (this.isValideRectangle()) {
             this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
             this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
@@ -112,14 +112,14 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
     }
 
-    cleanUpPreview(): void {
+    private cleanUpPreview(): void {
         this.isPreviewing = false;
         this.isSquarePreview = false;
         this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.svgReference, this.drawRectangle);
     }
 
-    createSVG(): void {
+    protected createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangle.x.baseVal.valueAsString);
@@ -140,7 +140,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
-    updateDrawing(): void {
+    private updateDrawing(): void {
         this.updatePreviewRectangle();
         if (this.isSquarePreview) {
             this.updatePreviewSquare();
@@ -150,7 +150,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderDrawRectangle();
     }
 
-    updatePreviewSquare(): void {
+    private updatePreviewSquare(): void {
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
@@ -197,7 +197,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
     }
 
-    updateTraceType(traceType: string) {
+    private updateTraceType(traceType: string) {
         this.traceType = traceType;
         switch (traceType) {
             case TraceType.Outline: {
