@@ -40,6 +40,38 @@ export abstract class TracingToolService extends AbstractToolService {
         }
     }
 
+    onMouseMove(e: MouseEvent): void {
+        if (e.button === Mouse.LeftButton && this.isDrawing) {
+            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            this.currentPath += ` L${x} ${y}`;
+            this.updateSVGPath();
+            this.updatePreviewCircle(x, y);
+        }
+    }
+
+    onMouseEnter(event: MouseEvent): undefined {
+        return undefined;
+    }
+
+    onKeyDown(event: KeyboardEvent): undefined {
+        return undefined;
+    }
+
+    onKeyUp(event: KeyboardEvent): undefined {
+        return undefined;
+    }
+
+    updatePreviewCircle(x: number, y: number): void {
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
+    }
+
+    updateSVGPath(): void {
+        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
+    }
+
+
     createSVGWrapper(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
@@ -82,6 +114,4 @@ export abstract class TracingToolService extends AbstractToolService {
     onMouseLeave(e: MouseEvent): void {
         this.isDrawing = false;
     }
-
-    abstract onMouseMove(e: MouseEvent): void;
 }

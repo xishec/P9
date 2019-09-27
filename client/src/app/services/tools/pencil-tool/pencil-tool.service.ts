@@ -31,15 +31,15 @@ export class PencilToolService extends TracingToolService {
         });
     }
 
-    onMouseMove(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
-            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
-            this.currentPath += ` L${x} ${y}`;
-            this.updateSVGPath();
-            this.updatePreviewCircle(x, y);
-        }
-    }
+    // onMouseMove(e: MouseEvent): void {
+    //     if (e.button === Mouse.LeftButton && this.isDrawing) {
+    //         const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    //         const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    //         this.currentPath += ` L${x} ${y}`;
+    //         this.updateSVGPath();
+    //         this.updatePreviewCircle(x, y);
+    //     }
+    // }
 
     onMouseUp(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton && this.isDrawing) {
@@ -57,17 +57,17 @@ export class PencilToolService extends TracingToolService {
         }
     }
 
-    onMouseEnter(event: MouseEvent): undefined {
-        return undefined;
-    }
+    // onMouseEnter(event: MouseEvent): undefined {
+    //     return undefined;
+    // }
 
-    onKeyDown(event: KeyboardEvent): undefined {
-        return undefined;
-    }
+    // onKeyDown(event: KeyboardEvent): undefined {
+    //     return undefined;
+    // }
 
-    onKeyUp(event: KeyboardEvent): undefined {
-        return undefined;
-    }
+    // onKeyUp(event: KeyboardEvent): undefined {
+    //     return undefined;
+    // }
 
     // createSVGWrapper(): void {
     //     const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
@@ -107,12 +107,12 @@ export class PencilToolService extends TracingToolService {
     //     this.renderer.appendChild(this.svgWrap, this.svgPath);
     // }
 
-    updatePreviewCircle(x: number, y: number): void {
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
-    }
+    // updatePreviewCircle(x: number, y: number): void {
+    //     this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
+    //     this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
+    // }
 
-    updateSVGPath(): void {
-        this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
-    }
+    // updateSVGPath(): void {
+    //     this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
+    // }
 }
