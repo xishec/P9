@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { COLORS, ColorType } from 'src/constants/color-constants';
 import { Color } from '../../../../classes/Color';
 
@@ -10,23 +10,15 @@ import { Color } from '../../../../classes/Color';
 export class ColorToolService {
     readonly colors: Color[] = COLORS;
 
-    private previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    private backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    private primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
-    private secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
-    private selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
+    previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
+    backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
+    primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
+    secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
+    selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
         undefined,
     );
-    private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-
-    currentPreviewColor: Observable<string> = this.previewColor.asObservable();
-    currentBackgroundColor: Observable<string> = this.backgroundColor.asObservable();
-    currentPrimaryColor: Observable<string> = this.primaryColor.asObservable();
-    currentSecondaryColor: Observable<string> = this.secondaryColor.asObservable();
-    currentSelectedColor: Observable<ColorType | undefined> = this.selectedColor.asObservable();
-    currentShowColorPalette: Observable<boolean> = this.showColorPalette.asObservable();
-    currentColorQueue: Observable<string[]> = this.colorQueue.asObservable();
+    showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
     addColorToQueue(color: string): void {
         if (this.colorQueue.value.length < 10) {
@@ -41,9 +33,11 @@ export class ColorToolService {
     changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);
     }
+
     changeBackgroundColor(backgroundColor: string) {
         this.backgroundColor.next(backgroundColor);
     }
+
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
@@ -60,9 +54,11 @@ export class ColorToolService {
                 break;
         }
     }
+
     changeSelectedColor(selectedColor: ColorType | undefined) {
         this.selectedColor.next(selectedColor);
     }
+
     changeCurrentShowColorPalette(showColorPalette: boolean) {
         this.showColorPalette.next(showColorPalette);
     }
@@ -94,6 +90,14 @@ export class ColorToolService {
             b = '0' + b;
         }
         return r + g + b;
+    }
+
+    getOpacity(alphaValue: number): string {
+        let color = Math.round(alphaValue * 255).toString(16);
+        if (color.length === 1) {
+            color += '0';
+        }
+        return color;
     }
 
     switchPrimarySecondary() {
