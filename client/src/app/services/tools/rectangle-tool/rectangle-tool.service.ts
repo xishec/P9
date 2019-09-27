@@ -191,8 +191,14 @@ export class RectangleToolService extends AbstractShapeToolService {
                 );
             }
         }
-        this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
-        this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
+        if (this.previewRectangle.width.baseVal.value >= 2 * this.strokeWidth && this.previewRectangle.height.baseVal.value >= 2 * this.strokeWidth) {
+            this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
+        } else {
+            this.renderer.setAttribute(this.drawRectangle, 'fill', 'none');
+            this.renderer.setAttribute(this.drawRectangle, 'stroke', 'none');
+        }
         this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.strokeWidth.toString());
     }
 
