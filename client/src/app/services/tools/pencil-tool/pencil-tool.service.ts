@@ -10,15 +10,12 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    private attributesManagerService: AttributesManagerService;
-    private colorToolService: ColorToolService;
-
     constructor(
-        private elementRef: ElementRef<SVGElement>,
+        elementRef: ElementRef<SVGElement>,
         renderer: Renderer2,
-        private drawStack: DrawStackService,
+        drawStack: DrawStackService,
     ) {
-        super(renderer);
+        super(elementRef, renderer, drawStack);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
@@ -32,19 +29,6 @@ export class PencilToolService extends TracingToolService {
         this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
             this.currentColor = currentColor;
         });
-    }
-
-    onMouseDown(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton) {
-            super.onMouseDown(e);
-            this.createSVGWrapper();
-            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
-            this.currentPath = `M${x} ${y}`;
-            this.createSVGCircle(x, y);
-            this.svgPreviewCircle = this.createSVGCircle(x, y);
-            this.createSVGPath();
-        }
     }
 
     onMouseMove(e: MouseEvent): void {
@@ -85,43 +69,43 @@ export class PencilToolService extends TracingToolService {
         return undefined;
     }
 
-    createSVGWrapper(): void {
-        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
-        this.renderer.setAttribute(el, 'fill', '#' + this.currentColor);
-        this.svgWrap = el;
-        this.renderer.appendChild(this.elementRef.nativeElement, el);
-    }
+    // createSVGWrapper(): void {
+    //     const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+    //     this.renderer.setAttribute(el, 'stroke', '#' + this.currentColor);
+    //     this.renderer.setAttribute(el, 'fill', '#' + this.currentColor);
+    //     this.svgWrap = el;
+    //     this.renderer.appendChild(this.elementRef.nativeElement, el);
+    // }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
-        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(circle, 'cx', x.toString());
-        this.renderer.setAttribute(circle, 'cy', y.toString());
-        this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        circle.addEventListener('mousedown', (event: MouseEvent) => {
-            setTimeout(() => {
-                this.drawStack.changeTargetElement(currentDrawStackLength);
-            }, 10);
-        });
-        this.renderer.appendChild(this.svgWrap, circle);
-        return circle;
-    }
+    // createSVGCircle(x: number, y: number): SVGCircleElement {
+    //     const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+    //     this.renderer.setAttribute(circle, 'cx', x.toString());
+    //     this.renderer.setAttribute(circle, 'cy', y.toString());
+    //     this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
+    //     this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
+    //     const currentDrawStackLength = this.drawStack.getDrawStackLength();
+    //     circle.addEventListener('mousedown', (event: MouseEvent) => {
+    //         setTimeout(() => {
+    //             this.drawStack.changeTargetElement(currentDrawStackLength);
+    //         }, 10);
+    //     });
+    //     this.renderer.appendChild(this.svgWrap, circle);
+    //     return circle;
+    // }
 
-    createSVGPath(): void {
-        this.svgPath = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
-        this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
-            setTimeout(() => {
-                this.drawStack.changeTargetElement(currentDrawStackLength);
-            }, 10);
-        });
-        this.renderer.appendChild(this.svgWrap, this.svgPath);
-    }
+    // createSVGPath(): void {
+    //     this.svgPath = this.renderer.createElement('path', SVG_NS);
+    //     this.renderer.setAttribute(this.svgPath, 'fill', 'none');
+    //     this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
+    //     this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+    //     const currentDrawStackLength = this.drawStack.getDrawStackLength();
+    //     this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
+    //         setTimeout(() => {
+    //             this.drawStack.changeTargetElement(currentDrawStackLength);
+    //         }, 10);
+    //     });
+    //     this.renderer.appendChild(this.svgWrap, this.svgPath);
+    // }
 
     updatePreviewCircle(x: number, y: number): void {
         this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());

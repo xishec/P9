@@ -11,15 +11,13 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class BrushToolService extends TracingToolService {
     private currentStyle = 1;
-    private attributesManagerService: AttributesManagerService;
-    private colorToolService: ColorToolService;
 
     constructor(
-        private elementRef: ElementRef<SVGElement>,
+        elementRef: ElementRef<SVGElement>,
         renderer: Renderer2,
-        private drawStack: DrawStackService,
+        drawStack: DrawStackService,
     ) {
-        super(renderer);
+        super(elementRef, renderer, drawStack);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
