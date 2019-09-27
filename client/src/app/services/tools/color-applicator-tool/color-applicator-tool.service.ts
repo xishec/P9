@@ -20,9 +20,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
         super();
         this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
             this.currentTargetPosition = targetPosition;
-            const butt = this.buttonClick;
-            if (this.drawStack.getElementByPosition(this.currentTargetPosition) && this.wasUsed) {
-                switch (butt) {
+            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined && this.wasUsed) {
+                switch (this.buttonClick) {
                     case Mouse.LeftButton:
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentTargetPosition),
