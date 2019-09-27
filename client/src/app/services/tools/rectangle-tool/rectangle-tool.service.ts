@@ -24,7 +24,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     constructor(
         private drawStack: DrawStackService,
         private svgReference: ElementRef<SVGElement>,
-        renderer: Renderer2,
+        renderer: Renderer2
     ) {
         super(renderer);
     }
@@ -77,7 +77,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
+        if (button === Mouse.LeftButton) {
             if (this.previewRectangle.width.baseVal.value > 0 || this.previewRectangle.height.baseVal.value > 0) {
                 this.createSVG();
             }
@@ -90,12 +90,10 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     onMouseEnter(event: MouseEvent): void {
         this.isIn = true;
-        this.isOut = false;
     }
 
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
-        this.isOut = true;
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -142,7 +140,9 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
         });
 
         this.renderer.appendChild(el, drawRectangle);

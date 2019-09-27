@@ -9,6 +9,8 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class ColorApplicatorToolService extends AbstractToolService {
     currentTargetPosition = 0;
+    private buttonClick = 0;
+    private wasUsed = false;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
@@ -17,6 +19,28 @@ export class ColorApplicatorToolService extends AbstractToolService {
         super();
         this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
             this.currentTargetPosition = targetPosition;
+            const butt = this.buttonClick;
+            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined && this.wasUsed) {
+                switch (butt) {
+                    case Mouse.LeftButton:
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentTargetPosition),
+                            'fill',
+                            this.primaryColor,
+                        );
+                        break;
+                    case Mouse.RightButton:
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentTargetPosition),
+                            'stroke',
+                            this.secondaryColor,
+                        );
+                        break;
+                    default:
+                        break;
+                }
+                this.wasUsed = false;
+            }
         });
     }
 
@@ -32,30 +56,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined) {
-            const button = event.button;
-            console.log(this.currentTargetPosition);
-            switch (button) {
-                case Mouse.LeftButton:
-                    console.log(this.primaryColor);
-                    this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentTargetPosition),
-                        'fill',
-                        this.primaryColor,
-                    );
-                    break;
-                case Mouse.RightButton:
-                    console.log(this.secondaryColor);
-                    this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentTargetPosition),
-                        'stroke',
-                        this.secondaryColor,
-                    );
-                    break;
-                default:
-                    break;
-            }
-        }
+        this.buttonClick = event.button;
+        this.wasUsed = true;
+        console.log('mouse ' + this.buttonClick);
     }
     onMouseUp(event: MouseEvent): void {}
     onMouseEnter(event: MouseEvent): void {}
