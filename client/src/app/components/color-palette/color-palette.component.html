@@ -37,6 +37,8 @@
                     type="number"
                     placeholder="R:"
                     formControlName="R"
+                    min="0"
+                    max="255"
                 />
                 <mat-error>R doit être entre 0 et 255!</mat-error>
             </mat-form-field>
@@ -48,6 +50,8 @@
                     type="number"
                     placeholder="G:"
                     formControlName="G"
+                    min="0"
+                    max="255"
                 />
                 <mat-error>G doit être entre 0 et 255!</mat-error>
             </mat-form-field>
@@ -59,6 +63,8 @@
                     type="number"
                     placeholder="B:"
                     formControlName="B"
+                    min="0"
+                    max="255"
                 />
                 <mat-error>B doit être entre 0 et 255!</mat-error>
             </mat-form-field>
@@ -70,6 +76,8 @@
                     type="number"
                     placeholder="A:"
                     formControlName="A"
+                    min="0"
+                    max="1"
                     step="0.1"
                 />
                 <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
