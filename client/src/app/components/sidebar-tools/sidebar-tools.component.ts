@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FILES_BUTTON_INFO, ToolName, TOOLS_BUTTON_INFO } from '../../services/constants';
+import { FILES_BUTTON_INFO, ToolName, TOOLS_BUTTON_INFO } from '../../../constants/constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 
 @Component({

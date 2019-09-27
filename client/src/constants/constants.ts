@@ -1,5 +1,5 @@
-import { Color } from '../../classes/Color';
-import { SidebarButtonInfo } from '../../classes/SidebarButtonInfo';
+import { Color } from '../classes/Color';
+import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const SIDEBAR_WIDTH = 360;
 const COLORS: Color[] = [

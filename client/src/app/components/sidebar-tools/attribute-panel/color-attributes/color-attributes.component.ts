@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { COLORS, ColorType } from 'src/app/services/constants';
+import { COLORS, ColorType } from 'src/constants/constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 interface ColorStyle {
