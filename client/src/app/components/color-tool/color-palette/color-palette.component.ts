@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Color } from 'src/classes/Color';
 
@@ -12,6 +12,7 @@ export class ColorPaletteComponent implements OnChanges {
     formBuilder: FormBuilder;
 
     @Input() currentColor: Color = new Color();
+    @Output() changeColorEvent = new EventEmitter<string>();
 
     constructor(formBuilder: FormBuilder) {
         this.formBuilder = formBuilder;
@@ -19,7 +20,7 @@ export class ColorPaletteComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-      this.setColorNumericValues(this.currentColor);
+        this.setColorNumericValues(this.currentColor);
     }
 
     initializeForm(): void {
@@ -47,9 +48,9 @@ export class ColorPaletteComponent implements OnChanges {
         this.myForm.controls.B.setValue(parseInt(color.hex.slice(4, 6), 16));
     }
 
-  //   onUserHexInput(): void {
-  //       this.changeColor(this.myForm.value.hex);
-  //   }
+    changeColor(hex: string): void {
+        this.changeColorEvent.emit(hex);
+    }
 
     onUserHexInput(): void {
         this.changeColor(this.myForm.value.hex);
