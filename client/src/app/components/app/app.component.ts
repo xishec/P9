@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ToolName } from 'src/constants/tool-constants';
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { ToolName } from '../../services/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';

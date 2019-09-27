@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Mouse, SVG_NS } from '../../constants';
+import { Mouse, SVG_NS } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -162,7 +162,6 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
         this.renderer.setAttribute(circle, 'filter', `url(#${this.currentStyle.toString()})`);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         circle.addEventListener('mousedown', (event: MouseEvent) => {
