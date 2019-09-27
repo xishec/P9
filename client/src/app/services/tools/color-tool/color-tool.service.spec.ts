@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ColorToolService } from './color-tool.service';
+import { ColorToolService } from './color-palette.service';
 
 describe('ColorToolService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

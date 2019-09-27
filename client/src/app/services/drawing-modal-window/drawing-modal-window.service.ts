@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Color } from '../../../classes/Color';
+import { COLORS } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
-import { COLORS } from '../constants';
 
 @Injectable({
     providedIn: 'root',
@@ -15,36 +14,15 @@ export class DrawingModalWindowService {
         color: COLORS[0],
         opacity: 1,
     });
-    private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private activeColor: BehaviorSubject<Color> = new BehaviorSubject(COLORS[0]);
+    private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     currentInfo: Observable<DrawingInfo> = this.infoSource.asObservable();
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
-    currentActiveColor: Observable<Color> = this.activeColor.asObservable();
 
     changeInfo(drawingInfo: DrawingInfo) {
         this.infoSource.next(drawingInfo);
     }
     changeDisplayNewDrawingModalWindow(displayNewDrawingModalWindow: boolean) {
         this.displayNewDrawingModalWindow.next(displayNewDrawingModalWindow);
-    }
-    changeActiveColor(activeColor: Color) {
-        this.activeColor.next(activeColor);
-    }
-
-    rgbToHex(R: number, G: number, B: number): string {
-        let r = Number(Math.ceil(R)).toString(16);
-        let g = Number(Math.ceil(G)).toString(16);
-        let b = Number(Math.ceil(B)).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
     }
 }

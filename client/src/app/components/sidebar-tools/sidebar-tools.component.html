@@ -7,24 +7,11 @@
                 matTooltipPosition="after"
                 (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
+                [checked]="currentToolName === TOOL_BUTTON_INFO.tooltipName"
             >
                 <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
         </mat-button-toggle-group>
-        <div id="color">
-            <button
-                id="secondary"
-                matTooltip="Couleur secondaire"
-                matTooltipPosition="after"
-                (click)="onSecondaryClick()"
-            ></button>
-            <button
-                id="primary"
-                matTooltip="Couleur principale"
-                matTooltipPosition="after"
-                (click)="onPrimaryClick()"
-            ></button>
-        </div>
 
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
             <mat-button-toggle

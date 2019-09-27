@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
+import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+
 @Component({
     selector: 'app-welcome-modal-window',
     templateUrl: './welcome-modal-window.component.html',
@@ -9,9 +11,13 @@ import { MatDialogRef } from '@angular/material';
 export class WelcomeModalWindowComponent {
     displayWelcomeModalWindow = false;
 
-    constructor(private dialogRef: MatDialogRef<WelcomeModalWindowComponent>) {}
+    constructor(
+        private dialogRef: MatDialogRef<WelcomeModalWindowComponent>,
+        private welcomeModalWindowService: WelcomeModalWindowService,
+    ) {}
 
     submitForm(): void {
         this.dialogRef.close(!this.displayWelcomeModalWindow);
+        this.welcomeModalWindowService.changeWelcomeModalWindowClosed(true);
     }
 }

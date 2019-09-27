@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
-import { SVG_NS } from '../../../constants';
+import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
 
 @Injectable({
@@ -14,7 +14,6 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     protected previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     protected isPreviewing = false;
     protected isIn = false;
-    protected isOut = false;
 
     constructor(protected renderer: Renderer2) {
         super();

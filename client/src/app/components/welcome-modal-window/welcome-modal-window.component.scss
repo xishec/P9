@@ -1,56 +1,56 @@
 #footer {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 #user-guide-message {
-  text-align: center;
-  margin-top: 25px;
+    text-align: center;
+    margin-top: 25px;
 }
 
 #user-guide-button {
-  padding: 0 6px 0 6px;
-  margin: 6px 8px 6px 12px;
-  min-width: 250px;
-  line-height: 24px;
-  border-radius: 3px;
-  border-color: white;
-  font-size: 14px;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  background-color: orange;
-  cursor: pointer;
+    padding: 0 6px 0 6px;
+    margin: 6px 8px 6px 12px;
+    min-width: 250px;
+    line-height: 24px;
+    border-radius: 3px;
+    border-color: white;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    background-color: #ff5722;
+    cursor: pointer;
 }
 
 #user-guide-button-container {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 #user-guide-button-text {
-  display: flex;
+    display: flex;
 
-  p {
-    margin: 0;
-    padding: 5px;
-    color: white
-  }
+    p {
+        margin: 0;
+        padding: 5px;
+        color: white;
+    }
 }
 
 #question-icon {
-  margin: auto;
-  padding: 5px;
-  color: white;
+    margin: auto;
+    padding: 5px;
+    color: white;
 }
 
 #checkbox {
-  p {
-    font-size: 14px;
-  }
+    p {
+        font-size: 14px;
+    }
 }
 
 #start-button {
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(216, 216, 216);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(216, 216, 216);
 }

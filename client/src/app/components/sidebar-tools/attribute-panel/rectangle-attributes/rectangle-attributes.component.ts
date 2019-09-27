@@ -2,7 +2,9 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { Thickness, ToolName } from '../../../../services/constants';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -22,6 +24,8 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
+        private colorToolService: ColorToolService,
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -34,6 +38,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.rectangleToolService = this.toolSelectorService.getRectangleTool();
         this.rectangleToolService.initializeAttributesManagerService(this.attributesManagerService);
+        this.rectangleToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {
@@ -61,5 +66,12 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     onTraceTypeChange(): void {
         const tracetype: string = this.rectangleAttributesForm.value.traceType;
         this.attributesManagerService.changeTraceType(tracetype);
+    }
+
+    onFocus() {
+        this.shortcutManagerService.changeIsOnInput(true);
+    }
+    onFocusOut() {
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 }

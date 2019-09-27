@@ -1,9 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
-import { ColorToolComponent } from '../../components/color-tool/color-tool.component';
-import { COLOR_SELECTION_SHIFT } from '../../services/constants';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 
 @Component({
     selector: 'app-color-picker',
@@ -16,13 +14,8 @@ export class ColorPickerComponent implements OnInit {
     obscurity = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
-    @ViewChild('currentColor', { static: true }) currentColor: ElementRef<HTMLDivElement>;
 
-    constructor(
-        private drawingModalWindowService: DrawingModalWindowService,
-        private renderer: Renderer2,
-        private colorToolComponent: ColorToolComponent,
-    ) {}
+    constructor(private colorToolService: ColorToolService, private renderer: Renderer2) {}
 
     ngOnInit(): void {
         const img = new Image();
@@ -60,33 +53,11 @@ export class ColorPickerComponent implements OnInit {
             return;
         }
 
-        const newHex = this.drawingModalWindowService.rgbToHex(
+        const newHex = this.colorToolService.rgbToHex(
             pixel[0] - pixel[0] * this.obscurity,
             pixel[1] - pixel[1] * this.obscurity,
             pixel[2] - pixel[2] * this.obscurity,
         );
-        this.drawingModalWindowService.changeActiveColor({ hex: newHex });
-
-        if (this.colorToolComponent !== undefined) {
-            this.colorToolComponent.changeColor(newHex);
-        }
-
-        this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'inline');
-        this.renderer.setStyle(
-            this.currentColor.nativeElement,
-            'top',
-            (event.y - COLOR_SELECTION_SHIFT).toString() + 'px',
-        );
-        this.renderer.setStyle(
-            this.currentColor.nativeElement,
-            'left',
-            (event.x - COLOR_SELECTION_SHIFT).toString() + 'px',
-        );
-        this.renderer.setStyle(this.currentColor.nativeElement, 'background-color', '#' + newHex);
-    }
-
-    @HostListener('window:resize', ['$event'])
-    onResize(): void {
-        this.renderer.setStyle(this.currentColor.nativeElement, 'display', 'none');
+        this.colorToolService.changePreviewColor(newHex);
     }
 }

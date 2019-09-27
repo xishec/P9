@@ -15,6 +15,8 @@
             ></mat-slider>
             <mat-form-field class="small">
                 <input
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
                     matInput
                     type="number"
                     formControlName="thickness"

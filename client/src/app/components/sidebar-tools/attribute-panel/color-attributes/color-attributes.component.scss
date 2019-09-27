@@ -1,0 +1,42 @@
+#container {
+    margin: 30px 40px;
+
+    #userColorButtons {
+        margin-bottom: 10px;
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        span {
+            width: 190px;
+        }
+
+        .color {
+            width: 0;
+            height: 0;
+            padding: 10px;
+            border: 1px solid #d0d0d0;
+            margin: 5px;
+            border-radius: 100%;
+            outline: none;
+            transition: ease-in-out 0.2s;
+        }
+        .color:hover:not(#bigColor) {
+            transform: scale(1.2);
+        }
+        .color:active:not(#bigColor) {
+            transform: scale(1);
+        }
+
+        i {
+            padding: 0 20px;
+        }
+
+        button {
+            margin: 10px;
+        }
+    }
+}

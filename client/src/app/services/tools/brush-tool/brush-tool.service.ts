@@ -1,9 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Mouse, SVG_NS } from '../../constants';
+import { Mouse, SVG_NS } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,12 +12,13 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 export class BrushToolService extends TracingToolService {
     private currentPath = '';
     private currentWidth = 0;
-    private currentColor = 'black';
+    private currentColor = '';
     private currentStyle = 1;
     private svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    private svgWrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+    private svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
     private svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
     private attributesManagerService: AttributesManagerService;
+    private colorToolService: ColorToolService;
 
     constructor(
         private elementRef: ElementRef<SVGElement>,
@@ -33,6 +35,12 @@ export class BrushToolService extends TracingToolService {
         });
         this.attributesManagerService.currentStyle.subscribe((style) => {
             this.currentStyle = style;
+        });
+    }
+    initializeColorToolService(colorToolService: ColorToolService) {
+        this.colorToolService = colorToolService;
+        this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
+            this.currentColor = currentColor;
         });
     }
 
@@ -87,7 +95,9 @@ export class BrushToolService extends TracingToolService {
     }
 
     createSVGWrapper(): void {
-        const wrap: SVGElement = this.renderer.createElement('svg', SVG_NS);
+        const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
         this.svgWrap = wrap;
         const filter: SVGFilterElement = this.createFilter(this.currentStyle);
         this.renderer.appendChild(this.svgWrap, filter);
@@ -152,10 +162,13 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.setAttribute(circle, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(circle, 'fill', this.currentColor);
-        this.renderer.setAttribute(circle, 'stroke', this.currentColor);
         this.renderer.setAttribute(circle, 'filter', `url(#${this.currentStyle.toString()})`);
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        circle.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
+        });
         this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
@@ -169,11 +182,17 @@ export class BrushToolService extends TracingToolService {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
 
         this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentStyle})`);
-        this.renderer.setAttribute(this.svgPath, 'stroke', this.currentColor);
 
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        this.svgPath.addEventListener('mousedown', (event: MouseEvent) => {
+            setTimeout(() => {
+                this.drawStack.changeTargetElement(currentDrawStackLength);
+            }, 10);
+        });
 
         this.renderer.appendChild(this.svgWrap, this.svgPath);
         this.updateSVGPath();

@@ -33,19 +33,19 @@
                 </mat-form-field>
 
                 <mat-form-field class="small" (change)="onUserColorRGB()">
-                    <input matInput type="number" placeholder="R:" formControlName="R" />
+                    <input matInput type="number" placeholder="R:" formControlName="R" min="0" max="255" />
                     <mat-error>R doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="small" (change)="onUserColorRGB()">
-                    <input matInput type="number" placeholder="G:" formControlName="G" />
+                    <input matInput type="number" placeholder="G:" formControlName="G" min="0" max="255" />
                     <mat-error>G doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="small" (change)="onUserColorRGB()">
-                    <input matInput type="number" placeholder="B:" formControlName="B" />
+                    <input matInput type="number" placeholder="B:" formControlName="B" min="0" max="255" />
                     <mat-error>B doit être entre 0 et 255!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="small" (change)="onUserColorRGB()">
-                    <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" />
+                    <input matInput type="number" placeholder="A:" formControlName="A" step="0.1" min="0" max="1" />
                     <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
                 </mat-form-field>
             </div>
@@ -76,7 +76,9 @@
             </div>
 
             <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-            <button class="actionButton" mat-stroked-button type="submit" [disabled]="drawingModalForm.invalid">Créer!</button>
+            <button class="actionButton" mat-stroked-button type="submit" [disabled]="drawingModalForm.invalid">
+                Créer!
+            </button>
         </form>
     </div>
 </div>
