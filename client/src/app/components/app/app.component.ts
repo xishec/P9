@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.basicService
             .basicGet()
