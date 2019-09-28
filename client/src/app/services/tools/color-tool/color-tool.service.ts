@@ -79,8 +79,6 @@ export class ColorToolService {
         let g = Number(Math.ceil(G)).toString(16);
         let b = Number(Math.ceil(B)).toString(16);
 
-        let a = (A !== undefined) ? (A * 255).toString(16) : '00';
-
         if (r.length === 1) {
             r = '0' + r;
         }
@@ -90,10 +88,14 @@ export class ColorToolService {
         if (b.length === 1) {
             b = '0' + b;
         }
-        if (a.length === 1) {
-            a = '0' + a;
+        if (A !== undefined) {
+            let a = Number(Math.ceil(A * 255)).toString(16);
+            if (a.length === 1) {
+                a = '0' + a;
+            }
+            return r + g + b + a;
         }
-        return r + g + b + a;
+        return r + g + b;
     }
 
     getPreviewColorOpacity(): string {

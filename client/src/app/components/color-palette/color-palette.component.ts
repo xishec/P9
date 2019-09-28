@@ -55,7 +55,7 @@ export class ColorPaletteComponent implements OnInit {
         console.log(this.previewColor);
 
         return {
-            backgroundColor: '#' + this.previewColor.slice(0, 6),
+            backgroundColor: '#' + this.previewColor,
         };
     }
 }

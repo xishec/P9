@@ -45,9 +45,6 @@ export class ColorNumericValuesComponent implements OnInit {
     }
 
     changeColor(previewColor: string): void {
-        if (previewColor.length === 6) {
-            previewColor += '00';
-        }
         this.setColorNumericValues(previewColor);
     }
 
@@ -81,6 +78,7 @@ export class ColorNumericValuesComponent implements OnInit {
             this.colorNumericValuesForm.value.A,
         );
         this.changeColor(newColorinHex);
+        this.colorToolService.changePreviewColor(newColorinHex);
     }
 
     onFocus() {
