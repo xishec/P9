@@ -1,22 +1,54 @@
-<h2 mat-dialog-title>Bienvenue à P9, votre nouvel ami pour le design!</h2>
+<h1 mat-dialog-title>Bienvenue à P9, votre nouvel ami pour le design!</h1>
 <mat-dialog-content class="mat-typography">
-  <h3>Dessinez ce que vous voulez!</h3>
-  <p>En utilisant la toute nouvelle application web P9, vous pouvez mettre sur feuille toute idée
-    créative qui passe par votre tête! Que ce soit pour un projet d'école ou simplement un exercice
-    pour entrainer votre cervelle droite, cet outil est pour vous. Amusez-vous bien! 😊</p>
-  <div id='user-guide-message'>
-    <a mat-button id='user-guide-button' href="https://github.com/xishec/P9/wiki/Guide-d'utilisateur">
-      <div id='user-guide-button-container'>
-        <div id='user-guide-button-text'>
-          <i class="far fa-question-circle" id='question-icon'></i>
-          <p>Guide d'utilisateur</p>
-        </div>
-      </div>
-    </a>
-    <p>Consultez le guide d'utilisateur pour <br> les détails concernant l'utilisation de l'application.</p>
-  </div>
+    <p>
+        En utilisant la toute nouvelle application web P9, vous pouvez mettre sur feuille toute idée créative qui passe
+        par votre tête! Que ce soit pour un projet d'école ou simplement un exercice pour entrainer votre cervelle
+        droite, cet outil est pour vous. Amusez-vous bien! Et voici un petit guide pour vous aider à commencer! 😊
+    </p>
+
+    <h3>Vue de dessin </h3>
+    <p> Pour créer un nouveau dessin, cliquez sur le bouton affichant le symbole de plus (+) dans le bas de la
+    barre latérale d’outils. Cette action fera apparaître une fenêtre modale présentant les réglages du nouveau dessin
+    (couleur de fond et dimensions). Une fois les options réglées, le bouton Créer! permet de créer le nouveau dessin.
+    Sinon, le bouton Annuler permet d’annuler la création d’un nouveau dessin. Il est également possible d’utiliser le
+    raccourcis clavier Contrôle + O pour créer un nouveau dessin.</p>
+    
+    <p>Pour interagir avec la surface de dessin nouvellement
+    créée, il faut d’abord sélectionner un des 15 outils disponibles sur la partie supérieure de la barre latérale
+    d’outils. Une fois un outil sélectionné, le panneau d’attributs affichera les attributs modifiables de l’outil. Ce
+    dernier est l’espace blanc situé directement à droite de la barre latérale d’outils. Un outil peut également être
+    sélectionné grâce à son unique raccourcis clavier (détaillé dans la section suivante).</p>
+
+    <h3>Les outils de dessin </h3>
+    <p>L’outil crayon : Utilisé en effectuant un glisser et déposer sur la surface de dessin. </p>
+    <p>Le panneau d’attributs affiche : ses options de couleur et d’épaisseur de trait. Aussi accessible grâce au raccourcis clavier C. </p> 
+    <p>L’outil pinceau : Utilisé en effectuant un glisser et déposer sur la surface de dessin. </p> 
+    <p>Le panneau d’attributs affiche : ses options de couleur, d’épaisseur de trait et de texture. Aussi accessible grâce au raccourcis clavier W. </p> 
+    <p>L’outil rectangle : Utilisé en effectuant un glisser et déposer sur la surface de dessin. </p> 
+    <p>Le panneau d’attributs affiche : ses options de couleur, d’épaisseur de contour et de type de tracé (contour, plein et plein avec contour). Aussi accessible grâce au raccourcis clavier 1. </p> 
+    <p>L’applicateur de couleur : Utilisé en cliquant sur une forme dessinée sur la surfac de dessin. </p> 
+    <p>Le panneau d’attributs affiche : ses options de couleur. Aussi accessible grâce au raccourcis clavier R.</p>
+
+    <div id="user-guide-message">
+        <a mat-button id="user-guide-button" href="https://github.com/xishec/P9/wiki/Guide-d'utilisateur">
+            <div id="user-guide-button-container">
+                <div id="user-guide-button-text">
+                    <i class="far fa-question-circle" id="question-icon"></i>
+                    <p>Guide d'utilisateur</p>
+                </div>
+            </div>
+        </a>
+        <p>
+            Consultez le guide d'utilisateur pour <br />
+            les détails concernant l'utilisation de l'application.
+        </p>
+    </div>
 </mat-dialog-content>
-<mat-dialog-actions id='footer' align="end">
-    <mat-checkbox color='primary' id='checkbox' [(ngModel)]='displayWelcomeModalWindow'><p>Ne plus montrer ce message.</p></mat-checkbox>
-    <button id='start-button' mat-button [mat-dialog-close]="true" cdkFocusInitial (click)='submitForm()'>Commencer</button>
+<mat-dialog-actions id="footer" align="end">
+    <mat-checkbox color="primary" id="checkbox" [(ngModel)]="displayWelcomeModalWindow"
+        ><p>Ne plus montrer ce message.</p></mat-checkbox
+    >
+    <button id="start-button" mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submitForm()">
+        Commencer
+    </button>
 </mat-dialog-actions>
