@@ -88,15 +88,14 @@ export class ColorToolService {
         if (b.length === 1) {
             b = '0' + b;
         }
-        return r + g + b;
+        if (a.length === 1) {
+            a = '0' + a;
+        }
+        return r + g + b + a;
     }
 
-    getOpacity(alphaValue: number): string {
-        let color = Math.round(alphaValue * 255).toString(16);
-        if (color.length === 1) {
-            color += '0';
-        }
-        return color;
+    getPreviewColorOpacity(): string {
+        return (parseInt(this.previewColor.value.slice(6, 8), 16) / 255).toFixed(1).toString();
     }
 
     switchPrimarySecondary() {
