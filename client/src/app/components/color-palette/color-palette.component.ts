@@ -38,13 +38,12 @@ export class ColorPaletteComponent implements OnInit {
         this.previewColor = previewColor.slice(0, 6);
     }
 
-    // onSubmit(): void {
-    //     const alphaValue: number = this.colorNumericValuesForm.value.A;
-    //     this.colorToolService.changeColorOnFocus(this.previewColor + this.colorToolService.getOpacity(alphaValue));
-    //     this.colorToolService.addColorToQueue(this.previewColor + this.colorToolService.getOpacity(alphaValue));
-    //     this.colorToolService.changeCurrentShowColorPalette(false);
-    //     this.colorToolService.changeSelectedColor(undefined);
-    // }
+    onSubmit(): void {
+        this.colorToolService.changeColorOnFocus(this.previewColor);
+        this.colorToolService.addColorToQueue(this.previewColor);
+        this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changeSelectedColor(undefined);
+    }
 
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);
@@ -52,7 +51,6 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     getUserColorIcon(): IconStyle {
-        console.log(this.previewColor);
 
         return {
             backgroundColor: '#' + this.previewColor,

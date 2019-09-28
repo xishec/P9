@@ -1,9 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { DrawingModalWindowComponent } from 'src/app/components/drawing-modal-window/drawing-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -25,8 +26,8 @@ export class ToolSelectorService {
     currentTool: AbstractToolService | undefined;
 
     constructor(
-        private drawingModalWindowService: DrawingModalWindowService,
         private colorToolService: ColorToolService,
+        private dialog: MatDialog,
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -41,6 +42,15 @@ export class ToolSelectorService {
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
+    }
+
+    displayNewDrawingModal(): void {
+        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
+            panelClass: 'myapp-max-width-dialog',
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            console.log('modal closed');
+        });
     }
 
     getPencilTool(): PencilToolService {
@@ -62,7 +72,7 @@ export class ToolSelectorService {
     changeTool(tooltipName: string): void {
         switch (tooltipName) {
             case ToolName.NewDrawing:
-                this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+                this.displayNewDrawingModal();
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
