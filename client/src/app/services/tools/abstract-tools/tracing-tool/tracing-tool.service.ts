@@ -71,7 +71,7 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     onMouseUp(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
+        if (e.button === Mouse.LeftButton && this.getIsDrawing()) {
             this.isDrawing = false;
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
