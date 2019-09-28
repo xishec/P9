@@ -10,7 +10,7 @@ export class WelcomeModalWindowService {
     private welcomeModalWindowClosed: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     currentDisplayWelcomeModalWindow: Observable<boolean> = this.displayWelcomeModalWindow.asObservable();
-    currentWelcomeModalWindowClosed: Observable<boolean> = this.displayWelcomeModalWindow.asObservable();
+    currentWelcomeModalWindowClosed: Observable<boolean> = this.welcomeModalWindowClosed.asObservable();
 
     getValueFromLocalStorage(): boolean {
         if (localStorage.getItem(this.storageKey)) {
