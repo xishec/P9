@@ -74,11 +74,13 @@ export class ColorToolService {
         }
     }
 
-    translateRGBToHex(R: number, G: number, B: number, A: number): string {
+    translateRGBToHex(R: number, G: number, B: number, A?: number): string {
         let r = Number(Math.ceil(R)).toString(16);
         let g = Number(Math.ceil(G)).toString(16);
         let b = Number(Math.ceil(B)).toString(16);
-        let a = (A * 255).toString(16);
+
+        let a = (A !== undefined) ? (A * 255).toString(16) : '00';
+
         if (r.length === 1) {
             r = '0' + r;
         }
