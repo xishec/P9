@@ -1,11 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { TraceType } from 'src/constants/tool-constants';
+import { TraceType, ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 
 @Injectable({
     providedIn: 'root',
@@ -132,7 +133,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Rectangle));
         });
 
         this.renderer.appendChild(el, drawRectangle);

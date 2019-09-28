@@ -26,6 +26,7 @@ export class PencilToolService extends TracingToolService {
     createSVGPath(): void {
         super.createSVGPath();
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        console.log(currentDrawStackLength);
         this.svgPath.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Pencil));
         });

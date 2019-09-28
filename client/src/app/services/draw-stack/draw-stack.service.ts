@@ -16,6 +16,7 @@ export class DrawStackService {
     }
 
     changeTargetElement(stackTarget: StackTargetInfo): void {
+        console.log(stackTarget);
         this.stackTarget.next(stackTarget);
     }
 

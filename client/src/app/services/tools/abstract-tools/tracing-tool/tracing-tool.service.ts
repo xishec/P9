@@ -5,7 +5,6 @@ import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 
 @Injectable({
     providedIn: 'root',
