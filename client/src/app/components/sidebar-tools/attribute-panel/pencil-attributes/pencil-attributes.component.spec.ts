@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { MatSliderChange } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -13,13 +13,21 @@ fdescribe('PencilAttributesComponent', () => {
     let fixture: ComponentFixture<PencilAttributesComponent>;
     let event: MatSliderChange;
     let attributesManageService: AttributesManagerService;
-    // let shortcutManagerService: ShortcutManagerService;
+    let shortcutManagerService: ShortcutManagerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [PencilAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder, AttributesManagerService, ShortcutManagerService],
+            providers: [FormBuilder, AttributesManagerService, ShortcutManagerService,
+                {
+                    provide: ShortcutManagerService,
+                    useValue: {
+                        changeIsOnInput: () => null,
+                    }
+                }
+            ],
+
         }).compileComponents();
     }));
 
@@ -30,6 +38,9 @@ fdescribe('PencilAttributesComponent', () => {
 
         event = new MatSliderChange();
         attributesManageService = new AttributesManagerService();
+
+        let injector = getTestBed();
+        shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
         // shortcutManagerService = new ShortcutManagerService();
     });
 
@@ -107,5 +118,10 @@ fdescribe('PencilAttributesComponent', () => {
         expect(attributesManageService.thickness.getValue()).toBe(oldValue);
     });
 
-    it('#onFocus should call changeIsOnInput when user in on focus', () => {});
+    it('#onFocus should call changeIsOnInput when user in on focus', () => {
+        let spy = spyOn(attributesManageService, 'changeIsOnInput').and.returnValue();
+        component.onFocus();
+        expect(spy).toHaveBeenCalled();
+        
+    });
 });
