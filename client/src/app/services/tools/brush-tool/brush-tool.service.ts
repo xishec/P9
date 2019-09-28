@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { StackTargetInfo } from '../../../../classes/StackTargetInfo';
 import { SVG_NS } from '../../../../constants/constants';
 import { ToolName } from '../../../../constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
-import { StackTargetInfo } from '../../../../classes/StackTargetInfo';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
