@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
 
 import { COLORS, DEFAULT_COLOR } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -25,6 +26,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     constructor(
         formBuilder: FormBuilder,
+        private dialogRef: MatDialogRef<DrawingModalWindowComponent>,
         private drawingModalWindowService: DrawingModalWindowService,
         private colorToolService: ColorToolService,
     ) {
@@ -82,41 +84,9 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.controls.height.setValue(window.innerHeight);
         }
     }
-    onChangeColor(i: number): void {
-        this.previewColor = this.colors[i];
-        this.setHex();
-        this.setRGBFromHex();
-    }
-    onClickColorPicker(): void {
-        if (this.previewColor.hex) {
-            this.setHex();
-            this.setRGBFromHex();
-        }
-    }
     onCancel(): void {
         this.displayNewDrawingModalWindow = false;
-    }
-    onUserColorHex(): void {
-        this.previewColor = { hex: this.drawingModalForm.value.hex };
-        this.setRGBFromHex();
-    }
-    onUserColorRGB(): void {
-        const newHex = this.colorToolService.translateRGBToHex(
-            this.drawingModalForm.value.R,
-            this.drawingModalForm.value.G,
-            this.drawingModalForm.value.B,
-        );
-        this.previewColor = { hex: newHex };
-        this.setHex();
-    }
-
-    setHex(): void {
-        this.drawingModalForm.controls.hex.setValue(this.previewColor.hex);
-    }
-    setRGBFromHex(): void {
-        this.drawingModalForm.controls.R.setValue(parseInt(this.previewColor.hex.slice(0, 2), 16));
-        this.drawingModalForm.controls.G.setValue(parseInt(this.previewColor.hex.slice(2, 4), 16));
-        this.drawingModalForm.controls.B.setValue(parseInt(this.previewColor.hex.slice(4, 6), 16));
+        this.dialogRef.close();
     }
 
     getColorIcon(color: Color): IconStyle {
@@ -138,10 +108,6 @@ export class DrawingModalWindowComponent implements OnInit {
             }
             return { height: '510px' };
         }
-    }
-
-    onClickColorWheel() {
-        this.displayColorWheel = !this.displayColorWheel;
     }
 }
 

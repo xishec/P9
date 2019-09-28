@@ -79,7 +79,7 @@ import { ColorNumericValuesComponent } from './components/color-palette/color-nu
         MatSelectModule,
         MatFormFieldModule,
     ],
-    entryComponents: [WelcomeModalWindowComponent],
+    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
     bootstrap: [AppComponent],
 })
