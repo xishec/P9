@@ -52,8 +52,10 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     getUserColorIcon(): IconStyle {
+        console.log(this.previewColor);
+
         return {
-            backgroundColor: '#' + this.previewColor.slice(0, 6) + this.colorToolService.getPreviewColorOpacity(),
+            backgroundColor: '#' + this.previewColor.slice(0, 6),
         };
     }
 }
