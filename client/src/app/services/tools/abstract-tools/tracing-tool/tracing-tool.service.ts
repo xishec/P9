@@ -5,6 +5,8 @@ import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -21,9 +23,11 @@ export abstract class TracingToolService extends AbstractToolService {
     protected attributesManagerService: AttributesManagerService;
     protected colorToolService: ColorToolService;
 
-    constructor(protected elementRef: ElementRef<SVGElement>,
-                protected renderer: Renderer2,
-                protected drawStack: DrawStackService) {
+    constructor(
+        protected elementRef: ElementRef<SVGElement>,
+        protected renderer: Renderer2,
+        protected drawStack: DrawStackService,
+    ) {
         super();
     }
 
@@ -103,7 +107,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         circle.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength));
         });
         this.renderer.appendChild(this.svgWrap, circle);
         return circle;
@@ -116,7 +120,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         this.svgPath.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength));
         });
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
