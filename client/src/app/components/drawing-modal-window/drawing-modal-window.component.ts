@@ -101,7 +101,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.setRGBFromHex();
     }
     onUserColorRGB(): void {
-        const newHex = this.colorToolService.rgbToHex(
+        const newHex = this.colorToolService.translateRGBToHex(
             this.drawingModalForm.value.R,
             this.drawingModalForm.value.G,
             this.drawingModalForm.value.B,

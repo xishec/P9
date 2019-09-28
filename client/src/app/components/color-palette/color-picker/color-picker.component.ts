@@ -53,10 +53,11 @@ export class ColorPickerComponent implements OnInit {
             return;
         }
 
-        const newHex = this.colorToolService.rgbToHex(
+        const newHex = this.colorToolService.translateRGBToHex(
             pixel[0] - pixel[0] * this.obscurity,
             pixel[1] - pixel[1] * this.obscurity,
             pixel[2] - pixel[2] * this.obscurity,
+            
         );
         this.colorToolService.changePreviewColor(newHex);
     }
