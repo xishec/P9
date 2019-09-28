@@ -19,15 +19,23 @@ fdescribe('PencilAttributesComponent', () => {
         TestBed.configureTestingModule({
             declarations: [PencilAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder, AttributesManagerService, ShortcutManagerService,
+            providers: [
+                FormBuilder,
+                AttributesManagerService,
+                {
+                    provide: AttributesManagerService,
+                    useValue: {
+                        changeThickness: () => null,
+                    },
+                },
+                ShortcutManagerService,
                 {
                     provide: ShortcutManagerService,
                     useValue: {
                         changeIsOnInput: () => null,
-                    }
-                }
+                    },
+                },
             ],
-
         }).compileComponents();
     }));
 
@@ -119,9 +127,8 @@ fdescribe('PencilAttributesComponent', () => {
     });
 
     it('#onFocus should call changeIsOnInput when user in on focus', () => {
-        let spy = spyOn(attributesManageService, 'changeIsOnInput').and.returnValue();
+        let spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
         component.onFocus();
         expect(spy).toHaveBeenCalled();
-        
     });
 });
