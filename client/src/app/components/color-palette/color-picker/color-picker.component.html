@@ -1,6 +1,0 @@
-<div id="ColorWheelContainer" #ColorWheelContainer>
-    <canvas id="canvas_picker" #canvas_picker (click)="onCanvasClick($event)"> </canvas>
-    <label>Ajouter du noir :</label>
-    <mat-slider min="0" step="0.01" max="1" (input)="onSliderChange($event)" [(ngModel)]="obscurity"></mat-slider>
-    <div id="currentColor" #currentColor></div>
-</div>
