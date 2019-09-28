@@ -35,28 +35,28 @@ enum TraceType {
 }
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
-  { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection },
-  { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil },
-  { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush },
-  { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill },
-  { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen },
-  { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan },
-  { iconName: 'fas fa-slash', tooltipName: ToolName.Line },
-  { iconName: 'far fa-square', tooltipName: ToolName.Rectangle },
-  { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon },
-  { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis },
-  { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator },
-  { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill },
-  { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper },
-  { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser },
-  { iconName: 'fas fa-font', tooltipName: ToolName.Text },
+    { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil },
+    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush },
+    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill },
+    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen },
+    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan },
+    { iconName: 'fas fa-slash', tooltipName: ToolName.Line },
+    { iconName: 'far fa-square', tooltipName: ToolName.Rectangle },
+    { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon },
+    { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis },
+    { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator },
+    { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill },
+    { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper },
+    { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser },
+    { iconName: 'fas fa-font', tooltipName: ToolName.Text },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
-  { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing },
-  { iconName: 'far fa-save', tooltipName: ToolName.Save },
-  { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery },
-  { iconName: 'fas fa-file-export', tooltipName: ToolName.Export },
+    { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing },
+    { iconName: 'far fa-save', tooltipName: ToolName.Save },
+    { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery },
+    { iconName: 'fas fa-file-export', tooltipName: ToolName.Export },
 ];
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
