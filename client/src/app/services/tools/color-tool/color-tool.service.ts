@@ -47,9 +47,11 @@ export class ColorToolService {
     changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);
     }
+
     changeBackgroundColor(backgroundColor: string) {
         this.backgroundColor.next(backgroundColor);
     }
+
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColor.value) {
             case ColorType.backgroundColor:
@@ -62,13 +64,14 @@ export class ColorToolService {
                 this.secondaryColor.next(colorOnFocus);
                 break;
             default:
-                console.warn('color selection undefined');
                 break;
         }
     }
+
     changeSelectedColor(selectedColor: ColorType | undefined) {
         this.selectedColor.next(selectedColor);
     }
+
     changeCurrentShowColorPalette(showColorPalette: boolean) {
         this.showColorPalette.next(showColorPalette);
     }
