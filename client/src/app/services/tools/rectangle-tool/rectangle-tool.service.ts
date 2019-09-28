@@ -115,7 +115,6 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     private cleanUpPreview(): void {
         this.isPreviewing = false;
-        this.isSquarePreview = false;
         this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.svgReference, this.drawRectangle);
     }
