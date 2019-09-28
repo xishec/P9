@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { COLORS, ColorType, MAX_RGB_NUMBER, MIN_RGB_NUMBER } from 'src/constants/color-constants';
+import {
+    COLORS,
+    ColorType,
+    MAX_RGB_NUMBER,
+    MIN_RGB_NUMBER,
+    MAX_NUMBER_OF_LAST_COLORS,
+} from 'src/constants/color-constants';
 import { Color } from '../../../../classes/Color';
 
 @Injectable({
@@ -29,7 +35,7 @@ export class ColorToolService {
     currentColorQueue: Observable<string[]> = this.colorQueue.asObservable();
 
     addColorToQueue(color: string): void {
-        if (this.colorQueue.value.length < 10) {
+        if (this.colorQueue.value.length < MAX_NUMBER_OF_LAST_COLORS) {
             this.colorQueue.value.push(color);
         } else {
             this.colorQueue.value.shift();
