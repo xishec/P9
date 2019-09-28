@@ -1,6 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { StackTargetInfo } from '../../../../classes/StackTargetInfo';
 import { SVG_NS } from '../../../../constants/constants';
+import { ToolName } from '../../../../constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -87,12 +89,20 @@ export class BrushToolService extends TracingToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle  = super.createSVGCircle(x, y);
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        circle.addEventListener('mousedown', () => {
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Brush));
+        });
         this.renderer.setAttribute(circle, 'filter', `url(#${this.currentStyle.toString()})`);
         return circle;
     }
 
     createSVGPath(): void {
         super.createSVGPath();
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        this.svgPath.addEventListener('mousedown', () => {
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Brush));
+        });
         this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentStyle})`);
     }
 }
