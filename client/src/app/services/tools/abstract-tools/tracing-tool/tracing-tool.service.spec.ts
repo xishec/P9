@@ -2,13 +2,14 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { Mouse } from 'src/constants/constants';
-import {  createMouseEvent, createMockSVGCircle } from '../test-helpers'; // , createMouseEvent,
+import { Mouse, Keys } from 'src/constants/constants';
+import {  createMouseEvent, createMockSVGCircle, createKeyBoardEvent } from '../test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
 
 const MOCK_X = 10;
 const MOCK_Y = 10;
-const mockMouseLeftButton = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
+const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
+const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(Keys.Shift);
 
 fdescribe('TracingToolService', () => {
     let injector: TestBed;
@@ -63,7 +64,7 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
         // Act
-        service.onMouseDown(mockMouseLeftButton);
+        service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(service.getIsDrawing()).toBeTruthy();
     });
@@ -74,7 +75,7 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
         // Act
-        service.onMouseDown(mockMouseLeftButton);
+        service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(service.getCurrentPath()).toContain(`M${MOCK_X} ${MOCK_Y}`);
     });
@@ -83,7 +84,7 @@ fdescribe('TracingToolService', () => {
         // Arrange
         spyOn(service, 'getIsDrawing').and.returnValue(false);
         // Act
-        service.onMouseMove(mockMouseLeftButton);
+        service.onMouseMove(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(service.getCurrentPath()).toBe('');
     });
@@ -94,7 +95,7 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'updateSVGPath').and.returnValue();
         spyOn(service, 'updatePreviewCircle').and.returnValue();
         // Act
-        service.onMouseMove(mockMouseLeftButton);
+        service.onMouseMove(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(service.getCurrentPath()).toContain(`L${MOCK_X} ${MOCK_Y}`);
     });
@@ -103,7 +104,7 @@ fdescribe('TracingToolService', () => {
         // Arrange
         spyOn(service, 'getIsDrawing').and.returnValue(true);
         // Act
-        service.onMouseUp(mockMouseLeftButton);
+        service.onMouseUp(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(service.getCurrentPath()).toBe('');
     });
@@ -112,7 +113,7 @@ fdescribe('TracingToolService', () => {
         // Arrange
         const spyMouseUp = spyOn(service, 'onMouseUp').and.returnValue();
         // Act
-        service.onMouseLeave(mockMouseLeftButton);
+        service.onMouseLeave(MOCK_LEFT_MOUSE_BUTTON_CLICK);
         // Assert
         expect(spyMouseUp).toHaveBeenCalled ();
     });
@@ -150,24 +151,32 @@ fdescribe('TracingToolService', () => {
         service.updateSVGPath();
         // Assert
         expect(spyOnSetAttribute).toHaveBeenCalled();
-    })
+    });
 
-    // it('when MouseEvent is left button currentPath contains M and mouse position', () => {
-    //     spyOn(service, 'createSVGWrapper').and.returnValue();
-    //     //spyOn(service, 'createSVGCircle').and.callFake();
-    // });
+    it('when createSVGCircle setAttribute is called three times and before appendChild', () => {
+        // Arrange
+        // Act
+        service.createSVGCircle(MOCK_X, MOCK_Y);
+        // Assert
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
+        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
+    });
 
-    // it('when createSVGWrapper renderer.creteElement should be called before renderer.setAttribute', () => {
-    //     const createElementSpy = spyOn(renderer, 'createElement').and.callThrough();
-    //     const setAttributeSpy = spyOn(renderer, 'setAttribute').and.callThrough();
-    //     service.createSVGWrapper();
-    //     expect(createElementSpy).toHaveBeenCalledBefore(setAttributeSpy);
-    // });
+    it('when createSVGPath then setAttribute is called three times and before appendChild', () => {
+        // Arrange
+        // Act
+        service.createSVGPath();
+        // Assert
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
+        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
+    });
 
-    // it('when onMouseDown if LeftButton createSVGWrapper is called', () => {
-    //     const createSVGWrapperSpy = spyOn(service, 'createSVGWrapper').and.returnValue();
-    //     service.onMouseDown(mockMouseLeftButton);
-    //     expect(createSVGWrapperSpy).toHaveBeenCalled();
-    // });
-
+    it('not implemented methods (onMouseEnter, onKeyDown, onKeyUp) should return undefined', () => {
+        // Arrange
+        // Act
+        // Assert
+        expect(service.onMouseLeave(MOCK_LEFT_MOUSE_BUTTON_CLICK)).toBeUndefined();
+        expect(service.onKeyDown(MOCK_KEYBOARD_SHIFT)).toBeUndefined();
+        expect(service.onKeyUp(MOCK_KEYBOARD_SHIFT)).toBeUndefined();
+    });
 });
