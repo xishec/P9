@@ -4,12 +4,15 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { Mouse } from 'src/constants/constants';
 import {  createMouseEvent } from '../test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
-
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 fdescribe('TracingToolService', () => {
+    const MOCK_X = 10;
+    const MOCK_Y = 10;
     let injector: TestBed;
     let service: TracingToolService;
-    const mockMouseLeftButton = createMouseEvent(10, 10, Mouse.LeftButton);
+    const mockMouseLeftButton = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
+    
     //const renderer: Renderer2;
 
     beforeEach(() => {
@@ -27,14 +30,19 @@ fdescribe('TracingToolService', () => {
                 useValue: {
                     nativeElement : {},
                 },
+            }, {
+                provide: DrawStackService,
+                useValue: {
+                    push: () => null,
+                },
             }],
         });
 
         injector = getTestBed();
         service = injector.get(TracingToolService);
 
-        spyOn(service, 'getXPos').and.returnValue(10);
-        spyOn(service, 'getYPos').and.returnValue(10);
+        spyOn(service, 'getXPos').and.returnValue(MOCK_X);
+        spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
         //renderer = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
     });
@@ -44,24 +52,54 @@ fdescribe('TracingToolService', () => {
     });
 
     it('when onMouseDown isDrawing should be true', () => {
+        // Arrange
         spyOn(service, 'createSVGWrapper').and.returnValue();
         spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
+        // Act
         service.onMouseDown(mockMouseLeftButton);
+        // Assert
         expect(service.getIsDrawing()).toBeTruthy();
     });
 
     it('when onMouseDown currentPath contain M and mouse position', () => {
+        // Arrange
         spyOn(service, 'createSVGWrapper').and.returnValue();
         spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
+        // Act
         service.onMouseDown(mockMouseLeftButton);
-        expect(service.getCurrentPath()).toContain('M10 10');
-    })
+        // Assert
+        expect(service.getCurrentPath()).toContain(`M${MOCK_X} ${MOCK_Y}`);
+    });
 
     it('when onMouseMove if notDrawing should not update currentPath', () => {
+        // Arrange
         spyOn(service, 'getIsDrawing').and.returnValue(false);
+        // Act
         service.onMouseMove(mockMouseLeftButton);
+        // Assert
+        expect(service.getCurrentPath()).toBe('');
+    });
+
+    it('when onMouseMove if isDrawing currentPath contain L and mouse position', () => {
+        // Arrange
+        spyOn(service, 'getIsDrawing').and.returnValue(true);
+        spyOn(service, 'updateSVGPath').and.returnValue();
+        spyOn(service, 'updatePreviewCircle').and.returnValue();
+        // Act
+        service.onMouseMove(mockMouseLeftButton);
+        // Assert
+        expect(service.getCurrentPath()).toContain(`L${MOCK_X} ${MOCK_Y}`);
+    });
+
+    it('when onMouseUp if isDrawing then currentPath is empty', () => {
+        // Arrange
+        spyOn(service, 'getIsDrawing').and.returnValue(true);
+        // Act
+        service.onMouseUp(mockMouseLeftButton);
+        // Assert
+        expect(service.getCurrentPath()).toBe('');
     })
 
     // it('when MouseEvent is left button currentPath contains M and mouse position', () => {
