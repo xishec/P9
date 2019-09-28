@@ -8,7 +8,7 @@ import { Thickness } from '../../../../../constants/tool-constants';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from '../../../../services/shortcut-manager/shortcut-manager.service';
 
-fdescribe('PencilAttributesComponent', () => {
+describe('PencilAttributesComponent', () => {
     let component: PencilAttributesComponent;
     let fixture: ComponentFixture<PencilAttributesComponent>;
     let event: MatSliderChange;
@@ -21,14 +21,12 @@ fdescribe('PencilAttributesComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 FormBuilder,
-                AttributesManagerService,
                 {
                     provide: AttributesManagerService,
                     useValue: {
                         changeThickness: () => null,
                     },
                 },
-                ShortcutManagerService,
                 {
                     provide: ShortcutManagerService,
                     useValue: {
@@ -45,11 +43,10 @@ fdescribe('PencilAttributesComponent', () => {
         component.initializeForm();
 
         event = new MatSliderChange();
-        attributesManageService = new AttributesManagerService();
 
         let injector = getTestBed();
+        attributesManageService = injector.get<AttributesManagerService>(AttributesManagerService);
         shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
-        // shortcutManagerService = new ShortcutManagerService();
     });
 
     it('should create', () => {
@@ -92,20 +89,16 @@ fdescribe('PencilAttributesComponent', () => {
 
     it(`#onSliderChange should call onThicknessChange if event value is [${Thickness.Min},${Thickness.Max}]`, () => {
         spyOn(component, 'onThicknessChange');
-        const validMockValue = 5;
-
-        event.value = validMockValue;
+        event.value = Thickness.Default;
         component.onSliderChange(event);
 
         expect(component.onThicknessChange).toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should change thickness of AttibuteManagerService if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
-        component.pencilAttributesForm.controls.thickness.setValue(4);
+    it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+        let spy = spyOn(attributesManageService, 'changeThickness').and.returnValue();
         component.onThicknessChange();
-
-        console.log(attributesManageService.thickness.getValue());
-        expect(attributesManageService.thickness.getValue()).toBe(4);
+        expect(spy).toHaveBeenCalled();
     });
 
     it(`#onThicknessChange should not change thickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
@@ -129,6 +122,12 @@ fdescribe('PencilAttributesComponent', () => {
     it('#onFocus should call changeIsOnInput when user in on focus', () => {
         let spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
         component.onFocus();
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('#onFocus should  call changeIsOnInput when user is out of focus', () => {
+        let spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
+        component.onFocusOut();
         expect(spy).toHaveBeenCalled();
     });
 });
