@@ -8,7 +8,7 @@
     }
 
     .attribute {
-        padding-top: 30px
+        padding-top: 30px;
     }
 }
 
@@ -19,4 +19,40 @@
 .small {
     margin-left: 10px;
     width: 25%;
+}
+
+img {
+    position: relative;
+    top: 10px;
+    left: 5px;
+}
+
+.class1 {
+    background: url('/assets/brush1.png') center / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+
+.class2 {
+    background: url('/assets/brush2.png') center / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+
+.class3 {
+    background: url('/assets/brush3.png') center / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+
+.class4 {
+    background: url('/assets/brush4.png') center / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+
+.class5 {
+    background: url('/assets/brush5.png') center / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
 }
