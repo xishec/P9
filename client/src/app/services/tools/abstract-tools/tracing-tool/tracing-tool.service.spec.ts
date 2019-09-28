@@ -1,14 +1,14 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-// import { Mouse } from 'src/constants/constants';
-import {  MockElementRef } from '../test-helpers'; // createMockSVGCircle, createMouseEvent,
+import { Mouse } from 'src/constants/constants';
+import {  createMockSVGCircle, createMouseEvent } from '../test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
 
 fdescribe('TracingToolService', () => {
     let injector: TestBed;
     let service: TracingToolService;
-    // const mockMouseLeftButton = createMouseEvent(10, 10, Mouse.LeftButton);
+    const mockMouseLeftButton = createMouseEvent(10, 10, Mouse.LeftButton);
     //const renderer: Renderer2;
 
     beforeEach(() => {
@@ -23,7 +23,9 @@ fdescribe('TracingToolService', () => {
                 },
             }, {
                 provide: ElementRef,
-                useClass: MockElementRef,
+                useValue: {
+                    nativeElement: 'allo',
+                },
             }],
         });
 
@@ -40,13 +42,13 @@ fdescribe('TracingToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    // it('when onMouseDown isDrawing should be true', () => {
-    //     spyOn(service, 'createSVGWrapper').and.returnValue();
-    //     spyOn(service, 'createSVGCircle').and.returnValue(createMockSVGCircle(0, 0));
-    //     spyOn(service, 'createSVGPath').and.returnValue();
-    //     service.onMouseDown(mockMouseLeftButton);
-    //     expect(service.getIsDrawing()).toBeFalsy();
-    // });
+    it('when onMouseDown isDrawing should be true', () => {
+        spyOn(service, 'createSVGWrapper').and.returnValue();
+        spyOn(service, 'createSVGCircle').and.returnValue(createMockSVGCircle(0, 0));
+        spyOn(service, 'createSVGPath').and.returnValue();
+        service.onMouseDown(mockMouseLeftButton);
+        expect(service.getIsDrawing()).toBeFalsy();
+    });
 
     // it('when MouseEvent is left button currentPath contains M and mouse position', () => {
     //     spyOn(service, 'createSVGWrapper').and.returnValue();
