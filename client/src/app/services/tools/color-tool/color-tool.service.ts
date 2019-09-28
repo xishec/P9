@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { COLORS, ColorType } from 'src/constants/color-constants';
+import { COLORS, ColorType, MAX_RGB_NUMBER, MIN_RGB_NUMBER } from 'src/constants/color-constants';
 import { Color } from '../../../../classes/Color';
 
 @Injectable({
@@ -81,9 +81,10 @@ export class ColorToolService {
     }
 
     rgbToHex(R: number, G: number, B: number): string {
-        let r = Number(Math.ceil(R)).toString(16);
-        let g = Number(Math.ceil(G)).toString(16);
-        let b = Number(Math.ceil(B)).toString(16);
+        let r: string = this.correctRGB(R);
+        let g: string = this.correctRGB(G);
+        let b: string = this.correctRGB(B);
+
         if (r.length === 1) {
             r = '0' + r;
         }
@@ -94,6 +95,18 @@ export class ColorToolService {
             b = '0' + b;
         }
         return r + g + b;
+    }
+
+    correctRGB(RGBNumber: number): string {
+        let correctedRGBNumber: string = '';
+        if (RGBNumber > MAX_RGB_NUMBER) {
+            correctedRGBNumber = 'ff';
+        } else if (RGBNumber < MIN_RGB_NUMBER) {
+            correctedRGBNumber = '00';
+        } else {
+            correctedRGBNumber = Number(Math.ceil(RGBNumber)).toString(16);
+        }
+        return correctedRGBNumber;
     }
 
     switchPrimarySecondary() {
