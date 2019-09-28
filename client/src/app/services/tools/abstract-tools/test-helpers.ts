@@ -9,4 +9,10 @@ export const createMouseEvent = (x: number, y: number, buttonPressed: number): M
     return mouseEvent as unknown as MouseEvent;
 };
 
-export class MockElementRef extends ElementRef {};
+export const createMockSVGCircle = (x: number, y: number): SVGCircleElement => {
+    return new SVGCircleElement();
+};
+
+export class MockElementRef extends ElementRef {
+    nativeElement = {};
+}
