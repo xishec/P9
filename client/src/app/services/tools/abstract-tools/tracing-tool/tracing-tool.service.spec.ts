@@ -2,8 +2,9 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { Mouse } from 'src/constants/constants';
-import {  createMockSVGCircle, createMouseEvent } from '../test-helpers'; // , createMouseEvent,
+import {  createMouseEvent } from '../test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
+
 
 fdescribe('TracingToolService', () => {
     let injector: TestBed;
@@ -24,7 +25,7 @@ fdescribe('TracingToolService', () => {
             }, {
                 provide: ElementRef,
                 useValue: {
-                    nativeElement: 'allo',
+                    nativeElement : {},
                 },
             }],
         });
@@ -44,11 +45,24 @@ fdescribe('TracingToolService', () => {
 
     it('when onMouseDown isDrawing should be true', () => {
         spyOn(service, 'createSVGWrapper').and.returnValue();
-        spyOn(service, 'createSVGCircle').and.returnValue(createMockSVGCircle(0, 0));
+        spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
         service.onMouseDown(mockMouseLeftButton);
-        expect(service.getIsDrawing()).toBeFalsy();
+        expect(service.getIsDrawing()).toBeTruthy();
     });
+
+    it('when onMouseDown currentPath contain M and mouse position', () => {
+        spyOn(service, 'createSVGWrapper').and.returnValue();
+        spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
+        spyOn(service, 'createSVGPath').and.returnValue();
+        service.onMouseDown(mockMouseLeftButton);
+        expect(service.getCurrentPath()).toContain('M10 10');
+    })
+
+    it('when onMouseMove if notDrawing should not update currentPath', () => {
+        spyOn(service, 'getIsDrawing').and.returnValue(false);
+        service.onMouseMove(mockMouseLeftButton);
+    })
 
     // it('when MouseEvent is left button currentPath contains M and mouse position', () => {
     //     spyOn(service, 'createSVGWrapper').and.returnValue();

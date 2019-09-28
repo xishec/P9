@@ -14,5 +14,6 @@ export const createMockSVGCircle = (x: number, y: number): SVGCircleElement => {
 };
 
 export class MockElementRef extends ElementRef {
-    nativeElement = {};
+    nativeElement: {
+    };
 }

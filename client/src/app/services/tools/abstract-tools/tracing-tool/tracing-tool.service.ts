@@ -61,7 +61,7 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     onMouseMove(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
+        if (e.button === Mouse.LeftButton && this.getIsDrawing()) {
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath += ` L${x} ${y}`;
