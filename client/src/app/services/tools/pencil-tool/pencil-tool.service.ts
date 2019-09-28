@@ -22,13 +22,15 @@ export class PencilToolService extends TracingToolService {
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService,
+        private drawStack: DrawStackService
     ) {
         super();
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
+        console.log(attributesManagerService);
+
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
         });
@@ -48,7 +50,7 @@ export class PencilToolService extends TracingToolService {
             const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
             this.currentPath = `M${x} ${y}`;
             this.createSVGCircle(x, y);
-            this.svgPreviewCircle = this.createSVGCircle(x,y);
+            this.svgPreviewCircle = this.createSVGCircle(x, y);
             this.createSVGPath();
         }
     }
