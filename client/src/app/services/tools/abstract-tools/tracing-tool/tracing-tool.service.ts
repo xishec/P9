@@ -21,9 +21,11 @@ export abstract class TracingToolService extends AbstractToolService {
     protected attributesManagerService: AttributesManagerService;
     protected colorToolService: ColorToolService;
 
-    constructor(protected elementRef: ElementRef<SVGElement>,
-                protected renderer: Renderer2,
-                protected drawStack: DrawStackService) {
+    constructor(
+        protected elementRef: ElementRef<SVGElement>,
+        protected renderer: Renderer2,
+        protected drawStack: DrawStackService,
+    ) {
         super();
     }
 
@@ -101,10 +103,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        circle.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
-        });
         this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
@@ -114,10 +112,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPath.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(currentDrawStackLength);
-        });
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
