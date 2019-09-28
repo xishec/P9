@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
         }
     }
 
-    checkEventPreventionCondition(): boolean {
+    shouldAllowShortcut(): boolean {
         return (
             !this.displayNewDrawingModalWindow &&
             (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
@@ -84,41 +84,41 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             // will be implemented later
         }
     }
 
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
 
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
 
     @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
 
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
     }
 
     @HostListener('window:keydown.r', ['$event']) onR(event: KeyboardEvent) {
-        if (this.checkEventPreventionCondition()) {
+        if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.ColorApplicator);
         }
