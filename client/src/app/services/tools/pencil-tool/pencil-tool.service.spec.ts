@@ -1,12 +1,39 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from "@angular/core/testing";
 
-import { PencilToolService } from './pencil-tool.service';
+import { PencilToolService } from "./pencil-tool.service";
+import { Renderer2, ElementRef } from '@angular/core';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-describe('PencilToolService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+fdescribe("PencilToolService", () => {
+    let injector: TestBed;
+    let service: PencilToolService;
+    //let rendererMock: Renderer2;
+    beforeEach(() =>  {
+        TestBed.configureTestingModule({
+            providers: [PencilToolService,
+            {
+                provide: Renderer2,
+                useValue: {
 
-  it('should be created', () => {
-    const service: PencilToolService = TestBed.get(PencilToolService);
-    expect(service).toBeTruthy();
-  });
+                },
+            }, {
+                provide: ElementRef,
+                useValue: {
+                    nativeElement : {},
+                }, 
+            }, {
+                provide: DrawStackService,
+                useValue: {
+
+                }
+            }],
+        });
+
+        injector = getTestBed();
+        service = injector.get(PencilToolService);
+    });
+
+    it("should be created", () => {
+        expect(service).toBeTruthy();
+    });
 });
