@@ -1,12 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PencilAttributesComponent } from './pencil-attributes.component';
-
+import { MatSliderChange } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { MatSliderChange } from '@angular/material';
-
+import { PencilAttributesComponent } from './pencil-attributes.component';
 import { Thickness } from '../../../../../constants/tool-constants';
 
 fdescribe('PencilAttributesComponent', () => {
