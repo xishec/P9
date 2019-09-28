@@ -29,7 +29,6 @@ export class PencilToolService extends TracingToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        console.log(attributesManagerService);
 
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
