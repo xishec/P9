@@ -1,19 +1,22 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { Mouse } from 'src/constants/constants';
-import {  createMouseEvent } from '../test-helpers'; // , createMouseEvent,
-import { TracingToolService } from './tracing-tool.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { Mouse } from 'src/constants/constants';
+import {  createMouseEvent, createMockSVGCircle } from '../test-helpers'; // , createMouseEvent,
+import { TracingToolService } from './tracing-tool.service';
+
+const MOCK_X = 10;
+const MOCK_Y = 10;
+const mockMouseLeftButton = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
 
 fdescribe('TracingToolService', () => {
-    const MOCK_X = 10;
-    const MOCK_Y = 10;
     let injector: TestBed;
     let service: TracingToolService;
-    const mockMouseLeftButton = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
-    
-    //const renderer: Renderer2;
+    let renderer: Renderer2;
+
+    let spyOnSetAttribute: jasmine.Spy;
+    let spyOnAppendChild: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -34,6 +37,7 @@ fdescribe('TracingToolService', () => {
                 provide: DrawStackService,
                 useValue: {
                     push: () => null,
+                    getDrawStackLength: () => 0,
                 },
             }],
         });
@@ -44,7 +48,9 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'getXPos').and.returnValue(MOCK_X);
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
-        //renderer = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        renderer = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        spyOnSetAttribute = spyOn(renderer, 'setAttribute').and.returnValue();
+        spyOnAppendChild = spyOn(renderer, 'appendChild').and.returnValue();
     });
 
     it('should be created', () => {
@@ -100,6 +106,50 @@ fdescribe('TracingToolService', () => {
         service.onMouseUp(mockMouseLeftButton);
         // Assert
         expect(service.getCurrentPath()).toBe('');
+    });
+
+    it('when onMouseLeave then onMouseUp is called', () => {
+        // Arrange
+        const spyMouseUp = spyOn(service, 'onMouseUp').and.returnValue();
+        // Act
+        service.onMouseLeave(mockMouseLeftButton);
+        // Assert
+        expect(spyMouseUp).toHaveBeenCalled ();
+    });
+
+    it('when createSVGWrapper is called renderer.setAttribute is called before appendChild', () => {
+        // Arrange
+        // Act
+        service.createSVGWrapper();
+        // Assert
+        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
+    });
+
+    it('when createSVGCircle then renderer.createElement is called before setAttribute and before appendChild', () => {
+        // Arrange
+        const mockCircle = createMockSVGCircle();
+        const spyOnCreateElement = spyOn(renderer, 'createElement').and.returnValue(mockCircle);
+        // Act
+        service.createSVGCircle(MOCK_X, MOCK_Y);
+        // Assert
+        expect(spyOnCreateElement).toHaveBeenCalledBefore(spyOnSetAttribute);
+        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
+    })
+
+    it('when updatePreviewCirlce then renderer.setAttribute is called twice', () => {
+        // Arrange
+        // Act
+        service.updatePreviewCircle(MOCK_X, MOCK_Y);
+        // Assert
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
+    });
+
+    it('when updateSVGPath then renderer.setAttribute is called', () => {
+        // Arrange
+        // Act
+        service.updateSVGPath();
+        // Assert
+        expect(spyOnSetAttribute).toHaveBeenCalled();
     })
 
     // it('when MouseEvent is left button currentPath contains M and mouse position', () => {
