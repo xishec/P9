@@ -23,16 +23,16 @@ export class ColorAttributesComponent implements OnInit {
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit() {
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
+        this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.backgroundColor = backgroundColor;
         });
-        this.colorToolService.currentPrimaryColor.subscribe((primaryColor: string) => {
+        this.colorToolService.primaryColor.subscribe((primaryColor: string) => {
             this.primaryColor = primaryColor;
         });
-        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor: string) => {
+        this.colorToolService.secondaryColor.subscribe((secondaryColor: string) => {
             this.secondaryColor = secondaryColor;
         });
-        this.colorToolService.currentSelectedColor.subscribe((selectedColor: ColorType | undefined) => {
+        this.colorToolService.selectedColor.subscribe((selectedColor: ColorType | undefined) => {
             this.selectedColor = selectedColor;
         });
     }

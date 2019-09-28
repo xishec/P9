@@ -46,10 +46,10 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
     initializeColorToolService(colorToolService: ColorToolService): void {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((primaryColor) => {
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
             this.primaryColor = '#' + primaryColor;
         });
-        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor) => {
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
             this.secondaryColor = '#' + secondaryColor;
         });
     }

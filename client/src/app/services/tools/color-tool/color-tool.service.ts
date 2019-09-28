@@ -14,9 +14,7 @@ export class ColorToolService {
     backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
     primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
     secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
-    selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
-        undefined,
-    );
+    selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
     showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 

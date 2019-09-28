@@ -35,7 +35,7 @@ export class PencilToolService extends TracingToolService {
     }
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColor = currentColor;
         });
     }

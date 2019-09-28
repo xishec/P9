@@ -19,7 +19,7 @@ export class ColorQueueComponent implements OnInit {
     constructor(private colorToolService: ColorToolService) {}
 
     ngOnInit(): void {
-        this.colorToolService.currentColorQueue.subscribe((colorQueue) => {
+        this.colorToolService.colorQueue.subscribe((colorQueue) => {
             this.colorQueue = colorQueue;
         });
     }

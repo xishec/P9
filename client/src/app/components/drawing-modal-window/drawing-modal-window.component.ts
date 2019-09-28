@@ -36,12 +36,12 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.colorToolService.currentPreviewColor.subscribe((previewColor) => {
+        this.colorToolService.previewColor.subscribe((previewColor) => {
             if (this.displayColorWheel) {
                 this.previewColor.hex = previewColor;
             }
         });
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor) => {
+        this.colorToolService.backgroundColor.subscribe((backgroundColor) => {
             this.previewColor.hex = backgroundColor;
         });
     }

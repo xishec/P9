@@ -51,7 +51,7 @@ export class WorkZoneComponent implements OnInit {
             this.toolName = toolName;
             this.currentTool = this.toolSelector.currentTool;
         });
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
+        this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color.hex = backgroundColor;
         });
 
