@@ -104,6 +104,5 @@ export class BrushToolService extends TracingToolService {
             this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Brush));
         });
         this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentStyle})`);
-        this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 }

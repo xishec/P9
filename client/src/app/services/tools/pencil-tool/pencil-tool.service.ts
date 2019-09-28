@@ -1,9 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { ToolName } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,12 +14,11 @@ export class PencilToolService extends TracingToolService {
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
-        let circle = super.createSVGCircle(x, y);
+        const circle = super.createSVGCircle(x, y);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         circle.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Pencil));
         });
-        this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
 
@@ -29,6 +28,5 @@ export class PencilToolService extends TracingToolService {
         this.svgPath.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Pencil));
         });
-        this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 }
