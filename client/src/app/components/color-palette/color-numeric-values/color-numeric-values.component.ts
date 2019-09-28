@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { Color } from 'src/classes/Color';
 
@@ -14,15 +15,19 @@ export class ColorNumericValuesComponent implements OnInit {
     formBuilder: FormBuilder;
     previewColor = new Color().hex;
 
-    constructor(formBuilder: FormBuilder, private colorToolService: ColorToolService) {
+    constructor(
+        formBuilder: FormBuilder,
+        private colorToolService: ColorToolService,
+        private shortcutManagerService: ShortcutManagerService,
+    ) {
         this.formBuilder = formBuilder;
         this.initializeForm();
     }
 
     ngOnInit() {
-        this.updateWithColorToolService();
+        this.setColorNumericValues(this.previewColor);
         this.colorToolService.selectedColor.subscribe(() => {
-            this.updateWithColorToolService();
+            this.setColorNumericValues(this.previewColor);
         });
         this.colorToolService.previewColor.subscribe((previewColor: string) => {
             this.changeColor(previewColor);
@@ -39,13 +44,10 @@ export class ColorNumericValuesComponent implements OnInit {
         });
     }
 
-    updateWithColorToolService() {
-        this.previewColor = this.colorToolService.getColorOnFocus();
-        this.setColorNumericValues(this.previewColor);
-    }
-
     changeColor(previewColor: string): void {
-        this.previewColor = previewColor.slice(0, 6);
+        if (previewColor.length === 6) {
+            previewColor += '00';
+        }
         this.setColorNumericValues(previewColor);
     }
 
@@ -72,23 +74,20 @@ export class ColorNumericValuesComponent implements OnInit {
     }
 
     onUserColorRGBInput(): void {
-        const newColorinHex = this.translateRGBToHex();
+        const newColorinHex = this.colorToolService.translateRGBToHex(
+            this.colorNumericValuesForm.value.R,
+            this.colorNumericValuesForm.value.G,
+            this.colorNumericValuesForm.value.B,
+            this.colorNumericValuesForm.value.A,
+        );
         this.changeColor(newColorinHex);
     }
 
-    translateRGBToHex(): string {
-        let r = Number(this.colorNumericValuesForm.value.R).toString(16);
-        let g = Number(this.colorNumericValuesForm.value.G).toString(16);
-        let b = Number(this.colorNumericValuesForm.value.B).toString(16);
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
-        return r + g + b;
+    onFocus() {
+        this.shortcutManagerService.changeIsOnInput(true);
+    }
+
+    onFocusOut() {
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 }
