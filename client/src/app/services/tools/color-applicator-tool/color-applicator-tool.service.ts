@@ -5,6 +5,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -44,8 +45,24 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         'fill',
                         this.primaryColor,
                     );
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                            'stroke',
+                            this.primaryColor,
+                        );
+                    }
                     break;
                 case Mouse.RightButton:
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        break;
+                    }
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         'stroke',

@@ -6,7 +6,6 @@ import { AttributesManagerService } from '../../attributes-manager/attributes-ma
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { ToolName } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -105,11 +104,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        circle.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength));
-        });
-        this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
 
@@ -118,11 +112,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        this.svgPath.addEventListener('mousedown', () => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength));
-        });
-        this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     updatePreviewCircle(x: number, y: number): void {
