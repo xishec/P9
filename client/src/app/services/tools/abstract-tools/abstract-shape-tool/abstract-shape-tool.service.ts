@@ -26,7 +26,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     abstract onMouseLeave(event: MouseEvent): void;
     abstract onKeyDown(event: KeyboardEvent): void;
     abstract onKeyUp(event: KeyboardEvent): void;
-    abstract createSVG(): void;
+    protected abstract createSVG(): void;
 
     protected updatePreviewRectangle(): void {
         let deltaX = this.currentMouseX - this.initialMouseX;
