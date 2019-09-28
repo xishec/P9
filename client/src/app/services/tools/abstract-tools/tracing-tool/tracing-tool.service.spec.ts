@@ -5,16 +5,21 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
 import { Mouse, Keys } from 'src/constants/constants';
 import {  createMouseEvent, createMockSVGCircle, createKeyBoardEvent } from '../test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
+import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../../color-tool/color-tool.service';
 
 const MOCK_X = 10;
 const MOCK_Y = 10;
+const MOCK_THICKNESS = 1;
+const MOCK_COLOR = '#000000';
 const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
 const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(Keys.Shift);
 
 fdescribe('TracingToolService', () => {
     let injector: TestBed;
     let service: TracingToolService;
-    let renderer: Renderer2;
+    let rendererMock: Renderer2;
+    // let attributeManagerServiceMock: AttributesManagerService;
 
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnAppendChild: jasmine.Spy;
@@ -40,6 +45,16 @@ fdescribe('TracingToolService', () => {
                     push: () => null,
                     getDrawStackLength: () => 0,
                 },
+            }, {
+                provide: AttributesManagerService,
+                useValue: {
+                    currentThickness: () => MOCK_THICKNESS,
+                }
+            }, {
+                provide: ColorToolService,
+                useValue: {
+                    currentPrimaryColor: () => MOCK_COLOR,
+                }
             }],
         });
 
@@ -49,9 +64,10 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'getXPos').and.returnValue(MOCK_X);
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
-        renderer = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        spyOnSetAttribute = spyOn(renderer, 'setAttribute').and.returnValue();
-        spyOnAppendChild = spyOn(renderer, 'appendChild').and.returnValue();
+        rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        // attributeManagerServiceMock = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
+        spyOnAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
     });
 
     it('should be created', () => {
@@ -129,7 +145,7 @@ fdescribe('TracingToolService', () => {
     it('when createSVGCircle then renderer.createElement is called before setAttribute and before appendChild', () => {
         // Arrange
         const mockCircle = createMockSVGCircle();
-        const spyOnCreateElement = spyOn(renderer, 'createElement').and.returnValue(mockCircle);
+        const spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(mockCircle);
         // Act
         service.createSVGCircle(MOCK_X, MOCK_Y);
         // Assert
