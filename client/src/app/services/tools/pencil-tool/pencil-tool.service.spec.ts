@@ -2,7 +2,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { createMockSVGCircle } from '../abstract-tools/test-helpers';
+import { createMockSVGCircle } from '../../../../classes/test-helpers';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { PencilToolService } from './pencil-tool.service';
 
