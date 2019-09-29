@@ -25,10 +25,7 @@ export class ToolSelectorService {
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
 
-    constructor(
-        private colorToolService: ColorToolService,
-        private dialog: MatDialog,
-    ) {}
+    constructor(private colorToolService: ColorToolService, private dialog: MatDialog) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -49,7 +46,7 @@ export class ToolSelectorService {
             panelClass: 'myapp-max-width-dialog',
         });
         dialogRef.afterClosed().subscribe(() => {
-            console.log('modal closed');
+            // console.log('modal closed');
         });
     }
 

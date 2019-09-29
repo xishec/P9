@@ -8,21 +8,12 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
     providedIn: 'root',
 })
 export class DrawingModalWindowService {
-    private drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject({
-        width: 0,
-        height: 0,
-        color: COLORS[0],
-    });
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private blankDrawingZone = new BehaviorSubject(true);
 
-    currentInfo: Observable<DrawingInfo> = this.drawingInfo.asObservable();
+    drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, COLORS[0]));
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
     currentBlankDrawingZone: Observable<boolean> = this.blankDrawingZone.asObservable();
-
-    changeInfo(drawingInfo: DrawingInfo) {
-        this.drawingInfo.next(drawingInfo);
-    }
 
     changeDrawingInfoWidthHeight(width: number, height: number) {
         this.drawingInfo.value.width = width;

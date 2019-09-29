@@ -37,7 +37,7 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
+        this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 

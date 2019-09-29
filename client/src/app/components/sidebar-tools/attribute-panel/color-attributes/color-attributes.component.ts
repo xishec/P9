@@ -39,15 +39,15 @@ export class ColorAttributesComponent implements OnInit {
 
     onClickBackgroundColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.backgroundColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        this.colorToolService.changShowColorPalette(true);
     }
     onClickPrimaryColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.primaryColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        this.colorToolService.changShowColorPalette(true);
     }
     onClickSecondaryColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.secondaryColor);
-        this.colorToolService.changeCurrentShowColorPalette(true);
+        this.colorToolService.changShowColorPalette(true);
     }
 
     getBackgroundColorIcon(): ColorStyle {
