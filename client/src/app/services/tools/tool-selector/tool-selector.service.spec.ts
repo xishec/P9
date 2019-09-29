@@ -66,4 +66,10 @@ fdescribe('ToolSelectorService', () => {
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(ToolName.Selection);
     });
+
+    it('when changeCurrentToolName is called with pencil toolName should be pencil', () => {
+
+        service.changeCurrentToolName(ToolName.Pencil);
+        console.log(service['toolName']);
+    })
 });
