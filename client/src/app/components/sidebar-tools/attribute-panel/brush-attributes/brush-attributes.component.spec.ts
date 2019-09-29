@@ -4,10 +4,9 @@ import { BrushAttributesComponent } from './brush-attributes.component';
 import { MatSliderChange } from '@angular/material';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Thickness } from 'src/constants/tool-constants';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 fdescribe('BrushAttributesComponent', () => {
     let component: BrushAttributesComponent;
@@ -15,39 +14,47 @@ fdescribe('BrushAttributesComponent', () => {
     let event: MatSliderChange;
     let attributesManagerService: AttributesManagerService;
     let shortcutManagerService: ShortcutManagerService;
+    let shit: AttributesManagerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [BrushAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [
-                FormBuilder,
-                {
-                    provide: AttributesManagerService,
-                    useValue: {
-                        changeThickness: () => null,
-                        changeStyle: () => 1,
+            providers: [FormBuilder],
+        }).overrideComponent(BrushAttributesComponent, {
+            set: {
+                providers: [
+                    {
+                        provide: AttributesManagerService,
+                        useValue: {
+                            changeThickness: () => null,
+                            changeStyle: () => 1,
+                        },
                     },
-                },
-                {
-                    provide: ShortcutManagerService,
-                    useValue: {
-                        changeIsOnInput: () => null,
+                    {
+                        provide: ShortcutManagerService,
+                        useValue: {
+                            changeIsOnInput: () => null,
+                        },
                     },
-                },
-            ],
-        }).compileComponents();
-
+                ],
+            }
+        })
+        .compileComponents();
         fixture = TestBed.createComponent(BrushAttributesComponent);
-        component = fixture.debugElement.componentInstance;
+        component = fixture.componentInstance;
 
         let injector = getTestBed();
+        
+        event = new MatSliderChange();
+
+        component.ngOnInit();
+
+        shit = fixture.debugElement.injector.get<AttributesManagerService>(AttributesManagerService);
+
         attributesManagerService = injector.get<AttributesManagerService>(AttributesManagerService);
         shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
 
-        component.initializeForm();
-
-        event = new MatSliderChange();
     }));
 
     it('should create', () => {
@@ -91,30 +98,18 @@ fdescribe('BrushAttributesComponent', () => {
         expect(component.brushAttributesForm.value.thickness).toBe(oldValue);
     });
 
-    // THERE
+    // IT WAS THERE THAT IT WAS FUCKING FAILING ALWAYS
     it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
         let thickness = component.brushAttributesForm.controls['thickness'];
         thickness.setValue(30);
 
-        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const spy = spyOn(shit, 'changeThickness').and.returnValue();
 
         console.log(thickness.value);
 
         component.onThicknessChange();
 
         expect(spy).toHaveBeenCalled();
-        
-        // component.brushAttributesForm.controls.thickness.setValue(30);
-        
-    //     const spy = spyOn(attributesManageService, 'changeThickness').and.returnValue();
-
-    //     //event.value = 30;
-    //     //component.onSliderChange(event);
-    //     //component.brushAttributesForm.controls.thickness.setValue(30);
-    //     //component.brushAttributesForm.controls['thickness'].setValue(30);
-    //     component.onThicknessChange();
-    //     //component.onThicknessChange();
-    //     expect(spy).toHaveBeenCalled();
     });
     // THERE
 
