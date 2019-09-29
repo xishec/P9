@@ -21,7 +21,7 @@ export class DrawingModalWindowComponent implements OnInit {
     readonly colors: Color[] = COLORS;
     previewColor: Color = new Color();
 
-    submitCount = 0;
+    blankWorkZone = true;
     displayNewDrawingModalWindow = false;
 
     constructor(
@@ -39,8 +39,13 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.colorToolService.backgroundColor.subscribe((backgroundColor) => {
-            this.previewColor.hex = backgroundColor;
+        this.previewColor.hex = this.colorToolService.backgroundColor.value;
+        this.colorToolService.previewColor.subscribe((previewColor) => {
+            this.previewColor.hex = previewColor;
+        });
+
+        this.drawingModalWindowService.currentBlankDrawingZone.subscribe((blankWorkZone) => {
+            this.blankWorkZone = blankWorkZone;
         });
     }
 
@@ -51,7 +56,7 @@ export class DrawingModalWindowComponent implements OnInit {
             G: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
             B: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
             A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
-            confirm: this.submitCount === 0,
+            confirm: this.blankWorkZone,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
@@ -68,8 +73,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.colorToolService.changeBackgroundColor(this.previewColor.hex);
 
-        this.submitCount++;
-
+        this.drawingModalWindowService.setBlankDrawingZone(false);
         this.colorToolService.changeColorOnFocus(this.previewColor.hex);
         this.colorToolService.addColorToQueue(this.previewColor.hex);
         this.colorToolService.changeSelectedColor(undefined);
@@ -86,7 +90,6 @@ export class DrawingModalWindowComponent implements OnInit {
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);
         this.colorToolService.changeSelectedColor(undefined);
-        this.displayNewDrawingModalWindow = false;
         this.dialogRef.close();
     }
 
@@ -96,14 +99,6 @@ export class DrawingModalWindowComponent implements OnInit {
 
     getUserColorIcon(): IconStyle {
         return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
-    }
-
-    setWindowHeight(): HeightStyle {
-        if (this.submitCount === 0) {
-            return { height: '450px' };
-        } else {
-            return { height: '510px' };
-        }
     }
 
     onClickColorQueueButton(color: string): void {
@@ -118,7 +113,4 @@ export class DrawingModalWindowComponent implements OnInit {
 interface IconStyle {
     backgroundColor: string;
     opacity: string;
-}
-interface HeightStyle {
-    height: string;
 }

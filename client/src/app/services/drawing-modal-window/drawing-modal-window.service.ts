@@ -15,14 +15,21 @@ export class DrawingModalWindowService {
         opacity: 1,
     });
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private blankDrawingZone = new BehaviorSubject(true);
 
     currentInfo: Observable<DrawingInfo> = this.infoSource.asObservable();
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
+    currentBlankDrawingZone: Observable<boolean> = this.blankDrawingZone.asObservable();
 
     changeInfo(drawingInfo: DrawingInfo) {
         this.infoSource.next(drawingInfo);
     }
+
     changeDisplayNewDrawingModalWindow(displayNewDrawingModalWindow: boolean) {
         this.displayNewDrawingModalWindow.next(displayNewDrawingModalWindow);
+    }
+
+    setBlankDrawingZone(isBlank: boolean): void {
+        this.blankDrawingZone.next(isBlank);
     }
 }
