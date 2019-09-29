@@ -1,6 +1,6 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-
 import { BehaviorSubject } from 'rxjs';
+
 import { ColorToolService } from './color-tool.service';
 import {
     MAX_NUMBER_OF_LAST_COLORS,
@@ -10,7 +10,7 @@ import {
     DEFAULT_WHITE,
 } from 'src/constants/color-constants';
 
-describe('ColorToolService', () => {
+fdescribe('ColorToolService', () => {
     let service: ColorToolService;
     let injector: TestBed;
     let colorQueue: BehaviorSubject<string[]>;
