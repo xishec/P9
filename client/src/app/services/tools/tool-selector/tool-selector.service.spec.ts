@@ -1,8 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
+import { BehaviorSubject } from 'rxjs';
 
 import { ToolName } from 'src/constants/tool-constants';
 import { ToolSelectorService } from './tool-selector.service';
-import { BehaviorSubject } from 'rxjs';
 
 describe('ToolSelectorService', () => {
     let injector: TestBed;
@@ -68,6 +68,7 @@ describe('ToolSelectorService', () => {
     it('when changeCurrentToolName with pencil then toolName is pencil', () => {
         const expectedResult: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Pencil);
         service.changeCurrentToolName(ToolName.Pencil);
+        // tslint:disable-next-line: no-string-literal
         expect(service['toolName']).toEqual(expectedResult);
-    })
+    });
 });
