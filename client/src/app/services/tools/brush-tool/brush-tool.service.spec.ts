@@ -14,7 +14,6 @@ fdescribe("BrushToolService", () => {
     let injector: TestBed;
     let service: BrushToolService;
     let rendererMock: Renderer2;
-    // let mockDrawStackService: DrawStackService;
 
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnCreateElement: jasmine.Spy;
@@ -50,7 +49,6 @@ fdescribe("BrushToolService", () => {
         service = injector.get(BrushToolService);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        // mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(MOCK_FILTER);
@@ -61,71 +59,87 @@ fdescribe("BrushToolService", () => {
     });
 
     it('createSVGWrapper should call setAttribute 2 times in parent and appendChild twice (once in parent)', () => {
+        // Arrange
         spyOn(service, 'createFilter').and.returnValue(createMockFilter());
         let spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
-        
+        // Act
         service.createSVGWrapper();
-
+        // Assert
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
         expect(spyRendererAppendChild).toHaveBeenCalledTimes(2);
     });
 
     it('createSVGWrapper should call createFilter', () => {
+        // Arrange
         let spyCreateFilter = spyOn(service, 'createFilter').and.returnValue(createMockFilter());
+        // Act
         service.createSVGWrapper();
-
+        // Assert
         expect(spyCreateFilter).toHaveBeenCalled();
     });
 
     it('when patternId = 1 createFilter should call createElement with feGaussianBlur and setAttribute with stdDeviation', () => {
+        // Arrange
         const patternId = 1;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnCreateElement).toHaveBeenCalledWith('feGaussianBlur', SVG_NS);
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'stdDeviation', '3');
     });
 
     it('when patternId !== 1 createFilter should call createElement with feTurbulence and feDisplacementMap', () => {
+        // Arrange
         const patternId = 100;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnCreateElement).toHaveBeenCalledWith('feTurbulence', SVG_NS);
         expect(spyOnCreateElement).toHaveBeenCalledWith('feDisplacementMap', SVG_NS);
     });
 
     it('when patternId = 2 setAttribute is called with baseFrequency 0.1 0.9', () => {
+        // Arrange
         const patternId = 2;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.1 0.9');
     });
 
     it('when patternId = 3 setAttribute is called with baseFrequency 0.01 0.57', () => {
+        // Arrange
         const patternId = 3;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.01 0.57');
     });
 
     it('when patternId = 4 setAttribute is called with baseFrequency 0.05', () => {
+        // Arrange
         const patternId = 4;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.05');
     });
 
     it('when patternId = 5 setAttribute is called with baseFrequency 0.9', () => {
+        // Arrange
         const patternId = 5;
+        // Act
         service.createFilter(patternId);
-
+        // Assert
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.9');
     });
 
     it('when createSVGCircle it should call super.getDrawStackLength', () => {
+        // Arrange
         let spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
-        
+        // Act
         service.createSVGCircle(0, 0);
-
+        // Assert
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
     });
 

@@ -19,7 +19,6 @@ fdescribe('TracingToolService', () => {
     let injector: TestBed;
     let service: TracingToolService;
     let rendererMock: Renderer2;
-    // let attributeManagerServiceMock: AttributesManagerService;
 
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnAppendChild: jasmine.Spy;
@@ -65,7 +64,7 @@ fdescribe('TracingToolService', () => {
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        // attributeManagerServiceMock = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
+        
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
     });
