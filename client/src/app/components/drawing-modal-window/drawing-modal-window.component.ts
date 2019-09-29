@@ -64,20 +64,17 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
-        const drawingInfo: DrawingInfo = {
-            width: this.drawingModalForm.value.width,
-            height: this.drawingModalForm.value.height,
-            color: this.previewColor,
-            opacity: this.drawingModalForm.value.A,
-        };
-        this.drawingModalWindowService.changeInfo(drawingInfo);
+        this.drawingModalWindowService.changeDrawingInfoWidthHeight(
+            this.drawingModalForm.value.width,
+            this.drawingModalForm.value.height,
+        );
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.colorToolService.changeBackgroundColor(this.previewColor.hex);
 
         this.drawingModalWindowService.setBlankDrawingZone(false);
-        this.colorToolService.changeColorOnFocus(this.previewColor.hex);
+        // this.colorToolService.changeColorOnFocus(this.previewColor.hex);
         this.colorToolService.addColorToQueue(this.previewColor.hex);
-        this.colorToolService.changeSelectedColor(undefined);
+        // this.colorToolService.changeSelectedColor(undefined);
     }
 
     @HostListener('window:resize', ['$event'])

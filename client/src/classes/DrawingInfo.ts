@@ -4,5 +4,4 @@ export class DrawingInfo {
     width: number;
     height: number;
     color: Color;
-    opacity: number;
 }

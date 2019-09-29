@@ -7,6 +7,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { Color } from 'src/classes/Color';
 
 @Component({
     selector: 'app-work-zone',
@@ -39,6 +40,8 @@ export class WorkZoneComponent implements OnInit {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
+            console.log(drawingInfo);
+
             for (const el of this.drawStackService.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
@@ -59,7 +62,7 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingInfo.height = window.innerHeight;
         this.drawingInfo.width = window.innerWidth;
-        this.drawingInfo.opacity = 0;
+        this.drawingInfo.color = new Color('ffffff00');
         this.empty = true;
     }
 
@@ -70,10 +73,8 @@ export class WorkZoneComponent implements OnInit {
     }
 
     changeStyle(): ReturnStyle {
-
         return {
             fill: '#' + this.drawingInfo.color.hex,
-            'fill-opacity': this.drawingInfo.opacity,
         };
     }
 
@@ -138,5 +139,4 @@ export class WorkZoneComponent implements OnInit {
 
 interface ReturnStyle {
     fill: string;
-    'fill-opacity': number;
 }
