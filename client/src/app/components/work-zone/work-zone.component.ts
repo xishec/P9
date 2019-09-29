@@ -3,6 +3,8 @@ import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } fro
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
@@ -14,7 +16,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo();
+    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
 
@@ -35,7 +37,7 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.drawingModalWindowService.currentInfo.subscribe((drawingInfo) => {
+        this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
@@ -43,6 +45,7 @@ export class WorkZoneComponent implements OnInit {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
         });
+
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
@@ -51,13 +54,14 @@ export class WorkZoneComponent implements OnInit {
             this.toolName = toolName;
             this.currentTool = this.toolSelector.currentTool;
         });
-        this.colorToolService.currentBackgroundColor.subscribe((backgroundColor: string) => {
-            this.drawingInfo.color.hex = backgroundColor;
+
+        this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
+            this.drawingInfo.color = backgroundColor;
         });
 
         this.drawingInfo.height = window.innerHeight;
-        this.drawingInfo.width = window.innerWidth;
-        this.drawingInfo.opacity = 0;
+        this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
+        this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
     }
 
@@ -68,9 +72,11 @@ export class WorkZoneComponent implements OnInit {
     }
 
     changeStyle(): ReturnStyle {
+        if (this.empty) {
+            this.drawingInfo.color = DEFAULT_TRANSPARENT;
+        }
         return {
-            fill: '#' + this.drawingInfo.color.hex,
-            'fill-opacity': this.drawingInfo.opacity,
+            fill: '#' + this.drawingInfo.color,
         };
     }
 
@@ -135,5 +141,4 @@ export class WorkZoneComponent implements OnInit {
 
 interface ReturnStyle {
     fill: string;
-    'fill-opacity': number;
 }

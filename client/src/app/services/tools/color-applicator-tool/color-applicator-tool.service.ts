@@ -1,5 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -9,47 +11,24 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class ColorApplicatorToolService extends AbstractToolService {
-    currentTargetPosition = 0;
-    private buttonClick = 0;
-    private wasUsed = false;
+    private currentStackTarget: StackTargetInfo;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
 
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
-        this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
-            this.currentTargetPosition = targetPosition;
-            if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined && this.wasUsed) {
-                switch (this.buttonClick) {
-                    case Mouse.LeftButton:
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentTargetPosition),
-                            'fill',
-                            this.primaryColor,
-                        );
-                        break;
-                    case Mouse.RightButton:
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentTargetPosition),
-                            'stroke',
-                            this.secondaryColor,
-                        );
-                        break;
-                    default:
-                        break;
-                }
-                this.wasUsed = false;
-            }
+        this.drawStack.currentStackTarget.subscribe((stackTarget) => {
+            this.currentStackTarget = stackTarget;
         });
     }
 
     initializeColorToolService(colorToolService: ColorToolService): void {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((primaryColor) => {
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
             this.primaryColor = '#' + primaryColor;
         });
-        this.colorToolService.currentSecondaryColor.subscribe((secondaryColor) => {
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
             this.secondaryColor = '#' + secondaryColor;
         });
     }
@@ -57,9 +36,43 @@ export class ColorApplicatorToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        this.buttonClick = event.button;
-        this.wasUsed = true;
-        console.log('mouse ' + this.buttonClick);
+        const button = event.button;
+        if (this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined) {
+            switch (button) {
+                case Mouse.LeftButton:
+                    this.renderer.setAttribute(
+                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                        'fill',
+                        this.primaryColor,
+                    );
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                            'stroke',
+                            this.primaryColor,
+                        );
+                    }
+                    break;
+                case Mouse.RightButton:
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        break;
+                    }
+                    this.renderer.setAttribute(
+                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                        'stroke',
+                        this.secondaryColor,
+                    );
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}
