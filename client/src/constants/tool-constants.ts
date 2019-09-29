@@ -35,28 +35,28 @@ enum TraceType {
 }
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
-  { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection },
-  { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil },
-  { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush },
-  { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill },
-  { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen },
-  { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan },
-  { iconName: 'fas fa-slash', tooltipName: ToolName.Line },
-  { iconName: 'far fa-square', tooltipName: ToolName.Rectangle },
-  { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon },
-  { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis },
-  { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator },
-  { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill },
-  { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper },
-  { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser },
-  { iconName: 'fas fa-font', tooltipName: ToolName.Text },
+    { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
+    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
+    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
+    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
+    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
+    { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
+    { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
+    { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
+    { iconName: 'fas fa-slash', tooltipName: ToolName.Line, shortcut: '(L)' },
+    { iconName: 'fas fa-font', tooltipName: ToolName.Text, shortcut: '(T)' },
+    { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator, shortcut: '(R)' },
+    { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill, shortcut: '(B)' },
+    { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser, shortcut: '(E)' },
+    { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
-  { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing },
-  { iconName: 'far fa-save', tooltipName: ToolName.Save },
-  { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery },
-  { iconName: 'fas fa-file-export', tooltipName: ToolName.Export },
+    { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
+    { iconName: 'far fa-save', tooltipName: ToolName.Save, shortcut: '(Ctrl-S)' },
+    { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery, shortcut: '(Ctrl-G)' },
+    { iconName: 'fas fa-file-export', tooltipName: ToolName.Export, shortcut: '(Ctrl-E)' },
 ];
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];

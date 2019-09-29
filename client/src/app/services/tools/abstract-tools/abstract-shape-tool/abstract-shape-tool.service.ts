@@ -13,7 +13,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     protected initialMouseY = 0;
     protected previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     protected isPreviewing = false;
-    protected isIn = false;
+    protected isIn = true;
 
     constructor(protected renderer: Renderer2) {
         super();

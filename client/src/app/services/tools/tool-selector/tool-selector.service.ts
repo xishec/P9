@@ -11,6 +11,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,7 +26,11 @@ export class ToolSelectorService {
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
 
-    constructor(private colorToolService: ColorToolService, private dialog: MatDialog) {}
+    constructor(
+        private colorToolService: ColorToolService,
+        private dialog: MatDialog,
+        private drawingModalWindowService: DrawingModalWindowService,
+    ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -42,8 +47,12 @@ export class ToolSelectorService {
     }
 
     displayNewDrawingModal(): void {
-        this.dialog.open(DrawingModalWindowComponent, {
+        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
+        });
+        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+        dialogRef.afterClosed().subscribe(() => {
+            this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         });
     }
 
