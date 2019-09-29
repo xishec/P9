@@ -25,21 +25,17 @@ class MockAbstractShapeToolService extends AbstractShapeToolService {
 }
 
 class MockRect {
-    currentX: number;
-    currentY: number;
-    initialX: number;
-    initialY: number;
-    width: number;
-    height: number;
+    mockX: number = 0;
+    mockY: number = 0;
+    mockWidth: number = 0;
+    mockHeight: number = 0;
 }
-
-
 
 fdescribe('AbstractShapeToolService', () => {
     let injector: TestBed;
     let service: MockAbstractShapeToolService;
+    let mockRect: MockRect;
     let rendererMock: Renderer2;
-    let rectMock: MockRect;
     let spyOnSetAttribute: jasmine.Spy;
 
     beforeEach(() => {
@@ -60,14 +56,12 @@ fdescribe('AbstractShapeToolService', () => {
         // Injector and service setup
         injector = getTestBed();
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        mockRect = new MockRect();
         service = new MockAbstractShapeToolService(rendererMock);
         service.setCurrentMouseX(0);
         service.setCurrentMouseY(0);
         service.setInitialMouseX(0);
         service.setInitialMouseY(0);
-
-        // Spy setup
-        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
     });
 
     it('Should be created in providers', () => {
@@ -75,16 +69,59 @@ fdescribe('AbstractShapeToolService', () => {
         expect(abstractService).toBeTruthy();
     });
 
-    it('A class that correctly extends AbstractShapeToolService should be created with new', () => {
-        expect(service).toBeTruthy();
-    });
-
-    it('setAttribute should be called 8 times when calling upadtePreviewRectangle', () => {
+    it('setAttribute should be called 8 times when calling updatePreviewRectangle', () => {
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
         service.callUpdatePreviewRectangle();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(8);
     });
 
-    it('If currentMouseX > initialMouseX, rectangle width should be positif and rectangle current X should be smaller than initial X', () => {
+    it('If currentMouseX > initialMouseX, width should be positif', () => {
+        service.setCurrentMouseX(-10);
+        service.setInitialMouseX(0);
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
+            switch(name) {
+                case 'x':
+                    mockRect.mockX = Number(value);
+                    break;
+                case 'y':
+                    mockRect.mockY = Number(value);
+                    break;
+                case 'width':
+                    mockRect.mockWidth = Number(value);
+                    break;
+                case 'height':
+                    mockRect.mockHeight = Number(value);
+                    break;
+                default:
+                    break;
+            }
+        });
+        service.callUpdatePreviewRectangle();
+        expect(mockRect.mockWidth).toBeGreaterThan(0);
+    });
 
+    it('If currentMouseY > initialMouseY, height should be positif', () => {
+        service.setCurrentMouseY(-10);
+        service.setInitialMouseY(0);
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
+            switch(name) {
+                case 'x':
+                    mockRect.mockX = Number(value);
+                    break;
+                case 'y':
+                    mockRect.mockY = Number(value);
+                    break;
+                case 'width':
+                    mockRect.mockWidth = Number(value);
+                    break;
+                case 'height':
+                    mockRect.mockHeight = Number(value);
+                    break;
+                default:
+                    break;
+            }
+        });
+        service.callUpdatePreviewRectangle();
+        expect(mockRect.mockHeight).toBeGreaterThan(0);
     });
 });
