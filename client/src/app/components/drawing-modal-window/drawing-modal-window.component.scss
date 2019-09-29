@@ -1,12 +1,3 @@
-#window {
-    height: 450px;
-    width: 500px;
-    background-color: white;
-    padding: 30px 30px;
-
-    text-align: center;
-}
-
 .formGroup {
     margin: 0 30px;
 
@@ -21,13 +12,6 @@
     }
 }
 
-.medium {
-    width: 20%;
-}
-.small {
-    width: 10%;
-}
-
 .color {
     width: 0;
     height: 0;
@@ -36,39 +20,6 @@
     margin: 5px;
     border-radius: 100%;
     outline: none;
-}
-.color:hover:not(#bigColor) {
-    filter: brightness(0.8);
-}
-.color:active:not(#bigColor) {
-    filter: brightness(1);
-}
-
-#colorButtons {
-    display: flex;
-    align-items: center;
-
-    img {
-        border: 0px solid #d0d0d0;
-        padding: 0px;
-        width: 23px;
-        height: 23px;
-    }
-}
-
-#userColor {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .color {
-        margin-left: 15px;
-    }
-
-    #bigColor {
-        padding: 15px;
-    }
 }
 
 .actionButton {
@@ -86,4 +37,8 @@
     mat-error {
         margin-bottom: 10px;
     }
+}
+
+.mat-typography {
+    overflow-x: hidden;
 }
