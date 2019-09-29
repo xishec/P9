@@ -35,13 +35,6 @@ class MockRect {
     };
     fill: string = '';
     stroke: string = '';
-
-    constructor() {
-        this.x.baseVal.value = 0;
-        this.y.baseVal.value = 0;
-        this.width.baseVal.value = 0;
-        this.height.baseVal.value = 0;
-    }
 }
 
 fdescribe('RectangleToolService', () => {
