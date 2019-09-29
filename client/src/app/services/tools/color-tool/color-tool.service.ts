@@ -99,8 +99,15 @@ export class ColorToolService {
         return r + g + b;
     }
 
-    getPreviewColorOpacity(): string {
-        return (parseInt(this.previewColor.value.slice(6, 8), 16) / 255).toFixed(1).toString();
+    getPreviewColorOpacityHex(): string {
+        return this.previewColor.value.slice(6, 8);
+    }
+
+    getPreviewColorOpacityDecimal(): string {
+        let opacityHex = this.getPreviewColorOpacityHex();
+        let opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
+        if (opacity === '1.0') return '1';
+        return opacity;
     }
 
     switchPrimarySecondary() {

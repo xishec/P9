@@ -58,6 +58,9 @@ export class ColorPickerComponent implements OnInit {
             pixel[1] - pixel[1] * this.obscurity,
             pixel[2] - pixel[2] * this.obscurity,
         );
-        this.colorToolService.changePreviewColor(newHex);
+
+        let opacity = this.colorToolService.getPreviewColorOpacityHex();
+        console.log(newHex + opacity);
+        this.colorToolService.changePreviewColor(newHex + opacity);
     }
 }

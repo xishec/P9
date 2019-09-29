@@ -1,32 +1,28 @@
 import { Color } from '../classes/Color';
 
 enum ColorType {
-  backgroundColor = 'background-color',
-  primaryColor = 'primary-color',
-  secondaryColor = 'secondary-color',
+    backgroundColor = 'background-color',
+    primaryColor = 'primary-color',
+    secondaryColor = 'secondary-color',
 }
 
 const COLORS: Color[] = [
-  { hex: 'ffffff' },
-  { hex: 'bbbbbb' },
-  { hex: '888888' },
-  { hex: '000000' },
-  { hex: 'a970eb' },
-  { hex: 'eb70e9' },
-  { hex: 'eb70a7' },
-  { hex: 'eb7070' },
-  { hex: 'fec771' },
-  { hex: 'e6e56c' },
-  { hex: '64e291' },
-  { hex: '07e4f0' },
-  { hex: '077bf0' },
-  { hex: '5057de' },
+    { hex: 'ffffffff' },
+    { hex: 'bbbbbbff' },
+    { hex: '888888ff' },
+    { hex: '000000ff' },
+    { hex: 'a970ebff' },
+    { hex: 'eb70e9ff' },
+    { hex: 'eb70a7ff' },
+    { hex: 'eb7070ff' },
+    { hex: 'fec771ff' },
+    { hex: 'e6e56cff' },
+    { hex: '64e291ff' },
+    { hex: '07e4f0ff' },
+    { hex: '077bf0ff' },
+    { hex: '5057deff' },
 ];
 
-const DEFAULT_COLOR = 'ffffff';
+const DEFAULT_COLOR = 'ffffffff';
 
-export {
-  COLORS,
-  DEFAULT_COLOR,
-  ColorType,
-};
+export { COLORS, DEFAULT_COLOR, ColorType };

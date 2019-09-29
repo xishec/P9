@@ -1,5 +1,7 @@
+import { DEFAULT_COLOR } from '../constants/color-constants';
+
 export class Color {
-    hex = 'ffffffff';
+    hex = DEFAULT_COLOR;
 
     constructor(hex?: string) {
         if (hex) {
