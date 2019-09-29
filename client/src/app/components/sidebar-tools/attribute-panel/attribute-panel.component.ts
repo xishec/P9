@@ -21,7 +21,7 @@ export class AttributePanelComponent implements OnInit {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.currentToolName = toolName;
         });
-        this.colorToolService.currentShowColorPalette.subscribe((showColorPalette: boolean) => {
+        this.colorToolService.showColorPalette.subscribe((showColorPalette: boolean) => {
             this.showColorPalette = showColorPalette;
         });
     }

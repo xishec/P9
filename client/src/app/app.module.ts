@@ -34,6 +34,7 @@ import { ColorApplicatorAttributesComponent } from '@attribute-panel/color-appli
 import { ColorAttributesComponent } from '@attribute-panel/color-attributes/color-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
+import { ColorNumericValuesComponent } from './components/color-palette/color-numeric-values/color-numeric-values.component';
 import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
@@ -58,6 +59,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         BrushAttributesComponent,
         ColorAttributesComponent,
         ColorApplicatorAttributesComponent,
+        ColorNumericValuesComponent,
     ],
     imports: [
         MatSliderModule,
@@ -77,7 +79,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatSelectModule,
         MatFormFieldModule,
     ],
-    entryComponents: [WelcomeModalWindowComponent],
+    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
     bootstrap: [AppComponent],
 })

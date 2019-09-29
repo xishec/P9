@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
+import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
     COLORS,
@@ -14,25 +16,14 @@ import { Color } from '../../../../classes/Color';
     providedIn: 'root',
 })
 export class ColorToolService {
-    readonly colors: Color[] = COLORS;
+    previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+    backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+    primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_0);
+    secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_1);
 
-    private previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    private backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    private primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
-    private secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
-    private selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(
-        undefined,
-    );
-    private showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-
-    currentPreviewColor: Observable<string> = this.previewColor.asObservable();
-    currentBackgroundColor: Observable<string> = this.backgroundColor.asObservable();
-    currentPrimaryColor: Observable<string> = this.primaryColor.asObservable();
-    currentSecondaryColor: Observable<string> = this.secondaryColor.asObservable();
-    currentSelectedColor: Observable<ColorType | undefined> = this.selectedColor.asObservable();
-    currentShowColorPalette: Observable<boolean> = this.showColorPalette.asObservable();
-    currentColorQueue: Observable<string[]> = this.colorQueue.asObservable();
+    selectedColorType: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
+    showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
     addColorToQueue(color: string): void {
         if (this.colorQueue.value.length < MAX_NUMBER_OF_LAST_COLORS) {
@@ -53,7 +44,7 @@ export class ColorToolService {
     }
 
     changeColorOnFocus(colorOnFocus: string) {
-        switch (this.selectedColor.value) {
+        switch (this.selectedColorType.value) {
             case ColorType.backgroundColor:
                 this.backgroundColor.next(colorOnFocus);
                 break;
@@ -68,16 +59,16 @@ export class ColorToolService {
         }
     }
 
-    changeSelectedColor(selectedColor: ColorType | undefined) {
-        this.selectedColor.next(selectedColor);
+    changeSelectedColorType(selectedColorType: ColorType | undefined) {
+        this.selectedColorType.next(selectedColorType);
     }
 
-    changeCurrentShowColorPalette(showColorPalette: boolean) {
+    changShowColorPalette(showColorPalette: boolean) {
         this.showColorPalette.next(showColorPalette);
     }
 
     getColorOnFocus(): string {
-        switch (this.selectedColor.value) {
+        switch (this.selectedColorType.value) {
             case ColorType.backgroundColor:
                 return this.backgroundColor.value;
             case ColorType.primaryColor:
@@ -85,7 +76,7 @@ export class ColorToolService {
             case ColorType.secondaryColor:
                 return this.secondaryColor.value;
             default:
-                return new Color().hex;
+                return DEFAULT_WHITE;
         }
     }
 
@@ -103,6 +94,13 @@ export class ColorToolService {
         if (b.length === 1) {
             b = '0' + b;
         }
+        if (A !== undefined) {
+            let a = Number(Math.ceil(A * 255)).toString(16);
+            if (a.length === 1) {
+                a = '0' + a;
+            }
+            return r + g + b + a;
+        }
         return r + g + b;
     }
 
@@ -116,6 +114,17 @@ export class ColorToolService {
             correctedRGBNumber = Number(Math.ceil(RGBNumber)).toString(16);
         }
         return correctedRGBNumber;
+    }
+
+    getPreviewColorOpacityHex(): string {
+        return this.previewColor.value.slice(6, 8);
+    }
+
+    getPreviewColorOpacityDecimal(): string {
+        const opacityHex = this.getPreviewColorOpacityHex();
+        const opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
+        if (opacity === '1.0') { return '1'; }
+        return opacity;
     }
 
     switchPrimarySecondary() {
