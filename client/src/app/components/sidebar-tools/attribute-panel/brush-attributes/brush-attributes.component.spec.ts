@@ -35,20 +35,17 @@ fdescribe('BrushAttributesComponent', () => {
                     },
                 },
             ],
-        }).compileComponents();
-    }));
+        });
 
-    beforeEach(() => {
         fixture = TestBed.createComponent(BrushAttributesComponent);
-        component = fixture.componentInstance;
-        component.initializeForm();
-
-        event = new MatSliderChange();
+        component = fixture.debugElement.componentInstance;
 
         let injector = getTestBed();
         attributesManageService = injector.get<AttributesManagerService>(AttributesManagerService);
         shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
-    });
+
+        event = new MatSliderChange();
+    }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
