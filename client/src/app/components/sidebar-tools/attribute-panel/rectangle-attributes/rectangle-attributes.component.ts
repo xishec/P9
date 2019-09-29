@@ -25,7 +25,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -52,8 +52,10 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.rectangleAttributesForm.controls.thickness.setValue(event.value);
-        this.onThicknessChange();
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.rectangleAttributesForm.controls.thickness.setValue(event.value);
+            this.onThicknessChange();
+        }
     }
 
     onThicknessChange(): void {
