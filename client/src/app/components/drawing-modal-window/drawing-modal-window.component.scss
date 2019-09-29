@@ -7,12 +7,17 @@
     text-align: center;
 }
 
-mat-form-field {
-    margin: 20px 10px;
+.formGroup {
+    margin: 0 30px;
 
-    span {
-        color: #888888;
-        margin-right: 5px;
+    mat-form-field {
+        width: 110px;
+        margin: 20px 10px;
+
+        span {
+            color: #888888;
+            margin-right: 5px;
+        }
     }
 }
 
