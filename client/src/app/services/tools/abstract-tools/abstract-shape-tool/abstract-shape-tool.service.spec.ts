@@ -3,6 +3,7 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
 import { Renderer2, Type } from '@angular/core';
 
+// Test class to have access to everything
 class MockAbstractShapeToolService extends AbstractShapeToolService {
     constructor(renderer: Renderer2) {super(renderer); }
 
@@ -78,7 +79,7 @@ fdescribe('AbstractShapeToolService', () => {
     it('If currentMouseX > initialMouseX, width should be positif', () => {
         service.setCurrentMouseX(-10);
         service.setInitialMouseX(0);
-        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: MockRect, name: string, value: string) => {
             switch(name) {
                 case 'x':
                     mockRect.mockX = Number(value);
