@@ -14,7 +14,7 @@ interface IconStyle {
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements OnInit {
-    selectedColor: ColorType = ColorType.primaryColor;
+    selectedColorType: ColorType = ColorType.primaryColor;
     previewColor = new Color().hex;
 
     constructor(private colorToolService: ColorToolService) {}
@@ -24,9 +24,9 @@ export class ColorPaletteComponent implements OnInit {
             this.previewColor = previewColor;
         });
 
-        this.colorToolService.selectedColor.subscribe((selectedColor) => {
-            if (selectedColor) {
-                this.selectedColor = selectedColor;
+        this.colorToolService.selectedColorType.subscribe((selectedColorType) => {
+            if (selectedColorType) {
+                this.selectedColorType = selectedColorType;
             }
         });
     }
@@ -42,12 +42,12 @@ export class ColorPaletteComponent implements OnInit {
         this.colorToolService.changeColorOnFocus(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.colorToolService.changeCurrentShowColorPalette(false);
-        this.colorToolService.changeSelectedColor(undefined);
+        this.colorToolService.changeSelectedColorType(undefined);
     }
 
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);
-        this.colorToolService.changeSelectedColor(undefined);
+        this.colorToolService.changeSelectedColorType(undefined);
     }
 
     getUserColorIcon(): IconStyle {

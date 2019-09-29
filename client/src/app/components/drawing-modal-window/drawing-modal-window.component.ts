@@ -35,7 +35,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.colorToolService.changeSelectedColor(ColorType.backgroundColor);
+        this.colorToolService.changeSelectedColorType(ColorType.backgroundColor);
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
@@ -74,7 +74,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.drawingModalWindowService.setBlankDrawingZone(false);
         // this.colorToolService.changeColorOnFocus(this.previewColor.hex);
         this.colorToolService.addColorToQueue(this.previewColor.hex);
-        // this.colorToolService.changeSelectedColor(undefined);
+        // this.colorToolService.changeSelectedColorType(undefined);
     }
 
     @HostListener('window:resize', ['$event'])
@@ -87,7 +87,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onCancel(): void {
         this.colorToolService.changeCurrentShowColorPalette(false);
-        this.colorToolService.changeSelectedColor(undefined);
+        this.colorToolService.changeSelectedColorType(undefined);
         this.dialogRef.close();
     }
 

@@ -26,7 +26,7 @@ export class ColorNumericValuesComponent implements OnInit {
 
     ngOnInit() {
         this.setColorNumericValues(this.previewColor);
-        this.colorToolService.selectedColor.subscribe(() => {
+        this.colorToolService.selectedColorType.subscribe(() => {
             this.setColorNumericValues(this.previewColor);
         });
         this.colorToolService.previewColor.subscribe((previewColor: string) => {

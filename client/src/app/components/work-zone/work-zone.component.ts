@@ -40,8 +40,6 @@ export class WorkZoneComponent implements OnInit {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
-            console.log(drawingInfo);
-
             for (const el of this.drawStackService.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }

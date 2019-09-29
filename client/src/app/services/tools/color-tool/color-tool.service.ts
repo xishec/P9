@@ -14,7 +14,8 @@ export class ColorToolService {
     backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
     primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
     secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
-    selectedColor: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
+
+    selectedColorType: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
     showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
@@ -37,7 +38,7 @@ export class ColorToolService {
     }
 
     changeColorOnFocus(colorOnFocus: string) {
-        switch (this.selectedColor.value) {
+        switch (this.selectedColorType.value) {
             case ColorType.backgroundColor:
                 this.backgroundColor.next(colorOnFocus);
                 break;
@@ -53,8 +54,8 @@ export class ColorToolService {
         }
     }
 
-    changeSelectedColor(selectedColor: ColorType | undefined) {
-        this.selectedColor.next(selectedColor);
+    changeSelectedColorType(selectedColorType: ColorType | undefined) {
+        this.selectedColorType.next(selectedColorType);
     }
 
     changeCurrentShowColorPalette(showColorPalette: boolean) {
@@ -62,7 +63,7 @@ export class ColorToolService {
     }
 
     getColorOnFocus(): string {
-        switch (this.selectedColor.value) {
+        switch (this.selectedColorType.value) {
             case ColorType.backgroundColor:
                 return this.backgroundColor.value;
             case ColorType.primaryColor:

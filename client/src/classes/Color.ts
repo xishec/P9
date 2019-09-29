@@ -1,5 +1,5 @@
 export class Color {
-    hex = 'ffffff';
+    hex = 'ffffffff';
 
     constructor(hex?: string) {
         if (hex) {
