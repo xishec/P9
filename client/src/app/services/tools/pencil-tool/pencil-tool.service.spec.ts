@@ -4,7 +4,7 @@ import { PencilToolService } from "./pencil-tool.service";
 import { Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { createMockSVGCircle } from '../abstract-tools/test-helpers';
-import { type } from 'os';
+import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 
 const STACK_LENGTH = 1;
 const X = 10;
@@ -46,21 +46,11 @@ fdescribe("PencilToolService", () => {
     });
 
     it('when createSVGCirle it should call super.createSVGCircle', () => {
-        // Arrange
-        const spyOnParentCreateSVGCircle = spyOn(Object.getPrototypeOf(service), 'createSVGCircle').and.returnValue(createMockSVGCircle());
-        //const spyOnDrawStackGetLength = spyOn(mockDrawStackService, 'getDrawStackLength').and.returnValue(1);
-        // Act
+        let spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+        
         service.createSVGCircle(X, Y);
-        // Assert
-        expect(spyOnParentCreateSVGCircle).toHaveBeenCalled();
-    });
 
-    it('when createSVGPath it should call super.createSVGPath', () => {
-        // Arrange
-        const spyOnParentCreateSVGPath = spyOn(Object.getPrototypeOf(service), 'createSVGPath').and.returnValue(type);
-        // Act
-        service.createSVGPath();
-        // Assert
-        expect(spyOnParentCreateSVGPath).toHaveBeenCalled();
+        expect(spyOnSuperCreateCircle).toHaveBeenCalled();
+        
     });
 });

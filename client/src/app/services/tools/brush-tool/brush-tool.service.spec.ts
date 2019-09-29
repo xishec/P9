@@ -3,8 +3,9 @@ import { TestBed, getTestBed } from "@angular/core/testing";
 import { BrushToolService } from "./brush-tool.service";
 import { Renderer2, ElementRef, Type } from "@angular/core";
 import { DrawStackService } from "../../draw-stack/draw-stack.service";
-import { createMockFilter } from '../abstract-tools/test-helpers';
+import { createMockFilter, createMockSVGCircle } from '../abstract-tools/test-helpers';
 import { SVG_NS } from 'src/constants/constants';
+import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 
 const STACK_LENGTH = 1;
 const MOCK_FILTER = createMockFilter();
@@ -49,6 +50,7 @@ fdescribe("BrushToolService", () => {
         service = injector.get(BrushToolService);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        // mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(MOCK_FILTER);
@@ -117,6 +119,14 @@ fdescribe("BrushToolService", () => {
         service.createFilter(patternId);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.9');
+    });
+
+    it('when createSVGCircle it should call super.getDrawStackLength', () => {
+        let spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+        
+        service.createSVGCircle(0, 0);
+
+        expect(spyOnSuperCreateCircle).toHaveBeenCalled();
     });
 
 });
