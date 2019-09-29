@@ -24,6 +24,14 @@ export const createMockSVGCircle = (): any => {
     return mockCircle;
 };
 
+export const createMockSVGRect = (): SVGRectElement => {
+    const mockRect = {
+        addEventListener: () => null,
+
+    };
+    return mockRect as unknown as SVGRectElement;
+};
+
 export const createMockFilter = (): SVGFilterElement => {
     const mockFilter = {
 

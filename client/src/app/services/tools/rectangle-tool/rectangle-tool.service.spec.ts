@@ -4,20 +4,44 @@ import { RectangleToolService } from './rectangle-tool.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { Keys, Mouse } from 'src/constants/constants';
+import { createMouseEvent, createKeyBoardEvent } from '../../../../classes/test-helpers';
+import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 
 class MockBoundRect {
     left: number = 0;
     top: number = 0;
 }
 
-class MockKeyboardEvent extends KeyboardEvent {
-    key: string;
-}
+class MockRect {
+    x: {
+        baseVal: {
+            value: number;
+        }
+    };
+    y: {
+        baseVal: {
+            value: number;
+        }
+    };
+    width: {
+        baseVal: {
+            value: number;
+        }
+    };
+    height: {
+        baseVal: {
+            value: number;
+        }
+    };
+    fill: string = '';
+    stroke: string = '';
 
-class MockMouseEvent extends MouseEvent {
-    clientX: number;
-    clientY: number;
-    button: number;
+    constructor() {
+        this.x.baseVal.value = 0;
+        this.y.baseVal.value = 0;
+        this.width.baseVal.value = 0;
+        this.height.baseVal.value = 0;
+    }
 }
 
 fdescribe('RectangleToolService', () => {
@@ -26,27 +50,41 @@ fdescribe('RectangleToolService', () => {
     let rendererMock: Renderer2;
     let elementRefMock: ElementRef;
     let rectangleTool: RectangleToolService;
-    let mockMouseEvent: MockMouseEvent;
-    let mockKeyboardEvent: MockKeyboardEvent;
+    let mockMouseEvent: MouseEvent;
+    let mockKeyboardEvent: KeyboardEvent;
+    let spy: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 DrawStackService,
                 {
+                    provide: RectangleToolService,
+                    useValue: {
+                        drawRectangle: MockRect,
+                    },
+                },
+                {
+                    provide: AbstractShapeToolService,
+                    useValue: {
+                        previewRectangle: MockRect,
+                    },
+                },
+                {
                     provide: Renderer2,
                     useValue: {
                         setAttribute: () => null,
-                        createElement: () => null,
-                    }
+                        createElement: () => new MockRect(),
+                        appendChild: () => null,
+                    },
                 },
                 {
                     provide: ElementRef,
                     useValue: {
                         nativeElement: {
                             getBoundingClientRect: () => { return new MockBoundRect(); },
-                        }
-                    }
+                        },
+                    },
                 },
             ],
         });
@@ -59,15 +97,24 @@ fdescribe('RectangleToolService', () => {
         rectangleTool = new RectangleToolService(drawStack, elementRefMock, rendererMock);
 
         // Setup mock events
-        mockMouseEvent = new MockMouseEvent('');
-        mockMouseEvent.button = Mouse.LeftButton;
-        mockMouseEvent.clientX = 0;
-        mockMouseEvent.clientY = 0;
+        mockMouseEvent = createMouseEvent(0, 0, Mouse.LeftButton);
 
-        mockKeyboardEvent.key = Keys.Shift;
+        mockKeyboardEvent = createKeyBoardEvent(Keys.Shift);
     });
 
     it('should be created with call to new', () => {
         expect(rectangleTool).toBeTruthy();
+    });
+
+    it('Nothing should happen when mouse click outside of workzone', () => {
+        spy = spyOn(rendererMock, 'appendChild');
+        rectangleTool.onMouseDown(mockMouseEvent);
+        expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    it('If shift pressed and left mouse not pressed, nothing should happen', () => {
+        spy = spyOn(rendererMock, 'appendChild');
+        rectangleTool.onKeyDown(mockKeyboardEvent);
+        expect(spy).not.toHaveBeenCalled();
     });
 });
