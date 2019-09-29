@@ -1,14 +1,14 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { BehaviorSubject } from 'rxjs';
+import { ColorToolService } from './color-tool.service';
 import {
+    MAX_NUMBER_OF_LAST_COLORS,
     ColorType,
     DEFAULT_GRAY_0,
     DEFAULT_GRAY_1,
     DEFAULT_WHITE,
-    MAX_NUMBER_OF_LAST_COLORS,
 } from 'src/constants/color-constants';
-import { ColorToolService } from './color-tool.service';
 
 describe('ColorToolService', () => {
     let service: ColorToolService;
@@ -17,7 +17,7 @@ describe('ColorToolService', () => {
     let primaryColor: string = DEFAULT_GRAY_0;
     let secondaryColor: string = DEFAULT_GRAY_1;
     let backgroundColor: string = DEFAULT_WHITE;
-    const focusColor = '666666f11';
+    let focusColor: string = '666666f11';
     let previewColor = new BehaviorSubject<string>(DEFAULT_WHITE);
 
     beforeEach(() => {
@@ -26,10 +26,10 @@ describe('ColorToolService', () => {
         });
         injector = getTestBed();
         service = injector.get(ColorToolService);
-        colorQueue = service.colorQueue;
-        service.backgroundColor = new BehaviorSubject<string>(backgroundColor);
-        service.primaryColor = new BehaviorSubject<string>(primaryColor);
-        service.secondaryColor = new BehaviorSubject<string>(secondaryColor);
+        colorQueue = service['colorQueue'];
+        service['backgroundColor'] = new BehaviorSubject<string>(backgroundColor);
+        service['primaryColor'] = new BehaviorSubject<string>(primaryColor);
+        service['secondaryColor'] = new BehaviorSubject<string>(secondaryColor);
         primaryColor = DEFAULT_GRAY_0;
         secondaryColor = DEFAULT_GRAY_1;
         backgroundColor = DEFAULT_WHITE;
@@ -41,7 +41,7 @@ describe('ColorToolService', () => {
     });
 
     it('#addColorToQueue should add an element to the queue', () => {
-        const begingColorQueueLength = colorQueue.value.length;
+        let begingColorQueueLength = colorQueue.value.length;
         service.addColorToQueue('red');
         expect(colorQueue.value.length).toBe(begingColorQueueLength + 1);
     });
@@ -53,72 +53,72 @@ describe('ColorToolService', () => {
     });
 
     it(`#changePreviewColor should change previewColor to ${DEFAULT_WHITE} `, () => {
-        const color: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+        let color: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
         service.changePreviewColor(DEFAULT_WHITE);
-        expect(service.previewColor).toEqual(color);
+        expect(service['previewColor']).toEqual(color);
     });
 
     it(`#changeBackgroundColor should change background-color to ${DEFAULT_WHITE} `, () => {
-        const color: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+        let color: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
         service.changeBackgroundColor(DEFAULT_WHITE);
-        expect(service.backgroundColor).toEqual(color);
+        expect(service['backgroundColor']).toEqual(color);
     });
 
     it('#changeselectedColorType should change selectedColorType to backgroundColor type', () => {
-        const selectedColorType: BehaviorSubject<ColorType> = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
+        let selectedColorType: BehaviorSubject<ColorType> = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
         service.changeSelectedColorType(ColorType.backgroundColor);
-        expect(service.selectedColorType).toEqual(selectedColorType);
+        expect(service['selectedColorType']).toEqual(selectedColorType);
     });
 
     it('#changeCurrentShowColorPalette should change showColorPalette to true', () => {
-        service.showColorPalette = new BehaviorSubject<boolean>(false);
+        service['showColorPalette'] = new BehaviorSubject<boolean>(false);
         service.changShowColorPalette(true);
-        const showColorPalette = new BehaviorSubject<boolean>(true);
-        expect(service.showColorPalette).toEqual(showColorPalette);
+        let showColorPalette = new BehaviorSubject<boolean>(true);
+        expect(service['showColorPalette']).toEqual(showColorPalette);
     });
 
     it(`#changeColorOnFocus should change the background color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
         service.changeColorOnFocus(focusColor);
-        expect(service.backgroundColor).toEqual(new BehaviorSubject<string>(focusColor));
+        expect(service['backgroundColor']).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should change the primaryColor color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.primaryColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.primaryColor);
         service.changeColorOnFocus(focusColor);
-        expect(service.primaryColor).toEqual(new BehaviorSubject<string>(focusColor));
+        expect(service['primaryColor']).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should change the secondaryColor color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.secondaryColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.secondaryColor);
         service.changeColorOnFocus(focusColor);
-        expect(service.secondaryColor).toEqual(new BehaviorSubject<string>(focusColor));
+        expect(service['secondaryColor']).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should not change the seconday color if the primary color is selected`, () => {
-        const tmpSecondayColor: BehaviorSubject<string> = service.secondaryColor;
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.primaryColor);
+        let tmpSecondayColor: BehaviorSubject<string> = service['secondaryColor'];
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.primaryColor);
         service.changeColorOnFocus(focusColor);
-        expect(service.secondaryColor).toEqual(tmpSecondayColor);
+        expect(service['secondaryColor']).toEqual(tmpSecondayColor);
     });
 
     it(`#getColorOnFocus should return ${backgroundColor} when backgroundColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.backgroundColor);
         expect(service.getColorOnFocus()).toEqual(backgroundColor);
     });
 
     it(`#getColorOnFocus should return ${primaryColor} when primaryColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.primaryColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.primaryColor);
         expect(service.getColorOnFocus()).toEqual(primaryColor);
     });
 
     it(`#getColorOnFocus should return ${secondaryColor} when secondaryColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<ColorType>(ColorType.secondaryColor);
+        service['selectedColorType'] = new BehaviorSubject<ColorType>(ColorType.secondaryColor);
         expect(service.getColorOnFocus()).toEqual(secondaryColor);
     });
 
     it(`#getColorOnFocus should return ${DEFAULT_WHITE} when selectedColorType is undefined`, () => {
-        service.selectedColorType = new BehaviorSubject<undefined>(undefined);
+        service['selectedColorType'] = new BehaviorSubject<undefined>(undefined);
         expect(service.getColorOnFocus()).toEqual(DEFAULT_WHITE);
     });
 
@@ -154,33 +154,35 @@ describe('ColorToolService', () => {
         expect(service.DecimalToHex(999)).toBe('ff');
     });
 
-    it('#switchPrimarySecondary should change primaryColor to secondaryColor after colors switch', () => {
+    it('#switchPrimarySecondary should change primaryColor to secondayColor after colors switch', () => {
+        let primaryColor = service['primaryColor'].value;
         service.switchPrimarySecondary();
-        expect(service.primaryColor.value).toEqual(service.secondaryColor.value);
+        expect(primaryColor).toEqual(service['secondaryColor'].value);
     });
 
     it('#switchPrimarySecondary should change secondaryColor to primaryColor after colors switch', () => {
+        let secondayColor = service['secondaryColor'].value;
         service.switchPrimarySecondary();
-        expect(service.secondaryColor.value).toEqual(service.primaryColor.value);
+        expect(secondayColor).toEqual(service['primaryColor'].value);
     });
 
     it(`#getPreviewColorOpacityHex should return ${previewColor.value.slice(6, 8)} the opacity of previewColor`, () => {
-        service.previewColor = previewColor;
+        service['previewColor'] = previewColor;
         expect(service.getPreviewColorOpacityHex()).toEqual(previewColor.value.slice(6, 8));
     });
 
     it(`#getPreviewColorOpacityDecimal should return 1 when the opacity of previewColor is "ff"`, () => {
-        service.previewColor = new BehaviorSubject<string>('888888ff');
+        service['previewColor'] = new BehaviorSubject<string>('888888ff');
         expect(service.getPreviewColorOpacityDecimal()).toEqual('1');
     });
 
     it(`#getPreviewColorOpacityDecimal should return 0 when the opacity of previewColor is "00"`, () => {
-        service.previewColor = new BehaviorSubject<string>('88888800');
+        service['previewColor'] = new BehaviorSubject<string>('88888800');
         expect(service.getPreviewColorOpacityDecimal()).toEqual('0');
     });
 
     it(`#getPreviewColorOpacityDecimal should return 0 when the opacity of previewColor is "11"`, () => {
-        service.previewColor = new BehaviorSubject<string>('88888811');
+        service['previewColor'] = new BehaviorSubject<string>('88888811');
         expect(service.getPreviewColorOpacityDecimal()).toEqual('0.1');
     });
 });

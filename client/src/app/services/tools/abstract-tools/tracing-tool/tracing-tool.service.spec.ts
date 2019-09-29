@@ -3,9 +3,9 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Keys, Mouse } from 'src/constants/constants';
-import {  createKeyBoardEvent, createMockSVGCircle, createMouseEvent } from '../../../../../classes/test-helpers'; // , createMouseEvent,
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
+import {  createKeyBoardEvent, createMockSVGCircle, createMouseEvent } from '../../../../../classes/test-helpers'; // , createMouseEvent,
 import { TracingToolService } from './tracing-tool.service';
 
 const MOCK_X = 10;

@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {
     ColorType,
+    MAX_RGB_NUMBER,
+    MIN_RGB_NUMBER,
+    MAX_NUMBER_OF_LAST_COLORS,
     DEFAULT_GRAY_0,
     DEFAULT_GRAY_1,
     DEFAULT_WHITE,
-    MAX_NUMBER_OF_LAST_COLORS,
-    MAX_RGB_NUMBER,
-    MIN_RGB_NUMBER,
 } from 'src/constants/color-constants';
 
 @Injectable({
@@ -80,18 +80,18 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        const r: string = this.DecimalToHex(R);
-        const g: string = this.DecimalToHex(G);
-        const b: string = this.DecimalToHex(B);
+        let r: string = this.DecimalToHex(R);
+        let g: string = this.DecimalToHex(G);
+        let b: string = this.DecimalToHex(B);
         if (A !== undefined) {
-            const a = this.DecimalToHex(A * 255);
+            let a = this.DecimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
     }
 
     DecimalToHex(RGBNumber: number): string {
-        let correctedRGBNumber = '';
+        let correctedRGBNumber: string = '';
         if (RGBNumber > MAX_RGB_NUMBER) {
             correctedRGBNumber = 'ff';
         } else if (RGBNumber < MIN_RGB_NUMBER) {

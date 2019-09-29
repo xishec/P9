@@ -4,8 +4,8 @@ import { MatDialogRef } from '@angular/material';
 
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
+import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 
 @Component({
     selector: 'app-drawing-modal-window',

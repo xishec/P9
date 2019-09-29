@@ -2,8 +2,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { BrushToolService } from './brush-tool.service';
 
