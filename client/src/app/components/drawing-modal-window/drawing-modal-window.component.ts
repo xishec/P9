@@ -72,6 +72,7 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onCancel(): void {
+        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.dialogRef.close();
     }
 
