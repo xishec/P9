@@ -4,7 +4,7 @@ import { ToolSelectorService } from './tool-selector.service';
 import { ToolName } from 'src/constants/tool-constants';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 
-fdescribe('ToolSelectorService', () => {
+describe('ToolSelectorService', () => {
     let injector: TestBed;
     let service: ToolSelectorService;
     let mockPencilTool: PencilToolService;
