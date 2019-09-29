@@ -11,9 +11,6 @@ export class DrawStackService {
     private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
 
-    // tslint:disable-next-line: no-empty
-    constructor() {}
-
     changeTargetElement(stackTarget: StackTargetInfo): void {
         this.stackTarget.next(stackTarget);
     }
