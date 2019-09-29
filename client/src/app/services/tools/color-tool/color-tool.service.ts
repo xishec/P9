@@ -80,30 +80,17 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        let r: string = this.correctRGB(R);
-        let g: string = this.correctRGB(G);
-        let b: string = this.correctRGB(B);
-
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
+        let r: string = this.DecimalToHex(R);
+        let g: string = this.DecimalToHex(G);
+        let b: string = this.DecimalToHex(B);
         if (A !== undefined) {
-            let a = Number(Math.ceil(A * 255)).toString(16);
-            if (a.length === 1) {
-                a = '0' + a;
-            }
+            let a = this.DecimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
     }
 
-    correctRGB(RGBNumber: number): string {
+    DecimalToHex(RGBNumber: number): string {
         let correctedRGBNumber: string = '';
         if (RGBNumber > MAX_RGB_NUMBER) {
             correctedRGBNumber = 'ff';
@@ -111,6 +98,9 @@ export class ColorToolService {
             correctedRGBNumber = '00';
         } else {
             correctedRGBNumber = Number(Math.ceil(RGBNumber)).toString(16);
+            if (correctedRGBNumber.length === 1) {
+                correctedRGBNumber = '0' + correctedRGBNumber;
+            }
         }
         return correctedRGBNumber;
     }

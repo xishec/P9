@@ -142,16 +142,16 @@ describe('ColorToolService', () => {
         expect(service.translateRGBToHex(184, 130, 130, 0)).toBe('b8828200');
     });
 
-    it('#correctRGB should return 25 if number is 37', () => {
-        expect(service.correctRGB(37)).toBe('25');
+    it('#DecimalToHex should return 25 if number is 37', () => {
+        expect(service.DecimalToHex(37)).toBe('25');
     });
 
-    it('#correctRGB should return 00 if number is negative', () => {
-        expect(service.correctRGB(-10)).toBe('00');
+    it('#DecimalToHex should return 00 if number is negative', () => {
+        expect(service.DecimalToHex(-10)).toBe('00');
     });
 
-    it('#correctRGB should return ff if number is higher than 255', () => {
-        expect(service.correctRGB(999)).toBe('ff');
+    it('#DecimalToHex should return ff if number is higher than 255', () => {
+        expect(service.DecimalToHex(999)).toBe('ff');
     });
 
     it('#switchPrimarySecondary should change primaryColor to secondayColor after colors switch', () => {
