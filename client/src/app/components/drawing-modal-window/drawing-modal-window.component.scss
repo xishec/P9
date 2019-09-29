@@ -12,6 +12,21 @@
     }
 }
 
+#userColor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .color {
+        margin-left: 10px;
+    }
+
+    #bigColor {
+        padding: 15px;
+    }
+}
+
 .color {
     width: 0;
     height: 0;
