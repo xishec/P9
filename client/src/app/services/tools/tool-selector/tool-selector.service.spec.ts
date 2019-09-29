@@ -1,29 +1,22 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ToolName } from 'src/constants/tool-constants';
-import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { ToolSelectorService } from './tool-selector.service';
+import { BehaviorSubject } from 'rxjs';
 
 describe('ToolSelectorService', () => {
     let injector: TestBed;
     let service: ToolSelectorService;
-    let mockPencilTool: PencilToolService;
 
     let spyOnChangeCurrentToolName: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ToolSelectorService, {
-                provide: PencilToolService,
-                useValue: {
-
-                },
-            }],
+            providers: [ToolSelectorService],
         });
 
         injector = getTestBed();
         service = injector.get(ToolSelectorService);
-        mockPencilTool = injector.get(PencilToolService);
     });
 
     it('should be created', () => {
@@ -72,8 +65,9 @@ describe('ToolSelectorService', () => {
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(ToolName.Selection);
     });
 
-    it('when getPencilTool should return the pencilTool', () => {
-        const returnedTool = service.getPencilTool();
-        expect(returnedTool).toEqual(mockPencilTool);
-    });
+    it('when changeCurrentToolName with pencil then toolName is pencil', () => {
+        const expectedResult: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Pencil);
+        service.changeCurrentToolName(ToolName.Pencil);
+        expect(service['toolName']).toEqual(expectedResult);
+    })
 });
