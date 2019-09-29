@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BrushAttributesComponent } from './brush-attributes.component';
 import { MatSliderChange } from '@angular/material';
@@ -14,47 +14,45 @@ fdescribe('BrushAttributesComponent', () => {
     let event: MatSliderChange;
     let attributesManagerService: AttributesManagerService;
     let shortcutManagerService: ShortcutManagerService;
-    let shit: AttributesManagerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [BrushAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [FormBuilder],
-        }).overrideComponent(BrushAttributesComponent, {
-            set: {
-                providers: [
-                    {
-                        provide: AttributesManagerService,
-                        useValue: {
-                            changeThickness: () => null,
-                            changeStyle: () => 1,
-                        },
-                    },
-                    {
-                        provide: ShortcutManagerService,
-                        useValue: {
-                            changeIsOnInput: () => null,
-                        },
-                    },
-                ],
-            }
         })
-        .compileComponents();
+            .overrideComponent(BrushAttributesComponent, {
+                set: {
+                    providers: [
+                        {
+                            provide: AttributesManagerService,
+                            useValue: {
+                                changeThickness: () => null,
+                                changeStyle: () => null,
+                            },
+                        },
+                        {
+                            provide: ShortcutManagerService,
+                            useValue: {
+                                changeIsOnInput: () => null,
+                            },
+                        },
+                    ],
+                },
+            })
+            .compileComponents();
         fixture = TestBed.createComponent(BrushAttributesComponent);
         component = fixture.componentInstance;
 
-        let injector = getTestBed();
-        
         event = new MatSliderChange();
 
         component.ngOnInit();
 
-        shit = fixture.debugElement.injector.get<AttributesManagerService>(AttributesManagerService);
+        attributesManagerService = fixture.debugElement.injector.get<AttributesManagerService>(
+            AttributesManagerService
+        );
 
-        attributesManagerService = injector.get<AttributesManagerService>(AttributesManagerService);
-        shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
-
+        shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
     }));
 
     it('should create', () => {
@@ -103,7 +101,7 @@ fdescribe('BrushAttributesComponent', () => {
         let thickness = component.brushAttributesForm.controls['thickness'];
         thickness.setValue(30);
 
-        const spy = spyOn(shit, 'changeThickness').and.returnValue();
+        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         console.log(thickness.value);
 
@@ -116,7 +114,7 @@ fdescribe('BrushAttributesComponent', () => {
     it(`#onThicknessChange should not call chanegeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(Thickness.Max + 1);
         let spyOnChangeThicknesAttributeManager = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
-        
+
         component.onThicknessChange();
 
         expect(spyOnChangeThicknesAttributeManager).not.toHaveBeenCalled();
