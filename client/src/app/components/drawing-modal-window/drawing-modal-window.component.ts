@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { ColorType } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
@@ -30,8 +29,6 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.initializeForm();
-
         this.previewColor = this.colorToolService.backgroundColor.value;
 
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
@@ -40,10 +37,9 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.previewColor.subscribe((previewColor) => {
             this.previewColor = previewColor;
         });
-        this.drawingModalWindowService.currentBlankDrawingZone.subscribe((blankWorkZone) => {
-            this.blankWorkZone = blankWorkZone;
-            this.drawingModalForm.controls.confirm.setValue(blankWorkZone);
-        });
+
+        this.blankWorkZone = this.drawingModalWindowService.blankDrawingZone.value;
+        this.initializeForm();
     }
 
     initializeForm(): void {
@@ -55,11 +51,11 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
+        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.drawingModalWindowService.changeDrawingInfoWidthHeight(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
         );
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.drawingModalWindowService.setBlankDrawingZone(false);
         this.colorToolService.addColorToQueue(this.previewColor);

@@ -9,11 +9,10 @@ import { DEFAULT_WHITE } from 'src/constants/color-constants';
 })
 export class DrawingModalWindowService {
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    private blankDrawingZone = new BehaviorSubject(true);
 
     drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE));
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
-    currentBlankDrawingZone: Observable<boolean> = this.blankDrawingZone.asObservable();
+    blankDrawingZone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
     changeDrawingInfoWidthHeight(width: number, height: number) {
         this.drawingInfo.value.width = width;
