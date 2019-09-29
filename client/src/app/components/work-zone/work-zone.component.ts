@@ -72,6 +72,9 @@ export class WorkZoneComponent implements OnInit {
     }
 
     changeStyle(): ReturnStyle {
+        if (this.empty) {
+            this.drawingInfo.color = DEFAULT_TRANSPARENT;
+        }
         return {
             fill: '#' + this.drawingInfo.color,
         };
