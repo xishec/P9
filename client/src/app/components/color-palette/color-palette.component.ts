@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { DEFAULT_WHITE, ColorType } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 
 interface IconStyle {
     backgroundColor: string;

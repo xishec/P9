@@ -52,7 +52,7 @@ describe('TracingToolService', () => {
             }, {
                 provide: ColorToolService,
                 useValue: {
-                    currentPrimaryColor: () => MOCK_COLOR,
+                    primaryColor: () => MOCK_COLOR,
                 },
             }],
         });

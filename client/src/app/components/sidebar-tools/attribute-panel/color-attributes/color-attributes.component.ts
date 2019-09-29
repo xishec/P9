@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DEFAULT_WHITE, DEFAULT_GRAY_0, DEFAULT_GRAY_1, ColorType } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 interface ColorStyle {

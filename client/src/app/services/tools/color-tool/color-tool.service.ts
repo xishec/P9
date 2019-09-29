@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { ColorType, DEFAULT_WHITE, DEFAULT_GRAY_0, DEFAULT_GRAY_1 } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -101,9 +101,9 @@ export class ColorToolService {
     }
 
     getPreviewColorOpacityDecimal(): string {
-        let opacityHex = this.getPreviewColorOpacityHex();
-        let opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
-        if (opacity === '1.0') return '1';
+        const opacityHex = this.getPreviewColorOpacityHex();
+        const opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
+        if (opacity === '1.0') { return '1'; }
         return opacity;
     }
 

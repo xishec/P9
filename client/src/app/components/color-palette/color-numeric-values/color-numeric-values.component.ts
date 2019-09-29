@@ -62,7 +62,7 @@ export class ColorNumericValuesComponent implements OnInit {
     }
 
     onUserHexInput(): void {
-        let opacity = this.colorToolService.getPreviewColorOpacityHex();
+        const opacity = this.colorToolService.getPreviewColorOpacityHex();
         this.previewColor = this.colorNumericValuesForm.value.hex + opacity;
         this.setColorNumericValues();
         this.colorToolService.changePreviewColor(this.previewColor);

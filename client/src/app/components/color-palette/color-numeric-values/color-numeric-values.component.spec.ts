@@ -8,7 +8,7 @@ describe('ColorNumericValuesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColorNumericValuesComponent ]
+      declarations: [ ColorNumericValuesComponent ],
     })
     .compileComponents();
   }));
