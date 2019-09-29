@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { ColorType } from 'src/constants/color-constants';
-import { Color } from '../../../classes/Color';
+import { DEFAULT_WHITE, ColorType } from 'src/constants/color-constants';
 
 interface IconStyle {
     backgroundColor: string;
@@ -15,7 +14,7 @@ interface IconStyle {
 })
 export class ColorPaletteComponent implements OnInit {
     selectedColorType: ColorType = ColorType.primaryColor;
-    previewColor = new Color().hex;
+    previewColor = DEFAULT_WHITE;
 
     constructor(private colorToolService: ColorToolService) {}
 
@@ -27,6 +26,7 @@ export class ColorPaletteComponent implements OnInit {
         this.colorToolService.selectedColorType.subscribe((selectedColorType) => {
             if (selectedColorType) {
                 this.selectedColorType = selectedColorType;
+                this.previewColor = this.colorToolService.getColorOnFocus();
             }
         });
     }
@@ -37,12 +37,12 @@ export class ColorPaletteComponent implements OnInit {
     onSubmit(): void {
         this.colorToolService.changeColorOnFocus(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
-        this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changShowColorPalette(false);
         this.colorToolService.changeSelectedColorType(undefined);
     }
 
     onCancel(): void {
-        this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changShowColorPalette(false);
         this.colorToolService.changeSelectedColorType(undefined);
     }
 

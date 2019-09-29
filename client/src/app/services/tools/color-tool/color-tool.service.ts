@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { COLORS, ColorType } from 'src/constants/color-constants';
-import { Color } from '../../../../classes/Color';
+import { ColorType, DEFAULT_WHITE, DEFAULT_GRAY_0, DEFAULT_GRAY_1 } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ColorToolService {
-    readonly colors: Color[] = COLORS;
-
-    previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[0].hex);
-    primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[1].hex);
-    secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(COLORS[2].hex);
+    previewColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+    backgroundColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_WHITE);
+    primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_0);
+    secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_1);
 
     selectedColorType: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
     showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -71,7 +68,7 @@ export class ColorToolService {
             case ColorType.secondaryColor:
                 return this.secondaryColor.value;
             default:
-                return new Color().hex;
+                return DEFAULT_WHITE;
         }
     }
 

@@ -7,8 +7,8 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { Color } from 'src/classes/Color';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import { DEFAULT_WHITE, DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 
 @Component({
     selector: 'app-work-zone',
@@ -16,7 +16,7 @@ import { SIDEBAR_WIDTH } from 'src/constants/constants';
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo();
+    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
 
@@ -56,12 +56,12 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
-            this.drawingInfo.color.hex = backgroundColor;
+            this.drawingInfo.color = backgroundColor;
         });
 
         this.drawingInfo.height = window.innerHeight;
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
-        this.drawingInfo.color = new Color('ffffff00');
+        this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
     }
 
@@ -73,7 +73,7 @@ export class WorkZoneComponent implements OnInit {
 
     changeStyle(): ReturnStyle {
         return {
-            fill: '#' + this.drawingInfo.color.hex,
+            fill: '#' + this.drawingInfo.color,
         };
     }
 

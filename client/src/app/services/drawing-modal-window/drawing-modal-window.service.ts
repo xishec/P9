@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { COLORS } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +11,7 @@ export class DrawingModalWindowService {
     private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private blankDrawingZone = new BehaviorSubject(true);
 
-    drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, COLORS[0]));
+    drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE));
     currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
     currentBlankDrawingZone: Observable<boolean> = this.blankDrawingZone.asObservable();
 

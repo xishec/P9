@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { COLORS, ColorType } from 'src/constants/color-constants';
+import { DEFAULT_WHITE, DEFAULT_GRAY_0, DEFAULT_GRAY_1, ColorType } from 'src/constants/color-constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 interface ColorStyle {
@@ -15,9 +15,9 @@ interface ColorStyle {
     styleUrls: ['./color-attributes.component.scss'],
 })
 export class ColorAttributesComponent implements OnInit {
-    backgroundColor = COLORS[0].hex;
-    primaryColor = COLORS[1].hex;
-    secondaryColor = COLORS[2].hex;
+    backgroundColor = DEFAULT_WHITE;
+    primaryColor = DEFAULT_GRAY_0;
+    secondaryColor = DEFAULT_GRAY_1;
     selectedColorType: ColorType | undefined = undefined;
 
     constructor(private colorToolService: ColorToolService) {}
@@ -56,7 +56,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {
@@ -69,7 +68,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {
@@ -82,7 +80,6 @@ export class ColorAttributesComponent implements OnInit {
                 backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',
                 transform: 'scale(1.3)',
-                borderStyle: 'dashed',
             };
         }
         return {

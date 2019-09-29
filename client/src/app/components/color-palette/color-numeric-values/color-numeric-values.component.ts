@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { Color } from 'src/classes/Color';
+import { DEFAULT_WHITE } from '../../../../constants/color-constants';
 
 @Component({
     selector: 'app-color-numeric-values',
@@ -13,7 +13,7 @@ import { Color } from 'src/classes/Color';
 export class ColorNumericValuesComponent implements OnInit {
     colorNumericValuesForm: FormGroup;
     formBuilder: FormBuilder;
-    previewColor = new Color().hex;
+    previewColor = DEFAULT_WHITE;
 
     constructor(
         formBuilder: FormBuilder,
@@ -26,6 +26,7 @@ export class ColorNumericValuesComponent implements OnInit {
 
     ngOnInit() {
         this.colorToolService.selectedColorType.subscribe(() => {
+            this.previewColor = this.colorToolService.getColorOnFocus();
             this.setColorNumericValues();
         });
         this.colorToolService.previewColor.subscribe((previewColor: string) => {

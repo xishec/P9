@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { Color } from '../../../../classes/Color';
 
 interface IconStyle {
     backgroundColor: string;
@@ -14,7 +13,7 @@ interface IconStyle {
 })
 export class ColorQueueComponent implements OnInit {
     colorQueue: string[] = [];
-    @Output() clickedColorButton = new EventEmitter<Color>();
+    @Output() clickedColorButton = new EventEmitter<string>();
 
     constructor(private colorToolService: ColorToolService) {}
 
@@ -24,7 +23,7 @@ export class ColorQueueComponent implements OnInit {
         });
     }
 
-    onClickColorButton(color: Color): void {
+    onClickColorButton(color: string): void {
         this.clickedColorButton.emit(color);
     }
 
