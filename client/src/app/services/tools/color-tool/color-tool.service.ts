@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { BehaviorSubject } from 'rxjs';
+
 import { COLORS, ColorType } from 'src/constants/color-constants';
 import { Color } from '../../../../classes/Color';
 
