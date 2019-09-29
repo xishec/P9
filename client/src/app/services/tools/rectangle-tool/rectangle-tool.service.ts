@@ -45,11 +45,11 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((fillColor: string) => {
+        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
             this.fillColor = fillColor;
             this.updateTraceType(this.traceType);
         });
-        this.colorToolService.currentSecondaryColor.subscribe((strokeColor: string) => {
+        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
             this.strokeColor = strokeColor;
             this.updateTraceType(this.traceType);
         });
