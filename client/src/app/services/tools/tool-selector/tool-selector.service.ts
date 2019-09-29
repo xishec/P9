@@ -42,7 +42,7 @@ export class ToolSelectorService {
     }
 
     displayNewDrawingModal(): void {
-        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
+        this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
         });
     }
