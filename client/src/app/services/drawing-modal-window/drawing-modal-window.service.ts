@@ -23,8 +23,4 @@ export class DrawingModalWindowService {
     changeDisplayNewDrawingModalWindow(displayNewDrawingModalWindow: boolean) {
         this.displayNewDrawingModalWindow.next(displayNewDrawingModalWindow);
     }
-
-    setBlankDrawingZone(isBlank: boolean): void {
-        this.blankDrawingZone.next(isBlank);
-    }
 }

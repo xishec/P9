@@ -45,9 +45,6 @@ export class ToolSelectorService {
         const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
         });
-        dialogRef.afterClosed().subscribe(() => {
-            // console.log('modal closed');
-        });
     }
 
     getPencilTool(): PencilToolService {

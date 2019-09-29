@@ -57,7 +57,7 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.height,
         );
         this.colorToolService.changeBackgroundColor(this.previewColor);
-        this.drawingModalWindowService.setBlankDrawingZone(false);
+        this.drawingModalWindowService.blankDrawingZone.next(false);
         this.colorToolService.addColorToQueue(this.previewColor);
     }
 
