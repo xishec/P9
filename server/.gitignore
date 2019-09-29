@@ -18,7 +18,6 @@ coverage/
 *.js.map
 *.js
 
-
 # Garder les fichiers necessaires pour les tests
 !systemjs.config.js
 !karma.conf.js
@@ -26,3 +25,7 @@ coverage/
 !systemjs.config.extras.js
 !tslint.json
 !tsconfig.json
+
+# System Files
+.DS_Store
+Thumbs.db

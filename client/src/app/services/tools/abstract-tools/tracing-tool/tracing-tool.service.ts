@@ -41,7 +41,7 @@ export abstract class TracingToolService extends AbstractToolService {
 
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColor = currentColor;
         });
     }

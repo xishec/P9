@@ -1,67 +1,14 @@
-#mask {
-    position: absolute;
-    top: 0;
-    left: 0px;
-    background-color: rgba($color: #000000, $alpha: 0.2);
-    height: 100vh;
-    width: 100vw;
-    z-index: 1;
+.formGroup {
+    margin: 0 30px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    mat-form-field {
+        width: 110px;
+        margin: 20px 10px;
 
-#window {
-    height: 450px;
-    width: 500px;
-    background-color: white;
-    padding: 30px 30px;
-
-    text-align: center;
-}
-
-mat-form-field {
-    margin: 20px 10px;
-
-    span {
-        color: #888888;
-        margin-right: 5px;
-    }
-}
-
-.medium {
-    width: 20%;
-}
-.small {
-    width: 10%;
-}
-
-.color {
-    width: 0;
-    height: 0;
-    padding: 10px;
-    border: 1px solid #d0d0d0;
-    margin: 5px;
-    border-radius: 100%;
-    outline: none;
-}
-.color:hover:not(#bigColor) {
-    filter: brightness(0.8);
-}
-.color:active:not(#bigColor) {
-    filter: brightness(1);
-}
-
-#colorButtons {
-    display: flex;
-    align-items: center;
-
-    img {
-        border: 0px solid #d0d0d0;
-        padding: 0px;
-        width: 23px;
-        height: 23px;
+        span {
+            color: #888888;
+            margin-right: 5px;
+        }
     }
 }
 
@@ -72,20 +19,22 @@ mat-form-field {
     margin-bottom: 10px;
 
     .color {
-        margin-left: 15px;
+        margin-left: 10px;
     }
 
     #bigColor {
         padding: 15px;
     }
+}
 
-    #colorPalette {
-        padding: 10px;
-        border: 1px solid #d0d0d0;
-        margin: 5px;
-        border-radius: 100%;
-        outline: none;
-    }
+.color {
+    width: 0;
+    height: 0;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    margin: 5px;
+    border-radius: 100%;
+    outline: none;
 }
 
 .actionButton {
@@ -103,4 +52,8 @@ mat-form-field {
     mat-error {
         margin-bottom: 10px;
     }
+}
+
+.mat-typography {
+    overflow-x: hidden;
 }
