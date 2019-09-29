@@ -1,6 +1,6 @@
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2, Type } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -59,87 +59,79 @@ describe('BrushToolService', () => {
     });
 
     it('createSVGWrapper should call setAttribute 2 times in parent and appendChild twice (once in parent)', () => {
-        // Arrange
         spyOn(service, 'createFilter').and.returnValue(createMockFilter());
         const spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
-        // Act
+
         service.createSVGWrapper();
-        // Assert
+
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
         expect(spyRendererAppendChild).toHaveBeenCalledTimes(2);
     });
 
     it('createSVGWrapper should call createFilter', () => {
-        // Arrange
+
         const spyCreateFilter = spyOn(service, 'createFilter').and.returnValue(createMockFilter());
-        // Act
+
         service.createSVGWrapper();
-        // Assert
+
         expect(spyCreateFilter).toHaveBeenCalled();
     });
 
     it('when patternId = 1 createFilter should call createElement with feGaussianBlur and setAttribute with stdDeviation', () => {
-        // Arrange
         const patternId = 1;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnCreateElement).toHaveBeenCalledWith('feGaussianBlur', SVG_NS);
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'stdDeviation', '3');
     });
 
     it('when patternId !== 1 createFilter should call createElement with feTurbulence and feDisplacementMap', () => {
-        // Arrange
         const patternId = 100;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnCreateElement).toHaveBeenCalledWith('feTurbulence', SVG_NS);
         expect(spyOnCreateElement).toHaveBeenCalledWith('feDisplacementMap', SVG_NS);
     });
 
     it('when patternId = 2 setAttribute is called with baseFrequency 0.1 0.9', () => {
-        // Arrange
         const patternId = 2;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.1 0.9');
     });
 
     it('when patternId = 3 setAttribute is called with baseFrequency 0.01 0.57', () => {
-        // Arrange
         const patternId = 3;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.01 0.57');
     });
 
     it('when patternId = 4 setAttribute is called with baseFrequency 0.05', () => {
-        // Arrange
         const patternId = 4;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.05');
     });
 
     it('when patternId = 5 setAttribute is called with baseFrequency 0.9', () => {
-        // Arrange
         const patternId = 5;
-        // Act
+
         service.createFilter(patternId);
-        // Assert
+
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.9');
     });
 
     it('when createSVGCircle it should call super.getDrawStackLength', () => {
-        // Arrange
         const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
-        // Act
+
         service.createSVGCircle(0, 0);
-        // Assert
+
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
     });
 

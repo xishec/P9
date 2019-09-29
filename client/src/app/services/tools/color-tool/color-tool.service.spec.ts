@@ -159,7 +159,7 @@ fdescribe('ColorToolService', () => {
         expect(service.primaryColor.value).toEqual(service.secondaryColor.value);
     });
 
-    it('#switchPrimarySecondary should change secondaryColor to primaryColor after colors switch', () => {
+    it('#switchPrimarySecondary should change secondaryColor to secondaryColor after colors switch', () => {
         service.switchPrimarySecondary();
         expect(service.secondaryColor.value).toEqual(service.primaryColor.value);
     });
