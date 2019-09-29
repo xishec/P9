@@ -3,7 +3,7 @@
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" value="Sélection">
             <mat-button-toggle
                 *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
-                matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }}"
+                matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }} {{ TOOL_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
                 (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
@@ -16,7 +16,7 @@
         <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
             <mat-button-toggle
                 *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
-                matTooltip="{{ FILE_BUTTON_INFO.tooltipName }}"
+                matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
                 (click)="onChangeTool(FILE_BUTTON_INFO.tooltipName)"
             >

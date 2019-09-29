@@ -1,124 +1,64 @@
-<div id="mask" *ngIf="displayNewDrawingModalWindow">
-    <div id="window" [ngStyle]="setWindowHeight()">
-        <h1 id="title">Création d'un nouveau dessin</h1>
-        <form [formGroup]="drawingModalForm" (ngSubmit)="onSubmit()">
-            <div class="formGroup">
-                <div id="userColor">
-                    <span> Couleur de fond :</span>
-                    <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
-                    <br />
-                </div>
-                <div id="colorButtons">
-                    <button
-                        class="color"
-                        type="button"
-                        *ngFor="let color of colors; let i = index"
-                        [ngStyle]="getColorIcon(color)"
-                        (click)="onChangeColor(i)"
-                    ></button>
-                    <img
-                        draggable="false"
-                        src="../../../assets/color-wheel.png"
-                        class="color"
-                        alt="Color Wheel"
-                        (click)="onClickColorWheel()"
-                    />
-                </div>
-                <app-color-picker *ngIf="displayColorWheel" (click)="onClickColorPicker()"></app-color-picker>
-
-                <mat-form-field class="medium">
-                    <input
-                        autocomplete="off"
-                        matInput
-                        type="text"
-                        placeholder="Hex"
-                        formControlName="hex"
-                        (input)="onUserColorHex()"
-                    />
-                    <mat-error>Ce code de couleur n'est pas valide!</mat-error>
-                    <span matPrefix>#</span>
-                </mat-form-field>
-
-                <mat-form-field class="small" (input)="onUserColorRGB()">
-                    <input
-                        autocomplete="off"
-                        matInput
-                        type="number"
-                        placeholder="R:"
-                        formControlName="R"
-                        min="0"
-                        max="255"
-                    />
-                    <mat-error>R doit être entre 0 et 255!</mat-error>
-                </mat-form-field>
-                <mat-form-field class="small" (input)="onUserColorRGB()">
-                    <input
-                        autocomplete="off"
-                        matInput
-                        type="number"
-                        placeholder="G:"
-                        formControlName="G"
-                        min="0"
-                        max="255"
-                    />
-                    <mat-error>G doit être entre 0 et 255!</mat-error>
-                </mat-form-field>
-                <mat-form-field class="small" (input)="onUserColorRGB()">
-                    <input
-                        autocomplete="off"
-                        matInput
-                        type="number"
-                        placeholder="B:"
-                        formControlName="B"
-                        min="0"
-                        max="255"
-                    />
-                    <mat-error>B doit être entre 0 et 255!</mat-error>
-                </mat-form-field>
-                <mat-form-field class="small" (input)="onUserColorRGB()">
-                    <input
-                        autocomplete="off"
-                        matInput
-                        type="number"
-                        placeholder="A:"
-                        formControlName="A"
-                        step="0.1"
-                        min="0"
-                        max="1"
-                    />
-                    <mat-error>Cette valeur doit être entre 0 et 1!</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="formGroup">
-                <mat-form-field>
-                    <input autocomplete="off" matInput type="number" placeholder="Largeur" formControlName="width" />
-                    <span matSuffix>px</span>
-                    <mat-error>La largeur doit être entre 0 et 10000!</mat-error>
-                </mat-form-field>
-
-                <mat-form-field>
-                    <input autocomplete="off" matInput type="number" placeholder="Hauteur" formControlName="height" />
-                    <span matSuffix>px</span>
-                    <mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div id="confirmation" [hidden]="submitCount === 0">
-                <mat-error>
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Un dessin existe déja dans votre zone de travail!
-                    <i class="fas fa-exclamation-triangle"></i>
-                </mat-error>
-                <mat-checkbox color="warn" formControlName="confirm" required>
-                    Je confirme que je veux créer un nouveau dessin.
-                </mat-checkbox>
-            </div>
-
-            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-            <button class="actionButton" mat-stroked-button type="submit" [disabled]="drawingModalForm.invalid">
-                Créer!
-            </button>
-        </form>
+<h1 mat-dialog-title>Création d'un nouveau dessin</h1>
+<mat-dialog-content class="mat-typography" [formGroup]="drawingModalForm">
+    <div id="userColor">
+        <span> Couleur de fond :</span>
+        <button id="bigColor" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+        <br />
     </div>
-</div>
+
+    <app-color-picker></app-color-picker>
+    <app-color-numeric-values></app-color-numeric-values>
+    <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
+
+    <div class="formGroup">
+        <mat-form-field>
+            <input
+                matInput
+                type="number"
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                placeholder="Largeur"
+                formControlName="width"
+            />
+            <span matSuffix>px</span>
+            <mat-error>La largeur doit être entre 0 et 10000!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                type="number"
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                placeholder="Hauteur"
+                formControlName="height"
+            />
+            <span matSuffix>px</span>
+            <mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div id="confirmation" [hidden]="blankWorkZone">
+        <mat-error>
+            <i class="fas fa-exclamation-triangle"></i>
+            Un dessin existe déja dans votre zone de travail!
+            <i class="fas fa-exclamation-triangle"></i>
+        </mat-error>
+        <mat-checkbox color="warn" formControlName="confirm" required>
+            Je confirme que je veux créer un nouveau dessin.
+        </mat-checkbox>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions id="footer" align="end">
+    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+    <button
+        class="actionButton"
+        mat-stroked-button
+        type="submit"
+        [mat-dialog-close]="true"
+        [disabled]="drawingModalForm.invalid"
+        (click)="onSubmit()"
+    >
+        Créer!
+    </button>
+</mat-dialog-actions>
