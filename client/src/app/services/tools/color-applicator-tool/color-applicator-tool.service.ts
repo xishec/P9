@@ -1,5 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -9,15 +11,15 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class ColorApplicatorToolService extends AbstractToolService {
-    private currentTargetPosition = 0;
+    private currentStackTarget: StackTargetInfo;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
 
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
-        this.drawStack.currentStackTargetPosition.subscribe((targetPosition) => {
-            this.currentTargetPosition = targetPosition;
+        this.drawStack.currentStackTarget.subscribe((stackTarget) => {
+            this.currentStackTarget = stackTarget;
         });
     }
 
@@ -35,18 +37,34 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        if (this.drawStack.getElementByPosition(this.currentTargetPosition) !== undefined) {
+        if (this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined) {
             switch (button) {
                 case Mouse.LeftButton:
                     this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentTargetPosition),
+                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         'fill',
                         this.primaryColor,
                     );
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                            'stroke',
+                            this.primaryColor,
+                        );
+                    }
                     break;
                 case Mouse.RightButton:
+                    if (
+                        this.currentStackTarget.toolName === ToolName.Brush ||
+                        this.currentStackTarget.toolName === ToolName.Pencil
+                    ) {
+                        break;
+                    }
                     this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentTargetPosition),
+                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         'stroke',
                         this.secondaryColor,
                     );
