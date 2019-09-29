@@ -8,6 +8,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { Color } from 'src/classes/Color';
+import { SIDEBAR_WIDTH } from 'src/constants/constants';
 
 @Component({
     selector: 'app-work-zone',
@@ -59,7 +60,7 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingInfo.height = window.innerHeight;
-        this.drawingInfo.width = window.innerWidth;
+        this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = new Color('ffffff00');
         this.empty = true;
     }

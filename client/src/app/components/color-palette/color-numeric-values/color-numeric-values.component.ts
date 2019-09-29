@@ -25,12 +25,12 @@ export class ColorNumericValuesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.setColorNumericValues(this.previewColor);
         this.colorToolService.selectedColorType.subscribe(() => {
-            this.setColorNumericValues(this.previewColor);
+            this.setColorNumericValues();
         });
         this.colorToolService.previewColor.subscribe((previewColor: string) => {
-            this.changeColor(previewColor);
+            this.previewColor = previewColor;
+            this.setColorNumericValues();
         });
     }
 
@@ -44,41 +44,39 @@ export class ColorNumericValuesComponent implements OnInit {
         });
     }
 
-    changeColor(previewColor: string): void {
-        this.setColorNumericValues(previewColor);
+    setColorNumericValues(): void {
+        this.setHexValues();
+        this.setRGBValues();
     }
 
-    setColorNumericValues(previewColor: string): void {
-        this.setHexValues(previewColor);
-        this.setRGBValues(previewColor);
+    setHexValues(): void {
+        this.colorNumericValuesForm.controls.hex.setValue(this.previewColor.slice(0, 6));
     }
 
-    setHexValues(previewColor: string): void {
-        this.colorNumericValuesForm.controls.hex.setValue(previewColor.slice(0, 6));
-    }
-
-    setRGBValues(previewColor: string): void {
-        this.colorNumericValuesForm.controls.R.setValue(parseInt(previewColor.slice(0, 2), 16));
-        this.colorNumericValuesForm.controls.G.setValue(parseInt(previewColor.slice(2, 4), 16));
-        this.colorNumericValuesForm.controls.B.setValue(parseInt(previewColor.slice(4, 6), 16));
-        if (previewColor.length === 8) {
-            this.colorNumericValuesForm.controls.A.setValue((parseInt(previewColor.slice(6, 8), 16) / 255).toFixed(1));
-        }
+    setRGBValues(): void {
+        this.colorNumericValuesForm.controls.R.setValue(parseInt(this.previewColor.slice(0, 2), 16));
+        this.colorNumericValuesForm.controls.G.setValue(parseInt(this.previewColor.slice(2, 4), 16));
+        this.colorNumericValuesForm.controls.B.setValue(parseInt(this.previewColor.slice(4, 6), 16));
+        this.colorNumericValuesForm.controls.A.setValue((parseInt(this.previewColor.slice(6, 8), 16) / 255).toFixed(1));
     }
 
     onUserHexInput(): void {
-        this.changeColor(this.colorNumericValuesForm.value.hex);
+        let opacity = this.colorToolService.getPreviewColorOpacityHex();
+        this.previewColor = this.colorNumericValuesForm.value.hex + opacity;
+        this.setColorNumericValues();
+        this.colorToolService.changePreviewColor(this.previewColor);
     }
 
     onUserColorRGBInput(): void {
-        const newColorinHex = this.colorToolService.translateRGBToHex(
+        const previewColor = this.colorToolService.translateRGBToHex(
             this.colorNumericValuesForm.value.R,
             this.colorNumericValuesForm.value.G,
             this.colorNumericValuesForm.value.B,
             this.colorNumericValuesForm.value.A,
         );
-        this.changeColor(newColorinHex);
-        this.colorToolService.changePreviewColor(newColorinHex);
+        this.previewColor = previewColor;
+        this.setColorNumericValues();
+        this.colorToolService.changePreviewColor(this.previewColor);
     }
 
     onFocus() {
