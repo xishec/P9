@@ -46,6 +46,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
         this.drawingModalWindowService.currentBlankDrawingZone.subscribe((blankWorkZone) => {
             this.blankWorkZone = blankWorkZone;
+            this.drawingModalForm.controls.confirm.setValue(blankWorkZone);
         });
     }
 

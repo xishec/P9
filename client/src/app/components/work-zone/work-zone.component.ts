@@ -43,6 +43,7 @@ export class WorkZoneComponent implements OnInit {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
         });
+
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
@@ -51,6 +52,7 @@ export class WorkZoneComponent implements OnInit {
             this.toolName = toolName;
             this.currentTool = this.toolSelector.currentTool;
         });
+
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color.hex = backgroundColor;
         });
@@ -68,6 +70,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     changeStyle(): ReturnStyle {
+
         return {
             fill: '#' + this.drawingInfo.color.hex,
             'fill-opacity': this.drawingInfo.opacity,
