@@ -55,10 +55,15 @@ fdescribe('BrushAttributesComponent', () => {
     });
 
     it(`#onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
-        event.value = Thickness.Default;
+        event.value = Thickness.Default - 1;
         component.onSliderChange(event);
 
-        expect(component.brushAttributesForm.value.thickness).toBe(Thickness.Default);
+        let s = spyOn(component, 'onThicknessChange').and.returnValue();
+
+        expect(component.brushAttributesForm.value.thickness).toBe(Thickness.Default - 1);
+        expect(s).toHaveBeenCalled();
+
+
     });
 
     it(`#onSliderChange should not change the value of thickness if event value < ${Thickness.Min}`, () => {
@@ -98,26 +103,30 @@ fdescribe('BrushAttributesComponent', () => {
 
     it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
         let spy = spyOn(attributesManageService, 'changeThickness').and.returnValue();
+        component.brushAttributesForm.controls.thickness.setValue((Thickness.Max + Thickness.Min)/2);
+        
         component.onThicknessChange();
         expect(spy).toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should not change thickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
-        const oldValue = component.brushAttributesForm.value.thickness;
-
+    it(`#onThicknessChange should not call chanegeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(Thickness.Max + 1);
         component.onThicknessChange();
 
-        expect(attributesManageService.thickness.getValue()).toBe(oldValue);
+        let spyOnChangeThicknesAttributeManager = spyOn(attributesManageService, 'changeThickness').and.returnValue();
+
+
+        expect(spyOnChangeThicknesAttributeManager).not.toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should not change thickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
-        const oldValue = component.brushAttributesForm.value.thickness;
+    it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(Thickness.Min - 1);
 
         component.onThicknessChange();
 
-        expect(attributesManageService.thickness.getValue()).toBe(oldValue);
+        let spyOnChangeThicknesAttributeManager = spyOn(attributesManageService, 'changeThickness').and.returnValue();
+
+        expect(spyOnChangeThicknesAttributeManager).not.toHaveBeenCalled();
     });
 
     it('#onFocus should call changeIsOnInput when user in on focus', () => {
@@ -133,7 +142,7 @@ fdescribe('BrushAttributesComponent', () => {
     });
 
     it('#change should call changeStyle when user select a brush style', () => {
-        let spy = spyOn(attributesManageService, 'changeStyle').and.returnValues();
+        let spy = spyOn(attributesManageService, 'changeStyle').and.returnValue();
         component.change(1);
         expect(spy).toHaveBeenCalled();
     });
