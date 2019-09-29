@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DrawStackService {
-    private drawStack: SVGGElement[];
-    private targetStackElementPosition: BehaviorSubject<number> = new BehaviorSubject(0);
-    currentStackTargetPosition = this.targetStackElementPosition.asObservable();
+    private drawStack: SVGGElement[] = new Array<SVGGElement>();
+    private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
+    currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
 
-    constructor() {
-        this.drawStack = new Array<SVGGElement>();
-    }
+    // tslint:disable-next-line: no-empty
+    constructor() {}
 
-    changeTargetElement(targetPositionInStack: number): void {
-        this.targetStackElementPosition.next(targetPositionInStack);
+    changeTargetElement(stackTarget: StackTargetInfo): void {
+        this.stackTarget.next(stackTarget);
     }
 
     getElementByPosition(elementPosition: number): SVGGElement {

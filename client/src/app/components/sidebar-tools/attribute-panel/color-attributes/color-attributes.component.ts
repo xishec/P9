@@ -7,7 +7,6 @@ interface ColorStyle {
     backgroundColor: string;
     border?: string;
     transform?: string;
-    borderStyle?: string;
 }
 @Component({
     selector: 'app-color-attributes',

@@ -15,6 +15,7 @@
             ></mat-slider>
             <mat-form-field class="small">
                 <input
+                    autocomplete="off"
                     (focus)="onFocus()"
                     (focusout)="onFocusOut()"
                     matInput
@@ -31,9 +32,15 @@
                 <mat-label>
                     Style de pinceau
                 </mat-label>
-                <mat-select formControlName="style" (selectionChange)="change($event.value)">
+                <mat-select
+                    formControlName="style"
+                    (selectionChange)="change($event.value)"
+                    [(value)]="selected"
+                    [ngClass]="selected ? 'class' + selected : 'class1'"
+                >
                     <mat-option *ngFor="let style of styles" [value]="style">
                         {{ style }}
+                        <img height="40" src="/assets/brush{{ style }}.png" />
                     </mat-option>
                 </mat-select>
             </mat-form-field>
