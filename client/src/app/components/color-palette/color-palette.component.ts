@@ -31,11 +31,7 @@ export class ColorPaletteComponent implements OnInit {
         });
     }
     onClickColorQueueButton(color: string): void {
-        this.changeColor(color);
-    }
-
-    changeColor(previewColor: string): void {
-        this.previewColor = previewColor.slice(0, 6);
+        this.previewColor = color;
     }
 
     onSubmit(): void {
@@ -51,7 +47,6 @@ export class ColorPaletteComponent implements OnInit {
     }
 
     getUserColorIcon(): IconStyle {
-
         return {
             backgroundColor: '#' + this.previewColor,
         };
