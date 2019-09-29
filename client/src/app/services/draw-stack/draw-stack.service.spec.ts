@@ -5,7 +5,6 @@ const NB_PUSH = 3;
 describe("DrawStackService", () => {
     let service: DrawStackService;
     const mockSVGGElement: any = {};
-    //beforeEach(() => TestBed.configureTestingModule({}));
 
     beforeEach(() => {
         service = new DrawStackService();
