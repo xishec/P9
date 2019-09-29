@@ -2,10 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { COLORS, ColorType } from 'src/constants/color-constants';
+import { ColorType } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { Color } from '../../../classes/Color';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
 
@@ -18,9 +16,7 @@ export class DrawingModalWindowComponent implements OnInit {
     drawingModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    readonly colors: Color[] = COLORS;
-    previewColor: Color = new Color();
-
+    previewColor: string;
     blankWorkZone = true;
     displayNewDrawingModalWindow = false;
 
@@ -35,15 +31,16 @@ export class DrawingModalWindowComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
+
         this.colorToolService.changeSelectedColorType(ColorType.backgroundColor);
+        this.previewColor = this.colorToolService.backgroundColor.value;
+
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
         });
-        this.previewColor.hex = this.colorToolService.backgroundColor.value;
         this.colorToolService.previewColor.subscribe((previewColor) => {
-            this.previewColor.hex = previewColor;
+            this.previewColor = previewColor;
         });
-
         this.drawingModalWindowService.currentBlankDrawingZone.subscribe((blankWorkZone) => {
             this.blankWorkZone = blankWorkZone;
             this.drawingModalForm.controls.confirm.setValue(blankWorkZone);
@@ -52,11 +49,6 @@ export class DrawingModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.drawingModalForm = this.formBuilder.group({
-            hex: ['ffffff', [Validators.pattern('^[0-9A-Fa-f]{6}$')]],
-            R: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
-            G: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
-            B: ['255', [Validators.required, Validators.min(0), Validators.max(255)]],
-            A: [1, [Validators.required, Validators.min(0), Validators.max(1)]],
             confirm: this.blankWorkZone,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
@@ -69,12 +61,10 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.height,
         );
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
-        this.colorToolService.changeBackgroundColor(this.previewColor.hex);
+        this.colorToolService.changeBackgroundColor(this.previewColor);
 
         this.drawingModalWindowService.setBlankDrawingZone(false);
-        // this.colorToolService.changeColorOnFocus(this.previewColor.hex);
-        this.colorToolService.addColorToQueue(this.previewColor.hex);
-        // this.colorToolService.changeSelectedColorType(undefined);
+        this.colorToolService.addColorToQueue(this.previewColor);
     }
 
     @HostListener('window:resize', ['$event'])
@@ -86,25 +76,15 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onCancel(): void {
-        this.colorToolService.changeCurrentShowColorPalette(false);
-        this.colorToolService.changeSelectedColorType(undefined);
         this.dialogRef.close();
     }
 
-    getColorIcon(color: Color): IconStyle {
-        return { backgroundColor: '#' + color.hex, opacity: '1' };
-    }
-
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
+        return { backgroundColor: '#' + this.previewColor, opacity: String(this.drawingModalForm.value.A) };
     }
 
-    onClickColorQueueButton(color: string): void {
-        this.changeColor(color);
-    }
-
-    changeColor(previewColor: string): void {
-        this.previewColor.hex = previewColor.slice(0, 6);
+    onClickColorQueueButton(previewColor: string): void {
+        this.previewColor = previewColor;
     }
 }
 
