@@ -155,13 +155,15 @@ fdescribe('ColorToolService', () => {
     });
 
     it('#switchPrimarySecondary should change primaryColor to secondaryColor after colors switch', () => {
+        let primaryColorTmp = service.primaryColor.value;
         service.switchPrimarySecondary();
-        expect(service.primaryColor.value).toEqual(service.secondaryColor.value);
+        expect(primaryColorTmp).toEqual(service.secondaryColor.value);
     });
 
     it('#switchPrimarySecondary should change secondaryColor to secondaryColor after colors switch', () => {
+        let secondaryColorTmp = service.secondaryColor.value;
         service.switchPrimarySecondary();
-        expect(service.secondaryColor.value).toEqual(service.primaryColor.value);
+        expect(secondaryColorTmp).toEqual(service.primaryColor.value);
     });
 
     it(`#getPreviewColorOpacityHex should return ${previewColor.value.slice(6, 8)} the opacity of previewColor`, () => {
