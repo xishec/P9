@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { COLORS, DEFAULT_COLOR } from 'src/constants/color-constants';
+import { COLORS, ColorType } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { Color } from '../../../classes/Color';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
@@ -20,9 +20,9 @@ export class DrawingModalWindowComponent implements OnInit {
 
     readonly colors: Color[] = COLORS;
     previewColor: Color = new Color();
+
     submitCount = 0;
     displayNewDrawingModalWindow = false;
-    displayColorWheel = false;
 
     constructor(
         formBuilder: FormBuilder,
@@ -35,13 +35,9 @@ export class DrawingModalWindowComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
+        this.colorToolService.changeSelectedColor(ColorType.backgroundColor);
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
             this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
-        this.colorToolService.previewColor.subscribe((previewColor) => {
-            if (this.displayColorWheel) {
-                this.previewColor.hex = previewColor;
-            }
         });
         this.colorToolService.backgroundColor.subscribe((backgroundColor) => {
             this.previewColor.hex = backgroundColor;
@@ -73,8 +69,10 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.changeBackgroundColor(this.previewColor.hex);
 
         this.submitCount++;
-        this.initializeForm();
-        this.previewColor = { hex: DEFAULT_COLOR };
+
+        this.colorToolService.changeColorOnFocus(this.previewColor.hex);
+        this.colorToolService.addColorToQueue(this.previewColor.hex);
+        this.colorToolService.changeSelectedColor(undefined);
     }
 
     @HostListener('window:resize', ['$event'])
@@ -84,7 +82,10 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.controls.height.setValue(window.innerHeight);
         }
     }
+
     onCancel(): void {
+        this.colorToolService.changeCurrentShowColorPalette(false);
+        this.colorToolService.changeSelectedColor(undefined);
         this.displayNewDrawingModalWindow = false;
         this.dialogRef.close();
     }
@@ -92,22 +93,25 @@ export class DrawingModalWindowComponent implements OnInit {
     getColorIcon(color: Color): IconStyle {
         return { backgroundColor: '#' + color.hex, opacity: '1' };
     }
+
     getUserColorIcon(): IconStyle {
         return { backgroundColor: '#' + this.previewColor.hex, opacity: String(this.drawingModalForm.value.A) };
     }
 
     setWindowHeight(): HeightStyle {
         if (this.submitCount === 0) {
-            if (this.displayColorWheel) {
-                return { height: '650px' };
-            }
             return { height: '450px' };
         } else {
-            if (this.displayColorWheel) {
-                return { height: '750px' };
-            }
             return { height: '510px' };
         }
+    }
+
+    onClickColorQueueButton(color: string): void {
+        this.changeColor(color);
+    }
+
+    changeColor(previewColor: string): void {
+        this.previewColor.hex = previewColor.slice(0, 6);
     }
 }
 
