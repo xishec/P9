@@ -10,7 +10,7 @@ import {
     DEFAULT_WHITE,
 } from 'src/constants/color-constants';
 
-fdescribe('ColorToolService', () => {
+describe('ColorToolService', () => {
     let service: ColorToolService;
     let injector: TestBed;
     let colorQueue: BehaviorSubject<string[]>;

@@ -6,7 +6,7 @@ import { ColorToolService } from '../../../services/tools/color-tool/color-tool.
 
 const MOCK_COLOR = '#000000';
 
-fdescribe('ColorPickerComponent', () => {
+describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
     let fixture: ComponentFixture<ColorPickerComponent>;
 
