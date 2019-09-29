@@ -82,45 +82,127 @@ export class AppComponent implements OnInit {
         event.preventDefault();
     }
 
-    @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
-        event.preventDefault();
-        if (this.shouldAllowShortcut()) {
-            // will be implemented later
-        }
-    }
-
+    // File option
     @HostListener('window:keydown.control.o', ['$event']) onControlO(event: KeyboardEvent) {
         event.preventDefault();
         if (this.shouldAllowShortcut()) {
             this.toolSelectorService.changeTool(ToolName.NewDrawing);
         }
     }
+    @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
+        event.preventDefault();
+        if (this.shouldAllowShortcut()) {
+            // Will be implemented later
+        }
+    }
+    @HostListener('window:keydown.control.g', ['$event']) onControlG(event: KeyboardEvent) {
+        event.preventDefault();
+        if (this.shouldAllowShortcut()) {
+            // Will be implemented later
+        }
+    }
+    @HostListener('window:keydown.control.g', ['$event']) onControlE(event: KeyboardEvent) {
+        event.preventDefault();
+        if (this.shouldAllowShortcut()) {
+            // Will be implemented later
+        }
+    }
 
+    // Selection
+    // Will be implemented later
+
+    // Choose a tool
     @HostListener('window:keydown.c', ['$event']) onC(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Pencil);
         }
     }
-
-    @HostListener('window:keydown.w', ['$event']) onP(event: KeyboardEvent) {
+    @HostListener('window:keydown.w', ['$event']) onW(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Brush);
         }
     }
-
+    @HostListener('window:keydown.p', ['$event']) onP(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Quill);
+        }
+    }
+    @HostListener('window:keydown.y', ['$event']) onY(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Pen);
+        }
+    }
+    @HostListener('window:keydown.a', ['$event']) onA(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.SprayCan);
+        }
+    }
     @HostListener('window:keydown.1', ['$event']) on1(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.Rectangle);
         }
     }
-
+    @HostListener('window:keydown.2', ['$event']) on2(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Ellipsis);
+        }
+    }
+    @HostListener('window:keydown.3', ['$event']) on3(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Polygon);
+        }
+    }
+    @HostListener('window:keydown.l', ['$event']) onL(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Line);
+        }
+    }
+    @HostListener('window:keydown.t', ['$event']) onT(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Text);
+        }
+    }
     @HostListener('window:keydown.r', ['$event']) onR(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
             this.toolSelectorService.changeTool(ToolName.ColorApplicator);
         }
     }
+    @HostListener('window:keydown.b', ['$event']) onB(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Fill);
+        }
+    }
+    @HostListener('window:keydown.e', ['$event']) onE(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Eraser);
+        }
+    }
+    @HostListener('window:keydown.i', ['$event']) onI(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Dropper);
+        }
+    }
+    @HostListener('window:keydown.s', ['$event']) onS(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.toolSelectorService.changeTool(ToolName.Selection);
+        }
+    }
+
+    // Workzone options
+    // Will be implemented later
 }
