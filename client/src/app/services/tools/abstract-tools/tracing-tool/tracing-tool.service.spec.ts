@@ -2,11 +2,11 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { Mouse, Keys } from 'src/constants/constants';
-import {  createMouseEvent, createMockSVGCircle, createKeyBoardEvent } from '../test-helpers'; // , createMouseEvent,
-import { TracingToolService } from './tracing-tool.service';
+import { Keys, Mouse } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
+import {  createKeyBoardEvent, createMockSVGCircle, createMouseEvent } from '../test-helpers'; // , createMouseEvent,
+import { TracingToolService } from './tracing-tool.service';
 
 const MOCK_X = 10;
 const MOCK_Y = 10;
@@ -48,12 +48,12 @@ describe('TracingToolService', () => {
                 provide: AttributesManagerService,
                 useValue: {
                     currentThickness: () => MOCK_THICKNESS,
-                }
+                },
             }, {
                 provide: ColorToolService,
                 useValue: {
                     currentPrimaryColor: () => MOCK_COLOR,
-                }
+                },
             }],
         });
 
@@ -64,7 +64,7 @@ describe('TracingToolService', () => {
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        
+
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
     });
@@ -150,7 +150,7 @@ describe('TracingToolService', () => {
         // Assert
         expect(spyOnCreateElement).toHaveBeenCalledBefore(spyOnSetAttribute);
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
-    })
+    });
 
     it('when updatePreviewCirlce then renderer.setAttribute is called twice', () => {
         // Arrange

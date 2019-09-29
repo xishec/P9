@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from "@angular/core/testing";
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { PencilToolService } from "./pencil-tool.service";
-import { Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { createMockSVGCircle } from '../abstract-tools/test-helpers';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { PencilToolService } from './pencil-tool.service';
 
 const STACK_LENGTH = 1;
 const X = 10;
 const Y = 10;
 
-describe("PencilToolService", () => {
+describe('PencilToolService', () => {
     let injector: TestBed;
     let service: PencilToolService;
     // let mockDrawStackService: DrawStackService;
@@ -26,12 +26,12 @@ describe("PencilToolService", () => {
                 provide: ElementRef,
                 useValue: {
                     nativeElement : {},
-                }, 
+                },
             }, {
                 provide: DrawStackService,
                 useValue: {
                     getDrawStackLength: () => STACK_LENGTH,
-                }
+                },
             }],
         });
 
@@ -41,16 +41,16 @@ describe("PencilToolService", () => {
         // mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
     });
 
-    it("should be created", () => {
+    it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
     it('when createSVGCirle it should call super.createSVGCircle', () => {
-        let spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
-        
+        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+
         service.createSVGCircle(X, Y);
 
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
-        
+
     });
 });

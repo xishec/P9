@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from "@angular/core/testing";
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { BrushToolService } from "./brush-tool.service";
-import { Renderer2, ElementRef, Type } from "@angular/core";
-import { DrawStackService } from "../../draw-stack/draw-stack.service";
-import { createMockFilter, createMockSVGCircle } from '../abstract-tools/test-helpers';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { createMockFilter, createMockSVGCircle } from '../abstract-tools/test-helpers';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { BrushToolService } from './brush-tool.service';
 
 const STACK_LENGTH = 1;
 const MOCK_FILTER = createMockFilter();
 
-describe("BrushToolService", () => {
+describe('BrushToolService', () => {
     let injector: TestBed;
     let service: BrushToolService;
     let rendererMock: Renderer2;
@@ -54,14 +54,14 @@ describe("BrushToolService", () => {
         spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(MOCK_FILTER);
     });
 
-    it("should be created", () => {
+    it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
     it('createSVGWrapper should call setAttribute 2 times in parent and appendChild twice (once in parent)', () => {
         // Arrange
         spyOn(service, 'createFilter').and.returnValue(createMockFilter());
-        let spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
+        const spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
         // Act
         service.createSVGWrapper();
         // Assert
@@ -71,7 +71,7 @@ describe("BrushToolService", () => {
 
     it('createSVGWrapper should call createFilter', () => {
         // Arrange
-        let spyCreateFilter = spyOn(service, 'createFilter').and.returnValue(createMockFilter());
+        const spyCreateFilter = spyOn(service, 'createFilter').and.returnValue(createMockFilter());
         // Act
         service.createSVGWrapper();
         // Assert
@@ -136,7 +136,7 @@ describe("BrushToolService", () => {
 
     it('when createSVGCircle it should call super.getDrawStackLength', () => {
         // Arrange
-        let spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
         // Act
         service.createSVGCircle(0, 0);
         // Assert

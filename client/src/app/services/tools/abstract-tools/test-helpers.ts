@@ -15,7 +15,7 @@ export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
         key: keyPressed,
     };
     return keyboardEvent as unknown as KeyboardEvent;
-}
+};
 
 export const createMockSVGCircle = (): any => {
     const mockCircle = {
@@ -29,7 +29,7 @@ export const createMockFilter = (): SVGFilterElement => {
 
     };
     return mockFilter as unknown as SVGFilterElement;
-}
+};
 
 export class MockElementRef extends ElementRef {
     nativeElement: {
