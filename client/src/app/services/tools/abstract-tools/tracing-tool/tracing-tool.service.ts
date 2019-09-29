@@ -29,6 +29,9 @@ export abstract class TracingToolService extends AbstractToolService {
         super();
     }
 
+    getIsDrawing = () => this.isDrawing;
+    getCurrentPath = () => this.currentPath;
+
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
@@ -38,17 +41,20 @@ export abstract class TracingToolService extends AbstractToolService {
 
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
-        this.colorToolService.currentPrimaryColor.subscribe((currentColor: string) => {
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColor = currentColor;
         });
     }
+
+    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     onMouseDown(e: MouseEvent): void {
         if (e.button === Mouse.LeftButton) {
             this.isDrawing = true;
             this.createSVGWrapper();
-            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+            const x = this.getXPos(e.clientX);
+            const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
             this.createSVGCircle(x, y);
             this.svgPreviewCircle = this.createSVGCircle(x, y);
@@ -57,9 +63,9 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     onMouseMove(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
-            const x = e.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-            const y = e.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        if (e.button === Mouse.LeftButton && this.getIsDrawing()) {
+            const x = this.getXPos(e.clientX);
+            const y = this.getYPos(e.clientY);
             this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
             this.updatePreviewCircle(x, y);
@@ -67,7 +73,7 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     onMouseUp(e: MouseEvent): void {
-        if (e.button === Mouse.LeftButton && this.isDrawing) {
+        if (e.button === Mouse.LeftButton && this.getIsDrawing()) {
             this.isDrawing = false;
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
