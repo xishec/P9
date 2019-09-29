@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BrushAttributesComponent } from './brush-attributes.component';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange, MatDialogModule } from '@angular/material';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { FormBuilder } from '@angular/forms';
@@ -19,7 +19,7 @@ fdescribe('BrushAttributesComponent', () => {
         TestBed.configureTestingModule({
             declarations: [BrushAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder],
+            providers: [FormBuilder, MatDialogModule],
         }).overrideComponent(BrushAttributesComponent, {
             set: {
                 providers: [
