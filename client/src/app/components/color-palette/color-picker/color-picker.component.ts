@@ -11,7 +11,7 @@ import { ColorToolService } from '../../../services/tools/color-tool/color-tool.
 export class ColorPickerComponent implements OnInit {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    obscurity = 0;
+    obscurity: number = 0;
 
     @ViewChild('canvas_picker', { static: true }) canvasPicker: ElementRef<HTMLCanvasElement>;
 
