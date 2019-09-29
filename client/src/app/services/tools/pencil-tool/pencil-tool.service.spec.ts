@@ -1,8 +1,8 @@
+import { ElementRef, Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2 } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { createMockSVGCircle } from '../../../../classes/test-helpers';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { PencilToolService } from './pencil-tool.service';
 
@@ -13,7 +13,7 @@ const Y = 10;
 describe('PencilToolService', () => {
     let injector: TestBed;
     let service: PencilToolService;
-    // let mockDrawStackService: DrawStackService;
+
     beforeEach(() =>  {
         TestBed.configureTestingModule({
             providers: [PencilToolService,
@@ -37,8 +37,6 @@ describe('PencilToolService', () => {
 
         injector = getTestBed();
         service = injector.get(PencilToolService);
-
-        // mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
     });
 
     it('should be created', () => {
