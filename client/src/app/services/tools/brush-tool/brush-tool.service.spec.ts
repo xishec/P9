@@ -10,7 +10,7 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 const STACK_LENGTH = 1;
 const MOCK_FILTER = createMockFilter();
 
-fdescribe("BrushToolService", () => {
+describe("BrushToolService", () => {
     let injector: TestBed;
     let service: BrushToolService;
     let rendererMock: Renderer2;

@@ -10,7 +10,7 @@ const STACK_LENGTH = 1;
 const X = 10;
 const Y = 10;
 
-fdescribe("PencilToolService", () => {
+describe("PencilToolService", () => {
     let injector: TestBed;
     let service: PencilToolService;
     // let mockDrawStackService: DrawStackService;

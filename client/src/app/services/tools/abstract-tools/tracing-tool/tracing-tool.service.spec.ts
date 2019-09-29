@@ -15,7 +15,7 @@ const MOCK_COLOR = '#000000';
 const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
 const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(Keys.Shift);
 
-fdescribe('TracingToolService', () => {
+describe('TracingToolService', () => {
     let injector: TestBed;
     let service: TracingToolService;
     let rendererMock: Renderer2;
