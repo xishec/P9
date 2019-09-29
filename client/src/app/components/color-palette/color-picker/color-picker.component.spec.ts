@@ -1,8 +1,8 @@
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { ColorPickerComponent } from './color-picker.component';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { ColorPickerComponent } from './color-picker.component';
 
 const MOCK_COLOR = '#000000';
 
