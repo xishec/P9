@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
-import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
-    COLORS,
     ColorType,
     MAX_RGB_NUMBER,
     MIN_RGB_NUMBER,
     MAX_NUMBER_OF_LAST_COLORS,
+    DEFAULT_GRAY_0,
+    DEFAULT_GRAY_1,
+    DEFAULT_WHITE,
 } from 'src/constants/color-constants';
-import { Color } from '../../../../classes/Color';
 
 @Injectable({
     providedIn: 'root',
@@ -80,7 +79,7 @@ export class ColorToolService {
         }
     }
 
-    rgbToHex(R: number, G: number, B: number): string {
+    translateRGBToHex(R: number, G: number, B: number, A?: number): string {
         let r: string = this.correctRGB(R);
         let g: string = this.correctRGB(G);
         let b: string = this.correctRGB(B);
@@ -123,7 +122,11 @@ export class ColorToolService {
     getPreviewColorOpacityDecimal(): string {
         const opacityHex = this.getPreviewColorOpacityHex();
         const opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
-        if (opacity === '1.0') { return '1'; }
+        if (opacity === '1.0') {
+            return '1';
+        } else if (opacity === '0.0') {
+            return '0';
+        }
         return opacity;
     }
 
