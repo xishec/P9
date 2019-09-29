@@ -1,8 +1,8 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ToolSelectorService } from './tool-selector.service';
 import { ToolName } from 'src/constants/tool-constants';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
+import { ToolSelectorService } from './tool-selector.service';
 
 describe('ToolSelectorService', () => {
     let injector: TestBed;
@@ -13,13 +13,19 @@ describe('ToolSelectorService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ToolSelectorService],
+            providers: [ToolSelectorService, {
+                provide: PencilToolService,
+                useValue: {
+
+                },
+            }],
         });
 
         injector = getTestBed();
         service = injector.get(ToolSelectorService);
+        mockPencilTool = injector.get(PencilToolService);
     });
-    
+
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
