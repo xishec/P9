@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from "@angular/core/testing";
 
 import { PencilToolService } from "./pencil-tool.service";
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { createMockSVGCircle } from '../abstract-tools/test-helpers';
 import { type } from 'os';
@@ -38,7 +38,7 @@ fdescribe("PencilToolService", () => {
         injector = getTestBed();
         service = injector.get(PencilToolService);
 
-        mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        // mockDrawStackService = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
     });
 
     it("should be created", () => {
