@@ -8,7 +8,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Thickness } from 'src/constants/tool-constants';
 
-fdescribe('RectangleAttributesComponent', () => {
+describe('RectangleAttributesComponent', () => {
     let component: RectangleAttributesComponent;
     let fixture: ComponentFixture<RectangleAttributesComponent>;
     let event: MatSliderChange;

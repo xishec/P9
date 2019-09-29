@@ -7,12 +7,13 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Thickness } from 'src/constants/tool-constants';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 
 fdescribe('BrushAttributesComponent', () => {
     let component: BrushAttributesComponent;
     let fixture: ComponentFixture<BrushAttributesComponent>;
     let event: MatSliderChange;
-    let attributesManageService: AttributesManagerService;
+    let attributesManagerService: AttributesManagerService;
     let shortcutManagerService: ShortcutManagerService;
 
     beforeEach(async(() => {
@@ -35,14 +36,16 @@ fdescribe('BrushAttributesComponent', () => {
                     },
                 },
             ],
-        });
+        }).compileComponents();
 
         fixture = TestBed.createComponent(BrushAttributesComponent);
         component = fixture.debugElement.componentInstance;
 
         let injector = getTestBed();
-        attributesManageService = injector.get<AttributesManagerService>(AttributesManagerService);
+        attributesManagerService = injector.get<AttributesManagerService>(AttributesManagerService);
         shortcutManagerService = injector.get<ShortcutManagerService>(ShortcutManagerService);
+
+        component.initializeForm();
 
         event = new MatSliderChange();
     }));
@@ -53,14 +56,12 @@ fdescribe('BrushAttributesComponent', () => {
 
     it(`#onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
         event.value = Thickness.Default - 1;
+        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
+
         component.onSliderChange(event);
 
-        let s = spyOn(component, 'onThicknessChange').and.returnValue();
-
         expect(component.brushAttributesForm.value.thickness).toBe(Thickness.Default - 1);
-        expect(s).toHaveBeenCalled();
-
-
+        expect(spy).toHaveBeenCalled();
     });
 
     it(`#onSliderChange should not change the value of thickness if event value < ${Thickness.Min}`, () => {
@@ -90,38 +91,47 @@ fdescribe('BrushAttributesComponent', () => {
         expect(component.brushAttributesForm.value.thickness).toBe(oldValue);
     });
 
-    it(`#onSliderChange should call onThicknessChange if event value is [${Thickness.Min},${Thickness.Max}]`, () => {
-        spyOn(component, 'onThicknessChange');
-        event.value = Thickness.Default;
-        component.onSliderChange(event);
-
-        expect(component.onThicknessChange).toHaveBeenCalled();
-    });
-
+    // THERE
     it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
-        let spy = spyOn(attributesManageService, 'changeThickness').and.returnValue();
-        component.brushAttributesForm.controls.thickness.setValue((Thickness.Max + Thickness.Min)/2);
-        
+        let thickness = component.brushAttributesForm.controls['thickness'];
+        thickness.setValue(30);
+
+        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+
+        console.log(thickness.value);
+
         component.onThicknessChange();
+
         expect(spy).toHaveBeenCalled();
+        
+        // component.brushAttributesForm.controls.thickness.setValue(30);
+        
+    //     const spy = spyOn(attributesManageService, 'changeThickness').and.returnValue();
+
+    //     //event.value = 30;
+    //     //component.onSliderChange(event);
+    //     //component.brushAttributesForm.controls.thickness.setValue(30);
+    //     //component.brushAttributesForm.controls['thickness'].setValue(30);
+    //     component.onThicknessChange();
+    //     //component.onThicknessChange();
+    //     expect(spy).toHaveBeenCalled();
     });
+    // THERE
 
     it(`#onThicknessChange should not call chanegeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(Thickness.Max + 1);
+        let spyOnChangeThicknesAttributeManager = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        
         component.onThicknessChange();
-
-        let spyOnChangeThicknesAttributeManager = spyOn(attributesManageService, 'changeThickness').and.returnValue();
-
 
         expect(spyOnChangeThicknesAttributeManager).not.toHaveBeenCalled();
     });
 
     it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(Thickness.Min - 1);
+        let spyOnChangeThicknesAttributeManager = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
-
-        let spyOnChangeThicknesAttributeManager = spyOn(attributesManageService, 'changeThickness').and.returnValue();
 
         expect(spyOnChangeThicknesAttributeManager).not.toHaveBeenCalled();
     });
@@ -139,7 +149,7 @@ fdescribe('BrushAttributesComponent', () => {
     });
 
     it('#change should call changeStyle when user select a brush style', () => {
-        let spy = spyOn(attributesManageService, 'changeStyle').and.returnValue();
+        let spy = spyOn(attributesManagerService, 'changeStyle').and.returnValue();
         component.change(1);
         expect(spy).toHaveBeenCalled();
     });
