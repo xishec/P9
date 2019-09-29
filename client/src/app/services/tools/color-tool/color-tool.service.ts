@@ -3,12 +3,12 @@ import { BehaviorSubject } from 'rxjs';
 
 import {
     ColorType,
-    MAX_RGB_NUMBER,
-    MIN_RGB_NUMBER,
-    MAX_NUMBER_OF_LAST_COLORS,
     DEFAULT_GRAY_0,
     DEFAULT_GRAY_1,
     DEFAULT_WHITE,
+    MAX_NUMBER_OF_LAST_COLORS,
+    MAX_RGB_NUMBER,
+    MIN_RGB_NUMBER,
 } from 'src/constants/color-constants';
 
 @Injectable({
@@ -80,37 +80,27 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        let r: string = this.correctRGB(R);
-        let g: string = this.correctRGB(G);
-        let b: string = this.correctRGB(B);
-
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
+        const r: string = this.DecimalToHex(R);
+        const g: string = this.DecimalToHex(G);
+        const b: string = this.DecimalToHex(B);
         if (A !== undefined) {
-            let a = Number(Math.ceil(A * 255)).toString(16);
-            if (a.length === 1) {
-                a = '0' + a;
-            }
+            const a = this.DecimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
     }
 
-    correctRGB(RGBNumber: number): string {
-        let correctedRGBNumber: string = '';
+    DecimalToHex(RGBNumber: number): string {
+        let correctedRGBNumber = '';
         if (RGBNumber > MAX_RGB_NUMBER) {
             correctedRGBNumber = 'ff';
         } else if (RGBNumber < MIN_RGB_NUMBER) {
             correctedRGBNumber = '00';
         } else {
             correctedRGBNumber = Number(Math.ceil(RGBNumber)).toString(16);
+            if (correctedRGBNumber.length === 1) {
+                correctedRGBNumber = '0' + correctedRGBNumber;
+            }
         }
         return correctedRGBNumber;
     }
