@@ -50,8 +50,10 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.pencilAttributesForm.controls.thickness.setValue(event.value);
-        this.onThicknessChange();
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.pencilAttributesForm.controls.thickness.setValue(event.value);
+            this.onThicknessChange();
+        }
     }
     onThicknessChange(): void {
         const thickness: number = this.pencilAttributesForm.value.thickness;

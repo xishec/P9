@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
+import {
+    ColorType,
+    DEFAULT_GRAY_0,
+    DEFAULT_GRAY_1,
+    DEFAULT_WHITE,
+    MAX_NUMBER_OF_LAST_COLORS,
+    MAX_RGB_NUMBER,
+    MIN_RGB_NUMBER,
+} from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +25,7 @@ export class ColorToolService {
     colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
     addColorToQueue(color: string): void {
-        if (this.colorQueue.value.length < 10) {
+        if (this.colorQueue.value.length < MAX_NUMBER_OF_LAST_COLORS) {
             this.colorQueue.value.push(color);
         } else {
             this.colorQueue.value.shift();
@@ -46,7 +54,6 @@ export class ColorToolService {
                 this.secondaryColor.next(colorOnFocus);
                 break;
             default:
-                console.warn('color selection undefined');
                 break;
         }
     }
@@ -55,7 +62,7 @@ export class ColorToolService {
         this.selectedColorType.next(selectedColorType);
     }
 
-    changShowColorPalette(showColorPalette: boolean) {
+    changeShowColorPalette(showColorPalette: boolean) {
         this.showColorPalette.next(showColorPalette);
     }
 
@@ -73,27 +80,29 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        let r = Number(Math.ceil(R)).toString(16);
-        let g = Number(Math.ceil(G)).toString(16);
-        let b = Number(Math.ceil(B)).toString(16);
-
-        if (r.length === 1) {
-            r = '0' + r;
-        }
-        if (g.length === 1) {
-            g = '0' + g;
-        }
-        if (b.length === 1) {
-            b = '0' + b;
-        }
+        const r: string = this.DecimalToHex(R);
+        const g: string = this.DecimalToHex(G);
+        const b: string = this.DecimalToHex(B);
         if (A !== undefined) {
-            let a = Number(Math.ceil(A * 255)).toString(16);
-            if (a.length === 1) {
-                a = '0' + a;
-            }
+            const a = this.DecimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
+    }
+
+    DecimalToHex(RGBNumber: number): string {
+        let correctedRGBNumber = '';
+        if (RGBNumber > MAX_RGB_NUMBER) {
+            correctedRGBNumber = 'ff';
+        } else if (RGBNumber < MIN_RGB_NUMBER) {
+            correctedRGBNumber = '00';
+        } else {
+            correctedRGBNumber = Number(Math.ceil(RGBNumber)).toString(16);
+            if (correctedRGBNumber.length === 1) {
+                correctedRGBNumber = '0' + correctedRGBNumber;
+            }
+        }
+        return correctedRGBNumber;
     }
 
     getPreviewColorOpacityHex(): string {
@@ -103,7 +112,11 @@ export class ColorToolService {
     getPreviewColorOpacityDecimal(): string {
         const opacityHex = this.getPreviewColorOpacityHex();
         const opacity = (parseInt(opacityHex, 16) / 255).toFixed(1).toString();
-        if (opacity === '1.0') { return '1'; }
+        if (opacity === '1.0') {
+            return '1';
+        } else if (opacity === '0.0') {
+            return '0';
+        }
         return opacity;
     }
 
