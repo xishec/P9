@@ -1,7 +1,6 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { ColorToolService } from './color-tool.service';
 import {
     ColorType,
     DEFAULT_GRAY_0,
@@ -9,6 +8,7 @@ import {
     DEFAULT_WHITE,
     MAX_NUMBER_OF_LAST_COLORS,
 } from 'src/constants/color-constants';
+import { ColorToolService } from './color-tool.service';
 
 describe('ColorToolService', () => {
     let service: ColorToolService;
@@ -72,7 +72,7 @@ describe('ColorToolService', () => {
 
     it('#changeCurrentShowColorPalette should change showColorPalette to true', () => {
         service.showColorPalette = new BehaviorSubject<boolean>(false);
-        service.changShowColorPalette(true);
+        service.changeShowColorPalette(true);
         const showColorPalette = new BehaviorSubject<boolean>(true);
         expect(service.showColorPalette).toEqual(showColorPalette);
     });
@@ -155,13 +155,13 @@ describe('ColorToolService', () => {
     });
 
     it('#switchPrimarySecondary should change primaryColor to secondaryColor after colors switch', () => {
-        let primaryColorTmp = service.primaryColor.value;
+        const primaryColorTmp = service.primaryColor.value;
         service.switchPrimarySecondary();
         expect(primaryColorTmp).toEqual(service.secondaryColor.value);
     });
 
     it('#switchPrimarySecondary should change secondaryColor to secondaryColor after colors switch', () => {
-        let secondaryColorTmp = service.secondaryColor.value;
+        const secondaryColorTmp = service.secondaryColor.value;
         service.switchPrimarySecondary();
         expect(secondaryColorTmp).toEqual(service.primaryColor.value);
     });

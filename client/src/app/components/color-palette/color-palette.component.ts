@@ -37,12 +37,12 @@ export class ColorPaletteComponent implements OnInit {
     onSubmit(): void {
         this.colorToolService.changeColorOnFocus(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
-        this.colorToolService.changShowColorPalette(false);
+        this.colorToolService.changeShowColorPalette(false);
         this.colorToolService.changeSelectedColorType(undefined);
     }
 
     onCancel(): void {
-        this.colorToolService.changShowColorPalette(false);
+        this.colorToolService.changeShowColorPalette(false);
         this.colorToolService.changeSelectedColorType(undefined);
     }
 

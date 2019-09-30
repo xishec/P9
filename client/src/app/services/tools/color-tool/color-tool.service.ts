@@ -62,7 +62,7 @@ export class ColorToolService {
         this.selectedColorType.next(selectedColorType);
     }
 
-    changShowColorPalette(showColorPalette: boolean) {
+    changeShowColorPalette(showColorPalette: boolean) {
         this.showColorPalette.next(showColorPalette);
     }
 

@@ -52,8 +52,10 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.brushAttributesForm.controls.thickness.setValue(event.value);
-        this.onThicknessChange();
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.brushAttributesForm.controls.thickness.setValue(event.value);
+            this.onThicknessChange();
+        }
     }
 
     onThicknessChange(): void {

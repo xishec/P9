@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
-interface ColorStyle {
+export interface ColorStyle {
     backgroundColor: string;
     border?: string;
     transform?: string;
@@ -38,15 +38,15 @@ export class ColorAttributesComponent implements OnInit {
 
     onClickBackgroundColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.backgroundColor);
-        this.colorToolService.changShowColorPalette(true);
+        this.colorToolService.changeShowColorPalette(true);
     }
     onClickPrimaryColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.primaryColor);
-        this.colorToolService.changShowColorPalette(true);
+        this.colorToolService.changeShowColorPalette(true);
     }
     onClickSecondaryColor(): void {
         this.colorToolService.changeSelectedColorType(ColorType.secondaryColor);
-        this.colorToolService.changShowColorPalette(true);
+        this.colorToolService.changeShowColorPalette(true);
     }
 
     getBackgroundColorIcon(): ColorStyle {
