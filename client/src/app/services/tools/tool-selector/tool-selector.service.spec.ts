@@ -1,4 +1,5 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { ToolName } from 'src/constants/tool-constants';
@@ -13,7 +14,10 @@ describe('ToolSelectorService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [ToolSelectorService, {
-            }],
+                provide: MatDialog,
+                useValue: {},
+            },
+            ],
         });
 
         injector = getTestBed();
@@ -22,6 +26,13 @@ describe('ToolSelectorService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('when changeTool with newDrawing tool then displayNewDrawingModal is called', () => {
+        const spyOnDisplayNewDrawingModal = spyOn(service, 'displayNewDrawingModal').and.returnValue();
+        service.changeTool(ToolName.NewDrawing);
+
+        expect(spyOnDisplayNewDrawingModal).toHaveBeenCalled();
     });
 
     it('when changeTool with pencil changeCurrentToolName should be call with pencil', () => {
