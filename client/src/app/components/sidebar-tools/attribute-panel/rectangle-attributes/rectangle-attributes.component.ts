@@ -52,8 +52,10 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        this.rectangleAttributesForm.controls.thickness.setValue(event.value);
-        this.onThicknessChange();
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.rectangleAttributesForm.controls.thickness.setValue(event.value);
+            this.onThicknessChange();
+        }
     }
 
     onThicknessChange(): void {
