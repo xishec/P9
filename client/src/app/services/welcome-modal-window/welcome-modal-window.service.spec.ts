@@ -1,8 +1,8 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { WelcomeModalWindowService } from './welcome-modal-window.service';
 
-fdescribe('WelcomeModalWindowService', () => {
+describe('WelcomeModalWindowService', () => {
     let injector: TestBed;
     let service: WelcomeModalWindowService;
 
