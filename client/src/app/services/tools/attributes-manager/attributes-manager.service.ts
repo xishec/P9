@@ -7,11 +7,12 @@ import { Thickness, TraceType } from 'src/constants/tool-constants';
     providedIn: 'root',
 })
 export class AttributesManagerService {
+    // tslint:disable-next-line: variable-name
     private _thickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
-    public get thickness(): BehaviorSubject<number> {
+    get thickness(): BehaviorSubject<number> {
         return this._thickness;
     }
-    public set thickness(value: BehaviorSubject<number>) {
+    set thickness(value: BehaviorSubject<number>) {
         this._thickness = value;
     }
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);

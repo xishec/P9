@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSliderChange, MatDialog } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { MatDialog, MatSliderChange } from '@angular/material';
 
-import { PencilAttributesComponent } from './pencil-attributes.component';
-import { Thickness } from '../../../../../constants/tool-constants';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
+import { Thickness } from '../../../../../constants/tool-constants';
 import { ShortcutManagerService } from '../../../../services/shortcut-manager/shortcut-manager.service';
+import { PencilAttributesComponent } from './pencil-attributes.component';
 
 fdescribe('PencilAttributesComponent', () => {
     let component: PencilAttributesComponent;
@@ -50,14 +50,14 @@ fdescribe('PencilAttributesComponent', () => {
         component.ngOnInit();
 
         attributesManagerService = fixture.debugElement.injector.get<AttributesManagerService>(
-            AttributesManagerService
+            AttributesManagerService,
         );
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
     }));
 
     it(`#onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
         event.value = AVERAGE_THICKNESS;
-        let spy = spyOn(component, 'onThicknessChange').and.returnValue();
+        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
 
         component.onSliderChange(event);
 
@@ -66,7 +66,7 @@ fdescribe('PencilAttributesComponent', () => {
     });
 
     it(`#onSliderChange should not change the value of thickness if event value  ]${Thickness.Min},${Thickness.Max}[`, () => {
-        let spy = spyOn(component, 'onThicknessChange').and.returnValue();
+        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
 
         event.value = Thickness.Max + AVERAGE_THICKNESS;
         component.onSliderChange(event);
@@ -77,7 +77,7 @@ fdescribe('PencilAttributesComponent', () => {
     });
 
     it('#onSliderChange should not call onThicknessChange if event value is null', () => {
-        let spy = spyOn(component, 'onThicknessChange').and.returnValue();
+        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
 
         event.value = null;
         component.onSliderChange(event);
@@ -87,7 +87,7 @@ fdescribe('PencilAttributesComponent', () => {
 
     it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        let spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
@@ -96,7 +96,7 @@ fdescribe('PencilAttributesComponent', () => {
 
     it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(Thickness.Max + AVERAGE_THICKNESS);
-        let spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
@@ -105,7 +105,7 @@ fdescribe('PencilAttributesComponent', () => {
 
     it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(Thickness.Min - AVERAGE_THICKNESS);
-        let spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
@@ -113,7 +113,7 @@ fdescribe('PencilAttributesComponent', () => {
     });
 
     it('#onFocus should call changeIsOnInput when user in on focus', () => {
-        let spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
+        const spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
 
         component.onFocus();
 
@@ -121,7 +121,7 @@ fdescribe('PencilAttributesComponent', () => {
     });
 
     it('#onFocus should  call changeIsOnInput when user is out of focus', () => {
-        let spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
+        const spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
 
         component.onFocusOut();
 

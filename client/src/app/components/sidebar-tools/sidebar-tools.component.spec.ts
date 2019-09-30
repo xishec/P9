@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarToolsComponent } from './sidebar-tools.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { ToolName } from '../../../constants/tool-constants';
+import { SidebarToolsComponent } from './sidebar-tools.component';
 
 describe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;
@@ -23,6 +23,8 @@ describe('SidebarToolsComponent', () => {
         });
         fixture = TestBed.createComponent(SidebarToolsComponent);
         component = fixture.componentInstance;
+
+        toolSelectorService = fixture.debugElement.injector.get(ToolSelectorService);
     }));
 
     it('should create', () => {
@@ -30,7 +32,7 @@ describe('SidebarToolsComponent', () => {
     });
 
     it('#onChangeTool should call function changeTool when a tool is selected', () => {
-        let spy = spyOn(toolSelectorService, 'changeTool');
+        const spy = spyOn(toolSelectorService, 'changeTool');
         component.onChangeTool(ToolName.Brush);
         expect(spy).toHaveBeenCalled();
     });
