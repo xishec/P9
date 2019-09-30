@@ -10,11 +10,18 @@ import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { createKeyBoardEvent } from 'src/classes/test-helpers';
+import { Keys } from 'src/constants/constants';
+import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
+import { ToolName } from 'src/constants/tool-constants';
 
 fdescribe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
     let app: AppComponent;
     let fixture: ComponentFixture<AppComponent>;
+
+    const MOCK_KEYBOARD_CONTROL = createKeyBoardEvent(Keys.Control);
+    const MOCK_KEYBOARD_O = createKeyBoardEvent(Keys.o);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -39,14 +46,15 @@ fdescribe('AppComponent', () => {
                 },
                 {
                     provide: MatDialog,
+                    useValue: {
+                        open: (one: any, two: any) => {},
+                    },
                 },
                 {
                     provide: ToolSelectorService,
-                    useValue: {},
-                },
-                {
-                    provide: ToolSelectorService,
-                    useValue: {},
+                    useValue: {
+                        changeTool: () => {},
+                    },
                 },
                 {
                     provide: DrawingModalWindowService,
@@ -62,6 +70,12 @@ fdescribe('AppComponent', () => {
                         currentIsOnInput: {
                             subscribe: () => {},
                         },
+                    },
+                },
+                {
+                    provide: KeyboardEvent,
+                    useValue: {
+                        preventDefault: () => {},
                     },
                 },
             ],
@@ -86,6 +100,26 @@ fdescribe('AppComponent', () => {
         expect(app.title).toEqual('LOG2990');
     });
 
+    it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
+        const SPY = spyOn(app[`dialog`], 'open');
+        app[`dialog`].open(WelcomeModalWindowComponent, {
+            panelClass: 'myapp-max-width-dialog',
+            disableClose: true,
+        });
+        app.displayWelcomeModalWindow = false;
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not openWelcomeModalWindow if displayWelcomeModalWindow is off', () => {
+        const SPY = spyOn(app[`dialog`], 'open');
+        app[`dialog`].open(WelcomeModalWindowComponent, {
+            panelClass: 'myapp-max-width-dialog',
+            disableClose: true,
+        });
+        app.displayWelcomeModalWindow = true;
+        expect(SPY).toHaveBeenCalled();
+    });
+
     it('should allow shortcut when no drawing modal and focus not on input and no welcome window', () => {
         app.displayNewDrawingModalWindow = false;
         app.welcomeModalWindowClosed = false;
@@ -100,5 +134,13 @@ fdescribe('AppComponent', () => {
         app.displayWelcomeModalWindow = true;
         app.isOnInput = false;
         expect(app.shouldAllowShortcut()).toBe(false);
+    });
+
+    it('should call onControlO', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => true;
+        app.onControlO(MOCK_KEYBOARD_CONTROL);
+        app.onControlO(MOCK_KEYBOARD_O);
+        expect(SPY).toHaveBeenCalledWith(ToolName.NewDrawing);
     });
 });

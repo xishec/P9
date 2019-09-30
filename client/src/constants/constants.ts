@@ -1,5 +1,7 @@
 enum Keys {
     Shift = 'Shift',
+    Control = 'Control',
+    o = 'o',
 }
 
 enum Mouse {
