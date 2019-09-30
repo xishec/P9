@@ -4,16 +4,8 @@ import { RectangleToolService } from './rectangle-tool.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { Keys, Mouse } from 'src/constants/constants';
-import { createMouseEvent, createKeyBoardEvent, getRandomNumber } from '../../../../classes/test-helpers';
+import { createMouseEvent, createKeyBoardEvent, getRandomNumber, MockRect } from '../../../../classes/test-helpers';
 import { TraceType } from 'src/constants/tool-constants';
-
-class MockRect {
-    x: number = 0;
-    y: number = 0;
-    width: number = 0;
-    height: number = 0;
-    addEventListener(): void{};
-}
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
@@ -23,11 +15,11 @@ const RANDOM_MOUSEMOVE_EVENT = (): MouseEvent => {
 const RANDOM_MOUSEDOWN_EVENT = (): MouseEvent => {
     return createMouseEvent(getRandomNumber(), getRandomNumber(), Mouse.LeftButton);
 };
-// const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
+const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 
-fdescribe('RectangleToolService', () => {
+describe('RectangleToolService', () => {
     let injector: TestBed;
     let rectangleTool: RectangleToolService;
     let rendererMock: Renderer2;
@@ -68,7 +60,7 @@ fdescribe('RectangleToolService', () => {
                                 let boundRect = {
                                     left: boundleft,
                                     top: boundtop,
-                                }
+                                };
                                 return boundRect;
                             },
                         },
@@ -81,13 +73,13 @@ fdescribe('RectangleToolService', () => {
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         rectangleTool = new RectangleToolService(drawStackMock, elementRefMock, rendererMock);
-        rectangleTool.previewRectangle = mockPreviewRect as unknown as SVGRectElement;
-        rectangleTool.drawRectangle = mockDrawRect as unknown as SVGRectElement;
+        rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
+        rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
         spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
             return new MockRect();
         });
         spyPreviewRectWidth = spyOnProperty(rectangleTool, 'previewRectangleWidth', 'get').and.callFake(() => {
-            return  mockPreviewRect.width;
+            return mockPreviewRect.width;
         });
         spyPreviewRectHeight = spyOnProperty(rectangleTool, 'previewRectangleHeight', 'get').and.callFake(() => {
             return mockPreviewRect.height;
@@ -99,7 +91,7 @@ fdescribe('RectangleToolService', () => {
             return mockPreviewRect.y;
         });
         spyDrawRectWidth = spyOnProperty(rectangleTool, 'drawRectangleWidth', 'get').and.callFake(() => {
-            return  mockDrawRect.width;
+            return mockDrawRect.width;
         });
         spyDrawRectHeight = spyOnProperty(rectangleTool, 'drawRectangleHeight', 'get').and.callFake(() => {
             return mockDrawRect.height;
@@ -140,24 +132,26 @@ fdescribe('RectangleToolService', () => {
     });
 
     it('should correctly update the draw rectangle in the workzone on random mouse position', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
-            switch(name){
-                case 'x':
-                    el.x = Number(value);
-                    break;
-                case 'y':
-                    el.y = Number(value);
-                    break;
-                case 'width':
-                    el.width = Number(value);
-                    break;
-                case 'height':
-                    el.height = Number(value);
-                    break;
-                default:
-                    break;
+        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+            (el: any, name: string, value: string) => {
+                switch (name) {
+                    case 'x':
+                        el.x = Number(value);
+                        break;
+                    case 'y':
+                        el.y = Number(value);
+                        break;
+                    case 'width':
+                        el.width = Number(value);
+                        break;
+                    case 'height':
+                        el.height = Number(value);
+                        break;
+                    default:
+                        break;
+                }
             }
-        });
+        );
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
@@ -172,24 +166,26 @@ fdescribe('RectangleToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
-            switch(name){
-                case 'x':
-                    el.x = Number(value);
-                    break;
-                case 'y':
-                    el.y = Number(value);
-                    break;
-                case 'width':
-                    el.width = Number(value);
-                    break;
-                case 'height':
-                    el.height = Number(value);
-                    break;
-                default:
-                    break;
+        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+            (el: any, name: string, value: string) => {
+                switch (name) {
+                    case 'x':
+                        el.x = Number(value);
+                        break;
+                    case 'y':
+                        el.y = Number(value);
+                        break;
+                    case 'width':
+                        el.width = Number(value);
+                        break;
+                    case 'height':
+                        el.height = Number(value);
+                        break;
+                    default:
+                        break;
+                }
             }
-        });
+        );
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
@@ -230,7 +226,7 @@ fdescribe('RectangleToolService', () => {
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
         rectangleTool.onMouseMove(RANDOM_MOUSEMOVE_EVENT());
-        rectangleTool.onMouseUp(RANDOM_MOUSEDOWN_EVENT());
+        rectangleTool.onMouseUp(MOUSEUP_EVENT);
 
         expect(rectangleTool.isPreviewing).toBeFalsy();
         expect(rectangleTool.isSquarePreview).toBeFalsy();

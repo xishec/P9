@@ -2,13 +2,7 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
 import { Renderer2, Type } from '@angular/core';
-
-class MockRect {
-    mockX: number = 0;
-    mockY: number = 0;
-    mockWidth: number = 0;
-    mockHeight: number = 0;
-}
+import { MockRect } from '../../../../../classes/test-helpers';
 
 describe('AbstractShapeToolService', () => {
     let injector: TestBed;
@@ -31,9 +25,9 @@ describe('AbstractShapeToolService', () => {
             ],
         });
 
-        // Injector and service setup
         injector = getTestBed();
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        service = injector.get<AbstractShapeToolService>(AbstractShapeToolService as Type<AbstractShapeToolService>);
         mockRect = new MockRect();
     });
 
@@ -42,59 +36,40 @@ describe('AbstractShapeToolService', () => {
         expect(abstractService).toBeTruthy();
     });
 
-    it('setAttribute should be called 8 times when calling updatePreviewRectangle', () => {
+    it('should call setAttribute 8 times when calling updatePreviewRectangle', () => {
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
         service.updatePreviewRectangle();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(8);
     });
 
-    it('If currentMouseX > initialMouseX, width should be positif', () => {
+    it('should always give rectangle with positive dimensions', () => {
         service.currentMouseX = -10;
         service.initialMouseX = 0;
-        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: MockRect, name: string, value: string) => {
-            switch(name) {
-                case 'x':
-                    mockRect.mockX = Number(value);
-                    break;
-                case 'y':
-                    mockRect.mockY = Number(value);
-                    break;
-                case 'width':
-                    mockRect.mockWidth = Number(value);
-                    break;
-                case 'height':
-                    mockRect.mockHeight = Number(value);
-                    break;
-                default:
-                    break;
-            }
-        });
-        service.updatePreviewRectangle();
-        expect(mockRect.mockWidth).toBeGreaterThan(0);
-    });
-
-    it('If currentMouseY > initialMouseY, height should be positif', () => {
         service.currentMouseY = -10;
         service.initialMouseY = 0;
-        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake((el: any, name: string, value: string) => {
-            switch(name) {
-                case 'x':
-                    mockRect.mockX = Number(value);
-                    break;
-                case 'y':
-                    mockRect.mockY = Number(value);
-                    break;
-                case 'width':
-                    mockRect.mockWidth = Number(value);
-                    break;
-                case 'height':
-                    mockRect.mockHeight = Number(value);
-                    break;
-                default:
-                    break;
+
+        spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+            (el: MockRect, name: string, value: string) => {
+                switch (name) {
+                    case 'x':
+                        mockRect.x = Number(value);
+                        break;
+                    case 'y':
+                        mockRect.y = Number(value);
+                        break;
+                    case 'width':
+                        mockRect.width = Number(value);
+                        break;
+                    case 'height':
+                        mockRect.height = Number(value);
+                        break;
+                    default:
+                        break;
+                }
             }
-        });
+        );
         service.updatePreviewRectangle();
-        expect(mockRect.mockHeight).toBeGreaterThan(0);
+        expect(mockRect.width).toBeGreaterThan(0);
+        expect(mockRect.height).toBeGreaterThan(0);
     });
 });
