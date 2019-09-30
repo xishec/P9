@@ -57,7 +57,7 @@
             />
             <mat-error>B doit être entre 0 et 255!</mat-error>
         </mat-form-field>
-        <mat-form-field class="small" (input)="onUserColorRGBInput()">
+        <mat-form-field class="small" (change)="onUserColorRGBInput()">
             <input
                 autocomplete="off"
                 (focus)="onFocus()"
