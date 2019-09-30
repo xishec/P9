@@ -7,15 +7,15 @@ import { AbstractToolService } from '../abstract-tool.service';
     providedIn: 'root',
 })
 export abstract class AbstractShapeToolService extends AbstractToolService {
-    protected currentMouseX = 0;
-    protected currentMouseY = 0;
-    protected initialMouseX = 0;
-    protected initialMouseY = 0;
-    protected previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    protected isPreviewing = false;
-    protected isIn = true;
+     currentMouseX = 0;
+     currentMouseY = 0;
+     initialMouseX = 0;
+     initialMouseY = 0;
+     previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+     isPreviewing = false;
+     isIn = true;
 
-    constructor(protected renderer: Renderer2) {
+    constructor(public renderer: Renderer2) {
         super();
     }
 
@@ -26,9 +26,25 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     abstract onMouseLeave(event: MouseEvent): void;
     abstract onKeyDown(event: KeyboardEvent): void;
     abstract onKeyUp(event: KeyboardEvent): void;
-    protected abstract createSVG(): void;
+    abstract createSVG(): void;
 
-    protected updatePreviewRectangle(): void {
+    get previewRectangleX(): number {
+        return this.previewRectangle.x.baseVal.value;
+    }
+
+    get previewRectangleY(): number {
+        return this.previewRectangle.y.baseVal.value;
+    }
+
+    get previewRectangleWidth(): number {
+        return this.previewRectangle.width.baseVal.value;
+    }
+
+    get previewRectangleHeight(): number {
+        return this.previewRectangle.height.baseVal.value;
+    }
+
+     updatePreviewRectangle(): void {
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
 

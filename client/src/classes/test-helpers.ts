@@ -43,3 +43,7 @@ export class MockElementRef extends ElementRef {
     nativeElement: {
     };
 }
+
+export const getRandomNumber = (): number => {
+    return Math.random() * 100;
+}
