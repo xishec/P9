@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-
-import { RectangleToolService } from './rectangle-tool.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { getTestBed, TestBed } from '@angular/core/testing';
+
 import { Keys, Mouse } from 'src/constants/constants';
-import { createMouseEvent, createKeyBoardEvent, getRandomNumber, MockRect } from '../../../../classes/test-helpers';
 import { TraceType } from 'src/constants/tool-constants';
+import { createKeyBoardEvent, createMouseEvent, getRandomNumber, MockRect } from '../../../../classes/test-helpers';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { RectangleToolService } from './rectangle-tool.service';
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
@@ -26,8 +26,8 @@ describe('RectangleToolService', () => {
     let elementRefMock: ElementRef;
     let drawStackMock: DrawStackService;
     let spyCreateElement: jasmine.Spy;
-    let mockPreviewRect: MockRect = new MockRect();
-    let mockDrawRect: MockRect = new MockRect();
+    const mockPreviewRect: MockRect = new MockRect();
+    const mockDrawRect: MockRect = new MockRect();
     let spyPreviewRectWidth: jasmine.Spy;
     let spyPreviewRectHeight: jasmine.Spy;
     let spyPreviewRectX: jasmine.Spy;
@@ -55,9 +55,9 @@ describe('RectangleToolService', () => {
                     useValue: {
                         nativeElement: {
                             getBoundingClientRect: () => {
-                                let boundleft = 0;
-                                let boundtop = 0;
-                                let boundRect = {
+                                const boundleft = 0;
+                                const boundtop = 0;
+                                const boundRect = {
                                     left: boundleft,
                                     top: boundtop,
                                 };
@@ -111,8 +111,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute');
-        let spyAppendChild = spyOn(rendererMock, 'appendChild');
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
         rectangleTool.onMouseLeave(MOUSELEAVE_EVENT);
         rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
@@ -123,8 +123,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should append the preview and the draw rectangle when left click in workzone', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute');
-        let spyAppendChild = spyOn(rendererMock, 'appendChild');
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
@@ -132,7 +132,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should correctly update the draw rectangle in the workzone on random mouse position', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
                     case 'x':
@@ -150,7 +150,7 @@ describe('RectangleToolService', () => {
                     default:
                         break;
                 }
-            }
+            },
         );
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
@@ -166,7 +166,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
-        let spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
                     case 'x':
@@ -184,7 +184,7 @@ describe('RectangleToolService', () => {
                     default:
                         break;
                 }
-            }
+            },
         );
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
@@ -198,7 +198,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should be square when shift is down', () => {
-        let spy = spyOn(rectangleTool, 'updatePreviewSquare');
+        const spy = spyOn(rectangleTool, 'updatePreviewSquare');
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
@@ -220,8 +220,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should call remove 2 times and append 4 time for a full rectangle', () => {
-        let spyAppend = spyOn(rendererMock, 'appendChild');
-        let spyRemove = spyOn(rendererMock, 'removeChild');
+        const spyAppend = spyOn(rendererMock, 'appendChild');
+        const spyRemove = spyOn(rendererMock, 'removeChild');
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());

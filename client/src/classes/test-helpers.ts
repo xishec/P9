@@ -2,10 +2,11 @@ import { ElementRef } from '@angular/core';
 import { Keys } from 'src/constants/constants';
 
 export class MockRect {
-    x: number = 0;
-    y: number = 0;
-    width: number = 0;
-    height: number = 0;
+    x = 0;
+    y = 0;
+    width = 0;
+    height = 0;
+    // tslint:disable-next-line: no-empty
     addEventListener(): void {}
 }
 
@@ -37,6 +38,7 @@ export const createMockFilter = (): SVGFilterElement => {
     return (mockFilter as unknown) as SVGFilterElement;
 };
 
+// tslint:disable-next-line: max-classes-per-file
 export class MockElementRef extends ElementRef {
     nativeElement: {};
 }

@@ -1,8 +1,8 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-
-import { AbstractShapeToolService } from './abstract-shape-tool.service';
 import { Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
+
 import { MockRect } from '../../../../../classes/test-helpers';
+import { AbstractShapeToolService } from './abstract-shape-tool.service';
 
 describe('AbstractShapeToolService', () => {
     let injector: TestBed;
@@ -66,7 +66,7 @@ describe('AbstractShapeToolService', () => {
                     default:
                         break;
                 }
-            }
+            },
         );
         service.updatePreviewRectangle();
         expect(mockRect.width).toBeGreaterThan(0);
