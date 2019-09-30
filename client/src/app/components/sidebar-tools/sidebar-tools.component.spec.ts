@@ -5,7 +5,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { ToolName } from '../../../constants/tool-constants';
 import { SidebarToolsComponent } from './sidebar-tools.component';
 
-describe('SidebarToolsComponent', () => {
+fdescribe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;
     let fixture: ComponentFixture<SidebarToolsComponent>;
     let toolSelectorService: ToolSelectorService;
@@ -22,6 +22,9 @@ describe('SidebarToolsComponent', () => {
                         provide: ToolSelectorService,
                         useValue: {
                             changeTool: () => null,
+                            currentToolName: {
+                                subscribe: () => {},
+                            },
                         },
                     },
                 ],
@@ -42,6 +45,12 @@ describe('SidebarToolsComponent', () => {
 
         component.onChangeTool(ToolName.Brush);
 
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('onInit should call function changeTool', () => {
+        const SPY = spyOn(toolSelectorService, 'changeTool');
+        component.ngOnInit();
         expect(SPY).toHaveBeenCalled();
     });
 });
