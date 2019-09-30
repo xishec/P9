@@ -1,20 +1,20 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
-import { ColorToolService } from "../../../services/tools/color-tool/color-tool.service";
-import { ColorNumericValuesComponent } from "./color-numeric-values.component";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { ColorNumericValuesComponent } from './color-numeric-values.component';
 
-describe("ColorNumericValuesComponent", () => {
+describe('ColorNumericValuesComponent', () => {
     let component: ColorNumericValuesComponent;
     let fixture: ComponentFixture<ColorNumericValuesComponent>;
     let form: FormGroup;
     let shortCutManagerService: ShortcutManagerService;
 
-    const MOCK_COLOR = "01234567";
-    const MOCK_COLOR_FROM_SERVICE = "ff00ff00";
-    const MOCK_OPACITY = "33";
+    const MOCK_COLOR = '01234567';
+    const MOCK_COLOR_FROM_SERVICE = 'ff00ff00';
+    const MOCK_OPACITY = '33';
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -33,8 +33,8 @@ describe("ColorNumericValuesComponent", () => {
                     provide: ShortcutManagerService,
                     useValue: {
                         changeIsOnInput: (b: boolean) => null,
-                    }
-                }
+                    },
+                },
             ],
         }).compileComponents();
 
@@ -48,20 +48,24 @@ describe("ColorNumericValuesComponent", () => {
         form = component.colorNumericValuesForm;
     }));
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    it("by default RGB are 0 and A is 1", () => {
-        expect(form.controls["R"].value).toEqual(0);
-        expect(form.controls["G"].value).toEqual(0);
-        expect(form.controls["B"].value).toEqual(0);
-        expect(form.controls["A"].value).toEqual(1);
+    it('by default RGB are 0 and A is 1', () => {
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['R'].value).toEqual(0);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['G'].value).toEqual(0);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['B'].value).toEqual(0);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['A'].value).toEqual(1);
     });
 
-    it("setColorNumericValues should call setHexValues before setRGBValues", () => {
-        const spyOnSetHex = spyOn(component, "setHexValues").and.returnValue();
-        const spyOnSetRGB = spyOn(component, "setRGBValues").and.returnValue();
+    it('setColorNumericValues should call setHexValues before setRGBValues', () => {
+        const spyOnSetHex = spyOn(component, 'setHexValues').and.returnValue();
+        const spyOnSetRGB = spyOn(component, 'setRGBValues').and.returnValue();
 
         component.setColorNumericValues();
 
@@ -72,24 +76,28 @@ describe("ColorNumericValuesComponent", () => {
         component.previewColor = MOCK_COLOR;
 
         component.setHexValues();
-
-        expect(form.controls["hex"].value).toEqual("012345");
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['hex'].value).toEqual('012345');
     });
 
     it(`when setRGBValues with ${MOCK_COLOR} then R=01, G=23, B=45 A=0.2`, () => {
         component.previewColor = MOCK_COLOR;
 
         component.setRGBValues();
-
-        expect(form.controls["R"].value).toEqual(1);
-        expect(form.controls["G"].value).toEqual(35);
-        expect(form.controls["B"].value).toEqual(69);
-        expect(form.controls["A"].value).toEqual("0.4");
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['R'].value).toEqual(1);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['G'].value).toEqual(35);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['B'].value).toEqual(69);
+        // tslint:disable-next-line: no-string-literal
+        expect(form.controls['A'].value).toEqual('0.4');
     });
 
-    it("when onUserHexInput previewColor is colorNumericValuesForm.hex + opacity", () => {
-        const hexColor = "112233";
-        form.controls["hex"].setValue(hexColor);
+    it('when onUserHexInput previewColor is colorNumericValuesForm.hex + opacity', () => {
+        const hexColor = '112233';
+        // tslint:disable-next-line: no-string-literal
+        form.controls['hex'].setValue(hexColor);
 
         component.onUserHexInput();
 
