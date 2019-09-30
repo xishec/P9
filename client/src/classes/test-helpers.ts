@@ -1,20 +1,29 @@
 import { ElementRef } from '@angular/core';
 import { Keys } from 'src/constants/constants';
 
+export class MockRect {
+    x = 0;
+    y = 0;
+    width = 0;
+    height = 0;
+    // tslint:disable-next-line: no-empty
+    addEventListener(): void {}
+}
+
 export const createMouseEvent = (x: number, y: number, buttonPressed: number): MouseEvent => {
     const mouseEvent = {
         clientX: x,
         clientY: y,
         button: buttonPressed,
     };
-    return mouseEvent as unknown as MouseEvent;
+    return (mouseEvent as unknown) as MouseEvent;
 };
 
 export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
     };
-    return keyboardEvent as unknown as KeyboardEvent;
+    return (keyboardEvent as unknown) as KeyboardEvent;
 };
 
 export const createMockSVGCircle = (): any => {
@@ -25,13 +34,15 @@ export const createMockSVGCircle = (): any => {
 };
 
 export const createMockFilter = (): SVGFilterElement => {
-    const mockFilter = {
-
-    };
-    return mockFilter as unknown as SVGFilterElement;
+    const mockFilter = {};
+    return (mockFilter as unknown) as SVGFilterElement;
 };
 
+// tslint:disable-next-line: max-classes-per-file
 export class MockElementRef extends ElementRef {
-    nativeElement: {
-    };
+    nativeElement: {};
 }
+
+export const getRandomNumber = (): number => {
+    return Math.random() * 100;
+};
