@@ -23,7 +23,7 @@ fdescribe('SidebarToolsComponent', () => {
                         useValue: {
                             changeTool: () => null,
                             currentToolName: {
-                                subscribe: () => {},
+                                subscribe: () => null,
                             },
                         },
                     },
