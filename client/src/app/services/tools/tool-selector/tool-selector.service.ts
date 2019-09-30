@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DrawingModalWindowComponent } from 'src/app/components/drawing-modal-window/drawing-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -25,7 +26,11 @@ export class ToolSelectorService {
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
 
-    constructor(private colorToolService: ColorToolService, private dialog: MatDialog) {}
+    constructor(
+        private colorToolService: ColorToolService,
+        private dialog: MatDialog,
+        private drawingModalWindowService: DrawingModalWindowService,
+    ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -42,8 +47,12 @@ export class ToolSelectorService {
     }
 
     displayNewDrawingModal(): void {
-        this.dialog.open(DrawingModalWindowComponent, {
+        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
+        });
+        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+        dialogRef.afterClosed().subscribe(() => {
+            this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         });
     }
 

@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material';
 
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<DrawingModalWindowComponent>,
         private drawingModalWindowService: DrawingModalWindowService,
         private colorToolService: ColorToolService,
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -79,6 +81,13 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onClickColorQueueButton(previewColor: string): void {
         this.previewColor = previewColor;
+    }
+
+    onFocus() {
+        this.shortcutManagerService.changeIsOnInput(true);
+    }
+    onFocusOut() {
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 }
 

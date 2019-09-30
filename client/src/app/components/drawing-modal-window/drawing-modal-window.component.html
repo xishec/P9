@@ -12,13 +12,27 @@
 
     <div class="formGroup">
         <mat-form-field>
-            <input matInput type="number" placeholder="Largeur" formControlName="width" />
+            <input
+                matInput
+                type="number"
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                placeholder="Largeur"
+                formControlName="width"
+            />
             <span matSuffix>px</span>
             <mat-error>La largeur doit être entre 0 et 10000!</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput type="number" placeholder="Hauteur" formControlName="height" />
+            <input
+                matInput
+                type="number"
+                (focus)="onFocus()"
+                (focusout)="onFocusOut()"
+                placeholder="Hauteur"
+                formControlName="height"
+            />
             <span matSuffix>px</span>
             <mat-error>La hauteur doit être entre 0 et 10000!</mat-error>
         </mat-form-field>
