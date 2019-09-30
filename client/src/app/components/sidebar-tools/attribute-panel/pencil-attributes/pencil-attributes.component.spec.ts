@@ -8,7 +8,7 @@ import { Thickness } from '../../../../../constants/tool-constants';
 import { ShortcutManagerService } from '../../../../services/shortcut-manager/shortcut-manager.service';
 import { PencilAttributesComponent } from './pencil-attributes.component';
 
-fdescribe('PencilAttributesComponent', () => {
+describe('PencilAttributesComponent', () => {
     let component: PencilAttributesComponent;
     let fixture: ComponentFixture<PencilAttributesComponent>;
     let event: MatSliderChange;

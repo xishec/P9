@@ -4,7 +4,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { ColorType } from 'src/constants/color-constants';
 import { ColorAttributesComponent } from './color-attributes.component';
 
-fdescribe('ColorAttributesComponent', () => {
+describe('ColorAttributesComponent', () => {
     let component: ColorAttributesComponent;
     let fixture: ComponentFixture<ColorAttributesComponent>;
     let colorToolService: ColorToolService;

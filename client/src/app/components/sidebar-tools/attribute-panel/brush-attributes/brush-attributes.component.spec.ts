@@ -8,7 +8,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { Thickness } from 'src/constants/tool-constants';
 import { BrushAttributesComponent } from './brush-attributes.component';
 
-fdescribe('BrushAttributesComponent', () => {
+describe('BrushAttributesComponent', () => {
     let component: BrushAttributesComponent;
     let fixture: ComponentFixture<BrushAttributesComponent>;
     let event: MatSliderChange;
