@@ -12,7 +12,7 @@ export class SidebarToolsComponent implements OnInit {
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
-    currentToolName = '';
+    currentToolName: ToolName;
 
     constructor(private toolSelectorService: ToolSelectorService) {}
 
@@ -25,13 +25,5 @@ export class SidebarToolsComponent implements OnInit {
 
     onChangeTool(tooltipName: string): void {
         this.toolSelectorService.changeTool(tooltipName);
-    }
-
-    onSecondaryClick(): void {
-        console.log('onSecondaryClick');
-    }
-
-    onPrimaryClick(): void {
-        console.log('onPrimaryClick');
     }
 }

@@ -5,7 +5,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { ToolName } from '../../../constants/tool-constants';
 import { SidebarToolsComponent } from './sidebar-tools.component';
 
-describe('SidebarToolsComponent', () => {
+fdescribe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;
     let fixture: ComponentFixture<SidebarToolsComponent>;
     let toolSelectorService: ToolSelectorService;
@@ -14,12 +14,21 @@ describe('SidebarToolsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SidebarToolsComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [
-                {
-                    provide: ToolSelectorService,
-                    useValue: { changeTool: () => null },
-                },
-            ],
+            providers: [],
+        }).overrideComponent(SidebarToolsComponent, {
+            set: {
+                providers: [
+                    {
+                        provide: ToolSelectorService,
+                        useValue: {
+                            changeTool: () => null,
+                            currentToolName: {
+                                subscribe: () => null,
+                            },
+                        },
+                    },
+                ],
+            },
         });
         fixture = TestBed.createComponent(SidebarToolsComponent);
         component = fixture.componentInstance;
@@ -31,9 +40,17 @@ describe('SidebarToolsComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('#onChangeTool should call function changeTool when a tool is selected', () => {
-        const spy = spyOn(toolSelectorService, 'changeTool');
+    it('onChangeTool should call function changeTool when a tool is selected', () => {
+        const SPY = spyOn(toolSelectorService, 'changeTool');
+
         component.onChangeTool(ToolName.Brush);
-        expect(spy).toHaveBeenCalled();
+
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('onInit should call function changeTool', () => {
+        const SPY = spyOn(toolSelectorService, 'changeTool');
+        component.ngOnInit();
+        expect(SPY).toHaveBeenCalled();
     });
 });
