@@ -8,7 +8,7 @@ import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
 
-fdescribe('ColorApplicatorToolService', () => {
+describe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
     let injector: TestBed;
     let mockRenderer: Renderer2;
