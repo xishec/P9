@@ -6,7 +6,7 @@ import { ColorNumericValuesComponent } from "./color-numeric-values.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
-fdescribe("ColorNumericValuesComponent", () => {
+describe("ColorNumericValuesComponent", () => {
     let component: ColorNumericValuesComponent;
     let fixture: ComponentFixture<ColorNumericValuesComponent>;
     let form: FormGroup;
