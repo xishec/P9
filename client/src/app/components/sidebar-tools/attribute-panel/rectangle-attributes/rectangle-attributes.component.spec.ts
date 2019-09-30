@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RectangleAttributesComponent } from './rectangle-attributes.component';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange, MatDialog } from '@angular/material';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -20,7 +20,10 @@ fdescribe('RectangleAttributesComponent', () => {
         TestBed.configureTestingModule({
             declarations: [RectangleAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder],
+            providers: [FormBuilder, {
+                provide: MatDialog,
+                useValue: {},
+            }],
         }).overrideComponent(RectangleAttributesComponent, {
             set: {
                 providers: [

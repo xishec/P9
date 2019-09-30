@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange, MatDialog } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
@@ -20,7 +20,10 @@ fdescribe('PencilAttributesComponent', () => {
         TestBed.configureTestingModule({
             declarations: [PencilAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder],
+            providers: [FormBuilder, {
+                provide: MatDialog,
+                useValue: {},
+            }],
         }).overrideComponent(PencilAttributesComponent, {
             set: {
                 providers: [

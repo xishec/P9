@@ -12,7 +12,8 @@ describe('ToolSelectorService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ToolSelectorService],
+            providers: [ToolSelectorService, {
+            }],
         });
 
         injector = getTestBed();
