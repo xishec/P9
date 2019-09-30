@@ -1,7 +1,23 @@
 enum Keys {
     Shift = 'Shift',
     Control = 'Control',
+    Digit1 = '1',
+    Digit2 = '2',
+    Digit3 = '3',
+    a = 'a',
+    b = 'b',
+    c = 'c',
+    e = 'e',
+    g = 'g',
+    i = 'i',
+    l = 'l',
     o = 'o',
+    p = 'p',
+    r = 'r',
+    s = 's',
+    t = 't',
+    w = 'w',
+    y = 'y',
 }
 
 enum Mouse {

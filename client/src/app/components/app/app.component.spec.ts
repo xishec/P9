@@ -22,6 +22,9 @@ fdescribe('AppComponent', () => {
 
     const MOCK_KEYBOARD_CONTROL = createKeyBoardEvent(Keys.Control);
     const MOCK_KEYBOARD_O = createKeyBoardEvent(Keys.o);
+    const MOCK_KEYBOARD_S = createKeyBoardEvent(Keys.s);
+    const MOCK_KEYBOARD_G = createKeyBoardEvent(Keys.g);
+    const MOCK_KEYBOARD_E = createKeyBoardEvent(Keys.e);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -137,6 +140,14 @@ fdescribe('AppComponent', () => {
     });
 
     it('should call onControlO', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => true;
+        app.onControlO(MOCK_KEYBOARD_CONTROL);
+        app.onControlO(MOCK_KEYBOARD_O);
+        expect(SPY).toHaveBeenCalledWith(ToolName.NewDrawing);
+    });
+
+    it('should call onControlS', () => {
         const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
         app.shouldAllowShortcut = () => true;
         app.onControlO(MOCK_KEYBOARD_CONTROL);

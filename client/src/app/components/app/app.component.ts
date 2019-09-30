@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
             // Will be implemented later
         }
     }
-    @HostListener('window:keydown.control.g', ['$event']) onControlE(event: KeyboardEvent) {
+    @HostListener('window:keydown.control.e', ['$event']) onControlE(event: KeyboardEvent) {
         event.preventDefault();
         if (this.shouldAllowShortcut()) {
             // Will be implemented later
