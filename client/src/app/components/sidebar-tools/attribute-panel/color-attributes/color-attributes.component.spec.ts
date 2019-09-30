@@ -74,7 +74,8 @@ fdescribe('ColorAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('getBackgroundColorIcon should return background color with border and transform value when selectedColorType is background-color ', () => {
+    it('getBackgroundColorIcon should return background color with border and transform value when selectedColorType is background-color',
+    () => {
         component.selectedColorType = ColorType.backgroundColor;
         expect(component.getBackgroundColorIcon()).toEqual({
             backgroundColor: '#' + component.backgroundColor,
@@ -83,14 +84,14 @@ fdescribe('ColorAttributesComponent', () => {
         });
     });
 
-    it('getBackgroundColorIcon should return background color when  selectedColorType is undefined ', () => {
+    it('getBackgroundColorIcon should return background color when  selectedColorType is undefined', () => {
         component.selectedColorType = undefined;
         expect(component.getBackgroundColorIcon()).toEqual({
             backgroundColor: '#' + component.backgroundColor,
         });
     });
 
-    it('getPrimaryColorIcon should return background color with border and transform value when selectedColorType is primary-color ', () => {
+    it('getPrimaryColorIcon should return background color with border and transform value when selectedColorType is primary-color', () => {
         component.selectedColorType = ColorType.primaryColor;
         expect(component.getPrimaryColorIcon()).toEqual({
             backgroundColor: '#' + component.primaryColor,
@@ -99,14 +100,15 @@ fdescribe('ColorAttributesComponent', () => {
         });
     });
 
-    it('getPrimaryColorIcon should return background color when  selectedColorType is undefined ', () => {
+    it('getPrimaryColorIcon should return background color when  selectedColorType is undefined', () => {
         component.selectedColorType = undefined;
         expect(component.getPrimaryColorIcon()).toEqual({
             backgroundColor: '#' + component.primaryColor,
         });
     });
 
-    it('getSecondaryColorIcon should return background color with border and transform value when selectedColorType is secondary-color  ', () => {
+    it('getSecondaryColorIcon should return background color with border and transform value when selectedColorType is secondary-color',
+    () => {
         component.selectedColorType = ColorType.secondaryColor;
         expect(component.getSecondaryColorIcon()).toEqual({
             backgroundColor: '#' + component.secondaryColor,
@@ -115,7 +117,7 @@ fdescribe('ColorAttributesComponent', () => {
         });
     });
 
-    it('getSecondaryColorIcon should return background color when  selectedColorType is undefined ', () => {
+    it('getSecondaryColorIcon should return background color when  selectedColorType is undefined', () => {
         component.selectedColorType = undefined;
         expect(component.getSecondaryColorIcon()).toEqual({
             backgroundColor: '#' + component.secondaryColor,

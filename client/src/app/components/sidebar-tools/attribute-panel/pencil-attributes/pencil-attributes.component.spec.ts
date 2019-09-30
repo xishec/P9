@@ -53,7 +53,7 @@ fdescribe('PencilAttributesComponent', () => {
         component.ngOnInit();
 
         attributesManagerService = fixture.debugElement.injector.get<AttributesManagerService>(
-            AttributesManagerService
+            AttributesManagerService,
         );
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
     }));
