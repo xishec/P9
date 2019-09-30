@@ -5,7 +5,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { ToolName } from '../../../constants/tool-constants';
 import { SidebarToolsComponent } from './sidebar-tools.component';
 
-fdescribe('SidebarToolsComponent', () => {
+describe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;
     let fixture: ComponentFixture<SidebarToolsComponent>;
     let toolSelectorService: ToolSelectorService;
