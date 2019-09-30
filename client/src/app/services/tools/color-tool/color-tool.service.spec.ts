@@ -72,7 +72,7 @@ describe('ColorToolService', () => {
 
     it('#changeCurrentShowColorPalette should change showColorPalette to true', () => {
         service.showColorPalette = new BehaviorSubject<boolean>(false);
-        service.changShowColorPalette(true);
+        service.changeShowColorPalette(true);
         const showColorPalette = new BehaviorSubject<boolean>(true);
         expect(service.showColorPalette).toEqual(showColorPalette);
     });
