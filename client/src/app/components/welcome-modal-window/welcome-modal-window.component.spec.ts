@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material';
 
 import { WelcomeModalWindowComponent } from './welcome-modal-window.component';
 
-fdescribe('WelcomeModalWindowComponent', () => {
+describe('WelcomeModalWindowComponent', () => {
     let component: WelcomeModalWindowComponent;
     let fixture: ComponentFixture<WelcomeModalWindowComponent>;
 

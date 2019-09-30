@@ -10,7 +10,7 @@ import {
     MAX_NUMBER_OF_LAST_COLORS,
 } from 'src/constants/color-constants';
 
-fdescribe('ColorToolService', () => {
+describe('ColorToolService', () => {
     let service: ColorToolService;
     let injector: TestBed;
     let colorQueue: BehaviorSubject<string[]>;

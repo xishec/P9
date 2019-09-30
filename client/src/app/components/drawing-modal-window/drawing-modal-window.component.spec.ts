@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material';
 
 import { DrawingModalWindowComponent } from './drawing-modal-window.component';
 
-fdescribe('DrawingModalWindowComponent', () => {
+describe('DrawingModalWindowComponent', () => {
     let component: DrawingModalWindowComponent;
     let fixture: ComponentFixture<DrawingModalWindowComponent>;
 
