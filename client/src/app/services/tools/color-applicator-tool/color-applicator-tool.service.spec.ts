@@ -73,37 +73,31 @@ describe('ColorApplicatorToolService', () => {
 
     it('#onMouseUp should not change ColorApplicatorToolService', () => {
         let event: MouseEvent = new MouseEvent('click');
-        service.onMouseUp(event);
-        expect(service).toBeTruthy();
+        expect(service.onMouseUp(event)).toEqual(undefined);
     });
 
     it('#onMouseEnter should not change ColorApplicatorToolService', () => {
         let event: MouseEvent = new MouseEvent('click');
-        service.onMouseEnter(event);
-        expect(service).toBeTruthy();
+        expect(service.onMouseEnter(event)).toEqual(undefined);
     });
 
     it('#onMouseLeave should not change ColorApplicatorToolService', () => {
         let event: MouseEvent = new MouseEvent('click');
-        service.onMouseLeave(event);
-        expect(service).toBeTruthy();
+        expect(service.onMouseLeave(event)).toEqual(undefined);
     });
 
     it('#onKeyDown should not change ColorApplicatorToolService', () => {
         let event: KeyboardEvent = new KeyboardEvent('click');
-        service.onKeyDown(event);
-        expect(service).toBeTruthy();
+        expect(service.onKeyDown(event)).toEqual(undefined);
     });
 
     it('#onKeyUp should not change ColorApplicatorToolService', () => {
         let event: KeyboardEvent = new KeyboardEvent('click');
-        service.onKeyUp(event);
-        expect(service).toBeTruthy();
+        expect(service.onKeyUp(event)).toEqual(undefined);
     });
 
     it('#onMouseMove should not change ColorApplicatorToolService', () => {
         let event: MouseEvent = new MouseEvent('click');
-        service.onMouseMove(event);
-        expect(service).toBeTruthy();
+        expect(service.onMouseMove(event)).toEqual(undefined);
     });
 });
