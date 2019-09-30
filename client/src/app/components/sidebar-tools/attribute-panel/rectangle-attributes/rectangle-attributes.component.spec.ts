@@ -20,10 +20,13 @@ fdescribe('RectangleAttributesComponent', () => {
         TestBed.configureTestingModule({
             declarations: [RectangleAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            providers: [FormBuilder, {
-                provide: MatDialog,
-                useValue: {},
-            }],
+            providers: [
+                FormBuilder,
+                {
+                    provide: MatDialog,
+                    useValue: {},
+                },
+            ],
         }).overrideComponent(RectangleAttributesComponent, {
             set: {
                 providers: [
@@ -51,7 +54,7 @@ fdescribe('RectangleAttributesComponent', () => {
         component.ngOnInit();
 
         attributesManagerService = fixture.debugElement.injector.get<AttributesManagerService>(
-            AttributesManagerService,
+            AttributesManagerService
         );
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
     }));
@@ -60,84 +63,84 @@ fdescribe('RectangleAttributesComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`#onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
         event.value = AVERAGE_THICKNESS;
-        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
+        const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
         component.onSliderChange(event);
 
         expect(component.rectangleAttributesForm.value.thickness).toBe(AVERAGE_THICKNESS);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
-    it(`#onSliderChange should not change the value of thickness if event value  ]${Thickness.Min},${Thickness.Max}[`, () => {
-        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
+    it(`onSliderChange should not change the value of thickness if event value  ]${Thickness.Min},${Thickness.Max}[`, () => {
+        const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
         event.value = Thickness.Max + AVERAGE_THICKNESS;
         component.onSliderChange(event);
         event.value = Thickness.Min - AVERAGE_THICKNESS;
         component.onSliderChange(event);
 
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('#onSliderChange should not call onThicknessChange if event value is null', () => {
-        const spy = spyOn(component, 'onThicknessChange').and.returnValue();
+    it('onSliderChange should not call onThicknessChange if event value is null', () => {
+        const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
         event.value = null;
         component.onSliderChange(event);
 
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
         component.rectangleAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.rectangleAttributesForm.controls.thickness.setValue(Thickness.Max + AVERAGE_THICKNESS);
-        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`#onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.rectangleAttributesForm.controls.thickness.setValue(Thickness.Min - AVERAGE_THICKNESS);
-        const spy = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('#onFocus should call changeIsOnInput when user in on focus', () => {
-        const spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
+    it('onFocus should call changeIsOnInput when user in on focus', () => {
+        const SPY = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
 
         component.onFocus();
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
-    it('#onFocus should  call changeIsOnInput when user is out of focus', () => {
-        const spy = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
+    it('onFocus should  call changeIsOnInput when user is out of focus', () => {
+        const SPY = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
 
         component.onFocusOut();
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
-    it('#change should call changeStyle when user select a trace type', () => {
-        const spy = spyOn(attributesManagerService, 'changeTraceType').and.returnValue();
+    it('change should call changeStyle when user select a trace type', () => {
+        const SPY = spyOn(attributesManagerService, 'changeTraceType').and.returnValue();
 
         component.onTraceTypeChange();
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 });

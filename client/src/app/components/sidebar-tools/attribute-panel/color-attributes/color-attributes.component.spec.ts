@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorAttributesComponent } from './color-attributes.component';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { ColorType } from 'src/constants/color-constants';
+import { ColorAttributesComponent } from './color-attributes.component';
 
 fdescribe('ColorAttributesComponent', () => {
     let component: ColorAttributesComponent;
@@ -37,41 +37,41 @@ fdescribe('ColorAttributesComponent', () => {
     });
 
     it('onClickBackgroundColor should call changeSelectedColorType and changeShowColorPalette when clicked', () => {
-        let changeSelectedColorTypeSpy = spyOn(colorToolService, 'changeSelectedColorType');
-        let changeShowColorPaletteSpy = spyOn(colorToolService, 'changeShowColorPalette');
+        const CHANGE_SELECTED_COLOR_TYPE_SPY = spyOn(colorToolService, 'changeSelectedColorType');
+        const CHANGE_SHOW_COLOR_PALETTE_SPY = spyOn(colorToolService, 'changeShowColorPalette');
 
         component.onClickBackgroundColor();
 
-        expect(changeSelectedColorTypeSpy).toHaveBeenCalled();
-        expect(changeShowColorPaletteSpy).toHaveBeenCalled();
+        expect(CHANGE_SELECTED_COLOR_TYPE_SPY).toHaveBeenCalled();
+        expect(CHANGE_SHOW_COLOR_PALETTE_SPY).toHaveBeenCalled();
     });
 
     it('onClickPrimaryColor should call changeSelectedColorType and changeShowColorPalette when clicked', () => {
-        let changeSelectedColorTypeSpy = spyOn(colorToolService, 'changeSelectedColorType');
-        let changeShowColorPaletteSpy = spyOn(colorToolService, 'changeShowColorPalette');
+        const CHANGE_SELECTED_COLOR_TYPE_SPY = spyOn(colorToolService, 'changeSelectedColorType');
+        const CHANGE_SHOW_COLOR_PALETTE_SPY = spyOn(colorToolService, 'changeShowColorPalette');
 
         component.onClickPrimaryColor();
 
-        expect(changeSelectedColorTypeSpy).toHaveBeenCalled();
-        expect(changeShowColorPaletteSpy).toHaveBeenCalled();
+        expect(CHANGE_SELECTED_COLOR_TYPE_SPY).toHaveBeenCalled();
+        expect(CHANGE_SHOW_COLOR_PALETTE_SPY).toHaveBeenCalled();
     });
 
     it('onClickSecondaryColor should call changeSelectedColorType and changeShowColorPalette when clicked', () => {
-        let changeSelectedColorTypeSpy = spyOn(colorToolService, 'changeSelectedColorType');
-        let changeShowColorPaletteSpy = spyOn(colorToolService, 'changeShowColorPalette');
+        const CHANGE_SELECTED_COLOR_TYPE_SPY = spyOn(colorToolService, 'changeSelectedColorType');
+        const CHANGE_SHOW_COLOR_PALETTE_SPY = spyOn(colorToolService, 'changeShowColorPalette');
 
         component.onClickSecondaryColor();
 
-        expect(changeSelectedColorTypeSpy).toHaveBeenCalled();
-        expect(changeShowColorPaletteSpy).toHaveBeenCalled();
+        expect(CHANGE_SELECTED_COLOR_TYPE_SPY).toHaveBeenCalled();
+        expect(CHANGE_SHOW_COLOR_PALETTE_SPY).toHaveBeenCalled();
     });
 
     it('switchColors should call switchPrimarySecondary when clicked', () => {
-        let spy = spyOn(colorToolService, 'switchPrimarySecondary');
+        const SPY = spyOn(colorToolService, 'switchPrimarySecondary');
 
         component.switchColors();
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('getBackgroundColorIcon should return background color with border and transform value when selectedColorType is background-color ', () => {
