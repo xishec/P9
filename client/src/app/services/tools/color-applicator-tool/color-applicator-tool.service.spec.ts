@@ -1,19 +1,12 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { /*Injectable,*/ Renderer2 } from '@angular/core';
-//import { BehaviorSubject } from 'rxjs';
+import { Renderer2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-//import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-//import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-
-//const MOCK_COLOR = '#000000';
-
-export class FakeDrawStackService extends DrawStackService {
-    // drawStack = new Array<SVGGElement>();
-    // stackTarget = new BehaviorSubject(new StackTargetInfo());
-    // currentStackTarget = this.stackTarget.asObservable();
-}
+import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
+import { ToolName } from 'src/constants/tool-constants';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 fdescribe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
@@ -21,36 +14,61 @@ fdescribe('ColorApplicatorToolService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [DrawStackService, Renderer2],
-            // providers: [
-            //     {
-            //         provide: DrawStackService,
-            //         useValue: {
-            //             currentStackTarget: new StackTargetInfo(), //how do I do it???
-            //         },
-            //     },
-            //     {
-            //         provide: Renderer2,
-            //         useValue: {
-            //             createElement: () => null,
-            //             setAttribute: () => null,
-            //             appendChild: () => null,
-            //         },
-            //     },
-            // ],
+            providers: [
+                DrawStackService,
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                        setAttribute: () => true,
+                        appendChild: () => null,
+                    },
+                },
+            ],
         });
         injector = getTestBed();
         service = injector.get(ColorApplicatorToolService);
+        service['currentStackTarget'].targetPosition = 0;
+        service['drawStack'].push(createMockSVGCircle());
     });
 
     it('ColorApplicatorToolService should be created', () => {
         expect(service).toBeTruthy();
     });
 
-    it('#onMouseDown should ', () => {
-        let event: MouseEvent = new MouseEvent('click');
-        service.onMouseDown(event);
-        expect(service).toBeTruthy();
+    it('#initializeColorToolService should ', () => {
+        let colorService: ColorToolService = new ColorToolService();
+        let primaryColorTmp: BehaviorSubject<string> = colorService['primaryColor'];
+        service.initializeColorToolService(new ColorToolService());
+        expect('#' + primaryColorTmp.value).toEqual(service['primaryColor']);
+    });
+
+    it('#onMouseDown should set attribute to stroke when left button clicked if tool is Brush', () => {
+        let mouseEventTmp = createMouseEvent(1, 1, 0);
+        service['currentStackTarget'].toolName = ToolName.Brush;
+        service.onMouseDown(mouseEventTmp);
+        expect(service['renderer']).toBeTruthy();
+    });
+
+    it('#onMouseDown should not set attribute to stroke when left button clicked if tool is Quill', () => {
+        let mouseEventTmp = createMouseEvent(1, 1, 0);
+        service['currentStackTarget'].toolName = ToolName.Quill;
+        service.onMouseDown(mouseEventTmp);
+        expect(service['renderer']).toBeTruthy();
+    });
+
+    it('#onMouseDown should not set attribute to stroke when right button clicked if tool is Brush', () => {
+        let mouseEventTmp = createMouseEvent(1, 1, 2);
+        service['currentStackTarget'].toolName = ToolName.Brush;
+        service.onMouseDown(mouseEventTmp);
+        expect(service['renderer']).toBeTruthy();
+    });
+
+    it('#onMouseDown should set attribute to stroke when right button clicked if tool is Quill ', () => {
+        let mouseEventTmp = createMouseEvent(1, 1, 2);
+        service['currentStackTarget'].toolName = ToolName.Quill;
+        service.onMouseDown(mouseEventTmp);
+        expect(service['renderer']).toBeTruthy();
     });
 
     it('#onMouseUp should not change ColorApplicatorToolService', () => {
