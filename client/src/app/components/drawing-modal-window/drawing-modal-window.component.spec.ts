@@ -2,14 +2,14 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { DrawingModalWindowComponent } from './drawing-modal-window.component';
 
-fdescribe('DrawingModalWindowComponent', () => {
+describe('DrawingModalWindowComponent', () => {
     let component: DrawingModalWindowComponent;
     let fixture: ComponentFixture<DrawingModalWindowComponent>;
     let form: FormGroup;
@@ -82,14 +82,22 @@ fdescribe('DrawingModalWindowComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should ', () => {
+    it('should set displayNewDrawingModalWindow to subscribe to value in drawing modal window service', () => {
         const SPY = spyOn(component, 'initializeForm');
+        colorToolService.backgroundColor = new BehaviorSubject<string>('');
+        drawingModalService.currentDisplayNewDrawingModalWindow = new Observable<boolean>();
+        colorToolService.previewColor = new BehaviorSubject<string>('');
+        drawingModalService.blankDrawingZone = new BehaviorSubject<boolean>(true);
         component.ngOnInit();
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should call initialize form when component is rendered', () => {
         const SPY = spyOn(component, 'initializeForm');
+        colorToolService.backgroundColor = new BehaviorSubject<string>('');
+        drawingModalService.currentDisplayNewDrawingModalWindow = new Observable<boolean>();
+        colorToolService.previewColor = new BehaviorSubject<string>('');
+        drawingModalService.blankDrawingZone = new BehaviorSubject<boolean>(true);
         component.ngOnInit();
         expect(SPY).toHaveBeenCalled();
     });
@@ -183,5 +191,4 @@ fdescribe('DrawingModalWindowComponent', () => {
         component.onFocusOut();
         expect(SPY).toHaveBeenCalledWith(false);
     });
-
 });
