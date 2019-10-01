@@ -19,8 +19,6 @@ fdescribe('DrawingModalWindowComponent', () => {
     // let shortCutManagerService: ShortcutManagerService;
 
     const testColor = '23fe45';
-    const testOpacity = 0.4;
-
     const dialogMock = {
         close: () => null,
     };
@@ -122,13 +120,11 @@ fdescribe('DrawingModalWindowComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('should return the right preview color and opacity when getUserColorIcon funtion is called', () => {
+    it('should return the right preview color when getUserColorIcon funtion is called', () => {
         component.previewColor = testColor;
-        form.controls.A.setValue(testOpacity);
         const iconStyle = component.getUserColorIcon();
         expect(iconStyle).toEqual({
             backgroundColor: '#' + testColor,
-            opacity: String(testOpacity),
         });
     });
 });
