@@ -92,19 +92,19 @@ export class AppComponent implements OnInit {
     @HostListener('window:keydown.control.s', ['$event']) onControlS(event: KeyboardEvent) {
         event.preventDefault();
         if (this.shouldAllowShortcut()) {
-            // Will be implemented later
+            this.toolSelectorService.changeTool(ToolName.Save);
         }
     }
     @HostListener('window:keydown.control.g', ['$event']) onControlG(event: KeyboardEvent) {
         event.preventDefault();
         if (this.shouldAllowShortcut()) {
-            // Will be implemented later
+            this.toolSelectorService.changeTool(ToolName.ArtGallery);
         }
     }
     @HostListener('window:keydown.control.e', ['$event']) onControlE(event: KeyboardEvent) {
         event.preventDefault();
         if (this.shouldAllowShortcut()) {
-            // Will be implemented later
+            this.toolSelectorService.changeTool(ToolName.Export);
         }
     }
 
