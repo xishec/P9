@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { empty, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { createKeyBoardEvent } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
@@ -122,7 +122,7 @@ describe('AppComponent', () => {
     });
 
     it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
-        const SPY = spyOn(app[`dialog`], 'open').and.returnValue({ afterClosed: () => empty() } as any);
+        const SPY = spyOn(app[`dialog`], 'open').and.returnValue({ afterClosed: () => of() } as any);
         app.displayWelcomeModalWindow = true;
         app.openWelcomeModalWindow();
         expect(SPY).toHaveBeenCalled();

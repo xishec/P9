@@ -1,6 +1,6 @@
-import { DrawStackService } from './draw-stack.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { ToolName } from 'src/constants/tool-constants';
+import { DrawStackService } from './draw-stack.service';
 
 const NB_PUSH = 3;
 
@@ -17,8 +17,7 @@ describe('DrawStackService', () => {
     });
 
     it('when getElementByPosition then returns element in drawStack at position', () => {
-        // tslint:disable-next-line: no-string-literal
-        service['drawStack'].push(mockSVGGElement);
+        service[`drawStack`].push(mockSVGGElement);
 
         const returnedElement: any = service.getElementByPosition(0);
 
@@ -27,8 +26,7 @@ describe('DrawStackService', () => {
 
     it(`when getDrawStackLenght after ${NB_PUSH} push then should return lenght of ${NB_PUSH}`, () => {
         for (let i = 0; i < NB_PUSH; i++) {
-            // tslint:disable-next-line: no-string-literal
-            service['drawStack'].push(mockSVGGElement);
+            service[`drawStack`].push(mockSVGGElement);
         }
 
         const nbElements = service.getDrawStackLength();
@@ -39,39 +37,33 @@ describe('DrawStackService', () => {
     it('when push SVGGElement drawStack should contain the element', () => {
         service.push(mockSVGGElement);
 
-        // tslint:disable-next-line: no-string-literal
-        expect(service['drawStack']).toContain(mockSVGGElement);
+        expect(service[`drawStack`]).toContain(mockSVGGElement);
     });
 
     it('when pop return the last element and drawStack does not contain element', () => {
-        // tslint:disable-next-line: no-string-literal
-        service['drawStack'].push(mockSVGGElement);
+        service[`drawStack`].push(mockSVGGElement);
 
         const popElement = service.pop();
 
         expect(popElement).toEqual(mockSVGGElement);
-        // tslint:disable-next-line: no-string-literal
-        expect(service['drawStack']).not.toContain(mockSVGGElement);
+        expect(service[`drawStack`]).not.toContain(mockSVGGElement);
     });
 
     it('when reset then drawStack is empty and length zero', () => {
         for (let i = 0; i < NB_PUSH; i++) {
-            // tslint:disable-next-line: no-string-literal
-            service['drawStack'].push(mockSVGGElement);
+            service[`drawStack`].push(mockSVGGElement);
         }
 
         service.reset();
 
-        // tslint:disable-next-line: no-string-literal
-        expect(service['drawStack'].length).toBe(0);
-        // tslint:disable-next-line: no-string-literal
-        expect(service['drawStack']).not.toContain(mockSVGGElement);
+        expect(service[`drawStack`].length).toBe(0);
+        expect(service[`drawStack`]).not.toContain(mockSVGGElement);
     });
 
     it('should getDrawStackLength', () => {
-        service[`stackTarget`].next = () => {};
+        service[`stackTarget`].next = () => null;
         const SPY = spyOn(service[`stackTarget`], 'next');
-        let stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
+        const stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
         service.changeTargetElement(stackTarget);
         expect(SPY).toHaveBeenCalledWith(stackTarget);
     });
