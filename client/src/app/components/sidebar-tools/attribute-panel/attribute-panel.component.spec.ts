@@ -7,7 +7,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ToolName } from 'src/constants/tool-constants';
 
-fdescribe('AttributePanelComponent', () => {
+describe('AttributePanelComponent', () => {
     let component: AttributePanelComponent;
     let fixture: ComponentFixture<AttributePanelComponent>;
 
