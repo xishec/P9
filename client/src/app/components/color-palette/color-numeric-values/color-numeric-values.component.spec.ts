@@ -7,7 +7,7 @@ import { ColorToolService } from '../../../services/tools/color-tool/color-tool.
 import { ColorNumericValuesComponent } from './color-numeric-values.component';
 import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 
-fdescribe('ColorNumericValuesComponent', () => {
+describe('ColorNumericValuesComponent', () => {
     let component: ColorNumericValuesComponent;
     let fixture: ComponentFixture<ColorNumericValuesComponent>;
     let form: FormGroup;
@@ -131,7 +131,7 @@ fdescribe('ColorNumericValuesComponent', () => {
     });
 });
 
-fdescribe('ColorNumericValuesComponent', () => {
+describe('ColorNumericValuesComponent', () => {
     let component: ColorNumericValuesComponent;
     let fixture: ComponentFixture<ColorNumericValuesComponent>;
 
