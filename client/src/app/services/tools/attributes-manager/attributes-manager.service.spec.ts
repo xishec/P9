@@ -4,7 +4,7 @@ import { AttributesManagerService } from './attributes-manager.service';
 import { TraceType } from 'src/constants/tool-constants';
 import { BehaviorSubject } from 'rxjs';
 
-fdescribe('AttributesManagerService', () => {
+describe('AttributesManagerService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
