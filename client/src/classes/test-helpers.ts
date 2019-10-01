@@ -30,6 +30,7 @@ export const createMouseEvent = (
 export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
+        preventDefault: () => {},
     };
     return (keyboardEvent as unknown) as KeyboardEvent;
 };
