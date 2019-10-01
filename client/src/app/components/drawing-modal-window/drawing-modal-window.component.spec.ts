@@ -127,4 +127,28 @@ fdescribe('DrawingModalWindowComponent', () => {
             backgroundColor: '#' + testColor,
         });
     });
+
+    it('should not resize the dimensions when form is dirty', () => {
+        const spyWidthSetValue = spyOn(component.drawingModalForm.controls['width'], 'setValue');
+        const spyHeightSetValue = spyOn(component.drawingModalForm.controls['height'], 'setValue');
+
+        component.drawingModalForm.controls['width'].markAsDirty();
+        component.drawingModalForm.controls['height'].markAsDirty();
+        component.onResize();
+
+        expect(spyWidthSetValue).not.toHaveBeenCalled();
+        expect(spyHeightSetValue).not.toHaveBeenCalled();
+    });
+
+    it('should resize the window when form is clean', () => {
+        const spyWidthSetValue = spyOn(component.drawingModalForm.controls['width'], 'setValue');
+        const spyHeightSetValue = spyOn(component.drawingModalForm.controls['height'], 'setValue');
+
+        component.drawingModalForm.controls['width'].markAsUntouched();
+        component.drawingModalForm.controls['height'].markAsUntouched();
+        component.onResize();
+
+        expect(spyWidthSetValue).toHaveBeenCalled();
+        expect(spyHeightSetValue).toHaveBeenCalled();
+    });
 });
