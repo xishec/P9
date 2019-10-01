@@ -76,22 +76,21 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     getUserColorIcon(): IconStyle {
-        return { backgroundColor: '#' + this.previewColor, opacity: String(this.drawingModalForm.value.A) };
+        return { backgroundColor: '#' + this.previewColor };
     }
 
     onClickColorQueueButton(previewColor: string): void {
         this.previewColor = previewColor;
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }
 
 interface IconStyle {
     backgroundColor: string;
-    opacity: string;
 }

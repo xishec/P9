@@ -1,6 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { ToolName } from '../../../constants/tool-constants';
 import { SidebarToolsComponent } from './sidebar-tools.component';
