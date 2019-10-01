@@ -5,7 +5,7 @@ import { MatSliderChange } from '@angular/material';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorPickerComponent } from './color-picker.component';
 
-fdescribe('ColorPickerComponent', () => {
+describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
     let fixture: ComponentFixture<ColorPickerComponent>;
 
