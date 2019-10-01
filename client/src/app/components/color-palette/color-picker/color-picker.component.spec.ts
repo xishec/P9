@@ -4,7 +4,6 @@ import { MatSliderChange } from '@angular/material';
 
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorPickerComponent } from './color-picker.component';
-import { createMouseEvent } from 'src/classes/test-helpers';
 
 fdescribe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
@@ -13,18 +12,7 @@ fdescribe('ColorPickerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ColorPickerComponent],
-            providers: [
-                ColorToolService,
-                Renderer2,
-                // {
-                //     provide: Renderer2,
-                //     useValue: {
-                //         createElement: () => null,
-                //         setAttribute: () => null,
-                //         appendChild: () => null,
-                //     },
-                // },
-            ],
+            providers: [ColorToolService, Renderer2],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
@@ -53,20 +41,5 @@ fdescribe('ColorPickerComponent', () => {
         event.value = 2;
         component.onSliderChange(event);
         expect(component.obscurity).toEqual(2);
-    });
-
-    it('#onCanvasClick should not change obscurity to 0 if obscurity is defined', () => {
-        let event: MouseEvent = createMouseEvent(0, 0, 0);
-        component.obscurity = 1;
-        const valueServiceSpy: jasmine.SpyObj<CanvasRenderingContext2D> = jasmine.createSpyObj(
-            'CanvasRenderingContext2D',
-            ['getImageData'],
-        );
-        const stubValue: ImageData = new ImageData(10, 10);
-
-        valueServiceSpy.getImageData.and.returnValue(stubValue);
-
-        component.onCanvasClick(event);
-        expect(component.obscurity).toEqual(1);
     });
 });
