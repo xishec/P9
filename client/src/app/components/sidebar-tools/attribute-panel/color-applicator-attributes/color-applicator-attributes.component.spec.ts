@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ColorApplicatorAttributesComponent } from './color-applicator-attributes.component';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 
-fdescribe('ColorApplicatorAttributesComponent', () => {
+describe('ColorApplicatorAttributesComponent', () => {
     let component: ColorApplicatorAttributesComponent;
     let fixture: ComponentFixture<ColorApplicatorAttributesComponent>;
 
