@@ -38,10 +38,6 @@ fdescribe('AppComponent', () => {
     const MOCK_KEYBOARD_W = createKeyBoardEvent(Keys.w);
     const MOCK_KEYBOARD_Y = createKeyBoardEvent(Keys.y);
 
-    const afterClosed = {
-        subscribe: () => null,
-    };
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AppComponent],
@@ -124,7 +120,7 @@ fdescribe('AppComponent', () => {
     });
 
     it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
-        const SPY = spyOn(app[`dialog`], 'open');
+        const SPY = spyOn(app[`dialog`], 'open').and.returnValue({afterClosed: () => of(true)});
         app.displayWelcomeModalWindow = true;
         app.openWelcomeModalWindow();
         expect(SPY).toHaveBeenCalled();
