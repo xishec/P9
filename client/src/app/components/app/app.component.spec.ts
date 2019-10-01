@@ -47,14 +47,14 @@ fdescribe('AppComponent', () => {
                     useValue: {
                         basicGet: () => new Observable(),
                         pipe: () => new Observable(),
-                        subscribe: () => {},
+                        subscribe: () => null,
                     },
                 },
                 {
                     provide: WelcomeModalWindowService,
                     useValue: {
                         currentWelcomeModalWindowClosed: {
-                            subscribe: () => {},
+                            subscribe: () => null,
                         },
                         getValueFromLocalStorage: () => false,
                     },
@@ -74,14 +74,14 @@ fdescribe('AppComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        changeTool: (arg: string) => {},
+                        changeTool: (arg: string) => null,
                     },
                 },
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
                         currentDisplayNewDrawingModalWindow: {
-                            subscribe: () => {},
+                            subscribe: () => null,
                         },
                     },
                 },
@@ -89,14 +89,14 @@ fdescribe('AppComponent', () => {
                     provide: ShortcutManagerService,
                     useValue: {
                         currentIsOnInput: {
-                            subscribe: () => {},
+                            subscribe: () => null,
                         },
                     },
                 },
                 {
                     provide: KeyboardEvent,
                     useValue: {
-                        preventDefault: () => {},
+                        preventDefault: () => null,
                     },
                 },
             ],
