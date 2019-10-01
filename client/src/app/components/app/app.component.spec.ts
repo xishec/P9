@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 
 import { createKeyBoardEvent } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
@@ -61,12 +61,14 @@ fdescribe('AppComponent', () => {
                 },
                 {
                     provide: MatDialogRef,
-                    useValue: afterClosed,
+                    useValue: {
+                        afterClosed: () => of('result'),
+                    },
                 },
                 {
                     provide: MatDialog,
                     useValue: {
-                        open: (one: any, two: any) => {},
+                        open: (one: any, two: any) => MatDialogRef,
                     },
                 },
                 {
@@ -120,7 +122,7 @@ fdescribe('AppComponent', () => {
     });
 
     it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
-        const SPY = spyOn(app[`dialog`], 'open').and.returnValue({afterClosed: () => of(true)});
+        const SPY = spyOn(app[`dialog`], 'open').and.returnValue({ afterClosed: () => EMPTY } as any);
         app.displayWelcomeModalWindow = true;
         app.openWelcomeModalWindow();
         expect(SPY).toHaveBeenCalled();
