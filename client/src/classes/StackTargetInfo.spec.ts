@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { StackTargetInfo } from './StackTargetInfo';
 import { ToolName } from 'src/constants/tool-constants';
 
-fdescribe('AttributesManagerService', () => {
+describe('AttributesManagerService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created with valid parameters', () => {
