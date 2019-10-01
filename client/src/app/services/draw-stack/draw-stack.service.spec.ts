@@ -1,4 +1,6 @@
 import { DrawStackService } from './draw-stack.service';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName } from 'src/constants/tool-constants';
 
 const NB_PUSH = 3;
 
@@ -64,5 +66,13 @@ describe('DrawStackService', () => {
         expect(service['drawStack'].length).toBe(0);
         // tslint:disable-next-line: no-string-literal
         expect(service['drawStack']).not.toContain(mockSVGGElement);
+    });
+
+    it('should getDrawStackLength', () => {
+        service[`stackTarget`].next = () => {};
+        const SPY = spyOn(service[`stackTarget`], 'next');
+        let stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
+        service.changeTargetElement(stackTarget);
+        expect(SPY).toHaveBeenCalledWith(stackTarget);
     });
 });
