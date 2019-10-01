@@ -1,0 +1,60 @@
+#sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    width: 360px;
+    background-color: #ffffff;
+
+    z-index: 1;
+}
+
+#tools-buttons {
+    width: 35px;
+    height: 100vh;
+
+    mat-button-toggle-group {
+        width: 35px;
+    }
+}
+
+#file-buttons {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    .mat-button-toggle-checked {
+        background: #ffffff;
+    }
+}
+
+.mat-button-toggle {
+    width: 35px;
+    height: 35px;
+    border: none;
+
+    i {
+        font-size: 75%;
+    }
+}
+
+#color {
+    margin-top: 3px;
+    padding: 3px;
+    width: 35px;
+    button {
+        width: 20px;
+        height: 20px;
+        border: 0;
+    }
+    #secondary {
+        background-color: pink;
+    }
+    #primary {
+        background-color: palevioletred;
+        position: relative;
+        top: -10px;
+        left: 10px;
+    }
+}

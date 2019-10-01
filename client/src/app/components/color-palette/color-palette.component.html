@@ -1,0 +1,28 @@
+<div id="container">
+    <div class="form-group">
+        <div id="buttons">
+            <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                Annuler
+            </button>
+            <button
+                class="actionButton"
+                mat-stroked-button
+                type="submit"
+                (click)="onSubmit()"
+            >
+                <i class="fas fa-check-circle"></i>
+                Choisir
+            </button>
+        </div>
+
+        <div id="user-color">
+            <span> Aperçu de couleur :</span>
+            <button id="big-color" class="color" type="button" [ngStyle]="getUserColorIcon()"></button>
+            <br />
+        </div>
+
+        <app-color-picker></app-color-picker>
+        <app-color-numeric-values></app-color-numeric-values>
+        <app-color-queue (clickedColorButton)="onClickColorQueueButton($event)"></app-color-queue>
+    </div>
+</div>

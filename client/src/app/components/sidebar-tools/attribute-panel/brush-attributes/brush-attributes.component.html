@@ -1,0 +1,49 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="brushAttributesForm">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="thickness"
+                (input)="onSliderChange($event)"
+                [min]="Thickness.Min"
+                value="{{ brushAttributesForm.value.thickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="thickness"
+                    (input)="onThicknessChange()"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>
+                    Style de pinceau
+                </mat-label>
+                <mat-select
+                    formControlName="style"
+                    (selectionChange)="change($event.value)"
+                    [(value)]="selected"
+                    [ngClass]="selected ? 'class' + selected : 'class1'"
+                >
+                    <mat-option *ngFor="let style of styles" [value]="style">
+                        {{ style }}
+                        <img height="40" src="/assets/brush{{ style }}.png" />
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+</div>

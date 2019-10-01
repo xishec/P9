@@ -1,0 +1,14 @@
+<svg
+    #svgpad
+    [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
+    [attr.width]="drawingInfo.width"
+    [attr.height]="drawingInfo.height"
+    [ngStyle]="getCursorStyle()"
+>
+    <rect
+        (click)="onClickRectangle()"
+        [ngStyle]="changeStyle()"
+        [attr.height]="this.drawingInfo.height + 'px'"
+        [attr.width]="this.drawingInfo.width + 'px'"
+    />
+</svg>
