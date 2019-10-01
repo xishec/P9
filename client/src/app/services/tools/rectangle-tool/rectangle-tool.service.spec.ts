@@ -219,7 +219,7 @@ describe('RectangleToolService', () => {
         expect(rectangleTool.isSquarePreview).toBeFalsy();
     });
 
-    it('should call remove 2 times and append 4 time for a full rectangle', () => {
+    it('should call remove 2 times and append 2 time for a full rectangle', () => {
         const spyAppend = spyOn(rendererMock, 'appendChild');
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
@@ -231,7 +231,7 @@ describe('RectangleToolService', () => {
         expect(rectangleTool.isPreviewing).toBeFalsy();
         expect(rectangleTool.isSquarePreview).toBeFalsy();
         expect(spyRemove).toHaveBeenCalledTimes(2);
-        expect(spyAppend).toHaveBeenCalledTimes(4);
+        expect(spyAppend).toHaveBeenCalledTimes(2);
     });
 
     it('should define drawRectangle and previewRectangle', () => {
