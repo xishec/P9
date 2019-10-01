@@ -4,7 +4,7 @@ export class StackTargetInfo {
     targetPosition: number;
     toolName: ToolName;
 
-    constructor(targetPosition?: number, toolName?: ToolName) {
+    constructor(targetPosition?: number | undefined, toolName?: ToolName | undefined) {
         if (targetPosition !== undefined) {
             this.targetPosition = targetPosition;
         }

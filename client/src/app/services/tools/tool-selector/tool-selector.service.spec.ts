@@ -13,10 +13,12 @@ describe('ToolSelectorService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ToolSelectorService, {
-                provide: MatDialog,
-                useValue: {},
-            },
+            providers: [
+                ToolSelectorService,
+                {
+                    provide: MatDialog,
+                    useValue: {},
+                },
             ],
         });
 
@@ -42,7 +44,7 @@ describe('ToolSelectorService', () => {
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(ToolName.Pencil);
     });
 
-    it('when changeTool with rectagnle changeCurrentToolName should be call with rectangle', () => {
+    it('when changeTool with retangle changeCurrentToolName should be call with rectangle', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
         service.changeTool(ToolName.Rectangle);
 
@@ -82,5 +84,21 @@ describe('ToolSelectorService', () => {
         service.changeCurrentToolName(ToolName.Pencil);
         // tslint:disable-next-line: no-string-literal
         expect(service['toolName']).toEqual(expectedResult);
+    });
+
+    it('should return pencil tool', () => {
+        expect(service.getPencilTool()).toEqual(service[`pencilTool`]);
+    });
+
+    it('should return rectangle tool', () => {
+        expect(service.getRectangleTool()).toEqual(service[`rectangleTool`]);
+    });
+
+    it('should return brush tool', () => {
+        expect(service.getBrushTool()).toEqual(service[`brushTool`]);
+    });
+
+    it('should return color applicator tool', () => {
+        expect(service.getColorApplicatorTool()).toEqual(service[`colorApplicatorTool`]);
     });
 });
