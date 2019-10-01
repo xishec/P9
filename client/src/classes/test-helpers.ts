@@ -10,11 +10,19 @@ export class MockRect {
     addEventListener(): void {}
 }
 
-export const createMouseEvent = (x: number, y: number, buttonPressed: number): MouseEvent => {
+export const createMouseEvent = (
+    x: number,
+    y: number,
+    buttonPressed: number,
+    offSetx?: number,
+    offSety?: number
+): MouseEvent => {
     const mouseEvent = {
         clientX: x,
         clientY: y,
         button: buttonPressed,
+        offsetX: offSetx,
+        offsetY: offSety,
     };
     return (mouseEvent as unknown) as MouseEvent;
 };

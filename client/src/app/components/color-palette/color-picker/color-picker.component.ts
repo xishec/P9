@@ -37,7 +37,7 @@ export class ColorPickerComponent implements OnInit {
         this.renderer.setStyle(
             this.canvasPicker.nativeElement,
             'filter',
-            'brightness(' + (1 - this.obscurity) * 100 + '%)',
+            'brightness(' + (1 - this.obscurity) * 100 + '%)'
         );
     }
 
@@ -46,9 +46,7 @@ export class ColorPickerComponent implements OnInit {
         const y = event.offsetY;
 
         const pixel = this.context.getImageData(x, y, 1, 1).data;
-        if (this.obscurity === undefined) {
-            this.obscurity = 0;
-        }
+
         if (this.obscurity !== 1 && pixel[0] + pixel[1] + pixel[2] + pixel[3] === 0) {
             return;
         }
@@ -56,7 +54,7 @@ export class ColorPickerComponent implements OnInit {
         const newHex = this.colorToolService.translateRGBToHex(
             pixel[0] - pixel[0] * this.obscurity,
             pixel[1] - pixel[1] * this.obscurity,
-            pixel[2] - pixel[2] * this.obscurity,
+            pixel[2] - pixel[2] * this.obscurity
         );
 
         const opacity = this.colorToolService.getPreviewColorOpacityHex();
