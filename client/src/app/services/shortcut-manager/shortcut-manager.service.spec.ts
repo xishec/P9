@@ -12,7 +12,7 @@ describe('ShortcutManagerService', () => {
 
     it('should call changeIsOnInput', () => {
         const service: ShortcutManagerService = TestBed.get(ShortcutManagerService);
-        service[`isOnInput`].next = () => {};
+        service[`isOnInput`].next = () => null;
         const SPY = spyOn(service[`isOnInput`], 'next');
         service.changeIsOnInput(true);
         expect(SPY).toHaveBeenCalledWith(true);

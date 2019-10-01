@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-
-import { AttributesManagerService } from './attributes-manager.service';
-import { TraceType } from 'src/constants/tool-constants';
 import { BehaviorSubject } from 'rxjs';
+
+import { TraceType } from 'src/constants/tool-constants';
+import { AttributesManagerService } from './attributes-manager.service';
 
 describe('AttributesManagerService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

@@ -31,7 +31,7 @@ describe('DrawingModalWindowService', () => {
     });
 
     it(`should call changeDisplayNewDrawingModalWindow with true`, () => {
-        service[`displayNewDrawingModalWindow`].next = () => {};
+        service[`displayNewDrawingModalWindow`].next = () => null;
         const SPY = spyOn(service[`displayNewDrawingModalWindow`], 'next');
         service.changeDisplayNewDrawingModalWindow(true);
         expect(SPY).toHaveBeenCalledWith(true);

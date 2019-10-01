@@ -15,7 +15,7 @@ export const createMouseEvent = (
     y: number,
     buttonPressed: number,
     offSetx?: number,
-    offSety?: number
+    offSety?: number,
 ): MouseEvent => {
     const mouseEvent = {
         clientX: x,
@@ -30,7 +30,7 @@ export const createMouseEvent = (
 export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
-        preventDefault: () => {},
+        preventDefault: () => null,
     };
     return (keyboardEvent as unknown) as KeyboardEvent;
 };

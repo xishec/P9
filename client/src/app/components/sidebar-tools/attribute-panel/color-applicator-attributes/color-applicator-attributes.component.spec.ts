@@ -22,23 +22,27 @@ describe('ColorApplicatorAttributesComponent', () => {
                     },
                 },
             ],
-        }).overrideComponent(ColorApplicatorAttributesComponent, {
-            set: {
-                providers: [
-                    {
-                        provide: ColorApplicatorToolService,
-                        useValue: {
-                            initializeColorToolService: () => null,
-                        }
-                    }
-                ]
-            }
-        }).compileComponents();
+        })
+            .overrideComponent(ColorApplicatorAttributesComponent, {
+                set: {
+                    providers: [
+                        {
+                            provide: ColorApplicatorToolService,
+                            useValue: {
+                                initializeColorToolService: () => null,
+                            },
+                        },
+                    ],
+                },
+            })
+            .compileComponents();
 
         fixture = TestBed.createComponent(ColorApplicatorAttributesComponent);
         component = fixture.componentInstance;
         toolSelectorService = fixture.debugElement.injector.get<ToolSelectorService>(ToolSelectorService);
-        colorApplicatorToolService = fixture.debugElement.injector.get<ColorApplicatorToolService>(ColorApplicatorToolService);
+        colorApplicatorToolService = fixture.debugElement.injector.get<ColorApplicatorToolService>(
+            ColorApplicatorToolService,
+        );
     }));
 
     it('should create', () => {

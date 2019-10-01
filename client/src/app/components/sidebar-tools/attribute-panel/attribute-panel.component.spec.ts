@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 
-import { AttributePanelComponent } from './attribute-panel.component';
+import { ToolName } from 'src/constants/tool-constants';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { ToolName } from 'src/constants/tool-constants';
+import { AttributePanelComponent } from './attribute-panel.component';
 
 describe('AttributePanelComponent', () => {
     let component: AttributePanelComponent;
