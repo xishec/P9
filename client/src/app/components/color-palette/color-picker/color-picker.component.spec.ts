@@ -6,7 +6,7 @@ import { ColorToolService } from '../../../services/tools/color-tool/color-tool.
 import { ColorPickerComponent } from './color-picker.component';
 import { createMouseEvent } from 'src/classes/test-helpers';
 
-fdescribe('ColorPickerComponent', () => {
+describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
     let fixture: ComponentFixture<ColorPickerComponent>;
     let colorToolService: ColorToolService;
@@ -14,17 +14,7 @@ fdescribe('ColorPickerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ColorPickerComponent],
-            providers: [
-                Renderer2,
-                // {
-                //     provide: Renderer2,
-                //     useValue: {
-                //         createElement: () => null,
-                //         setAttribute: () => null,
-                //         appendChild: () => null,
-                //     },
-                // },
-            ],
+            providers: [Renderer2],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         })
             .overrideComponent(ColorPickerComponent, {
@@ -75,21 +65,6 @@ fdescribe('ColorPickerComponent', () => {
         event.value = 2;
         component.onSliderChange(event);
         expect(component.obscurity).toEqual(2);
-    });
-
-    it('onCanvasClick should not change obscurity to 0 if obscurity is defined', () => {
-        let event: MouseEvent = createMouseEvent(0, 0, 0, 0, 0);
-        component.obscurity = 1;
-        const valueServiceSpy: jasmine.SpyObj<CanvasRenderingContext2D> = jasmine.createSpyObj(
-            'CanvasRenderingContext2D',
-            ['getImageData']
-        );
-        const stubValue: ImageData = new ImageData(10, 10);
-
-        valueServiceSpy.getImageData.and.returnValue(stubValue);
-
-        component.onCanvasClick(event);
-        expect(component.obscurity).toEqual(1);
     });
 
     it('onCanvasClick should not call changePreviewColor, translateRGBToHex getPreviewColorOpacityHex, and changePreviewColor when obscurity is 0', () => {

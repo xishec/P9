@@ -48,8 +48,6 @@ export class ColorPickerComponent implements OnInit {
         const pixel = this.context.getImageData(x, y, 1, 1).data;
 
         if (this.obscurity !== 1 && pixel[0] + pixel[1] + pixel[2] + pixel[3] === 0) {
-            console.log('oui');
-
             return;
         }
 

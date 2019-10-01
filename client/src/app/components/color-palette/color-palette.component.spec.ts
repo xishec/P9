@@ -1,44 +1,93 @@
-// import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-// import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { ColorToolService } from 'src/app/services/tools/color-palette/color-palette.service';
-// import { ColorToolComponent } from './color-palette.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { ColorPaletteComponent } from './color-palette.component';
 
-// fdescribe('ColorToolComponent', () => {
-//     let component: ColorToolComponent;
-//     let fixture: ComponentFixture<ColorToolComponent>;
+describe('ColorPaletteComponent', () => {
+    let component: ColorPaletteComponent;
+    let fixture: ComponentFixture<ColorPaletteComponent>;
+    let colorToolService: ColorToolService;
 
-//     beforeEach(async(() => {
-//         TestBed.configureTestingModule({
-//             imports: [ReactiveFormsModule, FormsModule],
-//             declarations: [ColorToolComponent],
-//             schemas: [CUSTOM_ELEMENTS_SCHEMA],
-//         }).compileComponents();
-//     }));
+    const testColor = '23fe45';
 
-//     beforeEach(() => {
-//         fixture = TestBed.createComponent(ColorToolComponent);
-//         component = fixture.componentInstance;
-//         fixture.detectChanges();
-//     });
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ColorPaletteComponent],
+            schemas: [NO_ERRORS_SCHEMA],
+            providers: [],
+        })
+            .overrideComponent(ColorPaletteComponent, {
+                set: {
+                    providers: [
+                        {
+                            provide: ColorToolService,
+                            useValue: {
+                                changeColorOnFocus: () => null,
+                                addColorToQueue: () => null,
+                                changeShowColorPalette: () => null,
+                                changeSelectedColorType: () => null,
+                            },
+                        },
+                    ],
+                },
+            })
+            .compileComponents();
 
-//     it('should create', () => {
-//         expect(component).toBeTruthy();
-//     });
+        fixture = TestBed.createComponent(ColorPaletteComponent);
+        component = fixture.componentInstance;
 
-//     // //let colortool: ColorToolComponent;
-//     // const colorToolService: ColorToolService = new ColorToolService();
-//     // const formBuilder: FormBuilder = new FormBuilder();
-//     // colortool = new ColorToolComponent(formBuilder, colorToolService);
+        colorToolService = fixture.debugElement.injector.get(ColorToolService);
+    }));
 
-//     // it('should return true when "clicked" on the color wheel button', () => {
-//     //     colortool.onClickColorWheel();
-//     //     expect(colortool.displayColorWheel).toBeTruthy();
-//     // });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-//     // it('should return false when "clicked" twice on the color wheel button', () => {
-//     //     colortool.onClickColorWheel();
-//     //     expect(colortool.displayColorWheel).toBeFalsy();
-//     // });
-// });
+    it('should update preview color when a color in queue is clicked', () => {
+        component.onClickColorQueueButton(testColor);
+        expect(component.previewColor).toEqual(testColor);
+    });
+
+    it('should call Color Tool Service changeColorOnFocus function when submit button is pressed', () => {
+        const SPY = spyOn(colorToolService, 'changeColorOnFocus');
+        component.onSubmit();
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call Color Tool Service addColorToQueue function when submit button is pressed', () => {
+      const SPY = spyOn(colorToolService, 'addColorToQueue');
+      component.onSubmit();
+      expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call Color Tool Service changeShowColorPalette function when submit button is pressed', () => {
+      const SPY = spyOn(colorToolService, 'changeShowColorPalette');
+      component.onSubmit();
+      expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call Color Tool Service changeSelectedColorType function when submit button is pressed', () => {
+      const SPY = spyOn(colorToolService, 'changeSelectedColorType');
+      component.onSubmit();
+      expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call Color Tool Service changShowColorPalette function when cancel button is pressed', () => {
+      const SPY = spyOn(colorToolService, 'changeShowColorPalette');
+      component.onCancel();
+      expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call Color Tool Service changeSelectedColorType function when cancel button is pressed', () => {
+      const SPY = spyOn(colorToolService, 'changeSelectedColorType');
+      component.onCancel();
+      expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should return Icon Style with the right preview color when getUserColorIcon funtion is called', () => {
+      component.previewColor = testColor;
+      const iconStyle = component.getUserColorIcon();
+      expect(iconStyle).toEqual({backgroundColor: '#' + testColor});
+    });
+});
