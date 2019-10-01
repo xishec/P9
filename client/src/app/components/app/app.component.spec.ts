@@ -14,7 +14,7 @@ import { ToolSelectorService } from '../../services/tools/tool-selector/tool-sel
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { AppComponent } from './app.component';
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
     let app: AppComponent;
     let fixture: ComponentFixture<AppComponent>;
@@ -285,5 +285,134 @@ fdescribe('AppComponent', () => {
         app.shouldAllowShortcut = () => true;
         app.onS(MOCK_KEYBOARD_S);
         expect(SPY).toHaveBeenCalledWith(ToolName.Selection);
+    });
+
+    it('should not call onControlS when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onControlS(MOCK_KEYBOARD_CONTROL);
+        app.onControlS(MOCK_KEYBOARD_S);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Save);
+    });
+
+    it('should not call onControlG when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onControlG(MOCK_KEYBOARD_CONTROL);
+        app.onControlG(MOCK_KEYBOARD_G);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.ArtGallery);
+    });
+
+    it('should not call onControlE when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onControlE(MOCK_KEYBOARD_CONTROL);
+        app.onControlE(MOCK_KEYBOARD_E);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Export);
+    });
+
+    it('should not call onC when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onC(MOCK_KEYBOARD_C);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Pencil);
+    });
+
+    it('should not call onW when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onW(MOCK_KEYBOARD_W);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Brush);
+    });
+
+    it('should not call onP when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onP(MOCK_KEYBOARD_P);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Quill);
+    });
+
+    it('should not call onY when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onY(MOCK_KEYBOARD_Y);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Pen);
+    });
+
+    it('should not call onA when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onA(MOCK_KEYBOARD_A);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.SprayCan);
+    });
+
+    it('should not call on1 when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.on1(MOCK_KEYBOARD_1);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Rectangle);
+    });
+
+    it('should not call on2 when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.on2(MOCK_KEYBOARD_2);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Ellipsis);
+    });
+
+    it('should not call on3 when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.on3(MOCK_KEYBOARD_3);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Polygon);
+    });
+
+    it('should not call onL when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onL(MOCK_KEYBOARD_L);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Line);
+    });
+
+    it('should not call onT when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onT(MOCK_KEYBOARD_T);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Text);
+    });
+
+    it('should not call onR when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onR(MOCK_KEYBOARD_R);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.ColorApplicator);
+    });
+
+    it('should not call onB when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onB(MOCK_KEYBOARD_B);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Fill);
+    });
+
+    it('should not call onE when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onE(MOCK_KEYBOARD_E);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Eraser);
+    });
+
+    it('should not call onI when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onI(MOCK_KEYBOARD_I);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Dropper);
+    });
+
+    it('should not call onS when not allowed', () => {
+        const SPY = spyOn(app[`toolSelectorService`], 'changeTool');
+        app.shouldAllowShortcut = () => false;
+        app.onS(MOCK_KEYBOARD_S);
+        expect(SPY).not.toHaveBeenCalledWith(ToolName.Selection);
     });
 });
