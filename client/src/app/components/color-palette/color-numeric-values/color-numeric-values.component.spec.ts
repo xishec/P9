@@ -1,10 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorNumericValuesComponent } from './color-numeric-values.component';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 
 describe('ColorNumericValuesComponent', () => {
     let component: ColorNumericValuesComponent;
@@ -29,7 +30,8 @@ describe('ColorNumericValuesComponent', () => {
                         translateRGBToHex: () => MOCK_COLOR_FROM_SERVICE,
                         changePreviewColor: () => null,
                     },
-                }, {
+                },
+                {
                     provide: ShortcutManagerService,
                     useValue: {
                         changeIsOnInput: (b: boolean) => null,
@@ -127,4 +129,49 @@ describe('ColorNumericValuesComponent', () => {
 
         expect(spy).toHaveBeenCalledWith(false);
     });
+});
+
+describe('ColorNumericValuesComponent', () => {
+    let component: ColorNumericValuesComponent;
+    let fixture: ComponentFixture<ColorNumericValuesComponent>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ColorNumericValuesComponent],
+            schemas: [NO_ERRORS_SCHEMA],
+            providers: [
+                FormBuilder,
+                {
+                    provide: ShortcutManagerService,
+                    useValue: {
+                        changeIsOnInput: (b: boolean) => null,
+                    },
+                },
+            ],
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(ColorNumericValuesComponent);
+        component = fixture.componentInstance;
+
+        component.initializeForm();
+    }));
+
+    it('should change previewColor onInit', async(
+        inject([ColorToolService], (colorToolService: ColorToolService) => {
+            component.ngOnInit();
+            fixture
+                .whenStable()
+                .then(() => {
+                    colorToolService.getColorOnFocus = () => {
+                        return DEFAULT_WHITE;
+                    };
+                    expect(component.previewColor).toBeDefined();
+                    colorToolService.selectedColorType.next(ColorType.backgroundColor);
+                    return fixture.whenStable();
+                })
+                .then(() => {
+                    expect(component.previewColor).toEqual(DEFAULT_WHITE);
+                });
+        }),
+    ));
 });
