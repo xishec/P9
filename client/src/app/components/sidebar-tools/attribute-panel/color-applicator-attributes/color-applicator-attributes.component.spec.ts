@@ -4,7 +4,7 @@ import { ColorApplicatorToolService } from 'src/app/services/tools/color-applica
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { ColorApplicatorAttributesComponent } from './color-applicator-attributes.component';
 
-fdescribe('ColorApplicatorAttributesComponent', () => {
+describe('ColorApplicatorAttributesComponent', () => {
     let component: ColorApplicatorAttributesComponent;
     let fixture: ComponentFixture<ColorApplicatorAttributesComponent>;
     let toolSelectorService: ToolSelectorService;
