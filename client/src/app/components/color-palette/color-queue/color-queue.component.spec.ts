@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorQueueComponent } from './color-queue.component';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
+import { ColorQueueComponent } from './color-queue.component';
 
 describe('ColorQueueComponent', () => {
     let component: ColorQueueComponent;

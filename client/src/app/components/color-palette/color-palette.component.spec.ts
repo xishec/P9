@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorPaletteComponent } from './color-palette.component';
-import { DEFAULT_WHITE, ColorType } from 'src/constants/color-constants';
 
 describe('ColorPaletteComponent', () => {
     let component: ColorPaletteComponent;

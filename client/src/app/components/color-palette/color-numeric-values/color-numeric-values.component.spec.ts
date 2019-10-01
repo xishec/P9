@@ -1,11 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorNumericValuesComponent } from './color-numeric-values.component';
-import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 
 describe('ColorNumericValuesComponent', () => {
     let component: ColorNumericValuesComponent;
