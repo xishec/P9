@@ -3,18 +3,14 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { Keys, Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
-import { createKeyBoardEvent, createMouseEvent, getRandomNumber, MockRect } from '../../../../classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const RANDOM_MOUSEMOVE_EVENT = (): MouseEvent => {
-    return createMouseEvent(getRandomNumber(), getRandomNumber(), Mouse.LeftButton);
-};
-const RANDOM_MOUSEDOWN_EVENT = (): MouseEvent => {
-    return createMouseEvent(getRandomNumber(), getRandomNumber(), Mouse.LeftButton);
-};
+const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
+const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
@@ -115,8 +111,8 @@ describe('RectangleToolService', () => {
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
         rectangleTool.onMouseLeave(MOUSELEAVE_EVENT);
-        rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
-        rectangleTool.onMouseMove(RANDOM_MOUSEMOVE_EVENT());
+        rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
+        rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
 
         expect(spySetAttribute).not.toHaveBeenCalled();
         expect(spyAppendChild).not.toHaveBeenCalled();
@@ -126,7 +122,7 @@ describe('RectangleToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
-        rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
+        rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
         expect(spyAppendChild).toHaveBeenCalledTimes(2);
     });
@@ -154,8 +150,8 @@ describe('RectangleToolService', () => {
         );
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
-        rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
-        rectangleTool.onMouseMove(RANDOM_MOUSEMOVE_EVENT());
+        rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
+        rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
 
         expect(rectangleTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();
@@ -202,8 +198,8 @@ describe('RectangleToolService', () => {
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
-        rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
-        rectangleTool.onMouseMove(RANDOM_MOUSEMOVE_EVENT());
+        rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
+        rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
 
         expect(rectangleTool.isSquarePreview).toBeTruthy();
@@ -219,19 +215,17 @@ describe('RectangleToolService', () => {
         expect(rectangleTool.isSquarePreview).toBeFalsy();
     });
 
-    it('should call remove 2 times and append 2 time for a full rectangle', () => {
-        const spyAppend = spyOn(rendererMock, 'appendChild');
+    it('should cleanup correctly when creating a full rectangle', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
         rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
-        rectangleTool.onMouseDown(RANDOM_MOUSEDOWN_EVENT());
-        rectangleTool.onMouseMove(RANDOM_MOUSEMOVE_EVENT());
+        rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
+        rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onMouseUp(MOUSEUP_EVENT);
 
         expect(rectangleTool.isPreviewing).toBeFalsy();
         expect(rectangleTool.isSquarePreview).toBeFalsy();
         expect(spyRemove).toHaveBeenCalledTimes(2);
-        expect(spyAppend).toHaveBeenCalledTimes(2);
     });
 
     it('should define drawRectangle and previewRectangle', () => {
