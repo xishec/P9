@@ -10,7 +10,7 @@ describe('DrawingModalWindowService', () => {
     let injector: TestBed;
     let service: DrawingModalWindowService;
 
-    beforeEach(() =>  {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [DrawingModalWindowService, DrawingInfo],
         });
@@ -30,4 +30,10 @@ describe('DrawingModalWindowService', () => {
         expect(service.drawingInfo.value.height).toEqual(HEIGHT);
     });
 
+    it(`should call changeDisplayNewDrawingModalWindow with true`, () => {
+        service[`displayNewDrawingModalWindow`].next = () => {};
+        const SPY = spyOn(service[`displayNewDrawingModalWindow`], 'next');
+        service.changeDisplayNewDrawingModalWindow(true);
+        expect(SPY).toHaveBeenCalledWith(true);
+    });
 });
