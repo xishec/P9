@@ -5,7 +5,7 @@ import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorAttributesComponent } from './color-attributes.component';
 import { BehaviorSubject } from 'rxjs';
 
-fdescribe('ColorAttributesComponent', () => {
+describe('ColorAttributesComponent', () => {
     let component: ColorAttributesComponent;
     let fixture: ComponentFixture<ColorAttributesComponent>;
     let colorToolService: ColorToolService;
