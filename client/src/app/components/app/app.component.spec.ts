@@ -1,19 +1,18 @@
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { of, Observable } from 'rxjs';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { Observable, of } from 'rxjs';
 
-import { AppComponent } from './app.component';
+import { createKeyBoardEvent } from 'src/classes/test-helpers';
+import { Keys } from 'src/constants/constants';
+import { ToolName } from 'src/constants/tool-constants';
 import SpyObj = jasmine.SpyObj;
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
-import { createKeyBoardEvent } from 'src/classes/test-helpers';
-import { Keys } from 'src/constants/constants';
-// import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { ToolName } from 'src/constants/tool-constants';
+import { AppComponent } from './app.component';
 
 fdescribe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
@@ -39,6 +38,10 @@ fdescribe('AppComponent', () => {
     const MOCK_KEYBOARD_W = createKeyBoardEvent(Keys.w);
     const MOCK_KEYBOARD_Y = createKeyBoardEvent(Keys.y);
 
+    const afterClosed = {
+        subscribe: () => null,
+    };
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AppComponent],
@@ -59,6 +62,10 @@ fdescribe('AppComponent', () => {
                         },
                         getValueFromLocalStorage: () => false,
                     },
+                },
+                {
+                    provide: MatDialogRef,
+                    useValue: afterClosed,
                 },
                 {
                     provide: MatDialog,
@@ -116,14 +123,14 @@ fdescribe('AppComponent', () => {
         expect(app.title).toEqual('LOG2990');
     });
 
-    xit('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
+    it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
         const SPY = spyOn(app[`dialog`], 'open');
         app.displayWelcomeModalWindow = true;
         app.openWelcomeModalWindow();
         expect(SPY).toHaveBeenCalled();
     });
 
-    xit('should not openWelcomeModalWindow if displayWelcomeModalWindow is off', () => {
+    it('should not openWelcomeModalWindow if displayWelcomeModalWindow is off', () => {
         const SPY = spyOn(app[`dialog`], 'open');
         app.displayWelcomeModalWindow = false;
         expect(SPY).not.toHaveBeenCalled();
