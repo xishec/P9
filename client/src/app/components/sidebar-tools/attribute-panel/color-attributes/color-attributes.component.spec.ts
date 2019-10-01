@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { ColorType } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorAttributesComponent } from './color-attributes.component';
+import { BehaviorSubject } from 'rxjs';
 
 describe('ColorAttributesComponent', () => {
     let component: ColorAttributesComponent;
@@ -18,6 +19,10 @@ describe('ColorAttributesComponent', () => {
                     {
                         provide: ColorToolService,
                         useValue: {
+                            backgroundColor: new BehaviorSubject<string>(DEFAULT_WHITE),
+                            primaryColor: new BehaviorSubject<string>(DEFAULT_WHITE),
+                            secondaryColor: new BehaviorSubject<string>(DEFAULT_WHITE),
+                            selectedColorType: new BehaviorSubject<ColorType | undefined>(undefined),
                             changeSelectedColorType: () => null,
                             changeShowColorPalette: () => null,
                             switchPrimarySecondary: () => null,
@@ -74,8 +79,7 @@ describe('ColorAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('getBackgroundColorIcon should return background color with border and transform value when selectedColorType is background-color',
-    () => {
+    it('getBackgroundColorIcon should return background color with border and transform value when selectedColorType is background-color', () => {
         component.selectedColorType = ColorType.backgroundColor;
         expect(component.getBackgroundColorIcon()).toEqual({
             backgroundColor: '#' + component.backgroundColor,
@@ -107,8 +111,7 @@ describe('ColorAttributesComponent', () => {
         });
     });
 
-    it('getSecondaryColorIcon should return background color with border and transform value when selectedColorType is secondary-color',
-    () => {
+    it('getSecondaryColorIcon should return background color with border and transform value when selectedColorType is secondary-color', () => {
         component.selectedColorType = ColorType.secondaryColor;
         expect(component.getSecondaryColorIcon()).toEqual({
             backgroundColor: '#' + component.secondaryColor,
@@ -123,4 +126,20 @@ describe('ColorAttributesComponent', () => {
             backgroundColor: '#' + component.secondaryColor,
         });
     });
+
+    it('should change backgroundColor onInit', async(
+        inject([ColorToolService], (colorToolService: ColorToolService) => {
+            component.ngOnInit();
+            fixture
+                .whenStable()
+                .then(() => {
+                    expect(component.backgroundColor).toBeDefined();
+                    colorToolService.backgroundColor.next(DEFAULT_WHITE);
+                    return fixture.whenStable();
+                })
+                .then(() => {
+                    expect(component.backgroundColor).toEqual(DEFAULT_WHITE);
+                });
+        }),
+    ));
 });
