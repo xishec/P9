@@ -4,9 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 
 import { ToolName } from 'src/constants/tool-constants';
 import { ToolSelectorService } from './tool-selector.service';
-import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 
-fdescribe('ToolSelectorService', () => {
+describe('ToolSelectorService', () => {
     let injector: TestBed;
     let service: ToolSelectorService;
 
@@ -19,10 +18,6 @@ fdescribe('ToolSelectorService', () => {
                 {
                     provide: MatDialog,
                     useValue: {},
-                },
-                ColorApplicatorToolService,
-                {
-                    initializeColorToolService: () => {},
                 },
             ],
         });
