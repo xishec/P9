@@ -98,9 +98,28 @@ export class PolygonToolService extends AbstractShapeToolService {
         // }
     }
 
-    onMouseDown(event: MouseEvent): void {}
+    onMouseDown(event: MouseEvent): void {
+        const button = event.button;
 
-    onMouseUp(event: MouseEvent): void {}
+        if (button === Mouse.LeftButton && this.isIn) {
+            this.initialMouseX = this.currentMouseX;
+            this.initialMouseY = this.currentMouseY;
+            this.isPreviewing = true;
+
+            this.updateDrawing();
+
+            //this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.appendChild(this.svgReference.nativeElement, this.drawPolygon);
+        }
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        const button = event.button;
+        if (button === Mouse.LeftButton && this.isIn && this.isValidePolygon()) {
+            this.createSVG();
+        }
+        this.cleanUpPreview();
+    }
 
     onMouseEnter(event: MouseEvent): void {
         this.isIn = true;
