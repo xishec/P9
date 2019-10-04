@@ -12,6 +12,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,7 @@ export class ToolSelectorService {
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
+    private polygoneTool: PolygonToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -44,6 +46,9 @@ export class ToolSelectorService {
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
+
+        this.polygoneTool = new PolygonToolService();
+        this.polygoneTool.initializeColorToolService(this.colorToolService);
     }
 
     displayNewDrawingModal(): void {
