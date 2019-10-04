@@ -47,7 +47,7 @@ export class ToolSelectorService {
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
 
-        this.polygoneTool = new PolygonToolService();
+        this.polygoneTool = new PolygonToolService(drawStack, ref, renderer);
         this.polygoneTool.initializeColorToolService(this.colorToolService);
     }
 

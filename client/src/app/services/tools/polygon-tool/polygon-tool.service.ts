@@ -1,30 +1,55 @@
 import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { SVG_NS } from 'src/constants/constants';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { ToolName, TraceType } from 'src/constants/tool-constants';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PolygonToolService extends AbstractShapeToolService {
-    colorToolService: ColorToolService;
+    drawPolygon: SVGPolygonElement = this.renderer.createElement('rect', SVG_NS);
     fillColor = '';
     strokeColor = '';
+    userFillColor = '';
+    userStrokeColor = '';
+    userStrokeWidth = 0;
+    traceType = '';
+    strokeWidth = 0;
+    attributesManagerService: AttributesManagerService;
+    colorToolService: ColorToolService;
 
     constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
+            this.strokeWidth = thickness;
+            this.updateTraceType(this.traceType);
+        });
+        this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
+            this.updateTraceType(traceType);
+        });
     }
 
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((fillColor: string) => {
             this.fillColor = fillColor;
-            //this.updateTraceType(this.traceType);
+            this.updateTraceType(this.traceType);
         });
         this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
             this.strokeColor = strokeColor;
-            //this.updateTraceType(this.traceType);
+            this.updateTraceType(this.traceType);
+        });
+    }
         });
     }
 
