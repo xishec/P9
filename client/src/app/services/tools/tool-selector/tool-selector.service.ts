@@ -112,7 +112,6 @@ export class ToolSelectorService {
             case ToolName.SprayCan:
             case ToolName.Line:
             case ToolName.Polygon:
-            case ToolName.Ellipsis:
             case ToolName.Fill:
             case ToolName.Dropper:
             case ToolName.Eraser:
