@@ -16,6 +16,7 @@ enum ToolName {
     Dropper = 'Sélecteur de couleur',
     Eraser = 'Efface',
     Text = 'Zone de texte',
+    Stamp = 'Étampe',
     NewDrawing = 'Nouveau dessin',
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
@@ -50,6 +51,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill, shortcut: '(B)' },
     { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser, shortcut: '(E)' },
     { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
+    { iconName: 'fas fa-stamp', tooltipName: ToolName.Stamp, shortcut: '' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
