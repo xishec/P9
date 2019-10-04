@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EyedropperToolService } from './eyedropper-tool.service';
+import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 
 describe('EyedropperToolService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EyedropperToolService = TestBed.get(EyedropperToolService);
+    const service: DropperToolService = TestBed.get(DropperToolService);
     expect(service).toBeTruthy();
   });
 });

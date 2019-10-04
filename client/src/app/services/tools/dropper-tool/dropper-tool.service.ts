@@ -5,7 +5,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 @Injectable({
     providedIn: 'root',
 })
-export class EyedropperToolService extends AbstractToolService {
+export class DropperToolService extends AbstractToolService {
     pixelColor: string;
     canvas: HTMLCanvasElement;
     context2D: CanvasRenderingContext2D;
@@ -13,10 +13,13 @@ export class EyedropperToolService extends AbstractToolService {
 
     constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, public renderer: Renderer2) {
         super();
+
+        this.canvas = this.renderer.createElement('canvas');
+        this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     updateSVGCopy(): void {
-
+        this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     onMouseMove(event: MouseEvent): void {}
