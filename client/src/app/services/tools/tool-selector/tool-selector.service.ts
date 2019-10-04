@@ -23,7 +23,7 @@ export class ToolSelectorService {
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
-    lineTool: LineToolService;
+    lineToolService: LineToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -46,6 +46,9 @@ export class ToolSelectorService {
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
+
+        this.lineToolService = new LineToolService(ref, renderer, drawStack);
+        this.lineToolService.initializeColorToolService(this.colorToolService);
 
     }
 
@@ -75,6 +78,10 @@ export class ToolSelectorService {
         return this.colorApplicatorTool;
     }
 
+    getLineTool(): LineToolService {
+        return this.lineToolService;
+    }
+
     changeTool(tooltipName: string): void {
         switch (tooltipName) {
             case ToolName.NewDrawing:
@@ -96,11 +103,14 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Line:
+                this.currentTool = this.lineToolService;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Quill:
             case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
-            case ToolName.Line:
             case ToolName.Polygon:
             case ToolName.Ellipsis:
             case ToolName.Fill:
