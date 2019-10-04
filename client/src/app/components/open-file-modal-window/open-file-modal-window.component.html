@@ -1,1 +1,31 @@
-<p>open-file-modal-window works!</p>
+<h1 mat-dialog-title>Ouvrir un dessin existant</h1>
+
+<mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
+  <mat-selection-list>
+    <mat-list-option *ngFor="let drawing of drawings">
+      <div id="drawing-name">
+        {{drawing.name}}
+      </div>
+      <div id="drawing-labels" *ngFor="let label of drawing.labels">
+        {{label}}
+      </div>
+      <div id="drawing-thumbnail" *ngFor="let thumbnail of drawing.thumbnails">
+          {{thumbnail}}
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions id="footer" align="end">
+    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+    <button
+        class="actionButton"
+        mat-stroked-button
+        type="submit"
+        [mat-dialog-close]="true"
+        [disabled]="drawingModalForm.invalid"
+        (click)="onSubmit()"
+    >
+        Créer!
+    </button>
+</mat-dialog-actions>
