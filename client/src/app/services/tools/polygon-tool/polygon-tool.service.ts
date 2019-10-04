@@ -50,7 +50,19 @@ export class PolygonToolService extends AbstractShapeToolService {
             this.updateTraceType(this.traceType);
         });
     }
+
+    createSVG(): void {
+        const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
+
+        const currentDrawStackLength = this.drawStack.getDrawStackLength();
+        drawPolygon.addEventListener('mousedown', (event: MouseEvent) => {
+            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Polygon));
         });
+
+        this.renderer.appendChild(el, drawPolygon);
+        this.drawStack.push(el);
+        this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
     updateTraceType(traceType: string) {
