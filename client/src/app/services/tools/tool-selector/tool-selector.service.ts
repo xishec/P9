@@ -12,6 +12,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,6 +20,7 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
     private rectangleTool: RectangleToolService;
+    private ellipsisTool: EllipsisToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
@@ -35,6 +37,9 @@ export class ToolSelectorService {
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
         this.rectangleTool.initializeColorToolService(this.colorToolService);
+
+        this.ellipsisTool = new EllipsisToolService(drawStack, ref, renderer);
+        this.ellipsisTool.initializeColorToolService(this.colorToolService);
 
         this.pencilTool = new PencilToolService(ref, renderer, drawStack);
         this.pencilTool.initializeColorToolService(this.colorToolService);
@@ -64,6 +69,10 @@ export class ToolSelectorService {
         return this.rectangleTool;
     }
 
+    getEllipsisTool(): EllipsisToolService {
+        return this.ellipsisTool;
+    }
+
     getBrushTool(): BrushToolService {
         return this.brushTool;
     }
@@ -79,6 +88,10 @@ export class ToolSelectorService {
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Ellipsis:
+                this.currentTool = this.ellipsisTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Pencil:
