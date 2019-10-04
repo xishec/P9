@@ -35,6 +35,11 @@ export class LineAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
+    ngAfterViewInit(): void {
+        this.lineToolService = this.toolSelectorService.getLineTool();
+        this.lineToolService.initializeAttributesManagerService(this.attributeManagerService);
+    }
+
     initializeForm(): void {
         this.lineAttributesForm = this.formBuilder.group({
             Thickness: [
