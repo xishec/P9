@@ -1,1 +1,33 @@
-<p>line-attributes works!</p>
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="lineAttributesForm">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="thickness"
+                (input)="onSliderChange($event)"
+                [min]="Thickness.Min"
+                value="{{ lineAttributesForm.value.thickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="thickness"
+                    (input)="onThicknessChange()"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
