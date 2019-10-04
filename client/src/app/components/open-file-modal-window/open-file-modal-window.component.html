@@ -2,15 +2,15 @@
 
 <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
   <mat-selection-list>
-    <mat-list-option *ngFor="let drawing of drawings">
+    <mat-list-option *ngFor="let drawing of drawingInfos">
       <div id="drawing-name">
         {{drawing.name}}
       </div>
       <div id="drawing-labels" *ngFor="let label of drawing.labels">
         {{label}}
       </div>
-      <div id="drawing-thumbnail" *ngFor="let thumbnail of drawing.thumbnails">
-          {{thumbnail}}
+      <div id="drawing-thumbnail">
+          {{drawing.thumbnail}}
       </div>
     </mat-list-option>
   </mat-selection-list>
@@ -26,6 +26,6 @@
         [disabled]="drawingModalForm.invalid"
         (click)="onSubmit()"
     >
-        Créer!
+        Ouvrir
     </button>
 </mat-dialog-actions>
