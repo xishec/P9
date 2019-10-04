@@ -42,7 +42,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
 
     initializeForm(): void {
         this.lineAttributesForm = this.formBuilder.group({
-            Thickness: [
+            thickness: [
                 Thickness.Default,
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
