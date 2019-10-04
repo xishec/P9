@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MatSliderChange } from '@angular/material';
@@ -14,7 +14,7 @@ import { Thickness, ToolName } from 'src/constants/tool-constants';
   styleUrls: ['./line-attributes.component.scss'],
   providers: [AttributesManagerService],
 })
-export class LineAttributesComponent implements OnInit {
+export class LineAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Line;
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
