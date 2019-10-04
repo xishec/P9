@@ -23,7 +23,7 @@ export class DropperToolService extends AbstractToolService {
     updateSVGCopy(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.svgReference.nativeElement);
         const base64SVG = btoa(serializedSVG);
-        this.SVGImg.src = base64SVG;
+        this.SVGImg.src = 'data:image/svg+xml;base64,' + base64SVG;
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
@@ -36,7 +36,7 @@ export class DropperToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
         this.updateSVGCopy();
         this.pickColor();
     }
