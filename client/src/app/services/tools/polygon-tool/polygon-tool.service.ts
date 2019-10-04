@@ -3,7 +3,7 @@ import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
-import { SVG_NS } from 'src/constants/constants';
+import { SVG_NS, Mouse } from 'src/constants/constants';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { ToolName, TraceType } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -51,6 +51,70 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
     }
 
+    isValidePolygon(): boolean {
+        const height = this.previewRectangleHeight;
+        const width = this.previewRectangleWidth;
+
+        return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
+    }
+
+    copyPreviewRectangleAttributes(): void {
+        this.renderer.setAttribute(
+            this.drawPolygon,
+            'x',
+            (this.previewRectangleX + this.userStrokeWidth / 2).toString(),
+        );
+        this.renderer.setAttribute(
+            this.drawPolygon,
+            'y',
+            (this.previewRectangleY + this.userStrokeWidth / 2).toString(),
+        );
+        if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
+            this.renderer.setAttribute(
+                this.drawPolygon,
+                'width',
+                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString(),
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawPolygon,
+                'width',
+                (this.previewRectangleWidth - this.userStrokeWidth).toString(),
+            );
+        }
+        if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
+            this.renderer.setAttribute(
+                this.drawPolygon,
+                'height',
+                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString(),
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawPolygon,
+                'height',
+                (this.previewRectangleHeight - this.userStrokeWidth).toString(),
+            );
+        }
+    }
+
+    renderDrawRectangle(): void {
+        if (this.isValidePolygon()) {
+            this.renderer.setAttribute(this.drawPolygon, 'fill', '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawPolygon, 'stroke', '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
+        } else {
+            this.renderer.setAttribute(this.drawPolygon, 'fill', 'none');
+            this.renderer.setAttribute(this.drawPolygon, 'stroke', 'none');
+            this.renderer.setAttribute(this.drawPolygon, 'stroke-width', '0');
+        }
+    }
+
+    cleanUpPreview(): void {
+        this.isPreviewing = false;
+        this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+        this.renderer.removeChild(this.svgReference, this.drawPolygon);
+    }
+
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
@@ -63,6 +127,12 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.renderer.appendChild(el, drawPolygon);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
+    }
+
+    updateDrawing(): void {
+        this.updatePreviewRectangle(); //update les lignes pointés du rectangle (toujours rec)
+        this.copyPreviewRectangleAttributes(); //va updater le polygon (position et taille)
+        this.renderDrawRectangle(); // applique la couleur // contient de la logique
     }
 
     updateTraceType(traceType: string) {
@@ -93,9 +163,9 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
-        // if (this.isPreviewing) {
-        //     this.updateDrawing();
-        // }
+        if (this.isPreviewing) {
+            this.updateDrawing();
+        }
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -131,17 +201,5 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     onKeyDown(event: KeyboardEvent): void {}
 
-    onKeyUp(event: KeyboardEvent): void {
-        // const key = event.key;
-        // switch (key) {
-        //     case Keys.Shift:
-        //         if (this.isSquarePreview) {
-        //             this.isSquarePreview = false;
-        //             this.updateDrawing();
-        //         }
-        //         break;
-        //     default:
-        //         break;
-        // }
-    }
+    onKeyUp(event: KeyboardEvent): void {}
 }
