@@ -2,6 +2,7 @@ import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
+import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -27,7 +28,29 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
     }
 
-    createSVG(): void {}
+    updateTraceType(traceType: string) {
+        this.traceType = traceType;
+        switch (traceType) {
+            case TraceType.Outline: {
+                this.userFillColor = DEFAULT_TRANSPARENT;
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+            case TraceType.Full: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = DEFAULT_TRANSPARENT;
+                this.userStrokeWidth = 0;
+                break;
+            }
+            case TraceType.Both: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+        }
+    }
 
     onMouseMove(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
