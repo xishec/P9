@@ -31,7 +31,7 @@ export class ToolSelectorService {
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService,
+        private drawingModalWindowService: DrawingModalWindowService
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -77,6 +77,9 @@ export class ToolSelectorService {
         return this.colorApplicatorTool;
     }
 
+    getPolygonTool(): PolygonToolService {
+        return this.polygoneTool;
+    }
     changeTool(tooltipName: string): void {
         switch (tooltipName) {
             case ToolName.NewDrawing:
@@ -98,12 +101,15 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Polygon:
+                this.currentTool = this.polygoneTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Quill:
             case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
             case ToolName.Line:
-            case ToolName.Polygon:
             case ToolName.Ellipsis:
             case ToolName.Fill:
             case ToolName.Dropper:

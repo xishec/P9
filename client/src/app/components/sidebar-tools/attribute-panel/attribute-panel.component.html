@@ -6,6 +6,7 @@
         <app-color-applicator-attributes
             [hidden]="currentToolName !== ToolName.ColorApplicator"
         ></app-color-applicator-attributes>
+        <app-polygon-attributes [hidden]="currentToolName !== ToolName.Polygon"></app-polygon-attributes>
     </div>
     <div>
         <app-color-palette id="color-palette" [hidden]="!showColorPalette"></app-color-palette>
