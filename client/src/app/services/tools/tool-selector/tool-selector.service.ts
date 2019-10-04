@@ -12,12 +12,14 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { SelectionToolService } from '../selection-tool/selection-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
+    private selectionTool: SelectionToolService;
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
@@ -33,6 +35,8 @@ export class ToolSelectorService {
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
+        this.selectionTool = new SelectionToolService(ref, renderer);
+
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
         this.rectangleTool.initializeColorToolService(this.colorToolService);
 
@@ -56,6 +60,10 @@ export class ToolSelectorService {
         });
     }
 
+    getSelectiontool(): SelectionToolService {
+        return this.selectionTool;
+    }
+
     getPencilTool(): PencilToolService {
         return this.pencilTool;
     }
@@ -77,6 +85,10 @@ export class ToolSelectorService {
             case ToolName.NewDrawing:
                 this.displayNewDrawingModal();
                 break;
+            case ToolName.Selection:
+                this.currentTool = this.selectionTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
                 this.changeCurrentToolName(tooltipName);
@@ -94,7 +106,6 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Quill:
-            case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
             case ToolName.Line:
