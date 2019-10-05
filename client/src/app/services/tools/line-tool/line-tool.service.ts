@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2, EventEmitter } from '@angular/core';
 
+import { Mouse, SVG_NS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { Mouse, SVG_NS } from 'src/constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +70,15 @@ export class LineToolService extends AbstractToolService {
         }
     }
 
+    onDblClick(event: MouseEvent): void {
+        if (this.isDrawing) {
+            this.isDrawing = false;
+            const x = this.getXPos(event.clientX);
+            const y = this.getYPos(event.clientY);
+            this.appendLine(x, y);
+        }
+    }
+
     startLine(x: number, y: number): void {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
@@ -88,7 +97,7 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints} ${this.endPreviewLine}`);
     }
 
-    appendLine(x: number, y: number){
+    appendLine(x: number, y: number) {
         this.linePoints += ` ${x.toString()},${y.toString()}`;
         this.endPreviewLine = `${x.toString()},${y.toString()}`;
     }

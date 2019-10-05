@@ -9,6 +9,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -120,6 +121,13 @@ export class WorkZoneComponent implements OnInit {
     @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onKeyUp(event);
+        }
+    }
+
+    // Added double click listener for line tool service
+    @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
+        if (this.currentTool instanceof LineToolService) {
+            (this.currentTool as LineToolService).onDblClick(event);
         }
     }
     // LISTENERS //
