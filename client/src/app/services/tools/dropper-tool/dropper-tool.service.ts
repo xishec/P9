@@ -34,7 +34,11 @@ export class DropperToolService extends AbstractToolService {
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
         this.renderer.setProperty(this.canvas, 'width', this.svgReference.nativeElement.getBoundingClientRect().width);
-        this.renderer.setProperty(this.canvas, 'height', this.svgReference.nativeElement.getBoundingClientRect().height);
+        this.renderer.setProperty(
+            this.canvas,
+            'height',
+            this.svgReference.nativeElement.getBoundingClientRect().height,
+        );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
@@ -46,11 +50,10 @@ export class DropperToolService extends AbstractToolService {
 
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
-        const colorRGB = this.pickColor();
-        console.log(colorRGB[0] + ' ' + colorRGB[1] + ' ' + colorRGB[2]);
-        const colorHex = this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
+        this.getColor(event);
+    }
+    onMouseUp(event: MouseEvent): void {
+        let colorHex = this.getColor(event);
 
         const button = event.button;
         if (button === Mouse.LeftButton) {
@@ -59,9 +62,15 @@ export class DropperToolService extends AbstractToolService {
             this.colorTool.changeSecondaryColor(colorHex);
         }
     }
-    onMouseUp(event: MouseEvent): void {}
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {}
+
+    getColor(event: MouseEvent): string {
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        const colorRGB = this.pickColor();
+        return this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
+    }
 }
