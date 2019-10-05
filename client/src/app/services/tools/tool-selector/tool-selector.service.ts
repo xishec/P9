@@ -45,6 +45,7 @@ export class ToolSelectorService {
         this.brushTool.initializeColorToolService(this.colorToolService);
 
         this.dropperTool = new DropperToolService(drawStack, ref, renderer);
+        this.dropperTool.initializeColorToolService(this.colorToolService);
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);

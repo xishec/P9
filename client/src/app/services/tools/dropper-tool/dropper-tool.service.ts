@@ -1,11 +1,15 @@
 import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
+import { Mouse } from 'src/constants/constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DropperToolService extends AbstractToolService {
+    colorTool: ColorToolService;
+    svg: SVGElement;
     currentMouseX = 0;
     currentMouseY = 0;
     pixelColor: string;
@@ -16,9 +20,13 @@ export class DropperToolService extends AbstractToolService {
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
+    }
+
+    initializeColorToolService(colorToolService: ColorToolService): void {
+        this.colorTool = colorToolService;
     }
 
     updateSVGCopy(): void {
@@ -27,21 +35,29 @@ export class DropperToolService extends AbstractToolService {
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
         this.renderer.setProperty(this.canvas, 'width', this.svgReference.nativeElement.getBoundingClientRect().width);
         this.renderer.setProperty(this.canvas, 'height', this.svgReference.nativeElement.getBoundingClientRect().height);
+        this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    pickColor(): void {
-        console.log('mouse ' + this.currentMouseX + ' ' + this.currentMouseY);
-        const data = this.context2D.getImageData(this.currentMouseX, this.currentMouseY, 1, 1);
-        console.log(data);
+    pickColor(): Uint8ClampedArray {
+        this.updateSVGCopy();
+        return this.context2D.getImageData(this.currentMouseX, this.currentMouseY, 1, 1).data;
     }
 
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
-        this.updateSVGCopy();
-        this.pickColor();
+        const colorRGB = this.pickColor();
+        console.log(colorRGB[0] + ' ' + colorRGB[1] + ' ' + colorRGB[2]);
+        const colorHex = this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
+
+        const button = event.button;
+        if (button === Mouse.LeftButton) {
+            this.colorTool.changePrimaryColor(colorHex);
+        } else if (button === Mouse.RightButton) {
+            this.colorTool.changeSecondaryColor(colorHex);
+        }
     }
     onMouseUp(event: MouseEvent): void {}
     onMouseEnter(event: MouseEvent): void {}
