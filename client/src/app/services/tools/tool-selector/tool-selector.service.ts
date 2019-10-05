@@ -54,6 +54,7 @@ export class ToolSelectorService {
     displayNewDrawingModal(): void {
         const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
+            disableClose: true,
         });
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
         dialogRef.afterClosed().subscribe(() => {
