@@ -74,7 +74,6 @@ export class LineToolService extends AbstractToolService {
 
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === Keys.Shift) {
-            console.log('shift is pressed');
             this.shouldCloseLine = true;
         }
     }
@@ -82,7 +81,6 @@ export class LineToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.Shift) {
             this.shouldCloseLine = false;
-            console.log('shift is not pressed');
         }
     }
 
@@ -128,7 +126,6 @@ export class LineToolService extends AbstractToolService {
     }
 
     appendLine(x: number, y: number) {
-        //this.endPreviewLine = `${x.toString()},${y.toString()}`;
         this.linePoints += ` ${x.toString()},${y.toString()}`;
         this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints}`);
     }
