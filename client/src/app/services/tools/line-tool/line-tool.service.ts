@@ -80,13 +80,17 @@ export class LineToolService extends AbstractToolService {
     }
 
     startLine(x: number, y: number): void {
+        console.log(this.currentColor);
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
         this.linePoints = `${x.toString()},${y.toString()}`;
 
         this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints}`);
-        this.renderer.setAttribute(this.currentLine, 'style', 'stroke-linejoin:round;fill:none;stroke:rgb(255,0,0);stroke-width:10px');
+        this.renderer.setAttribute(this.currentLine, 'fill', 'none');
+        this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
 
         this.renderer.appendChild(this.gWrap, this.currentLine);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
