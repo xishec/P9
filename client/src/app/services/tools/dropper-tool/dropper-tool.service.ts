@@ -12,6 +12,7 @@ export class DropperToolService extends AbstractToolService {
     svg: SVGElement;
     currentMouseX = 0;
     currentMouseY = 0;
+    isIn = false;
     pixelColor: string;
     canvas: HTMLCanvasElement = this.renderer.createElement('canvas');
     context2D: CanvasRenderingContext2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -50,20 +51,22 @@ export class DropperToolService extends AbstractToolService {
 
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        this.getColor(event);
+        if (this.isIn) {
+            this.getColor(event);
+        }
     }
     onMouseUp(event: MouseEvent): void {
-        let colorHex = this.getColor(event);
+        const colorHex = this.getColor(event);
 
         const button = event.button;
-        if (button === Mouse.LeftButton) {
+        if (button === Mouse.LeftButton && this.isIn) {
             this.colorTool.changePrimaryColor(colorHex);
-        } else if (button === Mouse.RightButton) {
+        } else if (button === Mouse.RightButton && this.isIn) {
             this.colorTool.changeSecondaryColor(colorHex);
         }
     }
-    onMouseEnter(event: MouseEvent): void {}
-    onMouseLeave(event: MouseEvent): void {}
+    onMouseEnter(event: MouseEvent): void {this.isIn = true;}
+    onMouseLeave(event: MouseEvent): void {this.isIn = false}
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {}
 
