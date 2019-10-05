@@ -9,26 +9,29 @@ export class DropperToolService extends AbstractToolService {
     currentMouseX = 0;
     currentMouseY = 0;
     pixelColor: string;
-    canvas: HTMLCanvasElement;
-    context2D: CanvasRenderingContext2D;
+    canvas: HTMLCanvasElement = this.renderer.createElement('canvas');
+    context2D: CanvasRenderingContext2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     SVGImg: HTMLImageElement = this.renderer.createElement('img');
 
-    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, public renderer: Renderer2) {
+    constructor(
+        public drawStack: DrawStackService,
+        public svgReference: ElementRef<SVGElement>,
+        public renderer: Renderer2
+    ) {
         super();
-
-        this.canvas = this.renderer.createElement('canvas');
-        this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     updateSVGCopy(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.svgReference.nativeElement);
         const base64SVG = btoa(serializedSVG);
-        this.SVGImg.src = 'data:image/svg+xml;base64,' + base64SVG;
+        this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
+        this.renderer.setProperty(this.canvas, 'width', this.svgReference.nativeElement.getBoundingClientRect().width);
+        this.renderer.setProperty(this.canvas, 'height', this.svgReference.nativeElement.getBoundingClientRect().height);
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
     pickColor(): void {
-        console.log(this.currentMouseX + ' ' + this.currentMouseY);
+        console.log('mouse ' + this.currentMouseX + ' ' + this.currentMouseY);
         const data = this.context2D.getImageData(this.currentMouseX, this.currentMouseY, 1, 1);
         console.log(data);
     }
