@@ -1,6 +1,6 @@
-import { ElementRef, Injectable, Renderer2, EventEmitter } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Mouse, SVG_NS } from 'src/constants/constants';
+import { Mouse, SVG_NS, Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -15,8 +15,10 @@ export class LineToolService extends AbstractToolService {
     currentWidth = 0;
     isDrawing = false;
 
+    startLineCoordinates: [number, number] = [0,0]
     linePoints = '';
     endPreviewLine = '';
+    shouldCloseLine = false;
 
     // elementRef: ElementRef<SVGElement>;
     // renderer: Renderer2;
@@ -70,12 +72,34 @@ export class LineToolService extends AbstractToolService {
         }
     }
 
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === Keys.Shift) {
+            console.log('shift is pressed');
+            this.shouldCloseLine = true;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        if (event.key === Keys.Shift) {
+            this.shouldCloseLine = false;
+            console.log('shift is not pressed');
+        }
+    }
+
     onDblClick(event: MouseEvent): void {
         if (this.isDrawing) {
             this.isDrawing = false;
             const x = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
             this.appendLine(x, y);
+
+            if (this.shouldCloseLine) {
+                this.appendLine(this.startLineCoordinates[0], this.startLineCoordinates[1]);
+            }
+
+            this.drawStack.push(this.gWrap);
+            this.linePoints = '';
+            this.endPreviewLine = '';
         }
     }
 
@@ -84,13 +108,15 @@ export class LineToolService extends AbstractToolService {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
-        this.linePoints = `${x.toString()},${y.toString()}`;
+        this.startLineCoordinates = [x, y];
+        this.linePoints  = `${x.toString()},${y.toString()}`;
 
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints}`);
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints} ${this.endPreviewLine}`);
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
         this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
+        this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
 
         this.renderer.appendChild(this.gWrap, this.currentLine);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
@@ -102,15 +128,12 @@ export class LineToolService extends AbstractToolService {
     }
 
     appendLine(x: number, y: number) {
+        //this.endPreviewLine = `${x.toString()},${y.toString()}`;
         this.linePoints += ` ${x.toString()},${y.toString()}`;
-        this.endPreviewLine = `${x.toString()},${y.toString()}`;
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints}`);
     }
 
     onMouseUp(event: MouseEvent): void {}
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
-    onKeyDown(event: KeyboardEvent): void {
-        this.drawStack.push(this.currentLine);
-    }
-    onKeyUp(event: KeyboardEvent): void {}
 }
