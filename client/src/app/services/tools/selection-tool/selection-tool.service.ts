@@ -13,14 +13,16 @@ export class SelectionToolService extends AbstractToolService {
     initialMouseY = 0;
 
     isSelecting = false;
+    isManipulating = false;
     isIn = false;
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+    selection: Set<SVGGElement> = new Set();
 
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
     }
@@ -67,13 +69,18 @@ export class SelectionToolService extends AbstractToolService {
     checkSelection(): void {
         const selectionBox = this.selectionRectangle.getBoundingClientRect();
 
-        for (let el of this.drawStack.drawStack) {
+        for (const el of this.drawStack.drawStack) {
             const elBox = el.getBoundingClientRect();
-            console.log(this.isInSelection(selectionBox, elBox));
             if (this.isInSelection(selectionBox, elBox)) {
-                this.renderer.setAttribute(el, 'stroke', 'blue');
+                this.selection.add(el);
             }
         }
+    }
+
+    hasSelected(): boolean {
+        console.log(this.selection.size);
+        console.log(this.selection);
+        return this.selection.size > 0;
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -88,12 +95,15 @@ export class SelectionToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
+        if (button === Mouse.LeftButton && !this.isManipulating) {
             this.initialMouseX = this.currentMouseX;
             this.initialMouseY = this.currentMouseY;
             this.isSelecting = true;
             this.updateSelectionRectangle();
             this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
+        } else {
+            this.selection.clear();
+            this.isManipulating = false;
         }
     }
 
@@ -103,6 +113,9 @@ export class SelectionToolService extends AbstractToolService {
         if (button === Mouse.LeftButton) {
             this.isSelecting = false;
             this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+            if (this.hasSelected()) {
+                this.isManipulating = true;
+            }
         }
     }
 
