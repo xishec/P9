@@ -35,7 +35,7 @@ export class ToolSelectorService {
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
-        this.selectionTool = new SelectionToolService(ref, renderer);
+        this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
 
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
         this.rectangleTool.initializeColorToolService(this.colorToolService);

@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,10 +13,15 @@ export class SelectionToolService extends AbstractToolService {
     initialMouseY = 0;
 
     isSelecting = false;
+    isIn = false;
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
 
-    constructor(public svgReference: ElementRef<SVGElement>, public renderer: Renderer2) {
+    constructor(
+        public drawStack: DrawStackService,
+        public svgReference: ElementRef<SVGElement>,
+        public renderer: Renderer2
+    ) {
         super();
     }
 
@@ -49,11 +55,33 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(this.selectionRectangle, 'stroke-dasharray', '5 5');
     }
 
+    isInSelection(selectionBox: DOMRect | ClientRect, elementBox: DOMRect | ClientRect): boolean {
+        return (
+            elementBox.left > selectionBox.left &&
+            elementBox.right < selectionBox.right &&
+            elementBox.top > selectionBox.top &&
+            elementBox.bottom < selectionBox.bottom
+        );
+    }
+
+    checkSelection(): void {
+        const selectionBox = this.selectionRectangle.getBoundingClientRect();
+
+        for (let el of this.drawStack.drawStack) {
+            const elBox = el.getBoundingClientRect();
+            console.log(this.isInSelection(selectionBox, elBox));
+            if (this.isInSelection(selectionBox, elBox)) {
+                this.renderer.setAttribute(el, 'stroke', 'blue');
+            }
+        }
+    }
+
     onMouseMove(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
         if (this.isSelecting) {
             this.updateSelectionRectangle();
+            this.checkSelection();
         }
     }
 
@@ -78,8 +106,12 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    onMouseEnter(event: MouseEvent): void {}
-    onMouseLeave(event: MouseEvent): void {}
+    onMouseEnter(event: MouseEvent): void {
+        this.isIn = true;
+    }
+    onMouseLeave(event: MouseEvent): void {
+        this.isIn = false;
+    }
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {}
 }
