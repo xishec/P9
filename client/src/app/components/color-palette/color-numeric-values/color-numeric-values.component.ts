@@ -37,7 +37,7 @@ export class ColorNumericValuesComponent implements OnInit {
 
     initializeForm(): void {
         this.colorNumericValuesForm = this.formBuilder.group({
-            hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)')]],
+            hex: ['000000', [Validators.pattern('^([A-Fa-f0-9]{6}$)')]],
             R: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
             G: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
             B: [0, [Validators.required, Validators.min(0), Validators.max(255)]],
@@ -62,10 +62,14 @@ export class ColorNumericValuesComponent implements OnInit {
     }
 
     onUserHexInput(): void {
-        const opacity = this.colorToolService.getPreviewColorOpacityHex();
-        this.previewColor = this.colorNumericValuesForm.value.hex + opacity;
-        this.setColorNumericValues();
-        this.colorToolService.changePreviewColor(this.previewColor);
+        if (this.colorNumericValuesForm.valid) {
+            const opacity = this.colorToolService.getPreviewColorOpacityHex();
+            this.previewColor = this.colorNumericValuesForm.value.hex + opacity;
+            this.setColorNumericValues();
+            this.colorToolService.changePreviewColor(this.previewColor);
+        } else {
+            this.setHexValues();
+        }
     }
 
     onUserColorRGBInput(): void {
