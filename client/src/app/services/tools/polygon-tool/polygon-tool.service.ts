@@ -13,7 +13,7 @@ import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
     providedIn: 'root',
 })
 export class PolygonToolService extends AbstractShapeToolService {
-    drawPolygon: SVGPolygonElement = this.renderer.createElement('rect', SVG_NS);
+    drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
     fillColor = '';
     strokeColor = '';
     userFillColor = '';
@@ -21,6 +21,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     userStrokeWidth = 0;
     traceType = '';
     strokeWidth = 0;
+    sideNumber = 3;
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
 
@@ -36,6 +37,9 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
         this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
+        });
+        this.attributesManagerService.currentSideNumber.subscribe((sideNumber: number) => {
+            this.sideNumber = sideNumber;
         });
     }
 
@@ -61,40 +65,11 @@ export class PolygonToolService extends AbstractShapeToolService {
     copyPreviewRectangleAttributes(): void {
         this.renderer.setAttribute(
             this.drawPolygon,
-            'x',
-            (this.previewRectangleX + this.userStrokeWidth / 2).toString(),
+            'points',
+            `${this.previewRectangleX + this.previewRectangleWidth},${this.previewRectangleY +
+                this.previewRectangleHeight} ${this.previewRectangleX +
+                this.previewRectangleWidth},65 51.96152422706631,70 `
         );
-        this.renderer.setAttribute(
-            this.drawPolygon,
-            'y',
-            (this.previewRectangleY + this.userStrokeWidth / 2).toString(),
-        );
-        if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(
-                this.drawPolygon,
-                'width',
-                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString(),
-            );
-        } else {
-            this.renderer.setAttribute(
-                this.drawPolygon,
-                'width',
-                (this.previewRectangleWidth - this.userStrokeWidth).toString(),
-            );
-        }
-        if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(
-                this.drawPolygon,
-                'height',
-                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString(),
-            );
-        } else {
-            this.renderer.setAttribute(
-                this.drawPolygon,
-                'height',
-                (this.previewRectangleHeight - this.userStrokeWidth).toString(),
-            );
-        }
     }
 
     renderDrawRectangle(): void {
@@ -159,6 +134,8 @@ export class PolygonToolService extends AbstractShapeToolService {
         }
     }
 
+    updatePoints() {}
+
     onMouseMove(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
@@ -178,8 +155,8 @@ export class PolygonToolService extends AbstractShapeToolService {
 
             this.updateDrawing();
 
-            //this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
             this.renderer.appendChild(this.svgReference.nativeElement, this.drawPolygon);
+            this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
         }
     }
 

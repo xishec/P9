@@ -25,7 +25,7 @@ export class PolygonAttributesComponent implements OnInit {
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -48,6 +48,7 @@ export class PolygonAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             traceType: ['Contour'],
+            sideNumber: ['3'],
         });
     }
 
@@ -68,6 +69,10 @@ export class PolygonAttributesComponent implements OnInit {
     onTraceTypeChange(): void {
         const tracetype: string = this.rectangleAttributesForm.value.traceType;
         this.attributesManagerService.changeTraceType(tracetype);
+    }
+
+    onSideNumberChange(): void {
+        this.attributesManagerService;
     }
 
     onFocus() {

@@ -39,5 +39,22 @@
                 </mat-select>
             </mat-form-field>
         </div>
+        <div id="attribute">
+            <label for="sideNumber">Polygone</label>
+            <mat-form-field>
+                <mat-select formControlName="sideNumber" (selectionChange)="onSideNumberChange()">
+                    <mat-option value="3">Triangle</mat-option>
+                    <mat-option value="4">Qudrilatère</mat-option>
+                    <mat-option value="5">Pentagone</mat-option>
+                    <mat-option value="6">Hexagone</mat-option>
+                    <mat-option value="7">Heptagone</mat-option>
+                    <mat-option value="8">Octogone</mat-option>
+                    <mat-option value="9">Nonagone</mat-option>
+                    <mat-option value="10">Décagone</mat-option>
+                    <mat-option value="11">Hendécagone</mat-option>
+                    <mat-option value="12">Dodécagone</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </form>
 </div>

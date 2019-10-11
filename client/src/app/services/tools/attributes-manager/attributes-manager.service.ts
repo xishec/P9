@@ -15,12 +15,15 @@ export class AttributesManagerService {
     set thickness(value: BehaviorSubject<number>) {
         this._thickness = value;
     }
+
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
+    private sideNumber: BehaviorSubject<number> = new BehaviorSubject(1);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
+    currentSideNumber: Observable<number> = this.sideNumber.asObservable();
 
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);
@@ -32,5 +35,9 @@ export class AttributesManagerService {
 
     changeStyle(style: number): void {
         this.style.next(style);
+    }
+
+    changeSideNumber(sideNum: number): void {
+        this.sideNumber.next(sideNum);
     }
 }
