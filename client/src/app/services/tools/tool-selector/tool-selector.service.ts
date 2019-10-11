@@ -12,6 +12,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { OpenFileModalWindowComponent } from 'src/app/components/open-file-modal-window/open-file-modal-window.component';
 
 @Injectable({
     providedIn: 'root',
@@ -47,12 +48,22 @@ export class ToolSelectorService {
     }
 
     displayNewDrawingModal(): void {
-        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
+        const newDrawingDialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
         });
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
-        dialogRef.afterClosed().subscribe(() => {
+        newDrawingDialogRef.afterClosed().subscribe(() => {
             this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
+        });
+    }
+
+    displayOpenFileModal(): void {
+        const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
+            panelClass: 'myapp-max-width-dialog',
+        });
+        // this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+        openFileDialogRef.afterClosed().subscribe(() => {
+            // this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         });
     }
 
@@ -106,6 +117,8 @@ export class ToolSelectorService {
             case ToolName.Text:
             case ToolName.Save:
             case ToolName.ArtGallery:
+                this.displayOpenFileModal();
+                break;
             case ToolName.Export:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(tooltipName);
