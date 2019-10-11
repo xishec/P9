@@ -2,5 +2,32 @@
     <div id="attribute-header">
         {{ toolName }}
     </div>
-</div>
 
+    <form [formGroup]="stampAttributesForm">
+        <div class="attribute">
+            <label for="ladder">Mise à échelle</label>
+            <mat-slider
+                placeholder="value"
+                formControlName="scaling"
+                (input)="onSliderChange($event)"
+                [min]="stampScaling.Min"
+                [max]="stampScaling.Max"
+                value="{{ stampAttributesForm.value.scaling }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="scaling"
+                    (input)="onScalingChange()"
+                    [min]="stampScaling.Min"
+                    [max]="stampScaling.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ stampScaling.Min }} et {{ stampScaling.Max }}</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
