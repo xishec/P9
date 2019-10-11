@@ -78,7 +78,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     onCircleJointChange(): void {
         const jointThickness = this.lineAttributesForm.value.cirlceJointThickness;
         if (this.lineAttributesForm.valid) {
-            // change join thickness attributes manager service
+            this.attributeManagerService.changeCircleJointThickness(jointThickness);
         }
     }
 

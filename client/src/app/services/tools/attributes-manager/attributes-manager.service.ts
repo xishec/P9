@@ -27,12 +27,16 @@ export class AttributesManagerService {
     currentLineStrokeType: Observable<number> = this.lineStrokeType.asObservable();
     private lineJointType: BehaviorSubject<number> = new BehaviorSubject(1);
     currentLineJointType: Observable<number> = this.lineJointType.asObservable();
+    private circleJointThickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
 
     changeLineStrokeType(lineStrokeType: number): void {
         this.lineStrokeType.next(lineStrokeType);
     }
     changeLineJointType(lineJointType: number): void {
         this.lineJointType.next(lineJointType);
+    }
+    changeCircleJointThickness(circleJointThickness: number): void {
+        this.circleJointThickness.next(circleJointThickness);
     }
     //
     changeThickness(thickness: number): void {
