@@ -1,7 +1,5 @@
 <div id="container">
-    <div id="attribute-header">
-        {{ toolName }}
-    </div>
+    <div id="attribute-header">{{ toolName }} : {{ polygonFormType.get(polygonAttributesForm.value.sideNumber) }}</div>
 
     <form [formGroup]="polygonAttributesForm">
         <div class="attribute">
