@@ -5,7 +5,6 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { createMockSVGCircle } from 'src/classes/test-helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +15,7 @@ export class LineToolService extends AbstractToolService {
     currentWidth = 0;
     currentStrokeType = 0;
     currentJointType = 0;
-    currentJointCircleThickness = 0;
+    currentCircleJointDiameter = 0;
     circlesElements = new Array();
     isDrawing = false;
 
@@ -54,8 +53,8 @@ export class LineToolService extends AbstractToolService {
         this.attributesManagerService.currentLineJointType.subscribe((jointType) => {
             this.currentJointType = jointType;
         });
-        this.attributesManagerService.currentCircleJointThickness.subscribe((circleJointThickness) => {
-            this.currentJointCircleThickness = circleJointThickness;
+        this.attributesManagerService.currentCircleJointDiameter.subscribe((circleJointDiameter) => {
+            this.currentCircleJointDiameter = circleJointDiameter;
         })
     }
 
@@ -160,12 +159,11 @@ export class LineToolService extends AbstractToolService {
     }
 
     appendCircle(x: number, y: number) {
-        console.log(`x : ${x}, y : ${y}, currentJointThick : ${this.currentJointCircleThickness}`);
         const circle = this.renderer.createElement('circle', SVG_NS);
 
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
-        this.renderer.setAttribute(circle, 'r', this.currentJointCircleThickness.toString());
+        this.renderer.setAttribute(circle, 'r', this.currentCircleJointDiameter.toString());
         this.renderer.setAttribute(circle, 'fill', `#${this.currentColor}`);
 
         this.renderer.appendChild(this.gWrap, circle);

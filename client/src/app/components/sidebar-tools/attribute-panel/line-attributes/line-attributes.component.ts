@@ -52,7 +52,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
             ],
             lineStrokeType: [1],
             lineJointType: [1],
-            cirlceJointThickness: [
+            circleJointDiameter: [
                 Thickness.Default,
                 [Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
@@ -70,15 +70,15 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
 
     onCircleJointSliderChange(event: MatSliderChange): void {
         if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
-            this.lineAttributesForm.controls.cirlceJointThickness.setValue(event.value);
-            this.onCircleJointChange();
+            this.lineAttributesForm.controls.circleJointDiameter.setValue(event.value);
+            this.onCircleJointDiameterChange();
         }
     }
 
-    onCircleJointChange(): void {
-        const jointThickness = this.lineAttributesForm.value.cirlceJointThickness;
+    onCircleJointDiameterChange(): void {
+        const jointThickness = this.lineAttributesForm.value.circleJointDiameter;
         if (this.lineAttributesForm.valid) {
-            this.attributeManagerService.changeCircleJointThickness(jointThickness);
+            this.attributeManagerService.changeCircleJointDiameter(jointThickness);
         }
     }
 

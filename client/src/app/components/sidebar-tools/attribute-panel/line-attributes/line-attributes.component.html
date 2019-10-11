@@ -74,10 +74,10 @@
                 <label for="thickness">Épaisseur des jointures</label>
                     <mat-slider
                         placeholder="Hex"
-                        formControlName="cirlceJointThickness"
+                        formControlName="circleJointDiameter"
                         (input)="onCircleJointSliderChange($event)"
                         [min]="Thickness.Min"
-                        value="{{ lineAttributesForm.value.cirlceJointThickness }}"
+                        value="{{ lineAttributesForm.value.circleJointDiameter }}"
                     ></mat-slider>
                     <mat-form-field class="small">
                         <input
@@ -86,8 +86,8 @@
                             (focusout)="onFocusOut()"
                             matInput
                             type="number"
-                            formControlName="cirlceJointThickness"
-                            (input)="onCircleJointChange()"
+                            formControlName="circleJointDiameter"
+                            (input)="onCircleJointDiameterChange()"
                             [min]="Thickness.Min"
                             [max]="Thickness.Max"
                         />
