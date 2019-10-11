@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { Thickness, ToolName, PolygonSides, PolygonFormeType } from 'src/constants/tool-constants';
+import { Thickness, ToolName, PolygonSides, PolygonFormType } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-polygon-attributes',
@@ -21,6 +21,7 @@ export class PolygonAttributesComponent implements OnInit {
 
     readonly thickness = Thickness;
     readonly polygonSides = PolygonSides;
+    readonly polygonFormType = PolygonFormType;
 
     constructor(
         private formBuilder: FormBuilder,

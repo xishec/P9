@@ -36,7 +36,7 @@ enum TraceType {
     Both = 'Plein avec contour',
 }
 
-const PolygonFormeType: Map<number, string> = new Map([
+const PolygonFormType: Map<number, string> = new Map([
     [3, 'Triangle'],
     [4, 'Qudrilatère'],
     [5, 'Pentagone'],
@@ -91,6 +91,6 @@ export {
     Thickness,
     TraceType,
     ToolName,
-    PolygonFormeType,
+    PolygonFormType,
     PolygonSides,
 };
