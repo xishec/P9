@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 export class OpenFileModalWindowComponent implements OnInit {
   openFileModalForm: FormGroup;
   formBuilder: FormBuilder;
-  drawingInfos = []
+  drawingFileInfos = []
 
   constructor() { }
 
