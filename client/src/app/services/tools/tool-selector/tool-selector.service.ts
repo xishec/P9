@@ -44,7 +44,7 @@ export class ToolSelectorService {
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
-        this.stampTool = new StampToolService(drawStack, ref, renderer);
+        this.stampTool = new StampToolService(drawStack, ref, renderer, this);
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
@@ -78,6 +78,9 @@ export class ToolSelectorService {
     }
 
     changeTool(tooltipName: string): void {
+        if (this.currentTool instanceof StampToolService) {
+            this.currentTool.cleanUpStamp();
+        }
         switch (tooltipName) {
             case ToolName.NewDrawing:
                 this.displayNewDrawingModal();
