@@ -14,6 +14,7 @@ export class LineToolService extends AbstractToolService {
     currentColor = '';
     currentWidth = 0;
     currentStrokeType = 0;
+    currentJointType = 0;
     isDrawing = false;
 
     pointsArray = new Array();
@@ -46,6 +47,9 @@ export class LineToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentLineStrokeType.subscribe((strokeType) => {
             this.currentStrokeType = strokeType;
+        });
+        this.attributesManagerService.currentLineJointType.subscribe((jointType) => {
+            this.currentJointType = jointType;
         });
     }
 
@@ -123,6 +127,12 @@ export class LineToolService extends AbstractToolService {
             case 2 :
                 this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
+                break;
+        }
+
+        switch (this.currentJointType) {
+            case 1 :
+                this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
                 break;
         }
 

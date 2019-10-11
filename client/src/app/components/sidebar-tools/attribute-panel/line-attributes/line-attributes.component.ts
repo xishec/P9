@@ -49,11 +49,16 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             lineStrokeType: [1],
+            lineJointType: [1],
         });
     }
 
-    onStrokeLineTypeChange(lineStrokeType: number): void {
+    onLineStrokeTypeChange(lineStrokeType: number): void {
         this.attributeManagerService.changeLineStrokeType(lineStrokeType);
+    }
+
+    onLineJointTypeChange(lineJointType: number): void {
+        this.attributeManagerService.changeLineJointType(lineJointType);
     }
 
     onSliderChange(event: MatSliderChange): void {

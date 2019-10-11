@@ -25,8 +25,14 @@ export class AttributesManagerService {
     // Added for line
     private lineStrokeType: BehaviorSubject<number> = new BehaviorSubject(1);
     currentLineStrokeType: Observable<number> = this.lineStrokeType.asObservable();
+    private lineJointType: BehaviorSubject<number> = new BehaviorSubject(1);
+    currentLineJointType: Observable<number> = this.lineJointType.asObservable();
+
     changeLineStrokeType(lineStrokeType: number): void {
         this.lineStrokeType.next(lineStrokeType);
+    }
+    changeLineJointType(lineJointType: number): void {
+        this.lineJointType.next(lineJointType);
     }
     //
     changeThickness(thickness: number): void {
