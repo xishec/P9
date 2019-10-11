@@ -12,6 +12,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { StampToolService } from '../stamp-tool/stamp-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -21,6 +22,7 @@ export class ToolSelectorService {
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+    private stampTool: StampToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
@@ -41,6 +43,8 @@ export class ToolSelectorService {
 
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
+
+        this.stampTool = new StampToolService(drawStack, ref, renderer);
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
@@ -88,6 +92,10 @@ export class ToolSelectorService {
                 break;
             case ToolName.Brush:
                 this.currentTool = this.brushTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Stamp:
+                this.currentTool = this.stampTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.ColorApplicator:
