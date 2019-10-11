@@ -65,4 +65,10 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName };
+enum StampScaling {
+    Min = 1,
+    Default = 1,
+    Max = 10,
+}
+
+export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, StampScaling };
