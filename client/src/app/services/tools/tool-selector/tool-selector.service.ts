@@ -44,7 +44,7 @@ export class ToolSelectorService {
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
-        this.stampTool = new StampToolService(drawStack, ref, renderer, this);
+        this.stampTool = new StampToolService(drawStack, ref, renderer);
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
