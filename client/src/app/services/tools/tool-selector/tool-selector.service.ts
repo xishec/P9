@@ -11,8 +11,8 @@ import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
-import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
+import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -31,7 +31,7 @@ export class ToolSelectorService {
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService
+        private drawingModalWindowService: DrawingModalWindowService,
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {

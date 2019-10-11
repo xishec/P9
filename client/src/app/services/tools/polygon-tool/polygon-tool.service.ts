@@ -1,13 +1,13 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { ColorToolService } from '../color-tool/color-tool.service';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
+import { Mouse, SVG_NS } from 'src/constants/constants';
+import { ToolName, TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
-import { SVG_NS, Mouse } from 'src/constants/constants';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { ToolName, TraceType } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -68,7 +68,7 @@ export class PolygonToolService extends AbstractShapeToolService {
             'points',
             `${this.previewRectangleX + this.previewRectangleWidth},${this.previewRectangleY +
                 this.previewRectangleHeight} ${this.previewRectangleX +
-                this.previewRectangleWidth},65 51.96152422706631,70 `
+                this.previewRectangleWidth},65 51.96152422706631,70 `,
         );
     }
 
@@ -105,8 +105,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     updateDrawing(): void {
-        this.updatePreviewRectangle(); //update les lignes pointés du rectangle (toujours rec)
-        this.copyPreviewRectangleAttributes(); //va updater le polygon (position et taille)
+        this.updatePreviewRectangle(); // update les lignes pointés du rectangle (toujours rec)
+        this.copyPreviewRectangleAttributes(); // va updater le polygon (position et taille)
         this.renderDrawRectangle(); // applique la couleur // contient de la logique
     }
 
