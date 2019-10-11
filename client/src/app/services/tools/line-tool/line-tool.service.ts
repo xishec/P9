@@ -54,6 +54,9 @@ export class LineToolService extends AbstractToolService {
         this.attributesManagerService.currentLineJointType.subscribe((jointType) => {
             this.currentJointType = jointType;
         });
+        this.attributesManagerService.currentCircleJointThickness.subscribe((circleJointThickness) => {
+            this.currentJointCircleThickness = circleJointThickness;
+        })
     }
 
     onMouseDown(event: MouseEvent): void {
