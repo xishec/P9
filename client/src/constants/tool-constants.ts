@@ -36,6 +36,25 @@ enum TraceType {
     Both = 'Plein avec contour',
 }
 
+const PolygonFormeType: Map<number, string> = new Map([
+    [3, 'Triangle'],
+    [4, 'Qudrilatère'],
+    [5, 'Pentagone'],
+    [6, 'Hexagone'],
+    [7, 'Heptagone'],
+    [8, 'Octogone'],
+    [9, 'Nonagone'],
+    [10, 'Décagone'],
+    [11, 'Hendécagone'],
+    [12, 'Dodécagone'],
+]);
+
+enum PolygonSides {
+    Min = 3,
+    Default = 3,
+    Max = 12,
+}
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
@@ -65,4 +84,13 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName };
+export {
+    TOOLS_BUTTON_INFO,
+    FILES_BUTTON_INFO,
+    BRUSH_STYLES,
+    Thickness,
+    TraceType,
+    ToolName,
+    PolygonFormeType,
+    PolygonSides,
+};

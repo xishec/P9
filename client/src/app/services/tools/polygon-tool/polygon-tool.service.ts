@@ -21,7 +21,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     userStrokeWidth = 0;
     traceType = '';
     strokeWidth = 0;
-    sideNumber = 3;
+    sideNumber = 8;
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
 
@@ -62,6 +62,10 @@ export class PolygonToolService extends AbstractShapeToolService {
         return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
     }
 
+    calculateVertex(){
+
+    }
+
     copyPreviewRectangleAttributes(): void {
         this.renderer.setAttribute(
             this.drawPolygon,
@@ -72,7 +76,36 @@ export class PolygonToolService extends AbstractShapeToolService {
         );
     }
 
-    renderDrawRectangle(): void {
+    updatePreviewRectangle() {
+        let deltaX = this.currentMouseX - this.initialMouseX;
+        let deltaY = this.currentMouseY - this.initialMouseY;
+        const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+
+        // adjust x
+        if (deltaX < 0) {
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLength.toString());
+        } else {
+            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'width', minLength.toString());
+        }
+
+        // adjust y
+        if (deltaY < 0) {
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLength.toString());
+        } else {
+            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'height', minLength.toString());
+        }
+
+        this.renderer.setAttribute(this.previewRectangle, 'fill', 'white');
+        this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
+        this.renderer.setAttribute(this.previewRectangle, 'stroke', 'black');
+        this.renderer.setAttribute(this.previewRectangle, 'stroke-dasharray', '5 5');
+    }
+
+    renderdrawPolygon(): void {
         if (this.isValidePolygon()) {
             this.renderer.setAttribute(this.drawPolygon, 'fill', '#' + this.userFillColor);
             this.renderer.setAttribute(this.drawPolygon, 'stroke', '#' + this.userStrokeColor);
@@ -107,7 +140,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     updateDrawing(): void {
         this.updatePreviewRectangle(); // update les lignes pointés du rectangle (toujours rec)
         this.copyPreviewRectangleAttributes(); // va updater le polygon (position et taille)
-        this.renderDrawRectangle(); // applique la couleur // contient de la logique
+        this.renderdrawPolygon(); // applique la couleur // contient de la logique
     }
 
     updateTraceType(traceType: string) {
