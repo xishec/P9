@@ -52,12 +52,14 @@ export class PolygonAttributesComponent implements OnInit {
         });
     }
 
-    onSliderChange(event: MatSliderChange): void {
+    onThicknessSliderChange(event: MatSliderChange): void {
         if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
             this.rectangleAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
+
+    onSideNumberSliderChange(event: MatSliderChange) {}
 
     onThicknessChange(): void {
         const thickness: number = this.rectangleAttributesForm.value.thickness;
