@@ -124,7 +124,7 @@ export class WorkZoneComponent implements OnInit {
         }
     }
 
-    // Added double click listener for line tool service
+    // ONLY USED ON LINE SERVICE
     @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
         if (this.currentTool instanceof LineToolService) {
             (this.currentTool as LineToolService).onDblClick(event);

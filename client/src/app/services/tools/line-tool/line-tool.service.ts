@@ -15,25 +15,18 @@ export class LineToolService extends AbstractToolService {
     currentWidth = 0;
     isDrawing = false;
 
-    startLineCoordinates: [number, number] = [0,0]
-    linePoints = '';
+    startLineCoordinates: [number, number] = [0, 0];
+    pointsArray = new Array();
     endPreviewLine = '';
     shouldCloseLine = false;
 
-    // elementRef: ElementRef<SVGElement>;
-    // renderer: Renderer2;
-    // drawStack: DrawStackService;
     gWrap: SVGGElement;
     currentLine: SVGLineElement;
 
     attributesManagerService: AttributesManagerService;
 
-    // tslint:disable-next-line: no-empty
     constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService) {
         super();
-        // this.elementRef = elementRef;
-        // this.renderer = renderer;
-        // this.drawStack = drawStack;
     }
 
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
@@ -75,6 +68,11 @@ export class LineToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === Keys.Shift) {
             this.shouldCloseLine = true;
+        } else if (event.key === Keys.Escape) {
+            this.isDrawing = false;
+            this.renderer.removeChild(this.elementRef, this.gWrap);
+            this.endPreviewLine = '';
+            this.pointsArray = new Array();
         }
     }
 
@@ -87,29 +85,30 @@ export class LineToolService extends AbstractToolService {
     onDblClick(event: MouseEvent): void {
         if (this.isDrawing) {
             this.isDrawing = false;
-            const x = this.getXPos(event.clientX);
-            const y = this.getYPos(event.clientY);
-            this.appendLine(x, y);
+            // const x = this.getXPos(event.clientX);
+            // const y = this.getYPos(event.clientY);
+            // this.appendLine(x, y);
 
             if (this.shouldCloseLine) {
-                this.appendLine(this.startLineCoordinates[0], this.startLineCoordinates[1]);
+                // this.appendLine(this.startLineCoordinates[0], this.startLineCoordinates[1]);
+                this.pointsArray.push(this.pointsArray[0]);
+                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
             }
 
             this.drawStack.push(this.gWrap);
-            this.linePoints = '';
+            this.pointsArray = new Array();
             this.endPreviewLine = '';
         }
     }
 
     startLine(x: number, y: number): void {
-        console.log(this.currentColor);
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
-        this.startLineCoordinates = [x, y];
-        this.linePoints  = `${x.toString()},${y.toString()}`;
+        this.startLineCoordinates = [x, y]; // CAN BE REMOVED AFTER USING ARRAY
+        this.pointsArray.push(`${x.toString()},${y.toString()}`);
 
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints} ${this.endPreviewLine}`);
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
@@ -122,12 +121,16 @@ export class LineToolService extends AbstractToolService {
 
     previewLine(x: number, y: number): void {
         this.endPreviewLine = `${x.toString()},${y.toString()}`;
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints} ${this.endPreviewLine}`);
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.endPreviewLine}`);
     }
 
     appendLine(x: number, y: number) {
-        this.linePoints += ` ${x.toString()},${y.toString()}`;
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.linePoints}`);
+        this.pointsArray.push(` ${x.toString()},${y.toString()}`);
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
+    }
+
+    arrayToStringLine(): string {
+        return this.pointsArray.join(' ');
     }
 
     onMouseUp(event: MouseEvent): void {}
