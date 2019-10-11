@@ -5,6 +5,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { createMockSVGCircle } from 'src/classes/test-helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,8 @@ export class LineToolService extends AbstractToolService {
     currentWidth = 0;
     currentStrokeType = 0;
     currentJointType = 0;
+    currentJointCircleThickness = 0;
+    circlesElements = new Array();
     isDrawing = false;
 
     pointsArray = new Array();
@@ -62,6 +65,9 @@ export class LineToolService extends AbstractToolService {
                 this.startLine(x, y);
             } else {
                 this.appendLine(x, y);
+            }
+            if (this.currentJointType === 3) {
+                this.appendCircle(x, y);
             }
         }
     }
@@ -148,6 +154,18 @@ export class LineToolService extends AbstractToolService {
     appendLine(x: number, y: number) {
         this.pointsArray.push(` ${x.toString()},${y.toString()}`);
         this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
+    }
+
+    appendCircle(x: number, y: number) {
+        console.log(`x : ${x}, y : ${y}, currentJointThick : ${this.currentJointCircleThickness}`);
+        const circle = this.renderer.createElement('circle', SVG_NS);
+
+        this.renderer.setAttribute(circle, 'cx', x.toString());
+        this.renderer.setAttribute(circle, 'cy', y.toString());
+        this.renderer.setAttribute(circle, 'r', this.currentJointCircleThickness.toString());
+        this.renderer.setAttribute(circle, 'fill', `#${this.currentColor}`);
+
+        this.renderer.appendChild(this.gWrap, circle);
     }
 
     arrayToStringLine(): string {
