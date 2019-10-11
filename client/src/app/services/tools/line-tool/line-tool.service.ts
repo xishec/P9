@@ -16,7 +16,7 @@ export class LineToolService extends AbstractToolService {
     currentStrokeType = 0;
     currentJointType = 0;
     currentCircleJointDiameter = 0;
-    circlesElements = new Array();
+    jointCircles = new Array();
     isDrawing = false;
 
     pointsArray = new Array();
@@ -55,7 +55,7 @@ export class LineToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentCircleJointDiameter.subscribe((circleJointDiameter) => {
             this.currentCircleJointDiameter = circleJointDiameter;
-        })
+        });
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -92,6 +92,9 @@ export class LineToolService extends AbstractToolService {
             if (this.pointsArray.length > 1) {
                 this.pointsArray.pop();
                 this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.endPreviewLine}`);
+
+                const circle = this.jointCircles.pop();
+                this.renderer.removeChild(this.gWrap, circle);
             }
         }
     }
@@ -163,10 +166,12 @@ export class LineToolService extends AbstractToolService {
 
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
-        this.renderer.setAttribute(circle, 'r', this.currentCircleJointDiameter.toString());
+        this.renderer.setAttribute(circle, 'r', (this.currentCircleJointDiameter / 2).toString());
         this.renderer.setAttribute(circle, 'fill', `#${this.currentColor}`);
 
         this.renderer.appendChild(this.gWrap, circle);
+
+        this.jointCircles.push(circle);
     }
 
     arrayToStringLine(): string {
