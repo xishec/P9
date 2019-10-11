@@ -121,17 +121,17 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
-            case 1 :
+            case 2 :
                 this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `${this.currentWidth}, ${this.currentWidth / 2}`);
                 break;
-            case 2 :
+            case 3 :
                 this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
 
         switch (this.currentJointType) {
-            case 1 :
+            case 2 :
                 this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
                 break;
         }
