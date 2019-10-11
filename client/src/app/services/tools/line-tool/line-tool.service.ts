@@ -11,22 +11,24 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class LineToolService extends AbstractToolService {
     colorToolService: ColorToolService;
+    attributesManagerService: AttributesManagerService;
+
     currentColor = '';
-    currentWidth = 0;
+    currentStrokeWidth = 0;
     currentStrokeType = 0;
     currentJointType = 0;
     currentCircleJointDiameter = 0;
-    jointCircles = new Array();
-    isDrawing = false;
 
     pointsArray = new Array();
-    endPreviewLine = '';
+    jointCircles = new Array();
+
+    currentMousePosition = '';
+
     shouldCloseLine = false;
+    isDrawing = false;
 
     gWrap: SVGGElement;
     currentLine: SVGLineElement;
-
-    attributesManagerService: AttributesManagerService;
 
     constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService) {
         super();
@@ -45,7 +47,7 @@ export class LineToolService extends AbstractToolService {
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
-            this.currentWidth = thickness;
+            this.currentStrokeWidth = thickness;
         });
         this.attributesManagerService.currentLineStrokeType.subscribe((strokeType) => {
             this.currentStrokeType = strokeType;
@@ -86,12 +88,12 @@ export class LineToolService extends AbstractToolService {
         } else if (event.key === Keys.Escape) {
             this.isDrawing = false;
             this.renderer.removeChild(this.elementRef, this.gWrap);
-            this.endPreviewLine = '';
+            this.currentMousePosition = '';
             this.pointsArray = new Array();
         } else if (event.key === Keys.Backspace) {
             if (this.pointsArray.length > 1) {
                 this.pointsArray.pop();
-                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.endPreviewLine}`);
+                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.currentMousePosition}`);
 
                 const circle = this.jointCircles.pop();
                 this.renderer.removeChild(this.gWrap, circle);
@@ -116,7 +118,7 @@ export class LineToolService extends AbstractToolService {
 
             this.drawStack.push(this.gWrap);
             this.pointsArray = new Array();
-            this.endPreviewLine = '';
+            this.currentMousePosition = '';
         }
     }
 
@@ -128,15 +130,16 @@ export class LineToolService extends AbstractToolService {
 
         this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
-        this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
+        this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentStrokeWidth.toString());
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
             case 2 :
-                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `${this.currentWidth}, ${this.currentWidth / 2}`);
+                this.renderer.setAttribute(
+                    this.currentLine, 'stroke-dasharray', `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`);
                 break;
             case 3 :
-                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentWidth * 1.5}`);
+                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentStrokeWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
@@ -152,8 +155,8 @@ export class LineToolService extends AbstractToolService {
     }
 
     previewLine(x: number, y: number): void {
-        this.endPreviewLine = `${x.toString()},${y.toString()}`;
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.endPreviewLine}`);
+        this.currentMousePosition = `${x.toString()},${y.toString()}`;
+        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.currentMousePosition}`);
     }
 
     appendLine(x: number, y: number) {
