@@ -9,6 +9,11 @@ import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
+interface Vertex {
+    x: number;
+    y: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -21,9 +26,11 @@ export class PolygonToolService extends AbstractShapeToolService {
     userStrokeWidth = 0;
     traceType = '';
     strokeWidth = 0;
-    sideNumber = 8;
+    nbVertices = 8;
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
+    radius = 0;
+    radiusOffset = 0;
 
     constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
@@ -38,8 +45,8 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
         });
-        this.attributesManagerService.currentSideNumber.subscribe((sideNumber: number) => {
-            this.sideNumber = sideNumber;
+        this.attributesManagerService.currentNbVertices.subscribe((nbVertices: number) => {
+            this.nbVertices = nbVertices;
         });
     }
 
@@ -62,24 +69,52 @@ export class PolygonToolService extends AbstractShapeToolService {
         return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
     }
 
-    calculateVertex(){
+    calculateVertex(n: number): Vertex {
+        let r = this.radius;
+        let deltaX = this.currentMouseX - this.initialMouseX;
+        let deltaY = this.currentMouseY - this.initialMouseY;
 
+        let xValue;
+        let yValue;
+        let sin =
+            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
+            Math.sin((2 * Math.PI * n) / this.nbVertices - (0.5 * Math.PI) / this.nbVertices);
+        let cos =
+            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
+            Math.cos((2 * Math.PI * n) / this.nbVertices - (0.5 * Math.PI) / this.nbVertices);
+
+        //! Magic number
+        if (deltaX > 0) {
+            xValue = cos + this.initialMouseX + r;
+        } else {
+            xValue = cos + this.initialMouseX - r;
+        }
+
+        if (deltaY > 0) {
+            yValue = sin + this.initialMouseY + r + this.radiusOffset;
+        } else {
+            yValue = sin + this.initialMouseY - (r - this.radiusOffset);
+        }
+
+        return { x: xValue, y: yValue };
     }
 
     copyPreviewRectangleAttributes(): void {
-        this.renderer.setAttribute(
-            this.drawPolygon,
-            'points',
-            `${this.previewRectangleX + this.previewRectangleWidth},${this.previewRectangleY +
-                this.previewRectangleHeight} ${this.previewRectangleX +
-                this.previewRectangleWidth},65 51.96152422706631,70 `,
-        );
+        let vertices = '';
+        for (let n = 1; n <= this.nbVertices; n++) {
+            let vertex: Vertex = this.calculateVertex(n);
+            vertices += vertex.x + ',' + vertex.y + ' ';
+        }
+
+        this.renderer.setAttribute(this.drawPolygon, 'points', vertices);
     }
 
     updatePreviewRectangle() {
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+        this.radius = minLength / 2;
+        this.radiusOffset = this.radius - this.radius * Math.cos(Math.PI / 2 - (2 * Math.PI) / this.nbVertices);
 
         // adjust x
         if (deltaX < 0) {
