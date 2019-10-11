@@ -45,8 +45,8 @@
                 placeholder="Hex"
                 formControlName="sideNumber"
                 (input)="onSideNumberSliderChange($event)"
-                [min]="3"
-                [max]="12"
+                [min]="polygonSides.Min"
+                [max]="polygonSides.Max"
                 value="{{ polygonAttributesForm.value.sideNumber }}"
             ></mat-slider>
             <mat-form-field class="small-polygon">
@@ -58,10 +58,12 @@
                     type="number"
                     formControlName="sideNumber"
                     (input)="onSideNumberChange()"
-                    [min]="3"
-                    [max]="12"
+                    [min]="polygonSides.Min"
+                    [max]="polygonSides.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error>
+                <mat-error>
+                    La valeur inscrite doit être entre {{ polygonSides.Min }} et {{ polygonSides.Max }} côtés</mat-error
+                >
                 <span matSuffix>côtés</span>
             </mat-form-field>
         </div>

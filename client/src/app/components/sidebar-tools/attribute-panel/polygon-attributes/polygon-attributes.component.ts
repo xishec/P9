@@ -18,7 +18,9 @@ export class PolygonAttributesComponent implements OnInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonTollService: PolygonToolService;
+
     readonly thickness = Thickness;
+    readonly polygonSides = PolygonSides;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -48,7 +50,10 @@ export class PolygonAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             traceType: ['Contour'],
-            sideNumber: ['3'],
+            sideNumber: [
+                PolygonSides.Default,
+                [Validators.required, Validators.min(PolygonSides.Min), Validators.max(PolygonSides.Max)],
+            ],
         });
     }
 
@@ -61,7 +66,7 @@ export class PolygonAttributesComponent implements OnInit {
 
     onSideNumberSliderChange(event: MatSliderChange) {
         //TODO: Change Thickness for the sidenumber enum && predicat for min/max
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (event.value !== null && event.value <= PolygonSides.Max && event.value >= PolygonSides.Min) {
             this.polygonAttributesForm.controls.sideNumber.setValue(event.value);
             this.onSideNumberChange();
         }
