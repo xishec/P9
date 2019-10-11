@@ -16,7 +16,7 @@ import { Thickness, ToolName } from 'src/constants/tool-constants';
 })
 export class PolygonAttributesComponent implements OnInit {
     toolName = ToolName.Polygon;
-    rectangleAttributesForm: FormGroup;
+    polygonAttributesForm: FormGroup;
     polygonTollService: PolygonToolService;
     readonly thickness = Thickness;
 
@@ -25,7 +25,7 @@ export class PolygonAttributesComponent implements OnInit {
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -42,7 +42,7 @@ export class PolygonAttributesComponent implements OnInit {
     }
 
     initializeForm(): void {
-        this.rectangleAttributesForm = this.formBuilder.group({
+        this.polygonAttributesForm = this.formBuilder.group({
             thickness: [
                 Thickness.Default,
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
@@ -54,27 +54,34 @@ export class PolygonAttributesComponent implements OnInit {
 
     onThicknessSliderChange(event: MatSliderChange): void {
         if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
-            this.rectangleAttributesForm.controls.thickness.setValue(event.value);
+            this.polygonAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
 
-    onSideNumberSliderChange(event: MatSliderChange) {}
+    onSideNumberSliderChange(event: MatSliderChange) {
+        //TODO: Change Thickness for the sidenumber enum && predicat for min/max
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.polygonAttributesForm.controls.sideNumber.setValue(event.value);
+            this.onSideNumberChange();
+        }
+    }
 
     onThicknessChange(): void {
-        const thickness: number = this.rectangleAttributesForm.value.thickness;
+        const thickness: number = this.polygonAttributesForm.value.thickness;
         if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
 
     onTraceTypeChange(): void {
-        const tracetype: string = this.rectangleAttributesForm.value.traceType;
+        const tracetype: string = this.polygonAttributesForm.value.traceType;
         this.attributesManagerService.changeTraceType(tracetype);
     }
 
     onSideNumberChange(): void {
-        this.attributesManagerService;
+        const sideNumber = this.polygonAttributesForm.value.sideNumber;
+        this.attributesManagerService.changeSideNumber(sideNumber);
     }
 
     onFocus() {
