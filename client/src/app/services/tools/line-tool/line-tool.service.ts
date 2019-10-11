@@ -15,7 +15,6 @@ export class LineToolService extends AbstractToolService {
     currentWidth = 0;
     isDrawing = false;
 
-    startLineCoordinates: [number, number] = [0, 0];
     pointsArray = new Array();
     endPreviewLine = '';
     shouldCloseLine = false;
@@ -73,6 +72,11 @@ export class LineToolService extends AbstractToolService {
             this.renderer.removeChild(this.elementRef, this.gWrap);
             this.endPreviewLine = '';
             this.pointsArray = new Array();
+        } else if (event.key === Keys.Backspace) {
+            if (this.pointsArray.length > 1) {
+                this.pointsArray.pop();
+                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.endPreviewLine}`);
+            }
         }
     }
 
@@ -85,14 +89,10 @@ export class LineToolService extends AbstractToolService {
     onDblClick(event: MouseEvent): void {
         if (this.isDrawing) {
             this.isDrawing = false;
-            // const x = this.getXPos(event.clientX);
-            // const y = this.getYPos(event.clientY);
-            // this.appendLine(x, y);
 
             if (this.shouldCloseLine) {
-                // this.appendLine(this.startLineCoordinates[0], this.startLineCoordinates[1]);
                 this.pointsArray.push(this.pointsArray[0]);
-                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
+                this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
             }
 
             this.drawStack.push(this.gWrap);
@@ -105,10 +105,9 @@ export class LineToolService extends AbstractToolService {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
-        this.startLineCoordinates = [x, y]; // CAN BE REMOVED AFTER USING ARRAY
         this.pointsArray.push(`${x.toString()},${y.toString()}`);
 
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
+        this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);

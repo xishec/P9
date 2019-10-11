@@ -19,6 +19,7 @@ enum Keys {
     w = 'w',
     y = 'y',
     Escape = 'Escape',
+    Backspace = 'Backspace',
 }
 
 enum Mouse {
