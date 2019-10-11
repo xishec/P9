@@ -28,6 +28,29 @@
                 <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>
+                    Style de trait
+                </mat-label>
+                <mat-select
+                    formControlName="lineStrokeType"
+                    (selectionChange)="onStrokeLineTypeChange($event.value)"
+                    [(value)]="selected"
+                >
+                    <mat-option [value]="1">
+                        1
+                    </mat-option>
+                    <mat-option [value]="2">
+                        2
+                    </mat-option>
+
+                    <mat-option [value]="3">
+                        3
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
         </div>
     </form>
 </div>

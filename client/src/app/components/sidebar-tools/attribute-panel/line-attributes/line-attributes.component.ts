@@ -19,6 +19,8 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
 
+    lineStrokeType: number;
+
     readonly Thickness = Thickness;
 
     constructor(
@@ -46,7 +48,12 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
                 Thickness.Default,
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
+            lineStrokeType: [1],
         });
+    }
+
+    onStrokeLineTypeChange(lineStrokeType: number): void {
+        this.attributeManagerService.changeLineStrokeType(lineStrokeType);
     }
 
     onSliderChange(event: MatSliderChange): void {

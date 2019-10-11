@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Mouse, SVG_NS, Keys } from 'src/constants/constants';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -13,6 +13,7 @@ export class LineToolService extends AbstractToolService {
     colorToolService: ColorToolService;
     currentColor = '';
     currentWidth = 0;
+    currentStrokeType = 0;
     isDrawing = false;
 
     pointsArray = new Array();
@@ -42,6 +43,9 @@ export class LineToolService extends AbstractToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
+        });
+        this.attributesManagerService.currentLineStrokeType.subscribe((strokeType) => {
+            this.currentStrokeType = strokeType;
         });
     }
 
@@ -111,8 +115,16 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
-        this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
-        this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
+
+        switch (this.currentStrokeType) {
+            case 1 :
+                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `${this.currentWidth}, ${this.currentWidth / 2}`);
+                break;
+            case 2 :
+                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentWidth * 1.5}`);
+                this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
+                break;
+        }
 
         this.renderer.appendChild(this.gWrap, this.currentLine);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);

@@ -22,6 +22,13 @@ export class AttributesManagerService {
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
 
+    // Added for line
+    private lineStrokeType: BehaviorSubject<number> = new BehaviorSubject(1);
+    currentLineStrokeType: Observable<number> = this.lineStrokeType.asObservable();
+    changeLineStrokeType(lineStrokeType: number): void {
+        this.lineStrokeType.next(lineStrokeType);
+    }
+    //
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);
     }
