@@ -70,6 +70,33 @@
                 </mat-select>
             </mat-form-field>
 
+            <div *ngIf="circleJointSelected">
+                <label for="thickness">Épaisseur des jointures</label>
+                    <mat-slider
+                        placeholder="Hex"
+                        formControlName="cirlceJointThickness"
+                        (input)="onCircleJointSliderChange($event)"
+                        [min]="Thickness.Min"
+                        value="{{ lineAttributesForm.value.cirlceJointThickness }}"
+                    ></mat-slider>
+                    <mat-form-field class="small">
+                        <input
+                            autocomplete="off"
+                            (focus)="onFocus()"
+                            (focusout)="onFocusOut()"
+                            matInput
+                            type="number"
+                            formControlName="cirlceJointThickness"
+                            (input)="onCircleJointChange()"
+                            [min]="Thickness.Min"
+                            [max]="Thickness.Max"
+                        />
+                    <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                    <span matSuffix>px</span>
+                </mat-form-field>
+            </div>
+            
+
         </div>
     </form>
 </div>

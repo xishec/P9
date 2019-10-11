@@ -21,6 +21,8 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
 
     lineStrokeType: number;
 
+    circleJointSelected = false;
+
     readonly Thickness = Thickness;
 
     constructor(
@@ -50,6 +52,10 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
             ],
             lineStrokeType: [1],
             lineJointType: [1],
+            cirlceJointThickness: [
+                Thickness.Default,
+                [Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
+            ],
         });
     }
 
@@ -59,6 +65,21 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
 
     onLineJointTypeChange(lineJointType: number): void {
         this.attributeManagerService.changeLineJointType(lineJointType);
+        this.circleJointSelected = (lineJointType === 3);
+    }
+
+    onCircleJointSliderChange(event: MatSliderChange): void {
+        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+            this.lineAttributesForm.controls.cirlceJointThickness.setValue(event.value);
+            this.onCircleJointChange();
+        }
+    }
+
+    onCircleJointChange(): void {
+        const jointThickness = this.lineAttributesForm.value.cirlceJointThickness;
+        if (this.lineAttributesForm.valid) {
+            // change join thickness attributes manager service
+        }
     }
 
     onSliderChange(event: MatSliderChange): void {
