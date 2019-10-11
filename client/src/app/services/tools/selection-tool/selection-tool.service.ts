@@ -17,6 +17,7 @@ export class SelectionToolService extends AbstractToolService {
     isIn = false;
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+    selectionBound: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     selection: Set<SVGGElement> = new Set();
 
     constructor(
@@ -74,6 +75,17 @@ export class SelectionToolService extends AbstractToolService {
             if (this.isInSelection(selectionBox, elBox)) {
                 this.selection.add(el);
             }
+        }
+    }
+
+    computeSelectionBoundingBox(): void {
+        const left;
+        const top;
+        const right;
+        const bottom;
+
+        for (const el of this.selection) {
+
         }
     }
 
