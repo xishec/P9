@@ -2,7 +2,7 @@
     <div id="attribute-header">{{ toolName }} : {{ polygonFormType.get(polygonAttributesForm.value.nbVertices) }}</div>
 
     <form [formGroup]="polygonAttributesForm">
-        <div class="attribute">
+        <div id="thickness">
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider
                 placeholder="Hex"
@@ -27,7 +27,7 @@
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
-        <div id="attribute">
+        <div id="traceType">
             <label for="traceType">Type de tracé</label>
             <mat-form-field>
                 <mat-select formControlName="traceType" (selectionChange)="onTraceTypeChange()">
@@ -37,7 +37,7 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div id="attribute">
+        <div id="nbVertices">
             <label for="nbVertices">Nombre de côtés</label>
             <mat-slider
                 placeholder="Hex"

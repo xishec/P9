@@ -13,7 +13,13 @@
 }
 
 .mat-slider-horizontal {
-    width: 170px;
+    width: 150px;
+}
+
+#nbVertices {
+    .mat-slider-horizontal {
+        width: 120px;
+    }
 }
 
 .small {
@@ -23,5 +29,5 @@
 
 .small-polygon {
     margin-left: 10px;
-    width: 40%;
+    width: 30%;
 }
