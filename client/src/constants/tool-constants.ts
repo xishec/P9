@@ -88,6 +88,7 @@ enum StampType {
 }
 
 const STAMP_TYPES = [
+    '',
     '/assets/stamps/iconmonstr-smiley-14.svg',
     '/assets/stamps/iconmonstr-cat-7.svg',
     '/assets/stamps/iconmonstr-coin-3.svg',

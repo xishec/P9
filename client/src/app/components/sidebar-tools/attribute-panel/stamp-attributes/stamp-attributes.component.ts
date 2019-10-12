@@ -63,7 +63,7 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
                     Validators.max(StampAngleOrientation.Max),
                 ],
             ],
-            stampType: ['Smiley'],
+            stampType: ['Aucun'],
         });
     }
 
