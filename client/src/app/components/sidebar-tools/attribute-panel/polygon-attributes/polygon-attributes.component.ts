@@ -51,7 +51,7 @@ export class PolygonAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             traceType: ['Contour'],
-            sideNumber: [
+            nbVertices: [
                 PolygonSides.Default,
                 [Validators.required, Validators.min(PolygonSides.Min), Validators.max(PolygonSides.Max)],
             ],
@@ -65,11 +65,11 @@ export class PolygonAttributesComponent implements OnInit {
         }
     }
 
-    onSideNumberSliderChange(event: MatSliderChange) {
+    onNbVerticesSliderChange(event: MatSliderChange) {
         //TODO: Change Thickness for the sidenumber enum && predicat for min/max
         if (event.value !== null && event.value <= PolygonSides.Max && event.value >= PolygonSides.Min) {
-            this.polygonAttributesForm.controls.sideNumber.setValue(event.value);
-            this.onSideNumberChange();
+            this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
+            this.onNbVerticesChange();
         }
     }
 
@@ -85,9 +85,9 @@ export class PolygonAttributesComponent implements OnInit {
         this.attributesManagerService.changeTraceType(tracetype);
     }
 
-    onSideNumberChange(): void {
-        const sideNumber = this.polygonAttributesForm.value.sideNumber;
-        this.attributesManagerService.changeSideNumber(sideNumber);
+    onNbVerticesChange(): void {
+        const nbVertices = this.polygonAttributesForm.value.nbVertices;
+        this.attributesManagerService.changeNbVertices(nbVertices);
     }
 
     onFocus() {

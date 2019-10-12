@@ -1,5 +1,5 @@
 <div id="container">
-    <div id="attribute-header">{{ toolName }} : {{ polygonFormType.get(polygonAttributesForm.value.sideNumber) }}</div>
+    <div id="attribute-header">{{ toolName }} : {{ polygonFormType.get(polygonAttributesForm.value.nbVertices) }}</div>
 
     <form [formGroup]="polygonAttributesForm">
         <div class="attribute">
@@ -38,14 +38,14 @@
             </mat-form-field>
         </div>
         <div id="attribute">
-            <label for="sideNumber">Nombre de côtés</label>
+            <label for="nbVertices">Nombre de côtés</label>
             <mat-slider
                 placeholder="Hex"
-                formControlName="sideNumber"
-                (input)="onSideNumberSliderChange($event)"
+                formControlName="nbVertices"
+                (input)="onNbVerticesSliderChange($event)"
                 [min]="polygonSides.Min"
                 [max]="polygonSides.Max"
-                value="{{ polygonAttributesForm.value.sideNumber }}"
+                value="{{ polygonAttributesForm.value.nbVertices }}"
             ></mat-slider>
             <mat-form-field class="small-polygon">
                 <input
@@ -54,8 +54,8 @@
                     (focusout)="onFocusOut()"
                     matInput
                     type="number"
-                    formControlName="sideNumber"
-                    (input)="onSideNumberChange()"
+                    formControlName="nbVertices"
+                    (input)="onNbVerticesChange()"
                     [min]="polygonSides.Min"
                     [max]="polygonSides.Max"
                 />
