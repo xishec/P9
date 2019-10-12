@@ -84,7 +84,7 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-const MaxPolygonCalculationAngles: Map<number, number> = new Map([
+const PolygonRadiusCorrection: Map<number, number> = new Map([
     [3, 0.15],
     [4, 0.38],
     [5, 0.05],
@@ -119,6 +119,6 @@ export {
     ToolName,
     PolygonFormType,
     PolygonSides,
-    MaxPolygonCalculationAngles,
+    PolygonRadiusCorrection,
     PolygonOffsetAngles,
 };
