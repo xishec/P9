@@ -12,7 +12,7 @@
                 (input)="onSliderChange($event)"
                 [min]="stampScaling.Min"
                 [max]="stampScaling.Max"
-                step='0.1'
+                step="0.1"
                 value="{{ stampAttributesForm.value.scaling }}"
             ></mat-slider>
 
@@ -53,7 +53,6 @@
                     {{ stampAngleOrientation.Max }} degrés</mat-error
                 >
                 <span matSuffix>degré(s)</span>
-                <!-- <span *ngIf= "stampAttributesForm.value.angle == 1 ? 'degré' : 'degrés'" matSuffix>degré(s)</span> -->
             </mat-form-field>
         </div>
 
@@ -66,28 +65,6 @@
                     [(value)]="selected"
                     [ngClass]="selected ? 'class-' + selected : 'class-NoStamp'"
                 >
-                    <!-- <mat-option value="Aucun">Aucun </mat-option>
-                    <mat-option value="Smiley"
-                        >Smiley
-                        <img height="30" src="{{ stampTypes[1] }}" />
-                    </mat-option>
-                    <mat-option value="Cat"
-                        >Chat
-                        <img height="30" src="{{ stampTypes[2] }}" />
-                    </mat-option>
-                    <mat-option value="Money"
-                        >Argent
-                        <img height="30" src="{{ stampTypes[3] }}" />
-                    </mat-option>
-                    <mat-option value="Home"
-                        >Maison
-                        <img height="30" src="{{ stampTypes[4] }}" />
-                    </mat-option>
-                    <mat-option value="Hipster"
-                        >Hipster
-                        <img height="30" src="{{ stampTypes[4] }}" />
-                    </mat-option> -->
-
                     <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="i">
                         {{ stampNames[i] }}
                         <img height="30" src="{{ stampTypes[i] }}" />

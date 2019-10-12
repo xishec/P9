@@ -81,11 +81,8 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
         }
     }
 
-    //TODO: change this function to be the function that changes the stamp.
     onStampTypeChange(): void {
         const stampType: number = this.stampAttributesForm.value.stampType;
-        console.log('stampType: ' + stampType);
-        console.log('STAMPS_MAP.get(stampType): ' + STAMPS_MAP.get(stampType));
         this.attributesManagerService.changeStampType(STAMPS_MAP.get(stampType) as string);
     }
 
