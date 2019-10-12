@@ -19,7 +19,7 @@ export class AttributesManagerService {
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
     private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
-    private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[1]);
+    private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
