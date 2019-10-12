@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { ToolName, StampScaling, StampAngleOrientation, StampType } from 'src/constants/tool-constants';
+import { ToolName, StampScaling, StampAngleOrientation, StampType, STAMPS_MAP } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 
 @Component({
     selector: 'app-stamp-attributes',
     templateUrl: './stamp-attributes.component.html',
     styleUrls: ['./stamp-attributes.component.scss'],
 })
-export class StampAttributesComponent implements OnInit {
+export class StampAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Stamp;
 
     stampAttributesForm: FormGroup;
@@ -37,8 +37,8 @@ export class StampAttributesComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        //this.stampToolService = this.toolSelectorService.getRectangleTool();
-        //this.stampToolService.initializeAttributesManagerService(this.attributesManagerService);
+        this.stampToolService = this.toolSelectorService.getStampToolService();
+        this.stampToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
     initializeForm(): void {
@@ -76,7 +76,7 @@ export class StampAttributesComponent implements OnInit {
     //TODO: change this function to be the function that changes the stamp.
     onStampTypeChange(): void {
         const stampType: string = this.stampAttributesForm.value.stampType;
-        this.attributesManagerService.changeStampType(stampType);
+        this.attributesManagerService.changeStampType(STAMPS_MAP.get(stampType) as string);
     }
 
     onAngleChange(): void {

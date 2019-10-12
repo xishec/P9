@@ -73,6 +73,10 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
+    getStampToolService(): StampToolService {
+        return this.stampTool;
+    }
+
     getColorApplicatorTool(): ColorApplicatorToolService {
         return this.colorApplicatorTool;
     }

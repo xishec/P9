@@ -24,6 +24,9 @@ export class AttributesManagerService {
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
+    currentAngle: Observable<number> = this.angle.asObservable();
+    currentScaling: Observable<number> = this.scaling.asObservable();
+    currentStampType: Observable<string> = this.stampType.asObservable();
 
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);

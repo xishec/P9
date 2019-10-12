@@ -9,6 +9,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -108,6 +109,12 @@ export class WorkZoneComponent implements OnInit {
     @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseLeave(event);
+        }
+    }
+
+    @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
+        if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
+            this.currentTool.onWheel(event);
         }
     }
 

@@ -1,4 +1,5 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
+import { map } from 'rxjs/operators';
 
 enum ToolName {
     Selection = 'Sélection',
@@ -78,12 +79,19 @@ enum StampAngleOrientation {
 }
 
 enum StampType {
-    Smiley = '../assets/stamps/iconmonstr-smiley-14.svg',
-    Cat = '../assets/stamps/iconmonstr-cat-7.svg',
-    Money = '../assets/stamps/iconmonstr-coin-3.svg',
-    Home = '../assets/stamps/iconmonstr-home-8.svg',
-    Hipster = '../assets/stamps/iconmonstr-glasses-12.svg',
+    Smiley = '../../../../assets/stamps/iconmonstr-smiley-14.svg',
+    Cat = '../../../../assets/stamps/iconmonstr-cat-7.svg',
+    Money = '../../../../assets/stamps/iconmonstr-coin-3.svg',
+    Home = '../../../../assets/stamps/iconmonstr-home-8.svg',
+    Hipster = '../../../../assets/stamps/iconmonstr-glasses-12.svg',
 }
+
+const STAMPS_MAP: Map<string, string> = new Map();
+STAMPS_MAP.set('Smiley', '../../../../assets/stamps/iconmonstr-smiley-14.svg');
+STAMPS_MAP.set('Cat', '../../../../assets/stamps/iconmonstr-cat-7.svg');
+STAMPS_MAP.set('Money', '../../../../assets/stamps/iconmonstr-coin-3.svg');
+STAMPS_MAP.set('Home', '../../../../assets/stamps/iconmonstr-home-8.svg');
+STAMPS_MAP.set('Hipster', '../../../../assets/stamps/iconmonstr-glasses-12.svg');
 
 export {
     TOOLS_BUTTON_INFO,
@@ -95,4 +103,5 @@ export {
     StampScaling,
     StampAngleOrientation,
     StampType,
+    STAMPS_MAP,
 };

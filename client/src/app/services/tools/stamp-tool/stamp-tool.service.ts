@@ -2,34 +2,49 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { SVG_NS } from 'src/constants/constants';
-import { ToolName } from 'src/constants/tool-constants';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StampToolService extends AbstractToolService {
-    currentMouseX: number;
-    currentMouseY: number;
-    stampX: number;
-    stampY: number;
-    currentAngle: number;
+    currentMouseX = 0;
+    currentMouseY = 0;
+    stampX = 0;
+    stampY = 0;
+    currentAngle = 0;
+    currentScaling = 1;
+
+    stampLink = '../../../../assets/stamps/iconmonstr-smiley-7.svg';
 
     stampIsAppended = false;
     isIn = false;
 
-    readonly STAMP_BASE_WIDTH: number = 200;
+    readonly STAMP_BASE_WIDTH: number = 50;
     readonly STAMP_BASE_HEIGHT: number = 50;
 
     stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
 
+    attributesManagerService: AttributesManagerService;
+
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
-        this.renderer.setAttribute(this.stamp, 'href', '../../../../assets/brush1.png');
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentScaling.subscribe((newScaling) => {
+            this.currentScaling = newScaling;
+            this.setStamp();
+        });
+        this.attributesManagerService.currentStampType.subscribe((newStamp) => {
+            this.stampLink = newStamp;
+            this.setStamp();
+        });
     }
 
     initStamp(): void {
@@ -48,8 +63,9 @@ export class StampToolService extends AbstractToolService {
     }
 
     setStamp(): void {
-        this.renderer.setAttribute(this.stamp, 'width', this.STAMP_BASE_WIDTH.toString());
-        this.renderer.setAttribute(this.stamp, 'height', this.STAMP_BASE_HEIGHT.toString());
+        this.renderer.setAttribute(this.stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(this.stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
 
     positionStamp(): void {
@@ -64,14 +80,10 @@ export class StampToolService extends AbstractToolService {
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
-        this.renderer.setAttribute(stamp, 'width', this.STAMP_BASE_WIDTH.toString());
-        this.renderer.setAttribute(stamp, 'height', this.STAMP_BASE_HEIGHT.toString());
-        this.renderer.setAttribute(stamp, 'href', '../../../../assets/brush1.png');
-
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        stamp.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Rectangle));
-        });
+        this.renderer.setAttribute(stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(stamp, 'href', this.stampLink);
+        this.renderer.setAttribute(stamp, 'transform', `rotate(${this.currentAngle}, ${this.stampX}, ${this.stampY})`);
 
         this.renderer.appendChild(el, stamp);
         this.drawStack.push(el);
@@ -106,6 +118,11 @@ export class StampToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
         this.cleanUpStamp();
+    }
+
+    onWheel(event: WheelEvent): void {
+        this.currentAngle += event.deltaY;
+        this.renderer.setAttribute(this.stamp, 'transform', `rotate(${this.currentAngle}, ${this.stampX}, ${this.stampY})`);
     }
 
     onKeyDown(event: KeyboardEvent): void {}
