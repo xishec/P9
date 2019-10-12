@@ -18,7 +18,7 @@ export class AttributesManagerService {
 
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
-    private nbVertices: BehaviorSubject<number> = new BehaviorSubject(7);
+    private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
