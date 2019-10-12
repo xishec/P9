@@ -10,6 +10,7 @@ import {
     StampType,
     STAMP_TYPES,
     STAMPS_MAP,
+    STAMP_NAMES,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
@@ -29,6 +30,7 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
     readonly stampAngleOrientation = StampAngleOrientation;
     readonly stampType = StampType;
     readonly stampTypes = STAMP_TYPES;
+    readonly stampNames = STAMP_NAMES;
 
     constructor(
         private formBuilder: FormBuilder,

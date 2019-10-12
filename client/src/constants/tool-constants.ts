@@ -80,14 +80,15 @@ enum StampAngleOrientation {
 }
 
 enum StampType {
-    Smiley = '../../../../assets/stamps/iconmonstr-smiley-14.svg',
-    Cat = '../../../../assets/stamps/iconmonstr-cat-7.svg',
-    Money = '../../../../assets/stamps/iconmonstr-coin-3.svg',
-    Home = '../../../../assets/stamps/iconmonstr-home-8.svg',
-    Hipster = '../../../../assets/stamps/iconmonstr-glasses-12.svg',
+    Smiley = '/assets/stamps/iconmonstr-smiley-14.svg',
+    Cat = '/assets/stamps/iconmonstr-cat-7.svg',
+    Money = '/assets/stamps/iconmonstr-coin-3.svg',
+    Home = '/assets/stamps/iconmonstr-home-8.svg',
+    Hipster = '/assets/stamps/iconmonstr-glasses-12.svg',
 }
 
 const STAMP_TYPES = [
+    '',
     '/assets/stamps/iconmonstr-smiley-14.svg',
     '/assets/stamps/iconmonstr-cat-7.svg',
     '/assets/stamps/iconmonstr-coin-3.svg',
@@ -95,13 +96,15 @@ const STAMP_TYPES = [
     '/assets/stamps/iconmonstr-glasses-12.svg',
 ];
 
+const STAMP_NAMES = ['Aucun', 'Smiley', 'Cat', 'Money', 'Home', 'Hipster'];
+
 const STAMPS_MAP: Map<string, string> = new Map();
 STAMPS_MAP.set('Aucun', NO_STAMP);
-STAMPS_MAP.set('Smiley', '../../../../assets/stamps/iconmonstr-smiley-14.svg');
-STAMPS_MAP.set('Cat', '../../../../assets/stamps/iconmonstr-cat-7.svg');
-STAMPS_MAP.set('Money', '../../../../assets/stamps/iconmonstr-coin-3.svg');
-STAMPS_MAP.set('Home', '../../../../assets/stamps/iconmonstr-home-8.svg');
-STAMPS_MAP.set('Hipster', '../../../../assets/stamps/iconmonstr-glasses-12.svg');
+STAMPS_MAP.set('Smiley', '/assets/stamps/iconmonstr-smiley-14.svg');
+STAMPS_MAP.set('Cat', '/assets/stamps/iconmonstr-cat-7.svg');
+STAMPS_MAP.set('Money', '/assets/stamps/iconmonstr-coin-3.svg');
+STAMPS_MAP.set('Home', '/assets/stamps/iconmonstr-home-8.svg');
+STAMPS_MAP.set('Hipster', '/assets/stamps/iconmonstr-glasses-12.svg');
 
 export {
     TOOLS_BUTTON_INFO,
@@ -116,4 +119,5 @@ export {
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
+    STAMP_NAMES,
 };

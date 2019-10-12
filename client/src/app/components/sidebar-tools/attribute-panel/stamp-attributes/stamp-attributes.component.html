@@ -65,7 +65,7 @@
                     [(value)]="selected"
                     [ngClass]="selected ? 'class-' + selected : 'class-Smiley'"
                 >
-                    <mat-option value="Aucun">Aucun </mat-option>
+                    <!-- <mat-option value="Aucun">Aucun </mat-option>
                     <mat-option value="Smiley"
                         >Smiley
                         <img height="30" src="{{ stampTypes[0] }}" />
@@ -85,12 +85,12 @@
                     <mat-option value="Hipster"
                         >Hipster
                         <img height="30" src="{{ stampTypes[4] }}" />
-                    </mat-option>
-
-                    <!-- <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="i">
-                        {{ i }}
-                        <img height="30" src="{{ stampTypes[i] }}" />
                     </mat-option> -->
+
+                    <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="stampNames[i]">
+                        {{ stampNames[i] }}
+                        <img height="30" src="{{ stampTypes[i] }}" />
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
