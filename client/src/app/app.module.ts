@@ -17,6 +17,7 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatTooltipModule,
+    MatSlideToggleModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -80,6 +81,7 @@ import { GridAttributesComponent } from './components/sidebar-tools/attribute-pa
         MatSliderModule,
         MatSelectModule,
         MatFormFieldModule,
+        MatSlideToggleModule,
     ],
     entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],

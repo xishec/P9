@@ -1,1 +1,78 @@
-<p>grid-attributes works!</p>
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="gridAttributesForm">
+        <div class="attribute">
+            <label for="activateGrid">
+                Activer la grille
+                <i
+                    class="fas fa-info-circle"
+                    matTooltip="Appuyez sur 'G' comme raccourci"
+                    matTooltipPosition="after"
+                ></i>
+            </label>
+            <br />
+            <mat-slide-toggle formControlName="state"></mat-slide-toggle>
+        </div>
+
+        <div class="attribute">
+            <label for="gridSize"> Taille des carrés</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="size"
+                (input)="onSizeSliderChange($event)"
+                [min]="gridSize.Min"
+                [max]="gridSize.Max"
+                value="{{ gridAttributesForm.value.size }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="size"
+                    (input)="onSizeChange()"
+                    [min]="gridSize.Min"
+                    [max]="gridSize.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ gridSize.Min }} et {{ gridSize.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="gridOpacity"> Opacité des traits</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="opacity"
+                (input)="onOpacitySliderChange($event)"
+                [min]="gridOpacity.Min"
+                [max]="gridOpacity.Max"
+                value="{{ gridAttributesForm.value.opacity }}"
+                step="0.1"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="opacity"
+                    (input)="onOpacityChange()"
+                    [min]="gridOpacity.Min"
+                    [max]="gridOpacity.Max"
+                    step="0.1"
+                />
+                <mat-error
+                    >La valeur inscrite doit être entre {{ gridOpacity.Min }} et {{ gridOpacity.Max }} px</mat-error
+                >
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
+</div>

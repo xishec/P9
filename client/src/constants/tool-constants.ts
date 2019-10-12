@@ -36,6 +36,17 @@ enum TraceType {
     Both = 'Plein avec contour',
 }
 
+enum GridSize {
+    Min = 1,
+    Default = 5,
+    Max = 10,
+}
+
+enum GridOpacity {
+    Min = 0.1,
+    Max = 1,
+}
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
@@ -65,4 +76,4 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName };
+export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, GridSize, GridOpacity };
