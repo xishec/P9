@@ -65,4 +65,10 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName };
+enum LineStrokeType {
+    Continuous = 1,
+    Dotted_line = 2,
+    Dotted_circle = 3,
+}
+
+export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, LineStrokeType };

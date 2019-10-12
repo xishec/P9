@@ -37,15 +37,8 @@
                     formControlName="lineStrokeType"
                     (selectionChange)="onLineStrokeTypeChange($event.value)"
                 >
-                    <mat-option [value]="1">
-                        1 - Continu
-                    </mat-option>
-                    <mat-option [value]="2">
-                        2 - Pointille (trait)
-                    </mat-option>
-
-                    <mat-option [value]="3">
-                        3 - Pointille (rond)
+                    <mat-option *ngFor="let strokeType of LineStrokeTypeChoices" [value]="strokeType">
+                        {{ strokeType }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

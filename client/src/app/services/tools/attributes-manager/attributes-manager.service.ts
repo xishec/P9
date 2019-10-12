@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Thickness, TraceType } from 'src/constants/tool-constants';
+import { Thickness, TraceType, LineStrokeType } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -23,14 +23,14 @@ export class AttributesManagerService {
     currentStyle: Observable<number> = this.style.asObservable();
 
     // Added for line
-    private lineStrokeType: BehaviorSubject<number> = new BehaviorSubject(1);
-    currentLineStrokeType: Observable<number> = this.lineStrokeType.asObservable();
+    private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
+    currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
     private lineJointType: BehaviorSubject<number> = new BehaviorSubject(1);
     currentLineJointType: Observable<number> = this.lineJointType.asObservable();
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     currentCircleJointDiameter: Observable<number> = this.circleJointDiameter.asObservable();
 
-    changeLineStrokeType(lineStrokeType: number): void {
+    changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
     }
     changeLineJointType(lineJointType: number): void {

@@ -6,7 +6,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { Thickness, ToolName } from 'src/constants/tool-constants';
+import { Thickness, ToolName, LineStrokeType } from 'src/constants/tool-constants';
 
 @Component({
   selector: 'app-line-attributes',
@@ -19,7 +19,8 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
 
-    lineStrokeType: number;
+    lineStrokeType: LineStrokeType;
+    LineStrokeTypeChoices = [LineStrokeType.Continuous, LineStrokeType.Dotted_line, LineStrokeType.Dotted_circle];
 
     circleJointSelected = false;
 
@@ -50,7 +51,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
                 Thickness.Default,
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
-            lineStrokeType: [1],
+            lineStrokeType: [LineStrokeType.Continuous],
             lineJointType: [1],
             circleJointDiameter: [
                 Thickness.Default,
@@ -59,7 +60,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onLineStrokeTypeChange(lineStrokeType: number): void {
+    onLineStrokeTypeChange(lineStrokeType: LineStrokeType): void {
         this.attributeManagerService.changeLineStrokeType(lineStrokeType);
     }
 

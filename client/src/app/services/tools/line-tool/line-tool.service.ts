@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
+import { LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -15,9 +16,10 @@ export class LineToolService extends AbstractToolService {
 
     currentColor = '';
     currentStrokeWidth = 0;
-    currentStrokeType = 0;
     currentJointType = 0;
     currentCircleJointDiameter = 0;
+
+    currentStrokeType =  LineStrokeType.Continuous;
 
     pointsArray = new Array();
     jointCircles = new Array();
@@ -134,11 +136,11 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
-            case 2 :
+            case LineStrokeType.Dotted_line :
                 this.renderer.setAttribute(
                     this.currentLine, 'stroke-dasharray', `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`);
                 break;
-            case 3 :
+            case LineStrokeType.Dotted_circle :
                 this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentStrokeWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
