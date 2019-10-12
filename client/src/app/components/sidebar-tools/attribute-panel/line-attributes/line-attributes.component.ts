@@ -88,11 +88,20 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
             this.onThicknessChange();
         }
     }
+
     onThicknessChange(): void {
         const thickness: number = this.lineAttributesForm.value.thickness;
         if (this.lineAttributesForm.valid) {
             this.attributeManagerService.changeThickness(thickness);
         }
+    }
+
+    onFocus() {
+        this.shortcutManagerService.changeIsOnInput(true);
+    }
+
+    onFocusOut() {
+        this.shortcutManagerService.changeIsOnInput(false);
     }
 
 }
