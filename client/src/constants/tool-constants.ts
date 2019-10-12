@@ -71,4 +71,19 @@ enum StampScaling {
     Max = 10,
 }
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, StampScaling };
+enum StampAngleOrientation {
+    Min = 0,
+    Default = 0,
+    Max = 360,
+}
+
+export {
+    TOOLS_BUTTON_INFO,
+    FILES_BUTTON_INFO,
+    BRUSH_STYLES,
+    Thickness,
+    TraceType,
+    ToolName,
+    StampScaling,
+    StampAngleOrientation,
+};
