@@ -157,10 +157,12 @@ export class PolygonToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(this.drawPolygon, 'fill', '#' + this.userFillColor);
             this.renderer.setAttribute(this.drawPolygon, 'stroke', '#' + this.userStrokeColor);
             this.renderer.setAttribute(this.drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
+            this.renderer.setAttribute(this.drawPolygon, 'stroke-linejoin', 'round');
         } else {
             this.renderer.setAttribute(this.drawPolygon, 'fill', 'none');
             this.renderer.setAttribute(this.drawPolygon, 'stroke', 'none');
             this.renderer.setAttribute(this.drawPolygon, 'stroke-width', '0');
+            this.renderer.setAttribute(this.drawPolygon, 'stroke-linejoin', 'round');
         }
     }
 
