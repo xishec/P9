@@ -16,7 +16,7 @@ export class StampToolService extends AbstractToolService {
     currentAngle = 0;
     currentScaling = 1;
 
-    stampLink = '../../../../assets/stamps/iconmonstr-smiley-7.svg';
+    stampLink = NO_STAMP;
     transform = '';
 
     stampIsAppended = false;
@@ -52,7 +52,6 @@ export class StampToolService extends AbstractToolService {
         this.attributesManagerService.currentAngle.subscribe((newAngle) => {
             this.currentAngle = newAngle;
             this.applyTransformation();
-            // this.renderer.setAttribute(this.stamp, 'transform', this.transform);
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
             if (newStamp === NO_STAMP) {
@@ -106,14 +105,11 @@ export class StampToolService extends AbstractToolService {
         this.stampX = this.currentMouseX - this.stampWidth / 2;
         this.stampY = this.currentMouseY - this.stampHeight / 2;
         this.applyTransformation();
-        // this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
     }
 
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
-        // this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
-        // this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
         this.renderer.setAttribute(stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'href', this.stampLink);
@@ -174,12 +170,14 @@ export class StampToolService extends AbstractToolService {
 
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
+
         if (this.shouldStamp) {
             this.cleanUpStamp();
         }
     }
 
     onWheel(event: WheelEvent): void {
+        console.log(this.isAlterRotation);
         if (this.isAlterRotation) {
             this.alterRotateStamp(event.deltaY);
         } else {
@@ -187,22 +185,27 @@ export class StampToolService extends AbstractToolService {
         }
 
         this.applyTransformation();
-        // this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        event.preventDefault();
         const key = event.key;
 
         if (key === Keys.Alt) {
-            this.isAlterRotation = true;
+            if (!this.isAlterRotation) {
+                this.isAlterRotation = true;
+            }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
+        event.preventDefault();
         const key = event.key;
 
         if (key === Keys.Alt) {
-            this.isAlterRotation = false;
+            if (this.isAlterRotation) {
+                this.isAlterRotation = false;
+            }
         }
     }
 }
