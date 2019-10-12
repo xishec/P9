@@ -7,7 +7,6 @@ import {
     ToolName,
     StampScaling,
     StampAngleOrientation,
-    StampType,
     STAMP_TYPES,
     STAMPS_MAP,
     STAMP_NAMES,
@@ -28,7 +27,6 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
     stampToolService: StampToolService;
     readonly stampScaling = StampScaling;
     readonly stampAngleOrientation = StampAngleOrientation;
-    readonly stampType = StampType;
     readonly stampTypes = STAMP_TYPES;
     readonly stampNames = STAMP_NAMES;
 
