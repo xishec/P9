@@ -66,6 +66,14 @@ export class StampToolService extends AbstractToolService {
         });
     }
 
+    get stampWidth(): number {
+        return this.stamp.width.baseVal.value;
+    }
+
+    get stampHeight(): number {
+        return this.stamp.height.baseVal.value;
+    }
+
     initStamp(): void {
         if (!this.stampIsAppended) {
             this.setStamp();
@@ -95,8 +103,8 @@ export class StampToolService extends AbstractToolService {
     }
 
     positionStamp(): void {
-        this.stampX = this.currentMouseX - this.stamp.getBoundingClientRect().width / 2;
-        this.stampY = this.currentMouseY - this.stamp.getBoundingClientRect().height / 2;
+        this.stampX = this.currentMouseX - this.stampWidth / 2;
+        this.stampY = this.currentMouseY - this.stampHeight / 2;
         this.applyTransformation();
         // this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
     }
