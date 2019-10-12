@@ -3,7 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { ToolName, StampScaling, StampAngleOrientation, StampType, STAMPS_MAP } from 'src/constants/tool-constants';
+import {
+    ToolName,
+    StampScaling,
+    StampAngleOrientation,
+    StampType,
+    STAMP_TYPES,
+    STAMPS_MAP,
+} from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
@@ -21,6 +28,7 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
     readonly stampScaling = StampScaling;
     readonly stampAngleOrientation = StampAngleOrientation;
     readonly stampType = StampType;
+    readonly stampTypes = STAMP_TYPES;
 
     constructor(
         private formBuilder: FormBuilder,

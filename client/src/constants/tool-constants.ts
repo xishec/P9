@@ -87,6 +87,14 @@ enum StampType {
     Hipster = '../../../../assets/stamps/iconmonstr-glasses-12.svg',
 }
 
+const STAMP_TYPES = [
+    '/assets/stamps/iconmonstr-smiley-14.svg',
+    '/assets/stamps/iconmonstr-cat-7.svg',
+    '/assets/stamps/iconmonstr-coin-3.svg',
+    '/assets/stamps/iconmonstr-home-8.svg',
+    '/assets/stamps/iconmonstr-glasses-12.svg',
+];
+
 const STAMPS_MAP: Map<string, string> = new Map();
 STAMPS_MAP.set('Aucun', NO_STAMP);
 STAMPS_MAP.set('Smiley', '../../../../assets/stamps/iconmonstr-smiley-14.svg');
@@ -105,6 +113,7 @@ export {
     StampScaling,
     StampAngleOrientation,
     StampType,
+    STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
 };
