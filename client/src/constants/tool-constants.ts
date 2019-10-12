@@ -1,5 +1,4 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
-import { map } from 'rxjs/operators';
 
 enum ToolName {
     Selection = 'Sélection',
