@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Thickness, TraceType, StampScaling, StampAngleOrientation } from 'src/constants/tool-constants';
+import { Thickness, TraceType, StampScaling, StampAngleOrientation, StampType } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -19,6 +19,7 @@ export class AttributesManagerService {
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
     private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private stampType: BehaviorSubject<string> = new BehaviorSubject(StampType.Smiley);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
@@ -42,5 +43,9 @@ export class AttributesManagerService {
 
     changeAngle(angle: number): void {
         this.angle.next(angle);
+    }
+
+    changeStampType(stampType: string): void {
+        this.stampType.next(stampType);
     }
 }

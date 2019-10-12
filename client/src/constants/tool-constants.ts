@@ -77,6 +77,14 @@ enum StampAngleOrientation {
     Max = 360,
 }
 
+enum StampType {
+    Smiley = '../assets/stamps/iconmonstr-smiley-14.svg',
+    Cat = '../assets/stamps/iconmonstr-cat-7.svg',
+    Money = '../assets/stamps/iconmonstr-coin-3.svg',
+    Home = '../assets/stamps/iconmonstr-home-8.svg',
+    Hipster = '../assets/stamps/iconmonstr-glasses-12.svg',
+}
+
 export {
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
@@ -86,4 +94,5 @@ export {
     ToolName,
     StampScaling,
     StampAngleOrientation,
+    StampType,
 };

@@ -32,7 +32,7 @@
         </div>
 
         <div class="attribute">
-            <label for="ladder">Angle courant:</label>
+            <label for="ladder">Angle courant</label>
             <mat-form-field id="angle-attribute">
                 <input
                     autocomplete="off"
@@ -48,7 +48,19 @@
                 <mat-error>La valeur inscrite doit être entre {{ stampAngleOrientation.Min }} et {{ stampAngleOrientation.Max }} degrés</mat-error>
                 <span matSuffix>degré(s)</span>
                 <!-- <span *ngIf= "stampAttributesForm.value.angle == 1 ? 'degré' : 'degrés'" matSuffix>degré(s)</span> -->
+            </mat-form-field>
+        </div>
 
+        <div class="attribute">
+            <label for="stampType">Type d'étampe</label>
+            <mat-form-field>
+                <mat-select formControlName="stampType" (selectionChange)="onStampTypeChange()">
+                    <mat-option value="Smiley">Smiley</mat-option>
+                    <mat-option value="Cat">Chat</mat-option>
+                    <mat-option value="Money">Argent</mat-option>
+                    <mat-option value="Home">Maison</mat-option>
+                    <mat-option value="Hipster">Hipster</mat-option>
+                </mat-select>
             </mat-form-field>
         </div>
         

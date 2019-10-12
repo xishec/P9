@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { ToolName, StampScaling, StampAngleOrientation } from 'src/constants/tool-constants';
+import { ToolName, StampScaling, StampAngleOrientation, StampType } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
@@ -20,6 +20,7 @@ export class StampAttributesComponent implements OnInit {
     stampToolService: StampToolService;
     readonly stampScaling = StampScaling;
     readonly stampAngleOrientation = StampAngleOrientation;
+    readonly stampType = StampType;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -54,7 +55,7 @@ export class StampAttributesComponent implements OnInit {
                     Validators.max(StampAngleOrientation.Max),
                 ],
             ],
-            traceType: ['Contour'],
+            stampType: ['Smiley'],
         });
     }
 
@@ -73,9 +74,9 @@ export class StampAttributesComponent implements OnInit {
     }
 
     //TODO: change this function to be the function that changes the stamp.
-    onTraceTypeChange(): void {
-        const tracetype: string = this.stampAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+    onStampTypeChange(): void {
+        const stampType: string = this.stampAttributesForm.value.stampType;
+        this.attributesManagerService.changeStampType(stampType);
     }
 
     onAngleChange(): void {
