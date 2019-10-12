@@ -29,7 +29,7 @@ export class ToolSelectorService {
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService,
+        private drawingModalWindowService: DrawingModalWindowService
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -92,6 +92,9 @@ export class ToolSelectorService {
                 break;
             case ToolName.ColorApplicator:
                 this.currentTool = this.colorApplicatorTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Grid:
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Quill:
