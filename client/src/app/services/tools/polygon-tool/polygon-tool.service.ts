@@ -50,6 +50,14 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
     }
 
+    setRadiusCorrection() {
+        let correction: number | undefined = PolygonRadiusCorrection.get(this.nbVertices);
+        if (correction === undefined) {
+            correction = 0;
+        }
+        this.radiusCorrection = this.radius * correction;
+    }
+
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((fillColor: string) => {
@@ -84,10 +92,10 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         //! Magic number
         let sin =
-            (r + this.radiusCorrection - (this.strokeWidth * 1.2) / 2) *
+            (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         let cos =
-            (r + this.radiusCorrection - (this.strokeWidth * 1.2) / 2) *
+            (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
 
         if (deltaX > 0) {
@@ -106,26 +114,23 @@ export class PolygonToolService extends AbstractShapeToolService {
         return { x: xValue, y: yValue };
     }
 
-    copyPreviewRectangleAttributes(): void {
+    copyPreviewRectangleAttributes(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         let vertices = '';
         for (let n = 1; n <= this.nbVertices; n++) {
             let vertex: Vertex = this.calculateVertex(n);
             vertices += vertex.x + ',' + vertex.y + ' ';
         }
 
-        this.renderer.setAttribute(this.drawPolygon, 'points', vertices);
+        this.renderer.setAttribute(drawPolygon, 'points', vertices);
     }
 
     updatePreviewRectangle() {
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+
         this.radius = minLength / 2;
-        let correction: number | undefined = PolygonRadiusCorrection.get(this.nbVertices);
-        if (correction === undefined) {
-            correction = 0;
-        }
-        this.radiusCorrection = this.radius * correction;
+        this.setRadiusCorrection();
 
         // adjust x
         if (deltaX < 0) {
@@ -151,17 +156,16 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(this.previewRectangle, 'stroke-dasharray', '5 5');
     }
 
-    renderdrawPolygon(): void {
+    renderdrawPolygon(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         if (this.isValidePolygon()) {
-            this.renderer.setAttribute(this.drawPolygon, 'fill', '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawPolygon, 'stroke', '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
-            this.renderer.setAttribute(this.drawPolygon, 'stroke-linejoin', 'round');
+            this.renderer.setAttribute(drawPolygon, 'fill', '#' + this.userFillColor);
+            this.renderer.setAttribute(drawPolygon, 'stroke', '#' + this.userStrokeColor);
+            this.renderer.setAttribute(drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
+            this.renderer.setAttribute(drawPolygon, 'stroke-linejoin', 'round');
         } else {
-            this.renderer.setAttribute(this.drawPolygon, 'fill', 'none');
-            this.renderer.setAttribute(this.drawPolygon, 'stroke', 'none');
-            this.renderer.setAttribute(this.drawPolygon, 'stroke-width', '0');
-            this.renderer.setAttribute(this.drawPolygon, 'stroke-linejoin', 'round');
+            this.renderer.setAttribute(drawPolygon, 'fill', 'none');
+            this.renderer.setAttribute(drawPolygon, 'stroke', 'none');
+            this.renderer.setAttribute(drawPolygon, 'stroke-width', '0');
         }
     }
 
@@ -174,6 +178,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
+        this.copyPreviewRectangleAttributes(drawPolygon);
+        this.renderdrawPolygon(drawPolygon);
 
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         drawPolygon.addEventListener('mousedown', (event: MouseEvent) => {
