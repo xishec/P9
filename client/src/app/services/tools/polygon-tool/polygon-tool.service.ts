@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 import { Mouse, SVG_NS } from 'src/constants/constants';
-import { ToolName, TraceType } from 'src/constants/tool-constants';
+import { ToolName, TraceType, MaxPolygonCalculationAngles, PolygonOffsetAngles } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -26,7 +26,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     userStrokeWidth = 0;
     traceType = '';
     strokeWidth = 0;
-    nbVertices = 8;
+    nbVertices = 3;
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
     radius = 0;
@@ -76,24 +76,31 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         let xValue;
         let yValue;
-        let sin =
-            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
-            Math.sin((2 * Math.PI * n) / this.nbVertices - (0.5 * Math.PI) / this.nbVertices);
-        let cos =
-            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
-            Math.cos((2 * Math.PI * n) / this.nbVertices - (0.5 * Math.PI) / this.nbVertices);
+
+        let polygonOffsetAngles: number | undefined = PolygonOffsetAngles.get(this.nbVertices);
+        if (polygonOffsetAngles === undefined) {
+            polygonOffsetAngles = 0;
+        }
 
         //! Magic number
+        let sin =
+            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
+            Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
+        let cos =
+            (r + this.radiusOffset - (this.strokeWidth * 1.2) / 2) *
+            Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
+
         if (deltaX > 0) {
             xValue = cos + this.initialMouseX + r;
         } else {
             xValue = cos + this.initialMouseX - r;
         }
 
+        let nbVerticesIsEven = this.nbVertices % 2 === 0;
         if (deltaY > 0) {
-            yValue = sin + this.initialMouseY + r + this.radiusOffset;
+            yValue = sin + this.initialMouseY + r + (nbVerticesIsEven ? 0 : this.radiusOffset);
         } else {
-            yValue = sin + this.initialMouseY - (r - this.radiusOffset);
+            yValue = sin + this.initialMouseY - (r - (nbVerticesIsEven ? 0 : this.radiusOffset));
         }
 
         return { x: xValue, y: yValue };
@@ -114,7 +121,12 @@ export class PolygonToolService extends AbstractShapeToolService {
         let deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
         this.radius = minLength / 2;
-        this.radiusOffset = this.radius - this.radius * Math.cos(Math.PI / 2 - (2 * Math.PI) / this.nbVertices);
+        let theta: number | undefined = MaxPolygonCalculationAngles.get(this.nbVertices);
+        if (theta === undefined) {
+            theta = 0;
+        }
+        // this.radiusOffset = this.radius / Math.cos(theta) - this.radius;
+        this.radiusOffset = this.radius * theta;
 
         // adjust x
         if (deltaX < 0) {
