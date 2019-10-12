@@ -8,7 +8,7 @@ describe('StampAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StampAttributesComponent ]
+      declarations: [ StampAttributesComponent ],
     })
     .compileComponents();
   }));

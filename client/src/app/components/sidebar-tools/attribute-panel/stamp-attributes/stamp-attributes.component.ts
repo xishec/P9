@@ -1,26 +1,26 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import {
-    ToolName,
-    StampScaling,
-    StampAngleOrientation,
-    STAMP_TYPES,
-    STAMPS_MAP,
-    STAMP_NAMES,
-} from 'src/constants/tool-constants';
-import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import {
+    STAMP_NAMES,
+    STAMP_TYPES,
+    StampAngleOrientation,
+    STAMPS_MAP,
+    StampScaling,
+    ToolName,
+} from 'src/constants/tool-constants';
+import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 
 @Component({
     selector: 'app-stamp-attributes',
     templateUrl: './stamp-attributes.component.html',
     styleUrls: ['./stamp-attributes.component.scss'],
 })
-export class StampAttributesComponent implements OnInit, AfterViewInit {
+export class StampAttributesComponent implements OnInit {
     toolName = ToolName.Stamp;
 
     stampAttributesForm: FormGroup;
@@ -45,8 +45,6 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
         this.stampToolService = this.toolSelectorService.getStampToolService();
         this.stampToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
-
-    ngAfterViewInit(): void {}
 
     initializeForm(): void {
         this.stampAttributesForm = this.formBuilder.group({

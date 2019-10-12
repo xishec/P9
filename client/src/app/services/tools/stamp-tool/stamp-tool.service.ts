@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
+import { NO_STAMP } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { SVG_NS, Keys, Mouse } from 'src/constants/constants';
-import { NO_STAMP } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
@@ -96,7 +96,8 @@ export class StampToolService extends AbstractToolService {
 
     applyTransformation(): void {
         if (this.shouldStamp) {
-            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY}) translate(${this.stampX}, ${this.stampY})`;
+            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseX},
+                ${this.currentMouseY}) translate(${this.stampX}, ${this.stampY})`;
             this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
         }
     }

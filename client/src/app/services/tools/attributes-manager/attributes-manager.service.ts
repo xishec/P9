@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Thickness, TraceType, StampScaling, StampAngleOrientation, STAMP_TYPES } from 'src/constants/tool-constants';
+import { STAMP_TYPES, StampAngleOrientation, StampScaling, Thickness, TraceType } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
