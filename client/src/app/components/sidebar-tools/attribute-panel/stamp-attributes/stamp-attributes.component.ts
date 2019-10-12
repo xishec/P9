@@ -23,8 +23,6 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 export class StampAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Stamp;
 
-    stampAngle = 0;
-
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;
     readonly stampScaling = StampScaling;
@@ -44,16 +42,11 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.initializeForm();
         this.onScalingChange();
-    }
-
-    ngAfterViewInit(): void {
         this.stampToolService = this.toolSelectorService.getStampToolService();
         this.stampToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.stampToolService.angle.asObservable().subscribe((angle) => {
-            console.log(angle);
-            this.stampAttributesForm.patchValue({['angle']: angle});
-        });
     }
+
+    ngAfterViewInit(): void {}
 
     initializeForm(): void {
         this.stampAttributesForm = this.formBuilder.group({
@@ -93,9 +86,9 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onAngleChange(): void {
-        this.stampAngle = this.stampAttributesForm.value.angle;
-        if (this.stampAngle >= StampAngleOrientation.Min && this.stampAngle <= StampAngleOrientation.Max) {
-            this.attributesManagerService.changeAngle(this.stampAngle);
+        const stampAngle: number = this.stampAttributesForm.value.angle;
+        if (stampAngle >= StampAngleOrientation.Min && stampAngle <= StampAngleOrientation.Max) {
+            this.attributesManagerService.changeAngle(stampAngle);
         }
     }
 

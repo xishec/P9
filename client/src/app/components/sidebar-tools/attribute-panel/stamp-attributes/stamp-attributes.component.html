@@ -45,6 +45,7 @@
                     type="number"
                     formControlName="angle"
                     (input)="onAngleChange()"
+                    [value]="stampToolService.currentAngle"
                     [min]="stampAngleOrientation.Min"
                     [max]="stampAngleOrientation.Max"
                 />

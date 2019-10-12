@@ -1,10 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { SVG_NS, Keys, Mouse} from 'src/constants/constants';
+import { SVG_NS, Keys, Mouse } from 'src/constants/constants';
 import { NO_STAMP } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -34,8 +33,6 @@ export class StampToolService extends AbstractToolService {
     stampWrapper: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
     attributesManagerService: AttributesManagerService;
-
-    angle: BehaviorSubject<number> = new BehaviorSubject(0);
 
     constructor(
         public drawStack: DrawStackService,
@@ -185,8 +182,6 @@ export class StampToolService extends AbstractToolService {
         } else {
             this.rotateStamp(event.deltaY);
         }
-
-        this.angle.next(this.currentAngle);
 
         this.applyTransformation();
     }
