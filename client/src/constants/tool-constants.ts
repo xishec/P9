@@ -68,9 +68,9 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
 enum StampScaling {
-    Min = 1,
-    Default = 1,
-    Max = 10,
+    Min = 0.1,
+    Default = 1.0,
+    Max = 10.0,
 }
 
 enum StampAngleOrientation {
