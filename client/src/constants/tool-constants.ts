@@ -1,5 +1,7 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
+const NO_STAMP = 'NO_STAMP';
+
 enum ToolName {
     Selection = 'Sélection',
     Pencil = 'Crayon',
@@ -86,6 +88,7 @@ enum StampType {
 }
 
 const STAMPS_MAP: Map<string, string> = new Map();
+STAMPS_MAP.set('Aucun', NO_STAMP);
 STAMPS_MAP.set('Smiley', '../../../../assets/stamps/iconmonstr-smiley-14.svg');
 STAMPS_MAP.set('Cat', '../../../../assets/stamps/iconmonstr-cat-7.svg');
 STAMPS_MAP.set('Money', '../../../../assets/stamps/iconmonstr-coin-3.svg');
@@ -103,4 +106,5 @@ export {
     StampAngleOrientation,
     StampType,
     STAMPS_MAP,
+    NO_STAMP,
 };

@@ -2,6 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { SVG_NS, Keys, Mouse} from 'src/constants/constants';
+import { NO_STAMP } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
@@ -21,6 +22,7 @@ export class StampToolService extends AbstractToolService {
     stampIsAppended = false;
     isIn = false;
     isAlterRotation = false;
+    shouldStamp = false;
 
     readonly STAMP_BASE_WIDTH: number = 50;
     readonly STAMP_BASE_HEIGHT: number = 50;
@@ -53,8 +55,14 @@ export class StampToolService extends AbstractToolService {
             // this.renderer.setAttribute(this.stamp, 'transform', this.transform);
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
-            this.stampLink = newStamp;
-            this.setStamp();
+            if (newStamp === NO_STAMP) {
+                this.cleanUpStamp();
+                this.shouldStamp = false;
+            } else {
+                this.stampLink = newStamp;
+                this.setStamp();
+                this.shouldStamp = true;
+            }
         });
     }
 
@@ -80,8 +88,10 @@ export class StampToolService extends AbstractToolService {
     }
 
     applyTransformation(): void {
-        this.transform = `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY}) translate(${this.stampX}, ${this.stampY})`;
-        this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
+        if (this.shouldStamp) {
+            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY}) translate(${this.stampX}, ${this.stampY})`;
+            this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
+        }
     }
 
     positionStamp(): void {
@@ -132,7 +142,7 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
+        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
             this.cleanUpStamp();
             this.addStamp();
         }
@@ -141,19 +151,24 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
+        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
             this.initStamp();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
         this.isIn = true;
-        this.initStamp();
+
+        if (this.shouldStamp) {
+            this.initStamp();
+        }
     }
 
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
-        this.cleanUpStamp();
+        if (this.shouldStamp) {
+            this.cleanUpStamp();
+        }
     }
 
     onWheel(event: WheelEvent): void {
