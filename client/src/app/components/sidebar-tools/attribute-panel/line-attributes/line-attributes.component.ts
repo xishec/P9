@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MatSliderChange } from '@angular/material';
@@ -6,7 +6,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { Thickness, ToolName, LineStrokeType } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
   selector: 'app-line-attributes',
@@ -52,7 +52,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             lineStrokeType: [LineStrokeType.Continuous],
-            lineJointType: [1],
+            lineJointType: [LineJointType.Curvy],
             circleJointDiameter: [
                 Thickness.Default,
                 [Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
@@ -64,9 +64,9 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
         this.attributeManagerService.changeLineStrokeType(lineStrokeType);
     }
 
-    onLineJointTypeChange(lineJointType: number): void {
+    onLineJointTypeChange(lineJointType: LineJointType): void {
         this.attributeManagerService.changeLineJointType(lineJointType);
-        this.circleJointSelected = (lineJointType === 3);
+        this.circleJointSelected = (lineJointType === LineJointType.Circle);
     }
 
     onCircleJointSliderChange(event: MatSliderChange): void {

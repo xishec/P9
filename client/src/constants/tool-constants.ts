@@ -71,4 +71,10 @@ enum LineStrokeType {
     Dotted_circle = 3,
 }
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, LineStrokeType };
+enum LineJointType {
+    Curvy = 1,
+    Straight = 2,
+    Circle = 3,
+}
+
+export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, LineStrokeType, LineJointType };

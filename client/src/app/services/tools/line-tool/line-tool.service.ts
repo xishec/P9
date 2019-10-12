@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { LineStrokeType } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -16,10 +16,10 @@ export class LineToolService extends AbstractToolService {
 
     currentColor = '';
     currentStrokeWidth = 0;
-    currentJointType = 0;
     currentCircleJointDiameter = 0;
 
     currentStrokeType =  LineStrokeType.Continuous;
+    currentJointType = LineJointType.Curvy;
 
     pointsArray = new Array();
     jointCircles = new Array();
@@ -72,7 +72,7 @@ export class LineToolService extends AbstractToolService {
             } else {
                 this.appendLine(x, y);
             }
-            if (this.currentJointType === 3) {
+            if (this.currentJointType === LineJointType.Circle) {
                 this.appendCircle(x, y);
             }
         }
@@ -147,7 +147,7 @@ export class LineToolService extends AbstractToolService {
         }
 
         switch (this.currentJointType) {
-            case 2 :
+            case LineJointType.Curvy :
                 this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
                 break;
         }

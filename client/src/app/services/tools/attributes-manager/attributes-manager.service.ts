@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Thickness, TraceType, LineStrokeType } from 'src/constants/tool-constants';
+import { Thickness, TraceType, LineStrokeType, LineJointType } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -17,29 +17,29 @@ export class AttributesManagerService {
     }
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
+    private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
+    private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
+    private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
-
-    // Added for line
-    private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
     currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
-    private lineJointType: BehaviorSubject<number> = new BehaviorSubject(1);
-    currentLineJointType: Observable<number> = this.lineJointType.asObservable();
-    private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
     currentCircleJointDiameter: Observable<number> = this.circleJointDiameter.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
     }
-    changeLineJointType(lineJointType: number): void {
+
+    changeLineJointType(lineJointType: LineJointType): void {
         this.lineJointType.next(lineJointType);
     }
+
     changeCircleJointDiameter(circleJointDiameter: number): void {
         this.circleJointDiameter.next(circleJointDiameter);
     }
-    //
+
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);
     }
