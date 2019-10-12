@@ -90,13 +90,14 @@ const STAMP_TYPES = [
 
 const STAMP_NAMES = ['Aucun', 'Smiley', 'Chat', 'Argent', 'Maison', 'Hipster'];
 
-const STAMPS_MAP: Map<number, string> = new Map();
-STAMPS_MAP.set(0, NO_STAMP);
-STAMPS_MAP.set(1, '/assets/stamps/iconmonstr-smiley-14.svg');
-STAMPS_MAP.set(2, '/assets/stamps/iconmonstr-cat-7.svg');
-STAMPS_MAP.set(3, '/assets/stamps/iconmonstr-coin-3.svg');
-STAMPS_MAP.set(4, '/assets/stamps/iconmonstr-home-8.svg');
-STAMPS_MAP.set(5, '/assets/stamps/iconmonstr-glasses-12.svg');
+const STAMPS_MAP: Map<number, string> = new Map([
+    [0, NO_STAMP],
+    [1, '/assets/stamps/iconmonstr-smiley-14.svg'],
+    [2, '/assets/stamps/iconmonstr-cat-7.svg'],
+    [3, '/assets/stamps/iconmonstr-coin-3.svg'],
+    [4, '/assets/stamps/iconmonstr-home-8.svg'],
+    [5, '/assets/stamps/iconmonstr-glasses-12.svg'],
+]);
 
 export {
     TOOLS_BUTTON_INFO,
