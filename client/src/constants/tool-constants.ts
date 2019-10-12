@@ -84,6 +84,32 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
+const MaxPolygonCalculationAngles: Map<number, number> = new Map([
+    [3, 0.15],
+    [4, 0.38],
+    [5, 0.05],
+    [6, 0.025],
+    [7, 0.035],
+    [8, 0.08],
+    [9, 0.025],
+    [10, 0.015],
+    [11, 0.02],
+    [12, 0.04],
+]);
+
+const PolygonOffsetAngles: Map<number, number> = new Map([
+    [3, 3 * (360 / 3 / 4) * (Math.PI / 180)],
+    [4, Math.PI / 4],
+    [5, (360 / 5 / 4) * (Math.PI / 180)],
+    [6, 0],
+    [7, 3 * (360 / 7 / 4) * (Math.PI / 180)],
+    [8, (360 / 8 / 2) * (Math.PI / 180)],
+    [9, (360 / 9 / 4) * (Math.PI / 180)],
+    [10, 0],
+    [11, 3 * (360 / 11 / 4) * (Math.PI / 180)],
+    [12, (360 / 12 / 2) * (Math.PI / 180)],
+]);
+
 export {
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
@@ -93,4 +119,6 @@ export {
     ToolName,
     PolygonFormType,
     PolygonSides,
+    MaxPolygonCalculationAngles,
+    PolygonOffsetAngles,
 };
