@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { SVG_NS } from 'src/constants/constants';
+import { SVG_NS, Keys} from 'src/constants/constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
@@ -19,9 +19,12 @@ export class StampToolService extends AbstractToolService {
 
     stampIsAppended = false;
     isIn = false;
+    isAlterRotation = false;
 
     readonly STAMP_BASE_WIDTH: number = 50;
     readonly STAMP_BASE_HEIGHT: number = 50;
+    readonly STAMP_BASE_ROTATION: number = 15;
+    readonly STAMP_ALTER_ROTATION: number = 1;
 
     stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
 
@@ -40,6 +43,10 @@ export class StampToolService extends AbstractToolService {
         this.attributesManagerService.currentScaling.subscribe((newScaling) => {
             this.currentScaling = newScaling;
             this.setStamp();
+        });
+        this.attributesManagerService.currentAngle.subscribe((newAngle) => {
+            this.currentAngle = newAngle;
+            this.renderer.setAttribute(this.stamp, 'transform', `rotate(${this.currentAngle}, ${this.stampX}, ${this.stampY})`);
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
             this.stampLink = newStamp;
@@ -90,9 +97,27 @@ export class StampToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
 
+    rotateStamp(direction: number): void {
+        if (direction < 0) {
+            this.currentAngle -= this.STAMP_BASE_ROTATION;
+        } else {
+            this.currentAngle += this.STAMP_BASE_ROTATION;
+        }
+    }
+
+    alterRotateStamp(direction: number): void {
+        if (direction < 0) {
+            this.currentAngle -= this.STAMP_ALTER_ROTATION;
+        } else {
+            this.currentAngle += this.STAMP_ALTER_ROTATION;
+        }
+    }
+
     onMouseMove(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+
+        console.log(this.currentMouseX + ' ' + this.currentMouseY);
 
         this.positionStamp();
     }
@@ -121,11 +146,28 @@ export class StampToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        this.currentAngle += event.deltaY;
-        this.renderer.setAttribute(this.stamp, 'transform', `rotate(${this.currentAngle}, ${this.stampX}, ${this.stampY})`);
+        if (this.isAlterRotation) {
+            this.alterRotateStamp(event.deltaY);
+        } else {
+            this.rotateStamp(event.deltaY);
+        }
+
+        this.renderer.setAttribute(this.stamp, 'transform', `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`);
     }
 
-    onKeyDown(event: KeyboardEvent): void {}
+    onKeyDown(event: KeyboardEvent): void {
+        const key = event.key;
 
-    onKeyUp(event: KeyboardEvent): void {}
+        if (key === Keys.Alt) {
+            this.isAlterRotation = true;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        const key = event.key;
+
+        if (key === Keys.Alt) {
+            this.isAlterRotation = false;
+        }
+    }
 }
