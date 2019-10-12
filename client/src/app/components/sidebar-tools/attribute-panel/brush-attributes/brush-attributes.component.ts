@@ -19,6 +19,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     brushAttributesForm: FormGroup;
     brushToolService: BrushToolService;
     styles = BRUSH_STYLES;
+    selected: string;
 
     readonly Thickness = Thickness;
 
