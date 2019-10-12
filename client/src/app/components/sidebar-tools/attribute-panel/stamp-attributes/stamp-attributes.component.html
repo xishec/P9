@@ -63,7 +63,7 @@
                     formControlName="stampType"
                     (selectionChange)="onStampTypeChange()"
                     [(value)]="selected"
-                    [ngClass]="selected ? 'class-' + selected : 'class-Smiley'"
+                    [ngClass]="selected ? 'class-' + selected : 'class-'"
                 >
                     <!-- <mat-option value="Aucun">Aucun </mat-option>
                     <mat-option value="Smiley"
@@ -87,7 +87,7 @@
                         <img height="30" src="{{ stampTypes[4] }}" />
                     </mat-option> -->
 
-                    <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="stampNames[i]">
+                    <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="i">
                         {{ stampNames[i] }}
                         <img height="30" src="{{ stampTypes[i] }}" />
                     </mat-option>

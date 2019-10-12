@@ -63,7 +63,7 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
                     Validators.max(StampAngleOrientation.Max),
                 ],
             ],
-            stampType: ['Smiley'],
+            stampType: [0],
         });
     }
 
@@ -83,7 +83,9 @@ export class StampAttributesComponent implements OnInit, AfterViewInit {
 
     //TODO: change this function to be the function that changes the stamp.
     onStampTypeChange(): void {
-        const stampType: string = this.stampAttributesForm.value.stampType;
+        const stampType: number = this.stampAttributesForm.value.stampType;
+        console.log('stampType: ' + stampType);
+        console.log('STAMPS_MAP.get(stampType): ' + STAMPS_MAP.get(stampType));
         this.attributesManagerService.changeStampType(STAMPS_MAP.get(stampType) as string);
     }
 

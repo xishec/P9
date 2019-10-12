@@ -88,15 +88,15 @@ const STAMP_TYPES = [
     '/assets/stamps/iconmonstr-glasses-12.svg',
 ];
 
-const STAMP_NAMES = ['Aucun', 'Smiley', 'Cat', 'Money', 'Home', 'Hipster'];
+const STAMP_NAMES = ['Aucun', 'Smiley', 'Chat', 'Argent', 'Maison', 'Hipster'];
 
-const STAMPS_MAP: Map<string, string> = new Map();
-STAMPS_MAP.set('Aucun', NO_STAMP);
-STAMPS_MAP.set('Smiley', '/assets/stamps/iconmonstr-smiley-14.svg');
-STAMPS_MAP.set('Cat', '/assets/stamps/iconmonstr-cat-7.svg');
-STAMPS_MAP.set('Money', '/assets/stamps/iconmonstr-coin-3.svg');
-STAMPS_MAP.set('Home', '/assets/stamps/iconmonstr-home-8.svg');
-STAMPS_MAP.set('Hipster', '/assets/stamps/iconmonstr-glasses-12.svg');
+const STAMPS_MAP: Map<number, string> = new Map();
+STAMPS_MAP.set(0, NO_STAMP);
+STAMPS_MAP.set(1, '/assets/stamps/iconmonstr-smiley-14.svg');
+STAMPS_MAP.set(2, '/assets/stamps/iconmonstr-cat-7.svg');
+STAMPS_MAP.set(3, '/assets/stamps/iconmonstr-coin-3.svg');
+STAMPS_MAP.set(4, '/assets/stamps/iconmonstr-home-8.svg');
+STAMPS_MAP.set(5, '/assets/stamps/iconmonstr-glasses-12.svg');
 
 export {
     TOOLS_BUTTON_INFO,
