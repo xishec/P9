@@ -36,9 +36,12 @@
                 <mat-select
                     formControlName="lineStrokeType"
                     (selectionChange)="onLineStrokeTypeChange($event.value)"
+                    [(value)]="selected"
+                    [ngClass]="selected ? 'strokeType' + selected : 'strokeType1'"
                 >
                     <mat-option *ngFor="let strokeType of LineStrokeTypeChoices" [value]="strokeType">
                         {{ strokeType }}
+                        <img height="40" src="/assets/strokeType{{ strokeType }}.png" />
                     </mat-option>
                 </mat-select>
             </mat-form-field>

@@ -20,3 +20,26 @@
     margin-left: 10px;
     width: 25%;
 }
+
+img {
+    position: relative;
+    top: 10px;
+    left: 5px;
+}
+
+mat-select {
+    white-space: nowrap;
+    display: inline;
+}
+
+.strokeType1 {
+    background: url('/assets/strokeType1.png') center / contain no-repeat;
+}
+
+.strokeType2 {
+    background: url('/assets/strokeType2.png') center / contain no-repeat;
+}
+
+.strokeType3 {
+    background: url('/assets/strokeType3.png') center / contain no-repeat;
+}
