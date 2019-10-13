@@ -34,6 +34,14 @@ export class ColorToolService {
         this.colorQueue.next(this.colorQueue.value);
     }
 
+    changePrimaryColor(primaryColor: string): void {
+        this.primaryColor.next(primaryColor);
+    }
+
+    changeSecondaryColor(secondaryColor: string): void {
+        this.secondaryColor.next(secondaryColor);
+    }
+
     changePreviewColor(previewColor: string) {
         this.previewColor.next(previewColor);
     }
