@@ -31,7 +31,7 @@ export class LineToolService extends AbstractToolService {
     isLineInStack = false;
 
     gWrap: SVGGElement;
-    currentLine: SVGLineElement;
+    currentLine: SVGPolylineElement;
 
     constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService) {
         super();
