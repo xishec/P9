@@ -21,9 +21,18 @@ export class DropperToolService extends AbstractToolService {
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
+        public renderer: Renderer2
     ) {
         super();
+    }
+
+    verifyPosition(event: MouseEvent): boolean {
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        return (
+            this.currentMouseX > this.svgReference.nativeElement.getBoundingClientRect().left &&
+            this.currentMouseY > this.svgReference.nativeElement.getBoundingClientRect().top
+        );
     }
 
     initializeColorToolService(colorToolService: ColorToolService): void {
@@ -38,7 +47,7 @@ export class DropperToolService extends AbstractToolService {
         this.renderer.setProperty(
             this.canvas,
             'height',
-            this.svgReference.nativeElement.getBoundingClientRect().height,
+            this.svgReference.nativeElement.getBoundingClientRect().height
         );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
@@ -51,9 +60,8 @@ export class DropperToolService extends AbstractToolService {
 
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
-        if (this.isIn) {
-            this.getColor(event);
-        }
+        this.isIn = this.verifyPosition(event);
+        this.getColor(event);
     }
     onMouseUp(event: MouseEvent): void {
         const colorHex = this.getColor(event);
@@ -65,8 +73,12 @@ export class DropperToolService extends AbstractToolService {
             this.colorTool.changeSecondaryColor(colorHex);
         }
     }
-    onMouseEnter(event: MouseEvent): void {this.isIn = true;}
-    onMouseLeave(event: MouseEvent): void {this.isIn = false}
+    onMouseEnter(event: MouseEvent): void {
+        this.isIn = true;
+    }
+    onMouseLeave(event: MouseEvent): void {
+        this.isIn = false;
+    }
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {}
 
