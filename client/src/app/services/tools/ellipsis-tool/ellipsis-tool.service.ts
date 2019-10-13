@@ -129,12 +129,6 @@ export class EllipsisToolService extends AbstractShapeToolService {
             );
         }
 
-        // this.renderer.setAttribute(
-        //     this.drawEllipse,
-        //     'cx',
-        //     (this.previewRectangleX + this.previewRectangleWidth / 2).toString()
-        // );
-
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawEllipse,
@@ -148,12 +142,6 @@ export class EllipsisToolService extends AbstractShapeToolService {
                 (this.previewRectangleY + minLength / 2).toString()
             );
         }
-
-        // this.renderer.setAttribute(
-        //     this.drawEllipse,
-        //     'cy',
-        //     (this.previewRectangleY + this.previewRectangleHeight / 2).toString()
-        // );
 
         this.renderer.setAttribute(
             this.drawEllipse,
