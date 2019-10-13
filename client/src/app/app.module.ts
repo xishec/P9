@@ -44,6 +44,7 @@ import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
+import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 
 @NgModule({
     declarations: [
@@ -63,6 +64,7 @@ import { GridAttributesComponent } from './components/sidebar-tools/attribute-pa
         ColorApplicatorAttributesComponent,
         ColorNumericValuesComponent,
         GridAttributesComponent,
+        DropperAttributesComponent,
     ],
     imports: [
         MatSliderModule,

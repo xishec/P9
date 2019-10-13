@@ -7,6 +7,7 @@
             [hidden]="currentToolName !== ToolName.ColorApplicator"
         ></app-color-applicator-attributes>
         <app-grid-attributes [hidden]="currentToolName !== ToolName.Grid"></app-grid-attributes>
+        <app-dropper-attributes [hidden]="currentToolName !== ToolName.Dropper"></app-dropper-attributes>
     </div>
     <div>
         <app-color-palette id="color-palette" [hidden]="!showColorPalette"></app-color-palette>
