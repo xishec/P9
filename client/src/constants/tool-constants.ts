@@ -74,7 +74,7 @@ enum StampScaling {
 }
 
 enum StampAngleOrientation {
-    Min = 0,
+    Min = -360,
     Default = 0,
     Max = 360,
 }
