@@ -188,10 +188,10 @@ export class StampToolService extends AbstractToolService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        event.preventDefault();
         const key = event.key;
 
         if (key === Keys.Alt) {
+            event.preventDefault();
             if (!this.isAlterRotation) {
                 this.isAlterRotation = true;
             }
@@ -199,10 +199,10 @@ export class StampToolService extends AbstractToolService {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        event.preventDefault();
         const key = event.key;
 
         if (key === Keys.Alt) {
+            event.preventDefault();
             if (this.isAlterRotation) {
                 this.isAlterRotation = false;
             }
