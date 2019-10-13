@@ -97,8 +97,10 @@ export class LineToolService extends AbstractToolService {
                 this.pointsArray.pop();
                 this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.currentMousePosition}`);
 
-                const circle = this.jointCircles.pop();
-                this.renderer.removeChild(this.gWrap, circle);
+                if (this.currentJointType === LineJointType.Circle) {
+                    const circle = this.jointCircles.pop();
+                    this.renderer.removeChild(this.gWrap, circle);
+                }
             }
         }
     }
@@ -121,6 +123,7 @@ export class LineToolService extends AbstractToolService {
             this.drawStack.push(this.gWrap);
             this.pointsArray = new Array();
             this.currentMousePosition = '';
+            this.gWrap = this.renderer.createElement('g', SVG_NS);
         }
     }
 
@@ -148,6 +151,7 @@ export class LineToolService extends AbstractToolService {
 
         switch (this.currentJointType) {
             case LineJointType.Curvy :
+            case LineJointType.Circle :
                 this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
                 break;
         }
