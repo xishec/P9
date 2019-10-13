@@ -12,6 +12,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 
 @Injectable({
@@ -23,6 +24,7 @@ export class ToolSelectorService {
     private ellipsisTool: EllipsisToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+    private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
@@ -47,6 +49,9 @@ export class ToolSelectorService {
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
+        this.dropperTool = new DropperToolService(drawStack, ref, renderer);
+        this.dropperTool.initializeColorToolService(this.colorToolService);
+
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
     }
@@ -54,6 +59,7 @@ export class ToolSelectorService {
     displayNewDrawingModal(): void {
         const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
+            disableClose: true,
         });
         this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
         dialogRef.afterClosed().subscribe(() => {
@@ -75,6 +81,10 @@ export class ToolSelectorService {
 
     getBrushTool(): BrushToolService {
         return this.brushTool;
+    }
+
+    getDropperTool(): DropperToolService {
+        return this.dropperTool;
     }
 
     getColorApplicatorTool(): ColorApplicatorToolService {
@@ -106,6 +116,10 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Dropper:
+                this.currentTool = this.dropperTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Quill:
             case ToolName.Selection:
             case ToolName.Pen:
@@ -113,7 +127,6 @@ export class ToolSelectorService {
             case ToolName.Line:
             case ToolName.Polygon:
             case ToolName.Fill:
-            case ToolName.Dropper:
             case ToolName.Eraser:
             case ToolName.Text:
             case ToolName.Save:

@@ -63,7 +63,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.addColorToQueue(this.previewColor);
     }
 
-    @HostListener('window:resize', ['$event'])
+    @HostListener('window:resize')
     onResize(): void {
         if (!this.drawingModalForm.controls.width.dirty && !this.drawingModalForm.controls.height.dirty) {
             this.drawingModalForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);

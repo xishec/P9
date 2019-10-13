@@ -4,6 +4,7 @@ import { DateController } from "./controllers/date.controller";
 import { IndexController } from "./controllers/index.controller";
 import { Server } from "./server";
 import { DateService } from "./services/date.service";
+import { FileManagerController } from "./controllers/file-manager.controller";
 import { IndexService } from "./services/index.service";
 import Types from "./types";
 
@@ -16,5 +17,7 @@ container.bind(Types.IndexService).to(IndexService);
 
 container.bind(Types.DateController).to(DateController);
 container.bind(Types.DateService).to(DateService);
+
+container.bind(Types.FileManagerController).to(FileManagerController);
 
 export { container };
