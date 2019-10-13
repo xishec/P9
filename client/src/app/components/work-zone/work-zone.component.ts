@@ -22,6 +22,7 @@ export class WorkZoneComponent implements OnInit {
 
     currentTool: AbstractToolService | undefined;
     empty = true;
+    gridIsActive = false;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -30,7 +31,7 @@ export class WorkZoneComponent implements OnInit {
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
         private toolSelector: ToolSelectorService,
-        private colorToolService: ColorToolService,
+        private colorToolService: ColorToolService
     ) {}
 
     ngOnInit(): void {
