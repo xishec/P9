@@ -40,6 +40,8 @@ export class DrawingModalWindowComponent implements OnInit {
             this.previewColor = previewColor;
         });
 
+        this.previewColor = this.colorToolService.backgroundColor.value;
+
         this.blankWorkZone = this.drawingModalWindowService.blankDrawingZone.value;
         this.initializeForm();
     }
