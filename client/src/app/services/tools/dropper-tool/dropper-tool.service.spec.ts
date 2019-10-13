@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 
-describe('EyedropperToolService', () => {
+describe('DropperToolService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {

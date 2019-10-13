@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EyedropperAttributesComponent } from './dropper-attributes.component';
+import { DropperAttributesComponent } from './dropper-attributes.component';
 
-describe('EyedropperAttributesComponent', () => {
-  let component: EyedropperAttributesComponent;
-  let fixture: ComponentFixture<EyedropperAttributesComponent>;
+describe('DropperAttributesComponent', () => {
+  let component: DropperAttributesComponent;
+  let fixture: ComponentFixture<DropperAttributesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EyedropperAttributesComponent ]
+      declarations: [ DropperAttributesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EyedropperAttributesComponent);
+    fixture = TestBed.createComponent(DropperAttributesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

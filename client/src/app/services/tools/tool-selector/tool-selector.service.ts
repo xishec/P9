@@ -74,7 +74,7 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
-    getEyedropperTool(): DropperToolService {
+    getDropperTool(): DropperToolService {
         return this.dropperTool;
     }
 
