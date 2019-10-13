@@ -28,6 +28,7 @@ export class LineToolService extends AbstractToolService {
 
     shouldCloseLine = false;
     isDrawing = false;
+    isLineInStack = false;
 
     gWrap: SVGGElement;
     currentLine: SVGLineElement;
@@ -121,6 +122,7 @@ export class LineToolService extends AbstractToolService {
             }
 
             this.drawStack.push(this.gWrap);
+            this.isLineInStack = true;
             this.pointsArray = new Array();
             this.currentMousePosition = '';
             this.gWrap = this.renderer.createElement('g', SVG_NS);
@@ -130,6 +132,8 @@ export class LineToolService extends AbstractToolService {
     startLine(x: number, y: number): void {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
+
+        this.isLineInStack = false;
 
         this.pointsArray.push(`${x.toString()},${y.toString()}`);
 
@@ -185,6 +189,12 @@ export class LineToolService extends AbstractToolService {
 
     arrayToStringLine(): string {
         return this.pointsArray.join(' ');
+    }
+
+    cleanUp(): void {
+        if (!this.isLineInStack) {
+            this.drawStack.push(this.gWrap);
+        }
     }
 
     onMouseUp(event: MouseEvent): void {}
