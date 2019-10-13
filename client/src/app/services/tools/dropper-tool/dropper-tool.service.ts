@@ -62,9 +62,6 @@ export class DropperToolService extends AbstractToolService {
     }
     onMouseDown(event: MouseEvent): void {
         this.isIn = this.verifyPosition(event);
-        console.log(this.verifyPosition(event));
-        console.log(event.clientX + ' vs ' + this.svgReference.nativeElement.getBoundingClientRect().left);
-        console.log(event.clientY + ' vs ' + this.svgReference.nativeElement.getBoundingClientRect().top);
         this.getColor(event);
     }
     onMouseUp(event: MouseEvent): void {
