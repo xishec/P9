@@ -54,7 +54,8 @@ export class StampToolService extends AbstractToolService {
             this.applyTransformation();
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
-            if (newStamp === NO_STAMP || newStamp === '') {
+            console.log(newStamp);
+            if (newStamp === NO_STAMP) {
                 this.cleanUpStamp();
                 this.shouldStamp = false;
             } else {

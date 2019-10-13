@@ -1,6 +1,6 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
-const NO_STAMP = 'NO_STAMP';
+const NO_STAMP = '';
 
 enum ToolName {
     Selection = 'Sélection',
