@@ -43,7 +43,7 @@ import { PolygonAttributesComponent } from './components/sidebar-tools/attribute
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { EyedropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
+import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 
 @NgModule({
     declarations: [
@@ -63,7 +63,7 @@ import { EyedropperAttributesComponent } from './components/sidebar-tools/attrib
         ColorApplicatorAttributesComponent,
         ColorNumericValuesComponent,
         PolygonAttributesComponent,
-        EyedropperAttributesComponent,
+        DropperAttributesComponent,
     ],
     imports: [
         MatSliderModule,
