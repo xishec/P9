@@ -13,6 +13,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,7 @@ export class ToolSelectorService {
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+    private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
     lineToolService: LineToolService;
 
@@ -43,6 +45,9 @@ export class ToolSelectorService {
 
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
+
+        this.dropperTool = new DropperToolService(drawStack, ref, renderer);
+        this.dropperTool.initializeColorToolService(this.colorToolService);
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
@@ -73,6 +78,10 @@ export class ToolSelectorService {
 
     getBrushTool(): BrushToolService {
         return this.brushTool;
+    }
+
+    getDropperTool(): DropperToolService {
+        return this.dropperTool;
     }
 
     getColorApplicatorTool(): ColorApplicatorToolService {
@@ -108,6 +117,10 @@ export class ToolSelectorService {
                 this.currentTool = this.lineToolService;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Dropper:
+                this.currentTool = this.dropperTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Quill:
             case ToolName.Selection:
             case ToolName.Pen:
@@ -115,7 +128,6 @@ export class ToolSelectorService {
             case ToolName.Polygon:
             case ToolName.Ellipsis:
             case ToolName.Fill:
-            case ToolName.Dropper:
             case ToolName.Eraser:
             case ToolName.Text:
             case ToolName.Save:
