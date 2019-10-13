@@ -27,11 +27,9 @@ export class DropperToolService extends AbstractToolService {
     }
 
     verifyPosition(event: MouseEvent): boolean {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
         return (
-            this.currentMouseX > this.svgReference.nativeElement.getBoundingClientRect().left &&
-            this.currentMouseY > this.svgReference.nativeElement.getBoundingClientRect().top
+            event.clientX > this.svgReference.nativeElement.getBoundingClientRect().left &&
+            event.clientY > this.svgReference.nativeElement.getBoundingClientRect().top
         );
     }
 
@@ -58,9 +56,15 @@ export class DropperToolService extends AbstractToolService {
         return this.context2D.getImageData(this.currentMouseX, this.currentMouseY, 1, 1).data;
     }
 
-    onMouseMove(event: MouseEvent): void {}
+    onMouseMove(event: MouseEvent): void {
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+    }
     onMouseDown(event: MouseEvent): void {
         this.isIn = this.verifyPosition(event);
+        console.log(this.verifyPosition(event));
+        console.log(event.clientX + ' vs ' + this.svgReference.nativeElement.getBoundingClientRect().left);
+        console.log(event.clientY + ' vs ' + this.svgReference.nativeElement.getBoundingClientRect().top);
         this.getColor(event);
     }
     onMouseUp(event: MouseEvent): void {
@@ -84,7 +88,7 @@ export class DropperToolService extends AbstractToolService {
 
     getColor(event: MouseEvent): string {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.offsetY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
         const colorRGB = this.pickColor();
         return this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
     }
