@@ -111,18 +111,49 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     updatePreviewCircle(): void {
-        this.renderer.setAttribute(
-            this.drawEllipse,
-            'cx',
-            (this.previewRectangleX + this.previewRectangleWidth / 2).toString()
-        );
-        this.renderer.setAttribute(
-            this.drawEllipse,
-            'cy',
-            (this.previewRectangleY + this.previewRectangleHeight / 2).toString()
-        );
-
+        const deltaX = this.currentMouseX - this.initialMouseX;
+        const deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(this.previewRectangleWidth, this.previewRectangleHeight);
+
+        if (deltaX < 0) {
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                'cx',
+                (this.previewRectangleX + (this.previewRectangleWidth - (minLength / 2))).toString()
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                'cx',
+                (this.previewRectangleX + minLength / 2).toString()
+            );
+        }
+
+        // this.renderer.setAttribute(
+        //     this.drawEllipse,
+        //     'cx',
+        //     (this.previewRectangleX + this.previewRectangleWidth / 2).toString()
+        // );
+
+        if (deltaY < 0) {
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                'cy',
+                (this.previewRectangleY + (this.previewRectangleHeight - (minLength / 2))).toString()
+            );
+        } else {
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                'cy',
+                (this.previewRectangleY + minLength / 2).toString()
+            );
+        }
+
+        // this.renderer.setAttribute(
+        //     this.drawEllipse,
+        //     'cy',
+        //     (this.previewRectangleY + this.previewRectangleHeight / 2).toString()
+        // );
 
         this.renderer.setAttribute(
             this.drawEllipse,
