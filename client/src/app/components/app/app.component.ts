@@ -11,6 +11,7 @@ import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 
 @Component({
     selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
     displayWelcomeModalWindow = false;
     welcomeModalWindowClosed = false;
     isOnInput = false;
+    gridState = false;
 
     constructor(
         private basicService: IndexService,
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit {
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
         private shortcutManagerService: ShortcutManagerService,
+        private gridtoolService: GridToolService
     ) {
         this.basicService
             .basicGet()
@@ -43,7 +46,7 @@ export class AppComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-            },
+            }
         );
         this.shortcutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
@@ -51,7 +54,7 @@ export class AppComponent implements OnInit {
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
             (welcomeModalWindowClosed: boolean) => {
                 this.welcomeModalWindowClosed = welcomeModalWindowClosed;
-            },
+            }
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
@@ -204,5 +207,13 @@ export class AppComponent implements OnInit {
     }
 
     // Workzone options
-    // Will be implemented later
+    @HostListener('window:keydown.g', ['$event']) onG(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.gridtoolService.currentState.subscribe((state: boolean) => {
+                this.gridState = state;
+            });
+            this.gridState ? this.gridtoolService.changeState(false) : this.gridtoolService.changeState(true);
+        }
+    }
 }
