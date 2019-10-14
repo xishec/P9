@@ -29,6 +29,7 @@ export class LineToolService extends AbstractToolService {
     shouldCloseLine = false;
     isDrawing = false;
     isLineInStack = false;
+    isMouseDown = false;
 
     gWrap: SVGGElement;
     currentLine: SVGPolylineElement;
@@ -77,10 +78,15 @@ export class LineToolService extends AbstractToolService {
                 this.appendCircle(x, y);
             }
         }
+        this.isMouseDown = true;
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        this.isMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.isDrawing) {
+        if (this.isDrawing && !this.isMouseDown) {
             this.previewLine(this.getXPos(event.clientX), this.getYPos(event.clientY));
         }
     }
@@ -197,7 +203,6 @@ export class LineToolService extends AbstractToolService {
         }
     }
 
-    onMouseUp(event: MouseEvent): void {}
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
 }
