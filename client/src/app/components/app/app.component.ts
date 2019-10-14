@@ -230,6 +230,14 @@ export class AppComponent implements OnInit {
             }
         }
     }
+    @HostListener('window:keydown.shift.+', ['$event']) onShiftPlus(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            if (this.gridSize + 5 <= GridSize.Max) {
+                this.gridtoolService.changeSize(this.gridSize + 5);
+            }
+        }
+    }
     @HostListener('window:keydown.-', ['$event']) onMinus(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
