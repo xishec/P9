@@ -37,13 +37,13 @@ enum TraceType {
 }
 
 enum GridSize {
-    Min = 1,
-    Default = 5,
-    Max = 10,
+    Min = 5,
+    Default = 10,
+    Max = 200,
 }
 
 enum GridOpacity {
-    Min = 0.1,
+    Min = 0.2,
     Max = 1,
 }
 
