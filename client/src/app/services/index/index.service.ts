@@ -17,6 +17,19 @@ export class IndexService {
         return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
     }
 
+    getDrawing() {
+        return this.http
+            .get<Message>('http://localhost:3000/api/file-manager/open')
+            .pipe(catchError(this.handleError<Message>('getDrawing')));
+    }
+
+    postDrawing() {
+        let message: Message = { title: 'OMG', body: 'IL FAUT SAVEEEEE' };
+        this.http.post<Message>('http://localhost:3000/api/file-manager/save', message).subscribe((responseData) => {
+            console.log(responseData);
+        });
+    }
+
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
         return (error: Error): Observable<T> => {
             return of(result as T);
