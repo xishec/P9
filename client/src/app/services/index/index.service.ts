@@ -26,8 +26,7 @@ export class IndexService {
 
     postDrawing(name: string, svg: string) {
         let drawing: Drawing = { name: name, svg: svg };
-        let message: Message = { title: 'OMG', body: JSON.stringify(drawing) };
-
+        let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
         this.http.post<Message>('http://localhost:3000/api/file-manager/save', message).subscribe((responseData) => {
             console.log(responseData);
         });
