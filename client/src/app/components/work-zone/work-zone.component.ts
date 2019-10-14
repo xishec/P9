@@ -23,6 +23,8 @@ export class WorkZoneComponent implements OnInit {
     currentTool: AbstractToolService | undefined;
     empty = true;
 
+    myString = '';
+
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
@@ -69,6 +71,16 @@ export class WorkZoneComponent implements OnInit {
         if (this.empty) {
             alert('Veuillez créer un nouveau dessin!');
         }
+    }
+
+    // myString will be linked with server
+    save() {
+        console.log('save');
+        this.myString = this.refSVG.nativeElement.innerHTML;
+    }
+    load() {
+        console.log('load');
+        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', this.myString);
     }
 
     changeStyle(): ReturnStyle {
