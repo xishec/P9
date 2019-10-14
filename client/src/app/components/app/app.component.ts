@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ToolName } from 'src/constants/tool-constants';
+import { ToolName, GridSize } from 'src/constants/tool-constants';
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -25,7 +25,9 @@ export class AppComponent implements OnInit {
     displayWelcomeModalWindow = false;
     welcomeModalWindowClosed = false;
     isOnInput = false;
+
     gridState = false;
+    gridSize = GridSize.Default;
 
     constructor(
         private basicService: IndexService,
@@ -58,6 +60,13 @@ export class AppComponent implements OnInit {
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
+
+        this.gridtoolService.currentState.subscribe((state: boolean) => {
+            this.gridState = state;
+        });
+        this.gridtoolService.currentSize.subscribe((size: number) => {
+            this.gridSize = size;
+        });
     }
 
     openWelcomeModalWindow(): void {
@@ -210,10 +219,15 @@ export class AppComponent implements OnInit {
     @HostListener('window:keydown.g', ['$event']) onG(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            this.gridtoolService.currentState.subscribe((state: boolean) => {
-                this.gridState = state;
-            });
             this.gridState ? this.gridtoolService.changeState(false) : this.gridtoolService.changeState(true);
+        }
+    }
+    @HostListener('window:keydown.+', ['$event']) onPlus(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            if (this.gridSize < GridSize.Max) {
+                this.gridtoolService.changeSize(this.gridSize + 5);
+            }
         }
     }
 }
