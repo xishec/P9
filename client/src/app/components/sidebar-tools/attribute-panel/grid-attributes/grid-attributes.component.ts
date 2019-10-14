@@ -43,8 +43,11 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.initializeForm();
         this.onSizeChange();
-        this.gridToolService.currentState.subscribe((state) => {
+        this.gridToolService.currentState.subscribe((state: boolean) => {
             this.gridAttributesForm.controls.state.setValue(state);
+        });
+        this.gridToolService.currentSize.subscribe((size: number) => {
+            this.gridAttributesForm.controls.size.setValue(size);
         });
     }
 
@@ -92,10 +95,6 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
         if (this.IsBetween(opacity, GridOpacity)) {
             this.gridToolService.changeOpacity(opacity);
         }
-    }
-
-    changeState(state: boolean) {
-        this.gridAttributesForm.controls.state.setValue(state);
     }
 
     onFocus() {
