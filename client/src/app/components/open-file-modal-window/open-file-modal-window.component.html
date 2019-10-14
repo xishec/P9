@@ -4,16 +4,22 @@
   <mat-selection-list>
     <mat-list-option *ngFor="let drawing of drawingFileInfos">
       <div id="drawing-name">
-        {{drawing.name}}=
-      </div>
-      <div id="drawing-labels" *ngFor="let label of drawing.labels">
-        {{label}}
-      </div>
-      <div id="drawing-thumbnail">
-          {{drawing.thumbnail}}
-      </div>
-    </mat-list-option>
-  </mat-selection-list>
+        <mat-list-option *ngFor="let drawing of drawingFileInfos" id="list-option" [value]="drawing.name">
+            <div id="drawing-option">
+                <div id="drawing-name">
+                    {{ drawing.name }}
+                </div>
+                <div id="drawing-labels-list">
+                    <div id="drawing-label" *ngFor="let label of drawing.labels">
+                        {{ label }}
+                    </div>
+                </div>
+                <div id="drawing-thumbnail">
+                    {{ drawing.thumbnail }}
+                </div>
+            </div>
+        </mat-list-option>
+    </mat-selection-list>
 </mat-dialog-content>
 
 <mat-dialog-actions id="footer" align="end">
