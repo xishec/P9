@@ -75,8 +75,8 @@ export class StampToolService extends AbstractToolService {
 
     verifyPosition(event: MouseEvent): boolean {
         return (
-            event.clientX > this.svgReference.nativeElement.getBoundingClientRect().left &&
-            event.clientY > this.svgReference.nativeElement.getBoundingClientRect().top
+            event.clientX > (this.svgReference.nativeElement.getBoundingClientRect().left + window.scrollX) &&
+            event.clientY > (this.svgReference.nativeElement.getBoundingClientRect().top + window.scrollY)
         );
     }
 
@@ -154,9 +154,7 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        this.isIn = this.verifyPosition(event);
-
-        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
+        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
             this.cleanUpStamp();
             this.addStamp();
         }
@@ -165,9 +163,7 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        this.isIn = this.verifyPosition(event);
-
-        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
+        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
             this.initStamp();
         }
     }
