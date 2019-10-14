@@ -24,8 +24,7 @@ export class WorkZoneComponent implements OnInit {
 
     currentTool: AbstractToolService | undefined;
     empty = true;
-
-    myString = '';
+    name = 'test';
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -79,7 +78,7 @@ export class WorkZoneComponent implements OnInit {
     // myString will be linked with server
     save() {
         console.log('save');
-        this.basicService.postDrawing('test1', this.refSVG.nativeElement.innerHTML);
+        this.basicService.postDrawing(this.name, this.refSVG.nativeElement.innerHTML);
     }
     load() {
         console.log('load');
