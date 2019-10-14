@@ -16,4 +16,25 @@ export class OpenFileModalWindowComponent implements OnInit {
   ngOnInit() {
   }
 
+    initializeForm(): void {
+        this.openFileModalForm = this.formBuilder.group({
+          selectedDrawing: ['', Validators.required],
+        });
+    }
+
+    handleSelection(event: any, ): void {
+      if (event.option.selected) {
+        event.source.deselectAll();
+        event.option._setSelected(true);
+        this.selectedOption = event.option.value;
+      }
+    }
+
+    onCancel(): void {
+      this.dialogRef.close();
+    }
+
+    onSubmit() {
+      console.log(this.selectedOption);
+    }
 }
