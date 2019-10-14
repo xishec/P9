@@ -1,9 +1,12 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
 <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
-  <mat-selection-list>
-    <mat-list-option *ngFor="let drawing of drawingFileInfos">
-      <div id="drawing-name">
+    <mat-selection-list
+        #drawings
+        formControlName="selectedDrawing"
+        (selectionChange)="handleSelection($event, drawings.selectedOptions)"
+        id="selection-list"
+    >
         <mat-list-option *ngFor="let drawing of drawingFileInfos" id="list-option" [value]="drawing.name">
             <div id="drawing-option">
                 <div id="drawing-name">
@@ -29,7 +32,7 @@
         mat-stroked-button
         type="submit"
         [mat-dialog-close]="true"
-        [disabled]="drawingModalForm.invalid"
+        [disabled]="openFileModalForm.invalid"
         (click)="onSubmit()"
     >
         Ouvrir
