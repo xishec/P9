@@ -78,15 +78,67 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    computeSelectionBoundingBox(): void {
-        const left;
-        const top;
-        const right;
-        const bottom;
+    findLeftMostCoord(): number {
+        const leftCoords: number[] = new Array();
 
         for (const el of this.selection) {
-
+            leftCoords.push(el.getBoundingClientRect().left);
         }
+
+        return Math.min.apply(Math, leftCoords);
+    }
+
+    findRightMostCoord(): number {
+        const rightCoords: number[] = new Array();
+
+        for (const el of this.selection) {
+            rightCoords.push(el.getBoundingClientRect().right);
+        }
+
+        return Math.max.apply(Math, rightCoords);
+    }
+
+    findTopMostCoord(): number {
+        const topCoords: number[] = new Array();
+
+        for (const el of this.selection) {
+            topCoords.push(el.getBoundingClientRect().top);
+        }
+
+        return Math.min.apply(Math, topCoords);
+    }
+
+    findBottomCoord(): number {
+        const bottomCoords: number[] = new Array();
+
+        for (const el of this.selection) {
+            bottomCoords.push(el.getBoundingClientRect().bottom);
+        }
+
+        return Math.max.apply(Math, bottomCoords);
+    }
+
+    computeSelectionBoundingBox(): void {
+        // const selectedElementsBoundingBoxes: (DOMRect | ClientRect)[] = new Array();
+        const left = this.findLeftMostCoord();
+        const right = this.findRightMostCoord();
+        const top = this.findTopMostCoord();
+        const bottom = this.findBottomCoord();
+
+        console.log('Left ' + left);
+        console.log('Right ' + right);
+        console.log('Top ' + top);
+        console.log('Bottom ' + bottom);
+        console.log('Width ' + (right - left));
+        console.log('Height ' + (bottom - top));
+
+        this.renderer.setAttribute(this.selectionBound, 'x', left.toString());
+        this.renderer.setAttribute(this.selectionBound, 'y', top.toString());
+        this.renderer.setAttribute(this.selectionBound, 'width', (right - left).toString());
+        this.renderer.setAttribute(this.selectionBound, 'height', (bottom - top).toString());
+        this.renderer.setAttribute(this.selectionBound, 'fill', 'none');
+        this.renderer.setAttribute(this.selectionBound, 'stroke', 'black');
+        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBound);
     }
 
     hasSelected(): boolean {
@@ -127,6 +179,7 @@ export class SelectionToolService extends AbstractToolService {
             this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
             if (this.hasSelected()) {
                 this.isManipulating = true;
+                this.computeSelectionBoundingBox();
             }
         }
     }
