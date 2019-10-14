@@ -9,6 +9,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { IndexService } from '../../services/index/index.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -28,6 +29,7 @@ export class WorkZoneComponent implements OnInit {
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
+        private basicService: IndexService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private drawStackService: DrawStackService,
@@ -80,6 +82,7 @@ export class WorkZoneComponent implements OnInit {
     }
     load() {
         console.log('load');
+        this.basicService.postDrawing();
         this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', this.myString);
     }
 
