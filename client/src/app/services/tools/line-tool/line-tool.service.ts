@@ -122,7 +122,7 @@ export class LineToolService extends AbstractToolService {
         if (this.isDrawing) {
             this.isDrawing = false;
 
-            if (this.shouldCloseLine) {
+            if (this.shouldCloseLine && this.pointsArray.length > 3) {
                 this.pointsArray.push(this.pointsArray[0]);
                 this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
             }
