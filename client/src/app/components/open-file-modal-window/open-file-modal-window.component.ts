@@ -1,20 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+
+import { DrawingFileInfo } from 'src/classes/DrawingFileInfo';
 
 @Component({
-  selector: 'app-open-file-modal-window',
-  templateUrl: './open-file-modal-window.component.html',
-  styleUrls: ['./open-file-modal-window.component.scss']
+    selector: 'app-open-file-modal-window',
+    templateUrl: './open-file-modal-window.component.html',
+    styleUrls: ['./open-file-modal-window.component.scss'],
 })
 export class OpenFileModalWindowComponent implements OnInit {
-  openFileModalForm: FormGroup;
-  formBuilder: FormBuilder;
-  drawingFileInfos = []
+    openFileModalForm: FormGroup;
+    formBuilder: FormBuilder;
 
-  constructor() { }
+    drawingFileInfos: DrawingFileInfo[] = [
+        { name: 'animal drawing', labels: ['tiger', 'lion'], thumbnail: 'thumbnail1' },
+        { name: 'food drawing', labels: ['hamburger', 'poutine'], thumbnail: 'thumbnail2' },
+        { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], thumbnail: 'thumbnail3' },
+    ];
+    selectedOption: string = "";
 
-  ngOnInit() {
-  }
+    constructor(formBuilder: FormBuilder, private dialogRef: MatDialogRef<OpenFileModalWindowComponent>) {
+        this.formBuilder = formBuilder;
+    }
+
+    ngOnInit() {
+        this.initializeForm();
+    }
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
