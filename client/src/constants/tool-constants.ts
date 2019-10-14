@@ -38,7 +38,7 @@ enum TraceType {
 
 const PolygonFormType: Map<number, string> = new Map([
     [3, 'Triangle'],
-    [4, 'Qudrilatère'],
+    [4, 'Quadrilatère'],
     [5, 'Pentagone'],
     [6, 'Hexagone'],
     [7, 'Heptagone'],
