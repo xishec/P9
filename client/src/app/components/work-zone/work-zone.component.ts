@@ -9,6 +9,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -17,6 +18,8 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 })
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+    gridToolService: GridToolService;
+
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
 
@@ -64,6 +67,13 @@ export class WorkZoneComponent implements OnInit {
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
+    }
+
+    initializeGrid(gridToolService: GridToolService) {
+        this.gridToolService = gridToolService;
+        this.gridToolService.currentState.subscribe((state: boolean) => {
+            this.gridIsActive = state;
+        });
     }
 
     onClickRectangle() {

@@ -5,8 +5,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridSize, GridOpacity, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -16,18 +16,12 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
 export class GridAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Grid;
     gridAttributesForm: FormGroup;
-    rectangleToolService: RectangleToolService;
+    gridToolService: GridToolService = new GridToolService();
 
     readonly gridSize = GridSize;
     readonly gridOpacity = GridOpacity;
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
-        private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService
-    ) {
+    constructor(private formBuilder: FormBuilder, private shortcutManagerService: ShortcutManagerService) {
         this.formBuilder = formBuilder;
     }
 
@@ -42,15 +36,11 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
         this.onSizeChange();
     }
 
-    ngAfterViewInit(): void {
-        this.rectangleToolService = this.toolSelectorService.getRectangleTool();
-        this.rectangleToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.rectangleToolService.initializeColorToolService(this.colorToolService);
-    }
+    ngAfterViewInit(): void {}
 
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({
-            state: [],
+            state: ['false'],
             size: [GridSize.Default, [Validators.required, Validators.min(GridSize.Min), Validators.max(GridSize.Max)]],
             opacity: [
                 GridOpacity.Max,
@@ -71,6 +61,11 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }
+    }
+
+    onStateChange() {
+        const state = this.gridAttributesForm.value.state;
+        this.gridToolService.changeState(state);
     }
 
     onSizeChange() {}
