@@ -83,7 +83,7 @@ import { OpenFileModalWindowComponent } from './components/open-file-modal-windo
         MatSelectModule,
         MatFormFieldModule,
     ],
-    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
+    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent, OpenFileModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
     bootstrap: [AppComponent],
 })
