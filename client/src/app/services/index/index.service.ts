@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { Drawing } from '../../../../../common/communication/Drawing';
 import { Message } from '../../../../../common/communication/message';
 
 @Injectable({
@@ -23,8 +24,10 @@ export class IndexService {
             .pipe(catchError(this.handleError<Message>('getDrawing')));
     }
 
-    postDrawing() {
-        let message: Message = { title: 'OMG', body: 'IL FAUT SAVEEEEE' };
+    postDrawing(name: string, svg: string) {
+        let drawing: Drawing = { name: name, svg: svg };
+        let message: Message = { title: 'OMG', body: JSON.stringify(drawing) };
+
         this.http.post<Message>('http://localhost:3000/api/file-manager/save', message).subscribe((responseData) => {
             console.log(responseData);
         });

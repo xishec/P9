@@ -10,6 +10,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/index/index.service';
+import { Drawing } from '../../../../../common/communication/Drawing';
 
 @Component({
     selector: 'app-work-zone',
@@ -78,15 +79,15 @@ export class WorkZoneComponent implements OnInit {
     // myString will be linked with server
     save() {
         console.log('save');
-        this.basicService.postDrawing();
-        this.myString = this.refSVG.nativeElement.innerHTML;
+        this.basicService.postDrawing('test1', this.refSVG.nativeElement.innerHTML);
     }
     load() {
         console.log('load');
         this.basicService.getDrawing().subscribe((ans: any) => {
-            console.log(ans);
+            let drawing: Drawing = JSON.parse(ans.body);
+            console.log(drawing);
+            this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
         });
-        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', this.myString);
     }
 
     changeStyle(): ReturnStyle {

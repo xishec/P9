@@ -28,10 +28,19 @@ export class FileManagerController {
 
 		this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
 			// Send the request to the service and send the response
-			const message = req.body;
+			// Post.findOne({ title: 'OMG' })
+			// 	.then((ans: Message) => {
+			// 		// update
+			// 		res.json(ans);
+			// 	})
+			// 	.catch((error: Error) => {
+			// 		// save
+			// 		console.log(error);
+			// 	});
+
+			const message: Message = req.body;
 			let post = new Post(message);
-			post;
-			// post.save();
+			post.save();
 			res.json(message);
 		});
 	}
