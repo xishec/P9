@@ -78,11 +78,14 @@ export class WorkZoneComponent implements OnInit {
     // myString will be linked with server
     save() {
         console.log('save');
+        this.basicService.postDrawing();
         this.myString = this.refSVG.nativeElement.innerHTML;
     }
     load() {
         console.log('load');
-        this.basicService.postDrawing();
+        this.basicService.getDrawing().subscribe((ans: any) => {
+            console.log(ans);
+        });
         this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', this.myString);
     }
 

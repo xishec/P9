@@ -17,16 +17,21 @@ export class FileManagerController {
 
 		this.router.get('/open', async (req: Request, res: Response, next: NextFunction) => {
 			// Send the request to the service and send the response
-			let message: Message = { title: 'AILLLLLE', body: 'HELLLOOOOOO P9' };
-			res.json(message);
+			Post.findOne({ title: 'OMG' })
+				.then((ans: Message) => {
+					res.json(ans);
+				})
+				.catch((error: Error) => {
+					console.log(error);
+				});
 		});
 
 		this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
 			// Send the request to the service and send the response
 			const message = req.body;
 			let post = new Post(message);
-			post.save();
-			// console.log('hi ->', message);
+			post;
+			// post.save();
 			res.json(message);
 		});
 	}

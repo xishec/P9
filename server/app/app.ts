@@ -52,9 +52,9 @@ export class Application {
 			.then(() => {
 				console.log('Connected to BD!');
 			})
-			.catch((err: any) => {
+			.catch((err: Error) => {
 				console.log(err, 'fuck');
-			});
+			}); 
 	}
 
 	private errorHandling(): void {
