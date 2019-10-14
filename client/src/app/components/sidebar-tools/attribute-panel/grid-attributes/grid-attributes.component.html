@@ -14,7 +14,7 @@
                 ></i>
             </label>
             <br />
-            <mat-slide-toggle formControlName="state" (input)="onStateChange()"></mat-slide-toggle>
+            <mat-slide-toggle formControlName="state" [checked]="onStateChange()"></mat-slide-toggle>
         </div>
 
         <div class="attribute">
@@ -26,6 +26,7 @@
                 [min]="gridSize.Min"
                 [max]="gridSize.Max"
                 value="{{ gridAttributesForm.value.size }}"
+                step="1"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
@@ -38,6 +39,7 @@
                     (input)="onSizeChange()"
                     [min]="gridSize.Min"
                     [max]="gridSize.Max"
+                    step="1"
                 />
                 <mat-error>La valeur inscrite doit être entre {{ gridSize.Min }} et {{ gridSize.Max }} px</mat-error>
                 <span matSuffix>px</span>
