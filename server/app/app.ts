@@ -48,13 +48,14 @@ export class Application {
 			.connect('mongodb+srv://P9_client:p9123@p9-mgkks.gcp.mongodb.net/test?retryWrites=true&w=majority', {
 				useUnifiedTopology: true,
 				useNewUrlParser: true,
+				useFindAndModify: false,
 			})
 			.then(() => {
 				console.log('Connected to BD!');
 			})
 			.catch((err: Error) => {
 				console.log(err, 'fuck');
-			}); 
+			});
 	}
 
 	private errorHandling(): void {
