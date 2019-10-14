@@ -18,17 +18,16 @@ export class IndexService {
         return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
     }
 
-    getDrawing() {
-        return this.http
-            .get<Message>('http://localhost:3000/api/file-manager/open')
-            .pipe(catchError(this.handleError<Message>('getDrawing')));
+    getDrawing(name: string): Observable<Message> {
+        let message: Message = { title: 'Send Drawing Name ', body: 'Add Drawing ' + name };
+        return this.http.post<Message>('http://localhost:3000/api/file-manager/open', message);
     }
 
     postDrawing(name: string, svg: string) {
         let drawing: Drawing = { name: name, svg: svg };
         let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
         this.http.post<Message>('http://localhost:3000/api/file-manager/save', message).subscribe((responseData) => {
-            console.log(responseData);
+            // console.log(responseData);
         });
     }
 

@@ -15,9 +15,10 @@ export class FileManagerController {
 	private configureRouter(): void {
 		this.router = Router();
 
-		this.router.get('/open', async (req: Request, res: Response, next: NextFunction) => {
+		this.router.post('/open', async (req: Request, res: Response, next: NextFunction) => {
 			// Send the request to the service and send the response
-			Post.findOne({ title: 'OMG' })
+			let name = req.body.body;
+			Post.findOne({ title: name })
 				.then((ans: Message) => {
 					res.json(ans);
 				})
@@ -30,12 +31,13 @@ export class FileManagerController {
 			// Send the request to the service and send the response
 
 			let query = { title: req.body.title };
-			let update = new Post(req.body);
+			let update = { body: req.body.body };
 			let options = { upsert: true, new: true };
+			console.log('/save');
 
 			Post.findOneAndUpdate(query, update, options)
 				.then((ans: Message) => {
-					console.log(ans);
+					// console.log(ans);
 					res.json(ans);
 				})
 				.catch((error: Error) => {

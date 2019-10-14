@@ -82,9 +82,8 @@ export class WorkZoneComponent implements OnInit {
     }
     load() {
         console.log('load');
-        this.basicService.getDrawing().subscribe((ans: any) => {
+        this.basicService.getDrawing(this.name).subscribe((ans: any) => {
             let drawing: Drawing = JSON.parse(ans.body);
-            console.log(drawing);
             this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
         });
     }
