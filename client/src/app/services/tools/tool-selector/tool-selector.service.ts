@@ -113,6 +113,8 @@ export class ToolSelectorService {
                 break;
             case ToolName.Polygon:
                 this.currentTool = this.polygoneTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Dropper:
                 this.currentTool = this.dropperTool;
                 this.changeCurrentToolName(tooltipName);
