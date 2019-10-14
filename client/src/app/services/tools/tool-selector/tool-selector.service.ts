@@ -59,7 +59,7 @@ export class ToolSelectorService {
 
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
-            panelClass: 'myapp-max-width-dialog',
+            panelClass: 'myapp-min-width-dialog',
         });
         // this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
         openFileDialogRef.afterClosed().subscribe(() => {
