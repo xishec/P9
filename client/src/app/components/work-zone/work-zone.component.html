@@ -20,11 +20,17 @@
     [attr.height]="drawingInfo.height"
 >
     <defs>
-        <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1" />
+        <pattern id="smallGrid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <path
+                d="M 200 0 L 0 0 0 200"
+                fill="none"
+                stroke="gray"
+                stroke-width="2"
+                [attr.stroke-opacity]="gridOpacity"
+            />
         </pattern>
-        <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-            <rect width="100" height="100" fill="url(#smallGrid)" />
+        <pattern id="grid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <rect width="200" height="200" fill="url(#smallGrid)" />
         </pattern>
     </defs>
     <rect
