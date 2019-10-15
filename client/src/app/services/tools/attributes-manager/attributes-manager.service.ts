@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Thickness, TraceType, LineStrokeType, LineJointType } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType, STAMP_TYPES, StampAngleOrientation, StampScaling, 
+    Thickness, TraceType } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -20,6 +21,9 @@ export class AttributesManagerService {
     private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
     private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
+    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
@@ -27,6 +31,9 @@ export class AttributesManagerService {
     currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
     currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
     currentCircleJointDiameter: Observable<number> = this.circleJointDiameter.asObservable();
+    currentAngle: Observable<number> = this.angle.asObservable();
+    currentScaling: Observable<number> = this.scaling.asObservable();
+    currentStampType: Observable<string> = this.stampType.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -50,5 +57,17 @@ export class AttributesManagerService {
 
     changeStyle(style: number): void {
         this.style.next(style);
+    }
+
+    changeScaling(scaling: number): void {
+        this.scaling.next(scaling);
+    }
+
+    changeAngle(angle: number): void {
+        this.angle.next(angle);
+    }
+
+    changeStampType(stampType: string): void {
+        this.stampType.next(stampType);
     }
 }

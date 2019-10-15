@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } fro
 
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -109,6 +110,12 @@ export class WorkZoneComponent implements OnInit {
     @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onMouseLeave(event);
+        }
+    }
+
+    @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
+        if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
+            this.currentTool.onWheel(event);
         }
     }
 

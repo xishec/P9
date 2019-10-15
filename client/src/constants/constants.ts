@@ -1,6 +1,7 @@
 enum Keys {
     Shift = 'Shift',
     Control = 'Control',
+    Alt = 'Alt',
     Digit1 = '1',
     Digit2 = '2',
     Digit3 = '3',
