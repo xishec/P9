@@ -1,16 +1,16 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { GridSize, GridOpacity, ToolName } from 'src/constants/tool-constants';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-grid-attributes',
     templateUrl: './grid-attributes.component.html',
     styleUrls: ['./grid-attributes.component.scss'],
 })
-export class GridAttributesComponent implements OnInit, AfterViewInit {
+export class GridAttributesComponent implements OnInit {
     toolName = ToolName.Grid;
     gridAttributesForm: FormGroup;
 
@@ -20,14 +20,14 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService
+        private gridToolService: GridToolService,
     ) {
         this.formBuilder = formBuilder;
     }
 
-    eventIsValid<T>(event: MatSliderChange, range: T): Boolean {
+    eventIsValid<T>(event: MatSliderChange, range: T): boolean {
         const value = event.value;
-        //@ts-ignore
+        // @ts-ignore
         if (value !== null) {
             return this.IsBetween(value, range);
         } else {
@@ -35,8 +35,8 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
         }
     }
 
-    IsBetween<T>(value: number | boolean, range: T): Boolean {
-        //@ts-ignore
+    IsBetween<T>(value: number | boolean, range: T): boolean {
+        // @ts-ignore
         return value >= range.Min && value <= range.Max;
     }
 
@@ -50,8 +50,6 @@ export class GridAttributesComponent implements OnInit, AfterViewInit {
             this.gridAttributesForm.controls.size.setValue(size);
         });
     }
-
-    ngAfterViewInit(): void {}
 
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({

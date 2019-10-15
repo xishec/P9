@@ -16,8 +16,8 @@ import {
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
-    MatTooltipModule,
     MatSlideToggleModule,
+    MatTooltipModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,11 +40,11 @@ import { ColorPaletteComponent } from './components/color-palette/color-palette.
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
+import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
+import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
-import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 
 @NgModule({
     declarations: [

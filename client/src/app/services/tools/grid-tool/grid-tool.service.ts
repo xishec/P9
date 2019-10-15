@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { GridSize, GridOpacity } from 'src/constants/tool-constants';
+import { GridOpacity, GridSize } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
