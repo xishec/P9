@@ -51,7 +51,7 @@ export class ToolSelectorService {
         this.brushTool.initializeColorToolService(this.colorToolService);
 
         this.stampTool = new StampToolService(drawStack, ref, renderer);
-      
+
         this.dropperTool = new DropperToolService(drawStack, ref, renderer);
         this.dropperTool.initializeColorToolService(this.colorToolService);
 
@@ -101,6 +101,8 @@ export class ToolSelectorService {
     changeTool(tooltipName: string): void {
         if (this.currentTool instanceof StampToolService) {
             this.currentTool.cleanUpStamp();
+        } else if (this.currentTool instanceof SelectionToolService) {
+            this.currentTool.removeFullSelectionBox();
         }
         switch (tooltipName) {
             case ToolName.NewDrawing:
