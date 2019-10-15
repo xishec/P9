@@ -46,10 +46,6 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
-
         this.toolSelector.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
             this.currentTool = this.toolSelector.currentTool;

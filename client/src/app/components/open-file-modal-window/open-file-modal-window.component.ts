@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { DrawingFileInfo } from 'src/classes/DrawingFileInfo';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -18,9 +19,13 @@ export class OpenFileModalWindowComponent implements OnInit {
         { name: 'food drawing', labels: ['hamburger', 'poutine'], thumbnail: 'thumbnail2' },
         { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], thumbnail: 'thumbnail3' },
     ];
-    selectedOption: string = "";
+    selectedOption: string = '';
 
-    constructor(formBuilder: FormBuilder, private dialogRef: MatDialogRef<OpenFileModalWindowComponent>) {
+    constructor(
+        formBuilder: FormBuilder,
+        private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
+        private modalManagerService: ModalManagerService,
+    ) {
         this.formBuilder = formBuilder;
     }
 
@@ -30,23 +35,25 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
-          selectedDrawing: ['', Validators.required],
+            selectedDrawing: ['', Validators.required],
         });
     }
 
-    handleSelection(event: any, ): void {
-      if (event.option.selected) {
-        event.source.deselectAll();
-        event.option._setSelected(true);
-        this.selectedOption = event.option.value;
-      }
+    handleSelection(event: any): void {
+        if (event.option.selected) {
+            event.source.deselectAll();
+            event.option._setSelected(true);
+            this.selectedOption = event.option.value;
+        }
     }
 
     onCancel(): void {
-      this.dialogRef.close();
+        this.dialogRef.close();
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 
     onSubmit() {
-      console.log(this.selectedOption);
+        console.log(this.selectedOption);
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 }

@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ModalManagerService {
     private modalIsDisplayed: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    currentDisplayNewDrawingModalWindow: Observable<boolean> = this.modalIsDisplayed.asObservable();
+    currentModalIsDisplayed: Observable<boolean> = this.modalIsDisplayed.asObservable();
 
     setModalIsDisplayed(isDisplayed: boolean) {
         this.modalIsDisplayed.next(isDisplayed);

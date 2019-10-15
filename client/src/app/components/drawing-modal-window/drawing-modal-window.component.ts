@@ -6,6 +6,7 @@ import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -26,6 +27,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private drawingModalWindowService: DrawingModalWindowService,
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
+        private modalManagerService: ModalManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -33,9 +35,6 @@ export class DrawingModalWindowComponent implements OnInit {
     ngOnInit(): void {
         this.previewColor = this.colorToolService.backgroundColor.value;
 
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
         this.colorToolService.previewColor.subscribe((previewColor) => {
             this.previewColor = previewColor;
         });
@@ -53,7 +52,6 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
         this.drawingModalWindowService.changeDrawingInfoWidthHeight(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
@@ -61,6 +59,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.drawingModalWindowService.blankDrawingZone.next(false);
         this.colorToolService.addColorToQueue(this.previewColor);
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 
     @HostListener('window:resize', ['$event'])
@@ -73,6 +72,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onCancel(): void {
         this.dialogRef.close();
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 
     getUserColorIcon(): IconStyle {
