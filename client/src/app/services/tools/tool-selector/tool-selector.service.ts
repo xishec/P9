@@ -13,6 +13,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { StampToolService } from '../stamp-tool/stamp-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,7 @@ export class ToolSelectorService {
     private rectangleTool: RectangleToolService;
     private pencilTool: PencilToolService;
     private brushTool: BrushToolService;
+    private stampTool: StampToolService;
     private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
 
@@ -43,6 +45,8 @@ export class ToolSelectorService {
 
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
+
+        this.stampTool = new StampToolService(drawStack, ref, renderer);
 
         this.dropperTool = new DropperToolService(drawStack, ref, renderer);
         this.dropperTool.initializeColorToolService(this.colorToolService);
@@ -74,6 +78,10 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
+    getStampToolService(): StampToolService {
+        return this.stampTool;
+    }
+
     getDropperTool(): DropperToolService {
         return this.dropperTool;
     }
@@ -83,6 +91,9 @@ export class ToolSelectorService {
     }
 
     changeTool(tooltipName: string): void {
+        if (this.currentTool instanceof StampToolService) {
+            this.currentTool.cleanUpStamp();
+        }
         switch (tooltipName) {
             case ToolName.NewDrawing:
                 this.displayNewDrawingModal();
@@ -97,6 +108,10 @@ export class ToolSelectorService {
                 break;
             case ToolName.Brush:
                 this.currentTool = this.brushTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Stamp:
+                this.currentTool = this.stampTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.ColorApplicator:

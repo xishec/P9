@@ -227,6 +227,8 @@ export class AppComponent implements OnInit {
             event.preventDefault();
             if (this.gridSize + 5 <= GridSize.Max) {
                 this.gridtoolService.changeSize(this.gridSize + 5);
+            } else {
+                this.gridtoolService.changeSize(GridSize.Max);
             }
         }
     }
@@ -235,6 +237,8 @@ export class AppComponent implements OnInit {
             event.preventDefault();
             if (this.gridSize + 5 <= GridSize.Max) {
                 this.gridtoolService.changeSize(this.gridSize + 5);
+            } else {
+                this.gridtoolService.changeSize(GridSize.Max);
             }
         }
     }
@@ -243,6 +247,8 @@ export class AppComponent implements OnInit {
             event.preventDefault();
             if (this.gridSize - 5 >= GridSize.Min) {
                 this.gridtoolService.changeSize(this.gridSize - 5);
+            } else {
+                this.gridtoolService.changeSize(GridSize.Min);
             }
         }
     }

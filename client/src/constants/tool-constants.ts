@@ -1,5 +1,7 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
+const NO_STAMP = '';
+
 enum ToolName {
     Selection = 'Sélection',
     Pencil = 'Crayon',
@@ -76,4 +78,51 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
-export { TOOLS_BUTTON_INFO, FILES_BUTTON_INFO, BRUSH_STYLES, Thickness, TraceType, ToolName, GridSize, GridOpacity };
+enum StampScaling {
+    Min = 0.1,
+    Default = 1.0,
+    Max = 10.0,
+}
+
+enum StampAngleOrientation {
+    Min = -360,
+    Default = 0,
+    Max = 360,
+}
+
+const STAMP_TYPES = [
+    '',
+    '/assets/stamps/iconmonstr-smiley-14.svg',
+    '/assets/stamps/iconmonstr-cat-7.svg',
+    '/assets/stamps/iconmonstr-coin-3.svg',
+    '/assets/stamps/iconmonstr-home-8.svg',
+    '/assets/stamps/iconmonstr-glasses-12.svg',
+];
+
+const STAMP_NAMES = ['Aucun', 'Smiley', 'Chat', 'Argent', 'Maison', 'Hipster'];
+
+const STAMPS_MAP: Map<number, string> = new Map([
+    [0, NO_STAMP],
+    [1, '/assets/stamps/iconmonstr-smiley-14.svg'],
+    [2, '/assets/stamps/iconmonstr-cat-7.svg'],
+    [3, '/assets/stamps/iconmonstr-coin-3.svg'],
+    [4, '/assets/stamps/iconmonstr-home-8.svg'],
+    [5, '/assets/stamps/iconmonstr-glasses-12.svg'],
+]);
+
+export {
+    TOOLS_BUTTON_INFO,
+    FILES_BUTTON_INFO,
+    BRUSH_STYLES,
+    Thickness,
+    TraceType,
+    ToolName,
+    StampScaling,
+    StampAngleOrientation,
+    STAMP_TYPES,
+    STAMPS_MAP,
+    NO_STAMP,
+    STAMP_NAMES,
+    GridSize,
+    GridOpacity,
+};
