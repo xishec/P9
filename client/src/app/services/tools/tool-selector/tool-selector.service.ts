@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DrawingModalWindowComponent } from 'src/app/components/drawing-modal-window/drawing-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -13,6 +12,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { OpenFileModalWindowComponent } from 'src/app/components/open-file-modal-window/open-file-modal-window.component';
+import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,12 +26,17 @@ export class ToolSelectorService {
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
+    modalIsDisplayed: boolean = false;
 
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService,
-    ) {}
+        private modalManagerService: ModalManagerService
+    ) {
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        })
+    }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -51,9 +56,9 @@ export class ToolSelectorService {
         const newDrawingDialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
         });
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+        this.modalManagerService.setModalIsDisplayed(true);
         newDrawingDialogRef.afterClosed().subscribe(() => {
-            this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
+            this.modalManagerService.setModalIsDisplayed(false);
         });
     }
 
@@ -61,9 +66,9 @@ export class ToolSelectorService {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
             panelClass: 'myapp-min-width-dialog',
         });
-        // this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
+        this.modalManagerService.setModalIsDisplayed(true);
         openFileDialogRef.afterClosed().subscribe(() => {
-            // this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
+            this.modalManagerService.setModalIsDisplayed(false);
         });
     }
 
@@ -86,7 +91,9 @@ export class ToolSelectorService {
     changeTool(tooltipName: string): void {
         switch (tooltipName) {
             case ToolName.NewDrawing:
-                this.displayNewDrawingModal();
+                if (!this.modalIsDisplayed) {
+                    this.displayNewDrawingModal();
+                }
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
@@ -117,7 +124,9 @@ export class ToolSelectorService {
             case ToolName.Text:
             case ToolName.Save:
             case ToolName.ArtGallery:
-                this.displayOpenFileModal();
+                if (!this.modalIsDisplayed) {
+                    this.displayOpenFileModal();
+                }
                 break;
             case ToolName.Export:
                 this.currentTool = undefined;

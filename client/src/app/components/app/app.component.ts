@@ -47,7 +47,9 @@ export class AppComponent implements OnInit {
             this.isOnInput = isOnInput;
         });
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
-        this.openWelcomeModalWindow();
+        if (!this.modalIsDisplayed) {
+            this.openWelcomeModalWindow();
+        }
     }
 
     openWelcomeModalWindow(): void {
@@ -56,9 +58,11 @@ export class AppComponent implements OnInit {
                 panelClass: 'myapp-max-width-dialog',
                 disableClose: true,
             });
+            this.modalManagerService.setModalIsDisplayed(true);
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
                 displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
                 this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
+                this.modalManagerService.setModalIsDisplayed(false);
             });
         }
     }
