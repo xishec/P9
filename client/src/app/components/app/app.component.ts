@@ -56,12 +56,13 @@ export class AppComponent implements OnInit {
         if (this.displayWelcomeModalWindow) {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
-                disableClose: true,
             });
             this.modalManagerService.setModalIsDisplayed(true);
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
-                displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
-                this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
+                if (!displayWelcomeModalWindow) {
+                    displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
+                    this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
+                }
                 this.modalManagerService.setModalIsDisplayed(false);
             });
         }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
