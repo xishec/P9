@@ -139,6 +139,7 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Brush:
             case ToolName.Pencil:
             case ToolName.Rectangle:
+            case ToolName.Ellipsis:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };
