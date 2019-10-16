@@ -14,13 +14,12 @@
                 ></i>
             </label>
             <br />
-            <mat-slide-toggle formControlName="state" [checked]="onStateChange()"></mat-slide-toggle>
+            <mat-slide-toggle formControlName="state" [checked]="onStateChange()" color="primary"></mat-slide-toggle>
         </div>
 
         <div class="attribute">
             <label for="gridSize"> Taille des carrés</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="size"
                 (input)="onSizeSliderChange($event)"
                 [min]="gridSize.Min"
@@ -49,7 +48,6 @@
         <div class="attribute">
             <label for="gridOpacity"> Opacité des traits</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="opacity"
                 (input)="onOpacitySliderChange($event)"
                 [min]="gridOpacity.Min"
