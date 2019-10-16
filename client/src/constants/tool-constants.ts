@@ -49,6 +49,9 @@ enum GridOpacity {
     Max = 1,
 }
 
+const GRID_SIZE_INCREMENT = 5;
+const GRID_SIZE_DECREMENT = 5;
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
@@ -125,4 +128,6 @@ export {
     STAMP_NAMES,
     GridSize,
     GridOpacity,
+    GRID_SIZE_INCREMENT,
+    GRID_SIZE_DECREMENT,
 };

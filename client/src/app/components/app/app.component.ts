@@ -12,6 +12,7 @@ import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { timingSafeEqual } from 'crypto';
 
 @Component({
     selector: 'app-root',
@@ -25,9 +26,6 @@ export class AppComponent implements OnInit {
     displayWelcomeModalWindow = false;
     welcomeModalWindowClosed = false;
     isOnInput = false;
-
-    gridState = false;
-    gridSize = GridSize.Default;
 
     constructor(
         private basicService: IndexService,
@@ -60,13 +58,6 @@ export class AppComponent implements OnInit {
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
-
-        this.gridtoolService.currentState.subscribe((state: boolean) => {
-            this.gridState = state;
-        });
-        this.gridtoolService.currentSize.subscribe((size: number) => {
-            this.gridSize = size;
-        });
     }
 
     openWelcomeModalWindow(): void {
@@ -219,39 +210,25 @@ export class AppComponent implements OnInit {
     @HostListener('window:keydown.g', ['$event']) onG(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            if (!this.gridtoolService.workzoneIsEmpty) {
-                this.gridState ? this.gridtoolService.changeState(false) : this.gridtoolService.changeState(true);
-            }
+            this.gridtoolService.switchState();
         }
     }
     @HostListener('window:keydown.+', ['$event']) onPlus(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            if (this.gridSize + 5 <= GridSize.Max) {
-                this.gridtoolService.changeSize(this.gridSize + 5);
-            } else {
-                this.gridtoolService.changeSize(GridSize.Max);
-            }
+            this.gridtoolService.incrementSize();
         }
     }
     @HostListener('window:keydown.shift.+', ['$event']) onShiftPlus(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            if (this.gridSize + 5 <= GridSize.Max) {
-                this.gridtoolService.changeSize(this.gridSize + 5);
-            } else {
-                this.gridtoolService.changeSize(GridSize.Max);
-            }
+            this.gridtoolService.incrementSize();
         }
     }
     @HostListener('window:keydown.-', ['$event']) onMinus(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            if (this.gridSize - 5 >= GridSize.Min) {
-                this.gridtoolService.changeSize(this.gridSize - 5);
-            } else {
-                this.gridtoolService.changeSize(GridSize.Min);
-            }
+            this.gridtoolService.decrementSize();
         }
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { GridOpacity, GridSize, GRID_SIZE_INCREMENT, GRID_SIZE_DECREMENT } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
@@ -30,8 +30,30 @@ export class GridToolService {
         }
     }
 
+    switchState() {
+        this.state.value ? this.changeState(false) : this.changeState(true);
+    }
+
     changeSize(size: number) {
         this.size.next(size);
+    }
+
+    incrementSize() {
+        const gridSize = this.size.value;
+        if (this.size.value + GRID_SIZE_INCREMENT <= GridSize.Max) {
+            this.changeSize(gridSize + GRID_SIZE_INCREMENT);
+        } else {
+            this.changeSize(GridSize.Max);
+        }
+    }
+
+    decrementSize() {
+        const gridSize = this.size.value;
+        if (gridSize - GRID_SIZE_DECREMENT >= GridSize.Min) {
+            this.changeSize(gridSize - GRID_SIZE_DECREMENT);
+        } else {
+            this.changeSize(GridSize.Min);
+        }
     }
 
     changeOpacity(opacity: number) {
