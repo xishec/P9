@@ -35,16 +35,14 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
-            selectedDrawing: ['', Validators.required],
+            selectedDrawing: [[this.selectedOption], Validators.required],
         });
     }
 
     handleSelection(event: any): void {
-        if (event.option.selected) {
-            event.source.deselectAll();
-            event.option._setSelected(true);
-            this.selectedOption = event.option.value;
-        }
+        this.selectedOption = event.option.selected ? event.option.value : '';
+        this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
+        console.log(this.openFileModalForm.value.selectedDrawing);
     }
 
     onCancel(): void {
@@ -55,5 +53,9 @@ export class OpenFileModalWindowComponent implements OnInit {
     onSubmit() {
         console.log(this.selectedOption);
         this.modalManagerService.setModalIsDisplayed(false);
+    }
+
+    formIsInvalid() {
+        return this.openFileModalForm.value.selectedDrawing[0] === '';
     }
 }
