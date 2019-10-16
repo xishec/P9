@@ -16,6 +16,7 @@ import {
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************
@@ -40,12 +41,13 @@ import { ColorPickerComponent } from './components/color-palette/color-picker/co
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
+import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
+import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 
 @NgModule({
     declarations: [
@@ -64,6 +66,7 @@ import { EllipsisAttributesComponent } from './components/sidebar-tools/attribut
         ColorAttributesComponent,
         ColorApplicatorAttributesComponent,
         ColorNumericValuesComponent,
+        GridAttributesComponent,
         LineAttributesComponent,
         StampAttributesComponent,
         DropperAttributesComponent,
@@ -86,6 +89,7 @@ import { EllipsisAttributesComponent } from './components/sidebar-tools/attribut
         MatSliderModule,
         MatSelectModule,
         MatFormFieldModule,
+        MatSlideToggleModule,
     ],
     entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
