@@ -16,9 +16,11 @@ export class FileManagerController {
 		this.router = Router();
 
 		this.router.post('/open', async (req: Request, res: Response, next: NextFunction) => {
-			// Send the request to the service and send the response
-			let name = req.body.body;
-			Post.findOne({ title: name })
+			let message: Message = req.body;
+
+			let query = { title: message.body };
+
+			Post.findOne(query)
 				.then((ans: Message) => {
 					res.json(ans);
 				})
@@ -28,16 +30,14 @@ export class FileManagerController {
 		});
 
 		this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
-			// Send the request to the service and send the response
+			let message: Message = req.body;
 
-			let query = { title: req.body.title };
-			let update = { body: req.body.body };
+			let query = { title: message.title };
+			let update = { body: message.body };
 			let options = { upsert: true, new: true };
-			console.log('/save');
 
 			Post.findOneAndUpdate(query, update, options)
 				.then((ans: Message) => {
-					// console.log(ans);
 					res.json(ans);
 				})
 				.catch((error: Error) => {
