@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { GridOpacity, GridSize, GRID_SIZE_INCREMENT, GRID_SIZE_DECREMENT } from 'src/constants/tool-constants';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { MatSliderChange } from '@angular/material';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',

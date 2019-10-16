@@ -10,12 +10,12 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { DropperToolService } from '../dropper-tool/dropper-tool.service';
+import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
-import { DropperToolService } from '../dropper-tool/dropper-tool.service';
-import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -37,7 +37,7 @@ export class ToolSelectorService {
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService,
+        private drawingModalWindowService: DrawingModalWindowService
     ) {}
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -63,7 +63,6 @@ export class ToolSelectorService {
 
         this.lineToolService = new LineToolService(ref, renderer, drawStack);
         this.lineToolService.initializeColorToolService(this.colorToolService);
-
     }
 
     displayNewDrawingModal(): void {
@@ -141,11 +140,11 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case ToolName.Line:
-                this.currentTool = this.lineToolService;
+            case ToolName.Grid:
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case ToolName.Grid:
+            case ToolName.Line:
+                this.currentTool = this.lineToolService;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Dropper:

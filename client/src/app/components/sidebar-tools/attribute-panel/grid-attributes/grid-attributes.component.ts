@@ -20,7 +20,7 @@ export class GridAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService
+        private gridToolService: GridToolService,
     ) {
         this.formBuilder = formBuilder;
     }
