@@ -84,3 +84,38 @@ fdescribe('LineToolService', () => {
 
         expect(resYPos).toBe(clientY - BOUNDTOP);
     });
+
+    it('should call startLine onMouseDown if Mouse.LeftButton and !isDrawing', () => {
+        const spyOnStartLine = spyOn(service, 'startLine');
+        service.isDrawing = false;
+
+        service.onMouseDown(mockLeftButton);
+
+        expect(spyOnStartLine).toHaveBeenCalled();
+    });
+
+    it('should call appendLine onMouseDown if Mouse.LeftButton and isDrawing', () => {
+        const spyOnAppendLine = spyOn(service, 'appendLine');
+        service.isDrawing = true;
+
+        service.onMouseDown(mockLeftButton);
+
+        expect(spyOnAppendLine).toHaveBeenCalled();
+    });
+
+    it('should call appendCircle onMouseDown if Mouse.LeftButton and currentJointType is Circle', () => {
+        const spyOnAppendCircle = spyOn(service, 'appendCircle');
+        service.currentJointType = LineJointType.Circle;
+
+        service.onMouseDown(mockLeftButton);
+
+        expect(spyOnAppendCircle).toHaveBeenCalled();
+    });
+
+    it('isMouseDown should be true when onMouseDown', () => {
+        service.isMouseDown = false;
+
+        service.onMouseDown(mockLeftButton);
+
+        expect(service.isMouseDown).toBeTruthy();
+    });
