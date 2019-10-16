@@ -1,8 +1,8 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +21,7 @@ export class DropperToolService extends AbstractToolService {
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
     }
@@ -45,7 +45,7 @@ export class DropperToolService extends AbstractToolService {
         this.renderer.setProperty(
             this.canvas,
             'height',
-            this.svgReference.nativeElement.getBoundingClientRect().height
+            this.svgReference.nativeElement.getBoundingClientRect().height,
         );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
