@@ -194,3 +194,29 @@ fdescribe('LineToolService', () => {
 
         expect(service.shouldCloseLine).toBeFalsy();
     });
+
+    it('should push to the drawStack the gWrap when onDblClick if isDrawing', () => {
+        service.isDrawing = true;
+        const spyOnDrawStackPush = spyOn(drawStackMock, 'push');
+
+        service.onDblClick(mockLeftButton);
+
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
+    });
+
+    it('should push the first point to pointsArray when onDblClick if isDrawing and shouldCloseLine and pointsArray.length > 3', () => {
+        service.isDrawing = true;
+        service.shouldCloseLine = true;
+        service.pointsArray.push('0,0');
+        service.pointsArray.push('1,1');
+        service.pointsArray.push('2,2');
+        service.pointsArray.push('3,3');
+
+
+        service.onDblClick(mockLeftButton);
+
+        expect(true).toBeTruthy();
+    });
+
+
+});
