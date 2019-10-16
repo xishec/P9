@@ -27,10 +27,15 @@ export class DrawStackService {
     }
 
     makeTargetable(el: SVGGElement): SVGGElement {
-        this.renderer.setAttribute(el, 'id', 'fuck');
-        // for (let i = 0; i < el.children.length; i++) {
-        //     this.renderer.listen(el.children.item(i), 'mousedown', () => {console.log('fuck');});
-        // }
+        const position = this.drawStack.length;
+        const tool = el.getAttribute('title');
+        this.renderer.setAttribute(el, 'id', position.toString());
+
+        for (let i = 0; i < el.children.length; i++) {
+            this.renderer.listen(el.children.item(i), 'mousedown', () => {
+                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+            });
+        }
 
         return el;
     }
