@@ -137,3 +137,51 @@ fdescribe('LineToolService', () => {
 
         expect(spyOnPreviewLine).toHaveBeenCalled();
     });
+
+    it('shouldCloseLine should be true when onKeyDown with shift', () => {
+        const mockShift = createKeyBoardEvent(Keys.Shift);
+
+        service.onKeyDown(mockShift);
+
+        expect(service.shouldCloseLine).toBeTruthy();
+    });
+
+    it('should call renderer.removeChild() when onKeyDown with escape', () => {
+        const mockEscape = createKeyBoardEvent(Keys.Escape);
+        const spyOnRendererRemoveChild = spyOn(rendererMock, 'removeChild');
+
+        service.onKeyDown(mockEscape);
+
+        expect(spyOnRendererRemoveChild).toHaveBeenCalled();
+    });
+
+    it('should remove last point when onKeyDown with Backspace and pointsArray.length > 1', () => {
+        service.pointsArray.push('0,0');
+        const pointToPop = '1,1';
+        service.pointsArray.push(pointToPop);
+        const arrayLengthBefore = service.pointsArray.length;
+
+        const mockBackspace = createKeyBoardEvent(Keys.Backspace);
+
+        service.onKeyDown(mockBackspace);
+        
+        const arrayLengthAfter = service.pointsArray.length;
+        expect(arrayLengthAfter).toBe(arrayLengthBefore - 1);
+        expect(service.pointsArray).not.toContain(pointToPop);
+    });
+
+    it('should remove last jointCircle when onKeyDown with Backspace and pointsArray.length > 1 and jointType is circle', () => {
+        const circle1 = createMockSVGCircle();
+        const circle2 = createMockSVGCircle();
+        service.pointsArray.push('0,0');
+        service.pointsArray.push('1,1');
+        service.jointCircles.push(circle1);
+        service.jointCircles.push(circle2);
+        service.currentJointType = LineJointType.Circle;
+
+        const mockBackspace = createKeyBoardEvent(Keys.Backspace);
+
+        service.onKeyDown(mockBackspace);
+
+        expect(service.jointCircles).not.toContain(circle2);
+    });
