@@ -251,5 +251,39 @@ fdescribe('LineToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linejoin', 'round');
     });
 
+    it('should call renderer.setAttribute with currentLine, points, arrayToStringLine + currentMousePosition when previewLine', () => {
+        const x = 10;
+        const y = 10;
+        const mousePosition = `${x.toString()},${y.toString()}`;
+        const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
+        service.pointsArray.push('0,0');
+        const stringPointsArray = service.arrayToStringLine();
+        service.currentLine = MOCK_LINE;
+
+
+        service.previewLine(x,y);
+
+        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray} ${mousePosition}`);
+    });
+
+    it('should call renderer.setAttribute with currentLine, points, arrayToStringLine when appendLine', () => {
+        const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
+        service.pointsArray.push('0,0');
+        service.currentLine = MOCK_LINE;
+
+        service.appendLine(10,10);
+
+        const stringPointsArray = service.arrayToStringLine();
+        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray}`);
+    });
+
+    it('should call renderer.appendChild when appendCircle', () => {
+        const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
+
+        service.appendCircle(0,0);
+
+        expect(spyOnRendererSetAttribute).toHaveBeenCalled();
+    })
+
 
 });
