@@ -185,3 +185,12 @@ fdescribe('LineToolService', () => {
 
         expect(service.jointCircles).not.toContain(circle2);
     });
+
+    it('shouldCloseLine should be true when onKeyUp with shift', () => {
+        const mockShift = createKeyBoardEvent(Keys.Shift);
+        service.shouldCloseLine = true;
+
+        service.onKeyUp(mockShift);
+
+        expect(service.shouldCloseLine).toBeFalsy();
+    });
