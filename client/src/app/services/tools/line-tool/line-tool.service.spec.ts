@@ -2,9 +2,9 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { LineToolService } from './line-tool.service';
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle } from 'src/classes/test-helpers';
+import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockSVGLine } from 'src/classes/test-helpers';
 import { Mouse, Keys } from 'src/constants/constants';
-import { LineJointType } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 fdescribe('LineToolService', () => {
@@ -18,13 +18,15 @@ fdescribe('LineToolService', () => {
     const BOUNDLEFT = 0;
     const BOUNDTOP = 0;
 
+    const MOCK_LINE = createMockSVGLine();
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 {
                     provide: Renderer2,
                     useValue: {
-                        createElement: () => null,
+                        createElement: () => MOCK_LINE,
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
@@ -204,18 +206,49 @@ fdescribe('LineToolService', () => {
         expect(spyOnDrawStackPush).toHaveBeenCalled();
     });
 
-    it('should push the first point to pointsArray when onDblClick if isDrawing and shouldCloseLine and pointsArray.length > 3', () => {
+    it('should vall pointsArray.push when onDblClick if isDrawing and shouldCloseLine and pointsArray.length > 3', () => {
         service.isDrawing = true;
         service.shouldCloseLine = true;
         service.pointsArray.push('0,0');
         service.pointsArray.push('1,1');
         service.pointsArray.push('2,2');
         service.pointsArray.push('3,3');
-
+        const spyOnPointsArrayPush = spyOn(service.pointsArray, 'push');
 
         service.onDblClick(mockLeftButton);
 
-        expect(true).toBeTruthy();
+        expect(spyOnPointsArrayPush).toHaveBeenCalled();
+    });
+
+    it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is Dotted_line', () => {
+        service.currentStrokeType = LineStrokeType.Dotted_line;
+        service.currentJointType = LineJointType.Straight;
+        const mockCurrentStrokeWidth = 10;
+        service.currentStrokeWidth = mockCurrentStrokeWidth;
+        const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+
+        service.startLine(0,0);
+
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-dasharray', `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth/2}`);
+    });
+
+    it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
+        service.currentStrokeType = LineStrokeType.Dotted_circle;
+        service.currentJointType = LineJointType.Straight;
+        const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+
+        service.startLine(0,0);
+
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linecap', 'round');
+    });
+
+    it('should call renderer.setAttribute with currentLine, stroke-linejoin, round when startLine if jointType is Circle', () => {
+        service.currentJointType = LineJointType.Circle;
+        const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+
+        service.startLine(0,0);
+
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linejoin', 'round');
     });
 
 
