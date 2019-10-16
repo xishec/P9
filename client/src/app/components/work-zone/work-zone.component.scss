@@ -5,6 +5,10 @@
     margin: 0;
 }
 
+.grid {
+    pointer-events: none;
+}
+
 svg {
     position: absolute;
     top: 0px;
