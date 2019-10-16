@@ -1,5 +1,3 @@
-// import { ToolName } from 'src/constants/tool-constants';
-
 export class StackTargetInfo {
     targetPosition: number;
     toolName: string;

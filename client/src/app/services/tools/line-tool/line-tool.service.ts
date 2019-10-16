@@ -147,7 +147,6 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentStrokeWidth.toString());
-        //this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
         this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
