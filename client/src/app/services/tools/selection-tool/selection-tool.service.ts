@@ -35,7 +35,6 @@ export class SelectionToolService extends AbstractToolService {
             if (stackTarget.targetPosition !== undefined) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
-                //this.singlySelect(stackTarget.targetPosition);
             }
         });
     }
@@ -131,7 +130,6 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     singlySelect(stackPosition: number): void {
-        console.log('singly');
         if (this.hasSelected()) {
             this.isManipulating = false;
             this.clearSelection();
@@ -309,8 +307,6 @@ export class SelectionToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        console.log('mousedown');
-
         switch (button) {
             case Mouse.LeftButton:
                 this.initialMouseX = this.currentMouseX;
@@ -336,8 +332,6 @@ export class SelectionToolService extends AbstractToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-
-        console.log('mouseup');
 
         switch (button) {
             case Mouse.LeftButton:
