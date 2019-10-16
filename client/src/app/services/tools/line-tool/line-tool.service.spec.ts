@@ -6,6 +6,9 @@ import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockS
 import { Mouse, Keys } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
+import { BehaviorSubject } from 'rxjs';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 fdescribe('LineToolService', () => {
 
@@ -69,6 +72,28 @@ fdescribe('LineToolService', () => {
     
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('initializeColorToolService should be primaryColor from colorService', () => {
+        const colorService: ColorToolService = new ColorToolService();
+        const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
+        service.initializeColorToolService(new ColorToolService());
+        expect(service[`currentColor`]).toEqual(primaryColorTmp.value);
+    });
+
+    it('initializeAttributesManagerService should set strokeWidth, strokeType, jointType and circleJointDiameter', () => {
+        const attributeManagerService: AttributesManagerService = new AttributesManagerService();
+        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`_thickness`];
+        const strokeType: BehaviorSubject<number> = attributeManagerService[`lineStrokeType`];
+        const jointType: BehaviorSubject<number> = attributeManagerService[`lineJointType`];
+        const jointDiameter: BehaviorSubject<number> = attributeManagerService[`circleJointDiameter`];
+
+        service.initializeAttributesManagerService(new AttributesManagerService());
+
+        expect(service.currentStrokeWidth).toEqual(strokeWidth.value);
+        expect(service.currentStrokeType).toEqual(strokeType.value);
+        expect(service.currentJointType).toEqual(jointType.value);
+        expect(service.currentCircleJointDiameter).toEqual(jointDiameter.value);
     });
 
     it('getXPos should return clientX - BOUNDLEFT', () => {
