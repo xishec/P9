@@ -17,7 +17,7 @@ export class FileManagerService {
         return this.http.post<Message>(environment.BASE_URL + '/api/file-manager/open', message);
     }
 
-    postDrawing(name: string, svg: string, idStack: string[]) {
+    postDrawing(name: string, svg: string, idStack: string[]): void {
         let drawing: Drawing = { name: name, svg: svg, idStack: [...idStack] };
         let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
         this.http.post<Message>(environment.BASE_URL + '/api/file-manager/save', message).subscribe((responseData) => {
