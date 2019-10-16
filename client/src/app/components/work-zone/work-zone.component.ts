@@ -11,7 +11,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
-import { IndexService } from '../../services/index/index.service';
+import { IndexService } from '../../services/server/index/index.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 
 @Component({
