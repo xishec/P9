@@ -1,5 +1,4 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SVG_NS, Keys } from 'src/constants/constants';
 import { ToolName, TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -268,11 +267,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
         this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
         this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
-
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        drawEllipse.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Rectangle));
-        });
+        this.renderer.setAttribute(el, 'title', ToolName.Ellipsis);
 
         this.renderer.appendChild(el, drawEllipse);
         this.drawStack.push(el);

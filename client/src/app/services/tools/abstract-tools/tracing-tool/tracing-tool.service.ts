@@ -5,6 +5,7 @@ import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
+import { ToolName } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -100,6 +101,7 @@ export abstract class TracingToolService extends AbstractToolService {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
         this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, 'title', ToolName.Pencil);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
