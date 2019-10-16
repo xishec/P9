@@ -283,6 +283,25 @@ fdescribe('LineToolService', () => {
         service.appendCircle(0,0);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should return all points join with space when arrayToString', () => {
+        service.pointsArray.push('0,0');
+        service.pointsArray.push('1,1');
+        const expectedString = '0,0 1,1';
+
+        const resultString = service.arrayToStringLine();
+
+        expect(resultString).toBe(expectedString);
+    });
+
+    it('should push gWrap when cleanUp if !isLineInStack', () => {
+        service.isLineInStack = false;
+        const spyOnDrawStackPush = spyOn(drawStackMock, 'push');
+
+        service.cleanUp();
+
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
     })
 
 
