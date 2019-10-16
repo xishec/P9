@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { LineJointType, LineStrokeType, STAMP_TYPES, StampAngleOrientation, StampScaling,
-    Thickness, TraceType } from 'src/constants/tool-constants';
+import {
+    LineJointType,
+    LineStrokeType,
+    STAMP_TYPES,
+    StampAngleOrientation,
+    StampScaling,
+    Thickness,
+    TraceType,
+} from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -25,6 +32,7 @@ export class AttributesManagerService {
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
     private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
@@ -64,7 +72,7 @@ export class AttributesManagerService {
     changeNbVertices(sideNum: number): void {
         this.nbVertices.next(sideNum);
     }
-  
+
     changeScaling(scaling: number): void {
         this.scaling.next(scaling);
     }
