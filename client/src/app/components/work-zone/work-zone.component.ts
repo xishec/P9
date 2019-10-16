@@ -2,15 +2,16 @@ import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } fro
 
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { ToolName } from 'src/constants/tool-constants';
+import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -19,11 +20,16 @@ import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.serv
 })
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
 
     currentTool: AbstractToolService | undefined;
     empty = true;
+
+    gridIsActive = false;
+    gridSize = GridSize.Default;
+    gridOpacity = GridOpacity.Max;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -33,6 +39,7 @@ export class WorkZoneComponent implements OnInit {
         private drawStackService: DrawStackService,
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
+        private gridToolService: GridToolService,
     ) {}
 
     ngOnInit(): void {
@@ -65,6 +72,17 @@ export class WorkZoneComponent implements OnInit {
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
+
+        this.gridToolService.currentState.subscribe((state: boolean) => {
+            this.gridIsActive = state;
+        });
+
+        this.gridToolService.currentSize.subscribe((size: number) => {
+            this.gridSize = size;
+        });
+        this.gridToolService.currentOpacity.subscribe((opacity: number) => {
+            this.gridOpacity = opacity;
+        });
     }
 
     onClickRectangle() {

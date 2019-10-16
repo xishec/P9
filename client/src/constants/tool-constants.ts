@@ -19,7 +19,7 @@ enum ToolName {
     Eraser = 'Efface',
     Text = 'Zone de texte',
     Stamp = 'Étampe',
-    Other = 'Autre',
+    Grid = 'Grille',
     NewDrawing = 'Nouveau dessin',
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
@@ -57,6 +57,20 @@ enum PolygonSides {
     Max = 12,
 }
 
+enum GridSize {
+    Min = 5,
+    Default = 10,
+    Max = 200,
+}
+
+enum GridOpacity {
+    Min = 0.2,
+    Max = 1,
+}
+
+const GRID_SIZE_INCREMENT = 5;
+const GRID_SIZE_DECREMENT = 5;
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
@@ -74,7 +88,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser, shortcut: '(E)' },
     { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: ToolName.Stamp, shortcut: '' },
-    { iconName: 'fas fa-ellipsis-v', tooltipName: ToolName.Other, shortcut: '' },
+    { iconName: 'fas fa-border-all', tooltipName: ToolName.Grid, shortcut: '' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -173,5 +187,9 @@ export {
     NO_STAMP,
     STAMP_NAMES,
     LineStrokeType,
-    LineJointType
+    LineJointType,
+    GridSize,
+    GridOpacity,
+    GRID_SIZE_INCREMENT,
+    GRID_SIZE_DECREMENT,
 };
