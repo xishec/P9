@@ -12,7 +12,6 @@ import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 
@@ -23,6 +22,10 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 })
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+
+    gridIsActive = false;
+    gridSize = GridSize.Default;
+    gridOpacity = GridOpacity.Max;
 
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
