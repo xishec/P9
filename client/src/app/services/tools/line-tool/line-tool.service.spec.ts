@@ -1,16 +1,16 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { LineToolService } from './line-tool.service';
-import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockSVGLine } from 'src/classes/test-helpers';
 import { Mouse, Keys } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { BehaviorSubject } from 'rxjs';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
-fdescribe('LineToolService', () => {
+describe('LineToolService', () => {
 
     let injector: TestBed;
     let service: LineToolService;
