@@ -46,6 +46,8 @@ import { StampAttributesComponent } from './components/sidebar-tools/attribute-p
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
+import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 
 @NgModule({
     declarations: [
@@ -67,6 +69,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         GridAttributesComponent,
         StampAttributesComponent,
         DropperAttributesComponent,
+        EllipsisAttributesComponent,
     ],
     imports: [
         MatSliderModule,
