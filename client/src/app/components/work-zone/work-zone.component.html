@@ -15,3 +15,30 @@
 <input id="input" placeholder="Name" [(ngModel)]="name" />
 <button id="save" (click)="save()">save</button>
 <button id="load" (click)="load()">load</button>
+
+<svg
+    *ngIf="gridIsActive === true"
+    [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
+    [attr.width]="drawingInfo.width"
+    [attr.height]="drawingInfo.height"
+>
+    <defs>
+        <pattern id="smallGrid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <path
+                d="M 200 0 L 0 0 0 200"
+                fill="none"
+                stroke="gray"
+                stroke-width="2"
+                [attr.stroke-opacity]="gridOpacity"
+            />
+        </pattern>
+        <pattern id="grid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <rect width="200" height="200" fill="url(#smallGrid)" />
+        </pattern>
+    </defs>
+    <rect
+        [attr.height]="this.drawingInfo.height + 'px'"
+        [attr.width]="this.drawingInfo.width + 'px'"
+        fill="url(#grid)"
+    />
+</svg>

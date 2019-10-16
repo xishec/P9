@@ -8,7 +8,7 @@ describe('EllipsisAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EllipsisAttributesComponent ]
+      declarations: [ EllipsisAttributesComponent ],
     })
     .compileComponents();
   }));
