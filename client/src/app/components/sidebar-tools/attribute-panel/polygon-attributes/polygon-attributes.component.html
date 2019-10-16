@@ -5,7 +5,6 @@
         <div id="thickness">
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="thickness"
                 (input)="onThicknessSliderChange($event)"
                 [min]="thickness.Min"
@@ -40,7 +39,6 @@
         <div id="nbVertices">
             <label for="nbVertices">Nombre de côtés</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="nbVertices"
                 (input)="onNbVerticesSliderChange($event)"
                 [min]="polygonSides.Min"

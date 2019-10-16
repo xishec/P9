@@ -66,7 +66,6 @@ export class PolygonAttributesComponent implements OnInit {
     }
 
     onNbVerticesSliderChange(event: MatSliderChange) {
-        //TODO: Change Thickness for the sidenumber enum && predicat for min/max
         if (event.value !== null && event.value <= PolygonSides.Max && event.value >= PolygonSides.Min) {
             this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
             this.onNbVerticesChange();
