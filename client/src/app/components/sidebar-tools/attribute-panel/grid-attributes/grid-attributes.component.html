@@ -14,7 +14,12 @@
                 ></i>
             </label>
             <br />
-            <mat-slide-toggle formControlName="state" [checked]="onStateChange()" color="primary"></mat-slide-toggle>
+            <mat-slide-toggle
+                formControlName="state"
+                [checked]="onStateChange()"
+                color="primary"
+                [disabled]="isWorkzoneEmpty()"
+            ></mat-slide-toggle>
         </div>
 
         <div class="attribute">

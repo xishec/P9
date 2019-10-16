@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
         private toolSelectorService: ToolSelectorService,
         private drawingModalWindowService: DrawingModalWindowService,
         private shortcutManagerService: ShortcutManagerService,
-        private gridtoolService: GridToolService,
+        private gridtoolService: GridToolService
     ) {
         this.basicService
             .basicGet()
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
             (displayNewDrawingModalWindow: boolean) => {
                 this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-            },
+            }
         );
         this.shortcutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
         this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
             (welcomeModalWindowClosed: boolean) => {
                 this.welcomeModalWindowClosed = welcomeModalWindowClosed;
-            },
+            }
         );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
         this.openWelcomeModalWindow();
@@ -219,7 +219,9 @@ export class AppComponent implements OnInit {
     @HostListener('window:keydown.g', ['$event']) onG(event: KeyboardEvent) {
         if (this.shouldAllowShortcut()) {
             event.preventDefault();
-            this.gridState ? this.gridtoolService.changeState(false) : this.gridtoolService.changeState(true);
+            if (!this.gridtoolService.workzoneIsEmpty) {
+                this.gridState ? this.gridtoolService.changeState(false) : this.gridtoolService.changeState(true);
+            }
         }
     }
     @HostListener('window:keydown.+', ['$event']) onPlus(event: KeyboardEvent) {

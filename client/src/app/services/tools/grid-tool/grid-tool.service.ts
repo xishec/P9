@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GridToolService {
+    workzoneIsEmpty = true;
+
+    constructor(private drawingModalWindowService: DrawingModalWindowService) {
+        this.drawingModalWindowService.drawingInfo.subscribe(() => {
+            this.workzoneIsEmpty = false;
+        });
+        this.workzoneIsEmpty = true;
+    }
+
     state: BehaviorSubject<boolean> = new BehaviorSubject(false);
     size: BehaviorSubject<number> = new BehaviorSubject(GridSize.Default);
     opacity: BehaviorSubject<number> = new BehaviorSubject(GridOpacity.Max);
@@ -15,7 +25,9 @@ export class GridToolService {
     currentOpacity: Observable<number> = this.opacity.asObservable();
 
     changeState(state: boolean) {
-        this.state.next(state);
+        if (this.workzoneIsEmpty === false) {
+            this.state.next(state);
+        }
     }
 
     changeSize(size: number) {

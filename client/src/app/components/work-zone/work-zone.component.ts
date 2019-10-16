@@ -38,7 +38,7 @@ export class WorkZoneComponent implements OnInit {
         private drawStackService: DrawStackService,
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private gridToolService: GridToolService,
+        private gridToolService: GridToolService
     ) {}
 
     ngOnInit(): void {
