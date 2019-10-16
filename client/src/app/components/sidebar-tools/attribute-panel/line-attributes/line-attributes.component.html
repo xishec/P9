@@ -1,0 +1,98 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="lineAttributesForm">
+        <div class="attribute">
+            <label for="thickness">Épaisseur du trait</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="thickness"
+                (input)="onSliderChange($event)"
+                [min]="Thickness.Min"
+                value="{{ lineAttributesForm.value.thickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="thickness"
+                    (input)="onThicknessChange()"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>
+                    Style de trait
+                </mat-label>
+                <mat-select
+                    formControlName="lineStrokeType"
+                    (selectionChange)="onLineStrokeTypeChange($event.value)"
+                    [(value)]="selected"
+                    [ngClass]="selected ? 'strokeType' + selected : 'strokeType1'"
+                >
+                    <mat-option *ngFor="let strokeType of LineStrokeTypeChoices" [value]="strokeType">
+                        {{ strokeType }}
+                        <img height="40" src="/assets/strokeType{{ strokeType }}.png" />
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>
+                    Style de Jointure
+                </mat-label>
+                <mat-select
+                    formControlName="lineJointType"
+                    (selectionChange)="onLineJointTypeChange($event.value)"
+                >
+                    <mat-option [value]="1">
+                        1 - Arrondi
+                    </mat-option>
+                    <mat-option [value]="2">
+                        2 - Angle
+                    </mat-option>
+                    <mat-option [value]="3">
+                        3 - Cercle
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="circleJointSelected">
+                <label for="thickness">Diamètre des cercles</label>
+                    <mat-slider
+                        placeholder="Hex"
+                        formControlName="circleJointDiameter"
+                        (input)="onCircleJointSliderChange($event)"
+                        [min]="Thickness.Min"
+                        value="{{ lineAttributesForm.value.circleJointDiameter }}"
+                    ></mat-slider>
+                    <mat-form-field class="small">
+                        <input
+                            autocomplete="off"
+                            (focus)="onFocus()"
+                            (focusout)="onFocusOut()"
+                            matInput
+                            type="number"
+                            formControlName="circleJointDiameter"
+                            (input)="onCircleJointDiameterChange()"
+                            [min]="Thickness.Min"
+                            [max]="Thickness.Max"
+                        />
+                    <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                    <span matSuffix>px</span>
+                </mat-form-field>
+            </div>
+            
+
+        </div>
+    </form>
+</div>
