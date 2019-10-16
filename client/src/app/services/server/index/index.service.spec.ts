@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { Message } from '../../../../../common/communication/message';
+import { Message } from '../../../../../../common/communication/message';
 import { IndexService } from './index.service';
 import SpyObj = jasmine.SpyObj;
 

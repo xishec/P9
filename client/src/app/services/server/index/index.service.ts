@@ -3,30 +3,31 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Drawing } from '../../../../../common/communication/Drawing';
-import { Message } from '../../../../../common/communication/message';
+import { Drawing } from '../../../../../../common/communication/Drawing';
+import { Message } from '../../../../../../common/communication/message';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class IndexService {
-    private readonly BASE_URL: string = 'http://localhost:3000/api/index';
-
     constructor(private http: HttpClient) {}
 
     basicGet(): Observable<Message> {
-        return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
+        return this.http
+            .get<Message>(environment.BASE_URL + '/api/index')
+            .pipe(catchError(this.handleError<Message>('basicGet')));
     }
 
     getDrawing(name: string): Observable<Message> {
         let message: Message = { title: 'Send Drawing Name ', body: 'Add Drawing ' + name };
-        return this.http.post<Message>('http://localhost:3000/api/file-manager/open', message);
+        return this.http.post<Message>(environment.BASE_URL + '/file-manager/open', message);
     }
 
     postDrawing(name: string, svg: string, idStack: string[]) {
         let drawing: Drawing = { name: name, svg: svg, idStack: [...idStack] };
         let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
-        this.http.post<Message>('http://localhost:3000/api/file-manager/save', message).subscribe((responseData) => {
+        this.http.post<Message>(environment.BASE_URL + '/api/file-manager/save', message).subscribe((responseData) => {
             // console.log(responseData);
         });
     }
