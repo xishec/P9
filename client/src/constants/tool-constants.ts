@@ -113,6 +113,18 @@ const STAMPS_MAP: Map<number, string> = new Map([
     [5, '/assets/stamps/iconmonstr-glasses-12.svg'],
 ]);
 
+enum LineStrokeType {
+    Continuous = 1,
+    Dotted_line = 2,
+    Dotted_circle = 3,
+}
+
+enum LineJointType {
+    Curvy = 1,
+    Straight = 2,
+    Circle = 3,
+}
+
 export {
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
@@ -130,4 +142,6 @@ export {
     GridOpacity,
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
+    LineStrokeType,
+    LineJointType
 };
