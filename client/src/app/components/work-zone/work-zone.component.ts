@@ -25,25 +25,28 @@ export class WorkZoneComponent implements OnInit {
     currentTool: AbstractToolService | undefined;
     empty = true;
 
+    drawStack: DrawStackService;
+
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
-        private drawStackService: DrawStackService,
+        /*private drawStackService: DrawStackService,*/
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
     ) {}
 
     ngOnInit(): void {
-        this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
+        this.drawStack = new DrawStackService(this.renderer);
+        this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
-            for (const el of this.drawStackService.reset()) {
+            for (const el of this.drawStack.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
         });
