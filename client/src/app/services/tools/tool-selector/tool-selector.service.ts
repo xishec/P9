@@ -10,7 +10,7 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { DropperToolService } from '../dropper-tool/dropper-tool.service';
+import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
@@ -29,6 +29,7 @@ export class ToolSelectorService {
     private stampTool: StampToolService;
     private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
+    lineToolService: LineToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -59,6 +60,10 @@ export class ToolSelectorService {
 
         this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
+
+        this.lineToolService = new LineToolService(ref, renderer, drawStack);
+        this.lineToolService.initializeColorToolService(this.colorToolService);
+
     }
 
     displayNewDrawingModal(): void {
@@ -100,6 +105,10 @@ export class ToolSelectorService {
         return this.colorApplicatorTool;
     }
 
+    getLineTool(): LineToolService {
+        return this.lineToolService;
+    }
+
     changeTool(tooltipName: string): void {
         if (this.currentTool instanceof StampToolService) {
             this.currentTool.cleanUpStamp();
@@ -132,6 +141,10 @@ export class ToolSelectorService {
                 this.currentTool = this.colorApplicatorTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Line:
+                this.currentTool = this.lineToolService;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Grid:
                 this.changeCurrentToolName(tooltipName);
                 break;
@@ -143,7 +156,6 @@ export class ToolSelectorService {
             case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
-            case ToolName.Line:
             case ToolName.Polygon:
             case ToolName.Fill:
             case ToolName.Eraser:
