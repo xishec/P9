@@ -11,10 +11,12 @@ export class SelectionToolService extends AbstractToolService {
     currentMouseY = 0;
     initialMouseX = 0;
     initialMouseY = 0;
+    currentTarget = 0;
 
     isSelecting = false;
     isManipulating = false;
     isIn = false;
+    isOnTarget = false;
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     selectionBox: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
@@ -29,6 +31,13 @@ export class SelectionToolService extends AbstractToolService {
         super();
         this.initControlPoints();
         this.initSelectionBox();
+        this.drawStack.currentStackTarget.subscribe((stackTarget) => {
+            if (stackTarget.targetPosition !== undefined) {
+                this.currentTarget = stackTarget.targetPosition;
+                this.isOnTarget = true;
+                //this.singlySelect(stackTarget.targetPosition);
+            }
+        });
     }
 
     initControlPoints(): void {
@@ -119,6 +128,20 @@ export class SelectionToolService extends AbstractToolService {
             elTop > boxTop &&
             elBottom < boxBottom
         );
+    }
+
+    singlySelect(stackPosition: number): void {
+        console.log('singly');
+        if (this.hasSelected()) {
+            this.isManipulating = false;
+            this.clearSelection();
+            this.removeFullSelectionBox();
+        }
+        this.selection.add(this.drawStack.drawStack[stackPosition]);
+        this.isManipulating = true;
+        this.computeSelectionBox();
+        this.appendFullSelectionBox();
+        this.isOnTarget = false;
     }
 
     startSelection(): void {
@@ -286,12 +309,18 @@ export class SelectionToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
+        console.log('mousedown');
+
         switch (button) {
             case Mouse.LeftButton:
                 this.initialMouseX = this.currentMouseX;
                 this.initialMouseY = this.currentMouseY;
-                this.clearSelection();
-                this.startSelection();
+                if (this.isOnTarget) {
+                    this.singlySelect(this.currentTarget);
+                } else {
+                    this.clearSelection();
+                    this.startSelection();
+                }
                 break;
 
             case Mouse.RightButton:
@@ -307,6 +336,8 @@ export class SelectionToolService extends AbstractToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
+
+        console.log('mouseup');
 
         switch (button) {
             case Mouse.LeftButton:
