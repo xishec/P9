@@ -113,6 +113,11 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
     }
 
+    clearSelection(): void {
+        this.selection.clear();
+        this.isManipulating = false;
+    }
+
     invertSelection(): void {
         const invertedSelection: Set<SVGGElement> = new Set();
 
@@ -268,15 +273,10 @@ export class SelectionToolService extends AbstractToolService {
 
         switch (button) {
             case Mouse.LeftButton:
-                if (!this.isManipulating) {
-                    this.initialMouseX = this.currentMouseX;
-                    this.initialMouseY = this.currentMouseY;
-                    this.startSelection();
-                } else {
-                    this.selection.clear();
-                    this.removeFullSelectionBox();
-                    this.isManipulating = false;
-                }
+                this.initialMouseX = this.currentMouseX;
+                this.initialMouseY = this.currentMouseY;
+                this.clearSelection();
+                this.startSelection();
                 break;
 
             case Mouse.RightButton:
@@ -301,6 +301,9 @@ export class SelectionToolService extends AbstractToolService {
                     this.isManipulating = true;
                     this.computeSelectionBox();
                     this.appendFullSelectionBox();
+                } else {
+                    this.clearSelection();
+                    this.removeFullSelectionBox();
                 }
                 break;
 
