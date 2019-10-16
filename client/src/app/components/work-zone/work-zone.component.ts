@@ -36,7 +36,6 @@ export class WorkZoneComponent implements OnInit {
         private fileManagerService: FileManagerService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
-        /*private drawStackService: DrawStackService,*/
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
     ) {}
@@ -82,11 +81,9 @@ export class WorkZoneComponent implements OnInit {
 
     // myString will be linked with server
     save() {
-        console.log('save');
         this.fileManagerService.postDrawing(this.name, this.refSVG.nativeElement.innerHTML, this.drawStack.idStack);
     }
     load() {
-        console.log('load');
         this.fileManagerService.getDrawing(this.name).subscribe((ans: any) => {
             let drawing: Drawing = JSON.parse(ans.body);
 
