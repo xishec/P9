@@ -66,10 +66,21 @@ fdescribe('LineToolService', () => {
     });
     
     it('should be created', () => {
-    const service: LineToolService = TestBed.get(LineToolService);
         expect(service).toBeTruthy();
     });
+
+    it('getXPos should return clientX - BOUNDLEFT', () => {
+        const clientX = 10;
+
+        const resXPos = service.getXPos(clientX);
+
+        expect(resXPos).toBe(clientX - BOUNDLEFT);
     });
 
+    it('getYPos should return clientY - BOUNDTOP', () => {
+        const clientY = 10;
 
-});
+        const resYPos = service.getYPos(clientY);
+
+        expect(resYPos).toBe(clientY - BOUNDTOP);
+    });
