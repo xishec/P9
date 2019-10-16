@@ -1,12 +1,43 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { StampToolService } from './stamp-tool.service';
+import { MatDialog } from '@angular/material';
+import { Renderer2, ElementRef } from '@angular/core';
 
-describe('StampToolService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+fdescribe('StampToolService', () => {
+    let injector: TestBed;
+    let service: StampToolService;
 
-  it('should be created', () => {
-    const service: StampToolService = TestBed.get(StampToolService);
-    expect(service).toBeTruthy();
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                StampToolService,
+                {
+                    provide: MatDialog,
+                    useValue: {},
+                },
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                        setAttribute: () => null,
+                        appendChild: () => null,
+                    },
+                },
+                {
+                    provide: ElementRef,
+                    useValue: {
+                        nativeElement: {},
+                    },
+                },
+            ],
+        });
+
+        injector = getTestBed();
+        service = injector.get(StampToolService);
+    });
+
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });
