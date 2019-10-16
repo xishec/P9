@@ -124,6 +124,7 @@ const PolygonOffsetAngles: Map<number, number> = new Map([
     [10, 0],
     [11, 3 * (360 / 11 / 4) * (Math.PI / 180)],
     [12, (360 / 12 / 2) * (Math.PI / 180)],
+]);
 
 enum StampScaling {
     Min = 0.1,
