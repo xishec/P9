@@ -25,21 +25,6 @@ export class GridAttributesComponent implements OnInit {
         this.formBuilder = formBuilder;
     }
 
-    eventIsValid<T>(event: MatSliderChange, range: T): boolean {
-        const value = event.value;
-        // @ts-ignore
-        if (value !== null) {
-            return this.IsBetween(value, range);
-        } else {
-            return false;
-        }
-    }
-
-    IsBetween<T>(value: number | boolean, range: T): boolean {
-        // @ts-ignore
-        return value >= range.Min && value <= range.Max;
-    }
-
     ngOnInit(): void {
         this.initializeForm();
         this.onSizeChange();
@@ -63,14 +48,14 @@ export class GridAttributesComponent implements OnInit {
     }
 
     onSizeSliderChange(event: MatSliderChange) {
-        if (this.eventIsValid(event, this.gridSize)) {
+        if (this.gridToolService.eventIsValid(event, this.gridSize)) {
             this.gridAttributesForm.controls.size.setValue(event.value);
             this.onSizeChange();
         }
     }
 
     onOpacitySliderChange(event: MatSliderChange) {
-        if (this.eventIsValid(event, this.gridOpacity)) {
+        if (this.gridToolService.eventIsValid(event, this.gridOpacity)) {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }
@@ -83,14 +68,14 @@ export class GridAttributesComponent implements OnInit {
 
     onSizeChange() {
         const size = this.gridAttributesForm.value.size;
-        if (this.IsBetween(size, GridSize)) {
+        if (this.gridToolService.IsBetween(size, GridSize)) {
             this.gridToolService.changeSize(size);
         }
     }
 
     onOpacityChange() {
         const opacity = this.gridAttributesForm.value.opacity;
-        if (this.IsBetween(opacity, GridOpacity)) {
+        if (this.gridToolService.IsBetween(opacity, GridOpacity)) {
             this.gridToolService.changeOpacity(opacity);
         }
     }

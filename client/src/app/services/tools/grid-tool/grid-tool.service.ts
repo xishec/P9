@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GridOpacity, GridSize, GRID_SIZE_INCREMENT, GRID_SIZE_DECREMENT } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
+import { MatSliderChange } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
@@ -23,6 +24,21 @@ export class GridToolService {
     currentState: Observable<boolean> = this.state.asObservable();
     currentSize: Observable<number> = this.size.asObservable();
     currentOpacity: Observable<number> = this.opacity.asObservable();
+
+    eventIsValid<T>(event: MatSliderChange, range: T): boolean {
+        const value = event.value;
+        // @ts-ignore
+        if (value !== null) {
+            return this.IsBetween(value, range);
+        } else {
+            return false;
+        }
+    }
+
+    IsBetween<T>(value: number | boolean, range: T): boolean {
+        // @ts-ignore
+        return value >= range.Min && value <= range.Max;
+    }
 
     changeState(state: boolean) {
         if (this.workzoneIsEmpty === false) {
