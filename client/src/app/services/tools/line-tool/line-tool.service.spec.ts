@@ -119,3 +119,21 @@ fdescribe('LineToolService', () => {
 
         expect(service.isMouseDown).toBeTruthy();
     });
+
+    it('isMouseDown should be false when onMouseUp', () => {
+        service.isMouseDown = true;
+
+        service.onMouseUp(mockLeftButton);
+
+        expect(service.isMouseDown).toBeFalsy();
+    });
+    
+    it('should call previewLine when onMouseMove with isDrawing and !isMouseDown', () => {
+        service.isDrawing = true;
+        service.isMouseDown = false;
+        const spyOnPreviewLine = spyOn(service, 'previewLine');
+
+        service.onMouseMove(mockLeftButton);
+
+        expect(spyOnPreviewLine).toHaveBeenCalled();
+    });
