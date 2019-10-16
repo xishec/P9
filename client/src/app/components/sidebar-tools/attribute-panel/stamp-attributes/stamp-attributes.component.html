@@ -1,0 +1,77 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="stampAttributesForm">
+        <div class="attribute">
+            <label for="scaling">Mise à échelle</label>
+            <mat-slider
+                placeholder="value"
+                formControlName="scaling"
+                (input)="onSliderChange($event)"
+                [min]="stampScaling.Min"
+                [max]="stampScaling.Max"
+                step="0.1"
+                value="{{ stampAttributesForm.value.scaling }}"
+            ></mat-slider>
+
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="scaling"
+                    (input)="onScalingChange()"
+                    [min]="stampScaling.Min"
+                    [max]="stampScaling.Max"
+                />
+                <mat-error
+                    >La valeur inscrite doit être entre {{ stampScaling.Min }} et {{ stampScaling.Max }}</mat-error
+                >
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="ladder">Angle courant</label>
+            <mat-form-field id="angle-attribute">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="angle"
+                    (input)="onAngleChange()"
+                    [value]="stampToolService.currentAngle"
+                    [min]="stampAngleOrientation.Min"
+                    [max]="stampAngleOrientation.Max"
+                />
+                <mat-error
+                    >La valeur inscrite doit être entre {{ stampAngleOrientation.Min }} et
+                    {{ stampAngleOrientation.Max }} degrés</mat-error
+                >
+                <span matSuffix>degré(s)</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <mat-form-field>
+                <mat-label>Type d'étampe </mat-label>
+                <mat-select
+                    formControlName="stampType"
+                    (selectionChange)="onStampTypeChange()"
+                    [(value)]="selected"
+                    [ngClass]="selected ? 'class-' + selected : 'class-NoStamp'"
+                >
+                    <mat-option *ngFor="let stamp of stampTypes; let i = index" [value]="i">
+                        {{ stampNames[i] }}
+                        <img height="30" src="{{ stampTypes[i] }}" />
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+</div>

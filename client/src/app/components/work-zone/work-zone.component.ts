@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } fro
 
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -9,6 +10,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { IndexService } from '../../services/index/index.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 
@@ -26,26 +28,29 @@ export class WorkZoneComponent implements OnInit {
     empty = true;
     name = 'test';
 
+    drawStack: DrawStackService;
+
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
         private basicService: IndexService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
-        private drawStackService: DrawStackService,
+        /*private drawStackService: DrawStackService,*/
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
     ) {}
 
     ngOnInit(): void {
-        this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
+        this.drawStack = new DrawStackService(this.renderer);
+        this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
-            for (const el of this.drawStackService.reset()) {
+            for (const el of this.drawStack.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
         });
@@ -128,6 +133,12 @@ export class WorkZoneComponent implements OnInit {
         }
     }
 
+    @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
+        if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
+            this.currentTool.onWheel(event);
+        }
+    }
+
     @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onKeyDown(event);
@@ -137,6 +148,13 @@ export class WorkZoneComponent implements OnInit {
     @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
             this.currentTool.onKeyUp(event);
+        }
+    }
+
+    // ONLY USED ON LINE SERVICE
+    @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
+        if (this.currentTool instanceof LineToolService) {
+            (this.currentTool as LineToolService).onDblClick(event);
         }
     }
     // LISTENERS //
@@ -149,6 +167,7 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Brush:
             case ToolName.Pencil:
             case ToolName.Rectangle:
+            case ToolName.Ellipsis:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };

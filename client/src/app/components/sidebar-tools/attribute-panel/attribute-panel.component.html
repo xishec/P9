@@ -3,10 +3,13 @@
         <app-pencil-attributes [hidden]="currentToolName !== ToolName.Pencil"></app-pencil-attributes>
         <app-rectangle-attributes [hidden]="currentToolName !== ToolName.Rectangle"></app-rectangle-attributes>
         <app-brush-attributes [hidden]="currentToolName !== ToolName.Brush"></app-brush-attributes>
+        <app-line-attributes [hidden]="currentToolName !== ToolName.Line"></app-line-attributes>
         <app-color-applicator-attributes
             [hidden]="currentToolName !== ToolName.ColorApplicator"
         ></app-color-applicator-attributes>
+        <app-stamp-attributes [hidden]="currentToolName !== ToolName.Stamp"></app-stamp-attributes>
         <app-dropper-attributes [hidden]="currentToolName !== ToolName.Dropper"></app-dropper-attributes>
+        <app-ellipsis-attributes [hidden]="currentToolName !== ToolName.Ellipsis"></app-ellipsis-attributes>
     </div>
     <div>
         <app-color-palette id="color-palette" [hidden]="!showColorPalette"></app-color-palette>

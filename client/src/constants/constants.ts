@@ -1,6 +1,7 @@
 enum Keys {
     Shift = 'Shift',
     Control = 'Control',
+    Alt = 'Alt',
     Digit1 = '1',
     Digit2 = '2',
     Digit3 = '3',
@@ -18,6 +19,8 @@ enum Keys {
     t = 't',
     w = 'w',
     y = 'y',
+    Escape = 'Escape',
+    Backspace = 'Backspace',
 }
 
 enum Mouse {
