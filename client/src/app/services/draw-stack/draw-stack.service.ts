@@ -8,12 +8,14 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 })
 export class DrawStackService {
     private drawStack: SVGGElement[] = new Array<SVGGElement>();
-    private idStack: string[] = new Array<string>();
+    idStack: string[] = new Array<string>();
     private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2){this.renderer = renderer;}
+    constructor(renderer: Renderer2) {
+        this.renderer = renderer;
+    }
 
     changeTargetElement(stackTarget: StackTargetInfo): void {
         this.stackTarget.next(stackTarget);
