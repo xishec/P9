@@ -76,7 +76,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     getInclusiveBBox(el: SVGGElement): DOMRect {
-        return el.getBBox({fill: true, stroke: true});
+        return el.getBBox();
     }
 
     getStrokeWidth(el: SVGGElement): number {
@@ -105,6 +105,27 @@ export class SelectionToolService extends AbstractToolService {
             elementBox.y > selectionBox.y &&
             (elementBox.y + elementBox.height) < (selectionBox.y + selectionBox.height)
         );
+    }
+
+    startSelection(): void {
+        this.isSelecting = true;
+        this.updateSelectionRectangle();
+        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
+    }
+
+    invertSelection(): void {
+        const invertedSelection: Set<SVGGElement> = new Set();
+
+        for (const el of this.drawStack.drawStack) {
+            if (!this.selection.has(el)) {
+                invertedSelection.add(el);
+            }
+        }
+
+        this.selection = invertedSelection;
+        this.removeFullSelectionBox();
+        this.computeSelectionBox();
+        this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
@@ -168,7 +189,42 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(this.selectionBox, 'y', top.toString());
         this.renderer.setAttribute(this.selectionBox, 'width', (right - left).toString());
         this.renderer.setAttribute(this.selectionBox, 'height', (bottom - top).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
+
+        this.computeControlPoints();
+    }
+
+    computeControlPoints(): void {
+        // Top left corner
+        this.renderer.setAttribute(this.controlPoints[0], 'cx', this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[0], 'cy', this.selectionBox.y.baseVal.value.toString());
+
+        // Top side
+        this.renderer.setAttribute(this.controlPoints[1], 'cx', (this.selectionBox.x.baseVal.value + (this.selectionBox.width.baseVal.value / 2)).toString());
+        this.renderer.setAttribute(this.controlPoints[1], 'cy', (this.selectionBox.y.baseVal.value).toString());
+
+        // Top right corner
+        this.renderer.setAttribute(this.controlPoints[2], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
+        this.renderer.setAttribute(this.controlPoints[2], 'cy', this.selectionBox.y.baseVal.value.toString());
+
+        // Right side
+        this.renderer.setAttribute(this.controlPoints[3], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
+        this.renderer.setAttribute(this.controlPoints[3], 'cy', (this.selectionBox.y.baseVal.value + (this.selectionBox.height.baseVal.value / 2)).toString());
+
+        // Bottom right corner
+        this.renderer.setAttribute(this.controlPoints[4], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
+        this.renderer.setAttribute(this.controlPoints[4], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
+
+        // Bottom side
+        this.renderer.setAttribute(this.controlPoints[5], 'cx', (this.selectionBox.x.baseVal.value + (this.selectionBox.width.baseVal.value / 2)).toString());
+        this.renderer.setAttribute(this.controlPoints[5], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
+
+        // Bottom left corner
+        this.renderer.setAttribute(this.controlPoints[6], 'cx', (this.selectionBox.x.baseVal.value).toString());
+        this.renderer.setAttribute(this.controlPoints[6], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
+
+        // Left side
+        this.renderer.setAttribute(this.controlPoints[7], 'cx', (this.selectionBox.x.baseVal.value).toString());
+        this.renderer.setAttribute(this.controlPoints[7], 'cy', (this.selectionBox.y.baseVal.value + (this.selectionBox.height.baseVal.value / 2)).toString());
     }
 
     hasSelected(): boolean {
@@ -176,49 +232,13 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     appendControlPoints(): void {
-        // Top left corner
-        this.renderer.setAttribute(this.controlPoints[0], 'cx', this.selectionBox.x.baseVal.value.toString());
-        this.renderer.setAttribute(this.controlPoints[0], 'cy', this.selectionBox.y.baseVal.value.toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[0]);
-
-        // Top side
-        this.renderer.setAttribute(this.controlPoints[1], 'cx', (this.selectionBox.x.baseVal.value + (this.selectionBox.width.baseVal.value / 2)).toString());
-        this.renderer.setAttribute(this.controlPoints[1], 'cy', (this.selectionBox.y.baseVal.value).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[1]);
-
-        // Top right corner
-        this.renderer.setAttribute(this.controlPoints[2], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
-        this.renderer.setAttribute(this.controlPoints[2], 'cy', this.selectionBox.y.baseVal.value.toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[2]);
-
-        // Right side
-        this.renderer.setAttribute(this.controlPoints[3], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
-        this.renderer.setAttribute(this.controlPoints[3], 'cy', (this.selectionBox.y.baseVal.value + (this.selectionBox.height.baseVal.value / 2)).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[3]);
-
-        // Bottom right corner
-        this.renderer.setAttribute(this.controlPoints[4], 'cx', (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString());
-        this.renderer.setAttribute(this.controlPoints[4], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[4]);
-
-        // Bottom side
-        this.renderer.setAttribute(this.controlPoints[5], 'cx', (this.selectionBox.x.baseVal.value + (this.selectionBox.width.baseVal.value / 2)).toString());
-        this.renderer.setAttribute(this.controlPoints[5], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[5]);
-
-        // Bottom left corner
-        this.renderer.setAttribute(this.controlPoints[6], 'cx', (this.selectionBox.x.baseVal.value).toString());
-        this.renderer.setAttribute(this.controlPoints[6], 'cy', (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[6]);
-
-        // Left side
-        this.renderer.setAttribute(this.controlPoints[7], 'cx', (this.selectionBox.x.baseVal.value).toString());
-        this.renderer.setAttribute(this.controlPoints[7], 'cy', (this.selectionBox.y.baseVal.value + (this.selectionBox.height.baseVal.value / 2)).toString());
-        this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[7]);
+        for (let i = 0; i < 8; i++) {
+            this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[i]);
+        }
     }
 
     removeControlPoints(): void {
-        for(let ctrlPt of this.controlPoints) {
+        for (const ctrlPt of this.controlPoints) {
             this.renderer.removeChild(this.svgReference, ctrlPt);
         }
     }
@@ -246,30 +266,49 @@ export class SelectionToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && !this.isManipulating) {
-            this.initialMouseX = this.currentMouseX;
-            this.initialMouseY = this.currentMouseY;
-            this.isSelecting = true;
-            this.updateSelectionRectangle();
-            this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
-        } else {
-            this.selection.clear();
-            this.removeFullSelectionBox();
-            this.isManipulating = false;
+        switch (button) {
+            case Mouse.LeftButton:
+                if (!this.isManipulating) {
+                    this.initialMouseX = this.currentMouseX;
+                    this.initialMouseY = this.currentMouseY;
+                    this.startSelection();
+                } else {
+                    this.selection.clear();
+                    this.removeFullSelectionBox();
+                    this.isManipulating = false;
+                }
+                break;
+
+            case Mouse.RightButton:
+                if (this.hasSelected()) {
+                    this.invertSelection();
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
-            this.isSelecting = false;
-            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
-            if (this.hasSelected()) {
-                this.isManipulating = true;
-                this.computeSelectionBox();
-                this.appendFullSelectionBox();
-            }
+        switch (button) {
+            case Mouse.LeftButton:
+                this.isSelecting = false;
+                this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+                if (this.hasSelected()) {
+                    this.isManipulating = true;
+                    this.computeSelectionBox();
+                    this.appendFullSelectionBox();
+                }
+                break;
+
+            case Mouse.RightButton:
+                break;
+
+            default:
+                break;
         }
     }
 
