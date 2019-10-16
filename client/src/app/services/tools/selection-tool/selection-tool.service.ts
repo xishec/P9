@@ -88,22 +88,36 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+        const boxLeft = selectionBox.x;
+        const boxRight = selectionBox.x + selectionBox.width;
+        const boxTop = selectionBox.y;
+        const boxBottom = selectionBox.y + selectionBox.height;
+        let elLeft = elementBox.x;
+        let elRight = elementBox.x + elementBox.width;
+        let elTop = elementBox.y;
+        let elBottom = elementBox.y + elementBox.height;
+
         if (strokeWidth) {
             const halfStrokeWidth = strokeWidth / 2;
 
+            elLeft = elementBox.x - halfStrokeWidth;
+            elRight = elementBox.x + elementBox.width + halfStrokeWidth;
+            elTop = elementBox.y - halfStrokeWidth;
+            elBottom = elementBox.y + elementBox.height + halfStrokeWidth;
+
             return (
-                (elementBox.x - halfStrokeWidth) > selectionBox.x &&
-                (elementBox.x + elementBox.width + halfStrokeWidth) < (selectionBox.x + selectionBox.width) &&
-                (elementBox.y - halfStrokeWidth) > selectionBox.y &&
-                (elementBox.y + elementBox.height + halfStrokeWidth) < (selectionBox.y + selectionBox.height)
+                elLeft > boxLeft &&
+                elRight < boxRight &&
+                elTop > boxTop &&
+                elBottom < boxBottom
             );
         }
 
         return (
-            elementBox.x > selectionBox.x &&
-            (elementBox.x + elementBox.width) < (selectionBox.x + selectionBox.width) &&
-            elementBox.y > selectionBox.y &&
-            (elementBox.y + elementBox.height) < (selectionBox.y + selectionBox.height)
+            elLeft > boxLeft &&
+            elRight < boxRight &&
+            elTop > boxTop &&
+            elBottom < boxBottom
         );
     }
 
@@ -138,6 +152,7 @@ export class SelectionToolService extends AbstractToolService {
 
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getInclusiveBBox(el);
+
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
                 this.selection.add(el);
             }
