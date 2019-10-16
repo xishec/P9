@@ -36,6 +36,7 @@ export class DrawStackService {
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
                 this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                console.log('fuck');
             });
         }
 

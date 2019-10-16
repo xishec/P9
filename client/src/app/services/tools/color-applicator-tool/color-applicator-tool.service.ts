@@ -15,11 +15,13 @@ export class ColorApplicatorToolService extends AbstractToolService {
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
+    private isOnTarget = false;
 
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
             this.currentStackTarget = stackTarget;
+            this.isOnTarget = true;
         });
     }
 
@@ -37,7 +39,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        if (this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined) {
+        if (this.isOnTarget && this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined) {
             switch (button) {
                 case Mouse.LeftButton:
                     this.renderer.setAttribute(
@@ -47,7 +49,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     );
                     if (
                         this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil
+                        this.currentStackTarget.toolName === ToolName.Pencil ||
+                        this.currentStackTarget.toolName === ToolName.Line
                     ) {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
@@ -59,7 +62,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 case Mouse.RightButton:
                     if (
                         this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil
+                        this.currentStackTarget.toolName === ToolName.Pencil ||
+                        this.currentStackTarget.toolName === ToolName.Line
                     ) {
                         break;
                     }
@@ -72,6 +76,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 default:
                     break;
             }
+            this.isOnTarget = false;
         }
     }
     // tslint:disable-next-line: no-empty
