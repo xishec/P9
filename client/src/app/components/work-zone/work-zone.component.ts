@@ -11,7 +11,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
-import { IndexService } from '../../services/server/index/index.service';
+import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 
 @Component({
@@ -33,7 +33,7 @@ export class WorkZoneComponent implements OnInit {
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
     constructor(
-        private basicService: IndexService,
+        private fileManagerService: FileManagerService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         /*private drawStackService: DrawStackService,*/
@@ -83,11 +83,11 @@ export class WorkZoneComponent implements OnInit {
     // myString will be linked with server
     save() {
         console.log('save');
-        this.basicService.postDrawing(this.name, this.refSVG.nativeElement.innerHTML, this.drawStack.idStack);
+        this.fileManagerService.postDrawing(this.name, this.refSVG.nativeElement.innerHTML, this.drawStack.idStack);
     }
     load() {
         console.log('load');
-        this.basicService.getDrawing(this.name).subscribe((ans: any) => {
+        this.fileManagerService.getDrawing(this.name).subscribe((ans: any) => {
             let drawing: Drawing = JSON.parse(ans.body);
 
             this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
