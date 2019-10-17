@@ -41,46 +41,54 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(filter, 'y', '-50px');
 
         if (patternId === 1 || patternId === 2) {
-            const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
-            this.renderer.setAttribute(effect, 'stdDeviation', '3');
-            this.renderer.appendChild(filter, effect);
+            this.createGaussianBlurFilter(filter);
         }
         if (patternId !== 1) {
-            const turbulence = this.renderer.createElement('feTurbulence', SVG_NS);
-            this.renderer.setAttribute(turbulence, 'type', 'turbulence');
-            this.renderer.setAttribute(turbulence, 'result', 'turbulence');
-
-            const displacementMap = this.renderer.createElement('feDisplacementMap', SVG_NS);
-            this.renderer.setAttribute(displacementMap, 'in2', 'turbulence');
-            this.renderer.setAttribute(displacementMap, 'in', 'SourceGraphic');
-            this.renderer.setAttribute(displacementMap, 'scale', '10');
-            this.renderer.setAttribute(displacementMap, 'xChannelSelector', 'R');
-            this.renderer.setAttribute(displacementMap, 'yChannelSelector', 'G');
-
-            switch (patternId) {
-                case 2:
-                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.1 0.9');
-                    this.renderer.setAttribute(turbulence, 'numOctaves', '10');
-                    this.renderer.setAttribute(displacementMap, 'scale', '20');
-                    break;
-                case 3:
-                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.01 0.57');
-                    this.renderer.setAttribute(turbulence, 'numOctaves', '2');
-                    break;
-                case 4:
-                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.05');
-                    this.renderer.setAttribute(turbulence, 'numOctaves', '2');
-                    break;
-                case 5:
-                    this.renderer.setAttribute(turbulence, 'type', 'fractalNoise');
-                    this.renderer.setAttribute(turbulence, 'baseFrequency', '0.9');
-                    this.renderer.setAttribute(turbulence, 'numOctaves', '4');
-                    break;
-            }
-            this.renderer.appendChild(filter, turbulence);
-            this.renderer.appendChild(filter, displacementMap);
+            this.createTurbulenceDisplacementFilter(filter, patternId);
         }
         return filter;
+    }
+
+    createTurbulenceDisplacementFilter(filter: SVGFilterElement, patternId: number): void {
+        const turbulence = this.renderer.createElement('feTurbulence', SVG_NS);
+        this.renderer.setAttribute(turbulence, 'type', 'turbulence');
+        this.renderer.setAttribute(turbulence, 'result', 'turbulence');
+
+        const displacementMap = this.renderer.createElement('feDisplacementMap', SVG_NS);
+        this.renderer.setAttribute(displacementMap, 'in2', 'turbulence');
+        this.renderer.setAttribute(displacementMap, 'in', 'SourceGraphic');
+        this.renderer.setAttribute(displacementMap, 'scale', '10');
+        this.renderer.setAttribute(displacementMap, 'xChannelSelector', 'R');
+        this.renderer.setAttribute(displacementMap, 'yChannelSelector', 'G');
+
+        switch (patternId) {
+            case 2:
+                this.renderer.setAttribute(turbulence, 'baseFrequency', '0.1 0.9');
+                this.renderer.setAttribute(turbulence, 'numOctaves', '10');
+                this.renderer.setAttribute(displacementMap, 'scale', '20');
+                break;
+            case 3:
+                this.renderer.setAttribute(turbulence, 'baseFrequency', '0.01 0.57');
+                this.renderer.setAttribute(turbulence, 'numOctaves', '2');
+                break;
+            case 4:
+                this.renderer.setAttribute(turbulence, 'baseFrequency', '0.05');
+                this.renderer.setAttribute(turbulence, 'numOctaves', '2');
+                break;
+            case 5:
+                this.renderer.setAttribute(turbulence, 'type', 'fractalNoise');
+                this.renderer.setAttribute(turbulence, 'baseFrequency', '0.9');
+                this.renderer.setAttribute(turbulence, 'numOctaves', '4');
+                break;
+        }
+        this.renderer.appendChild(filter, turbulence);
+        this.renderer.appendChild(filter, displacementMap);
+    }
+
+    createGaussianBlurFilter(filter: SVGFilterElement): void {
+        const effect = this.renderer.createElement('feGaussianBlur', SVG_NS);
+        this.renderer.setAttribute(effect, 'stdDeviation', '3');
+        this.renderer.appendChild(filter, effect);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
