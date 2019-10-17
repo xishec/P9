@@ -17,14 +17,14 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Ellipsis;
     ellipsisAttributesForm: FormGroup;
     ellipsisToolService: EllipsisToolService;
+    attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }

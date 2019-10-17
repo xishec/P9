@@ -18,6 +18,7 @@ export class PolygonAttributesComponent implements OnInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonTollService: PolygonToolService;
+    attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
     readonly thickness = Thickness;
     readonly polygonSides = PolygonSides;
@@ -25,7 +26,6 @@ export class PolygonAttributesComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService
