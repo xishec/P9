@@ -6,6 +6,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { Message } from '../../../../../common/communication/message';
 import { Drawing } from '../../../../../common/communication/Drawing';
+import { DrawingLoaderService } from 'src/app/services/server/drawingLoader/drawing-loader.service';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -16,11 +17,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     openFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    drawingsFromServer: Drawing[] = [
-        { name: 'animal drawing', labels: ['tiger', 'lion'], svg: '', idStack: [''] },
-        { name: 'food drawing', labels: ['hamburger', 'poutine'], svg: '', idStack: [''] },
-        { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], svg: '', idStack: [''] },
-    ];
+    drawingsFromServer: Drawing[] = [];
     selectedOption: string = '';
     drawingOpenSuccess: boolean = true;
 
@@ -29,6 +26,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -63,19 +61,14 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit() {
         if (this.drawingOpenSuccess) {
-            this.applyDrawing();
+            let selectedDrawing: Drawing = this.drawingsFromServer.find(
+                (drawing) => drawing.name == this.selectedOption,
+            ) as Drawing;
+
+            this.drawingLoaderService.currentRefSVG.next(selectedDrawing);
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
-    }
-
-    applyDrawing() {
-        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
-        let idStack = Object.values(drawing.idStack);
-        idStack.forEach((id) => {
-            let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
-            this.drawStack.push(el);
-        });
     }
 
     formIsInvalid() {

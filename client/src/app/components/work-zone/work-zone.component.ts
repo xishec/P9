@@ -16,6 +16,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { Message } from '../../../../../common/communication/message';
+import { DrawingLoaderService } from 'src/app/services/server/drawingLoader/drawing-loader.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -24,19 +25,15 @@ import { Message } from '../../../../../common/communication/message';
 })
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
-
     modalIsDisplayed = false;
     gridIsActive = false;
     gridSize = GridSize.Default;
     gridOpacity = GridOpacity.Max;
-
     displayNewDrawingModalWindow = false;
     toolName: ToolName = ToolName.Selection;
-
     currentTool: AbstractToolService | undefined;
     empty = true;
     name = 'test';
-
     drawStack: DrawStackService;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
@@ -49,12 +46,24 @@ export class WorkZoneComponent implements OnInit {
         private colorToolService: ColorToolService,
         private gridToolService: GridToolService,
         private modalManagerService: ModalManagerService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {}
 
     ngOnInit(): void {
         this.drawStack = new DrawStackService(this.renderer);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
+
+        this.drawingLoaderService.currentRefSVG.subscribe((selectedDrawing) => {
+            if (selectedDrawing.svg === '') return;
+            this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
+
+            let idStack = Object.values(selectedDrawing.idStack);
+            idStack.forEach((id) => {
+                let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
+                this.drawStack.push(el);
+            });
+        });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             this.empty = false;
