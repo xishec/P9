@@ -1,6 +1,6 @@
 <svg
     #svgpad
-    [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
+    [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
     [attr.width]="drawingInfo.width"
     [attr.height]="drawingInfo.height"
     [ngStyle]="getCursorStyle()"
@@ -15,7 +15,7 @@
 
 <svg
     *ngIf="gridIsActive === true"
-    [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
+    [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
     [attr.width]="drawingInfo.width"
     [attr.height]="drawingInfo.height"
 >

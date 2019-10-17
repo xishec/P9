@@ -12,6 +12,7 @@ import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -21,7 +22,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
 
-    displayNewDrawingModalWindow = false;
+    modalIsDisplayed = false;
     toolName: ToolName = ToolName.Selection;
 
     currentTool: AbstractToolService | undefined;
@@ -40,19 +41,24 @@ export class WorkZoneComponent implements OnInit {
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
         private gridToolService: GridToolService,
+        private modalManagerService: ModalManagerService,
     ) {}
 
     ngOnInit(): void {
         this.toolSelector.initTools(this.drawStackService, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
+        this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
             for (const el of this.drawStackService.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
             }
+        });
+
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {
+            this.modalIsDisplayed = modalIsDisplayed;
         });
 
         this.toolSelector.currentToolName.subscribe((toolName) => {

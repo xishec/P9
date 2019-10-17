@@ -19,7 +19,6 @@ export class DrawingModalWindowComponent implements OnInit {
 
     previewColor: string;
     blankWorkZone = true;
-    displayNewDrawingModalWindow = false;
 
     constructor(
         formBuilder: FormBuilder,

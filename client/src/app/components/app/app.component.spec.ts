@@ -135,16 +135,12 @@ describe('AppComponent', () => {
     });
 
     it('should allow shortcut when no drawing modal and focus not on input and no welcome window', () => {
-        app.displayNewDrawingModalWindow = false;
-        app.welcomeModalWindowClosed = false;
         app.displayWelcomeModalWindow = false;
         app.isOnInput = false;
         expect(app.shouldAllowShortcut()).toBe(true);
     });
 
     it('should not allow shortcut when drawing modal is on or focus on input or welcome window is on', () => {
-        app.displayNewDrawingModalWindow = false;
-        app.welcomeModalWindowClosed = false;
         app.displayWelcomeModalWindow = true;
         app.isOnInput = false;
         expect(app.shouldAllowShortcut()).toBe(false);
