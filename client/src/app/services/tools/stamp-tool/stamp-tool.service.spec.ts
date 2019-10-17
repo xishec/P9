@@ -8,6 +8,7 @@ fdescribe('StampToolService', () => {
     let injector: TestBed;
     let service: StampToolService;
 
+    let spyOnPreventDefault: jasmine.Spy;
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -35,6 +36,9 @@ fdescribe('StampToolService', () => {
 
         injector = getTestBed();
         service = injector.get(StampToolService);
+        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
+        onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
+        spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
     });
 
     it('should be created', () => {
@@ -58,5 +62,34 @@ fdescribe('StampToolService', () => {
     it('should decrease the current angle by 1 degree if the direction is negative', () => {
         service.alterRotateStamp(-10);
         expect(service.currentAngle).toEqual(-1);
+    });
+    it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
+        service.onKeyDown(onOtherKeyDown);
+        service.isAlterRotation = false;
+        service.onKeyDown(onAltKeyDown);
+
+        expect(service.isAlterRotation).toBeTruthy();
+        expect(spyOnPreventDefault).toHaveBeenCalled();
+
+        service.isAlterRotation = true;
+        service.onKeyDown(onAltKeyDown);
+
+        expect(service.isAlterRotation).toBeTruthy();
+        expect(spyOnPreventDefault).toHaveBeenCalled();
+    });
+
+    it('should call preventDefault on event and change isAlterRotation to false if it is true', () => {
+        service.onKeyUp(onOtherKeyDown);
+        service.isAlterRotation = true;
+        service.onKeyUp(onAltKeyDown);
+
+        expect(service.isAlterRotation).toBeFalsy();
+        expect(spyOnPreventDefault).toHaveBeenCalled();
+
+        service.isAlterRotation = false;
+        service.onKeyUp(onAltKeyDown);
+
+        expect(service.isAlterRotation).toBeFalsy();
+        expect(spyOnPreventDefault).toHaveBeenCalled();
     });
 });
