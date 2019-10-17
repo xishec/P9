@@ -117,10 +117,6 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    it(`should have as title 'LOG2990'`, () => {
-        expect(app.title).toEqual('LOG2990');
-    });
-
     it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {
         const SPY = spyOn(app[`dialog`], 'open').and.returnValue({ afterClosed: () => of() } as any);
         app.displayWelcomeModalWindow = true;
