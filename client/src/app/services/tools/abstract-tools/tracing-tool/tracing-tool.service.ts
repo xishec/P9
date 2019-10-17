@@ -57,8 +57,8 @@ export abstract class TracingToolService extends AbstractToolService {
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
-            this.createSVGCircle(x, y);
             this.svgPreviewCircle = this.createSVGCircle(x, y);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.svgPreviewCircle);
             this.createSVGPath();
         }
     }
@@ -69,7 +69,7 @@ export abstract class TracingToolService extends AbstractToolService {
             const y = this.getYPos(e.clientY);
             this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
-            this.updatePreviewCircle(x, y);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.svgPreviewCircle);
         }
     }
 
@@ -85,17 +85,12 @@ export abstract class TracingToolService extends AbstractToolService {
         this.onMouseUp(e);
     }
 
-    onMouseEnter(event: MouseEvent): undefined {
-        return undefined;
-    }
-
-    onKeyDown(event: KeyboardEvent): undefined {
-        return undefined;
-    }
-
-    onKeyUp(event: KeyboardEvent): undefined {
-        return undefined;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyDown(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyUp(event: KeyboardEvent): void {}
 
     createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
@@ -107,11 +102,12 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
-        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+        const circle = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(circle, 'fill', '#' + this.currentColor);
+        this.renderer.setAttribute(circle, 'stroke', 'none');
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
 
@@ -120,6 +116,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+        this.renderer.setAttribute(this.svgPath, 'stroke-linecap', 'round');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
