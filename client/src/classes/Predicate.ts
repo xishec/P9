@@ -10,7 +10,7 @@ export class Predicate {
             return false;
         }
     }
-    isBetween<T>(value: number | boolean, range: T): boolean {
+    isBetween<T>(value: number, range: T): boolean {
         // @ts-ignore
         return value >= range.Min && value <= range.Max;
     }
