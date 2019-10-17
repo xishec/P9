@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { DrawingFileInfo } from 'src/classes/DrawingFileInfo';
@@ -36,16 +36,13 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
-            selectedDrawing: (this.selectedOption === ''),
+            selectedDrawing: [[this.selectedOption], Validators.required],
         });
     }
 
     handleSelection(event: any): void {
-        if (event.option.selected) {
-            event.source.deselectAll();
-            event.option._setSelected(true);
-            this.selectedOption = event.option.value;
-        }
+        this.selectedOption = event.option.selected ? event.option.value : '';
+        this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
     }
 
     onCancel(): void {
@@ -58,5 +55,9 @@ export class OpenFileModalWindowComponent implements OnInit {
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
+    }
+
+    formIsInvalid() {
+        return this.openFileModalForm.value.selectedDrawing[0] === '';
     }
 }

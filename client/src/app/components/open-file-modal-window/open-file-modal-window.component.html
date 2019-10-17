@@ -39,7 +39,7 @@
         class="actionButton"
         mat-stroked-button
         type="submit"
-        [disabled]="openFileModalForm.invalid"
+        [disabled]="formIsInvalid()"
         (click)="onSubmit()"
     >
         Ouvrir
