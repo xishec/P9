@@ -90,7 +90,6 @@ export class PolygonToolService extends AbstractShapeToolService {
             polygonOffsetAngles = 0;
         }
 
-        //! Magic number
         let sin =
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
