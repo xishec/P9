@@ -40,4 +40,13 @@ fdescribe('StampToolService', () => {
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
+    it('should increase the current angle by 1 degree if the direction is positive', () => {
+        service.alterRotateStamp(10);
+        expect(service.currentAngle).toEqual(1);
+    });
+
+    it('should decrease the current angle by 1 degree if the direction is negative', () => {
+        service.alterRotateStamp(-10);
+        expect(service.currentAngle).toEqual(-1);
+    });
 });
