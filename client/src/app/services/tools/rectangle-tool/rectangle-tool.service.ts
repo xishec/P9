@@ -108,7 +108,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
     }
 
-    cleanUpPreview(): void {
+    cleanUp(): void {
         this.isPreviewing = false;
         this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.svgReference, this.drawRectangle);
@@ -256,7 +256,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (button === Mouse.LeftButton && this.isIn && this.isValideRectangle()) {
             this.createSVG();
         }
-        this.cleanUpPreview();
+        this.cleanUp();
     }
 
     onMouseEnter(event: MouseEvent): void {

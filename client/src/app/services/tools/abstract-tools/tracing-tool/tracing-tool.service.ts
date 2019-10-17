@@ -131,4 +131,7 @@ export abstract class TracingToolService extends AbstractToolService {
     updateSVGPath(): void {
         this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
+
+    // tslint:disable-next-line: no-empty
+    cleanUp(): void {}
 }
