@@ -16,7 +16,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { Message } from '../../../../../common/communication/message';
-import { DrawingLoaderService } from 'src/app/services/server/drawingLoader/drawing-loader.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-work-zone',

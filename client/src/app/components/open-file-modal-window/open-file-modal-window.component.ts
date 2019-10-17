@@ -6,7 +6,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { Message } from '../../../../../common/communication/message';
 import { Drawing } from '../../../../../common/communication/Drawing';
-import { DrawingLoaderService } from 'src/app/services/server/drawingLoader/drawing-loader.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -40,6 +40,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 let drawing: Drawing = JSON.parse(el.body);
                 this.drawingsFromServer.push(drawing);
             });
+            console.log(this.drawingsFromServer);
         });
     }
 
