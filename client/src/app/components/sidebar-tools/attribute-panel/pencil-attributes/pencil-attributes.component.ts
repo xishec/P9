@@ -7,7 +7,7 @@ import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-pencil-attributes',
@@ -51,7 +51,7 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, Thickness)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.pencilAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }

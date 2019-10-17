@@ -7,7 +7,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { Thickness, ToolName } from 'src/constants/tool-constants';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-ellipsis-attributes',
@@ -52,7 +52,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, Thickness)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.ellipsisAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }

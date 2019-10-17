@@ -35,6 +35,6 @@ const SIDEBAR_WIDTH = 360;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-const Predicate: Predicate = new Predicate();
+const predicate: Predicate = new Predicate();
 
-export { SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, Predicate };
+export { SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };

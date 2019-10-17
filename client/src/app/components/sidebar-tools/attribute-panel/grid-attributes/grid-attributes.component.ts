@@ -4,7 +4,7 @@ import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -49,14 +49,14 @@ export class GridAttributesComponent implements OnInit {
     }
 
     onSizeSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, this.gridSize)) {
+        if (predicate.eventIsValid(event, this.gridSize)) {
             this.gridAttributesForm.controls.size.setValue(event.value);
             this.onSizeChange();
         }
     }
 
     onOpacitySliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, this.gridOpacity)) {
+        if (predicate.eventIsValid(event, this.gridOpacity)) {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }

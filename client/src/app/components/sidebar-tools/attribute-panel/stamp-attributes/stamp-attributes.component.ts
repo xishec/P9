@@ -14,7 +14,7 @@ import {
     ToolName,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-stamp-attributes',
@@ -66,7 +66,7 @@ export class StampAttributesComponent implements OnInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, StampScaling)) {
+        if (predicate.eventIsValid(event, StampScaling)) {
             this.stampAttributesForm.controls.scaling.setValue(event.value);
             this.onScalingChange();
         }

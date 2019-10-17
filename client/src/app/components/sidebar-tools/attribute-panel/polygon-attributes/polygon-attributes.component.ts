@@ -8,7 +8,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { Thickness, ToolName, PolygonSides, PolygonFormType } from 'src/constants/tool-constants';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-polygon-attributes',
@@ -60,14 +60,14 @@ export class PolygonAttributesComponent implements OnInit {
     }
 
     onThicknessSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, Thickness)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.polygonAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
 
     onNbVerticesSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, PolygonSides)) {
+        if (predicate.eventIsValid(event, PolygonSides)) {
             this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
             this.onNbVerticesChange();
         }

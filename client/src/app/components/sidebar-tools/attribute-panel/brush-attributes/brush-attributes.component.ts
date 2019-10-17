@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
-import { Predicate } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-brush-attributes',
@@ -54,7 +54,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (Predicate.eventIsValid(event, Thickness)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.brushAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
