@@ -146,7 +146,9 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     renderdrawPolygon(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         if (this.isValidePolygon()) {
-            this.renderer.setAttribute(drawPolygon, 'fill', '#' + this.userFillColor);
+            this.userFillColor === 'none'
+                ? this.renderer.setAttribute(drawPolygon, 'fill', this.userFillColor)
+                : this.renderer.setAttribute(drawPolygon, 'fill', '#' + this.userFillColor);
             this.renderer.setAttribute(drawPolygon, 'stroke', '#' + this.userStrokeColor);
             this.renderer.setAttribute(drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
             this.renderer.setAttribute(drawPolygon, 'stroke-linejoin', 'round');
@@ -189,14 +191,14 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.traceType = traceType;
         switch (traceType) {
             case TraceType.Outline: {
-                this.userFillColor = DEFAULT_TRANSPARENT;
+                this.userFillColor = 'none';
                 this.userStrokeColor = this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
             case TraceType.Full: {
                 this.userFillColor = this.fillColor;
-                this.userStrokeColor = DEFAULT_TRANSPARENT;
+                this.userStrokeColor = 'none';
                 this.userStrokeWidth = 0;
                 break;
             }
