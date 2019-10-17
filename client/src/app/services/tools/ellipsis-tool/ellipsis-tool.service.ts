@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Mouse, SVG_NS, Keys } from 'src/constants/constants';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import { ToolName, TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
@@ -90,23 +90,23 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(
             this.drawEllipse,
             'rx',
-            Math.abs(this.previewRectangleWidth / 2 - this.userStrokeWidth / 2).toString()
+            Math.abs(this.previewRectangleWidth / 2 - this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
             'ry',
-            Math.abs(this.previewRectangleHeight / 2 - this.userStrokeWidth / 2).toString()
+            Math.abs(this.previewRectangleHeight / 2 - this.userStrokeWidth / 2).toString(),
         );
 
         this.renderer.setAttribute(
             this.drawEllipse,
             'cx',
-            (this.previewRectangleX + this.previewRectangleWidth / 2).toString()
+            (this.previewRectangleX + this.previewRectangleWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
             'cy',
-            (this.previewRectangleY + this.previewRectangleHeight / 2).toString()
+            (this.previewRectangleY + this.previewRectangleHeight / 2).toString(),
         );
     }
 
@@ -119,13 +119,13 @@ export class EllipsisToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawEllipse,
                 'cx',
-                (this.previewRectangleX + (this.previewRectangleWidth - (minLength / 2))).toString()
+                (this.previewRectangleX + (this.previewRectangleWidth - (minLength / 2))).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawEllipse,
                 'cx',
-                (this.previewRectangleX + minLength / 2).toString()
+                (this.previewRectangleX + minLength / 2).toString(),
             );
         }
 
@@ -133,25 +133,25 @@ export class EllipsisToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawEllipse,
                 'cy',
-                (this.previewRectangleY + (this.previewRectangleHeight - (minLength / 2))).toString()
+                (this.previewRectangleY + (this.previewRectangleHeight - (minLength / 2))).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawEllipse,
                 'cy',
-                (this.previewRectangleY + minLength / 2).toString()
+                (this.previewRectangleY + minLength / 2).toString(),
             );
         }
 
         this.renderer.setAttribute(
             this.drawEllipse,
             'rx',
-            Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString()
+            Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
             'ry',
-            Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString()
+            Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString(),
         );
     }
 

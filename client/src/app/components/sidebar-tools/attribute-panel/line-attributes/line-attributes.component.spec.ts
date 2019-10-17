@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropperAttributesComponent } from './dropper-attributes.component';
+import { LineAttributesComponent } from './line-attributes.component';
 
-describe('DropperAttributesComponent', () => {
-  let component: DropperAttributesComponent;
-  let fixture: ComponentFixture<DropperAttributesComponent>;
+describe('LineAttributesComponent', () => {
+  let component: LineAttributesComponent;
+  let fixture: ComponentFixture<LineAttributesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DropperAttributesComponent ],
+      declarations: [ LineAttributesComponent ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DropperAttributesComponent);
+    fixture = TestBed.createComponent(LineAttributesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
