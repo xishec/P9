@@ -1,6 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-
 import { SVG_NS } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
