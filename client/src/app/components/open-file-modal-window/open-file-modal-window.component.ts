@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { DrawingFileInfo } from 'src/classes/DrawingFileInfo';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
+import { Message } from '../../../../../common/communication/message';
+import { Drawing } from '../../../../../common/communication/Drawing';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -14,10 +16,10 @@ export class OpenFileModalWindowComponent implements OnInit {
     openFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    drawingFileInfos: DrawingFileInfo[] = [
-        { name: 'animal drawing', labels: ['tiger', 'lion'], thumbnail: 'thumbnail1' },
-        { name: 'food drawing', labels: ['hamburger', 'poutine'], thumbnail: 'thumbnail2' },
-        { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], thumbnail: 'thumbnail3' },
+    drawingsFromServer: Drawing[] = [
+        { name: 'animal drawing', labels: ['tiger', 'lion'], svg: '', idStack: [''] },
+        { name: 'food drawing', labels: ['hamburger', 'poutine'], svg: '', idStack: [''] },
+        { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], svg: '', idStack: [''] },
     ];
     selectedOption: string = '';
     drawingOpenSuccess: boolean = true;
@@ -26,12 +28,21 @@ export class OpenFileModalWindowComponent implements OnInit {
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
+        private fileManagerService: FileManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit() {
         this.initializeForm();
+
+        this.fileManagerService.getAllDrawing().subscribe((ans: any) => {
+            ans = ans as Message[];
+            ans.forEach((el: Message) => {
+                let drawing: Drawing = JSON.parse(el.body);
+                this.drawingsFromServer.push(drawing);
+            });
+        });
     }
 
     initializeForm(): void {
@@ -52,9 +63,19 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit() {
         if (this.drawingOpenSuccess) {
+            this.applyDrawing();
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
+    }
+
+    applyDrawing() {
+        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
+        let idStack = Object.values(drawing.idStack);
+        idStack.forEach((id) => {
+            let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
+            this.drawStack.push(el);
+        });
     }
 
     formIsInvalid() {
