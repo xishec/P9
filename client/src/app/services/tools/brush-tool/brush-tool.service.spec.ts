@@ -10,7 +10,7 @@ import { BrushToolService } from './brush-tool.service';
 const STACK_LENGTH = 1;
 const MOCK_FILTER = createMockFilter();
 
-describe('BrushToolService', () => {
+fdescribe('BrushToolService', () => {
     let injector: TestBed;
     let service: BrushToolService;
     let rendererMock: Renderer2;
@@ -58,7 +58,7 @@ describe('BrushToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('createSVGWrapper should call setAttribute 2 times in parent and appendChild twice (once in parent)', () => {
+    it('createSVGWrapper should call appendChild 2 times in parent and appendChild twice (once in parent)', () => {
         spyOn(service, 'createFilter').and.returnValue(createMockFilter());
         const spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
 
@@ -77,13 +77,13 @@ describe('BrushToolService', () => {
         expect(spyCreateFilter).toHaveBeenCalled();
     });
 
-    it('when patternId = 1 createFilter should call createElement with feGaussianBlur and setAttribute with stdDeviation', () => {
+    it('when patternId = 1 createFilter should only call createGayssianBlurFilter', () => {
         const patternId = 1;
+        const spyOnCreateGaussianBlurFilter = spyOn(service, 'createGaussianBlurFilter');
 
         service.createFilter(patternId);
 
-        expect(spyOnCreateElement).toHaveBeenCalledWith('feGaussianBlur', SVG_NS);
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'stdDeviation', '3');
+        expect(spyOnCreateGaussianBlurFilter).toHaveBeenCalled();
     });
 
     it('when patternId !== 1 createFilter should call createElement with feTurbulence and feDisplacementMap', () => {
