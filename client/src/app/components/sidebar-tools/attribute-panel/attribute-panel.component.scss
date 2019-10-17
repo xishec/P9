@@ -18,3 +18,10 @@
         margin: 30px 40px;
     }
 }
+
+#container {
+    scrollbar-width: none;
+}
+#container::-webkit-scrollbar {
+    display: none;
+}

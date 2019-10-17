@@ -40,6 +40,7 @@ import { ColorPaletteComponent } from './components/color-palette/color-palette.
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
+import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
@@ -66,6 +67,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         ColorAttributesComponent,
         ColorApplicatorAttributesComponent,
         ColorNumericValuesComponent,
+        PolygonAttributesComponent,
         GridAttributesComponent,
         LineAttributesComponent,
         StampAttributesComponent,
