@@ -1,13 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolName } from 'src/constants/tool-constants';
-import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { IndexService } from '../../services/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
@@ -19,26 +15,18 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-    readonly title = 'LOG2990';
-    message = new BehaviorSubject<string>('');
     displayWelcomeModalWindow = false;
     modalIsDisplayed = false;
     isOnInput = false;
 
     constructor(
-        private basicService: IndexService,
         private welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private shortcutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private gridtoolService: GridToolService,
-    ) {
-        this.basicService
-            .basicGet()
-            .pipe(map((message: Message) => `${message.title} ${message.body}`))
-            .subscribe(this.message);
-    }
+    ) {}
 
     ngOnInit(): void {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
