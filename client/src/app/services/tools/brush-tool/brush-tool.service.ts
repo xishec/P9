@@ -13,11 +13,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 export class BrushToolService extends TracingToolService {
     private currentStyle = 1;
 
-    constructor(
-        elementRef: ElementRef<SVGElement>,
-        renderer: Renderer2,
-        drawStack: DrawStackService,
-    ) {
+    constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super(elementRef, renderer, drawStack);
     }
 
@@ -88,7 +84,7 @@ export class BrushToolService extends TracingToolService {
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
-        const circle  = super.createSVGCircle(x, y);
+        const circle = super.createSVGCircle(x, y);
         const currentDrawStackLength = this.drawStack.getDrawStackLength();
         circle.addEventListener('mousedown', () => {
             this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Brush));

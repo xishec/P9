@@ -9,7 +9,7 @@
                 type="text"
                 placeholder="Hex"
                 formControlName="hex"
-                (input)="onUserHexInput()"
+                (change)="onUserHexInput()"
             />
             <mat-error>Ce code de couleur n'est pas valide!</mat-error>
             <span matPrefix>#</span>

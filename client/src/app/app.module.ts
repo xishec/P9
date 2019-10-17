@@ -17,6 +17,7 @@ import {
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************
@@ -40,6 +41,12 @@ import { ColorPaletteComponent } from './components/color-palette/color-palette.
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/drawing-modal-window/drawing-modal-window.component';
+import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
+import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
+import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
+import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
+import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
+import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
@@ -63,6 +70,12 @@ import { OpenFileModalWindowComponent } from './components/open-file-modal-windo
         ColorApplicatorAttributesComponent,
         ColorNumericValuesComponent,
         OpenFileModalWindowComponent,
+        PolygonAttributesComponent,
+        GridAttributesComponent,
+        LineAttributesComponent,
+        StampAttributesComponent,
+        DropperAttributesComponent,
+        EllipsisAttributesComponent,
     ],
     imports: [
         MatSliderModule,
@@ -82,6 +95,7 @@ import { OpenFileModalWindowComponent } from './components/open-file-modal-windo
         MatSliderModule,
         MatSelectModule,
         MatFormFieldModule,
+        MatSlideToggleModule,
     ],
     entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent, OpenFileModalWindowComponent],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],

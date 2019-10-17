@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolName } from 'src/constants/tool-constants';
 import { Message } from '../../../../../common/communication/message';
 import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
@@ -31,7 +32,8 @@ export class AppComponent implements OnInit {
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
         private shortcutManagerService: ShortcutManagerService,
-        private modalManagerService: ModalManagerService
+        private modalManagerService: ModalManagerService,
+        private gridtoolService: GridToolService,
     ) {
         this.basicService
             .basicGet()
@@ -198,5 +200,28 @@ export class AppComponent implements OnInit {
     }
 
     // Workzone options
-    // Will be implemented later
+    @HostListener('window:keydown.g', ['$event']) onG(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.gridtoolService.switchState();
+        }
+    }
+    @HostListener('window:keydown.+', ['$event']) onPlus(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.gridtoolService.incrementSize();
+        }
+    }
+    @HostListener('window:keydown.shift.+', ['$event']) onShiftPlus(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.gridtoolService.incrementSize();
+        }
+    }
+    @HostListener('window:keydown.-', ['$event']) onMinus(event: KeyboardEvent) {
+        if (this.shouldAllowShortcut()) {
+            event.preventDefault();
+            this.gridtoolService.decrementSize();
+        }
+    }
 }

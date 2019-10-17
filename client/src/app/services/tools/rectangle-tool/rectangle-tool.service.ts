@@ -13,26 +13,22 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class RectangleToolService extends AbstractShapeToolService {
     drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-     fillColor = '';
-     strokeColor = '';
-     userFillColor = '';
-     userStrokeColor = '';
-     userStrokeWidth = 0;
-     traceType = '';
-     strokeWidth = 0;
-     isSquarePreview = false;
-     attributesManagerService: AttributesManagerService;
-     colorToolService: ColorToolService;
+    fillColor = '';
+    strokeColor = '';
+    userFillColor = '';
+    userStrokeColor = '';
+    userStrokeWidth = 0;
+    traceType = '';
+    strokeWidth = 0;
+    isSquarePreview = false;
+    attributesManagerService: AttributesManagerService;
+    colorToolService: ColorToolService;
 
-    constructor(
-         public drawStack: DrawStackService,
-         public svgReference: ElementRef<SVGElement>,
-         renderer: Renderer2,
-    ) {
+    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
     }
 
-    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
@@ -43,7 +39,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
     }
 
-    initializeColorToolService(colorToolService: ColorToolService) {
+    initializeColorToolService(colorToolService: ColorToolService): void {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((fillColor: string) => {
             this.fillColor = fillColor;

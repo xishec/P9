@@ -39,6 +39,7 @@ export class DrawingModalWindowComponent implements OnInit {
             this.previewColor = previewColor;
         });
 
+        this.previewColor = this.colorToolService.backgroundColor.value;
         this.blankWorkZone = this.drawingModalWindowService.blankDrawingZone.value;
         this.initializeForm();
     }
@@ -62,7 +63,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
-    @HostListener('window:resize', ['$event'])
+    @HostListener('window:resize')
     onResize(): void {
         if (!this.drawingModalForm.controls.width.dirty && !this.drawingModalForm.controls.height.dirty) {
             this.drawingModalForm.controls.width.setValue(window.innerWidth - SIDEBAR_WIDTH);
