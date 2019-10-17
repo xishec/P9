@@ -99,7 +99,12 @@ import { SaveFileModalWindowComponent } from './components/modal-windows/save-fi
         MatFormFieldModule,
         MatSlideToggleModule,
     ],
-    entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent, OpenFileModalWindowComponent],
+    entryComponents: [
+        WelcomeModalWindowComponent,
+        DrawingModalWindowComponent,
+        OpenFileModalWindowComponent,
+        SaveFileModalWindowComponent,
+    ],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
     bootstrap: [AppComponent],
 })

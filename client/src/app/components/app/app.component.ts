@@ -21,6 +21,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 export class AppComponent implements OnInit {
     readonly title = 'LOG2990';
     message = new BehaviorSubject<string>('');
+    displayNewDrawingModalWindow = false;
     displayWelcomeModalWindow = false;
     modalIsDisplayed = false;
     isOnInput = false;
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit {
         if (this.displayWelcomeModalWindow) {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
+                disableClose: true,
             });
             this.modalManagerService.setModalIsDisplayed(true);
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {

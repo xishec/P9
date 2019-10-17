@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -45,7 +46,7 @@ export class ToolSelectorService {
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
-        })
+        });
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -90,9 +91,21 @@ export class ToolSelectorService {
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
             panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
         });
         this.modalManagerService.setModalIsDisplayed(true);
         openFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
+    displaySaveFileModal(): void {
+        const saveFileDialogRef = this.dialog.open(SaveFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        saveFileDialogRef.afterClosed().subscribe(() => {
             this.modalManagerService.setModalIsDisplayed(false);
         });
     }
@@ -168,7 +181,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Polygon:
-                this.currentTool = this.polygoneTool;                
+                this.currentTool = this.polygoneTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Grid:
@@ -193,6 +206,10 @@ export class ToolSelectorService {
             case ToolName.Eraser:
             case ToolName.Text:
             case ToolName.Save:
+                if (!this.modalIsDisplayed) {
+                    this.displaySaveFileModal();
+                }
+                break;
             case ToolName.ArtGallery:
                 if (!this.modalIsDisplayed) {
                     this.displayOpenFileModal();
