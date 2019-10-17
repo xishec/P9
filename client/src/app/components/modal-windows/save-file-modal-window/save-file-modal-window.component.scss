@@ -1,0 +1,19 @@
+#drawing-labels-list {
+    display: flex;
+    justify-content: center;
+}
+
+#drawing-label {
+    padding: 0 6px 0 6px;
+    margin: 3px 4px;
+    min-width: 60px;
+    border-radius: 3px;
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid;
+    border-radius: 5px;
+
+    ::ng-deep.mat-pseudo-checkbox {
+        display: none !important;
+    }
+}

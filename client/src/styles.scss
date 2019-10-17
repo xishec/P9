@@ -35,6 +35,16 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     padding: 12px 10px 10px 10px !important;
 }
 
+.mat-button-toggle {
+    background-color: mat-color($candy-app-primary);
+    color: mat-color($candy-app-primary, default-contrast);
+}
+
+.mat-button-toggle-checked {
+    background-color: mat-color($candy-app-accent);
+    color: mat-color($candy-app-accent, default-contrast);
+}
+
 .myapp-max-width-dialog .mat-dialog-container {
     max-width: 650px;
 }

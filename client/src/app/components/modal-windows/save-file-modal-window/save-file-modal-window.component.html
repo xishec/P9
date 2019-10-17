@@ -1,7 +1,21 @@
 <h1 mat-dialog-title>Sauvegarder le dessin</h1>
 
-<!-- <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
-    <mat-selection-list
+<mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
+    <mat-label>Nom du dessin</mat-label>  
+    <input matInput #input placeholder="Nom du dessin" />
+
+    <mat-label>Étiquettes</mat-label>
+    <div id="drawing-labels-list">
+        <mat-button-toggle id="drawing-label" *ngFor="let label of drawingLabels">
+            {{ label }}
+        </mat-button-toggle>
+    </div>
+    <!--     
+    <mat-select>
+      <mat-option *ngFor="let label of drawingLabels" [value]="label">Étiquette</mat-option>
+    </mat-select> -->
+
+    <!-- <mat-selection-list
         #drawings
         formControlName="selectedDrawing"
         (selectionChange)="handleSelection($event, drawings.selectedOptions)"
@@ -30,18 +44,12 @@
             L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
             <i class="fas fa-exclamation-triangle"></i>
         </mat-error>
-    </div>
+    </div> -->
 </mat-dialog-content>
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        [disabled]="formIsInvalid()"
-        (click)="onSubmit()"
-    >
+    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()">
         Ouvrir
     </button>
-</mat-dialog-actions> -->
+</mat-dialog-actions>
