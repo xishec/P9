@@ -5,12 +5,12 @@ export class Predicate {
         const value = event.value;
         // @ts-ignore
         if (value !== null) {
-            return this.IsBetween(value, range);
+            return this.isBetween(value, range);
         } else {
             return false;
         }
     }
-    IsBetween<T>(value: number | boolean, range: T): boolean {
+    isBetween<T>(value: number | boolean, range: T): boolean {
         // @ts-ignore
         return value >= range.Min && value <= range.Max;
     }
