@@ -147,7 +147,9 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentStrokeWidth.toString());
+
         this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, 'fill', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
             case LineStrokeType.Dotted_line :
@@ -187,7 +189,6 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentCircleJointDiameter / 2).toString());
-        this.renderer.setAttribute(circle, 'fill', `#${this.currentColor}`);
 
         this.renderer.appendChild(this.gWrap, circle);
 
