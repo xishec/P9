@@ -12,8 +12,12 @@
         [attr.width]="this.drawingInfo.width + 'px'"
     />
 </svg>
+<input id="input" placeholder="Name" [(ngModel)]="name" />
+<button id="save" (click)="save()">save</button>
+<button id="load" (click)="load()">load</button>
 
 <svg
+    class='grid'
     *ngIf="gridIsActive === true"
     [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
     [attr.width]="drawingInfo.width"
@@ -34,6 +38,7 @@
         </pattern>
     </defs>
     <rect
+        class='grid'
         [attr.height]="this.drawingInfo.height + 'px'"
         [attr.width]="this.drawingInfo.width + 'px'"
         fill="url(#grid)"
