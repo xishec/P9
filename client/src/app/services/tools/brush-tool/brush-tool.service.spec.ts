@@ -1,7 +1,6 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { SVG_NS } from 'src/constants/constants';
 import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
@@ -86,43 +85,62 @@ fdescribe('BrushToolService', () => {
         expect(spyOnCreateGaussianBlurFilter).toHaveBeenCalled();
     });
 
-    it('when patternId !== 1 createFilter should call createElement with feTurbulence and feDisplacementMap', () => {
-        const patternId = 100;
+    it('when patternId = 2 createFilter should call createGayssianBlurFilter and createTurbulenceDisplacementFilter', () => {
+        const patternId = 2;
+        const spyOnCreateGaussianBlurFilter = spyOn(service, 'createGaussianBlurFilter');
+        const spyOnCreateTurbulenceDisplacementFilter = spyOn(service, 'createTurbulenceDisplacementFilter');
 
         service.createFilter(patternId);
 
-        expect(spyOnCreateElement).toHaveBeenCalledWith('feTurbulence', SVG_NS);
-        expect(spyOnCreateElement).toHaveBeenCalledWith('feDisplacementMap', SVG_NS);
+        expect(spyOnCreateGaussianBlurFilter).toHaveBeenCalled();
+        expect(spyOnCreateTurbulenceDisplacementFilter).toHaveBeenCalled();
     });
 
-    it('when patternId = 2 setAttribute is called with baseFrequency 0.1 0.9', () => {
-        const patternId = 2;
+    it('when patternId = 3,4 or 5 createFilter should call only createTurbulenceDisplacementFilter', () => {
+        const patternId = 4;
+        const spyOnCreateTurbulenceDisplacementFilter = spyOn(service, 'createTurbulenceDisplacementFilter');
 
         service.createFilter(patternId);
+
+        expect(spyOnCreateTurbulenceDisplacementFilter).toHaveBeenCalled();
+    });
+
+    it('when createGaussianBlurFilter renderer.setAttribute and appendChild should be called', () => {
+
+        service.createGaussianBlurFilter(MOCK_FILTER);
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnCreateElement).toHaveBeenCalled();
+    });
+
+    it('when patternId = 2 createTurbulenceDisplacementFilter call setAttribute with baseFrequency 0.1 0.9', () => {
+        const patternId = 2;
+
+        service.createTurbulenceDisplacementFilter(MOCK_FILTER, patternId);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.1 0.9');
     });
 
-    it('when patternId = 3 setAttribute is called with baseFrequency 0.01 0.57', () => {
+    it('when patternId = 3 createTurbulenceDisplacementFilter call setAttribute with baseFrequency 0.01 0.57', () => {
         const patternId = 3;
 
-        service.createFilter(patternId);
+        service.createTurbulenceDisplacementFilter(MOCK_FILTER, patternId);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.01 0.57');
     });
 
-    it('when patternId = 4 setAttribute is called with baseFrequency 0.05', () => {
+    it('when patternId = 4 createTurbulenceDisplacementFilter call setAttribute with baseFrequency 0.05', () => {
         const patternId = 4;
 
-        service.createFilter(patternId);
+        service.createTurbulenceDisplacementFilter(MOCK_FILTER, patternId);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.05');
     });
 
-    it('when patternId = 5 setAttribute is called with baseFrequency 0.9', () => {
+    it('when patternId = 5 createTurbulenceDisplacementFilter call setAttribute with baseFrequency 0.9', () => {
         const patternId = 5;
 
-        service.createFilter(patternId);
+        service.createTurbulenceDisplacementFilter(MOCK_FILTER, patternId);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_FILTER, 'baseFrequency', '0.9');
     });
