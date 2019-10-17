@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { LineJointType, LineStrokeType, Thickness, ToolName } from 'src/constants/tool-constants';
-import { Predicate } from 'src/classes/Predicate';
+import { Predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-line-attributes',
@@ -19,7 +19,6 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Line;
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
-    predicate: Predicate = new Predicate();
 
     lineStrokeType: LineStrokeType;
     LineStrokeTypeChoices = [LineStrokeType.Continuous, LineStrokeType.Dotted_line, LineStrokeType.Dotted_circle];
@@ -69,7 +68,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onCircleJointSliderChange(event: MatSliderChange): void {
-        if (this.predicate.eventIsValid(event, Thickness)) {
+        if (Predicate.eventIsValid(event, Thickness)) {
             this.lineAttributesForm.controls.circleJointDiameter.setValue(event.value);
             this.onCircleJointDiameterChange();
         }
@@ -83,7 +82,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (this.predicate.eventIsValid(event, Thickness)) {
+        if (Predicate.eventIsValid(event, Thickness)) {
             this.lineAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }

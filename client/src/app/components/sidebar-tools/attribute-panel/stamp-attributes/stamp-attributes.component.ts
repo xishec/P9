@@ -14,7 +14,7 @@ import {
     ToolName,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { Predicate } from 'src/classes/Predicate';
+import { Predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-stamp-attributes',
@@ -26,7 +26,6 @@ export class StampAttributesComponent implements OnInit {
 
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;
-    predicate: Predicate = new Predicate();
     readonly stampScaling = StampScaling;
     readonly stampAngleOrientation = StampAngleOrientation;
     readonly stampTypes = STAMP_TYPES;
@@ -67,7 +66,7 @@ export class StampAttributesComponent implements OnInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (this.predicate.eventIsValid(event, StampScaling)) {
+        if (Predicate.eventIsValid(event, StampScaling)) {
             this.stampAttributesForm.controls.scaling.setValue(event.value);
             this.onScalingChange();
         }

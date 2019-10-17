@@ -8,7 +8,7 @@ import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
-import { Predicate } from 'src/classes/Predicate';
+import { Predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-rectangle-attributes',
@@ -19,7 +19,6 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Rectangle;
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
-    predicate: Predicate = new Predicate();
     readonly thickness = Thickness;
 
     constructor(
@@ -54,7 +53,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (this.predicate.eventIsValid(event, Thickness)) {
+        if (Predicate.eventIsValid(event, Thickness)) {
             this.rectangleAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
