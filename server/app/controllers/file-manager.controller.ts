@@ -15,12 +15,10 @@ export class FileManagerController {
 	private configureRouter(): void {
 		this.router = Router();
 
-		this.router.post('/open', async (req: Request, res: Response, next: NextFunction) => {
-			let message: Message = req.body;
+		this.router.get('/get-all-drawing', async (req: Request, res: Response, next: NextFunction) => {
+			let query = { title: /Add Drawing/i };
 
-			let query = { title: message.body };
-
-			Post.findOne(query)
+			Post.find(query)
 				.then((ans: Message) => {
 					res.json(ans);
 				})
