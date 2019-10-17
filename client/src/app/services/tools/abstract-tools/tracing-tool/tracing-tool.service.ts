@@ -69,7 +69,6 @@ export abstract class TracingToolService extends AbstractToolService {
             const y = this.getYPos(e.clientY);
             this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
-            this.renderer.removeChild(this.elementRef.nativeElement, this.svgPreviewCircle);
         }
     }
 
@@ -78,6 +77,7 @@ export abstract class TracingToolService extends AbstractToolService {
             this.isDrawing = false;
             this.currentPath = '';
             this.drawStack.push(this.svgWrap);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.svgPreviewCircle);
         }
     }
 
