@@ -41,11 +41,11 @@ export class ToolSelectorService {
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private modalManagerService: ModalManagerService
+        private modalManagerService: ModalManagerService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
-        })
+        });
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
@@ -79,7 +79,7 @@ export class ToolSelectorService {
     displayNewDrawingModal(): void {
         const newDrawingDialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
-            disableClose: true,
+            autoFocus: false,
         });
         this.modalManagerService.setModalIsDisplayed(true);
         newDrawingDialogRef.afterClosed().subscribe(() => {
@@ -90,6 +90,7 @@ export class ToolSelectorService {
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
             panelClass: 'myapp-min-width-dialog',
+            autoFocus: false,
         });
         this.modalManagerService.setModalIsDisplayed(true);
         openFileDialogRef.afterClosed().subscribe(() => {
@@ -168,7 +169,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Polygon:
-                this.currentTool = this.polygoneTool;                
+                this.currentTool = this.polygoneTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Grid:

@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
         if (this.displayWelcomeModalWindow) {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
+                autoFocus: false,
             });
             this.modalManagerService.setModalIsDisplayed(true);
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
