@@ -7,6 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
+import { Predicate } from 'src/classes/Predicate';
 
 @Component({
     selector: 'app-brush-attributes',
@@ -18,6 +19,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Brush;
     brushAttributesForm: FormGroup;
     brushToolService: BrushToolService;
+    predicate: Predicate = new Predicate();
     styles = BRUSH_STYLES;
     selected: string;
 
@@ -27,7 +29,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -53,7 +55,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (this.predicate.eventIsValid(event, Thickness)) {
             this.brushAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -61,7 +63,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
 
     onThicknessChange(): void {
         const thickness = this.brushAttributesForm.value.thickness;
-        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
+        if (this.brushAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
@@ -70,10 +72,10 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
         this.attributesManagerService.changeStyle(style);
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }

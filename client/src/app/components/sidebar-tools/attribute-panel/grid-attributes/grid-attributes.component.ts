@@ -4,6 +4,7 @@ import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
+import { Predicate } from 'src/classes/Predicate';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -13,6 +14,7 @@ import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 export class GridAttributesComponent implements OnInit {
     toolName = ToolName.Grid;
     gridAttributesForm: FormGroup;
+    predicate: Predicate = new Predicate();
 
     readonly gridSize = GridSize;
     readonly gridOpacity = GridOpacity;
@@ -20,7 +22,7 @@ export class GridAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService,
+        private gridToolService: GridToolService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -47,47 +49,47 @@ export class GridAttributesComponent implements OnInit {
         });
     }
 
-    onSizeSliderChange(event: MatSliderChange) {
-        if (this.gridToolService.eventIsValid(event, this.gridSize)) {
+    onSizeSliderChange(event: MatSliderChange): void {
+        if (this.predicate.eventIsValid(event, this.gridSize)) {
             this.gridAttributesForm.controls.size.setValue(event.value);
             this.onSizeChange();
         }
     }
 
-    onOpacitySliderChange(event: MatSliderChange) {
-        if (this.gridToolService.eventIsValid(event, this.gridOpacity)) {
+    onOpacitySliderChange(event: MatSliderChange): void {
+        if (this.predicate.eventIsValid(event, this.gridOpacity)) {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }
     }
 
-    onStateChange() {
+    onStateChange(): void {
         const state = this.gridAttributesForm.value.state;
         this.gridToolService.changeState(state);
     }
 
-    onSizeChange() {
+    onSizeChange(): void {
         const size = this.gridAttributesForm.value.size;
-        if (this.gridToolService.IsBetween(size, GridSize)) {
+        if (this.gridAttributesForm.controls.size.valid) {
             this.gridToolService.changeSize(size);
         }
     }
 
-    onOpacityChange() {
+    onOpacityChange(): void {
         const opacity = this.gridAttributesForm.value.opacity;
-        if (this.gridToolService.IsBetween(opacity, GridOpacity)) {
+        if (this.gridAttributesForm.controls.opacity.valid) {
             this.gridToolService.changeOpacity(opacity);
         }
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 
-    isWorkzoneEmpty() {
+    isWorkzoneEmpty(): boolean {
         return this.gridToolService.workzoneIsEmpty;
     }
 }
