@@ -8,7 +8,7 @@
         id="selection-list"
         required
     >
-        <mat-list-option *ngFor="let drawing of drawingFileInfos" id="list-option" [value]="drawing.name">
+        <mat-list-option *ngFor="let drawing of drawingsFromServer" id="list-option" [value]="drawing.name">
             <div id="drawing-option">
                 <div id="drawing-name">
                     {{ drawing.name }}
@@ -35,13 +35,7 @@
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        [disabled]="formIsInvalid()"
-        (click)="onSubmit()"
-    >
+    <button class="actionButton" mat-stroked-button type="submit" [disabled]="formIsInvalid()" (click)="onSubmit()">
         Ouvrir
     </button>
 </mat-dialog-actions>
