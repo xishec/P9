@@ -51,10 +51,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     setRadiusCorrection() {
-        let correction: number | undefined = PolygonRadiusCorrection.get(this.nbVertices);
-        if (correction === undefined) {
-            correction = 0;
-        }
+        let correction: number = PolygonRadiusCorrection.get(this.nbVertices) as number;
         this.radiusCorrection = this.radius * correction;
     }
 
@@ -81,31 +78,25 @@ export class PolygonToolService extends AbstractShapeToolService {
         let r = this.radius;
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
-
         let xValue;
         let yValue;
+        let polygonOffsetAngles: number = PolygonOffsetAngles.get(this.nbVertices) as number;
 
-        let polygonOffsetAngles: number | undefined = PolygonOffsetAngles.get(this.nbVertices);
-        if (polygonOffsetAngles === undefined) {
-            polygonOffsetAngles = 0;
-        }
-
-        let sin =
-            (r + this.radiusCorrection - this.strokeWidth / 2) *
-            Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         let cos =
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
-
         if (deltaX > 0) {
             xValue = cos + this.initialMouseX + r;
         } else {
             xValue = cos + this.initialMouseX - r;
         }
 
+        let sin =
+            (r + this.radiusCorrection - this.strokeWidth / 2) *
+            Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         let nbVerticesIsEven = this.nbVertices % 2 === 0;
         if (deltaY > 0) {
-            yValue = sin + this.initialMouseY + r + (nbVerticesIsEven ? 0 : this.radiusCorrection);
+            yValue = sin + this.initialMouseY + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
         } else {
             yValue = sin + this.initialMouseY - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
         }
@@ -131,7 +122,6 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.radius = minLength / 2;
         this.setRadiusCorrection();
 
-        // adjust x
         if (deltaX < 0) {
             this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, 'width', minLength.toString());
@@ -140,7 +130,6 @@ export class PolygonToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(this.previewRectangle, 'width', minLength.toString());
         }
 
-        // adjust y
         if (deltaY < 0) {
             this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, 'height', minLength.toString());
@@ -170,7 +159,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     cleanUpPreview(): void {
         this.isPreviewing = false;
-        this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+        // this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.svgReference, this.drawPolygon);
     }
 
@@ -191,9 +180,9 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     updateDrawing(): void {
-        this.updatePreviewRectangle(); // update les lignes pointés du rectangle (toujours rec)
-        this.copyPreviewRectangleAttributes(); // va updater le polygon (position et taille)
-        this.renderdrawPolygon(); // applique la couleur // contient de la logique
+        this.updatePreviewRectangle();
+        this.copyPreviewRectangleAttributes();
+        this.renderdrawPolygon();
     }
 
     updateTraceType(traceType: string) {
@@ -242,7 +231,7 @@ export class PolygonToolService extends AbstractShapeToolService {
             this.updateDrawing();
 
             this.renderer.appendChild(this.svgReference.nativeElement, this.drawPolygon);
-            this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
+            // this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
         }
     }
 

@@ -101,8 +101,8 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
 
 const PolygonRadiusCorrection: Map<number, number> = new Map([
-    [3, 0.15],
-    [4, 0.38],
+    [3, 0.13],
+    [4, 0.33],
     [5, 0.05],
     [6, 0.025],
     [7, 0.035],
