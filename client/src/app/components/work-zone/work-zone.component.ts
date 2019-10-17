@@ -15,6 +15,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
+import { Message } from '../../../../../common/communication/message';
 
 @Component({
     selector: 'app-work-zone',
@@ -102,19 +103,28 @@ export class WorkZoneComponent implements OnInit {
 
     // myString will be linked with server
     save() {
-        this.fileManagerService.postDrawing(this.name, this.refSVG.nativeElement.innerHTML, this.drawStack.idStack);
+        this.fileManagerService.postDrawing(
+            this.name,
+            ['test'],
+            this.refSVG.nativeElement.innerHTML,
+            this.drawStack.idStack,
+        );
     }
     load() {
-        this.fileManagerService.getDrawing(this.name).subscribe((ans: any) => {
-            let drawing: Drawing = JSON.parse(ans.body);
-
-            this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
-
-            let idStack = Object.values(drawing.idStack);
-            idStack.forEach((id) => {
-                let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
-                this.drawStack.push(el);
+        this.fileManagerService.getAllDrawing().subscribe((ans: any) => {
+            ans = ans as Message[];
+            ans.forEach((el: Message) => {
+                let drawing: Drawing = JSON.parse(el.body);
+                console.log(drawing);
             });
+
+            // this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', drawing.svg);
+
+            // let idStack = Object.values(drawing.idStack);
+            // idStack.forEach((id) => {
+            //     let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
+            //     this.drawStack.push(el);
+            // });
         });
     }
 
