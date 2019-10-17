@@ -34,7 +34,7 @@ export class GridAttributesComponent implements OnInit {
         this.gridToolService.currentSize.subscribe((size: number) => {
             this.gridAttributesForm.controls.size.setValue(size);
         });
-        this.gridToolService.currentWorkzoneIsEmpty.subscribe((isEmpty: boolean) => {
+        this.gridToolService.currentWorkzoneIsEmpty.subscribe(() => {
             this.enableSlider();
         });
     }
