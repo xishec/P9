@@ -6,6 +6,7 @@
         formControlName="selectedDrawing"
         (selectionChange)="handleSelection($event, drawings.selectedOptions)"
         id="selection-list"
+        required
     >
         <mat-list-option *ngFor="let drawing of drawingFileInfos" id="list-option" [value]="drawing.name">
             <div id="drawing-option">
@@ -23,6 +24,13 @@
             </div>
         </mat-list-option>
     </mat-selection-list>
+    <div id="confirmation" [hidden]="drawingOpenSuccess">
+        <mat-error>
+            <i class="fas fa-exclamation-triangle"></i>
+            L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
+            <i class="fas fa-exclamation-triangle"></i>
+        </mat-error>
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions id="footer" align="end">
@@ -31,7 +39,6 @@
         class="actionButton"
         mat-stroked-button
         type="submit"
-        [mat-dialog-close]="true"
         [disabled]="openFileModalForm.invalid"
         (click)="onSubmit()"
     >

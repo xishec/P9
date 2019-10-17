@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { DrawingFileInfo } from 'src/classes/DrawingFileInfo';
@@ -20,6 +20,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         { name: 'countries drawing', labels: ['Canada', 'USA', 'Italy'], thumbnail: 'thumbnail3' },
     ];
     selectedOption: string = '';
+    drawingOpenSuccess: boolean = true;
 
     constructor(
         formBuilder: FormBuilder,
@@ -35,7 +36,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
-            selectedDrawing: ['', Validators.required],
+            selectedDrawing: (this.selectedOption === ''),
         });
     }
 
@@ -53,7 +54,9 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.selectedOption);
-        this.modalManagerService.setModalIsDisplayed(false);
+        if (this.drawingOpenSuccess) {
+            this.dialogRef.close();
+            this.modalManagerService.setModalIsDisplayed(false);
+        }
     }
 }
