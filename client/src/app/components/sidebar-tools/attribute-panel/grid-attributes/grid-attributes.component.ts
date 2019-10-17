@@ -20,7 +20,7 @@ export class GridAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService,
+        private gridToolService: GridToolService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -34,11 +34,14 @@ export class GridAttributesComponent implements OnInit {
         this.gridToolService.currentSize.subscribe((size: number) => {
             this.gridAttributesForm.controls.size.setValue(size);
         });
+        this.gridToolService.currentWorkzoneIsEmpty.subscribe((isEmpty: boolean) => {
+            this.enableSlider();
+        });
     }
 
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({
-            state: [false],
+            state: [{ value: false, disabled: true }],
             size: [GridSize.Default, [Validators.required, Validators.min(GridSize.Min), Validators.max(GridSize.Max)]],
             opacity: [
                 GridOpacity.Max,
@@ -87,7 +90,9 @@ export class GridAttributesComponent implements OnInit {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 
-    isWorkzoneEmpty() {
-        return this.gridToolService.workzoneIsEmpty;
+    enableSlider(): void {
+        if (this.gridToolService.workzoneIsEmpty.value === false) {
+            this.gridAttributesForm.controls.state.enable();
+        }
     }
 }
