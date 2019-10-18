@@ -68,15 +68,19 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingLoaderService.currentWidth.subscribe((width: number) => {
             this.drawingInfo.width = width;
+            this.setRectangleBackgroundStyle();
         });
 
         this.drawingLoaderService.currentHeight.subscribe((height: number) => {
             this.drawingInfo.height = height;
+            this.setRectangleBackgroundStyle();
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             this.empty = false;
             this.drawingInfo = drawingInfo;
+
+            this.setRectangleBackgroundStyle();
 
             for (const el of this.drawStack.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
@@ -94,12 +98,8 @@ export class WorkZoneComponent implements OnInit {
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color = backgroundColor;
+            this.setRectangleBackgroundStyle();
         });
-
-        this.drawingInfo.height = window.innerHeight;
-        this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
-        this.drawingInfo.color = DEFAULT_TRANSPARENT;
-        this.empty = true;
 
         this.gridToolService.currentState.subscribe((state: boolean) => {
             this.gridIsActive = state;
@@ -111,6 +111,12 @@ export class WorkZoneComponent implements OnInit {
         this.gridToolService.currentOpacity.subscribe((opacity: number) => {
             this.gridOpacity = opacity;
         });
+
+        this.drawingInfo.height = window.innerHeight;
+        this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
+        this.drawingInfo.color = DEFAULT_TRANSPARENT;
+        this.empty = true;
+        this.setRectangleBackgroundStyle();
     }
 
     onClickRectangle() {
@@ -144,15 +150,6 @@ export class WorkZoneComponent implements OnInit {
             //     this.drawStack.push(el);
             // });
         });
-    }
-
-    changeStyle(): ReturnStyle {
-        if (this.empty) {
-            this.drawingInfo.color = DEFAULT_TRANSPARENT;
-        }
-        return {
-            fill: '#' + this.drawingInfo.color,
-        };
     }
 
     // LISTENERS //
@@ -226,8 +223,24 @@ export class WorkZoneComponent implements OnInit {
                 return { cursor: 'default' };
         }
     }
-}
 
-interface ReturnStyle {
-    fill: string;
+    backgroundColor(): string {
+        if (this.empty) {
+            this.drawingInfo.color = DEFAULT_TRANSPARENT;
+        }
+        return this.drawingInfo.color;
+    }
+
+    setRectangleBackgroundStyle() {
+        if (this.drawingInfo.width > 0 || this.drawingInfo.height > 0) {
+            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'height', this.drawingInfo.height + 'px');
+            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'width', this.drawingInfo.width + 'px');
+
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                'style',
+                'fill: #' + this.backgroundColor() + ';',
+            );
+        }
+    }
 }

@@ -1,23 +1,18 @@
 <svg
     #svgpad
     [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
-    [attr.width]="drawingInfo.width"
-    [attr.height]="drawingInfo.height"
+    [attr.width]="drawingInfo.width + 'px'"
+    [attr.height]="drawingInfo.height + 'px'"
     [ngStyle]="getCursorStyle()"
 >
-    <rect
-        (click)="onClickRectangle()"
-        [ngStyle]="changeStyle()"
-        [attr.height]="this.drawingInfo.height + 'px'"
-        [attr.width]="this.drawingInfo.width + 'px'"
-    />
+    <rect (click)="onClickRectangle()" />
 </svg>
 <input id="input" placeholder="Name" [(ngModel)]="name" />
 <button id="save" (click)="save()">save</button>
 <button id="load" (click)="load()">load</button>
 
 <svg
-    class='grid'
+    class="grid"
     *ngIf="gridIsActive === true"
     [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
     [attr.width]="drawingInfo.width"
@@ -38,9 +33,9 @@
         </pattern>
     </defs>
     <rect
-        class='grid'
-        [attr.height]="this.drawingInfo.height + 'px'"
-        [attr.width]="this.drawingInfo.width + 'px'"
+        class="grid"
+        [attr.height]="drawingInfo.height + 'px'"
+        [attr.width]="drawingInfo.width + 'px'"
         fill="url(#grid)"
     />
 </svg>
