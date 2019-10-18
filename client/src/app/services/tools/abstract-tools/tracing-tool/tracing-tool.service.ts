@@ -133,5 +133,11 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     // tslint:disable-next-line: no-empty
-    cleanUp(): void {}
+    cleanUp(): void {
+        if(this.isDrawing){
+            this.renderer.removeChild(this.elementRef.nativeElement, this.svgWrap);
+            this.svgWrap = this.renderer.createElement('g', SVG_NS);
+            this.currentPath = '';
+        }
+    }
 }
