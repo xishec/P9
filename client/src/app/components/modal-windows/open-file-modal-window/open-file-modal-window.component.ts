@@ -19,23 +19,42 @@ export class ToTrustHtmlPipe implements PipeTransform {
 }
 
 @Pipe({
-    name: 'filterDrawings',
+    name: 'nameFilter',
     pure: false,
 })
-export class FilterDrawings implements PipeTransform {
-    transform(drawings: Drawing[], filter: string): any {
-        if (filter === undefined || filter.length === 0) {
+export class NameFilter implements PipeTransform {
+    transform(drawings: Drawing[], nameFilter: string): Drawing[] {
+        if (nameFilter === undefined || nameFilter.length === 0) {
             return drawings;
         } else {
+            nameFilter = nameFilter.toLowerCase();
             return drawings.filter((drawing: Drawing) => {
-                let checkLabels: boolean = false;
-                drawing.labels.forEach((label: string) => {
-                    if (label.includes(filter)) {
-                        checkLabels = true;
+                return drawing.name.includes(nameFilter);
+            });
+        }
+    }
+}
+
+@Pipe({
+    name: 'labelFilter',
+    pure: false,
+})
+export class LabelFilter implements PipeTransform {
+    transform(drawings: Drawing[], labelFilter: string): Drawing[] {
+        if (labelFilter === undefined || labelFilter.length === 0) {
+            return drawings;
+        } else {
+            labelFilter = labelFilter.toLowerCase();
+            let labelsFromFilter = labelFilter.split(',').map(String);
+
+            return drawings.filter((drawing: Drawing) => {
+                let checkLabels: boolean = true;
+                labelsFromFilter.forEach((labelFromFilter: string) => {
+                    if (!drawing.labels.includes(labelFromFilter)) {
+                        checkLabels = false;
                     }
                 });
-
-                return drawing.name.includes(filter) || checkLabels;
+                return checkLabels;
             });
         }
     }
@@ -53,7 +72,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     drawingsFromServer: Drawing[] = [];
     selectedOption: string = '';
     drawingOpenSuccess: boolean = true;
-    filter: string;
+    nameFilter: string;
+    labelFilter: string;
     emptyDrawStack = true;
 
     constructor(

@@ -1,6 +1,12 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
-<input matInput id="filter" [(ngModel)]="filter" placeholder="Trouver un dessin spécifique ..." />
+<input matInput class="filter" [(ngModel)]="nameFilter" placeholder="Filter par nom ..." />
+<input
+    matInput
+    class="filter"
+    [(ngModel)]="labelFilter"
+    placeholder="Filter par étiquettes (ex.: pomme, melon, etc.) ..."
+/>
 
 <mat-dialog-content [formGroup]="openFileModalForm">
     <mat-selection-list
@@ -11,7 +17,10 @@
         required
     >
         <mat-list-option
-            *ngFor="let drawing of drawingsFromServer | filterDrawings: filter | slice: 0:6; let i = index"
+            *ngFor="
+                let drawing of drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter | slice: 0:6;
+                let i = index
+            "
             id="list-option"
             [value]="drawing.name"
         >
@@ -37,9 +46,13 @@
             </div>
         </mat-list-option>
     </mat-selection-list>
-    <div id="hidden-info" *ngIf="(drawingsFromServer | filterDrawings: filter).length > 6">
-        {{ (drawingsFromServer | filterDrawings: filter).length - 6 }}
-        {{ (drawingsFromServer | filterDrawings: filter).length - 6 > 1 ? 'dessins masqués ...' : 'dessin masqué ...' }}
+    <div id="hidden-info" *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6">
+        {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
+        {{
+            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 > 1
+                ? 'dessins masqués ...'
+                : 'dessin masqué ...'
+        }}
     </div>
 
     <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">

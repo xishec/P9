@@ -52,14 +52,16 @@ import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { SaveFileModalWindowComponent } from './components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import {
+    LabelFilter,
     ToTrustHtmlPipe,
-    FilterDrawings,
+    NameFilter,
     OpenFileModalWindowComponent,
 } from './components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 
 @NgModule({
     declarations: [
-        FilterDrawings,
+        LabelFilter,
+        NameFilter,
         ToTrustHtmlPipe,
         AppComponent,
         AttributePanelComponent,
