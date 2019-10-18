@@ -7,7 +7,7 @@ import { DrawingInfo } from 'src/classes/DrawingInfo';
     providedIn: 'root',
 })
 export class DrawingLoaderService {
-    currentRefSVG: BehaviorSubject<Drawing> = new BehaviorSubject({
+    currentDrawing: BehaviorSubject<Drawing> = new BehaviorSubject({
         name: '',
         labels: [''],
         svg: '',

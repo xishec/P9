@@ -54,7 +54,7 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.drawingLoaderService.currentRefSVG.subscribe((selectedDrawing) => {
+        this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
             if (selectedDrawing.svg === '') return;
 
             this.drawingInfo = selectedDrawing.drawingInfo;
@@ -85,7 +85,7 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingSaverService.currentDrawingLabels.subscribe((drawingLabels: NameAndLabels) => {
+        this.drawingSaverService.currentNameAndLabels.subscribe((drawingLabels: NameAndLabels) => {
             if (drawingLabels.name.length === 0) return;
             this.fileManagerService.postDrawing(
                 drawingLabels.name,

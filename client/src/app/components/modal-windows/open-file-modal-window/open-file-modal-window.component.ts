@@ -99,7 +99,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 (drawing) => drawing.name == this.selectedOption,
             ) as Drawing;
 
-            this.drawingLoaderService.currentRefSVG.next(selectedDrawing);
+            this.drawingLoaderService.currentDrawing.next(selectedDrawing);
 
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);

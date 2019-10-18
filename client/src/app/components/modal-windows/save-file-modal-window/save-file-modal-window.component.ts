@@ -42,7 +42,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         let nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.drawingLabels);
-        this.drawingSaverService.currentDrawingLabels.next(nameAndLabels);
+        this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
         this.onCancel();
         window.alert('Sauvegarde Réussie!');
     }
