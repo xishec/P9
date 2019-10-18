@@ -4,7 +4,7 @@ import { GridAttributesComponent } from './grid-attributes.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSliderChange } from '@angular/material';
-import { GridSize } from 'src/constants/tool-constants';
+import { GridSize, GridOpacity } from 'src/constants/tool-constants';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
@@ -16,6 +16,7 @@ fdescribe('GridAttributesComponent', () => {
     let shortcutManagerService: ShortcutManagerService;
 
     const AVERAGE_SIZE = (GridSize.Min + GridSize.Max) / 2;
+    const AVERAGE_OPACITY = (GridOpacity.Min + GridOpacity.Max) / 2;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -105,7 +106,62 @@ fdescribe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    //TODO: Add test here
+    it(`onOpacitySliderChange should change the value of opacity if event value [${GridOpacity.Min},${GridOpacity.Max}]`, () => {
+        event.value = AVERAGE_OPACITY;
+        const SPY = spyOn(component, 'onOpacityChange').and.returnValue();
+
+        component.onOpacitySliderChange(event);
+
+        expect(component.gridAttributesForm.value.opacity).toBe(AVERAGE_OPACITY);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it(`onOpacitySliderChange should not change the value of opacity if event value  ]${GridOpacity.Min},${GridOpacity.Max}[`, () => {
+        const SPY = spyOn(component, 'onOpacityChange').and.returnValue();
+
+        event.value = GridOpacity.Max + AVERAGE_OPACITY;
+        component.onOpacitySliderChange(event);
+        event.value = GridOpacity.Min - AVERAGE_OPACITY;
+        component.onOpacitySliderChange(event);
+
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('onOpacitySliderChange should not call onOpacityChange if event value is null', () => {
+        const SPY = spyOn(component, 'onOpacityChange').and.returnValue();
+
+        event.value = null;
+        component.onOpacitySliderChange(event);
+
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it(`onOpacityChange should call changeOpacity if form opacity value is [${GridOpacity.Min},${GridOpacity.Max}]`, () => {
+        component.gridAttributesForm.controls.opacity.setValue(AVERAGE_OPACITY);
+        const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
+
+        component.onOpacityChange();
+
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity > ${GridOpacity.Max}`, () => {
+        component.gridAttributesForm.controls.opacity.setValue(GridOpacity.Max + AVERAGE_OPACITY);
+        const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
+
+        component.onOpacityChange();
+
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity < ${GridOpacity.Min}`, () => {
+        component.gridAttributesForm.controls.opacity.setValue(GridOpacity.Min - AVERAGE_OPACITY);
+        const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
+
+        component.onOpacityChange();
+
+        expect(SPY).not.toHaveBeenCalled();
+    });
 
     it('onFocus should call changeIsOnInput when user in on focus', () => {
         const SPY = spyOn(shortcutManagerService, 'changeIsOnInput').and.returnValue();
