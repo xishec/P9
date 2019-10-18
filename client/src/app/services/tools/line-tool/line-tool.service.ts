@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType, ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -137,6 +137,7 @@ export class LineToolService extends AbstractToolService {
 
     startLine(x: number, y: number): void {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(this.gWrap, 'title', ToolName.Line);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
         this.isLineInStack = false;
@@ -146,7 +147,9 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
         this.renderer.setAttribute(this.currentLine, 'fill', 'none');
         this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentStrokeWidth.toString());
-        this.renderer.setAttribute(this.currentLine, 'stroke', `#${this.currentColor}`);
+
+        this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, 'fill', `#${this.currentColor}`);
 
         switch (this.currentStrokeType) {
             case LineStrokeType.Dotted_line :
@@ -186,7 +189,6 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentCircleJointDiameter / 2).toString());
-        this.renderer.setAttribute(circle, 'fill', `#${this.currentColor}`);
 
         this.renderer.appendChild(this.gWrap, circle);
 

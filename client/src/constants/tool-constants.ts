@@ -38,6 +38,25 @@ enum TraceType {
     Both = 'Plein avec contour',
 }
 
+const PolygonFormType: Map<number, string> = new Map([
+    [3, 'Triangle'],
+    [4, 'Quadrilatère'],
+    [5, 'Pentagone'],
+    [6, 'Hexagone'],
+    [7, 'Heptagone'],
+    [8, 'Octogone'],
+    [9, 'Nonagone'],
+    [10, 'Décagone'],
+    [11, 'Hendécagone'],
+    [12, 'Dodécagone'],
+]);
+
+enum PolygonSides {
+    Min = 3,
+    Default = 3,
+    Max = 12,
+}
+
 enum GridSize {
     Min = 5,
     Default = 10,
@@ -80,6 +99,32 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
+
+const PolygonRadiusCorrection: Map<number, number> = new Map([
+    [3, 0.13],
+    [4, 0.33],
+    [5, 0.05],
+    [6, 0.025],
+    [7, 0.035],
+    [8, 0.08],
+    [9, 0.025],
+    [10, 0.015],
+    [11, 0.02],
+    [12, 0.04],
+]);
+
+const PolygonOffsetAngles: Map<number, number> = new Map([
+    [3, 3 * (360 / 3 / 4) * (Math.PI / 180)],
+    [4, Math.PI / 4],
+    [5, (360 / 5 / 4) * (Math.PI / 180)],
+    [6, 0],
+    [7, 3 * (360 / 7 / 4) * (Math.PI / 180)],
+    [8, (360 / 8 / 2) * (Math.PI / 180)],
+    [9, (360 / 9 / 4) * (Math.PI / 180)],
+    [10, 0],
+    [11, 3 * (360 / 11 / 4) * (Math.PI / 180)],
+    [12, (360 / 12 / 2) * (Math.PI / 180)],
+]);
 
 enum StampScaling {
     Min = 0.1,
@@ -132,6 +177,10 @@ export {
     Thickness,
     TraceType,
     ToolName,
+    PolygonFormType,
+    PolygonSides,
+    PolygonRadiusCorrection,
+    PolygonOffsetAngles,
     StampScaling,
     StampAngleOrientation,
     STAMP_TYPES,
