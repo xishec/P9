@@ -14,10 +14,10 @@ import { DrawingInfo } from 'src/classes/DrawingInfo';
 export class FileManagerService {
     constructor(private http: HttpClient) {}
 
-    getAllDrawing(): Observable<Message[] | Message> {
+    getAllDrawings(): Observable<Message[] | Message> {
         return this.http
             .get<Message[]>(environment.BASE_URL + '/api/file-manager/get-all-drawing')
-            .pipe(catchError(this.handleError<Message>('getAllDrawing')));
+            .pipe(catchError(this.handleError<Message>('getAllDrawings')));
     }
 
     postDrawing(name: string, labels: string[], svg: string, idStack: string[], drawingInfo: DrawingInfo): void {

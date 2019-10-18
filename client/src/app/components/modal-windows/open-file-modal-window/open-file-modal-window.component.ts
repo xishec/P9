@@ -89,7 +89,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
 
-        this.fileManagerService.getAllDrawing().subscribe((ans: any) => {
+        this.fileManagerService.getAllDrawings().subscribe((ans: any) => {
             ans = ans as Message[];
             ans.forEach((el: Message) => {
                 let drawing: Drawing = JSON.parse(el.body);
