@@ -139,14 +139,16 @@ export class OpenFileModalWindowComponent implements OnInit {
         );
     }
 
-    getViewBox(i: number): string {
+    getViewBox(drawingName: string): string {
+        let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
         let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         return `0 0 ${width} ${height}`;
     }
 
-    getWidth(i: number): string {
+    getWidth(drawingName: string): string {
+        let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
         let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
@@ -155,7 +157,8 @@ export class OpenFileModalWindowComponent implements OnInit {
         }
         return '60px';
     }
-    getHeight(i: number): string {
+    getHeight(drawingName: string): string {
+        let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
         let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
@@ -163,5 +166,15 @@ export class OpenFileModalWindowComponent implements OnInit {
             return '100%';
         }
         return '60px';
+    }
+    getSVG(drawingName: string): string {
+        let i: number = this.findIndexByName(drawingName);
+        return this.drawingsFromServer[i].svg;
+    }
+    findIndexByName(drawingName: string): number {
+        let drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
+            return drawing.name === drawingName;
+        }) as Drawing;
+        return this.drawingsFromServer.indexOf(drawing);
     }
 }

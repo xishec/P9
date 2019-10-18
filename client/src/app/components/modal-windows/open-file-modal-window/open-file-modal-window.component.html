@@ -48,10 +48,10 @@
                     </div>
                     <div id="drawing-thumbnail">
                         <svg
-                            [attr.width]="getWidth(i)"
-                            [attr.height]="getHeight(i)"
-                            [attr.viewBox]="getViewBox(i)"
-                            [innerHTML]="drawingsFromServer[i].svg | toTrustHtml"
+                            [attr.width]="getWidth(drawing.name)"
+                            [attr.height]="getHeight(drawing.name)"
+                            [attr.viewBox]="getViewBox(drawing.name)"
+                            [innerHTML]="getSVG(drawing.name) | toTrustHtml"
                         ></svg>
                     </div>
                 </div>
