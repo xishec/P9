@@ -41,12 +41,24 @@
         {{ (drawingsFromServer | filterDrawings: filter).length - 6 }}
         {{ (drawingsFromServer | filterDrawings: filter).length - 6 > 1 ? 'dessins masqués ...' : 'dessin masqué ...' }}
     </div>
-    <div id="confirmation" [hidden]="drawingOpenSuccess">
+
+    <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">
         <mat-error>
             <i class="fas fa-exclamation-triangle"></i>
             L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
             <i class="fas fa-exclamation-triangle"></i>
         </mat-error>
+    </div> -->
+
+    <div id="confirmation" [hidden]="emptyDrawStack">
+        <mat-error class="center">
+            <i class="fas fa-exclamation-triangle"></i>
+            Un dessin existe déja dans votre zone de travail!
+            <i class="fas fa-exclamation-triangle"></i>
+        </mat-error>
+        <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+            Je confirme que je ne veut pas sauvegarder le dessin existant.
+        </mat-checkbox>
     </div>
 </mat-dialog-content>
 

@@ -69,3 +69,9 @@ mat-list-option[aria-selected='true'] {
     text-align: center;
     color: #8f8f8f;
 }
+
+.center {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+}

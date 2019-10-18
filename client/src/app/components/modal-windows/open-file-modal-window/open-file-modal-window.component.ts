@@ -54,6 +54,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     selectedOption: string = '';
     drawingOpenSuccess: boolean = true;
     filter: string;
+    emptyDrawStack = true;
 
     constructor(
         formBuilder: FormBuilder,
@@ -77,13 +78,14 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
-            console.log('emptyDrawStack', emptyDrawStack);
+            this.emptyDrawStack = emptyDrawStack;
         });
     }
 
     initializeForm(): void {
         this.openFileModalForm = this.formBuilder.group({
             selectedDrawing: [[this.selectedOption], Validators.required],
+            confirm: false,
         });
     }
 
@@ -111,7 +113,10 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     formIsInvalid(): boolean {
-        return this.openFileModalForm.value.selectedDrawing[0] === '';
+        return (
+            this.openFileModalForm.value.selectedDrawing[0] === '' ||
+            (!this.emptyDrawStack && this.openFileModalForm.invalid)
+        );
     }
 
     getViewBox(i: number): string {
