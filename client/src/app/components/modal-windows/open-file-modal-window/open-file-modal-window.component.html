@@ -1,5 +1,7 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
+<input matInput id="filter" [(ngModel)]="filter" placeholder="Trouver un dessin spécifique ..." />
+
 <mat-dialog-content [formGroup]="openFileModalForm">
     <mat-selection-list
         #drawings
@@ -9,7 +11,7 @@
         required
     >
         <mat-list-option
-            *ngFor="let drawing of drawingsFromServer; let i = index"
+            *ngFor="let drawing of drawingsFromServer | filterDrawings: filter; let i = index"
             id="list-option"
             [value]="drawing.name"
         >

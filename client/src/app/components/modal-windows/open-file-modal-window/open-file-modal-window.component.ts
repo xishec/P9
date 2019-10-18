@@ -18,6 +18,28 @@ export class ToTrustHtmlPipe implements PipeTransform {
     }
 }
 
+@Pipe({
+    name: 'filterDrawings',
+    pure: false,
+})
+export class FilterDrawings implements PipeTransform {
+    transform(drawings: Drawing[], filter: string): any {
+        if (filter === undefined || filter.length === 0) {
+            return drawings;
+        }
+        return drawings.filter((drawing: Drawing) => {
+            let checkLabels: boolean = false;
+            drawing.labels.forEach((label: string) => {
+                if (label.includes(filter)) {
+                    checkLabels = true;
+                }
+            });
+
+            return drawing.name.includes(filter) || checkLabels;
+        });
+    }
+}
+
 @Component({
     selector: 'app-open-file-modal-window',
     templateUrl: './open-file-modal-window.component.html',
@@ -30,6 +52,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     drawingsFromServer: Drawing[] = [];
     selectedOption: string = '';
     drawingOpenSuccess: boolean = true;
+    filter: string;
 
     constructor(
         formBuilder: FormBuilder,
