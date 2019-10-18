@@ -14,6 +14,7 @@ import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
+import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -38,6 +39,8 @@ export class WorkZoneComponent implements OnInit {
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
+    private eventListenerService: EventListenerService;
+
     constructor(
         private fileManagerService: FileManagerService,
         private drawingModalWindowService: DrawingModalWindowService,
@@ -52,8 +55,12 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
+        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector);
+        this.eventListenerService.addEventListeners();
+
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
+            this.eventListenerService.notifyEmpty(false);
             this.drawingInfo = drawingInfo;
 
             for (const el of this.drawStack.reset()) {
@@ -78,6 +85,8 @@ export class WorkZoneComponent implements OnInit {
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
+
+        this.eventListenerService.notifyEmpty(true);
 
         this.gridToolService.currentState.subscribe((state: boolean) => {
             this.gridIsActive = state;
@@ -125,11 +134,11 @@ export class WorkZoneComponent implements OnInit {
     }
 
     // LISTENERS //
-    @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onMouseMove(event);
-        }
-    }
+    // @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onMouseMove(event);
+    //     }
+    // }
 
     @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
         if (this.currentTool !== undefined && this.empty === false) {
