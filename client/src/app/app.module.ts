@@ -51,13 +51,13 @@ import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import {
-    NoSanitizePipe,
+    ToTrustHtmlPipe,
     OpenFileModalWindowComponent,
 } from './components/open-file-modal-window/open-file-modal-window.component';
 
 @NgModule({
     declarations: [
-        NoSanitizePipe,
+        ToTrustHtmlPipe,
         AppComponent,
         AttributePanelComponent,
         WorkZoneComponent,

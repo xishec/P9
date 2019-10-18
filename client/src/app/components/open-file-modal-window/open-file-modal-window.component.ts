@@ -11,7 +11,7 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Pipe({ name: 'toTrustHtml' })
-export class NoSanitizePipe implements PipeTransform {
+export class ToTrustHtmlPipe implements PipeTransform {
     constructor(private domSanitizer: DomSanitizer) {}
     transform(svg: string): SafeHtml {
         return this.domSanitizer.bypassSecurityTrustHtml(svg);
