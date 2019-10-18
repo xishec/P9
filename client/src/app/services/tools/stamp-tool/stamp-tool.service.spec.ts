@@ -97,6 +97,30 @@ fdescribe('StampToolService', () => {
         expect(service.verifyPosition(negativeMouseEvent)).toBeFalsy();
     });
 
+    it('should call initStamp appendChild if stampIsAppended is false', () => {
+        service.stampIsAppended = true;
+        service.initStamp();
+        expect(spyOnAppendChild).toHaveBeenCalledTimes(0);
+
+        service.stampIsAppended = false;
+        service.initStamp();
+        expect(spyOnAppendChild).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call removeChild if stampIsAppended is true', () => {
+        service.stampIsAppended = false;
+        service.cleanUpStamp();
+        expect(spyOnRemoveChild).toHaveBeenCalledTimes(0);
+
+        service.stampIsAppended = true;
+        service.cleanUpStamp();
+        expect(spyOnRemoveChild).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call setAttribute 3 times', () => {
+        service.setStamp();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
+    });
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
         expect(service.currentAngle).toEqual(15);
