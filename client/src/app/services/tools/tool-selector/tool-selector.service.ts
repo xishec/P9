@@ -197,12 +197,16 @@ export class ToolSelectorService {
                 this.currentTool = this.dropperTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.ArtGallery:
+                if (!this.modalIsDisplayed) {
+                    this.displayOpenFileModal();
+                }
+                break;
             case ToolName.Save:
                 if (!this.modalIsDisplayed) {
                     this.displaySaveFileModal();
                 }
                 break;
-
             case ToolName.Export:
                 // this.currentTool = undefined;
                 // this.changeCurrentToolName(tooltipName);
@@ -217,11 +221,7 @@ export class ToolSelectorService {
             case ToolName.Fill:
             case ToolName.Eraser:
             case ToolName.Text:
-            case ToolName.ArtGallery:
-                if (!this.modalIsDisplayed) {
-                    this.displayOpenFileModal();
-                }
-                break;
+
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);

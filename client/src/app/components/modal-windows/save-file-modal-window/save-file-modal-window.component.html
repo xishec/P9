@@ -2,7 +2,7 @@
 
 <mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
     <mat-label id="drawing-name-title">Nom du dessin</mat-label>
-    <input matInput id="drawing-name-input" #input placeholder="Nom du dessin" />
+    <input matInput id="drawing-name-input" [(ngModel)]="name" #input placeholder="Nom du dessin" />
 
     <mat-label id="drawing-label-title">Étiquettes</mat-label>
     <div id="drawing-labels-list">
