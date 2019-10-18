@@ -164,11 +164,11 @@ export class WorkZoneComponent implements OnInit {
     //     }
     // }
 
-    @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
-        if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
-            this.currentTool.onWheel(event);
-        }
-    }
+    // @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
+    //         this.currentTool.onWheel(event);
+    //     }
+    // }
 
     // @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
     //     if (this.currentTool !== undefined && this.empty === false) {
@@ -182,12 +182,12 @@ export class WorkZoneComponent implements OnInit {
     //     }
     // }
 
-    // ONLY USED ON LINE SERVICE
-    @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
-        if (this.currentTool instanceof LineToolService) {
-            (this.currentTool as LineToolService).onDblClick(event);
-        }
-    }
+    // // ONLY USED ON LINE SERVICE
+    // @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
+    //     if (this.currentTool instanceof LineToolService) {
+    //         (this.currentTool as LineToolService).onDblClick(event);
+    //     }
+    // }
     // LISTENERS //
 
     getCursorStyle() {

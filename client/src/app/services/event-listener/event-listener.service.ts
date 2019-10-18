@@ -1,7 +1,10 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
-import { ToolNameShortcuts } from 'src/constants/tool-constants';
+import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
+import { LineToolService } from '../tools/line-tool/line-tool.service';
+//import { ToolNameShortcuts } from 'src/constants/tool-constants';
+
 
 @Injectable({
     providedIn: 'root',
@@ -26,46 +29,49 @@ export class EventListenerService {
 
     addEventListeners(): void {
         
-        window.addEventListener('mousemove', (event: MouseEvent) => {
-            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+        this.workZoneSVGRef.nativeElement.addEventListener('mousemove', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseMove(event);
             }
         });
 
-        window.addEventListener('mousedown', (event: MouseEvent) => {
-            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+        this.workZoneSVGRef.nativeElement.addEventListener('mousedown', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseDown(event);
             }
         });
 
-        window.addEventListener('mouseup', (event: MouseEvent) => {
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseup', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseUp(event);
             }
         });
 
-        window.addEventListener('mouseenter', (event: MouseEvent) => {
-            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseenter', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseEnter(event);
             }
         });
 
-        window.addEventListener('mouseleave', (event: MouseEvent) => {
-            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseleave', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseLeave(event);
             }
         });
 
-        window.addEventListener('keydown', (event: KeyboardEvent) => {
-            
-            const toolName = ToolNameShortcuts.get(event.key);
-
-            if(this.shouldAllowShortcuts() && toolName !== undefined) {
-                event.preventDefault();
-                console.log(event.key);
-
-                this.toolSelectorService.changeTool(toolName);
+        this.workZoneSVGRef.nativeElement.addEventListener('wheel', (event: WheelEvent) => {
+            if (this.currentTool instanceof StampToolService && !this.empty) {
+                this.currentTool.onWheel(event);
             }
+        });
+
+        this.workZoneSVGRef.nativeElement.addEventListener('dblclick', (event: WheelEvent) => {
+            if (this.currentTool instanceof LineToolService && !this.empty) {
+                this.currentTool.onDblClick(event);
+            }
+        });
+
+        window.addEventListener('keydown', (event: KeyboardEvent) => {
             if (this.currentTool != undefined && !this.empty) {
                 this.currentTool.onKeyDown(event);
             }
@@ -76,13 +82,6 @@ export class EventListenerService {
                 this.currentTool.onKeyUp(event);
             }
         })
-    }
-
-    verifyIfInWorkZone(event: MouseEvent): boolean {
-        return(
-            event.clientX > (this.workZoneSVGRef.nativeElement.getBoundingClientRect().left + window.scrollX) &&
-            event.clientY > (this.workZoneSVGRef.nativeElement.getBoundingClientRect().top + window.scrollY)
-        )
     }
 
     shouldAllowShortcuts(): boolean {
