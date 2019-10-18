@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -8,53 +7,38 @@ import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-mo
     providedIn: 'root',
 })
 export class GridToolService {
-    workzoneIsEmpty = true;
-
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
-            this.workzoneIsEmpty = false;
+            this.workzoneIsEmpty.next(false);
         });
-        this.workzoneIsEmpty = true;
+        this.workzoneIsEmpty.next(true);
     }
 
     state: BehaviorSubject<boolean> = new BehaviorSubject(false);
     size: BehaviorSubject<number> = new BehaviorSubject(GridSize.Default);
     opacity: BehaviorSubject<number> = new BehaviorSubject(GridOpacity.Max);
+    workzoneIsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     currentState: Observable<boolean> = this.state.asObservable();
     currentSize: Observable<number> = this.size.asObservable();
     currentOpacity: Observable<number> = this.opacity.asObservable();
-
-    eventIsValid<T>(event: MatSliderChange, range: T): boolean {
-        const value = event.value;
-        // @ts-ignore
-        if (value !== null) {
-            return this.IsBetween(value, range);
-        } else {
-            return false;
-        }
-    }
-
-    IsBetween<T>(value: number | boolean, range: T): boolean {
-        // @ts-ignore
-        return value >= range.Min && value <= range.Max;
-    }
+    currentWorkzoneIsEmpty: Observable<boolean> = this.workzoneIsEmpty.asObservable();
 
     changeState(state: boolean) {
-        if (this.workzoneIsEmpty === false) {
+        if (this.workzoneIsEmpty.value === false) {
             this.state.next(state);
         }
     }
 
-    switchState() {
+    switchState(): void {
         this.state.value ? this.changeState(false) : this.changeState(true);
     }
 
-    changeSize(size: number) {
+    changeSize(size: number): void {
         this.size.next(size);
     }
 
-    incrementSize() {
+    incrementSize(): void {
         const gridSize = this.size.value;
         if (this.size.value + GRID_SIZE_INCREMENT <= GridSize.Max) {
             this.changeSize(gridSize + GRID_SIZE_INCREMENT);
@@ -63,7 +47,7 @@ export class GridToolService {
         }
     }
 
-    decrementSize() {
+    decrementSize(): void {
         const gridSize = this.size.value;
         if (gridSize - GRID_SIZE_DECREMENT >= GridSize.Min) {
             this.changeSize(gridSize - GRID_SIZE_DECREMENT);
@@ -72,7 +56,7 @@ export class GridToolService {
         }
     }
 
-    changeOpacity(opacity: number) {
+    changeOpacity(opacity: number): void {
         this.opacity.next(opacity);
     }
 }

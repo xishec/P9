@@ -8,6 +8,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { Thickness, ToolName, PolygonSides, PolygonFormType } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-polygon-attributes',
@@ -18,6 +19,7 @@ export class PolygonAttributesComponent implements OnInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonTollService: PolygonToolService;
+    attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
     readonly thickness = Thickness;
     readonly polygonSides = PolygonSides;
@@ -25,7 +27,6 @@ export class PolygonAttributesComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService
@@ -59,14 +60,14 @@ export class PolygonAttributesComponent implements OnInit {
     }
 
     onThicknessSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.polygonAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
 
-    onNbVerticesSliderChange(event: MatSliderChange) {
-        if (event.value !== null && event.value <= PolygonSides.Max && event.value >= PolygonSides.Min) {
+    onNbVerticesSliderChange(event: MatSliderChange): void {
+        if (predicate.eventIsValid(event, PolygonSides)) {
             this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
             this.onNbVerticesChange();
         }
@@ -74,7 +75,7 @@ export class PolygonAttributesComponent implements OnInit {
 
     onThicknessChange(): void {
         const thickness: number = this.polygonAttributesForm.value.thickness;
-        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
+        if (this.polygonAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
@@ -89,10 +90,10 @@ export class PolygonAttributesComponent implements OnInit {
         this.attributesManagerService.changeNbVertices(nbVertices);
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }
