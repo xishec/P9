@@ -201,10 +201,14 @@ export class LineToolService extends AbstractToolService {
 
     cleanUp(): void {
         if (!this.isLineInStack) {
-            this.drawStack.push(this.gWrap);
+            this.renderer.removeChild(this.elementRef, this.gWrap);
+            this.pointsArray = new Array();
         }
+        this.isDrawing = false;
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
 }

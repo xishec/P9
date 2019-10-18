@@ -89,4 +89,6 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
+    cleanUp(): void {}
 }
