@@ -8,7 +8,7 @@ import { GridSize, GridOpacity } from 'src/constants/tool-constants';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
-fdescribe('GridAttributesComponent', () => {
+describe('GridAttributesComponent', () => {
     let component: GridAttributesComponent;
     let fixture: ComponentFixture<GridAttributesComponent>;
     let event: MatSliderChange;
