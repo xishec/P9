@@ -44,14 +44,14 @@ export class LabelFilter implements PipeTransform {
         if (labelFilter === undefined || labelFilter.length === 0) {
             return drawings;
         } else {
-            labelFilter = labelFilter.toLowerCase();
+            labelFilter = labelFilter.toLowerCase().replace(/\s/g, '');
             let labelsFromFilter = labelFilter.split(',').map(String);
 
             return drawings.filter((drawing: Drawing) => {
-                let checkLabels: boolean = true;
+                let checkLabels: boolean = false;
                 labelsFromFilter.forEach((labelFromFilter: string) => {
-                    if (!drawing.labels.includes(labelFromFilter)) {
-                        checkLabels = false;
+                    if (drawing.labels.includes(labelFromFilter)) {
+                        checkLabels = true;
                     }
                 });
                 return checkLabels;

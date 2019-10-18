@@ -46,13 +46,22 @@
             </div>
         </mat-list-option>
     </mat-selection-list>
-    <div id="hidden-info" *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6">
+    <div
+        class="hidden-info"
+        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6"
+    >
         {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
         {{
             (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 > 1
                 ? 'dessins masqués ...'
                 : 'dessin masqué ...'
         }}
+    </div>
+    <div
+        class="hidden-info"
+        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
+    >
+        Aucun dessin trouvé!
     </div>
 
     <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">
