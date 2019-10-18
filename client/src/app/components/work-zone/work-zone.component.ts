@@ -86,6 +86,7 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentDrawingLabels.subscribe((drawingLabels: NameAndLabels) => {
+            if (drawingLabels.name.length === 0) return;
             this.fileManagerService.postDrawing(
                 drawingLabels.name,
                 drawingLabels.drawingLabels,

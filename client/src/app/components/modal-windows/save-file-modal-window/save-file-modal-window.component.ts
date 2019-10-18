@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
@@ -13,7 +13,6 @@ import { NameAndLabels } from 'src/classes/NameAndLabels';
 export class SaveFileModalWindowComponent implements OnInit {
     saveFileModalForm: FormGroup;
     formBuilder: FormBuilder;
-    name: string;
     drawingLabels: string[] = ['flower', 'hakimhakimhakim', 'kevin', 'roman'];
     selectedLabels: string[] = [''];
 
@@ -31,7 +30,9 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     initializeForm(): void {
-        this.saveFileModalForm = this.formBuilder.group({});
+        this.saveFileModalForm = this.formBuilder.group({
+            name: ['', [Validators.required, Validators.minLength(1)]],
+        });
     }
 
     onCancel(): void {
@@ -40,10 +41,10 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     onSubmit(): void {
-        let nameAndLabals = new NameAndLabels(this.name, this.drawingLabels);
-        this.drawingSaverService.currentDrawingLabels.next(nameAndLabals);
+        let nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.drawingLabels);
+        this.drawingSaverService.currentDrawingLabels.next(nameAndLabels);
         this.modalManagerService.setModalIsDisplayed(false);
-        window.alert('Sauvgarde Réussie!');
+        window.alert('Sauvegarde Réussie!');
     }
 
     addLabel(newLabel: string): void {
