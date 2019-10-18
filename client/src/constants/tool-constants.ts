@@ -170,7 +170,26 @@ enum LineJointType {
     Circle = 3,
 }
 
+const ToolNameShortcuts : Map<string , string> = new Map([
+        ['c', ToolName.Pencil],
+        ['w', ToolName.Brush],
+        ['p', ToolName.Quill],
+        ['y', ToolName.Pen],
+        ['a', ToolName.SprayCan],
+        ['1', ToolName.Rectangle],
+        ['2', ToolName.Ellipsis],
+        ['3', ToolName.Polygon],
+        ['l', ToolName.Line],
+        ['t', ToolName.Text],
+        ['r', ToolName.ColorApplicator],
+        ['b', ToolName.Fill],
+        ['e', ToolName.Eraser],
+        ['i', ToolName.Dropper],
+        ['s', ToolName.Selection],
+    ])
+
 export {
+    ToolNameShortcuts,
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
