@@ -100,7 +100,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         if (width > height) {
             return '100%';
         }
-        return '40px';
+        return '60px';
     }
     getHeight(i: number): string {
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
@@ -109,6 +109,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         if (width < height) {
             return '100%';
         }
-        return '40px';
+        return '60px';
     }
 }

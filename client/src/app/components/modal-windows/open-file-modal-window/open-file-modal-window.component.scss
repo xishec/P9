@@ -1,51 +1,63 @@
-.mat-typography {
-    display: grid;
-    grid-template-columns: 140px auto;
-    grid-template-rows: 30px 10px auto 60px;
-    align-self: center;
-    padding: 15px 40px;
-}
-
 #selection-list {
     ::ng-deep.mat-pseudo-checkbox {
         display: none !important;
     }
-}
 
-#drawing-name,
-#drawing-thumbnail {
-    padding-top: 4px;
+    #list-option {
+        padding: 5px;
+        height: 60px;
+    }
 }
 
 #drawing-option {
-    display: flex;
-    justify-content: space-between;
-}
+    display: grid;
+    grid-template-columns: 100px 400px 80px;
+    grid-template-rows: 60px;
+    align-self: center;
+    width: 100%;
 
-#drawing-labels-list {
-    display: flex;
-    justify-content: center;
-}
+    #drawing-name {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
 
-#drawing-label {
-    padding: 0 6px 0 6px;
-    margin: 3px 4px;
-    min-width: 60px;
-    border-radius: 3px;
-    font-size: 12px;
-    text-align: center;
-    border: 1px solid;
-    border-radius: 5px;
+        display: flex;
+        align-self: center;
+        justify-content: center;
+    }
+
+    #drawing-labels-list {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-self: center;
+
+        #drawing-label {
+            padding: 3px 6px;
+            margin: 3px 4px;
+            min-width: 60px;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+    }
+
+    #drawing-thumbnail {
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+
+        background-color: #a5a5a5;
+        height: 60px;
+        width: 60px;
+        border: 1px solid red;
+        padding: 0;
+    }
 }
 
 mat-list-option[aria-selected='true'] {
-    background: #a5a5a5;
-}
-
-#drawing-thumbnail {
-    background-color: #a5a5a5;
-    height: 40px;
-    width: 40px;
-    border: 1px solid red;
-    padding: 0;
+    background: #c5c5c5;
 }
