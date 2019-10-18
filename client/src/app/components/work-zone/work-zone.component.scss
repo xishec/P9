@@ -5,6 +5,10 @@
     margin: 0;
 }
 
+.grid {
+    pointer-events: none;
+}
+
 svg {
     position: absolute;
     top: 0px;
@@ -15,4 +19,20 @@ svg {
     position: fixed;
     height: 100%;
     overflow: hidden;
+}
+
+#save {
+    position: absolute;
+    top: 0px;
+    left: 360px;
+}
+#load {
+    position: absolute;
+    top: 0px;
+    left: 400px;
+}
+#input {
+    position: absolute;
+    top: 0px;
+    left: 460px;
 }

@@ -1,10 +1,8 @@
-import { ToolName } from 'src/constants/tool-constants';
-
 export class StackTargetInfo {
     targetPosition: number;
-    toolName: ToolName;
+    toolName: string;
 
-    constructor(targetPosition?: number | undefined, toolName?: ToolName | undefined) {
+    constructor(targetPosition?: number | undefined, toolName?: string | undefined) {
         if (targetPosition !== undefined) {
             this.targetPosition = targetPosition;
         }

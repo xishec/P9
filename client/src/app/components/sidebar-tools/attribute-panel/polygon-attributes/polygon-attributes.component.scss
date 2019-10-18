@@ -8,7 +8,7 @@
     }
 
     .attribute {
-        padding-top: 30px
+        padding-top: 30px;
     }
 }
 
@@ -16,7 +16,18 @@
     width: 150px;
 }
 
+#nbVertices {
+    .mat-slider-horizontal {
+        width: 120px;
+    }
+}
+
 .small {
     margin-left: 10px;
     width: 25%;
+}
+
+.small-polygon {
+    margin-left: 10px;
+    width: 30%;
 }
