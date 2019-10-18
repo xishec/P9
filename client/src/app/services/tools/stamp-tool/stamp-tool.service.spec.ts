@@ -88,6 +88,15 @@ fdescribe('StampToolService', () => {
         expect(spyOnStampWidth).toBeDefined();
         expect(spyOnStampHeight).toBeDefined();
     });
+
+    it('should return true if the mouseEvent is inside the window', () => {
+        expect(service.verifyPosition(positiveMouseEvent)).toBeTruthy();
+    });
+
+    it('should return false if the mouseEvent is outside the window', () => {
+        expect(service.verifyPosition(negativeMouseEvent)).toBeFalsy();
+    });
+
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
         expect(service.currentAngle).toEqual(15);
