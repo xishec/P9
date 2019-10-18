@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolName } from 'src/constants/tool-constants';
-import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
+import { WelcomeModalWindowComponent } from '../../components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';

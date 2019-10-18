@@ -6,9 +6,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
-import { Message } from '../../../../../common/communication/message';
-import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { Message } from '../../../../../../common/communication/message';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {
