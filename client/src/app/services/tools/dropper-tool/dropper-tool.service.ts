@@ -87,8 +87,13 @@ export class DropperToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
         this.isIn = false;
     }
+
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
+    cleanUp(): void {}
 
     getColor(event: MouseEvent): string {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;

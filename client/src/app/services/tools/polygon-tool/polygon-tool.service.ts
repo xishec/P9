@@ -1,6 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import { ToolName, TraceType, PolygonRadiusCorrection, PolygonOffsetAngles } from 'src/constants/tool-constants';
@@ -146,7 +145,9 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     renderdrawPolygon(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         if (this.isValidePolygon()) {
-            this.renderer.setAttribute(drawPolygon, 'fill', '#' + this.userFillColor);
+            this.userFillColor === 'none'
+                ? this.renderer.setAttribute(drawPolygon, 'fill', this.userFillColor)
+                : this.renderer.setAttribute(drawPolygon, 'fill', '#' + this.userFillColor);
             this.renderer.setAttribute(drawPolygon, 'stroke', '#' + this.userStrokeColor);
             this.renderer.setAttribute(drawPolygon, 'stroke-width', this.userStrokeWidth.toString());
             this.renderer.setAttribute(drawPolygon, 'stroke-linejoin', 'round');
@@ -169,11 +170,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.copyPreviewRectangleAttributes(drawPolygon);
         this.renderdrawPolygon(drawPolygon);
 
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        drawPolygon.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Polygon));
-        });
-
+        this.renderer.setAttribute(el, 'title', ToolName.Polygon);
         this.renderer.appendChild(el, drawPolygon);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
@@ -189,14 +186,14 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.traceType = traceType;
         switch (traceType) {
             case TraceType.Outline: {
-                this.userFillColor = DEFAULT_TRANSPARENT;
+                this.userFillColor = 'none';
                 this.userStrokeColor = this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
             case TraceType.Full: {
                 this.userFillColor = this.fillColor;
-                this.userStrokeColor = DEFAULT_TRANSPARENT;
+                this.userStrokeColor = 'none';
                 this.userStrokeWidth = 0;
                 break;
             }
@@ -254,4 +251,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     onKeyDown(event: KeyboardEvent): void {}
 
     onKeyUp(event: KeyboardEvent): void {}
+
+    cleanUp(): void {
+        this.renderer.removeChild(this.svgReference.nativeElement, this.drawPolygon);
+    }
 }

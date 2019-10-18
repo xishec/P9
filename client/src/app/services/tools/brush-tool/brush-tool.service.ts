@@ -99,4 +99,7 @@ export class BrushToolService extends TracingToolService {
         super.createSVGPath();
         this.renderer.setAttribute(this.svgPath, 'filter', `url(#${this.currentStyle})`);
     }
+
+    // tslint:disable-next-line: no-empty
+    cleanUp(): void {}
 }

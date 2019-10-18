@@ -126,11 +126,11 @@ export class ToolSelectorService {
     }
 
     changeTool(tooltipName: string): void {
-        if (this.currentTool instanceof StampToolService) {
-            this.currentTool.cleanUpStamp();
-        } else if (this.currentTool instanceof SelectionToolService) {
-            this.currentTool.removeFullSelectionBox();
+
+        if (this.currentTool) {
+            this.currentTool.cleanUp();
         }
+
         switch (tooltipName) {
             case ToolName.NewDrawing:
                 this.displayNewDrawingModal();
