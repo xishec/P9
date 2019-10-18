@@ -6,7 +6,7 @@
 
     <mat-label id="drawing-label-title">Étiquettes</mat-label>
     <div id="drawing-labels-list">
-        <mat-button-toggle id="label" *ngFor="let label of drawingLabels">
+        <mat-button-toggle id="label" *ngFor="let label of drawingLabels" [checked]="selectedLabels.includes(label)">
             {{ label }}
         </mat-button-toggle>
     </div>

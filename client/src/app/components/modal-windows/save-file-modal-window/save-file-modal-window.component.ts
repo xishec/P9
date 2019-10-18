@@ -49,5 +49,6 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     addLabel(newLabel: string): void {
         this.drawingLabels.push(newLabel);
+        this.selectedLabels.push(newLabel);
     }
 }
