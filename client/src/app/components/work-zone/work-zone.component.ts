@@ -56,6 +56,7 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingLoaderService.currentRefSVG.subscribe((selectedDrawing) => {
             if (selectedDrawing.svg === '') return;
+            this.empty = false;
             this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
 
             let idStack = Object.values(selectedDrawing.idStack);
@@ -63,6 +64,14 @@ export class WorkZoneComponent implements OnInit {
                 let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
                 this.drawStack.push(el);
             });
+        });
+
+        this.drawingLoaderService.currentWidth.subscribe((width: number) => {
+            this.drawingInfo.width = width;
+        });
+
+        this.drawingLoaderService.currentHeight.subscribe((height: number) => {
+            this.drawingInfo.height = height;
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {

@@ -50,7 +50,6 @@ export class OpenFileModalWindowComponent implements OnInit {
                 let drawing: Drawing = JSON.parse(el.body);
                 this.drawingsFromServer.push(drawing);
             });
-            console.log(this.drawingsFromServer);
         });
     }
 
@@ -77,6 +76,11 @@ export class OpenFileModalWindowComponent implements OnInit {
             ) as Drawing;
 
             this.drawingLoaderService.currentRefSVG.next(selectedDrawing);
+            this.drawingLoaderService.currentHeight.next(
+                Number(selectedDrawing.svg.split('height="')[1].split('px')[0]),
+            );
+            this.drawingLoaderService.currentWidth.next(Number(selectedDrawing.svg.split('width="')[1].split('px')[0]));
+
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
@@ -87,15 +91,15 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     getViewBox(i: number): string {
-        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
-        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
+        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
 
         return `0 0 ${width} ${height}`;
     }
 
     getWidth(i: number): string {
-        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
-        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
+        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
 
         if (width > height) {
             return '100%';
@@ -103,8 +107,8 @@ export class OpenFileModalWindowComponent implements OnInit {
         return '40px';
     }
     getHeight(i: number): string {
-        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
-        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
+        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
 
         if (width < height) {
             return '100%';

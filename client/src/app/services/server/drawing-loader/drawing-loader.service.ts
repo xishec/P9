@@ -13,5 +13,8 @@ export class DrawingLoaderService {
         idStack: [''],
     });
 
+    currentHeight: BehaviorSubject<number> = new BehaviorSubject(0);
+    currentWidth: BehaviorSubject<number> = new BehaviorSubject(0);
+
     constructor() {}
 }
