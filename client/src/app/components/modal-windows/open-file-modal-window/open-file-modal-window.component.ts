@@ -26,17 +26,18 @@ export class FilterDrawings implements PipeTransform {
     transform(drawings: Drawing[], filter: string): any {
         if (filter === undefined || filter.length === 0) {
             return drawings;
-        }
-        return drawings.filter((drawing: Drawing) => {
-            let checkLabels: boolean = false;
-            drawing.labels.forEach((label: string) => {
-                if (label.includes(filter)) {
-                    checkLabels = true;
-                }
-            });
+        } else {
+            return drawings.filter((drawing: Drawing) => {
+                let checkLabels: boolean = false;
+                drawing.labels.forEach((label: string) => {
+                    if (label.includes(filter)) {
+                        checkLabels = true;
+                    }
+                });
 
-            return drawing.name.includes(filter) || checkLabels;
-        });
+                return drawing.name.includes(filter) || checkLabels;
+            });
+        }
     }
 }
 

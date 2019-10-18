@@ -31,6 +31,8 @@ enum Mouse {
 
 const SIDEBAR_WIDTH = 360;
 
+const MAX_DRAWING_LENGTH = 6;
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export { SIDEBAR_WIDTH, SVG_NS, Keys, Mouse };
+export { MAX_DRAWING_LENGTH, SIDEBAR_WIDTH, SVG_NS, Keys, Mouse };

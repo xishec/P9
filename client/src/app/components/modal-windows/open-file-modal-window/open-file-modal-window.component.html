@@ -11,30 +11,36 @@
         required
     >
         <mat-list-option
-            *ngFor="let drawing of drawingsFromServer | filterDrawings: filter; let i = index"
+            *ngFor="let drawing of drawingsFromServer | filterDrawings: filter | slice: 0:6; let i = index"
             id="list-option"
             [value]="drawing.name"
         >
-            <div id="drawing-option">
-                <div id="drawing-name">
-                    {{ drawing.name }}
-                </div>
-                <div id="drawing-labels-list">
-                    <div id="drawing-label" *ngFor="let label of drawing.labels">
-                        {{ label }}
+            <div *ngIf="i < 6">
+                <div id="drawing-option">
+                    <div id="drawing-name">
+                        {{ drawing.name }}
                     </div>
-                </div>
-                <div id="drawing-thumbnail">
-                    <svg
-                        [attr.width]="getWidth(i)"
-                        [attr.height]="getHeight(i)"
-                        [attr.viewBox]="getViewBox(i)"
-                        [innerHTML]="drawingsFromServer[i].svg | toTrustHtml"
-                    ></svg>
+                    <div id="drawing-labels-list">
+                        <div id="drawing-label" *ngFor="let label of drawing.labels">
+                            {{ label }}
+                        </div>
+                    </div>
+                    <div id="drawing-thumbnail">
+                        <svg
+                            [attr.width]="getWidth(i)"
+                            [attr.height]="getHeight(i)"
+                            [attr.viewBox]="getViewBox(i)"
+                            [innerHTML]="drawingsFromServer[i].svg | toTrustHtml"
+                        ></svg>
+                    </div>
                 </div>
             </div>
         </mat-list-option>
     </mat-selection-list>
+    <div id="hidden-info" *ngIf="(drawingsFromServer | filterDrawings: filter).length > 6">
+        {{ (drawingsFromServer | filterDrawings: filter).length - 6 }}
+        {{ (drawingsFromServer | filterDrawings: filter).length - 6 > 1 ? 'dessins masqués ...' : 'dessin masqué ...' }}
+    </div>
     <div id="confirmation" [hidden]="drawingOpenSuccess">
         <mat-error>
             <i class="fas fa-exclamation-triangle"></i>
