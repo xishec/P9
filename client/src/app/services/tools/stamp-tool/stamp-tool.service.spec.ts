@@ -242,6 +242,24 @@ fdescribe('StampToolService', () => {
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(1);
     });
 
+    it('should call alterRotateStamp if isAlterRotation is true and rotateStamp if isAlterRotation is false', () => {
+        let wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
+        let spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
+
+        service.isAlterRotation = true;
+        let spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
+
+        service.onWheel(wheelEvent);
+        expect(spyOnAlterRotateStamp).toHaveBeenCalled();
+        expect(spyOnApplyTransformation).toHaveBeenCalled();
+
+        service.isAlterRotation = false;
+        let spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
+
+        service.onWheel(wheelEvent);
+        expect(spyOnRotateStamp).toHaveBeenCalled();
+    });
+
     it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
         service.onKeyDown(onOtherKeyDown);
         service.isAlterRotation = false;
