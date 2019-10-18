@@ -7,25 +7,25 @@ import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-mo
     providedIn: 'root',
 })
 export class GridToolService {
-    workzoneIsEmpty = true;
-
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
-            this.workzoneIsEmpty = false;
+            this.workzoneIsEmpty.next(false);
         });
-        this.workzoneIsEmpty = true;
+        this.workzoneIsEmpty.next(true);
     }
 
     state: BehaviorSubject<boolean> = new BehaviorSubject(false);
     size: BehaviorSubject<number> = new BehaviorSubject(GridSize.Default);
     opacity: BehaviorSubject<number> = new BehaviorSubject(GridOpacity.Max);
+    workzoneIsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     currentState: Observable<boolean> = this.state.asObservable();
     currentSize: Observable<number> = this.size.asObservable();
     currentOpacity: Observable<number> = this.opacity.asObservable();
+    currentWorkzoneIsEmpty: Observable<boolean> = this.workzoneIsEmpty.asObservable();
 
-    changeState(state: boolean): void {
-        if (this.workzoneIsEmpty === false) {
+    changeState(state: boolean) {
+        if (this.workzoneIsEmpty.value === false) {
             this.state.next(state);
         }
     }
