@@ -9,6 +9,7 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { Message } from '../../../../../common/communication/message';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {
@@ -76,10 +77,6 @@ export class OpenFileModalWindowComponent implements OnInit {
             ) as Drawing;
 
             this.drawingLoaderService.currentRefSVG.next(selectedDrawing);
-            this.drawingLoaderService.currentHeight.next(
-                Number(selectedDrawing.svg.split('height="')[1].split('px')[0]),
-            );
-            this.drawingLoaderService.currentWidth.next(Number(selectedDrawing.svg.split('width="')[1].split('px')[0]));
 
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
@@ -91,15 +88,15 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     getViewBox(i: number): string {
-        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
-        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
+        let height: number = this.drawingsFromServer[i].drawingInfo.height;
+        let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         return `0 0 ${width} ${height}`;
     }
 
     getWidth(i: number): string {
-        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
-        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
+        let height: number = this.drawingsFromServer[i].drawingInfo.height;
+        let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         if (width > height) {
             return '100%';
@@ -107,8 +104,8 @@ export class OpenFileModalWindowComponent implements OnInit {
         return '40px';
     }
     getHeight(i: number): string {
-        let height: number = Number(this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0]);
-        let width: number = Number(this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0]);
+        let height: number = this.drawingsFromServer[i].drawingInfo.height;
+        let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         if (width < height) {
             return '100%';
