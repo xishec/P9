@@ -1,55 +1,26 @@
 <h1 mat-dialog-title>Sauvegarder le dessin</h1>
 
 <mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
-    <mat-label>Nom du dessin</mat-label>  
-    <input matInput #input placeholder="Nom du dessin" />
+    <mat-label id="drawing-name-title">Nom du dessin</mat-label>
+    <input id="drawing-name-input" #input placeholder="Nom du dessin" />
 
-    <mat-label>Étiquettes</mat-label>
+    <mat-label id="drawing-label-title">Étiquettes</mat-label>
     <div id="drawing-labels-list">
-        <mat-button-toggle id="drawing-label" *ngFor="let label of drawingLabels">
+        <mat-button-toggle id="label" *ngFor="let label of drawingLabels">
             {{ label }}
         </mat-button-toggle>
     </div>
-    <!--     
-    <mat-select>
-      <mat-option *ngFor="let label of drawingLabels" [value]="label">Étiquette</mat-option>
-    </mat-select> -->
-
-    <!-- <mat-selection-list
-        #drawings
-        formControlName="selectedDrawing"
-        (selectionChange)="handleSelection($event, drawings.selectedOptions)"
-        id="selection-list"
-        required
-    >
-        <mat-list-option *ngFor="let drawing of drawingFileInfos" id="list-option" [value]="drawing.name">
-            <div id="drawing-option">
-                <div id="drawing-name">
-                    {{ drawing.name }}
-                </div>
-                <div id="drawing-labels-list">
-                    <div id="drawing-label" *ngFor="let label of drawing.labels">
-                        {{ label }}
-                    </div>
-                </div>
-                <div id="drawing-thumbnail">
-                    {{ drawing.thumbnail }}
-                </div>
-            </div>
-        </mat-list-option>
-    </mat-selection-list>
-    <div id="confirmation" [hidden]="drawingOpenSuccess">
-        <mat-error>
-            <i class="fas fa-exclamation-triangle"></i>
-            L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
-            <i class="fas fa-exclamation-triangle"></i>
-        </mat-error>
-    </div> -->
+    <div id="new-label">
+      <input id="new-label-input" #labelInput placeholder="Nouvelle étiquette"/>
+      <button type="button" (click)="addLabel(labelInput.value)">
+        Ajouter une étiquette
+      </button>
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
     <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()">
-        Ouvrir
+        Sauvegarder
     </button>
 </mat-dialog-actions>

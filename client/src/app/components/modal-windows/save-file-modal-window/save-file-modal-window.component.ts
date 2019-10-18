@@ -12,27 +12,31 @@ export class SaveFileModalWindowComponent implements OnInit {
     saveFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    drawingLabels: string[] = ['flower', 'hakim', 'kevin', 'roman'];
+    drawingLabels: string[] = ['flower', 'hakimhakimhakim', 'kevin', 'roman'];
+    selectedLabels: string[] = [''];
 
     constructor(
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<SaveFileModalWindowComponent>,
         private modalManagerService: ModalManagerService
     ) {
-      this.formBuilder = formBuilder;
+        this.formBuilder = formBuilder;
     }
 
     ngOnInit() {
-      this.initializeForm();
+        this.initializeForm();
     }
 
     initializeForm(): void {
-      this.saveFileModalForm = this.formBuilder.group({
-      });
-  }
+        this.saveFileModalForm = this.formBuilder.group({});
+    }
 
     onCancel(): void {
-      this.dialogRef.close();
-      this.modalManagerService.setModalIsDisplayed(false);
-  }
+        this.dialogRef.close();
+        this.modalManagerService.setModalIsDisplayed(false);
+    }
+
+    addLabel(newLabel: string): void {
+      this.drawingLabels.push(newLabel);
+    }
 }

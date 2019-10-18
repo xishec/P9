@@ -1,9 +1,41 @@
-#drawing-labels-list {
-    display: flex;
-    justify-content: center;
+.mat-typography {
+    display: grid;
+    grid-template-columns: 140px auto;
+    grid-template-rows: 30px 10px auto 30px;
+    align-self: center;
+    padding: 15px 40px;
 }
 
-#drawing-label {
+#drawing-name-title {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    align-self: center;
+}
+
+#drawing-name-input {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-self: center;
+    margin: 0 4px;
+    padding-left: 4px;
+}
+
+#drawing-label-title {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    align-self: center;
+}
+
+#drawing-labels-list {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    display: flex;
+
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#label {
     padding: 0 6px 0 6px;
     margin: 3px 4px;
     min-width: 60px;
@@ -12,8 +44,18 @@
     text-align: center;
     border: 1px solid;
     border-radius: 5px;
+}
 
-    ::ng-deep.mat-pseudo-checkbox {
-        display: none !important;
-    }
+#new-label {
+    grid-column: 2 / 3;
+    grid-row: 4 / 5;
+    align-self: center;
+
+    display: flex;
+    justify-content: center;
+}
+
+#new-label-input {
+    margin-right: 15px;
+    padding-left: 4px;
 }
