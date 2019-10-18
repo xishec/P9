@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
-import { ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { ToolNameShortcuts } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -11,8 +11,6 @@ export class EventListenerService {
     currentTool: AbstractToolService | undefined;
     toolName = '';
     empty = true;
-
-    
 
     constructor(
         private workZoneSVGRef: ElementRef<SVGElement>,
@@ -28,24 +26,56 @@ export class EventListenerService {
 
     addEventListeners(): void {
         
-        window.addEventListener('mousemove', (event) => {
+        window.addEventListener('mousemove', (event: MouseEvent) => {
             if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
                 this.currentTool.onMouseMove(event);
             }
         });
 
-        window.addEventListener('keydown', (event) => {
-            if(this.shouldAllowShortcuts()) {
-                event.preventDefault();
-
-                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
-
-                if (event.key === 'c') {
-                    event.preventDefault();
-                    this.toolSelectorService.changeTool(ToolName.Pencil);
-                }
+        window.addEventListener('mousedown', (event: MouseEvent) => {
+            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+                this.currentTool.onMouseDown(event);
             }
         });
+
+        window.addEventListener('mouseup', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.empty) {
+                this.currentTool.onMouseUp(event);
+            }
+        });
+
+        window.addEventListener('mouseenter', (event: MouseEvent) => {
+            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+                this.currentTool.onMouseEnter(event);
+            }
+        });
+
+        window.addEventListener('mouseleave', (event: MouseEvent) => {
+            if (this.verifyIfInWorkZone(event) && this.currentTool!== undefined && !this.empty) {
+                this.currentTool.onMouseLeave(event);
+            }
+        });
+
+        window.addEventListener('keydown', (event: KeyboardEvent) => {
+            
+            const toolName = ToolNameShortcuts.get(event.key);
+
+            if(this.shouldAllowShortcuts() && toolName !== undefined) {
+                event.preventDefault();
+                console.log(event.key);
+
+                this.toolSelectorService.changeTool(toolName);
+            }
+            if (this.currentTool != undefined && !this.empty) {
+                this.currentTool.onKeyDown(event);
+            }
+        });
+
+        window.addEventListener('keyup', (event: KeyboardEvent) => {
+            if(this.currentTool != undefined && !this.empty) {
+                this.currentTool.onKeyUp(event);
+            }
+        })
     }
 
     verifyIfInWorkZone(event: MouseEvent): boolean {

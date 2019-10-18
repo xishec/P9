@@ -140,29 +140,29 @@ export class WorkZoneComponent implements OnInit {
     //     }
     // }
 
-    @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onMouseDown(event);
-        }
-    }
+    // @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onMouseDown(event);
+    //     }
+    // }
 
-    @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onMouseUp(event);
-        }
-    }
+    // @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onMouseUp(event);
+    //     }
+    // }
 
-    @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onMouseEnter(event);
-        }
-    }
+    // @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onMouseEnter(event);
+    //     }
+    // }
 
-    @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onMouseLeave(event);
-        }
-    }
+    // @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onMouseLeave(event);
+    //     }
+    // }
 
     @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
         if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
@@ -170,17 +170,17 @@ export class WorkZoneComponent implements OnInit {
         }
     }
 
-    @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onKeyDown(event);
-        }
-    }
+    // @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onKeyDown(event);
+    //     }
+    // }
 
-    @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
-        if (this.currentTool !== undefined && this.empty === false) {
-            this.currentTool.onKeyUp(event);
-        }
-    }
+    // @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
+    //     if (this.currentTool !== undefined && this.empty === false) {
+    //         this.currentTool.onKeyUp(event);
+    //     }
+    // }
 
     // ONLY USED ON LINE SERVICE
     @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
