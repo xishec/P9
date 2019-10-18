@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { NO_STAMP } from 'src/constants/tool-constants';
+import { NO_STAMP, BASE64_STAMPS_MAP } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -122,7 +122,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
-        this.renderer.setAttribute(stamp, 'href', this.stampLink);
+        this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink));
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(rect, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
