@@ -17,8 +17,6 @@ import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
-import { DropperToolService } from '../dropper-tool/dropper-tool.service';
-import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 
 @Injectable({
@@ -166,7 +164,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Polygon:
-                this.currentTool = this.polygoneTool;                
+                this.currentTool = this.polygoneTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Grid:

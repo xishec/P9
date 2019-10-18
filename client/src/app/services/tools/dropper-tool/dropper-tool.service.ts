@@ -49,6 +49,7 @@ export class DropperToolService extends AbstractToolService {
         );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
+        console.log(this.SVGImg.src);
     }
 
     pickColor(): Uint8ClampedArray {
@@ -73,6 +74,12 @@ export class DropperToolService extends AbstractToolService {
         } else if (button === Mouse.RightButton && this.isIn) {
             this.colorTool.changeSecondaryColor(colorHex);
         }
+
+        // DEBUGGING
+        //let d = this.canvas.toDataURL('image/png');
+        //let w = window.open(d) as Window;
+        //w.document.write("<img src='"+d+"' alt='from canvas'/>");
+        // DEBUGGING
     }
     onMouseEnter(event: MouseEvent): void {
         this.isIn = true;

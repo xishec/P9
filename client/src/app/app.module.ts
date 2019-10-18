@@ -71,6 +71,10 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         StampAttributesComponent,
         DropperAttributesComponent,
         EllipsisAttributesComponent,
+        PolygonAttributesComponent,
+        GridAttributesComponent,
+        LineAttributesComponent,
+        SelectionAttributesComponent
     ],
     imports: [
         MatSliderModule,

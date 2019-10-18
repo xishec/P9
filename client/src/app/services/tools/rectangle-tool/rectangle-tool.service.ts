@@ -135,6 +135,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
+        console.log(el.getBBox());
     }
 
     updateDrawing(): void {

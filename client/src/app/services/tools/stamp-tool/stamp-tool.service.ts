@@ -120,10 +120,22 @@ export class StampToolService extends AbstractToolService {
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
+        this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
         this.renderer.setAttribute(stamp, 'href', this.stampLink);
 
+        const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(rect, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(rect, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(rect, 'x', this.stampX.toString());
+        this.renderer.setAttribute(rect, 'y', this.stampY.toString());
+        this.renderer.setAttribute(rect, 'fill', '#ffffff00');
+        this.renderer.setAttribute(rect, 'stroke', 'black');
+
         this.renderer.appendChild(el, stamp);
-        this.renderer.setAttribute(el, 'transform', this.transform);
+        this.renderer.appendChild(el, rect);
+        this.renderer.setAttribute(el, 'transform', `translate(${this.stampX}, ${this.stampY})`);
+        this.renderer.setAttribute(el, 'transform', `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
