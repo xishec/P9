@@ -130,7 +130,6 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(rect, 'x', this.stampX.toString());
         this.renderer.setAttribute(rect, 'y', this.stampY.toString());
         this.renderer.setAttribute(rect, 'fill', '#ffffff00');
-        this.renderer.setAttribute(rect, 'stroke', 'black');
 
         this.renderer.appendChild(el, stamp);
         this.renderer.appendChild(el, rect);
