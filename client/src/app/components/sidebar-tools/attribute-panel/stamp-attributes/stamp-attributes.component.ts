@@ -14,6 +14,7 @@ import {
     ToolName,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-stamp-attributes',
@@ -34,7 +35,7 @@ export class StampAttributesComponent implements OnInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -65,7 +66,7 @@ export class StampAttributesComponent implements OnInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= StampScaling.Max && event.value >= StampScaling.Min) {
+        if (predicate.eventIsValid(event, StampScaling)) {
             this.stampAttributesForm.controls.scaling.setValue(event.value);
             this.onScalingChange();
         }
@@ -73,7 +74,7 @@ export class StampAttributesComponent implements OnInit {
 
     onScalingChange(): void {
         const stampScaling: number = this.stampAttributesForm.value.scaling;
-        if (stampScaling >= StampScaling.Min && stampScaling <= StampScaling.Max) {
+        if (this.stampAttributesForm.controls.scaling.valid) {
             this.attributesManagerService.changeScaling(stampScaling);
         }
     }
@@ -85,16 +86,16 @@ export class StampAttributesComponent implements OnInit {
 
     onAngleChange(): void {
         const stampAngle: number = this.stampAttributesForm.value.angle;
-        if (stampAngle >= StampAngleOrientation.Min && stampAngle <= StampAngleOrientation.Max) {
+        if (this.stampAttributesForm.controls.angle.valid) {
             this.attributesManagerService.changeAngle(stampAngle);
         }
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
 
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }
