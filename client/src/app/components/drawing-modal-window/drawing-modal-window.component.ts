@@ -52,9 +52,10 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
-        this.drawingModalWindowService.changeDrawingInfoWidthHeight(
+        this.drawingModalWindowService.changeDrawingInfo(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
+            this.previewColor,
         );
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.drawingModalWindowService.blankDrawingZone.next(false);
