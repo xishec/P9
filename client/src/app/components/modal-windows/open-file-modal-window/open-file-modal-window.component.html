@@ -9,6 +9,18 @@
 />
 
 <mat-dialog-content [formGroup]="openFileModalForm">
+    <div id="header">
+        <div>
+            Nom :
+        </div>
+        <div>
+            Étiquettes :
+        </div>
+        <div>
+            Aperçu :
+        </div>
+    </div>
+
     <mat-selection-list
         #drawings
         formControlName="selectedDrawing"
