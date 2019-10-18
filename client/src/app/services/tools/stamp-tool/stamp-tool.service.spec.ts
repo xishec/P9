@@ -163,6 +163,31 @@ fdescribe('StampToolService', () => {
         service.alterRotateStamp(-10);
         expect(service.currentAngle).toEqual(-1);
     });
+
+    it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {
+        let spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+
+        let currentMouseX = service.currentMouseX;
+        let currentMouseY = service.currentMouseY;
+        service.onMouseMove(positiveMouseEvent);
+
+        expect(service.currentMouseX).toBeGreaterThan(currentMouseX);
+        expect(service.currentMouseY).toBeGreaterThan(currentMouseY);
+        expect(spyOnPositionStamp).toHaveBeenCalled();
+    });
+
+    it('should call positionStamp and decrease the current position of the mouse if the position is negative', () => {
+        let spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+
+        let currentMouseX = service.currentMouseX;
+        let currentMouseY = service.currentMouseY;
+        service.onMouseMove(negativeMouseEvent);
+
+        expect(service.currentMouseX).toBeLessThan(currentMouseX);
+        expect(service.currentMouseY).toBeLessThan(currentMouseY);
+        expect(spyOnPositionStamp).toHaveBeenCalled();
+    });
+
     it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
         service.onKeyDown(onOtherKeyDown);
         service.isAlterRotation = false;
