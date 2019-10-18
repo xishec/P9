@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Sauvegarder le dessin</h1>
+
+<mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
+    <mat-label id="drawing-name-title">Nom du dessin</mat-label>
+    <input matInput id="drawing-name-input" #input placeholder="Nom du dessin" />
+
+    <mat-label id="drawing-label-title">Étiquettes</mat-label>
+    <div id="drawing-labels-list">
+        <mat-button-toggle id="label" *ngFor="let label of drawingLabels">
+            {{ label }}
+        </mat-button-toggle>
+    </div>
+    <div id="new-label">
+        <input matInput id="new-label-input" #labelInput placeholder="Nouvelle étiquette" />
+        <button
+            *ngIf="labelInput.value !== ''"
+            mat-raised-button
+            type="button"
+            id="label-button"
+            (click)="addLabel(labelInput.value)"
+        >
+            Ajouter l'étiquette
+        </button>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions id="footer" align="end">
+    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()">
+        Sauvegarder
+    </button>
+</mat-dialog-actions>

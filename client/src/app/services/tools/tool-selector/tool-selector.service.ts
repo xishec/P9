@@ -2,7 +2,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { DrawingModalWindowComponent } from 'src/app/components/drawing-modal-window/drawing-modal-window.component';
+import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -15,7 +16,7 @@ import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
-import { OpenFileModalWindowComponent } from 'src/app/components/open-file-modal-window/open-file-modal-window.component';
+import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 
@@ -90,10 +91,22 @@ export class ToolSelectorService {
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
             panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
             autoFocus: false,
         });
         this.modalManagerService.setModalIsDisplayed(true);
         openFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
+    displaySaveFileModal(): void {
+        const saveFileDialogRef = this.dialog.open(SaveFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        saveFileDialogRef.afterClosed().subscribe(() => {
             this.modalManagerService.setModalIsDisplayed(false);
         });
     }
@@ -194,6 +207,10 @@ export class ToolSelectorService {
             case ToolName.Eraser:
             case ToolName.Text:
             case ToolName.Save:
+                if (!this.modalIsDisplayed) {
+                    this.displaySaveFileModal();
+                }
+                break;
             case ToolName.ArtGallery:
                 if (!this.modalIsDisplayed) {
                     this.displayOpenFileModal();
