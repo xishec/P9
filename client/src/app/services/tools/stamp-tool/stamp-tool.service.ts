@@ -122,7 +122,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
-        this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink));
+        this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(rect, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
