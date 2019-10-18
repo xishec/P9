@@ -42,6 +42,11 @@ export const createMockSVGCircle = (): any => {
     return mockCircle;
 };
 
+export const createMockSVGLine = (): any => {
+    const mockLine = {};
+    return (mockLine as unknown) as SVGLineElement;
+}
+
 export const createMockFilter = (): SVGFilterElement => {
     const mockFilter = {};
     return (mockFilter as unknown) as SVGFilterElement;
