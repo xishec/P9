@@ -50,10 +50,8 @@
         grid-column: 3 / 4;
         grid-row: 1 / 2;
 
-        background-color: #a5a5a5;
         height: 60px;
         width: 60px;
-        border: 1px solid red;
         padding: 0;
     }
 }
@@ -62,6 +60,6 @@ mat-list-option[aria-selected='true'] {
     background: #c5c5c5;
 }
 
-#filter{
+#filter {
     margin-left: 2px;
 }
