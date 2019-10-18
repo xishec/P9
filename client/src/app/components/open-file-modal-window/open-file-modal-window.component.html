@@ -8,7 +8,11 @@
         id="selection-list"
         required
     >
-        <mat-list-option *ngFor="let drawing of drawingsFromServer" id="list-option" [value]="drawing.name">
+        <mat-list-option
+            *ngFor="let drawing of drawingsFromServer; let i = index"
+            id="list-option"
+            [value]="drawing.name"
+        >
             <div id="drawing-option">
                 <div id="drawing-name">
                     {{ drawing.name }}
@@ -19,7 +23,12 @@
                     </div>
                 </div>
                 <div id="drawing-thumbnail">
-                    {{ drawing.thumbnail }}
+                    <svg
+                        [attr.width]="getWidth(i)"
+                        [attr.height]="getHeight(i)"
+                        [attr.viewBox]="getViewBox(i)"
+                        [innerHTML]="drawingsFromServer[i].svg | toTrustHtml"
+                    ></svg>
                 </div>
             </div>
         </mat-list-option>

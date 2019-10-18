@@ -1,12 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { Message } from '../../../../../common/communication/message';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+
+@Pipe({ name: 'toTrustHtml' })
+export class NoSanitizePipe implements PipeTransform {
+    constructor(private domSanitizer: DomSanitizer) {}
+    transform(svg: string): SafeHtml {
+        return this.domSanitizer.bypassSecurityTrustHtml(svg);
+    }
+}
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -31,7 +41,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.formBuilder = formBuilder;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.initializeForm();
 
         this.fileManagerService.getAllDrawing().subscribe((ans: any) => {
@@ -60,7 +70,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
-    onSubmit() {
+    onSubmit(): void {
         if (this.drawingOpenSuccess) {
             let selectedDrawing: Drawing = this.drawingsFromServer.find(
                 (drawing) => drawing.name == this.selectedOption,
@@ -72,7 +82,33 @@ export class OpenFileModalWindowComponent implements OnInit {
         }
     }
 
-    formIsInvalid() {
+    formIsInvalid(): boolean {
         return this.openFileModalForm.value.selectedDrawing[0] === '';
+    }
+
+    getViewBox(i: number): string {
+        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
+        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+
+        return `0 0 ${width} ${height}`;
+    }
+
+    getWidth(i: number): string {
+        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
+        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+
+        if (width > height) {
+            return '100%';
+        }
+        return '40px';
+    }
+    getHeight(i: number): string {
+        let height = this.drawingsFromServer[i].svg.split('height="')[1].split('px')[0];
+        let width = this.drawingsFromServer[i].svg.split('width="')[1].split('px')[0];
+
+        if (width < height) {
+            return '100%';
+        }
+        return '40px';
     }
 }

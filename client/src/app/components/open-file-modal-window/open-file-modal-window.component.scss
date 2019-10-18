@@ -33,3 +33,10 @@
 mat-list-option[aria-selected='true'] {
     background: #a5a5a5;
 }
+
+#drawing-thumbnail {
+    height: 40px;
+    width: 40px;
+    border: 1px solid red;
+    padding: 0;
+}
