@@ -110,7 +110,7 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
-        const circle = this.renderer.createElement('circle', SVG_NS);
+        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(circle, 'stroke', 'none');
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
