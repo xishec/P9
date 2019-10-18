@@ -3,6 +3,8 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { StampToolService } from './stamp-tool.service';
 import { MatDialog } from '@angular/material';
 import { Renderer2, ElementRef } from '@angular/core';
+import { createMouseEvent, MockRect, createKeyBoardEvent } from 'src/classes/test-helpers';
+import { Keys } from 'src/constants/constants';
 
 fdescribe('StampToolService', () => {
     let injector: TestBed;
@@ -80,6 +82,11 @@ fdescribe('StampToolService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('should define width and height of stamp', () => {
+        expect(spyOnStampWidth).toBeDefined();
+        expect(spyOnStampHeight).toBeDefined();
     });
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
