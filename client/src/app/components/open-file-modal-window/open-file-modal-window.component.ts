@@ -9,7 +9,6 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { Message } from '../../../../../common/communication/message';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +12,7 @@ export class DrawingLoaderService {
         labels: [''],
         svg: '',
         idStack: [''],
+        drawingInfo: new DrawingInfo(0, 0, ''),
     });
 
     constructor() {}
