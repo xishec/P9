@@ -1,3 +1,11 @@
+.mat-typography {
+    display: grid;
+    grid-template-columns: 140px auto;
+    grid-template-rows: 30px 10px auto 60px;
+    align-self: center;
+    padding: 15px 40px;
+}
+
 #selection-list {
     ::ng-deep.mat-pseudo-checkbox {
         display: none !important;

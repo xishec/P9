@@ -104,6 +104,7 @@ export class ToolSelectorService {
         const saveFileDialogRef = this.dialog.open(SaveFileModalWindowComponent, {
             panelClass: 'myapp-min-width-dialog',
             disableClose: true,
+            autoFocus: false,
         });
         this.modalManagerService.setModalIsDisplayed(true);
         saveFileDialogRef.afterClosed().subscribe(() => {
@@ -196,16 +197,6 @@ export class ToolSelectorService {
                 this.currentTool = this.dropperTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-            case ToolName.Quill:
-            case ToolName.Selection:
-            case ToolName.Pen:
-            case ToolName.SprayCan:
-            case ToolName.Line:
-            case ToolName.Ellipsis:
-            case ToolName.Polygon:
-            case ToolName.Fill:
-            case ToolName.Eraser:
-            case ToolName.Text:
             case ToolName.Save:
                 if (!this.modalIsDisplayed) {
                     this.displaySaveFileModal();
@@ -217,9 +208,19 @@ export class ToolSelectorService {
                 }
                 break;
             case ToolName.Export:
-                this.currentTool = undefined;
-                this.changeCurrentToolName(tooltipName);
+                // this.currentTool = undefined;
+                // this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Quill:
+            case ToolName.Selection:
+            case ToolName.Pen:
+            case ToolName.SprayCan:
+            case ToolName.Line:
+            case ToolName.Ellipsis:
+            case ToolName.Polygon:
+            case ToolName.Fill:
+            case ToolName.Eraser:
+            case ToolName.Text:
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
