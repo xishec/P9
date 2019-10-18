@@ -28,7 +28,7 @@ describe('GridToolService', () => {
         expect(service.state.value).toBeTruthy();
     });
 
-    it('changeState should should not change the state if workzone is empty', () => {
+    it('changeState should not change the state if workzone is empty', () => {
         service.workzoneIsEmpty.next(true);
 
         service.changeState(true);
