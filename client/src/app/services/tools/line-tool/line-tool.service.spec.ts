@@ -285,7 +285,6 @@ describe('LineToolService', () => {
         const stringPointsArray = service.arrayToStringLine();
         service.currentLine = MOCK_LINE;
 
-
         service.previewLine(x,y);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray} ${mousePosition}`);
