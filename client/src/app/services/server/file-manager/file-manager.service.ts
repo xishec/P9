@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Injectable({
     providedIn: 'root',
@@ -19,8 +20,8 @@ export class FileManagerService {
             .pipe(catchError(this.handleError<Message>('getAllDrawing')));
     }
 
-    postDrawing(name: string, labels: string[], svg: string, idStack: string[]): void {
-        let drawing: Drawing = { name: name, labels: labels, svg: svg, idStack: idStack };
+    postDrawing(name: string, labels: string[], svg: string, idStack: string[], drawingInfo: DrawingInfo): void {
+        let drawing: Drawing = { name: name, labels: labels, svg: svg, idStack: idStack, drawingInfo: drawingInfo };
         let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
         this.http.post<Message>(environment.BASE_URL + '/api/file-manager/save', message).subscribe((responseData) => {
             // console.log(responseData);
