@@ -50,10 +50,14 @@ import { StampAttributesComponent } from './components/sidebar-tools/attribute-p
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/welcome-modal-window/welcome-modal-window.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { OpenFileModalWindowComponent } from './components/open-file-modal-window/open-file-modal-window.component';
+import {
+    NoSanitizePipe,
+    OpenFileModalWindowComponent,
+} from './components/open-file-modal-window/open-file-modal-window.component';
 
 @NgModule({
     declarations: [
+        NoSanitizePipe,
         AppComponent,
         AttributePanelComponent,
         WorkZoneComponent,
