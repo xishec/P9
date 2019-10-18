@@ -7,8 +7,19 @@ import { Renderer2, ElementRef } from '@angular/core';
 fdescribe('StampToolService', () => {
     let injector: TestBed;
     let service: StampToolService;
+    const mockDrawRect: MockRect = new MockRect();
+    let positiveMouseEvent: MouseEvent;
+    let negativeMouseEvent: MouseEvent;
+    let onAltKeyDown: KeyboardEvent;
+    let onOtherKeyDown: KeyboardEvent;
 
+    let spyOnStampWidth: jasmine.Spy;
+    let spyOnStampHeight: jasmine.Spy;
+    let spyOnSetAttribute: jasmine.Spy;
+    let spyOnAppendChild: jasmine.Spy;
+    let spyOnRemoveChild: jasmine.Spy;
     let spyOnPreventDefault: jasmine.Spy;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -23,12 +34,23 @@ fdescribe('StampToolService', () => {
                         createElement: () => null,
                         setAttribute: () => null,
                         appendChild: () => null,
+                        removeChild: () => null,
                     },
                 },
                 {
                     provide: ElementRef,
                     useValue: {
-                        nativeElement: {},
+                        nativeElement: {
+                            getBoundingClientRect: () => {
+                                const boundleft = 0;
+                                const boundtop = 0;
+                                const boundRect = {
+                                    left: boundleft,
+                                    top: boundtop,
+                                };
+                                return boundRect;
+                            },
+                        },
                     },
                 },
             ],
@@ -36,9 +58,24 @@ fdescribe('StampToolService', () => {
 
         injector = getTestBed();
         service = injector.get(StampToolService);
+
+        positiveMouseEvent = createMouseEvent(10, 10, 0);
+        negativeMouseEvent = createMouseEvent(-10, -10, 0);
+
         onAltKeyDown = createKeyBoardEvent(Keys.Alt);
         onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
+
+        spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
+        spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
+        spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
+
+        spyOnStampWidth = spyOnProperty(service, 'stampWidth', 'get').and.callFake(() => {
+            return mockDrawRect.width;
+        });
+        spyOnStampHeight = spyOnProperty(service, 'stampHeight', 'get').and.callFake(() => {
+            return mockDrawRect.height;
+        });
     });
 
     it('should be created', () => {
