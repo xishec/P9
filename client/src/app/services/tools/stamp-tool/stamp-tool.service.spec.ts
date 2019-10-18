@@ -121,6 +121,29 @@ fdescribe('StampToolService', () => {
         service.setStamp();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
+
+    it('should call applyTransformation if shouldStamp is true', () => {
+        service.shouldStamp = false;
+        service.applyTransformation();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(0);
+
+        service.shouldStamp = true;
+        service.applyTransformation();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should call applyTransformation once after a call to positionStamp', () => {
+        let spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation');
+        service.positionStamp();
+        expect(spyOnApplyTransformation).toHaveBeenCalled();
+    });
+
+    it('should call setAttribute 4 times and appendChild 2 times after a stamp is added', () => {
+        service.addStamp();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
+        expect(spyOnAppendChild).toHaveBeenCalledTimes(2);
+    });
+
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
         expect(service.currentAngle).toEqual(15);
