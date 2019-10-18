@@ -40,7 +40,9 @@ export class ToolSelectorService {
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private drawingModalWindowService: DrawingModalWindowService
-    ) {}
+    ) {
+        console.log('construct tool-selector');
+    }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);

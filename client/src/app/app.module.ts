@@ -27,6 +27,7 @@ import { DrawingModalWindowService } from './services/drawing-modal-window/drawi
 import { ColorToolService } from './services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from './services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from './services/welcome-modal-window/welcome-modal-window.service';
+import { EventListenerService } from './services/event-listener/event-listener.service';
 // ************************************************
 
 import { AttributePanelComponent } from '@attribute-panel/attribute-panel.component';
@@ -94,7 +95,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatSlideToggleModule,
     ],
     entryComponents: [WelcomeModalWindowComponent, DrawingModalWindowComponent],
-    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService],
+    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService, EventListenerService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 
 @Component({
     selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
         private welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
+        private eventListenerService: EventListenerService,
         private drawingModalWindowService: DrawingModalWindowService,
         private shortcutManagerService: ShortcutManagerService,
         private gridtoolService: GridToolService,
