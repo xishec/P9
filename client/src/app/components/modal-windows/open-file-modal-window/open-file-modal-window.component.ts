@@ -75,6 +75,10 @@ export class OpenFileModalWindowComponent implements OnInit {
                 this.drawingsFromServer.push(drawing);
             });
         });
+
+        this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
+            console.log('emptyDrawStack', emptyDrawStack);
+        });
     }
 
     initializeForm(): void {

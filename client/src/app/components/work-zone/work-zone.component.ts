@@ -50,7 +50,7 @@ export class WorkZoneComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.drawStack = new DrawStackService(this.renderer);
+        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 

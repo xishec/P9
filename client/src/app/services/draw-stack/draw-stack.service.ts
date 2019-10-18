@@ -2,6 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +14,7 @@ export class DrawStackService {
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2) {
+    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
         this.renderer = renderer;
     }
 
@@ -46,6 +47,7 @@ export class DrawStackService {
 
     push(el: SVGGElement): void {
         this.drawStack.push(this.makeTargetable(el));
+        if (this.idStack.length > 0) this.drawingLoaderService.emptyDrawStack.next(false);
     }
 
     pop(): SVGGElement | undefined {
@@ -53,6 +55,7 @@ export class DrawStackService {
     }
 
     reset(): SVGGElement[] {
+        this.drawingLoaderService.emptyDrawStack.next(true);
         this.idStack.splice(0, this.idStack.length);
         return this.drawStack.splice(0, this.drawStack.length);
     }

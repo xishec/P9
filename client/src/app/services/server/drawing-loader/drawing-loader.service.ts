@@ -15,5 +15,7 @@ export class DrawingLoaderService {
         drawingInfo: new DrawingInfo(0, 0, ''),
     });
 
+    emptyDrawStack: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
     constructor() {}
 }
