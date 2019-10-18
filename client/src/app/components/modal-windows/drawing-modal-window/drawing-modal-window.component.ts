@@ -7,6 +7,7 @@ import { DrawingModalWindowService } from '../../../services/drawing-modal-windo
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -18,7 +19,7 @@ export class DrawingModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     previewColor: string;
-    blankWorkZone = true;
+    emptyDrawStack = true;
 
     constructor(
         formBuilder: FormBuilder,
@@ -27,6 +28,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -38,14 +40,18 @@ export class DrawingModalWindowComponent implements OnInit {
             this.previewColor = previewColor;
         });
 
+        this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
+            this.emptyDrawStack = emptyDrawStack;
+            console.log(this.emptyDrawStack);
+        });
+
         this.previewColor = this.colorToolService.backgroundColor.value;
-        this.blankWorkZone = this.drawingModalWindowService.blankDrawingZone.value;
         this.initializeForm();
     }
 
     initializeForm(): void {
         this.drawingModalForm = this.formBuilder.group({
-            confirm: this.blankWorkZone,
+            confirm: this.emptyDrawStack,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
@@ -58,7 +64,6 @@ export class DrawingModalWindowComponent implements OnInit {
             this.previewColor,
         );
         this.colorToolService.changeBackgroundColor(this.previewColor);
-        this.drawingModalWindowService.blankDrawingZone.next(false);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);
     }

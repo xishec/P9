@@ -9,7 +9,6 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 })
 export class DrawingModalWindowService {
     drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE));
-    blankDrawingZone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
     changeDrawingInfo(width: number, height: number, color: string) {
         this.drawingInfo.value.width = width;
