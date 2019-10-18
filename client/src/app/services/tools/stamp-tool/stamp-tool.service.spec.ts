@@ -7,9 +7,10 @@ import { createMouseEvent, MockRect, createKeyBoardEvent } from 'src/classes/tes
 import { Keys } from 'src/constants/constants';
 
 fdescribe('StampToolService', () => {
+    const mockDrawRect: MockRect = new MockRect();
+
     let injector: TestBed;
     let service: StampToolService;
-    const mockDrawRect: MockRect = new MockRect();
     let positiveMouseEvent: MouseEvent;
     let negativeMouseEvent: MouseEvent;
     let onAltKeyDown: KeyboardEvent;
@@ -20,6 +21,7 @@ fdescribe('StampToolService', () => {
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnAppendChild: jasmine.Spy;
     let spyOnRemoveChild: jasmine.Spy;
+    let spyOnDrawStackPush: jasmine.Spy;
     let spyOnPreventDefault: jasmine.Spy;
 
     beforeEach(() => {
@@ -70,6 +72,7 @@ fdescribe('StampToolService', () => {
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+        spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
         spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
 
         spyOnStampWidth = spyOnProperty(service, 'stampWidth', 'get').and.callFake(() => {
@@ -119,6 +122,7 @@ fdescribe('StampToolService', () => {
 
     it('should call setAttribute 3 times', () => {
         service.setStamp();
+
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
@@ -134,14 +138,18 @@ fdescribe('StampToolService', () => {
 
     it('should call applyTransformation once after a call to positionStamp', () => {
         let spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation');
+
         service.positionStamp();
+
         expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 
     it('should call setAttribute 4 times and appendChild 2 times after a stamp is added', () => {
         service.addStamp();
+
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
         expect(spyOnAppendChild).toHaveBeenCalledTimes(2);
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
     });
 
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
@@ -199,6 +207,7 @@ fdescribe('StampToolService', () => {
         service.shouldStamp = true;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalled();
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
     });
 
     it('should call initStamp if event is left click, shouldStamp is true and the position is correct', () => {
