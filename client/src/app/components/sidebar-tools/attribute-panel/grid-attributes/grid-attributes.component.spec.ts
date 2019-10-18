@@ -179,11 +179,27 @@ fdescribe('GridAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('change should call changeStyle when user select a trace type', () => {
+    it('changeState should call changeState when user toggle slider', () => {
         const SPY = spyOn(gridAttributeService, 'changeState').and.returnValue();
 
         component.onStateChange();
 
         expect(SPY).toHaveBeenCalled();
+    });
+
+    it('enableSlider should enable the slider if workzone is not empty', () => {
+        gridAttributeService.workzoneIsEmpty.next(false);
+
+        component.enableSlider();
+
+        expect(component.gridAttributesForm.controls.state.enabled).toBeTruthy();
+    });
+
+    it('enableSlider should not enable the slider if workzone is empty', () => {
+        gridAttributeService.workzoneIsEmpty.next(true);
+
+        component.enableSlider();
+
+        expect(component.gridAttributesForm.controls.state.enabled).toBeFalsy();
     });
 });
