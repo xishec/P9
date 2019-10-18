@@ -1,7 +1,7 @@
 .mat-typography {
     display: grid;
     grid-template-columns: 140px auto;
-    grid-template-rows: 30px 10px auto 30px;
+    grid-template-rows: 30px 10px auto 60px;
     align-self: center;
     padding: 15px 40px;
 }
@@ -49,13 +49,18 @@
 #new-label {
     grid-column: 2 / 3;
     grid-row: 4 / 5;
-    align-self: center;
 
     display: flex;
+    align-self: center;
     justify-content: center;
 }
 
 #new-label-input {
     margin-right: 15px;
     padding-left: 4px;
+}
+
+#label-button {
+    padding: 0;
+    width: 60%;
 }
