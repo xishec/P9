@@ -8,7 +8,7 @@ import { Keys } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import SpyObj = jasmine.SpyObj;
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { IndexService } from '../../services/index/index.service';
+import { IndexService } from '../../services/server/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
@@ -115,10 +115,6 @@ describe('AppComponent', () => {
 
     it('should create the app', () => {
         expect(app).toBeTruthy();
-    });
-
-    it(`should have as title 'LOG2990'`, () => {
-        expect(app.title).toEqual('LOG2990');
     });
 
     it('should openWelcomeModalWindow if displayWelcomeModalWindow is on', () => {

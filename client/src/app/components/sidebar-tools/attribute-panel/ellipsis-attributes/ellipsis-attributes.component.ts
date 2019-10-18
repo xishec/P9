@@ -7,6 +7,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { Thickness, ToolName } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-ellipsis-attributes',
@@ -17,14 +18,14 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Ellipsis;
     ellipsisAttributesForm: FormGroup;
     ellipsisToolService: EllipsisToolService;
+    attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -51,7 +52,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.ellipsisAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -59,7 +60,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
 
     onThicknessChange(): void {
         const thickness: number = this.ellipsisAttributesForm.value.thickness;
-        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
+        if (this.ellipsisAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
@@ -69,10 +70,10 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
         this.attributesManagerService.changeTraceType(tracetype);
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }
