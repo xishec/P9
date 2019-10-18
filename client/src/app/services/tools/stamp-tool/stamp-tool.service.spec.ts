@@ -188,6 +188,31 @@ fdescribe('StampToolService', () => {
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
+    it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
+        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUpStamp').and.returnValue();
+
+        service.shouldStamp = false;
+        service.onMouseDown(positiveMouseEvent);
+        expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
+
+        service.isIn = true;
+        service.shouldStamp = true;
+        service.onMouseDown(positiveMouseEvent);
+        expect(spyOnCleanUpStamp).toHaveBeenCalled();
+    });
+
+    it('should call initStamp if event is left click, shouldStamp is true and the position is correct', () => {
+        let spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
+
+        service.shouldStamp = false;
+        service.onMouseUp(positiveMouseEvent);
+        expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
+
+        service.isIn = true;
+        service.shouldStamp = true;
+        service.onMouseUp(positiveMouseEvent);
+        expect(spyOnInitStamp).toHaveBeenCalled();
+    });
     it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
         service.onKeyDown(onOtherKeyDown);
         service.isAlterRotation = false;
