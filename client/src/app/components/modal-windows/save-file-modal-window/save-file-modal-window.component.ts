@@ -33,7 +33,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
             this.drawingLabels = this.drawingLabels.concat(currentDrawing.labels);
-            this.selectedLabels = currentDrawing.labels;
+            this.selectedLabels = Array.from(currentDrawing.labels);
         });
     }
 
