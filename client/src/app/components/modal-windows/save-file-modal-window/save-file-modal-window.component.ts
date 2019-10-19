@@ -65,7 +65,6 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
-                console.log(drawingIsSaved);
                 if (drawingIsSaved) {
                     window.alert('Sauvegarde réussie!');
                     this.onCancel();
@@ -97,3 +96,5 @@ export class SaveFileModalWindowComponent implements OnInit {
         }
     }
 }
+
+
