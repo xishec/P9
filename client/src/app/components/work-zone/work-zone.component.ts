@@ -17,6 +17,7 @@ import { FileManagerService } from '../../services/server/file-manager/file-mana
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { Message } from '../../../../../common/communication/message';
 
 @Component({
     selector: 'app-work-zone',
@@ -87,13 +88,22 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingSaverService.currentNameAndLabels.subscribe((drawingLabels: NameAndLabels) => {
             if (drawingLabels.name.length === 0) return;
-            this.fileManagerService.postDrawing(
-                drawingLabels.name,
-                drawingLabels.drawingLabels,
-                this.refSVG.nativeElement.innerHTML,
-                this.drawStack.idStack,
-                this.drawingInfo,
-            );
+            this.fileManagerService
+                .postDrawing(
+                    drawingLabels.name,
+                    drawingLabels.drawingLabels,
+                    this.refSVG.nativeElement.innerHTML,
+                    this.drawStack.idStack,
+                    this.drawingInfo,
+                )
+                .subscribe((message: Message) => {
+                    let body: any = JSON.parse(message.body);
+                    if (body.name === drawingLabels.name) {
+                        this.drawingSaverService.currentIsSaved.next(true);
+                    } else {
+                        this.drawingSaverService.currentIsSaved.next(false);
+                    }
+                });
         });
 
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {

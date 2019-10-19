@@ -20,12 +20,18 @@ export class FileManagerService {
             .pipe(catchError(this.handleError<Message>('getAllDrawings')));
     }
 
-    postDrawing(name: string, labels: string[], svg: string, idStack: string[], drawingInfo: DrawingInfo): void {
+    postDrawing(
+        name: string,
+        labels: string[],
+        svg: string,
+        idStack: string[],
+        drawingInfo: DrawingInfo,
+    ): Observable<Message> {
         let drawing: Drawing = { name: name, labels: labels, svg: svg, idStack: idStack, drawingInfo: drawingInfo };
         let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
-        this.http.post<Message>(environment.BASE_URL + '/api/file-manager/save', message).subscribe((responseData) => {
-            // console.log(responseData);
-        });
+        return this.http
+            .post<Message>(environment.BASE_URL + '/api/file-manager/save', message)
+            .pipe(catchError(this.handleError<Message>('postDrawing')));
     }
 
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {

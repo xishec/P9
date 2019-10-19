@@ -5,6 +5,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { take, filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-save-file-modal-window',
@@ -50,8 +51,18 @@ export class SaveFileModalWindowComponent implements OnInit {
     onSubmit(): void {
         let nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
         this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
-        this.onCancel();
-        window.alert('Sauvegarde Réussie!');
+
+        this.drawingSaverService.currentIsSaved
+            .pipe(filter((subject) => subject !== undefined))
+            .pipe(take(1))
+            .subscribe((drawingIsSaved) => {
+                if (drawingIsSaved) {
+                    window.alert('Sauvegarde réussie!');
+                    this.onCancel();
+                } else {
+                    window.alert('Sauvegarde échouée...');
+                }
+            });
     }
 
     addLabel(newLabel: string): void {

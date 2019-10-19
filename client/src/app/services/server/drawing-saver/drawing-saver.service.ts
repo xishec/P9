@@ -7,6 +7,7 @@ import { NameAndLabels } from 'src/classes/NameAndLabels';
 })
 export class DrawingSaverService {
     currentNameAndLabels: BehaviorSubject<NameAndLabels> = new BehaviorSubject(new NameAndLabels('', ['']));
+    currentIsSaved: BehaviorSubject<boolean | undefined> = new BehaviorSubject(undefined);
 
     constructor() {}
 }
