@@ -33,7 +33,7 @@ enum Mouse {
 
 const SIDEBAR_WIDTH = 360;
 
-const MAX_DRAWING_LENGTH = 6;
+const MAX_DRAWING_LENGTH = 5;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

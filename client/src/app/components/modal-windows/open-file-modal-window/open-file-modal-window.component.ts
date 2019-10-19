@@ -29,7 +29,7 @@ export class MySlice implements PipeTransform {
         if (nameFilter === '$tout') {
             return drawings;
         } else {
-            return drawings.slice(0, 6);
+            return drawings.slice(0, 5);
         }
     }
 }

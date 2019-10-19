@@ -1,6 +1,12 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
-<input autocomplete="off" matInput class="filter" [(ngModel)]="nameFilter" placeholder="Filter par nom ... (entrez '$tout' pour voir tous les dessins)" />
+<input
+    autocomplete="off"
+    matInput
+    class="filter"
+    [(ngModel)]="nameFilter"
+    placeholder="Filter par nom ... (entrez '$tout' pour voir tous les dessins)"
+/>
 <input
     autocomplete="off"
     matInput
@@ -64,13 +70,13 @@
         <div
             class="hidden-info"
             *ngIf="
-                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6 &&
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
                 nameFilter !== '$tout'
             "
         >
-            {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
+            {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
             {{
-                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 > 1
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
                     ? 'dessins masqués ...'
                     : 'dessin masqué ...'
             }}
@@ -81,25 +87,6 @@
         >
             Aucun dessin trouvé!
         </div>
-
-        <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">
-                    <mat-error>
-                        <i class="fas fa-exclamation-triangle"></i>
-                        L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </mat-error>
-                </div> -->
-
-        <div id="confirmation" [hidden]="emptyDrawStack">
-            <mat-error class="center">
-                <i class="fas fa-exclamation-triangle"></i>
-                Un dessin existe déja dans votre zone de travail!
-                <i class="fas fa-exclamation-triangle"></i>
-            </mat-error>
-            <mat-checkbox class="center" color="warn" formControlName="confirm" required>
-                Je confirme que je ne veux pas sauvegarder le dessin existant.
-            </mat-checkbox>
-        </div>
     </div>
     <div *ngIf="isLoading" id="loading-div">
         <img id="img" [src]="getGifSource()" alt="" />
@@ -108,6 +95,17 @@
         </div>
     </div>
 </mat-dialog-content>
+
+<div id="confirmation" [hidden]="emptyDrawStack">
+    <mat-error class="center">
+        <i class="fas fa-exclamation-triangle"></i>
+        Un dessin existe déja dans votre zone de travail!
+        <i class="fas fa-exclamation-triangle"></i>
+    </mat-error>
+    <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+        Je confirme que je ne veux pas sauvegarder le dessin existant.
+    </mat-checkbox>
+</div>
 
 <mat-dialog-actions id="footer" align="end">
     <button
