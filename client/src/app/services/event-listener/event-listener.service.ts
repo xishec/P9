@@ -34,108 +34,92 @@ export class EventListenerService {
         })
     };
 
-    onMouseMove(event: MouseEvent) {
-        if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-            this.currentTool!.onMouseMove(event);
-        }
-    }
-
-    onMouseDown(event: MouseEvent) {
-        console.log(this.currentTool);
-        console.log(this.isWorkZoneEmpty);
-        if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-            this.currentTool!.onMouseDown(event);
-        }
-    }
-
-    onMouseUp(event: MouseEvent) {
-        if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-            this.currentTool!.onMouseUp(event);
-        }
-    }
-
-    onMouseEnter(event: MouseEvent) {
-        if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-            this.currentTool!.onMouseEnter(event);
-        }
-    }
-
-    onMouseLeave(event: MouseEvent) {
-        if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-            this.currentTool!.onMouseLeave(event);
-        }
-    }
-
-    onMouseWheel(event: WheelEvent) {
-        if (this.currentTool instanceof StampToolService && !this.isWorkZoneEmpty) {
-            this.currentTool.onWheel(event);
-        }
-    }
-
-    onDblClick(event: MouseEvent) {
-        if (this.currentTool instanceof LineToolService && !this.isWorkZoneEmpty) {
-            this.currentTool.onDblClick(event);
-        }
-    }
-
-    onKeyDown(event: KeyboardEvent) {
-        // event.preventDefault();
-
-        // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
-        if (this.currentTool != undefined && !this.isWorkZoneEmpty) {
-            this.currentTool.onKeyDown(event);
-        }
-
-        // If the key is a shortcut for a tool, change current tool
-        if (!this.isOnInput && ToolNameShortcuts.has(event.key)) {
-            this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
-        }
-
-        // If control is pressed, change for ControlTools
-        if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
-            this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
-        }
-
-        if(event.key === 'g' && !this.isOnInput) {
-            this.gridToolService.switchState(); 
-        }
-
-        if(event.key === '+' && !this.isOnInput) {
-            this.gridToolService.incrementSize();
-        }
-
-        if(event.key === '-' && !this.isOnInput) {
-            this.gridToolService.decrementSize();
-        }
-    }
-
-    onKeyUp(event: KeyboardEvent) {
-        if(this.currentTool != undefined && !this.isWorkZoneEmpty) {
-            this.currentTool.onKeyUp(event);
-        }
-    }
-
-    
-
     addEventListeners(): void {
         
-        this.workZoneSVGRef.nativeElement.addEventListener('mousemove', this.onMouseMove);
+        this.workZoneSVGRef.nativeElement.addEventListener('mousemove', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onMouseMove(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mousedown', this.onMouseDown);
+        this.workZoneSVGRef.nativeElement.addEventListener('mousedown', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onMouseDown(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseup', this.onMouseUp);
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseup', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onMouseUp(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseenter', this.onMouseEnter);
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseenter', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onMouseEnter(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseleave', this.onMouseLeave);
+        this.workZoneSVGRef.nativeElement.addEventListener('mouseleave', (event: MouseEvent) => {
+            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onMouseLeave(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('wheel', this.onMouseWheel);
+        this.workZoneSVGRef.nativeElement.addEventListener('wheel', (event: WheelEvent) => {
+            if (this.currentTool instanceof StampToolService && !this.isWorkZoneEmpty) {
+                this.currentTool.onWheel(event);
+            }
+        });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('dblclick', this.onDblClick);
+        this.workZoneSVGRef.nativeElement.addEventListener('dblclick', (event: WheelEvent) => {
+            if (this.currentTool instanceof LineToolService && !this.isWorkZoneEmpty) {
+                this.currentTool.onDblClick(event);
+            }
+        });
 
-        window.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('keydown', (event: KeyboardEvent) => {
+            event.preventDefault();
 
-        window.addEventListener('keyup', this.onKeyUp)
+            // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
+            if (this.currentTool != undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onKeyDown(event);
+            }
+
+            // If the key is a shortcut for a tool, change current tool
+            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
+                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
+            }
+
+            // If control is pressed, change for ControlTools
+            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
+            }
+
+            if(event.key === 'g' && this.shouldAllowShortcuts()) {
+                this.gridToolService.switchState(); 
+            }
+
+            if(event.key === '+' && this.shouldAllowShortcuts()) {
+                this.gridToolService.incrementSize();
+            }
+
+            if(event.key === '-' && this.shouldAllowShortcuts()) {
+                this.gridToolService.decrementSize();
+            }
+
+
+        });
+
+
+        window.addEventListener('keyup', (event: KeyboardEvent) => {
+            if(this.currentTool != undefined && !this.isWorkZoneEmpty) {
+                this.currentTool.onKeyUp(event);
+            }
+        })
     }
 
+    shouldAllowShortcuts(): boolean {
+        return (!this.isOnInput);
+    }
 }
