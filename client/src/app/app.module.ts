@@ -52,6 +52,7 @@ import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { SaveFileModalWindowComponent } from './components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import {
+    MySlice,
     LabelFilter,
     ToTrustHtmlPipe,
     NameFilter,
@@ -60,6 +61,7 @@ import {
 
 @NgModule({
     declarations: [
+        MySlice,
         LabelFilter,
         NameFilter,
         ToTrustHtmlPipe,

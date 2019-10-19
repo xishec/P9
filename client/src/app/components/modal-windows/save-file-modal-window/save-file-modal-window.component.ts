@@ -6,6 +6,7 @@ import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawi
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { take, filter } from 'rxjs/operators';
+import { MAX_NB_LABELS } from 'src/constants/constants';
 
 @Component({
     selector: 'app-save-file-modal-window',
@@ -77,8 +78,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     addLabel(newLabel: string): void {
-        if (this.selectedLabels.length >= 6) {
-            window.alert('Veuillez choisir au maximum 6 étiquettes.');
+        if (this.selectedLabels.length >= MAX_NB_LABELS) {
+            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
         } else {
             this.drawingLabels.push(newLabel);
             this.selectedLabels.push(newLabel);

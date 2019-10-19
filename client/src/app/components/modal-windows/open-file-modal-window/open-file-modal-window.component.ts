@@ -21,11 +21,29 @@ export class ToTrustHtmlPipe implements PipeTransform {
 }
 
 @Pipe({
+    name: 'mySlice',
+    pure: false,
+})
+export class MySlice implements PipeTransform {
+    transform(drawings: Drawing[], nameFilter: string): Drawing[] {
+        if (nameFilter === '$tout') {
+            return drawings;
+        } else {
+            return drawings.slice(0, 6);
+        }
+    }
+}
+
+@Pipe({
     name: 'nameFilter',
     pure: false,
 })
 export class NameFilter implements PipeTransform {
     transform(drawings: Drawing[], nameFilter: string): Drawing[] {
+        if (nameFilter === '$tout') {
+            return drawings;
+        }
+
         if (nameFilter === undefined || nameFilter.length === 0) {
             return drawings;
         } else {

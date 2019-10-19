@@ -1,12 +1,12 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
-<input autocomplete="off" matInput class="filter" [(ngModel)]="nameFilter" placeholder="Filter par nom ..." />
+<input autocomplete="off" matInput class="filter" [(ngModel)]="nameFilter" placeholder="Filter par nom ... (entrez '$tout' pour voir tous les dessins)" />
 <input
     autocomplete="off"
     matInput
     class="filter"
     [(ngModel)]="labelFilter"
-    placeholder="Filter par étiquettes (ex.: pomme, melon, etc.) ..."
+    placeholder="Filter par étiquettes ... (ex.: pomme, melon, etc.)"
 />
 
 <mat-dialog-content [formGroup]="openFileModalForm">
@@ -32,37 +32,41 @@
         >
             <mat-list-option
                 *ngFor="
-                    let drawing of drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter | slice: 0:6;
+                    let drawing of drawingsFromServer
+                        | nameFilter: nameFilter
+                        | labelFilter: labelFilter
+                        | mySlice: nameFilter;
                     let i = index
                 "
                 id="list-option"
                 [value]="drawing.name"
             >
-                <div *ngIf="i < 6">
-                    <div id="drawing-option">
-                        <div id="drawing-name">
-                            {{ drawing.name }}
+                <div id="drawing-option">
+                    <div id="drawing-name">
+                        {{ drawing.name }}
+                    </div>
+                    <div id="drawing-labels-list">
+                        <div id="drawing-label" *ngFor="let label of drawing.labels">
+                            {{ label }}
                         </div>
-                        <div id="drawing-labels-list">
-                            <div id="drawing-label" *ngFor="let label of drawing.labels">
-                                {{ label }}
-                            </div>
-                        </div>
-                        <div id="drawing-thumbnail">
-                            <svg
-                                [attr.width]="getWidth(drawing.name)"
-                                [attr.height]="getHeight(drawing.name)"
-                                [attr.viewBox]="getViewBox(drawing.name)"
-                                [innerHTML]="getSVG(drawing.name) | toTrustHtml"
-                            ></svg>
-                        </div>
+                    </div>
+                    <div id="drawing-thumbnail">
+                        <svg
+                            [attr.width]="getWidth(drawing.name)"
+                            [attr.height]="getHeight(drawing.name)"
+                            [attr.viewBox]="getViewBox(drawing.name)"
+                            [innerHTML]="getSVG(drawing.name) | toTrustHtml"
+                        ></svg>
                     </div>
                 </div>
             </mat-list-option>
         </mat-selection-list>
         <div
             class="hidden-info"
-            *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6"
+            *ngIf="
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6 &&
+                nameFilter !== '$tout'
+            "
         >
             {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
             {{
