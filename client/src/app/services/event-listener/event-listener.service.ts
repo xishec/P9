@@ -27,7 +27,6 @@ export class EventListenerService {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
             this.currentTool = this.toolSelectorService.currentTool;
-            console.log(this.toolName);
         });
 
         this.shortCutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
@@ -44,10 +43,7 @@ export class EventListenerService {
         });
 
         this.workZoneSVGRef.nativeElement.addEventListener('mousedown', (event: MouseEvent) => {
-            console.log(!this.isWorkZoneEmpty);
-            console.log(this.currentTool !== undefined);
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
-                console.log('mouseDown');
                 this.currentTool.onMouseDown(event);
             }
         });
@@ -83,7 +79,7 @@ export class EventListenerService {
         });
 
         window.addEventListener('keydown', (event: KeyboardEvent) => {
-            // event.preventDefault();
+            event.preventDefault();
 
             // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
             if (this.currentTool != undefined && !this.isWorkZoneEmpty) {
@@ -124,7 +120,6 @@ export class EventListenerService {
     }
 
     shouldAllowShortcuts(): boolean {
-        console.log(this.isOnInput);
         return (!this.isOnInput);
     }
 }
