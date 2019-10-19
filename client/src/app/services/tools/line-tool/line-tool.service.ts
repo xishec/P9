@@ -193,12 +193,12 @@ export class LineToolService extends AbstractToolService {
         );
     }
 
-    appendLine(x: number, y: number) {
+    appendLine(x: number, y: number): void {
         this.pointsArray.push(` ${x.toString()},${y.toString()}`);
         this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
     }
 
-    appendCircle(x: number, y: number) {
+    appendCircle(x: number, y: number): void {
         const circle = this.renderer.createElement('circle', SVG_NS);
 
         this.renderer.setAttribute(circle, 'cx', x.toString());
