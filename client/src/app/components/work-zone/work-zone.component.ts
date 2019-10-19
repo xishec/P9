@@ -1,10 +1,8 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
-import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -15,6 +13,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -48,6 +47,7 @@ export class WorkZoneComponent implements OnInit {
         private toolSelector: ToolSelectorService,
         private colorToolService: ColorToolService,
         private gridToolService: GridToolService,
+        private shortCutManagerService: ShortcutManagerService,
     ) {}
 
     ngOnInit(): void {
@@ -55,12 +55,12 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector);
+        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService);
         this.eventListenerService.addEventListeners();
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.empty = false;
-            this.eventListenerService.notifyEmpty(false);
+            this.eventListenerService.isWorkZoneEmpty = false;
             this.drawingInfo = drawingInfo;
 
             for (const el of this.drawStack.reset()) {
@@ -86,7 +86,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
 
-        this.eventListenerService.notifyEmpty(true);
+        this.eventListenerService.isWorkZoneEmpty = true;
 
         this.gridToolService.currentState.subscribe((state: boolean) => {
             this.gridIsActive = state;
@@ -132,63 +132,6 @@ export class WorkZoneComponent implements OnInit {
             fill: '#' + this.drawingInfo.color,
         };
     }
-
-    // LISTENERS //
-    // @HostListener('mousemove', ['$event']) onMouseMove(event: MouseEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onMouseMove(event);
-    //     }
-    // }
-
-    // @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onMouseDown(event);
-    //     }
-    // }
-
-    // @HostListener('window:mouseup', ['$event']) onMouseUp(event: MouseEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onMouseUp(event);
-    //     }
-    // }
-
-    // @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onMouseEnter(event);
-    //     }
-    // }
-
-    // @HostListener('mouseleave', ['$event']) onMouseLeave(event: MouseEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onMouseLeave(event);
-    //     }
-    // }
-
-    // @HostListener('wheel', ['$event']) onWheel(event: WheelEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false && this.currentTool instanceof StampToolService) {
-    //         this.currentTool.onWheel(event);
-    //     }
-    // }
-
-    // @HostListener('window:keydown', ['$event']) onKeyDown(event: KeyboardEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onKeyDown(event);
-    //     }
-    // }
-
-    // @HostListener('window:keyup', ['$event']) onKeyUp(event: KeyboardEvent): void {
-    //     if (this.currentTool !== undefined && this.empty === false) {
-    //         this.currentTool.onKeyUp(event);
-    //     }
-    // }
-
-    // // ONLY USED ON LINE SERVICE
-    // @HostListener('dblclick', ['$event']) onDblClick(event: MouseEvent): void {
-    //     if (this.currentTool instanceof LineToolService) {
-    //         (this.currentTool as LineToolService).onDblClick(event);
-    //     }
-    // }
-    // LISTENERS //
 
     getCursorStyle() {
         if (this.empty) {
