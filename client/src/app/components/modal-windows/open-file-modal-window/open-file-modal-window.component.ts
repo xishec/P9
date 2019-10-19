@@ -30,7 +30,7 @@ export class NameFilter implements PipeTransform {
         } else {
             nameFilter = nameFilter.toLowerCase();
             return drawings.filter((drawing: Drawing) => {
-                return drawing.name.includes(nameFilter);
+                return drawing.name.toLowerCase().includes(nameFilter);
             });
         }
     }
@@ -51,7 +51,11 @@ export class LabelFilter implements PipeTransform {
             return drawings.filter((drawing: Drawing) => {
                 let checkLabels: boolean = false;
                 labelsFromFilter.forEach((labelFromFilter: string) => {
-                    if (drawing.labels.includes(labelFromFilter)) {
+                    if (
+                        drawing.labels.filter((label: string) => {
+                            return label.toLowerCase().replace(/\s/g, '') === labelFromFilter;
+                        }).length !== 0
+                    ) {
                         checkLabels = true;
                     }
                 });

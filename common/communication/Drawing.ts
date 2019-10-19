@@ -1,4 +1,4 @@
-import { DrawingInfo } from 'src/classes/DrawingInfo';
+import { DrawingInfo } from './DrawingInfo';
 
 export interface Drawing {
 	name: string;

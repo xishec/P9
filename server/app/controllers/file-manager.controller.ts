@@ -37,7 +37,7 @@ export class FileManagerController {
 					title: 'Invalid Drawing',
 					body: 'Invalid Drawing',
 				};
-				return res.json(error);
+				res.json(error);
 			}
 
 			let query = { title: message.title };
