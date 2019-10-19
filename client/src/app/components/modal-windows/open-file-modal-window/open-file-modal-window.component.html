@@ -9,90 +9,98 @@
 />
 
 <mat-dialog-content [formGroup]="openFileModalForm">
-    <div id="header">
-        <div>
-            Nom :
+    <div *ngIf="!isLoading">
+        <div id="header">
+            <div>
+                Nom :
+            </div>
+            <div>
+                Étiquettes :
+            </div>
+            <div>
+                Aperçu :
+            </div>
         </div>
-        <div>
-            Étiquettes :
-        </div>
-        <div>
-            Aperçu :
-        </div>
-    </div>
 
-    <mat-selection-list
-        #drawings
-        formControlName="selectedDrawing"
-        (selectionChange)="handleSelection($event, drawings.selectedOptions)"
-        id="selection-list"
-        required
-    >
-        <mat-list-option
-            *ngFor="
-                let drawing of drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter | slice: 0:6;
-                let i = index
-            "
-            id="list-option"
-            [value]="drawing.name"
+        <mat-selection-list
+            #drawings
+            formControlName="selectedDrawing"
+            (selectionChange)="handleSelection($event, drawings.selectedOptions)"
+            id="selection-list"
+            required
         >
-            <div *ngIf="i < 6">
-                <div id="drawing-option">
-                    <div id="drawing-name">
-                        {{ drawing.name }}
-                    </div>
-                    <div id="drawing-labels-list">
-                        <div id="drawing-label" *ngFor="let label of drawing.labels">
-                            {{ label }}
+            <mat-list-option
+                *ngFor="
+                    let drawing of drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter | slice: 0:6;
+                    let i = index
+                "
+                id="list-option"
+                [value]="drawing.name"
+            >
+                <div *ngIf="i < 6">
+                    <div id="drawing-option">
+                        <div id="drawing-name">
+                            {{ drawing.name }}
+                        </div>
+                        <div id="drawing-labels-list">
+                            <div id="drawing-label" *ngFor="let label of drawing.labels">
+                                {{ label }}
+                            </div>
+                        </div>
+                        <div id="drawing-thumbnail">
+                            <svg
+                                [attr.width]="getWidth(drawing.name)"
+                                [attr.height]="getHeight(drawing.name)"
+                                [attr.viewBox]="getViewBox(drawing.name)"
+                                [innerHTML]="getSVG(drawing.name) | toTrustHtml"
+                            ></svg>
                         </div>
                     </div>
-                    <div id="drawing-thumbnail">
-                        <svg
-                            [attr.width]="getWidth(drawing.name)"
-                            [attr.height]="getHeight(drawing.name)"
-                            [attr.viewBox]="getViewBox(drawing.name)"
-                            [innerHTML]="getSVG(drawing.name) | toTrustHtml"
-                        ></svg>
-                    </div>
                 </div>
-            </div>
-        </mat-list-option>
-    </mat-selection-list>
-    <div
-        class="hidden-info"
-        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6"
-    >
-        {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
-        {{
-            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 > 1
-                ? 'dessins masqués ...'
-                : 'dessin masqué ...'
-        }}
-    </div>
-    <div
-        class="hidden-info"
-        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
-    >
-        Aucun dessin trouvé!
-    </div>
+            </mat-list-option>
+        </mat-selection-list>
+        <div
+            class="hidden-info"
+            *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 6"
+        >
+            {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 }}
+            {{
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 6 > 1
+                    ? 'dessins masqués ...'
+                    : 'dessin masqué ...'
+            }}
+        </div>
+        <div
+            class="hidden-info"
+            *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
+        >
+            Aucun dessin trouvé!
+        </div>
 
-    <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">
-        <mat-error>
-            <i class="fas fa-exclamation-triangle"></i>
-            L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
-            <i class="fas fa-exclamation-triangle"></i>
-        </mat-error>
-    </div> -->
+        <!-- <div id="confirmation" [hidden]="drawingOpenSuccess">
+                    <mat-error>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        L'ouverture du dessin n'a pas bien fonctionné... Veuillez réessayer.
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </mat-error>
+                </div> -->
 
-    <div id="confirmation" [hidden]="emptyDrawStack">
-        <mat-error class="center">
-            <i class="fas fa-exclamation-triangle"></i>
-            Un dessin existe déja dans votre zone de travail!
-            <i class="fas fa-exclamation-triangle"></i>
-        </mat-error>
-        <mat-checkbox class="center" color="warn" formControlName="confirm" required>
-            Je confirme que je ne veux pas sauvegarder le dessin existant.
-        </mat-checkbox>
+        <div id="confirmation" [hidden]="emptyDrawStack">
+            <mat-error class="center">
+                <i class="fas fa-exclamation-triangle"></i>
+                Un dessin existe déja dans votre zone de travail!
+                <i class="fas fa-exclamation-triangle"></i>
+            </mat-error>
+            <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+                Je confirme que je ne veux pas sauvegarder le dessin existant.
+            </mat-checkbox>
+        </div>
+    </div>
+    <div *ngIf="isLoading" id="loading-div">
+        <img id="img" [src]="getGifSource()" alt="" />
+        <div>
+            Loading ...
+        </div>
     </div>
 </mat-dialog-content>
 

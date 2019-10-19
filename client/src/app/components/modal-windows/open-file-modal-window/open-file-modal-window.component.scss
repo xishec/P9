@@ -19,7 +19,7 @@
     margin-left: 55px;
     margin-top: 20px;
 
-    div{
+    div {
         color: #8f8f8f;
     }
 
@@ -107,4 +107,12 @@ mat-list-option[aria-selected='true'] {
     display: flex;
     align-self: center;
     justify-content: center;
+}
+
+#loading-div {
+    margin: 20px;
+    text-align: center;
+    #img {
+        width: 150px;
+    }
 }

@@ -9,6 +9,7 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { Message } from '../../../../../../common/communication/message';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { GIFS } from 'src/constants/constants';
 
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {
@@ -75,6 +76,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
+    isLoading: boolean;
+    randomGifIndex: number;
 
     constructor(
         formBuilder: FormBuilder,
@@ -89,17 +92,25 @@ export class OpenFileModalWindowComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
 
+        this.isLoading = true;
         this.fileManagerService.getAllDrawings().subscribe((ans: any) => {
             ans = ans as Message[];
+
+            // setTimeout(() => {
             ans.forEach((el: Message) => {
                 let drawing: Drawing = JSON.parse(el.body);
                 this.drawingsFromServer.push(drawing);
+
+                this.isLoading = false;
             });
+            // }, 500);
         });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
             this.emptyDrawStack = emptyDrawStack;
         });
+
+        this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
     }
 
     initializeForm(): void {
@@ -146,7 +157,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
         return `0 0 ${width} ${height}`;
     }
-
     getWidth(drawingName: string): string {
         let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
@@ -176,5 +186,9 @@ export class OpenFileModalWindowComponent implements OnInit {
             return drawing.name === drawingName;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
+    }
+
+    getGifSource() {
+        return GIFS[this.randomGifIndex];
     }
 }

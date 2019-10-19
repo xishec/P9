@@ -39,4 +39,6 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const predicate: Predicate = new Predicate();
 
-export { MAX_DRAWING_LENGTH, SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };
+const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/rolling.gif'];
+
+export { GIFS, MAX_DRAWING_LENGTH, SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };
