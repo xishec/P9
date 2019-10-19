@@ -15,7 +15,7 @@ import { take, filter } from 'rxjs/operators';
 export class SaveFileModalWindowComponent implements OnInit {
     saveFileModalForm: FormGroup;
     formBuilder: FormBuilder;
-    drawingLabels: string[] = [];
+    drawingLabels: string[] = ['Art Abstrait', 'Art Contemporain', 'Expressionnisme', 'Minimalisme'];
     selectedLabels: string[] = [];
 
     constructor(
@@ -32,7 +32,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
-            this.drawingLabels = currentDrawing.labels;
+            this.drawingLabels = this.drawingLabels.concat(currentDrawing.labels);
             this.selectedLabels = currentDrawing.labels;
         });
     }
@@ -77,6 +77,5 @@ export class SaveFileModalWindowComponent implements OnInit {
         } else {
             this.selectedLabels.push(label);
         }
-        console.log(this.selectedLabels);
     }
 }
