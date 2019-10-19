@@ -37,7 +37,6 @@ export class SelectionToolService extends AbstractToolService {
         this.initSelectionBox();
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
-                console.log('hit');
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
@@ -207,21 +206,27 @@ export class SelectionToolService extends AbstractToolService {
         this.isManipulating = false;
     }
 
-    invertSelection(): void {
-        if (this.selection.size === this.drawStack.drawStack.length) {
-            this.clearSelection();
+    invertSelection(stackPosition?: number): void {
+        if (stackPosition === undefined) {
+            return;
+        }
+
+        if (!this.selection.has(this.drawStack.drawStack[stackPosition])) {
+            for (const el of this.drawStack.drawStack) {
+                if (el !== this.drawStack.drawStack[stackPosition]) {
+                    this.selection.add(el);
+                }
+            }
+        } else {
+            this.selection.delete(this.drawStack.drawStack[stackPosition]);
+        }
+        this.isOnTarget = false;
+
+        if (this.selection.size === 0) {
             this.removeFullSelectionBox();
             return;
         }
-        const invertedSelection: Set<SVGGElement> = new Set();
 
-        for (const el of this.drawStack.drawStack) {
-            if (!this.selection.has(el)) {
-                invertedSelection.add(el);
-            }
-        }
-
-        this.selection = invertedSelection;
         this.removeFullSelectionBox();
         this.computeSelectionBox();
         this.appendFullSelectionBox();
@@ -421,7 +426,6 @@ export class SelectionToolService extends AbstractToolService {
 
         } // Mouse down on nothing
         else {
-            console.log('fuck');
             this.clearSelection();
             this.startSelection();
         }
@@ -433,9 +437,12 @@ export class SelectionToolService extends AbstractToolService {
         // Mouse down on selection box
         // Mouse down on selected object
         // Mouse down on unselected objected inside selection box
-        if (this.hasSelected()) {
-            this.invertSelection();
+        if (this.isOnTarget) {
+            this.invertSelection(this.currentTarget);
         }
+        // if (this.hasSelected()) {
+        //     this.invertSelection();
+        // }
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -456,17 +463,15 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleLeftMouseUp(): void {
-        if (this.isOnTarget) {
-            this.isOnTarget = false;
-        }
-
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
         if (this.hasSelected() && this.isSelecting) {
             this.isSelecting = false;
             this.isManipulating = true;
             this.computeSelectionBox();
             this.appendFullSelectionBox();
-        } else if (this.mouseIsInControlPoint() || this.mouseIsInSelectionBox()) {
+        } else if ((this.mouseIsInSelectionBox() && this.isOnTarget)) {
+            this.isOnTarget = false;
+        } else if (this.mouseIsInControlPoint()) {
 
         } else {
             this.clearSelection();
@@ -474,7 +479,11 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleRightMouseUp(): void {}
+    handleRightMouseUp(): void {
+        if (this.isOnTarget) {
+            this.isOnTarget = false;
+        }
+    }
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
