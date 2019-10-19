@@ -77,8 +77,13 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     addLabel(newLabel: string): void {
-        this.drawingLabels.push(newLabel);
-        this.selectedLabels.push(newLabel);
+        if (this.selectedLabels.length >= 6) {
+            window.alert('Veuillez choisir au maximum 6 étiquettes.');
+        } else {
+            this.drawingLabels.push(newLabel);
+            this.selectedLabels.push(newLabel);
+            this.saveFileModalForm.controls.label.setValue('');
+        }
     }
 
     toggleLabel(label: string) {
