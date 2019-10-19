@@ -24,7 +24,7 @@ export class GridToolService {
     currentOpacity: Observable<number> = this.opacity.asObservable();
     currentWorkzoneIsEmpty: Observable<boolean> = this.workzoneIsEmpty.asObservable();
 
-    changeState(state: boolean) {
+    changeState(state: boolean): void {
         if (this.workzoneIsEmpty.value === false) {
             this.state.next(state);
         }

@@ -1,6 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import { ToolName, TraceType, PolygonRadiusCorrection, PolygonOffsetAngles } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -170,11 +169,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.copyPreviewRectangleAttributes(drawPolygon);
         this.renderdrawPolygon(drawPolygon);
 
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        drawPolygon.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Polygon));
-        });
-
+        this.renderer.setAttribute(el, 'title', ToolName.Polygon);
         this.renderer.appendChild(el, drawPolygon);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
@@ -255,4 +250,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     onKeyDown(event: KeyboardEvent): void {}
 
     onKeyUp(event: KeyboardEvent): void {}
+
+    cleanUp(): void {
+        this.renderer.removeChild(this.svgReference.nativeElement, this.drawPolygon);
+    }
 }
