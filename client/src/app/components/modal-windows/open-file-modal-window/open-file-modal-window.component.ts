@@ -208,4 +208,16 @@ export class OpenFileModalWindowComponent implements OnInit {
     getGifSource() {
         return GIFS[this.randomGifIndex];
     }
+
+    onDelete() {
+        this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
+            if (message.title || message.title === 'Add Drawing' + this.selectedOption) {
+                this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
+                    return drawing.name !== this.selectedOption;
+                });
+            } else {
+                window.alert('Error de suppression du côté serveur!');
+            }
+        });
+    }
 }

@@ -52,5 +52,19 @@ export class FileManagerController {
 					res.json(error);
 				});
 		});
+
+		this.router.post('/delete', async (req: Request, res: Response, next: NextFunction) => {
+			let message: Message = req.body;
+
+			let query = { title: { $regex: message.body, $options: 'i' } };
+
+			Post.findOneAndDelete(query)
+				.then((ans: Message) => {
+					res.json(ans);
+				})
+				.catch((error: Error) => {
+					res.json(error);
+				});
+		});
 	}
 }

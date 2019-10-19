@@ -34,6 +34,13 @@ export class FileManagerService {
             .pipe(catchError(this.handleError<Message>('postDrawing')));
     }
 
+    deleteDrawing(name: string): Observable<Message[] | Message> {
+        let message: Message = { title: 'Delete Drawing ' + name, body: name };
+        return this.http
+            .post<Message[]>(environment.BASE_URL + '/api/file-manager/delete', message)
+            .pipe(catchError(this.handleError<Message>('deleteDrawing')));
+    }
+
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
         return (error: Error): Observable<T> => {
             return of(result as T);

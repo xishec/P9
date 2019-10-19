@@ -106,6 +106,16 @@
 </mat-dialog-content>
 
 <mat-dialog-actions id="footer" align="end">
+    <button
+        class="actionButton"
+        mat-stroked-button
+        color="warn"
+        type="button"
+        (click)="onDelete()"
+        *ngIf="selectedOption !== ''"
+    >
+        Supprimer
+    </button>
     <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
     <button class="actionButton" mat-stroked-button type="submit" [disabled]="formIsInvalid()" (click)="onSubmit()">
         Ouvrir
