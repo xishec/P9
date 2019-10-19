@@ -24,7 +24,7 @@ export class FileManagerController {
 					res.json(ans);
 				})
 				.catch((error: Error) => {
-					console.log(error);
+					res.json(error);
 				});
 		});
 
@@ -49,7 +49,7 @@ export class FileManagerController {
 					res.json(ans);
 				})
 				.catch((error: Error) => {
-					console.log(error);
+					res.json(error);
 				});
 		});
 	}

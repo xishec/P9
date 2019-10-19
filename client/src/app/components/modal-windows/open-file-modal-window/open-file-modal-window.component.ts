@@ -10,6 +10,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { Message } from '../../../../../../common/communication/message';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { GIFS } from 'src/constants/constants';
+import { filter } from 'rxjs/operators';
 
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {
@@ -97,18 +98,30 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.initializeForm();
 
         this.isLoading = true;
-        this.fileManagerService.getAllDrawings().subscribe((ans: any) => {
-            ans = ans as Message[];
+        this.fileManagerService
+            .getAllDrawings()
+            .pipe(
+                filter((subject) => {
+                    if (subject === undefined) {
+                        window.alert('Error de chargement!');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }),
+            )
+            .subscribe((ans: any) => {
+                ans = ans as Message[];
 
-            // setTimeout(() => {
-            ans.forEach((el: Message) => {
-                let drawing: Drawing = JSON.parse(el.body);
-                this.drawingsFromServer.push(drawing);
+                // setTimeout(() => {
+                ans.forEach((el: Message) => {
+                    let drawing: Drawing = JSON.parse(el.body);
+                    this.drawingsFromServer.push(drawing);
 
-                this.isLoading = false;
+                    this.isLoading = false;
+                });
+                // }, 500);
             });
-            // }, 500);
-        });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
             this.emptyDrawStack = emptyDrawStack;
