@@ -175,6 +175,11 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     invertSelection(): void {
+        if (this.selection.size === this.drawStack.drawStack.length) {
+            this.clearSelection();
+            this.removeFullSelectionBox();
+            return;
+        }
         const invertedSelection: Set<SVGGElement> = new Set();
 
         for (const el of this.drawStack.drawStack) {
