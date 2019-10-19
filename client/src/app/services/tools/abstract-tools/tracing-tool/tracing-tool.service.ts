@@ -14,6 +14,8 @@ export abstract class TracingToolService extends AbstractToolService {
     protected isDrawing = false;
     protected currentPath = '';
     protected currentWidth = 0;
+    protected currentColorAndOpacity = '';
+    protected currentOpacity = '';
     protected currentColor = '';
     protected svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
     protected svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
@@ -43,7 +45,7 @@ export abstract class TracingToolService extends AbstractToolService {
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColor = currentColor;
+            this.currentColorAndOpacity = currentColor;
         });
     }
 
@@ -51,16 +53,22 @@ export abstract class TracingToolService extends AbstractToolService {
     getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     onMouseDown(e: MouseEvent): void {
+        this.getColorAndOpacity();
         if (e.button === Mouse.LeftButton) {
             this.isDrawing = true;
             this.createSVGWrapper();
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
-            this.createSVGCircle(x, y);
             this.svgPreviewCircle = this.createSVGCircle(x, y);
+            this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
             this.createSVGPath();
         }
+    }
+
+    getColorAndOpacity(): void {
+        this.currentColor = this.currentColorAndOpacity.slice(0, 6);
+        this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
     }
 
     onMouseMove(e: MouseEvent): void {
@@ -69,7 +77,6 @@ export abstract class TracingToolService extends AbstractToolService {
             const y = this.getYPos(e.clientY);
             this.currentPath += ` L${x} ${y}`;
             this.updateSVGPath();
-            this.updatePreviewCircle(x, y);
         }
     }
 
@@ -85,21 +92,17 @@ export abstract class TracingToolService extends AbstractToolService {
         this.onMouseUp(e);
     }
 
-    onMouseEnter(event: MouseEvent): undefined {
-        return undefined;
-    }
-
-    onKeyDown(event: KeyboardEvent): undefined {
-        return undefined;
-    }
-
-    onKeyUp(event: KeyboardEvent): undefined {
-        return undefined;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyDown(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyUp(event: KeyboardEvent): void {}
 
     createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, 'opacity', this.currentOpacity);
         this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
         this.renderer.setAttribute(wrap, 'title', ToolName.Pencil);
         this.svgWrap = wrap;
@@ -108,10 +111,10 @@ export abstract class TracingToolService extends AbstractToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(circle, 'stroke', 'none');
         this.renderer.setAttribute(circle, 'cx', x.toString());
         this.renderer.setAttribute(circle, 'cy', y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.appendChild(this.svgWrap, circle);
         return circle;
     }
 
@@ -120,6 +123,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'fill', 'none');
         this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+        this.renderer.setAttribute(this.svgPath, 'stroke-linecap', 'round');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
