@@ -66,10 +66,10 @@ export class SaveFileModalWindowComponent implements OnInit {
             .subscribe((drawingIsSaved) => {
                 console.log(drawingIsSaved);
                 if (drawingIsSaved) {
-                    console.warn('Sauvegarde réussie!');
+                    window.alert('Sauvegarde réussie!');
                     this.onCancel();
                 } else {
-                    console.warn('Sauvegarde échouée...\n' + this.errorMesaage);
+                    window.alert('Sauvegarde échouée...\n' + this.errorMesaage);
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);

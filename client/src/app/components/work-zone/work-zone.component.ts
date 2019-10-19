@@ -103,12 +103,11 @@ export class WorkZoneComponent implements OnInit {
                     this.drawingInfo,
                 )
                 .subscribe((message: Message) => {
-                    let body: any = JSON.parse(message.body);
-                    if (body.name === nameAndLabels.name) {
+                    if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
                         this.drawingSaverService.currentIsSaved.next(true);
                     } else {
                         this.drawingSaverService.currentIsSaved.next(false);
-                        this.drawingSaverService.currentErrorMesaage.next('Error de sauvegarde!');
+                        this.drawingSaverService.currentErrorMesaage.next('Error de sauvegarde du côté serveur!');
                     }
                 });
         });
