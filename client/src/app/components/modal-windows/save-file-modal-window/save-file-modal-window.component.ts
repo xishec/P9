@@ -39,7 +39,8 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     initializeForm(): void {
         this.saveFileModalForm = this.formBuilder.group({
-            name: ['', [Validators.required, Validators.minLength(1)]],
+            name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15)]],
+            label: ['', [Validators.maxLength(15)]],
         });
     }
 
@@ -67,6 +68,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     addLabel(newLabel: string): void {
         this.drawingLabels.push(newLabel);
+        this.selectedLabels.push(newLabel);
     }
 
     toggleLabel(label: string) {
