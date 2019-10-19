@@ -118,9 +118,11 @@ export class ToolSelectorService {
     }
 
     changeTool(tooltipName: string): void {
-        if (this.currentTool instanceof StampToolService) {
-            this.currentTool.cleanUpStamp();
+
+        if (this.currentTool) {
+            this.currentTool.cleanUp();
         }
+
         switch (tooltipName) {
             case ToolName.NewDrawing:
                 this.displayNewDrawingModal();
@@ -150,7 +152,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Polygon:
-                this.currentTool = this.polygoneTool;                
+                this.currentTool = this.polygoneTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Grid:
