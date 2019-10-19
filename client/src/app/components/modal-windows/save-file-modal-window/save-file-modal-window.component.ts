@@ -18,6 +18,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     drawingLabels: string[] = ['Art Abstrait', 'Art Contemporain', 'Expressionnisme', 'Minimalisme'];
     selectedLabels: string[] = [];
     errorMesaage: string;
+    isSaving: boolean;
 
     constructor(
         formBuilder: FormBuilder,
@@ -39,6 +40,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
             this.errorMesaage = errorMesaage;
         });
+        this.isSaving = false;
     }
 
     initializeForm(): void {
@@ -55,12 +57,14 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         let nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
+        this.isSaving = true;
         this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
 
         this.drawingSaverService.currentIsSaved
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
+                this.isSaving = false;
                 if (drawingIsSaved) {
                     window.alert('Sauvegarde réussie!');
                     this.onCancel();
