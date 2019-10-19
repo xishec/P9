@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse, SVG_NS } from 'src/constants/constants';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -37,6 +37,10 @@ export class SelectionToolService extends AbstractToolService {
                 this.isOnTarget = true;
             }
         });
+    }
+
+    cleanUp(): void {
+        this.removeFullSelectionBox();
     }
 
     initControlPoints(): void {
@@ -100,6 +104,7 @@ export class SelectionToolService extends AbstractToolService {
         const boxRight = selectionBox.x + selectionBox.width;
         const boxTop = selectionBox.y;
         const boxBottom = selectionBox.y + selectionBox.height;
+
         let elLeft = elementBox.x;
         let elRight = elementBox.x + elementBox.width;
         let elTop = elementBox.y;
@@ -112,21 +117,37 @@ export class SelectionToolService extends AbstractToolService {
             elRight = elementBox.x + elementBox.width + halfStrokeWidth;
             elTop = elementBox.y - halfStrokeWidth;
             elBottom = elementBox.y + elementBox.height + halfStrokeWidth;
-
-            return (
-                elLeft > boxLeft &&
-                elRight < boxRight &&
-                elTop > boxTop &&
-                elBottom < boxBottom
-            );
         }
 
-        return (
-            elLeft > boxLeft &&
-            elRight < boxRight &&
-            elTop > boxTop &&
-            elBottom < boxBottom
-        );
+        const boxTopLeftCorner = {
+            x: boxLeft,
+            y: boxTop,
+        };
+
+        const boxBottomRightCorner = {
+            x: boxRight,
+            y: boxBottom,
+        };
+
+        const elTopLeftCorner = {
+            x: elLeft,
+            y: elTop,
+        };
+
+        const elBottomRightCorner = {
+            x: elRight,
+            y: elBottom,
+        };
+
+        if ((elBottomRightCorner.x < boxTopLeftCorner.x) || (boxBottomRightCorner.x < elTopLeftCorner.x)) {
+            return false;
+        }
+
+        if ((elBottomRightCorner.y < boxTopLeftCorner.y) || (boxBottomRightCorner.y < elTopLeftCorner.y)) {
+            return false;
+        }
+
+        return true;
     }
 
     singlySelect(stackPosition: number): void {

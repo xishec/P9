@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
+//import { DEFAULT_TRANSPARENT } from 'src/constants/color-constants';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import { ToolName, TraceType, PolygonRadiusCorrection, PolygonOffsetAngles } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
