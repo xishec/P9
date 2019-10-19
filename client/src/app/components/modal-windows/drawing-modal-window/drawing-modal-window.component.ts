@@ -43,7 +43,6 @@ export class DrawingModalWindowComponent implements OnInit {
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
             this.emptyDrawStack = emptyDrawStack;
-            console.log(this.emptyDrawStack);
         });
 
         this.previewColor = this.colorToolService.backgroundColor.value;

@@ -76,6 +76,7 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
+            if (drawingInfo.width === 0 || drawingInfo.height === 0) return;
             this.empty = false;
             this.drawingInfo = drawingInfo;
 
@@ -86,8 +87,8 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingSaverService.currentNameAndLabels.subscribe((drawingLabels: NameAndLabels) => {
-            if (drawingLabels.name.length === 0) return;
+        this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
+            if (nameAndLabels.name.length === 0) return;
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
@@ -95,15 +96,15 @@ export class WorkZoneComponent implements OnInit {
             }
             this.fileManagerService
                 .postDrawing(
-                    drawingLabels.name,
-                    drawingLabels.drawingLabels,
+                    nameAndLabels.name,
+                    nameAndLabels.drawingLabels,
                     this.refSVG.nativeElement.innerHTML,
                     this.drawStack.idStack,
                     this.drawingInfo,
                 )
                 .subscribe((message: Message) => {
                     let body: any = JSON.parse(message.body);
-                    if (body.name === drawingLabels.name) {
+                    if (body.name === nameAndLabels.name) {
                         this.drawingSaverService.currentIsSaved.next(true);
                     } else {
                         this.drawingSaverService.currentIsSaved.next(false);

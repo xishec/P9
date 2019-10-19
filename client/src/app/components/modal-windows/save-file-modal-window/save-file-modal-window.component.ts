@@ -64,13 +64,15 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
-                this.isSaving = false;
+                console.log(drawingIsSaved);
                 if (drawingIsSaved) {
-                    window.alert('Sauvegarde réussie!');
+                    console.warn('Sauvegarde réussie!');
                     this.onCancel();
                 } else {
-                    window.alert('Sauvegarde échouée...\n' + this.errorMesaage);
+                    console.warn('Sauvegarde échouée...\n' + this.errorMesaage);
                 }
+                this.isSaving = false;
+                this.drawingSaverService.currentIsSaved.next(undefined);
             });
     }
 
