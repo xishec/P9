@@ -88,6 +88,11 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingSaverService.currentNameAndLabels.subscribe((drawingLabels: NameAndLabels) => {
             if (drawingLabels.name.length === 0) return;
+            if (this.empty) {
+                this.drawingSaverService.currentIsSaved.next(false);
+                this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
+                return;
+            }
             this.fileManagerService
                 .postDrawing(
                     drawingLabels.name,
@@ -102,6 +107,7 @@ export class WorkZoneComponent implements OnInit {
                         this.drawingSaverService.currentIsSaved.next(true);
                     } else {
                         this.drawingSaverService.currentIsSaved.next(false);
+                        this.drawingSaverService.currentErrorMesaage.next('Error de sauvegarde!');
                     }
                 });
         });

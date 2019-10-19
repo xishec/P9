@@ -17,6 +17,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
     drawingLabels: string[] = ['Art Abstrait', 'Art Contemporain', 'Expressionnisme', 'Minimalisme'];
     selectedLabels: string[] = [];
+    errorMesaage: string;
 
     constructor(
         formBuilder: FormBuilder,
@@ -34,6 +35,9 @@ export class SaveFileModalWindowComponent implements OnInit {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
             this.drawingLabels = this.drawingLabels.concat(currentDrawing.labels);
             this.selectedLabels = Array.from(currentDrawing.labels);
+        });
+        this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
+            this.errorMesaage = errorMesaage;
         });
     }
 
@@ -61,7 +65,7 @@ export class SaveFileModalWindowComponent implements OnInit {
                     window.alert('Sauvegarde réussie!');
                     this.onCancel();
                 } else {
-                    window.alert('Sauvegarde échouée...');
+                    window.alert('Sauvegarde échouée...\n' + this.errorMesaage);
                 }
             });
     }
