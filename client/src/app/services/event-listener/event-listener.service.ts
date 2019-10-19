@@ -3,6 +3,7 @@ import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.servi
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { ToolNameShortcuts, ToolNameControlShortcuts } from 'src/constants/tool-constants';
 //import { ToolNameShortcuts } from 'src/constants/tool-constants';
 
 
@@ -72,10 +73,24 @@ export class EventListenerService {
         });
 
         window.addEventListener('keydown', (event: KeyboardEvent) => {
+            event.preventDefault();
+
+            // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
             if (this.currentTool != undefined && !this.empty) {
                 this.currentTool.onKeyDown(event);
             }
+
+            // If the key is a shortcut for a tool, change current tool
+            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
+                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
+            }
+
+            // If control is pressed, change for ControlTools
+            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
+            }
         });
+
 
         window.addEventListener('keyup', (event: KeyboardEvent) => {
             if(this.currentTool != undefined && !this.empty) {
