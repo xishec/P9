@@ -8,6 +8,7 @@ import { ShortcutManagerService } from '../../../services/shortcut-manager/short
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -63,6 +64,13 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.height,
             this.previewColor,
         );
+        this.drawingLoaderService.currentDrawing.next({
+            name: '',
+            labels: [],
+            svg: '',
+            idStack: [],
+            drawingInfo: new DrawingInfo(0, 0, ''),
+        });
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);

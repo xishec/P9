@@ -1,6 +1,6 @@
 .mat-typography {
     display: grid;
-    grid-template-columns: 140px auto;
+    grid-template-columns: 140px 450px;
     grid-template-rows: 30px 10px auto 60px;
     align-self: center;
     padding: 15px 40px;
@@ -31,7 +31,7 @@
     grid-row: 3 / 4;
     display: flex;
 
-    justify-content: space-between;
+    justify-content: left;
     flex-wrap: wrap;
 }
 
@@ -63,4 +63,8 @@
 #label-button {
     padding: 0;
     width: 60%;
+}
+
+#no-label {
+    margin-left: 5px;
 }

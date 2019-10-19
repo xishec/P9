@@ -9,9 +9,9 @@ import { DrawingInfo } from 'src/classes/DrawingInfo';
 export class DrawingLoaderService {
     currentDrawing: BehaviorSubject<Drawing> = new BehaviorSubject({
         name: '',
-        labels: [''],
+        labels: [],
         svg: '',
-        idStack: [''],
+        idStack: [],
         drawingInfo: new DrawingInfo(0, 0, ''),
     });
 

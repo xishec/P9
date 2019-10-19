@@ -2,16 +2,29 @@
 
 <mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
     <mat-label id="drawing-name-title">Nom du dessin</mat-label>
-    <input matInput id="drawing-name-input" formControlName="name" #input placeholder="Nom du dessin" />
+    <input
+        autocomplete="off"
+        matInput
+        id="drawing-name-input"
+        formControlName="name"
+        #input
+        placeholder="Nom du dessin"
+    />
 
     <mat-label id="drawing-label-title">Étiquettes</mat-label>
     <div id="drawing-labels-list">
-        <mat-button-toggle id="label" *ngFor="let label of drawingLabels" [checked]="selectedLabels.includes(label)">
+        <mat-button-toggle
+            id="label"
+            *ngFor="let label of drawingLabels"
+            (click)="toggleLabel(label)"
+            [checked]="selectedLabels.includes(label)"
+        >
             {{ label }}
         </mat-button-toggle>
+        <div id="no-label" *ngIf="drawingLabels.length === 0">aucune</div>
     </div>
     <div id="new-label">
-        <input matInput id="new-label-input" #labelInput placeholder="Nouvelle étiquette" />
+        <input autocomplete="off" matInput id="new-label-input" #labelInput placeholder="Nouvelle étiquette" />
         <button
             *ngIf="labelInput.value !== ''"
             mat-raised-button
