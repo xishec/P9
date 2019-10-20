@@ -15,8 +15,8 @@ export class EventListenerService {
 
     currentTool: AbstractToolService | undefined;
     toolName = '';
-    isWorkZoneEmpty = true;
     isOnInput = false;
+    isWorkZoneEmpty = true;
     isModalOpen = false;
 
     constructor(
@@ -120,7 +120,7 @@ export class EventListenerService {
 
 
         window.addEventListener('keyup', (event: KeyboardEvent) => {
-            if(this.currentTool != undefined && !this.isWorkZoneEmpty) {
+            if(this.currentTool != undefined) {
                 this.currentTool.onKeyUp(event);
             }
         })
