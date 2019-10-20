@@ -432,11 +432,8 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.leftMouseIsDown && this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
             this.isLeftMouseDragging = true;
             for (const el of this.selection) {
-                // Get all transforms on el
                 const transformsList = el.transform.baseVal;
-                // Check if first transform is translate
                 if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
-                    // If not create translate(0,0) and add it to the beginning of the list
                     const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
                     const translateToZero = svg.createSVGTransform();
                     translateToZero.setTranslate(0, 0);
@@ -481,9 +478,6 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isOnTarget) {
             this.invertSelection(this.currentTarget);
         }
-        // if (this.hasSelected()) {
-        //     this.invertSelection();
-        // }
     }
 
     onMouseDown(event: MouseEvent): void {
