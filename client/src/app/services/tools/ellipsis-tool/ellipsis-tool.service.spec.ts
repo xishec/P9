@@ -208,6 +208,24 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
+    it('should call copyRectanglePreview if isCirclePreview is false', () => {
+        let spyOnCopyRectanglePreview: jasmine.Spy = spyOn(service, 'copyRectanglePreview').and.returnValue();
+        service.isCirclePreview = false;
+
+        service.updateDrawing();
+
+        expect(spyOnCopyRectanglePreview).toHaveBeenCalled();
+    });
+
+    it('should call updatePreviewCircle if isCirclePreview is true', () => {
+        let spyOnUpdatePreviewCircle: jasmine.Spy = spyOn(service, 'updatePreviewCircle').and.returnValue();
+        service.isCirclePreview = true;
+
+        service.updateDrawing();
+
+        expect(spyOnUpdatePreviewCircle).toHaveBeenCalled();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
