@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Mouse, SVG_NS, Keys } from 'src/constants/constants';
-import { ToolName, TraceType } from 'src/constants/tool-constants';
+import { ToolName, TraceType, svgAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -88,23 +88,23 @@ export class EllipsisToolService extends AbstractShapeToolService {
     copyRectanglePreview(): void {
         this.renderer.setAttribute(
             this.drawEllipse,
-            'rx',
+            svgAttribute.rx,
             Math.abs(this.previewRectangleWidth / 2 - this.userStrokeWidth / 2).toString()
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            'ry',
+            svgAttribute.ry,
             Math.abs(this.previewRectangleHeight / 2 - this.userStrokeWidth / 2).toString()
         );
 
         this.renderer.setAttribute(
             this.drawEllipse,
-            'cx',
+            svgAttribute.cx,
             (this.previewRectangleX + this.previewRectangleWidth / 2).toString()
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            'cy',
+            svgAttribute.cy,
             (this.previewRectangleY + this.previewRectangleHeight / 2).toString()
         );
     }
@@ -117,31 +117,31 @@ export class EllipsisToolService extends AbstractShapeToolService {
         if (deltaX < 0) {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                'cx',
+                svgAttribute.cx,
                 (this.previewRectangleX + (this.previewRectangleWidth - minLength / 2)).toString()
             );
         } else {
-            this.renderer.setAttribute(this.drawEllipse, 'cx', (this.previewRectangleX + minLength / 2).toString());
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.cx, (this.previewRectangleX + minLength / 2).toString());
         }
 
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                'cy',
+                svgAttribute.cy,
                 (this.previewRectangleY + (this.previewRectangleHeight - minLength / 2)).toString()
             );
         } else {
-            this.renderer.setAttribute(this.drawEllipse, 'cy', (this.previewRectangleY + minLength / 2).toString());
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.cy, (this.previewRectangleY + minLength / 2).toString());
         }
 
         this.renderer.setAttribute(
             this.drawEllipse,
-            'rx',
+            svgAttribute.rx,
             Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString()
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            'ry',
+            svgAttribute.ry,
             Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString()
         );
     }
@@ -149,14 +149,14 @@ export class EllipsisToolService extends AbstractShapeToolService {
     renderDrawEllipsis(): void {
         if (this.isValideEllipse()) {
             this.userFillColor === 'none'
-                ? this.renderer.setAttribute(this.drawEllipse, 'fill', this.userFillColor)
-                : this.renderer.setAttribute(this.drawEllipse, 'fill', '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawEllipse, 'stroke', '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawEllipse, 'stroke-width', this.userStrokeWidth.toString());
+                ? this.renderer.setAttribute(this.drawEllipse, svgAttribute.fill, this.userFillColor)
+                : this.renderer.setAttribute(this.drawEllipse, svgAttribute.fill, '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.stroke, '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.stroke_width, this.userStrokeWidth.toString());
         } else {
-            this.renderer.setAttribute(this.drawEllipse, 'fill', 'none');
-            this.renderer.setAttribute(this.drawEllipse, 'stroke', 'none');
-            this.renderer.setAttribute(this.drawEllipse, 'stroke-width', '0');
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.fill, 'none');
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.stroke, 'none');
+            this.renderer.setAttribute(this.drawEllipse, svgAttribute.stroke_width, '0');
         }
     }
 
@@ -254,16 +254,16 @@ export class EllipsisToolService extends AbstractShapeToolService {
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawEllipse: SVGEllipseElement = this.renderer.createElement('ellipse', SVG_NS);
-        this.renderer.setAttribute(drawEllipse, 'cx', this.drawEllipseCenterX.toString());
-        this.renderer.setAttribute(drawEllipse, 'cy', this.drawEllipseCenterY.toString());
-        this.renderer.setAttribute(drawEllipse, 'rx', this.drawEllipseRadiusX.toString());
-        this.renderer.setAttribute(drawEllipse, 'ry', this.drawEllipseRadiusY.toString());
-        this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
+        this.renderer.setAttribute(drawEllipse, svgAttribute.cx, this.drawEllipseCenterX.toString());
+        this.renderer.setAttribute(drawEllipse, svgAttribute.cy, this.drawEllipseCenterY.toString());
+        this.renderer.setAttribute(drawEllipse, svgAttribute.rx, this.drawEllipseRadiusX.toString());
+        this.renderer.setAttribute(drawEllipse, svgAttribute.ry, this.drawEllipseRadiusY.toString());
+        this.renderer.setAttribute(el, svgAttribute.stroke_width, this.userStrokeWidth.toString());
         this.userFillColor === 'none'
-            ? this.renderer.setAttribute(el, 'fill', this.userFillColor)
-            : this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
-        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
-        this.renderer.setAttribute(el, 'title', ToolName.Ellipsis);
+            ? this.renderer.setAttribute(el, svgAttribute.fill, this.userFillColor)
+            : this.renderer.setAttribute(el, svgAttribute.fill, '#' + this.userFillColor);
+        this.renderer.setAttribute(el, svgAttribute.stroke, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(el, svgAttribute.title, ToolName.Ellipsis);
 
         this.renderer.appendChild(el, drawEllipse);
         this.drawStack.push(el);
