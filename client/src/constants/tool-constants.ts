@@ -19,7 +19,7 @@ enum ToolName {
     Eraser = 'Efface',
     Text = 'Zone de texte',
     Stamp = 'Étampe',
-    Other = 'Autre',
+    Grid = 'Grille',
     NewDrawing = 'Nouveau dessin',
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
@@ -38,6 +38,39 @@ enum TraceType {
     Both = 'Plein avec contour',
 }
 
+const PolygonFormType: Map<number, string> = new Map([
+    [3, 'Triangle'],
+    [4, 'Quadrilatère'],
+    [5, 'Pentagone'],
+    [6, 'Hexagone'],
+    [7, 'Heptagone'],
+    [8, 'Octogone'],
+    [9, 'Nonagone'],
+    [10, 'Décagone'],
+    [11, 'Hendécagone'],
+    [12, 'Dodécagone'],
+]);
+
+enum PolygonSides {
+    Min = 3,
+    Default = 3,
+    Max = 12,
+}
+
+enum GridSize {
+    Min = 5,
+    Default = 10,
+    Max = 200,
+}
+
+enum GridOpacity {
+    Min = 0.2,
+    Max = 1,
+}
+
+const GRID_SIZE_INCREMENT = 5;
+const GRID_SIZE_DECREMENT = 5;
+
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
     { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
@@ -55,7 +88,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser, shortcut: '(E)' },
     { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: ToolName.Stamp, shortcut: '' },
-    { iconName: 'fas fa-ellipsis-v', tooltipName: ToolName.Other, shortcut: '' },
+    { iconName: 'fas fa-border-all', tooltipName: ToolName.Grid, shortcut: '' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -66,6 +99,32 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const BRUSH_STYLES = [1, 2, 3, 4, 5];
+
+const PolygonRadiusCorrection: Map<number, number> = new Map([
+    [3, 0.13],
+    [4, 0.33],
+    [5, 0.05],
+    [6, 0.025],
+    [7, 0.035],
+    [8, 0.08],
+    [9, 0.025],
+    [10, 0.015],
+    [11, 0.02],
+    [12, 0.04],
+]);
+
+const PolygonOffsetAngles: Map<number, number> = new Map([
+    [3, 3 * (360 / 3 / 4) * (Math.PI / 180)],
+    [4, Math.PI / 4],
+    [5, (360 / 5 / 4) * (Math.PI / 180)],
+    [6, 0],
+    [7, 3 * (360 / 7 / 4) * (Math.PI / 180)],
+    [8, (360 / 8 / 2) * (Math.PI / 180)],
+    [9, (360 / 9 / 4) * (Math.PI / 180)],
+    [10, 0],
+    [11, 3 * (360 / 11 / 4) * (Math.PI / 180)],
+    [12, (360 / 12 / 2) * (Math.PI / 180)],
+]);
 
 enum StampScaling {
     Min = 0.1,
@@ -99,6 +158,18 @@ const STAMPS_MAP: Map<number, string> = new Map([
     [5, '/assets/stamps/iconmonstr-glasses-12.svg'],
 ]);
 
+enum LineStrokeType {
+    Continuous = 1,
+    Dotted_line = 2,
+    Dotted_circle = 3,
+}
+
+enum LineJointType {
+    Curvy = 1,
+    Straight = 2,
+    Circle = 3,
+}
+
 export {
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
@@ -106,10 +177,20 @@ export {
     Thickness,
     TraceType,
     ToolName,
+    PolygonFormType,
+    PolygonSides,
+    PolygonRadiusCorrection,
+    PolygonOffsetAngles,
     StampScaling,
     StampAngleOrientation,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
     STAMP_NAMES,
+    LineStrokeType,
+    LineJointType,
+    GridSize,
+    GridOpacity,
+    GRID_SIZE_INCREMENT,
+    GRID_SIZE_DECREMENT,
 };

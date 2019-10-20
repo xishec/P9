@@ -151,6 +151,8 @@ Une branche fonctionnalité devrait se nommer `feat/nom-du-feature`.
 
 Une branche correction de bogue devrait se nommer `fix/nom-du-bug`.
 
+Une branche de refactor devrait se nommer `refactor/nom-du-refactor`
+
 Les messages de commit doivent être concis et significatifs. Ne mettez pas des messages trop long ou trop courts. On devrait être capable de comprendre ce que le commit fait sans lire les changements.
 
 Vous devez garder le même courriel, peu importe l'ordinateur que vous utilisez. Il ne devrait donc pas y avoir plus de 6 contributeurs dans votre repo. Un script d'extraction des métriques dans Git vous est fourni sur Moodle.

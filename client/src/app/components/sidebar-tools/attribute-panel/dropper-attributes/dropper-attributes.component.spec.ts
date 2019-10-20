@@ -8,7 +8,7 @@ describe('DropperAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DropperAttributesComponent ]
+      declarations: [ DropperAttributesComponent ],
     })
     .compileComponents();
   }));

@@ -1,3 +1,5 @@
+import { Predicate } from 'src/classes/Predicate';
+
 enum Keys {
     Shift = 'Shift',
     Control = 'Control',
@@ -19,6 +21,8 @@ enum Keys {
     t = 't',
     w = 'w',
     y = 'y',
+    Escape = 'Escape',
+    Backspace = 'Backspace',
 }
 
 enum Mouse {
@@ -31,4 +35,6 @@ const SIDEBAR_WIDTH = 360;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export { SIDEBAR_WIDTH, SVG_NS, Keys, Mouse };
+const predicate: Predicate = new Predicate();
+
+export { SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };

@@ -55,7 +55,7 @@ export class StampToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
             if (newStamp === NO_STAMP) {
-                this.cleanUpStamp();
+                this.cleanUp();
                 this.shouldStamp = false;
             } else {
                 this.stampLink = newStamp;
@@ -75,8 +75,8 @@ export class StampToolService extends AbstractToolService {
 
     verifyPosition(event: MouseEvent): boolean {
         return (
-            event.clientX > this.svgReference.nativeElement.getBoundingClientRect().left &&
-            event.clientY > this.svgReference.nativeElement.getBoundingClientRect().top
+            event.clientX > (this.svgReference.nativeElement.getBoundingClientRect().left + window.scrollX) &&
+            event.clientY > (this.svgReference.nativeElement.getBoundingClientRect().top + window.scrollY)
         );
     }
 
@@ -88,7 +88,7 @@ export class StampToolService extends AbstractToolService {
         }
     }
 
-    cleanUpStamp(): void {
+    cleanUp(): void {
         if (this.stampIsAppended) {
             this.renderer.removeChild(this.svgReference.nativeElement, this.stampWrapper);
             this.stampIsAppended = false;
@@ -154,10 +154,8 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        this.isIn = this.verifyPosition(event);
-
-        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
-            this.cleanUpStamp();
+        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
+            this.cleanUp();
             this.addStamp();
         }
     }
@@ -165,9 +163,7 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        this.isIn = this.verifyPosition(event);
-
-        if (button === Mouse.LeftButton && this.isIn && this.shouldStamp) {
+        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
             this.initStamp();
         }
     }
@@ -184,7 +180,7 @@ export class StampToolService extends AbstractToolService {
         this.isIn = false;
 
         if (this.shouldStamp) {
-            this.cleanUpStamp();
+            this.cleanUp();
         }
     }
 
@@ -219,4 +215,5 @@ export class StampToolService extends AbstractToolService {
             }
         }
     }
+
 }
