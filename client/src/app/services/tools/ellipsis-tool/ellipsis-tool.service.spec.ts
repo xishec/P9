@@ -288,6 +288,22 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnCreateSVG).toHaveBeenCalled();
     });
 
+    it('should set isIn to true after onMouseEnter', () => {
+        service.isIn = false;
+
+        service.onMouseEnter(leftMouseEvent);
+
+        expect(service.isIn).toBeTruthy();
+    });
+
+    it('should set isIn to false after onMouseLeave', () => {
+        service.isIn = true;
+
+        service.onMouseLeave(leftMouseEvent);
+
+        expect(service.isIn).toBeFalsy();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
