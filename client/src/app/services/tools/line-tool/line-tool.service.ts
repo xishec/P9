@@ -14,7 +14,9 @@ export class LineToolService extends AbstractToolService {
     colorToolService: ColorToolService;
     attributesManagerService: AttributesManagerService;
 
+    currentColorAndOpacity = '';
     currentColor = '';
+    currentOpacity = '';
     currentStrokeWidth = 0;
     currentCircleJointDiameter = 0;
 
@@ -48,7 +50,7 @@ export class LineToolService extends AbstractToolService {
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColor = currentColor;
+            this.currentColorAndOpacity = currentColor;
         });
     }
 
@@ -68,8 +70,14 @@ export class LineToolService extends AbstractToolService {
         });
     }
 
+    getColorAndOpacity(): void {
+        this.currentColor = this.currentColorAndOpacity.slice(0,6);
+        this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
+    }
+
     onMouseDown(event: MouseEvent): void {
         if (event.button === Mouse.LeftButton) {
+            this.getColorAndOpacity();
             const x = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
             if (!this.isDrawing) {
@@ -158,6 +166,7 @@ export class LineToolService extends AbstractToolService {
 
         this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
         this.renderer.setAttribute(this.gWrap, 'fill', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, 'opacity', this.currentOpacity);
 
         switch (this.currentStrokeType) {
             case LineStrokeType.Dotted_line:

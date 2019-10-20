@@ -23,8 +23,8 @@ describe('DrawingModalWindowService', () => {
         expect(service).toBeTruthy();
     });
 
-    it(`changeDrawingInfoWidthHeight with ${WIDTH} and ${HEIGHT} should update drawingInfo`, () => {
-        service.changeDrawingInfoWidthHeight(WIDTH, HEIGHT);
+    it(`changeDrawingInfo with ${WIDTH} and ${HEIGHT} should update drawingInfo`, () => {
+        service.changeDrawingInfo(WIDTH, HEIGHT);
 
         expect(service.drawingInfo.value.width).toEqual(WIDTH);
         expect(service.drawingInfo.value.height).toEqual(HEIGHT);
