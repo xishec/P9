@@ -114,14 +114,18 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     mouseIsInSelectionBox(): boolean {
-        const selectionBoxLeft = this.getDOMRect(this.selectionBox).x - SIDEBAR_WIDTH;
-        const selectionBoxRight = this.getDOMRect(this.selectionBox).x - SIDEBAR_WIDTH + this.getDOMRect(this.selectionBox).width;
-        const selectionBoxTop = this.getDOMRect(this.selectionBox).y;
-        const selectionBoxBottom = this.getDOMRect(this.selectionBox).y + this.getDOMRect(this.selectionBox).height;
+        const selectionBoxLeft = this.getDOMRect(this.selectionBox).x + window.scrollX - SIDEBAR_WIDTH;
+        const selectionBoxRight =
+            this.getDOMRect(this.selectionBox).x +
+            window.scrollX -
+            SIDEBAR_WIDTH +
+            this.getDOMRect(this.selectionBox).width;
+        const selectionBoxTop = this.getDOMRect(this.selectionBox).y + window.scrollY;
+        const selectionBoxBottom =
+            this.getDOMRect(this.selectionBox).y + window.scrollY + this.getDOMRect(this.selectionBox).height;
         return (
             this.currentMouseX >= selectionBoxLeft &&
-            this.currentMouseX <=
-                selectionBoxRight &&
+            this.currentMouseX <= selectionBoxRight &&
             this.currentMouseY >= selectionBoxTop &&
             this.currentMouseY <= selectionBoxBottom
         );
@@ -145,15 +149,15 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
-        const boxLeft = selectionBox.x - SIDEBAR_WIDTH;
-        const boxRight = selectionBox.x - SIDEBAR_WIDTH + selectionBox.width;
-        const boxTop = selectionBox.y;
-        const boxBottom = selectionBox.y + selectionBox.height;
+        const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
+        const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
+        const boxTop = selectionBox.y + window.scrollY;
+        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
 
-        let elLeft = elementBox.x - SIDEBAR_WIDTH;
-        let elRight = elementBox.x - SIDEBAR_WIDTH + elementBox.width;
-        let elTop = elementBox.y;
-        let elBottom = elementBox.y + elementBox.height;
+        let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
+        let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
+        let elTop = elementBox.y + window.scrollY;
+        let elBottom = elementBox.y + window.scrollY + elementBox.height;
 
         if (strokeWidth) {
             const halfStrokeWidth = strokeWidth / 2;
@@ -278,7 +282,7 @@ export class SelectionToolService extends AbstractToolService {
         const leftCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            leftCoords.push(this.getDOMRect(el).x - SIDEBAR_WIDTH - this.getStrokeWidth(el) / 2);
+            leftCoords.push(this.getDOMRect(el).x + window.scrollX - SIDEBAR_WIDTH - this.getStrokeWidth(el) / 2);
         }
 
         return Math.min.apply(Math, leftCoords);
@@ -289,7 +293,11 @@ export class SelectionToolService extends AbstractToolService {
 
         for (const el of this.selection) {
             rightCoords.push(
-                this.getDOMRect(el).x - SIDEBAR_WIDTH + this.getDOMRect(el).width + this.getStrokeWidth(el) / 2
+                this.getDOMRect(el).x +
+                    window.scrollX -
+                    SIDEBAR_WIDTH +
+                    this.getDOMRect(el).width +
+                    this.getStrokeWidth(el) / 2
             );
         }
 
@@ -300,7 +308,7 @@ export class SelectionToolService extends AbstractToolService {
         const topCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            topCoords.push(this.getDOMRect(el).y - this.getStrokeWidth(el) / 2);
+            topCoords.push(this.getDOMRect(el).y + window.scrollY - this.getStrokeWidth(el) / 2);
         }
 
         return Math.min.apply(Math, topCoords);
@@ -310,7 +318,9 @@ export class SelectionToolService extends AbstractToolService {
         const bottomCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            bottomCoords.push(this.getDOMRect(el).y + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2);
+            bottomCoords.push(
+                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2
+            );
         }
 
         return Math.max.apply(Math, bottomCoords);
