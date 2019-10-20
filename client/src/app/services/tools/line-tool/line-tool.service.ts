@@ -8,17 +8,19 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class LineToolService extends AbstractToolService {
     colorToolService: ColorToolService;
     attributesManagerService: AttributesManagerService;
 
+    currentColorAndOpacity = '';
     currentColor = '';
+    currentOpacity = '';
     currentStrokeWidth = 0;
     currentCircleJointDiameter = 0;
 
-    currentStrokeType =  LineStrokeType.Continuous;
+    currentStrokeType = LineStrokeType.Continuous;
     currentJointType = LineJointType.Curvy;
 
     pointsArray = new Array();
@@ -34,7 +36,11 @@ export class LineToolService extends AbstractToolService {
     gWrap: SVGGElement;
     currentLine: SVGPolylineElement;
 
-    constructor(private elementRef: ElementRef<SVGElement>, private renderer: Renderer2, private drawStack: DrawStackService) {
+    constructor(
+        private elementRef: ElementRef<SVGElement>,
+        private renderer: Renderer2,
+        private drawStack: DrawStackService
+    ) {
         super();
     }
 
@@ -44,7 +50,7 @@ export class LineToolService extends AbstractToolService {
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColor = currentColor;
+            this.currentColorAndOpacity = currentColor;
         });
     }
 
@@ -64,8 +70,14 @@ export class LineToolService extends AbstractToolService {
         });
     }
 
+    getColorAndOpacity(): void {
+        this.currentColor = this.currentColorAndOpacity.slice(0,6);
+        this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
+    }
+
     onMouseDown(event: MouseEvent): void {
         if (event.button === Mouse.LeftButton) {
+            this.getColorAndOpacity();
             const x = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
             if (!this.isDrawing) {
@@ -102,7 +114,11 @@ export class LineToolService extends AbstractToolService {
         } else if (event.key === Keys.Backspace) {
             if (this.pointsArray.length > 1) {
                 this.pointsArray.pop();
-                this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.currentMousePosition}`);
+                this.renderer.setAttribute(
+                    this.currentLine,
+                    'points',
+                    `${this.arrayToStringLine()} ${this.currentMousePosition}`
+                );
 
                 if (this.currentJointType === LineJointType.Circle) {
                     const circle = this.jointCircles.pop();
@@ -150,21 +166,25 @@ export class LineToolService extends AbstractToolService {
 
         this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
         this.renderer.setAttribute(this.gWrap, 'fill', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, 'opacity', this.currentOpacity);
 
         switch (this.currentStrokeType) {
-            case LineStrokeType.Dotted_line :
+            case LineStrokeType.Dotted_line:
                 this.renderer.setAttribute(
-                    this.currentLine, 'stroke-dasharray', `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`);
+                    this.currentLine,
+                    'stroke-dasharray',
+                    `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`
+                );
                 break;
-            case LineStrokeType.Dotted_circle :
+            case LineStrokeType.Dotted_circle:
                 this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentStrokeWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
 
         switch (this.currentJointType) {
-            case LineJointType.Curvy :
-            case LineJointType.Circle :
+            case LineJointType.Curvy:
+            case LineJointType.Circle:
                 this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
                 break;
         }
@@ -175,15 +195,19 @@ export class LineToolService extends AbstractToolService {
 
     previewLine(x: number, y: number): void {
         this.currentMousePosition = `${x.toString()},${y.toString()}`;
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()} ${this.currentMousePosition}`);
+        this.renderer.setAttribute(
+            this.currentLine,
+            'points',
+            `${this.arrayToStringLine()} ${this.currentMousePosition}`
+        );
     }
 
-    appendLine(x: number, y: number) {
+    appendLine(x: number, y: number): void {
         this.pointsArray.push(` ${x.toString()},${y.toString()}`);
         this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
     }
 
-    appendCircle(x: number, y: number) {
+    appendCircle(x: number, y: number): void {
         const circle = this.renderer.createElement('circle', SVG_NS);
 
         this.renderer.setAttribute(circle, 'cx', x.toString());
@@ -200,11 +224,15 @@ export class LineToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        if (!this.isLineInStack) {
-            this.drawStack.push(this.gWrap);
+        if (!this.isLineInStack && this.gWrap !== undefined) {
+            this.renderer.removeChild(this.elementRef, this.gWrap);
+            this.pointsArray = new Array();
         }
+        this.isDrawing = false;
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
 }

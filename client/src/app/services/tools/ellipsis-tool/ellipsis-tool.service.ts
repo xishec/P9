@@ -269,4 +269,10 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
+
+    cleanUp(): void {
+        this.renderer.removeChild(this.svgReference, this.previewRectangle);
+        this.renderer.removeChild(this.svgReference, this.drawEllipse);
+        this.isPreviewing = false;
+    }
 }

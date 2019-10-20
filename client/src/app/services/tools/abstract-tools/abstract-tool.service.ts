@@ -15,4 +15,5 @@ export abstract class AbstractToolService {
   abstract onMouseLeave(event: MouseEvent): void;
   abstract onKeyDown(event: KeyboardEvent): void;
   abstract onKeyUp(event: KeyboardEvent): void;
+  abstract cleanUp(): void;
 }

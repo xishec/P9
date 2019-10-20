@@ -55,7 +55,7 @@ export class StampToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentStampType.subscribe((newStamp) => {
             if (newStamp === NO_STAMP) {
-                this.cleanUpStamp();
+                this.cleanUp();
                 this.shouldStamp = false;
             } else {
                 this.stampLink = newStamp;
@@ -88,7 +88,7 @@ export class StampToolService extends AbstractToolService {
         }
     }
 
-    cleanUpStamp(): void {
+    cleanUp(): void {
         if (this.stampIsAppended) {
             this.renderer.removeChild(this.svgReference.nativeElement, this.stampWrapper);
             this.stampIsAppended = false;
@@ -155,7 +155,7 @@ export class StampToolService extends AbstractToolService {
         const button = event.button;
 
         if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
-            this.cleanUpStamp();
+            this.cleanUp();
             this.addStamp();
         }
     }
@@ -180,7 +180,7 @@ export class StampToolService extends AbstractToolService {
         this.isIn = false;
 
         if (this.shouldStamp) {
-            this.cleanUpStamp();
+            this.cleanUp();
         }
     }
 
@@ -215,4 +215,5 @@ export class StampToolService extends AbstractToolService {
             }
         }
     }
+
 }
