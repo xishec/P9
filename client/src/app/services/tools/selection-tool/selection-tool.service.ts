@@ -311,6 +311,10 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     computeSelectionBox(): void {
+        if (!this.hasSelected()) {
+            this.removeFullSelectionBox();
+            return;
+        }
         const left = this.findLeftMostCoord();
         const right = this.findRightMostCoord();
         const top = this.findTopMostCoord();
@@ -426,38 +430,39 @@ export class SelectionToolService extends AbstractToolService {
         this.selectionBoxIsAppended = false;
     }
 
-    handleLeftMouseDrag(): void {
+    translateSelection(): void {
         const deltaX = this.currentMouseX - this.lastCurrentMouseX;
         const deltaY = this.currentMouseY - this.lastCurrentMouseY;
+        for (const el of this.selection) {
+            const transformsList = el.transform.baseVal;
+            if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
+                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+                const translateToZero = svg.createSVGTransform();
+                translateToZero.setTranslate(0, 0);
+                el.transform.baseVal.insertItemBefore(translateToZero, 0);
+            }
+
+            const initialTransform = transformsList.getItem(0);
+            const offsetX = -initialTransform.matrix.e;
+            const offsetY = -initialTransform.matrix.f;
+            el.transform.baseVal.getItem(0).setTranslate((deltaX - offsetX), (deltaY - offsetY));
+        }
+    }
+
+    handleLeftMouseDrag(): void {
         this.isLeftMouseDragging = true;
 
         if (this.isSelecting) {
             this.updateSelectionRectangle();
             this.checkSelection();
-            if (this.hasSelected()) {
-                this.computeSelectionBox();
-            }
             if (!this.selectionBoxIsAppended) {
                 this.appendFullSelectionBox();
             }
         } else if (this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
-            for (const el of this.selection) {
-                const transformsList = el.transform.baseVal;
-                if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
-                    const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                    const translateToZero = svg.createSVGTransform();
-                    translateToZero.setTranslate(0, 0);
-                    el.transform.baseVal.insertItemBefore(translateToZero, 0);
-                }
-
-                const initialTransform = transformsList.getItem(0);
-                const offsetX = -initialTransform.matrix.e;
-                const offsetY = -initialTransform.matrix.f;
-                el.transform.baseVal.getItem(0).setTranslate((deltaX - offsetX), (deltaY - offsetY));
-            }
-
-            this.computeSelectionBox();
+            this.translateSelection();
         }
+
+        this.computeSelectionBox();
     }
 
     handleRightMouseDrag(): void {
@@ -481,32 +486,22 @@ export class SelectionToolService extends AbstractToolService {
         this.leftMouseIsDown = true;
         this.initialMouseX = this.currentMouseX;
         this.initialMouseY = this.currentMouseY;
-        // Mouse down on selection box
 
-        // Mouse down on an unselected object
-        // Mouse down on unselected object inside selection box
         if (this.isOnTarget) {
             if (this.selection.size > 1) {
 
             } else {
                 this.singlySelect(this.currentTarget);
             }
-        } // Mouse down on control point
-        else if (this.mouseIsInControlPoint() || (this.mouseIsInSelectionBox() && !this.isOnTarget)) {
+        } else if (this.mouseIsInControlPoint() || (this.mouseIsInSelectionBox() && !this.isOnTarget)) {
 
-        } // Mouse down on nothing
-        else if (!this.mouseIsInControlPoint() && !this.mouseIsInSelectionBox()) {
+        } else if (!this.mouseIsInControlPoint() && !this.mouseIsInSelectionBox()) {
             this.clearSelection();
             this.startSelection();
         }
     }
 
     handleRightMouseDown(): void {
-        // Mouse down on nothing
-        // Mouse down on unselected object
-        // Mouse down on selection box
-        // Mouse down on selected object
-        // Mouse down on unselected objected inside selection box
         if (this.isOnTarget) {
             this.invertSelection(this.currentTarget);
         }
