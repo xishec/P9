@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { ToolName, TraceType } from 'src/constants/tool-constants';
+import { ToolName, TraceType, svgAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -71,26 +71,26 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'width',
+                svgAttribute.width,
                 (-(this.previewRectangleWidth - this.userStrokeWidth)).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'width',
+                svgAttribute.width,
                 (this.previewRectangleWidth - this.userStrokeWidth).toString()
             );
         }
         if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'height',
+                svgAttribute.height,
                 (-(this.previewRectangleHeight - this.userStrokeWidth)).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'height',
+                svgAttribute.height,
                 (this.previewRectangleHeight - this.userStrokeWidth).toString()
             );
         }
@@ -99,14 +99,14 @@ export class RectangleToolService extends AbstractShapeToolService {
     renderDrawRectangle(): void {
         if (this.isValideRectangle()) {
             this.userFillColor === 'none'
-                ? this.renderer.setAttribute(this.drawRectangle, 'fill', this.userFillColor)
-                : this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.userStrokeWidth.toString());
+                ? this.renderer.setAttribute(this.drawRectangle, svgAttribute.fill, this.userFillColor)
+                : this.renderer.setAttribute(this.drawRectangle, svgAttribute.fill, '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.stroke, '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.stroke_width, this.userStrokeWidth.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'fill', 'none');
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', 'none');
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', '0');
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.fill, 'none');
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.stroke, 'none');
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.stroke_width, '0');
         }
     }
 
@@ -121,15 +121,15 @@ export class RectangleToolService extends AbstractShapeToolService {
         const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangleX.toString());
         this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangleY.toString());
-        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangleWidth.toString());
-        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangleHeight.toString());
-        this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
+        this.renderer.setAttribute(drawRectangle, svgAttribute.width, this.drawRectangleWidth.toString());
+        this.renderer.setAttribute(drawRectangle, svgAttribute.height, this.drawRectangleHeight.toString());
+        this.renderer.setAttribute(el, svgAttribute.stroke_width, this.userStrokeWidth.toString());
         this.userFillColor === 'none'
-            ? this.renderer.setAttribute(el, 'fill', this.userFillColor)
-            : this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
+            ? this.renderer.setAttribute(el, svgAttribute.fill, this.userFillColor)
+            : this.renderer.setAttribute(el, svgAttribute.fill, '#' + this.userFillColor);
 
-        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
-        this.renderer.setAttribute(el, 'title', ToolName.Rectangle);
+        this.renderer.setAttribute(el, svgAttribute.stroke, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(el, svgAttribute.title, ToolName.Rectangle);
 
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
@@ -166,9 +166,9 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
 
         if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (-(minLength - this.userStrokeWidth)).toString());
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.width, (-(minLength - this.userStrokeWidth)).toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (minLength - this.userStrokeWidth).toString());
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.width, (minLength - this.userStrokeWidth).toString());
         }
 
         if (deltaY < 0) {
@@ -186,9 +186,9 @@ export class RectangleToolService extends AbstractShapeToolService {
         }
 
         if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (-(minLength - this.userStrokeWidth)).toString());
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.height, (-(minLength - this.userStrokeWidth)).toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (minLength - this.userStrokeWidth).toString());
+            this.renderer.setAttribute(this.drawRectangle, svgAttribute.height, (minLength - this.userStrokeWidth).toString());
         }
     }
 
