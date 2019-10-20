@@ -304,38 +304,42 @@ fdescribe('EllipsisToolService', () => {
         expect(service.isIn).toBeFalsy();
     });
 
+    it('should set isCirclePreview to true if key shift is pressed and if isCirclePreview is false', () => {
+        service.isCirclePreview = false;
+        service.onKeyDown(onShiftKeyDown);
+        expect(service.isCirclePreview).toBeTruthy();
 
-import { EllipsisToolService } from './ellipsis-tool.service';
-import { ElementRef, Renderer2 } from '@angular/core';
-import { MatDialog } from '@angular/material';
+        service.isCirclePreview = true;
+        service.onKeyDown(onShiftKeyDown);
+        expect(service.isCirclePreview).toBeTruthy();
+    });
 
-fdescribe('EllipsisToolService', () => {
-    let injector: TestBed;
-    let service: EllipsisToolService;
+    it('should not set isCirclePreview to true if key is not shift', () => {
+        service.isCirclePreview = false;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                EllipsisToolService,
-                {
-                    provide: MatDialog,
-                    useValue: {},
-                },
-                {
-                    provide: Renderer2,
-                    useValue: {
-                        createElement: () => null,
-                        setAttribute: () => null,
-                        appendChild: () => null,
-                        removeChild: () => null,
-                    },
-                },
-                {
-                    provide: ElementRef,
-                    useValue: {
-                        nativeElement: {
-                            getBoundingClientRect: () => {
-                                const boundleft = 0;
+        service.onKeyDown(onOtherKeyDown);
+
+        expect(service.isCirclePreview).toBeFalsy();
+    });
+
+    it('should set isCirclePreview to false if key shift is pressed and if isCirclePreview is true', () => {
+        service.isCirclePreview = true;
+        service.onKeyUp(onShiftKeyDown);
+        expect(service.isCirclePreview).toBeFalsy();
+
+        service.isCirclePreview = false;
+        service.onKeyUp(onShiftKeyDown);
+        expect(service.isCirclePreview).toBeFalsy();
+    });
+
+    it('should not set isCirclePreview to false if key is not shift', () => {
+        service.isCirclePreview = true;
+
+        service.onKeyUp(onOtherKeyDown);
+
+        expect(service.isCirclePreview).toBeTruthy();
+    });
+
                                 const boundtop = 0;
                                 const boundRect = {
                                     left: boundleft,
