@@ -112,6 +112,19 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnDrawEllipseRadiusY).toBeDefined();
     });
 
+    it('should return true if userStrokeWidth is positive', () => {
+        service.userStrokeWidth = 2;
+
+        expect(service.isValideEllipse()).toEqual(true);
+    });
+
+    it('should return false if radiusX and radiusY of elipse are equal to zero', () => {
+        spyOnPreviewRectangleWidth.and.returnValue(0);
+        spyOnPreviewRectangleHeight.and.returnValue(0);
+
+        expect(service.isValideEllipse()).toEqual(false);
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
