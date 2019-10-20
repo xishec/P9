@@ -18,6 +18,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { Message } from '../../../../../common/communication/message';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-work-zone',
@@ -105,12 +106,25 @@ export class WorkZoneComponent implements OnInit {
                     this.drawStack.idStack,
                     this.drawingInfo,
                 )
+                .pipe(
+                    filter((subject) => {
+                        if (subject === undefined) {
+                            this.drawingSaverService.currentErrorMesaage.next(
+                                "Error de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                            );
+                            this.drawingSaverService.currentIsSaved.next(false);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }),
+                )
                 .subscribe((message: Message) => {
                     if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
                         this.drawingSaverService.currentIsSaved.next(true);
                     } else {
-                        this.drawingSaverService.currentIsSaved.next(false);
                         this.drawingSaverService.currentErrorMesaage.next('Error de sauvegarde du côté serveur!');
+                        this.drawingSaverService.currentIsSaved.next(false);
                     }
                 });
         });

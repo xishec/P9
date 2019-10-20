@@ -96,5 +96,3 @@ export class SaveFileModalWindowComponent implements OnInit {
         }
     }
 }
-
-
