@@ -79,7 +79,12 @@ export class EventListenerService {
         });
 
         window.addEventListener('keydown', (event: KeyboardEvent) => {
-            event.preventDefault();
+            
+            // If control is pressed, change for ControlTools
+            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+                event.preventDefault();
+                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
+            }
 
             // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
             if (this.currentTool != undefined && !this.isWorkZoneEmpty) {
@@ -89,11 +94,6 @@ export class EventListenerService {
             // If the key is a shortcut for a tool, change current tool
             if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
                 this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
-            }
-
-            // If control is pressed, change for ControlTools
-            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
-                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
             }
 
             if(event.key === 'g' && this.shouldAllowShortcuts()) {
