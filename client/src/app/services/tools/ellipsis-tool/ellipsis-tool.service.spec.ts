@@ -226,6 +226,40 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnUpdatePreviewCircle).toHaveBeenCalled();
     });
 
+    it('should call updateDrawing if isPreviewing is true', () => {
+        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        service.isPreviewing = true;
+
+        service.onMouseMove(leftMouseEvent);
+
+        expect(spyOnUpdateDrawing).toHaveBeenCalled();
+    });
+
+    it('should not call updateDrawing if isPreviewing is false', () => {
+        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        service.isPreviewing = false;
+
+        service.onMouseMove(leftMouseEvent);
+
+        expect(spyOnUpdateDrawing).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call updateDrawing if the left button of the mouse is clicked', () => {
+        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+
+        service.onMouseDown(leftMouseEvent);
+
+        expect(spyOnUpdateDrawing).toHaveBeenCalled();
+    });
+
+    it('should not call updateDrawing if the left button of the mouse is not clicked', () => {
+        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+
+        service.onMouseDown(rightMouseEvent);
+
+        expect(spyOnUpdateDrawing).toHaveBeenCalledTimes(0);
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
