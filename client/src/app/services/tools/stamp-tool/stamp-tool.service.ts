@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { NO_STAMP } from 'src/constants/tool-constants';
+import { NO_STAMP, svgAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -96,8 +96,8 @@ export class StampToolService extends AbstractToolService {
     }
 
     setStamp(): void {
-        this.renderer.setAttribute(this.stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
-        this.renderer.setAttribute(this.stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(this.stamp, svgAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(this.stamp, svgAttribute.height, (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
 
@@ -118,8 +118,8 @@ export class StampToolService extends AbstractToolService {
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
-        this.renderer.setAttribute(stamp, 'width', (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
-        this.renderer.setAttribute(stamp, 'height', (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(stamp, svgAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(stamp, svgAttribute.height, (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
         this.renderer.setAttribute(stamp, 'href', this.stampLink);
 
         this.renderer.appendChild(el, stamp);
