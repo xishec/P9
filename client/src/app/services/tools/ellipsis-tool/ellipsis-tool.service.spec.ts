@@ -340,21 +340,23 @@ fdescribe('EllipsisToolService', () => {
         expect(service.isCirclePreview).toBeTruthy();
     });
 
-                                const boundtop = 0;
-                                const boundRect = {
-                                    left: boundleft,
-                                    top: boundtop,
-                                };
-                                return boundRect;
-                            },
-                        },
-                    },
-                },
-            ],
-        });
+    it('should call setAttribute and set fill without an "#" if userFillColor is "none"', () => {
+        service.userFillColor = NONE;
 
-        injector = getTestBed();
-        service = injector.get(EllipsisToolService);
+        service.createSVG();
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
+    });
+
+    it('should call setAttribute and set fill with an "#" if userFillColor is not "none"', () => {
+        service.userFillColor = NOTNONE;
+
+        service.createSVG();
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnDrawStackPush).toHaveBeenCalled();
+    });
 
     it('should set isPreviewing to false after cleanUp', () => {
         service.isPreviewing = true;
