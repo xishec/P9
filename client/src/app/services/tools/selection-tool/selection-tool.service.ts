@@ -425,15 +425,19 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     appendFullSelectionBox(): void {
-        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
-        this.appendControlPoints();
-        this.selectionBoxIsAppended = true;
+        if (!this.selectionBoxIsAppended) {
+            this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
+            this.appendControlPoints();
+            this.selectionBoxIsAppended = true;
+        }
     }
 
     removeFullSelectionBox(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
-        this.removeControlPoints();
-        this.selectionBoxIsAppended = false;
+        if (this.selectionBoxIsAppended) {
+            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
+            this.removeControlPoints();
+            this.selectionBoxIsAppended = false;
+        }
     }
 
     translateSelection(): void {
@@ -464,9 +468,7 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isSelecting) {
             this.updateSelectionRectangle();
             this.checkSelection();
-            if (!this.selectionBoxIsAppended) {
-                this.appendFullSelectionBox();
-            }
+            this.appendFullSelectionBox();
         } else if (this.mouseIsInSelectionBox() && !this.mouseIsInControlPoint()) {
             this.translateSelection();
         }
@@ -480,9 +482,7 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isSelecting) {
             this.updateSelectionRectangle();
             this.checkSelection();
-            if (!this.selectionBoxIsAppended) {
-                this.appendFullSelectionBox();
-            }
+            this.appendFullSelectionBox();
             this.applySelectionInvert();
         }
 
