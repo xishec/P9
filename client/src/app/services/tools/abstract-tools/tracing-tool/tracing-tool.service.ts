@@ -5,7 +5,7 @@ import { Mouse, SVG_NS } from 'src/constants/constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
-import { ToolName } from 'src/constants/tool-constants';
+import { ToolName, svgAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -101,35 +101,35 @@ export abstract class TracingToolService extends AbstractToolService {
 
     createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(wrap, 'stroke', '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, 'opacity', this.currentOpacity);
-        this.renderer.setAttribute(wrap, 'fill', '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, 'title', ToolName.Pencil);
+        this.renderer.setAttribute(wrap, svgAttribute.stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, svgAttribute.opacity, this.currentOpacity);
+        this.renderer.setAttribute(wrap, svgAttribute.fill, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, svgAttribute.title, ToolName.Pencil);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(circle, 'stroke', 'none');
-        this.renderer.setAttribute(circle, 'cx', x.toString());
-        this.renderer.setAttribute(circle, 'cy', y.toString());
+        this.renderer.setAttribute(circle, svgAttribute.stroke, 'none');
+        this.renderer.setAttribute(circle, svgAttribute.cx, x.toString());
+        this.renderer.setAttribute(circle, svgAttribute.cy, y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
         return circle;
     }
 
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPath, 'fill', 'none');
-        this.renderer.setAttribute(this.svgPath, 'stroke-width', this.currentWidth.toString());
-        this.renderer.setAttribute(this.svgPath, 'stroke-linejoin', 'round');
+        this.renderer.setAttribute(this.svgPath, svgAttribute.fill, 'none');
+        this.renderer.setAttribute(this.svgPath, svgAttribute.stroke_width, this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPath, svgAttribute.stroke_linejoin, 'round');
         this.renderer.setAttribute(this.svgPath, 'stroke-linecap', 'round');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     updatePreviewCircle(x: number, y: number): void {
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cx', x.toString());
-        this.renderer.setAttribute(this.svgPreviewCircle, 'cy', y.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, svgAttribute.cx, x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, svgAttribute.cy, y.toString());
     }
 
     updateSVGPath(): void {
