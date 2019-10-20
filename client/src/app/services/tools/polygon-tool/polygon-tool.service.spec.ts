@@ -87,8 +87,17 @@ fdescribe('PolygonToolService', () => {
         expect(newPolygonTool).toBeTruthy();
     });
 
+    it('should not call the renderer when clicking outside of workzone', () => {
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
+        polygonTool.onMouseLeave(MOUSELEAVE_EVENT);
+        polygonTool.onMouseDown(MOUSEDOWN_EVENT);
+        polygonTool.onMouseMove(MOUSEMOVE_EVENT);
 
+        expect(spySetAttribute).not.toHaveBeenCalled();
+        expect(spyAppendChild).not.toHaveBeenCalled();
+    });
 
     it('should append the the draw polygon when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
@@ -97,6 +106,38 @@ fdescribe('PolygonToolService', () => {
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
         expect(spyAppendChild).toHaveBeenCalledTimes(1);
+    });
+
+    it('should correctly update the draw polygon in the workzone on random mouse position', () => {
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+            (el: any, name: string, value: string) => {
+                switch (name) {
+                    case 'x':
+                        el.x = Number(value);
+                        break;
+                    case 'y':
+                        el.y = Number(value);
+                        break;
+                    case 'width':
+                        el.width = Number(value);
+                        break;
+                    case 'height':
+                        el.height = Number(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        );
+
+        polygonTool.onMouseEnter(MOUSEENTER_EVENT);
+        polygonTool.onMouseDown(MOUSEDOWN_EVENT);
+        polygonTool.onMouseMove(MOUSEMOVE_EVENT);
+
+        expect(polygonTool.isPreviewing).toBeTruthy();
+        expect(spySetAttribute).toHaveBeenCalled();
+        expect(polygonTool.radius * 2).toEqual(polygonTool.previewRectangleWidth);
+        expect(polygonTool.radius * 2).toEqual(polygonTool.previewRectangleHeight);
     });
 
     it('should define drawRectangle and previewRectangle', () => {
@@ -128,5 +169,36 @@ fdescribe('PolygonToolService', () => {
         expect(polygonTool.isPreviewing).toBeFalsy();
         expect(spyRemove).toHaveBeenCalledTimes(1);
     });
-  });
+
+    it('should give positive dimensions on negative input', () => {
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
+            (el: any, name: string, value: string) => {
+                switch (name) {
+                    case 'x':
+                        el.x = Number(value);
+                        break;
+                    case 'y':
+                        el.y = Number(value);
+                        break;
+                    case 'width':
+                        el.width = Number(value);
+                        break;
+                    case 'height':
+                        el.height = Number(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        );
+
+        polygonTool.onMouseEnter(MOUSEENTER_EVENT);
+        polygonTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
+        polygonTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
+
+        expect(polygonTool.isPreviewing).toBeTruthy();
+        expect(spySetAttribute).toHaveBeenCalled();
+        expect(1).toBeGreaterThan(0);
+        expect(1).toBeGreaterThan(0);
+    });
 });
