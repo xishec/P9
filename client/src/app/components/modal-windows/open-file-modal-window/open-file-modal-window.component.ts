@@ -122,6 +122,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 filter((subject) => {
                     if (subject === undefined) {
                         window.alert('Error de chargement!');
+                        this.isLoading = false;
                         return false;
                     } else {
                         return true;
@@ -129,12 +130,11 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((ans: any) => {
-                ans = ans as Message[];
                 ans.forEach((el: Message) => {
                     let drawing: Drawing = JSON.parse(el.body);
                     this.drawingsFromServer.push(drawing);
-                    this.isLoading = false;
                 });
+                this.isLoading = false;
             });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
