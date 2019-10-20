@@ -70,8 +70,11 @@ export class WorkZoneComponent implements OnInit {
 
             let idStack = Object.values(selectedDrawing.idStack);
             idStack.forEach((id) => {
-                let el: SVGGElement = this.refSVG.nativeElement.children.namedItem(id) as SVGGElement;
-                this.drawStack.push(el);
+                let children: Array<SVGElement> = Array.from(this.refSVG.nativeElement.children) as Array<SVGElement>;
+                let child: SVGElement = children.filter((child) => {
+                    return child.getAttribute('id_element') === id;
+                })[0];
+                this.drawStack.push(child as SVGAElement);
             });
         });
 

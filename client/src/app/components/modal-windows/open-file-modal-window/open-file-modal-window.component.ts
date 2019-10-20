@@ -130,11 +130,9 @@ export class OpenFileModalWindowComponent implements OnInit {
             )
             .subscribe((ans: any) => {
                 ans = ans as Message[];
-
                 ans.forEach((el: Message) => {
                     let drawing: Drawing = JSON.parse(el.body);
                     this.drawingsFromServer.push(drawing);
-
                     this.isLoading = false;
                 });
             });
