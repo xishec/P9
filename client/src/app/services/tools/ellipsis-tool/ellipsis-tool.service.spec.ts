@@ -173,10 +173,11 @@ fdescribe('EllipsisToolService', () => {
         injector = getTestBed();
         service = injector.get(EllipsisToolService);
 
+    it('should set isPreviewing to false after cleanUp', () => {
+        service.isPreviewing = true;
 
-        // onAltKeyDown = createKeyBoardEvent(Keys.Alt);
+        service.cleanUp();
 
-    it('should be created', () => {
-        expect(service).toBeTruthy();
+        expect(service.isPreviewing).toBeFalsy();
     });
 });
