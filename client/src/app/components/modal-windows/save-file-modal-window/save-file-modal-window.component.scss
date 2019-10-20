@@ -1,0 +1,66 @@
+.mat-typography {
+    display: grid;
+    grid-template-columns: 140px 500px;
+    grid-template-rows: 30px 10px auto 60px;
+    align-self: center;
+    padding: 15px 40px;
+}
+
+#drawing-name-title {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    align-self: center;
+}
+
+#drawing-name-input {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-self: center;
+    margin: 0 4px;
+    padding-left: 4px;
+}
+
+#drawing-label-title {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    align-self: center;
+}
+
+#drawing-labels-list {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    display: flex;
+
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+#label {
+    padding: 3px 6px;
+    margin: 3px 4px;
+    min-width: 60px;
+    border-radius: 3px;
+    font-size: 12px;
+    text-align: center;
+    border-style: dashed;
+    border-radius: 5px;
+}
+
+#new-label {
+    grid-column: 2 / 3;
+    grid-row: 4 / 5;
+
+    display: flex;
+    align-self: center;
+    justify-content: center;
+}
+
+#new-label-input {
+    margin-right: 15px;
+    padding-left: 4px;
+}
+
+#label-button {
+    padding: 0;
+    width: 60%;
+}
