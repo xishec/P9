@@ -90,5 +90,16 @@ fdescribe('PolygonToolService', () => {
     it('should define drawRectangle and previewRectangle', () => {
         expect(spyPreviewRectX).toBeDefined();
         expect(spyPreviewRectY).toBeDefined();
+    it('should cleanup correctly when creating a polygon', () => {
+        const spyRemove = spyOn(rendererMock, 'removeChild');
+
+        polygonTool.onMouseEnter(MOUSEENTER_EVENT);
+        polygonTool.onMouseDown(MOUSEDOWN_EVENT);
+        polygonTool.onMouseMove(MOUSEMOVE_EVENT);
+        polygonTool.onMouseUp(MOUSEUP_EVENT);
+
+        expect(polygonTool.isPreviewing).toBeFalsy();
+        expect(spyRemove).toHaveBeenCalledTimes(1);
+    });
   });
 });
