@@ -167,9 +167,14 @@ export class PolygonToolService extends AbstractShapeToolService {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
         this.copyPreviewRectangleAttributes(drawPolygon);
-        this.renderdrawPolygon(drawPolygon);
 
         this.renderer.setAttribute(el, 'title', ToolName.Polygon);
+        this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
+        this.userFillColor === 'none'
+            ? this.renderer.setAttribute(el, 'fill', this.userFillColor)
+            : this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
+
         this.renderer.appendChild(el, drawPolygon);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
