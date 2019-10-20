@@ -191,7 +191,7 @@ enum svgAttribute {
 }
 
 export {
-    svgAttribute
+    svgAttribute,
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
