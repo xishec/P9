@@ -1,8 +1,15 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { Mouse, SVG_NS, SIDEBAR_WIDTH, Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+
+enum MouseStates {
+    None,
+    Moving,
+    Dragging,
+    Clicking,
+}
 
 @Injectable({
     providedIn: 'root',
@@ -11,12 +18,15 @@ export class SelectionToolService extends AbstractToolService {
     readonly CONTROL_POINT_RADIUS = 10;
     currentMouseX = 0;
     currentMouseY = 0;
+    lastCurrentMouseX = 0;
+    lastCurrentMouseY = 0;
     initialMouseX = 0;
     initialMouseY = 0;
     currentTarget = 0;
 
     isTheCurrentTool = false;
     isSelecting = false;
+    selectionBoxIsAppended = false;
     isManipulating = false;
     isIn = false;
     isOnTarget = false;
@@ -30,10 +40,12 @@ export class SelectionToolService extends AbstractToolService {
     controlPoints: SVGCircleElement[] = new Array(8);
     selection: Set<SVGGElement> = new Set();
 
+    mouseState: number = MouseStates.None;
+
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
         this.initControlPoints();
@@ -248,6 +260,8 @@ export class SelectionToolService extends AbstractToolService {
 
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
                 this.selection.add(el);
+            } else {
+                this.selection.delete(el);
             }
         }
     }
@@ -403,34 +417,30 @@ export class SelectionToolService extends AbstractToolService {
     appendFullSelectionBox(): void {
         this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
         this.appendControlPoints();
+        this.selectionBoxIsAppended = true;
     }
 
     removeFullSelectionBox(): void {
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
         this.removeControlPoints();
+        this.selectionBoxIsAppended = false;
     }
 
     handleLeftMouseDrag(): void {
-
-    }
-
-    handleRightMouseDrag(): void {
-
-    }
-
-    onMouseMove(event: MouseEvent): void {
-        const lastMouseX = this.currentMouseX;
-        const lastMouseY = this.currentMouseY;
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
-        const deltaX = this.currentMouseX - lastMouseX;
-        const deltaY = this.currentMouseY - lastMouseY;
+        const deltaX = this.currentMouseX - this.lastCurrentMouseX;
+        const deltaY = this.currentMouseY - this.lastCurrentMouseY;
+        this.isLeftMouseDragging = true;
 
         if (this.isSelecting) {
             this.updateSelectionRectangle();
             this.checkSelection();
-        } else if (this.leftMouseIsDown && this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
-            this.isLeftMouseDragging = true;
+            if (this.hasSelected()) {
+                this.computeSelectionBox();
+            }
+            if (!this.selectionBoxIsAppended) {
+                this.appendFullSelectionBox();
+            }
+        } else if (this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
             for (const el of this.selection) {
                 const transformsList = el.transform.baseVal;
                 if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
@@ -450,6 +460,23 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
+    handleRightMouseDrag(): void {
+
+    }
+
+    onMouseMove(event: MouseEvent): void {
+        this.lastCurrentMouseX = this.currentMouseX;
+        this.lastCurrentMouseY = this.currentMouseY;
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+
+        if (this.leftMouseIsDown) {
+            this.handleLeftMouseDrag();
+        } else if (this.rightMouseIsDown) {
+            this.handleRightMouseDrag();
+        }
+    }
+
     handleLeftMouseDown(): void {
         this.leftMouseIsDown = true;
         this.initialMouseX = this.currentMouseX;
@@ -459,11 +486,16 @@ export class SelectionToolService extends AbstractToolService {
         // Mouse down on an unselected object
         // Mouse down on unselected object inside selection box
         if (this.isOnTarget) {
+            if (this.selection.size > 1) {
+
+            } else {
+                this.singlySelect(this.currentTarget);
+            }
         } // Mouse down on control point
         else if (this.mouseIsInControlPoint() || (this.mouseIsInSelectionBox() && !this.isOnTarget)) {
 
         } // Mouse down on nothing
-        else {
+        else if (!this.mouseIsInControlPoint() && !this.mouseIsInSelectionBox()) {
             this.clearSelection();
             this.startSelection();
         }
@@ -499,24 +531,20 @@ export class SelectionToolService extends AbstractToolService {
 
     handleLeftMouseUp(): void {
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+
         if (this.hasSelected() && this.isSelecting) {
             this.isSelecting = false;
             this.isManipulating = true;
             this.computeSelectionBox();
-            this.appendFullSelectionBox();
         } else if ((this.mouseIsInSelectionBox() && this.isOnTarget)) {
-
             if (!this.isLeftMouseDragging) {
-
                 this.singlySelect(this.currentTarget);
             } else {
-
                 this.isOnTarget = false;
             }
         } else if (this.isOnTarget) {
             this.singlySelect(this.currentTarget);
-        }
-        else if (this.mouseIsInControlPoint() || this.mouseIsInSelectionBox()) {
+        } else if (this.mouseIsInControlPoint() || this.mouseIsInSelectionBox()) {
 
         } else {
             this.clearSelection();
@@ -559,6 +587,8 @@ export class SelectionToolService extends AbstractToolService {
     }
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
-        this.isTheCurrentTool = true;
+        if (event.key === Keys.s) {
+            this.isTheCurrentTool = true;
+        }
     }
 }
