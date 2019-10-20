@@ -49,6 +49,9 @@ export class SelectionToolService extends AbstractToolService {
 
     cleanUp(): void {
         this.removeFullSelectionBox();
+        if (this.isSelecting) {
+            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        }
         this.isTheCurrentTool = false;
         this.isLeftMouseDown = false;
         this.isRightMouseDown = false;
