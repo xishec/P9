@@ -96,7 +96,7 @@
     </div>
 </mat-dialog-content>
 
-<div id="confirmation" [hidden]="emptyDrawStack">
+<div id="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
     <mat-error class="center">
         <i class="fas fa-exclamation-triangle"></i>
         Un dessin existe déja dans votre zone de travail!

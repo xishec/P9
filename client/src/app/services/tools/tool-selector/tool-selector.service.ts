@@ -210,9 +210,6 @@ export class ToolSelectorService {
                 }
                 break;
             case ToolName.Export:
-                // this.currentTool = undefined;
-                // this.changeCurrentToolName(tooltipName);
-                break;
             case ToolName.Quill:
             case ToolName.Selection:
             case ToolName.Pen:
@@ -223,7 +220,6 @@ export class ToolSelectorService {
             case ToolName.Fill:
             case ToolName.Eraser:
             case ToolName.Text:
-
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
