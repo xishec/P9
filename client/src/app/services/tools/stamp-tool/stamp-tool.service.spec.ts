@@ -112,11 +112,11 @@ fdescribe('StampToolService', () => {
 
     it('should call removeChild if stampIsAppended is true', () => {
         service.stampIsAppended = false;
-        service.cleanUpStamp();
+        service.cleanUp();
         expect(spyOnRemoveChild).toHaveBeenCalledTimes(0);
 
         service.stampIsAppended = true;
-        service.cleanUpStamp();
+        service.cleanUp();
         expect(spyOnRemoveChild).toHaveBeenCalledTimes(1);
     });
 
@@ -197,7 +197,7 @@ fdescribe('StampToolService', () => {
     });
 
     it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
-        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUpStamp').and.returnValue();
+        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
 
         service.shouldStamp = false;
         service.onMouseDown(positiveMouseEvent);
@@ -238,7 +238,7 @@ fdescribe('StampToolService', () => {
     });
 
     it('should call cleanUpStamp if shouldStamp is true and it should set isIn to false', () => {
-        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUpStamp').and.returnValue();
+        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         service.isIn = true;
         service.shouldStamp = false;
 
