@@ -254,4 +254,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.svgReference.nativeElement, this.drawPolygon);
     }
+
+    get drawPolygonPoints(): SVGPointList {
+        return this.drawPolygon.points;
+    }
 }
