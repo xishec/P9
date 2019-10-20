@@ -1,10 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { EventListenerService } from '../event-listener/event-listener.service';
-import { ElementRef } from '@angular/core';
+import { ElementRef, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-fdescribe('EventListenerService', () => {
+describe('EventListenerService', () => {
+
+    let injector: TestBed;
+    let service: EventListenerService;
+    let elementRef: ElementRef<SVGElement>
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -12,6 +16,9 @@ fdescribe('EventListenerService', () => {
                 {
                     provide: ElementRef,
                     useValue : {
+                        nativeElement : {
+                            addEventListener: () => null,
+                        }
 
                     }
                 },
@@ -23,10 +30,39 @@ fdescribe('EventListenerService', () => {
                 }
             ]
         });
+
+        injector = getTestBed();
+        service = TestBed.get(EventListenerService);
+        elementRef = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
     });
 
+    
+
     it('should be created', () => {
-        const service: EventListenerService = TestBed.get(EventListenerService);
         expect(service).toBeTruthy();
     });
+
+    it('shouldAllowShortcut should return true when !isOnInput', () => {
+        service.isOnInput = false;
+
+        let result = service.shouldAllowShortcuts();
+
+        expect(result).toBeTruthy();
+    });
+
+    it('shouldAllowShortcut should return false when isOnInput', () => {
+        service.isOnInput = true;
+
+        let result = service.shouldAllowShortcuts();
+
+        expect(result).toBeFalsy();
+    });
+    
+    it('addEventListeners should call addEventListener 7 times', () => {
+        const spyOnAddEventListener = spyOn(elementRef.nativeElement, 'addEventListener');
+
+        service.addEventListeners();
+
+        expect(spyOnAddEventListener).toHaveBeenCalledTimes(7);
+    })
 });
