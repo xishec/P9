@@ -226,7 +226,26 @@ export class SelectionToolService extends AbstractToolService {
         this.isManipulating = false;
     }
 
-    invertSelection(stackPosition?: number): void {
+    applySelectionInvert(): void {
+        if (!this.hasSelected()) {
+            for (const el of this.drawStack.drawStack) {
+                this.selection.add(el);
+            }
+            return;
+        }
+
+        const invertedSelection: Set<SVGGElement> = new Set();
+
+        for (const el of this.drawStack.drawStack) {
+            if (!this.selection.has(el)) {
+                invertedSelection.add(el);
+            }
+        }
+
+        this.selection = invertedSelection;
+    }
+
+    singlyInvertSelect(stackPosition?: number): void {
         if (stackPosition === undefined) {
             return;
         }
@@ -247,9 +266,7 @@ export class SelectionToolService extends AbstractToolService {
             return;
         }
 
-        this.removeFullSelectionBox();
         this.computeSelectionBox();
-        this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
@@ -466,7 +483,18 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleRightMouseDrag(): void {
+        this.isRightMouseDragging = true;
 
+        if (this.isSelecting) {
+            this.updateSelectionRectangle();
+            this.checkSelection();
+            if (!this.selectionBoxIsAppended) {
+                this.appendFullSelectionBox();
+            }
+            this.applySelectionInvert();
+        }
+
+        this.computeSelectionBox();
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -501,7 +529,7 @@ export class SelectionToolService extends AbstractToolService {
         this.initialMouseY = this.currentMouseY;
 
         if (this.isOnTarget) {
-            this.invertSelection(this.currentTarget);
+            this.singlyInvertSelect(this.currentTarget);
         } else {
             this.clearSelection();
             this.startSelection();
@@ -549,10 +577,17 @@ export class SelectionToolService extends AbstractToolService {
 
     handleRightMouseUp(): void {
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
-
+        if (this.isSelecting) {
+            this.isSelecting = false;
+            this.isManipulating = true;
+            this.computeSelectionBox();
+        }
         if (this.isOnTarget) {
             this.isOnTarget = false;
         }
+
+        this.rightMouseIsDown = false;
+        this.isRightMouseDragging = false;
     }
 
     onMouseUp(event: MouseEvent): void {
