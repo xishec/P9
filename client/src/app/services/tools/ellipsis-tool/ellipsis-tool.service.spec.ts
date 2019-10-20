@@ -97,7 +97,21 @@ fdescribe('EllipsisToolService', () => {
         });
     });
 
-import { TestBed, getTestBed } from '@angular/core/testing';
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
+
+    it('should define all get attributes of ellipsis', () => {
+        expect(spyOnPreviewRectangleWidth).toBeDefined();
+        expect(spyOnPreviewRectangleHeight).toBeDefined();
+        expect(spyOnPreviewRectangleX).toBeDefined();
+        expect(spyOnPreviewRectangleY).toBeDefined();
+        expect(spyOnDrawEllipseCenterX).toBeDefined();
+        expect(spyOnDrawEllipseCenterY).toBeDefined();
+        expect(spyOnDrawEllipseRadiusX).toBeDefined();
+        expect(spyOnDrawEllipseRadiusY).toBeDefined();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
