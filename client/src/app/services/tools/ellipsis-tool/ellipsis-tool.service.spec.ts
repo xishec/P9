@@ -125,6 +125,32 @@ fdescribe('EllipsisToolService', () => {
         expect(service.isValideEllipse()).toEqual(false);
     });
 
+    it('should set userFillColor to none if Outline is selected', () => {
+        service.userFillColor = NOTNONE;
+
+        service.updateTraceType('Contour');
+
+        expect(service.userFillColor).toEqual(NONE);
+    });
+
+    it('should set userFillColor the fillColor if Outline is Full', () => {
+        service.userFillColor = NOTNONE;
+        let fillColor = service.fillColor;
+
+        service.updateTraceType('Plein');
+
+        expect(service.userFillColor).toEqual(fillColor);
+    });
+
+    it('should set userFillColor the fillColor if Outline is Both', () => {
+        service.userFillColor = NOTNONE;
+        let fillColor = service.fillColor;
+
+        service.updateTraceType('Plein avec contour');
+
+        expect(service.userFillColor).toEqual(fillColor);
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
