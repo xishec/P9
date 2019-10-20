@@ -170,7 +170,28 @@ enum LineJointType {
     Circle = 3,
 }
 
+enum svgAttribute {
+    width = 'width',
+    height = 'height',
+    fill = 'fill',
+    stroke = 'stroke',
+    opacity = 'opacity',
+    stroke_width = 'stroke-width',
+    cx = 'cx',
+    cy = 'cy',
+    rx = 'rx',
+    ry = 'ry',
+    numOctaves = 'numOctaves',
+    baseFrequency = 'baseFrequency',
+    filter = 'filter',
+    points = 'points',
+    stroke_dasharray = 'stroke-dasharray',
+    stroke_linejoin = 'stroke-linejoin',
+    title = 'title',
+}
+
 export {
+    svgAttribute
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
