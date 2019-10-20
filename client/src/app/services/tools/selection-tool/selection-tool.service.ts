@@ -487,12 +487,8 @@ export class SelectionToolService extends AbstractToolService {
         this.initialMouseX = this.currentMouseX;
         this.initialMouseY = this.currentMouseY;
 
-        if (this.isOnTarget) {
-            if (this.selection.size > 1) {
-
-            } else {
-                this.singlySelect(this.currentTarget);
-            }
+        if (this.isOnTarget && !this.selection.has(this.drawStack.drawStack[this.currentTarget])) {
+            this.singlySelect(this.currentTarget);
         } else if (this.mouseIsInControlPoint() || (this.mouseIsInSelectionBox() && !this.isOnTarget)) {
 
         } else if (!this.mouseIsInControlPoint() && !this.mouseIsInSelectionBox()) {
@@ -502,6 +498,10 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleRightMouseDown(): void {
+        this.rightMouseIsDown = true;
+        this.initialMouseX = this.currentMouseX;
+        this.initialMouseY = this.currentMouseY;
+
         if (this.isOnTarget) {
             this.invertSelection(this.currentTarget);
         }
