@@ -110,7 +110,7 @@ export class WorkZoneComponent implements OnInit {
                     filter((subject) => {
                         if (subject === undefined) {
                             this.drawingSaverService.currentErrorMesaage.next(
-                                "Error de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                                "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                             );
                             this.drawingSaverService.currentIsSaved.next(false);
                             return false;
@@ -123,7 +123,7 @@ export class WorkZoneComponent implements OnInit {
                     if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
                         this.drawingSaverService.currentIsSaved.next(true);
                     } else {
-                        this.drawingSaverService.currentErrorMesaage.next('Error de sauvegarde du côté serveur!');
+                        this.drawingSaverService.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
                         this.drawingSaverService.currentIsSaved.next(false);
                     }
                 });
