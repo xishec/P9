@@ -179,6 +179,35 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
+    it('should call setAttribute and fill to userFillColor without "#" if userFillColor is none', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        service.userFillColor = NONE;
+
+        service.renderDrawEllipsis();
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should call setAttribute and fill to userFillColor with "#" if userFillColor is different than none', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        service.userFillColor = NOTNONE;
+
+        service.renderDrawEllipsis();
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should call setAttribute and fill to none if ellipse in not valide', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+
+        service.renderDrawEllipsis();
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
