@@ -1,15 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Mouse, SVG_NS, SIDEBAR_WIDTH, Keys } from 'src/constants/constants';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-
-enum MouseStates {
-    None,
-    Moving,
-    Dragging,
-    Clicking,
-}
 
 @Injectable({
     providedIn: 'root',
@@ -27,11 +20,9 @@ export class SelectionToolService extends AbstractToolService {
     isTheCurrentTool = false;
     isSelecting = false;
     selectionBoxIsAppended = false;
-    isManipulating = false;
-    isIn = false;
     isOnTarget = false;
-    leftMouseIsDown = false;
-    rightMouseIsDown = false;
+    isLeftMouseDown = false;
+    isRightMouseDown = false;
     isLeftMouseDragging = false;
     isRightMouseDragging = false;
 
@@ -40,12 +31,10 @@ export class SelectionToolService extends AbstractToolService {
     controlPoints: SVGCircleElement[] = new Array(8);
     selection: Set<SVGGElement> = new Set();
 
-    mouseState: number = MouseStates.None;
-
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
+        public renderer: Renderer2
     ) {
         super();
         this.initControlPoints();
@@ -61,10 +50,9 @@ export class SelectionToolService extends AbstractToolService {
     cleanUp(): void {
         this.removeFullSelectionBox();
         this.isTheCurrentTool = false;
-        this.leftMouseIsDown = false;
-        this.rightMouseIsDown = false;
+        this.isLeftMouseDown = false;
+        this.isRightMouseDown = false;
         this.isSelecting = false;
-        this.isManipulating = false;
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
     }
@@ -126,11 +114,16 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     mouseIsInSelectionBox(): boolean {
+        const selectionBoxLeft = this.getDOMRect(this.selectionBox).x - SIDEBAR_WIDTH;
+        const selectionBoxRight = this.getDOMRect(this.selectionBox).x - SIDEBAR_WIDTH + this.getDOMRect(this.selectionBox).width;
+        const selectionBoxTop = this.getDOMRect(this.selectionBox).y;
+        const selectionBoxBottom = this.getDOMRect(this.selectionBox).y + this.getDOMRect(this.selectionBox).height;
         return (
-            this.currentMouseX >= ((this.selectionBox.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH) &&
-            this.currentMouseX <= ((this.selectionBox.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH) + (this.selectionBox.getBoundingClientRect() as DOMRect).width &&
-            this.currentMouseY >= (this.selectionBox.getBoundingClientRect() as DOMRect).y &&
-            this.currentMouseY <= (this.selectionBox.getBoundingClientRect() as DOMRect).y + (this.selectionBox.getBoundingClientRect() as DOMRect).height
+            this.currentMouseX >= selectionBoxLeft &&
+            this.currentMouseX <=
+                selectionBoxRight &&
+            this.currentMouseY >= selectionBoxTop &&
+            this.currentMouseY <= selectionBoxBottom
         );
     }
 
@@ -143,7 +136,7 @@ export class SelectionToolService extends AbstractToolService {
             const distX = this.currentMouseX - cx;
             const distY = this.currentMouseY - cy;
 
-            if ((Math.abs(distX) <= r) && (Math.abs(distY) <= r)) {
+            if (Math.abs(distX) <= r && Math.abs(distY) <= r) {
                 return true;
             }
         }
@@ -204,12 +197,10 @@ export class SelectionToolService extends AbstractToolService {
 
     singlySelect(stackPosition: number): void {
         if (this.hasSelected()) {
-            this.isManipulating = false;
             this.clearSelection();
             this.removeFullSelectionBox();
         }
         this.selection.add(this.drawStack.drawStack[stackPosition]);
-        this.isManipulating = true;
         this.computeSelectionBox();
         this.appendFullSelectionBox();
         this.isOnTarget = false;
@@ -223,7 +214,6 @@ export class SelectionToolService extends AbstractToolService {
 
     clearSelection(): void {
         this.selection.clear();
-        this.isManipulating = false;
     }
 
     applySelectionInvert(): void {
@@ -254,7 +244,6 @@ export class SelectionToolService extends AbstractToolService {
             for (const el of this.drawStack.drawStack) {
                 if (el !== this.drawStack.drawStack[stackPosition]) {
                     this.selection.add(el);
-                    console.log('what');
                 }
             }
         } else {
@@ -321,9 +310,7 @@ export class SelectionToolService extends AbstractToolService {
         const bottomCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            bottomCoords.push(
-                this.getDOMRect(el).y + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2
-            );
+            bottomCoords.push(this.getDOMRect(el).y + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2);
         }
 
         return Math.max.apply(Math, bottomCoords);
@@ -454,7 +441,10 @@ export class SelectionToolService extends AbstractToolService {
         const deltaY = this.currentMouseY - this.lastCurrentMouseY;
         for (const el of this.selection) {
             const transformsList = el.transform.baseVal;
-            if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
+            if (
+                transformsList.numberOfItems === 0 ||
+                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
+            ) {
                 const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
                 const translateToZero = svg.createSVGTransform();
                 translateToZero.setTranslate(0, 0);
@@ -464,7 +454,7 @@ export class SelectionToolService extends AbstractToolService {
             const initialTransform = transformsList.getItem(0);
             const offsetX = -initialTransform.matrix.e;
             const offsetY = -initialTransform.matrix.f;
-            el.transform.baseVal.getItem(0).setTranslate((deltaX - offsetX), (deltaY - offsetY));
+            el.transform.baseVal.getItem(0).setTranslate(deltaX - offsetX, deltaY - offsetY);
         }
     }
 
@@ -477,7 +467,7 @@ export class SelectionToolService extends AbstractToolService {
             if (!this.selectionBoxIsAppended) {
                 this.appendFullSelectionBox();
             }
-        } else if (this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
+        } else if (this.mouseIsInSelectionBox() && !this.mouseIsInControlPoint()) {
             this.translateSelection();
         }
 
@@ -505,15 +495,15 @@ export class SelectionToolService extends AbstractToolService {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
-        if (this.leftMouseIsDown) {
+        if (this.isLeftMouseDown) {
             this.handleLeftMouseDrag();
-        } else if (this.rightMouseIsDown) {
+        } else if (this.isRightMouseDown) {
             this.handleRightMouseDrag();
         }
     }
 
     handleLeftMouseDown(): void {
-        this.leftMouseIsDown = true;
+        this.isLeftMouseDown = true;
         this.initialMouseX = this.currentMouseX;
         this.initialMouseY = this.currentMouseY;
 
@@ -526,7 +516,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleRightMouseDown(): void {
-        this.rightMouseIsDown = true;
+        this.isRightMouseDown = true;
         this.initialMouseX = this.currentMouseX;
         this.initialMouseY = this.currentMouseY;
 
@@ -560,7 +550,6 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isSelecting) {
             this.isSelecting = false;
-            this.isManipulating = true;
             this.computeSelectionBox();
         } else if (this.mouseIsInSelectionBox()) {
             if (!this.isLeftMouseDragging && this.isOnTarget && !this.mouseIsInControlPoint()) {
@@ -573,7 +562,7 @@ export class SelectionToolService extends AbstractToolService {
             this.removeFullSelectionBox();
         }
 
-        this.leftMouseIsDown = false;
+        this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
     }
 
@@ -581,14 +570,13 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
-            this.isManipulating = true;
             this.computeSelectionBox();
         }
         if (this.isOnTarget) {
             this.isOnTarget = false;
         }
 
-        this.rightMouseIsDown = false;
+        this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
     }
 
@@ -611,11 +599,9 @@ export class SelectionToolService extends AbstractToolService {
 
     onMouseEnter(event: MouseEvent): void {
         this.isTheCurrentTool = true;
-        this.isIn = true;
     }
     onMouseLeave(event: MouseEvent): void {
         this.isTheCurrentTool = true;
-        this.isIn = false;
     }
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
