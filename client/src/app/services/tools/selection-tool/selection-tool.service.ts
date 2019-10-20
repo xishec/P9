@@ -479,7 +479,7 @@ export class SelectionToolService extends AbstractToolService {
             this.updateSelectionRectangle();
             this.checkSelection();
             this.appendFullSelectionBox();
-        } else if (this.mouseIsInSelectionBox() && !this.mouseIsInControlPoint()) {
+        } else if (!this.mouseIsInControlPoint()) {
             this.translateSelection();
         }
 
