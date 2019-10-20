@@ -3,11 +3,11 @@ import { MatDialog } from '@angular/material';
 
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolName } from 'src/constants/tool-constants';
-import { WelcomeModalWindowComponent } from '../../components/welcome-modal-window/welcome-modal-window.component';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { WelcomeModalWindowComponent } from '../../components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 @Component({
     selector: 'app-root',
@@ -15,36 +15,30 @@ import { WelcomeModalWindowService } from '../../services/welcome-modal-window/w
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-    displayNewDrawingModalWindow = false;
     displayWelcomeModalWindow = false;
-    welcomeModalWindowClosed = false;
+    modalIsDisplayed = false;
     isOnInput = false;
 
     constructor(
         private welcomeModalWindowService: WelcomeModalWindowService,
         private dialog: MatDialog,
         private toolSelectorService: ToolSelectorService,
-        private drawingModalWindowService: DrawingModalWindowService,
         private shortcutManagerService: ShortcutManagerService,
+        private modalManagerService: ModalManagerService,
         private gridtoolService: GridToolService,
     ) {}
 
     ngOnInit(): void {
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe(
-            (displayNewDrawingModalWindow: boolean) => {
-                this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-            },
-        );
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
         this.shortcutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
         });
-        this.welcomeModalWindowService.currentWelcomeModalWindowClosed.subscribe(
-            (welcomeModalWindowClosed: boolean) => {
-                this.welcomeModalWindowClosed = welcomeModalWindowClosed;
-            },
-        );
         this.displayWelcomeModalWindow = this.welcomeModalWindowService.getValueFromLocalStorage();
-        this.openWelcomeModalWindow();
+        if (!this.modalIsDisplayed) {
+            this.openWelcomeModalWindow();
+        }
     }
 
     openWelcomeModalWindow(): void {
@@ -52,20 +46,21 @@ export class AppComponent implements OnInit {
             const dialogRef = this.dialog.open(WelcomeModalWindowComponent, {
                 panelClass: 'myapp-max-width-dialog',
                 disableClose: true,
+                autoFocus: false,
             });
+            this.modalManagerService.setModalIsDisplayed(true);
             dialogRef.afterClosed().subscribe((displayWelcomeModalWindow) => {
-                displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
-                this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
+                if (!displayWelcomeModalWindow) {
+                    displayWelcomeModalWindow = displayWelcomeModalWindow.toString();
+                    this.welcomeModalWindowService.setValueToLocalStorage(displayWelcomeModalWindow);
+                }
+                this.modalManagerService.setModalIsDisplayed(false);
             });
         }
     }
 
     shouldAllowShortcut(): boolean {
-        return (
-            !this.displayNewDrawingModalWindow &&
-            (this.welcomeModalWindowClosed || !this.displayWelcomeModalWindow) &&
-            !this.isOnInput
-        );
+        return !this.modalIsDisplayed && !this.isOnInput;
     }
 
     @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {

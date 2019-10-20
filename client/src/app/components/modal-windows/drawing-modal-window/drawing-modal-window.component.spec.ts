@@ -46,7 +46,7 @@ describe('DrawingModalWindowComponent', () => {
                             provide: DrawingModalWindowService,
                             useValue: {
                                 changeDisplayNewDrawingModalWindow: () => null,
-                                changeDrawingInfoWidthHeight: () => null,
+                                changeDrawingInfo: () => null,
                             },
                         },
                         {
@@ -109,8 +109,8 @@ describe('DrawingModalWindowComponent', () => {
         expect(SPY).toHaveBeenCalledWith(false);
     });
 
-    it('should call Drawing Modal Window service changeDrawingInfoWidthHeight function on form submit', () => {
-        const SPY = spyOn(drawingModalService, 'changeDrawingInfoWidthHeight');
+    it('should call Drawing Modal Window service changeDrawingInfo function on form submit', () => {
+        const SPY = spyOn(drawingModalService, 'changeDrawingInfo');
         drawingModalService.blankDrawingZone = new BehaviorSubject<boolean>(false);
         component.onSubmit();
         expect(SPY).toHaveBeenCalledWith(form.controls.width.value, form.controls.height.value);
