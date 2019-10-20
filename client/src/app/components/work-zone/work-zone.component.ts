@@ -59,7 +59,7 @@ export class WorkZoneComponent implements OnInit {
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.currentTool = this.toolSelector.currentTool;
 
-        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService);
+        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService, this.modalManagerService);
         this.eventListenerService.addEventListeners();
 
         this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {

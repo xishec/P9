@@ -6,6 +6,7 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { ToolNameShortcuts, ToolNameControlShortcuts } from 'src/constants/tool-constants';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
+import { ModalManagerService } from '../modal-manager/modal-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -16,12 +17,14 @@ export class EventListenerService {
     toolName = '';
     isWorkZoneEmpty = true;
     isOnInput = false;
+    isModalOpen = false;
 
     constructor(
         private workZoneSVGRef: ElementRef<SVGElement>,
         private toolSelectorService: ToolSelectorService,
         private gridToolService: GridToolService,
         private shortCutManagerService: ShortcutManagerService,
+        private modalManagerService: ModalManagerService,
         ) 
     {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
@@ -31,6 +34,10 @@ export class EventListenerService {
 
         this.shortCutManagerService.currentIsOnInput.subscribe((isOnInput: boolean) => {
             this.isOnInput = isOnInput;
+        });
+
+        this.modalManagerService.currentModalIsDisplayed.subscribe((isModalOpen: boolean) => {
+            this.isModalOpen = isModalOpen;
         })
     };
 
@@ -48,7 +55,7 @@ export class EventListenerService {
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseup', (event: MouseEvent) => {
+        window.addEventListener('mouseup', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseUp(event);
             }
@@ -120,6 +127,6 @@ export class EventListenerService {
     }
 
     shouldAllowShortcuts(): boolean {
-        return (!this.isOnInput);
+        return (!this.isOnInput && !this.isModalOpen);
     }
 }
