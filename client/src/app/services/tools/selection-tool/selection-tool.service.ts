@@ -254,6 +254,7 @@ export class SelectionToolService extends AbstractToolService {
             for (const el of this.drawStack.drawStack) {
                 if (el !== this.drawStack.drawStack[stackPosition]) {
                     this.selection.add(el);
+                    console.log('what');
                 }
             }
         } else {
@@ -265,8 +266,9 @@ export class SelectionToolService extends AbstractToolService {
             this.removeFullSelectionBox();
             return;
         }
-
+        this.removeFullSelectionBox();
         this.computeSelectionBox();
+        this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
