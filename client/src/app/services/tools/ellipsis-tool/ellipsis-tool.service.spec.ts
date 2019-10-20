@@ -260,6 +260,34 @@ fdescribe('EllipsisToolService', () => {
         expect(spyOnUpdateDrawing).toHaveBeenCalledTimes(0);
     });
 
+    it('should not call isValideEllipse if the left button of the mouse is not clicked', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+
+        service.onMouseUp(rightMouseEvent);
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not call createSVG if the left button of the mouse is clicked and the ellipse is not valide', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        let spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
+
+        service.onMouseUp(leftMouseEvent);
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnCreateSVG).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call createSVG if the left button of the mouse is clicked and the ellipse is valide', () => {
+        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        let spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
+
+        service.onMouseUp(leftMouseEvent);
+
+        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnCreateSVG).toHaveBeenCalled();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
