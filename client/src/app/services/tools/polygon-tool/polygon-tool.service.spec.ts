@@ -87,9 +87,24 @@ fdescribe('PolygonToolService', () => {
         expect(newPolygonTool).toBeTruthy();
     });
 
+
+
+
+    it('should append the the draw polygon when left click in workzone', () => {
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
+        polygonTool.onMouseEnter(MOUSEENTER_EVENT);
+        polygonTool.onMouseDown(MOUSEDOWN_EVENT);
+        expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
+        expect(spyAppendChild).toHaveBeenCalledTimes(1);
+    });
+
     it('should define drawRectangle and previewRectangle', () => {
         expect(spyPreviewRectX).toBeDefined();
         expect(spyPreviewRectY).toBeDefined();
+        expect(spyPreviewRectWidth).toBeDefined();
+        expect(spyPreviewRectHeight).toBeDefined();
+    });
 
     it('should be able to update tracetype', () => {
         polygonTool.updateTraceType(TraceType.Both);
