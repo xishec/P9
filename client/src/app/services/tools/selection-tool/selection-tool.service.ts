@@ -482,7 +482,6 @@ export class SelectionToolService extends AbstractToolService {
         } else if (!this.mouseIsInControlPoint()) {
             this.translateSelection();
         }
-
         this.computeSelectionBox();
     }
 
