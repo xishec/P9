@@ -151,6 +151,34 @@ fdescribe('EllipsisToolService', () => {
         expect(service.userFillColor).toEqual(fillColor);
     });
 
+    it('should call renderer.setAttribute after a call to copyRectanglePreview', () => {
+        service.copyRectanglePreview();
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should call renderer.setAttribute after a call to updatePreviewCircle when deltaX/Y is positive', () => {
+        service.currentMouseX = 10;
+        service.initialMouseX = 5;
+        service.currentMouseY = 10;
+        service.initialMouseY = 5;
+
+        service.updatePreviewCircle();
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should call renderer.setAttribute after a call to updatePreviewCircle when deltaX/Y is negative', () => {
+        service.currentMouseX = 5;
+        service.initialMouseX = 10;
+        service.currentMouseY = 5;
+        service.initialMouseY = 10;
+
+        service.updatePreviewCircle();
+
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
 
 import { EllipsisToolService } from './ellipsis-tool.service';
 import { ElementRef, Renderer2 } from '@angular/core';
