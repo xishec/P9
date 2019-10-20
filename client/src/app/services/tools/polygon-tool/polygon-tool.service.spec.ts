@@ -90,6 +90,18 @@ fdescribe('PolygonToolService', () => {
     it('should define drawRectangle and previewRectangle', () => {
         expect(spyPreviewRectX).toBeDefined();
         expect(spyPreviewRectY).toBeDefined();
+
+    it('should be able to update tracetype', () => {
+        polygonTool.updateTraceType(TraceType.Both);
+        expect(polygonTool.traceType).toEqual(TraceType.Both);
+
+        polygonTool.updateTraceType(TraceType.Full);
+        expect(polygonTool.traceType).toEqual(TraceType.Full);
+
+        polygonTool.updateTraceType(TraceType.Outline);
+        expect(polygonTool.traceType).toEqual(TraceType.Outline);
+    });
+
     it('should cleanup correctly when creating a polygon', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
