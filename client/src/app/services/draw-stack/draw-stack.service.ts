@@ -32,8 +32,8 @@ export class DrawStackService {
     makeTargetable(el: SVGGElement): SVGGElement {
         const position = this.drawStack.length;
         const tool = el.getAttribute('title');
-        this.renderer.setAttribute(el, 'id', position.toString());
-        this.idStack.push(el.getAttribute('id') as string);
+        this.renderer.setAttribute(el, 'id_element', position.toString());
+        this.idStack.push(el.getAttribute('id_element') as string);
 
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
