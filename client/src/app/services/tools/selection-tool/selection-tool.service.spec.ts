@@ -3,11 +3,14 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
-import { createMockSVGGElementWithAttribute } from 'src/classes/test-helpers';
+import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement } from 'src/classes/test-helpers';
+import { Mouse } from 'src/constants/constants';
 //import { MockRect } from 'src/classes/test-helpers';
 
 fdescribe('SelectionToolService', () => {
     //const mockDrawRect: MockRect = new MockRect();
+    const MOCK_LEFT_CLICK = createMouseEvent(0,0,Mouse.LeftButton);
+    const MOCK_RIGHT_CLICK = createMouseEvent(0,0,Mouse.RightButton);
 
     let injector: TestBed;
     let service: SelectionToolService;
@@ -148,24 +151,68 @@ fdescribe('SelectionToolService', () => {
         expect(resNumber).toBe(10);
     });
 
-    it('mouseIsInSelectionBox should return true if mouse is in SelectionBonx', () => {
-        //
+    it('', () => {
+        
     });
 
     it('', () => {
-
+        
     });
 
     it('', () => {
-
+        
     });
 
     it('', () => {
-
+        
     });
 
-    it('', () => {
+    // HANDLERS AND MOUSE EVENTS
 
+    it('handleLeftMouseDrag should call checkSelection if this.isSelecting', () => {
+        service.isSelecting = true;
+        const spy = spyOn(service, 'checkSelection');
+
+        service.handleLeftMouseDrag();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseDrag should call translateSelection if !this.isSelecting and !mouseInControlPoint', () => {
+        service.isSelecting = false;
+        spyOn(service, 'mouseIsInControlPoint').and.returnValue(false);
+        const spy = spyOn(service, 'translateSelection');
+        
+        service.handleLeftMouseDrag();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleRightMouseDrag should call checkSelection if this.isSelecting', () => {
+        const spy = spyOn(service, 'checkSelection');
+        service.isSelecting = true;
+
+        service.checkSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('onMouseMove should call handleLeftMouseDrag if isLeftMouseDown', () => {
+        const spy = spyOn(service, 'handleLeftMouseDrag');
+        service.isLeftMouseDown = true;
+
+        service.onMouseMove(MOCK_LEFT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('onMouseMove should call handleRightMouseDrag if isRightMouseDown', () => {
+        const spy = spyOn(service, 'handleRightMouseDrag');
+        service.isRightMouseDown = true;
+
+        service.onMouseMove(MOCK_RIGHT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
     });
 
     it('', () => {
