@@ -187,7 +187,59 @@ fdescribe('SelectionToolService', () => {
     });
 
     it('mouseIsInControlPoint should return true if mouseX and mouseY in one of controlPoint', () => {
-        
+        service.controlPoints = new Array();
+        const mockControlPoint = {
+            cx : {
+                baseVal : {
+                    value : 10,
+                }
+            },
+            cy : {
+                baseVal : {
+                    value : 10,
+                }
+            },
+            r : {
+                baseVal : {
+                    value: 5,
+                }
+            }
+        }
+        service.controlPoints.push(mockControlPoint as SVGCircleElement);
+        service.currentMouseX = 11;
+        service.currentMouseY = 11;
+
+        const res = service.mouseIsInControlPoint();
+
+        expect(res).toBeTruthy();
+    });
+
+    it('mouseIsInControlPoint should return true if mouseX and mouseY in one of controlPoint', () => {
+        service.controlPoints = new Array();
+        const mockControlPoint = {
+            cx : {
+                baseVal : {
+                    value : 10,
+                }
+            },
+            cy : {
+                baseVal : {
+                    value : 10,
+                }
+            },
+            r : {
+                baseVal : {
+                    value: 5,
+                }
+            }
+        }
+        service.controlPoints.push(mockControlPoint as SVGCircleElement);
+        service.currentMouseX = 100;
+        service.currentMouseY = 100;
+
+        const res = service.mouseIsInControlPoint();
+
+        expect(res).toBeFalsy();
     });
 
     it('', () => {
