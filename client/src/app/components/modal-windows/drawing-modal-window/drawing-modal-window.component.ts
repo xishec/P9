@@ -35,8 +35,6 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.previewColor = this.colorToolService.backgroundColor.value;
-
         this.colorToolService.previewColor.subscribe((previewColor) => {
             this.previewColor = previewColor;
         });
@@ -45,7 +43,6 @@ export class DrawingModalWindowComponent implements OnInit {
             this.emptyDrawStack = emptyDrawStack;
         });
 
-        this.previewColor = this.colorToolService.backgroundColor.value;
         this.initializeForm();
     }
 

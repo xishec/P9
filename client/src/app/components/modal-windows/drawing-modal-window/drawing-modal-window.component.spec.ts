@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { BehaviorSubject } from 'rxjs';
 
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
@@ -19,7 +20,7 @@ describe('DrawingModalWindowComponent', () => {
     let shortcutManagerService: ShortcutManagerService;
     let modalManagerService: ModalManagerService;
 
-    const testColor = '23fe45';
+    const TEST_COLOR = '23fe45';
     const dialogMock = {
         close: () => null,
     };
@@ -46,7 +47,6 @@ describe('DrawingModalWindowComponent', () => {
                         {
                             provide: DrawingModalWindowService,
                             useValue: {
-                                changeDisplayNewDrawingModalWindow: () => null,
                                 changeDrawingInfo: () => null,
                             },
                         },
@@ -83,6 +83,7 @@ describe('DrawingModalWindowComponent', () => {
         drawingModalService = fixture.debugElement.injector.get(DrawingModalWindowService);
         colorToolService = fixture.debugElement.injector.get(ColorToolService);
         shortcutManagerService = fixture.debugElement.injector.get(ShortcutManagerService);
+        modalManagerService = fixture.debugElement.injector.get(ModalManagerService);
     }));
 
     it('should create', () => {
@@ -91,6 +92,7 @@ describe('DrawingModalWindowComponent', () => {
 
     it('should call initialize form when component is rendered', () => {
         const SPY = spyOn(component, 'initializeForm');
+        colorToolService.previewColor = new BehaviorSubject(TEST_COLOR);
         component.ngOnInit();
         expect(SPY).toHaveBeenCalled();
     });
@@ -104,7 +106,7 @@ describe('DrawingModalWindowComponent', () => {
     it('should call Drawing Modal Window service changeDrawingInfo function on form submit', () => {
         const SPY = spyOn(drawingModalService, 'changeDrawingInfo');
         component.onSubmit();
-        expect(SPY).toHaveBeenCalledWith(form.controls.width.value, form.controls.height.value);
+        expect(SPY).toHaveBeenCalledWith(form.controls.width.value, form.controls.height.value, component.previewColor);
     });
 
     it('should call Color Tool service changeBackgroundColor function on form submit', () => {
@@ -150,17 +152,17 @@ describe('DrawingModalWindowComponent', () => {
     });
 
     it('should return the right preview color when getUserColorIcon funtion is called', () => {
-        component.previewColor = testColor;
+        component.previewColor = TEST_COLOR;
         const iconStyle = component.getUserColorIcon();
         expect(iconStyle).toEqual({
-            backgroundColor: '#' + testColor,
+            backgroundColor: '#' + TEST_COLOR,
         });
     });
 
     it('should set a new preview color when Queue Color Button is clicked', () => {
         component.previewColor = '000000';
-        component.onClickColorQueueButton(testColor);
-        expect(component.previewColor).toEqual(testColor);
+        component.onClickColorQueueButton(TEST_COLOR);
+        expect(component.previewColor).toEqual(TEST_COLOR);
     });
 
     it('should set shortcut isOnInput flag to true on focus', () => {
