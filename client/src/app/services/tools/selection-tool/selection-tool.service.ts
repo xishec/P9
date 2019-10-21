@@ -541,7 +541,6 @@ export class SelectionToolService extends AbstractToolService {
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
-        console.log(this.selection);
     }
 
     handleRightMouseUp(): void {
