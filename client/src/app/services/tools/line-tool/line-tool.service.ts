@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { LineJointType, LineStrokeType, ToolName } from 'src/constants/tool-constants';
+import { LineJointType, LineStrokeType, ToolName, HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -14,7 +14,9 @@ export class LineToolService extends AbstractToolService {
     colorToolService: ColorToolService;
     attributesManagerService: AttributesManagerService;
 
+    currentColorAndOpacity = '';
     currentColor = '';
+    currentOpacity = '';
     currentStrokeWidth = 0;
     currentCircleJointDiameter = 0;
 
@@ -48,7 +50,7 @@ export class LineToolService extends AbstractToolService {
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColor = currentColor;
+            this.currentColorAndOpacity = currentColor;
         });
     }
 
@@ -68,8 +70,14 @@ export class LineToolService extends AbstractToolService {
         });
     }
 
+    getColorAndOpacity(): void {
+        this.currentColor = this.currentColorAndOpacity.slice(0,6);
+        this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
+    }
+
     onMouseDown(event: MouseEvent): void {
         if (event.button === Mouse.LeftButton) {
+            this.getColorAndOpacity();
             const x = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
             if (!this.isDrawing) {
@@ -108,7 +116,7 @@ export class LineToolService extends AbstractToolService {
                 this.pointsArray.pop();
                 this.renderer.setAttribute(
                     this.currentLine,
-                    'points',
+                    HTMLAttribute.points,
                     `${this.arrayToStringLine()} ${this.currentMousePosition}`
                 );
 
@@ -132,7 +140,7 @@ export class LineToolService extends AbstractToolService {
 
             if (this.shouldCloseLine && this.pointsArray.length > 3) {
                 this.pointsArray.push(this.pointsArray[0]);
-                this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
+                this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, this.arrayToStringLine());
             }
 
             this.drawStack.push(this.gWrap);
@@ -145,30 +153,31 @@ export class LineToolService extends AbstractToolService {
 
     startLine(x: number, y: number): void {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(this.gWrap, 'title', ToolName.Line);
+        this.renderer.setAttribute(this.gWrap, HTMLAttribute.title, ToolName.Line);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
         this.isLineInStack = false;
 
         this.pointsArray.push(`${x.toString()},${y.toString()}`);
 
-        this.renderer.setAttribute(this.currentLine, 'points', this.arrayToStringLine());
-        this.renderer.setAttribute(this.currentLine, 'fill', 'none');
-        this.renderer.setAttribute(this.currentLine, 'stroke-width', this.currentStrokeWidth.toString());
+        this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, this.arrayToStringLine());
+        this.renderer.setAttribute(this.currentLine, HTMLAttribute.fill, 'none');
+        this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_width, this.currentStrokeWidth.toString());
 
-        this.renderer.setAttribute(this.gWrap, 'stroke', `#${this.currentColor}`);
-        this.renderer.setAttribute(this.gWrap, 'fill', `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, HTMLAttribute.stroke, `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, HTMLAttribute.fill, `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, HTMLAttribute.opacity, this.currentOpacity);
 
         switch (this.currentStrokeType) {
             case LineStrokeType.Dotted_line:
                 this.renderer.setAttribute(
                     this.currentLine,
-                    'stroke-dasharray',
+                    HTMLAttribute.stroke_dasharray,
                     `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`
                 );
                 break;
             case LineStrokeType.Dotted_circle:
-                this.renderer.setAttribute(this.currentLine, 'stroke-dasharray', `1, ${this.currentStrokeWidth * 1.5}`);
+                this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_dasharray, `1, ${this.currentStrokeWidth * 1.5}`);
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
@@ -176,7 +185,7 @@ export class LineToolService extends AbstractToolService {
         switch (this.currentJointType) {
             case LineJointType.Curvy:
             case LineJointType.Circle:
-                this.renderer.setAttribute(this.currentLine, 'stroke-linejoin', 'round');
+                this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_linejoin, 'round');
                 break;
         }
 
@@ -188,21 +197,21 @@ export class LineToolService extends AbstractToolService {
         this.currentMousePosition = `${x.toString()},${y.toString()}`;
         this.renderer.setAttribute(
             this.currentLine,
-            'points',
+            HTMLAttribute.points,
             `${this.arrayToStringLine()} ${this.currentMousePosition}`
         );
     }
 
     appendLine(x: number, y: number): void {
         this.pointsArray.push(` ${x.toString()},${y.toString()}`);
-        this.renderer.setAttribute(this.currentLine, 'points', `${this.arrayToStringLine()}`);
+        this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, `${this.arrayToStringLine()}`);
     }
 
     appendCircle(x: number, y: number): void {
         const circle = this.renderer.createElement('circle', SVG_NS);
 
-        this.renderer.setAttribute(circle, 'cx', x.toString());
-        this.renderer.setAttribute(circle, 'cy', y.toString());
+        this.renderer.setAttribute(circle, HTMLAttribute.cx, x.toString());
+        this.renderer.setAttribute(circle, HTMLAttribute.cy, y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentCircleJointDiameter / 2).toString());
 
         this.renderer.appendChild(this.gWrap, circle);

@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 
 @Injectable({
     providedIn: 'root',
@@ -11,17 +11,18 @@ export class SelectionToolService extends AbstractToolService {
     readonly CONTROL_POINT_RADIUS = 10;
     currentMouseX = 0;
     currentMouseY = 0;
+    lastCurrentMouseX = 0;
+    lastCurrentMouseY = 0;
     initialMouseX = 0;
     initialMouseY = 0;
     currentTarget = 0;
 
     isTheCurrentTool = false;
     isSelecting = false;
-    isManipulating = false;
-    isIn = false;
+    selectionBoxIsAppended = false;
     isOnTarget = false;
-    leftMouseIsDown = false;
-    rightMouseIsDown = false;
+    isLeftMouseDown = false;
+    isRightMouseDown = false;
     isLeftMouseDragging = false;
     isRightMouseDragging = false;
 
@@ -48,11 +49,13 @@ export class SelectionToolService extends AbstractToolService {
 
     cleanUp(): void {
         this.removeFullSelectionBox();
+        if (this.isSelecting) {
+            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        }
         this.isTheCurrentTool = false;
-        this.leftMouseIsDown = false;
-        this.rightMouseIsDown = false;
+        this.isLeftMouseDown = false;
+        this.isRightMouseDown = false;
         this.isSelecting = false;
-        this.isManipulating = false;
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
     }
@@ -79,21 +82,19 @@ export class SelectionToolService extends AbstractToolService {
         if (deltaX < 0) {
             deltaX *= -1;
             this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseX - deltaX).toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseX.toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
         }
+        this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
             this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseY - deltaY).toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseY.toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
         }
+        this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
 
         this.renderer.setAttribute(this.selectionRectangle, 'fill', 'white');
         this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
@@ -101,7 +102,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(this.selectionRectangle, 'stroke-dasharray', '5 5');
     }
 
-    getInclusiveBBox(el: SVGGElement): DOMRect {
+    getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
@@ -114,11 +115,20 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     mouseIsInSelectionBox(): boolean {
+        const selectionBoxLeft = this.getDOMRect(this.selectionBox).x + window.scrollX - SIDEBAR_WIDTH;
+        const selectionBoxRight =
+            this.getDOMRect(this.selectionBox).x +
+            window.scrollX -
+            SIDEBAR_WIDTH +
+            this.getDOMRect(this.selectionBox).width;
+        const selectionBoxTop = this.getDOMRect(this.selectionBox).y + window.scrollY;
+        const selectionBoxBottom =
+            this.getDOMRect(this.selectionBox).y + window.scrollY + this.getDOMRect(this.selectionBox).height;
         return (
-            this.currentMouseX >= ((this.selectionBox.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH) &&
-            this.currentMouseX <= ((this.selectionBox.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH) + (this.selectionBox.getBoundingClientRect() as DOMRect).width &&
-            this.currentMouseY >= (this.selectionBox.getBoundingClientRect() as DOMRect).y &&
-            this.currentMouseY <= (this.selectionBox.getBoundingClientRect() as DOMRect).y + (this.selectionBox.getBoundingClientRect() as DOMRect).height
+            this.currentMouseX >= selectionBoxLeft &&
+            this.currentMouseX <= selectionBoxRight &&
+            this.currentMouseY >= selectionBoxTop &&
+            this.currentMouseY <= selectionBoxBottom
         );
     }
 
@@ -131,7 +141,7 @@ export class SelectionToolService extends AbstractToolService {
             const distX = this.currentMouseX - cx;
             const distY = this.currentMouseY - cy;
 
-            if ((Math.abs(distX) <= r) && (Math.abs(distY) <= r)) {
+            if (Math.abs(distX) <= r && Math.abs(distY) <= r) {
                 return true;
             }
         }
@@ -140,15 +150,15 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
-        const boxLeft = selectionBox.x - SIDEBAR_WIDTH;
-        const boxRight = selectionBox.x - SIDEBAR_WIDTH + selectionBox.width;
-        const boxTop = selectionBox.y;
-        const boxBottom = selectionBox.y + selectionBox.height;
+        const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
+        const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
+        const boxTop = selectionBox.y + window.scrollY;
+        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
 
-        let elLeft = elementBox.x - SIDEBAR_WIDTH;
-        let elRight = elementBox.x - SIDEBAR_WIDTH + elementBox.width;
-        let elTop = elementBox.y;
-        let elBottom = elementBox.y + elementBox.height;
+        let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
+        let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
+        let elTop = elementBox.y + window.scrollY;
+        let elBottom = elementBox.y + window.scrollY + elementBox.height;
 
         if (strokeWidth) {
             const halfStrokeWidth = strokeWidth / 2;
@@ -192,12 +202,10 @@ export class SelectionToolService extends AbstractToolService {
 
     singlySelect(stackPosition: number): void {
         if (this.hasSelected()) {
-            this.isManipulating = false;
             this.clearSelection();
             this.removeFullSelectionBox();
         }
         this.selection.add(this.drawStack.drawStack[stackPosition]);
-        this.isManipulating = true;
         this.computeSelectionBox();
         this.appendFullSelectionBox();
         this.isOnTarget = false;
@@ -211,10 +219,28 @@ export class SelectionToolService extends AbstractToolService {
 
     clearSelection(): void {
         this.selection.clear();
-        this.isManipulating = false;
     }
 
-    invertSelection(stackPosition?: number): void {
+    applySelectionInvert(): void {
+        if (!this.hasSelected()) {
+            for (const el of this.drawStack.drawStack) {
+                this.selection.add(el);
+            }
+            return;
+        }
+
+        const invertedSelection: Set<SVGGElement> = new Set();
+
+        for (const el of this.drawStack.drawStack) {
+            if (!this.selection.has(el)) {
+                invertedSelection.add(el);
+            }
+        }
+
+        this.selection = invertedSelection;
+    }
+
+    singlyInvertSelect(stackPosition?: number): void {
         if (stackPosition === undefined) {
             return;
         }
@@ -234,20 +260,21 @@ export class SelectionToolService extends AbstractToolService {
             this.removeFullSelectionBox();
             return;
         }
-
         this.removeFullSelectionBox();
         this.computeSelectionBox();
         this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
-        const selectionBox = this.getInclusiveBBox(this.selectionRectangle);
+        const selectionBox = this.getDOMRect(this.selectionRectangle);
 
         for (const el of this.drawStack.drawStack) {
-            const elBox = this.getInclusiveBBox(el);
+            const elBox = this.getDOMRect(el);
 
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
                 this.selection.add(el);
+            } else {
+                this.selection.delete(el);
             }
         }
     }
@@ -256,7 +283,7 @@ export class SelectionToolService extends AbstractToolService {
         const leftCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            leftCoords.push(this.getInclusiveBBox(el).x - SIDEBAR_WIDTH - this.getStrokeWidth(el) / 2);
+            leftCoords.push(this.getDOMRect(el).x + window.scrollX - SIDEBAR_WIDTH - this.getStrokeWidth(el) / 2);
         }
 
         return Math.min.apply(Math, leftCoords);
@@ -267,7 +294,11 @@ export class SelectionToolService extends AbstractToolService {
 
         for (const el of this.selection) {
             rightCoords.push(
-                this.getInclusiveBBox(el).x - SIDEBAR_WIDTH + this.getInclusiveBBox(el).width + this.getStrokeWidth(el) / 2
+                this.getDOMRect(el).x +
+                    window.scrollX -
+                    SIDEBAR_WIDTH +
+                    this.getDOMRect(el).width +
+                    this.getStrokeWidth(el) / 2
             );
         }
 
@@ -278,7 +309,7 @@ export class SelectionToolService extends AbstractToolService {
         const topCoords: number[] = new Array();
 
         for (const el of this.selection) {
-            topCoords.push(this.getInclusiveBBox(el).y - this.getStrokeWidth(el) / 2);
+            topCoords.push(this.getDOMRect(el).y + window.scrollY - this.getStrokeWidth(el) / 2);
         }
 
         return Math.min.apply(Math, topCoords);
@@ -289,7 +320,7 @@ export class SelectionToolService extends AbstractToolService {
 
         for (const el of this.selection) {
             bottomCoords.push(
-                this.getInclusiveBBox(el).y + this.getInclusiveBBox(el).height + this.getStrokeWidth(el) / 2
+                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2
             );
         }
 
@@ -297,6 +328,10 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     computeSelectionBox(): void {
+        if (!this.hasSelected()) {
+            this.removeFullSelectionBox();
+            return;
+        }
         const left = this.findLeftMostCoord();
         const right = this.findRightMostCoord();
         const top = this.findTopMostCoord();
@@ -401,89 +436,106 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     appendFullSelectionBox(): void {
-        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
-        this.appendControlPoints();
+        if (!this.selectionBoxIsAppended) {
+            this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
+            this.appendControlPoints();
+            this.selectionBoxIsAppended = true;
+        }
     }
 
     removeFullSelectionBox(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
-        this.removeControlPoints();
+        if (this.selectionBoxIsAppended) {
+            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
+            this.removeControlPoints();
+            this.selectionBoxIsAppended = false;
+        }
+    }
+
+    translateSelection(): void {
+        const deltaX = this.currentMouseX - this.lastCurrentMouseX;
+        const deltaY = this.currentMouseY - this.lastCurrentMouseY;
+        for (const el of this.selection) {
+            const transformsList = el.transform.baseVal;
+            if (
+                transformsList.numberOfItems === 0 ||
+                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
+            ) {
+                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+                const translateToZero = svg.createSVGTransform();
+                translateToZero.setTranslate(0, 0);
+                el.transform.baseVal.insertItemBefore(translateToZero, 0);
+            }
+
+            const initialTransform = transformsList.getItem(0);
+            const offsetX = -initialTransform.matrix.e;
+            const offsetY = -initialTransform.matrix.f;
+            el.transform.baseVal.getItem(0).setTranslate(deltaX - offsetX, deltaY - offsetY);
+        }
     }
 
     handleLeftMouseDrag(): void {
-
-    }
-
-    handleRightMouseDrag(): void {
-
-    }
-
-    onMouseMove(event: MouseEvent): void {
-        const lastMouseX = this.currentMouseX;
-        const lastMouseY = this.currentMouseY;
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
-        const deltaX = this.currentMouseX - lastMouseX;
-        const deltaY = this.currentMouseY - lastMouseY;
+        this.isLeftMouseDragging = true;
 
         if (this.isSelecting) {
             this.updateSelectionRectangle();
             this.checkSelection();
-        } else if (this.leftMouseIsDown && this.mouseIsInSelectionBox() && ! this.mouseIsInControlPoint()) {
-            this.isLeftMouseDragging = true;
-            for (const el of this.selection) {
-                // Get all transforms on el
-                const transformsList = el.transform.baseVal;
-                // Check if first transform is translate
-                if ((transformsList.numberOfItems === 0) || (transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
-                    // If not create translate(0,0) and add it to the beginning of the list
-                    const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                    const translateToZero = svg.createSVGTransform();
-                    translateToZero.setTranslate(0, 0);
-                    el.transform.baseVal.insertItemBefore(translateToZero, 0);
-                }
+            this.appendFullSelectionBox();
+        } else if (!this.mouseIsInControlPoint()) {
+            this.translateSelection();
+        }
+        this.computeSelectionBox();
+    }
 
-                const initialTransform = transformsList.getItem(0);
-                const offsetX = -initialTransform.matrix.e;
-                const offsetY = -initialTransform.matrix.f;
-                el.transform.baseVal.getItem(0).setTranslate((deltaX - offsetX), (deltaY - offsetY));
-            }
+    handleRightMouseDrag(): void {
+        this.isRightMouseDragging = true;
 
-            this.computeSelectionBox();
+        if (this.isSelecting) {
+            this.updateSelectionRectangle();
+            this.checkSelection();
+            this.appendFullSelectionBox();
+            this.applySelectionInvert();
+        }
+
+        this.computeSelectionBox();
+    }
+
+    onMouseMove(event: MouseEvent): void {
+        this.lastCurrentMouseX = this.currentMouseX;
+        this.lastCurrentMouseY = this.currentMouseY;
+        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+
+        if (this.isLeftMouseDown) {
+            this.handleLeftMouseDrag();
+        } else if (this.isRightMouseDown) {
+            this.handleRightMouseDrag();
         }
     }
 
     handleLeftMouseDown(): void {
-        this.leftMouseIsDown = true;
+        this.isLeftMouseDown = true;
         this.initialMouseX = this.currentMouseX;
         this.initialMouseY = this.currentMouseY;
-        // Mouse down on selection box
 
-        // Mouse down on an unselected object
-        // Mouse down on unselected object inside selection box
-        if (this.isOnTarget) {
-        } // Mouse down on control point
-        else if (this.mouseIsInControlPoint() || (this.mouseIsInSelectionBox() && !this.isOnTarget)) {
-
-        } // Mouse down on nothing
-        else {
+        if (this.isOnTarget && !this.selection.has(this.drawStack.drawStack[this.currentTarget])) {
+            this.singlySelect(this.currentTarget);
+        } else if (!this.mouseIsInControlPoint() && !this.mouseIsInSelectionBox()) {
             this.clearSelection();
             this.startSelection();
         }
     }
 
     handleRightMouseDown(): void {
-        // Mouse down on nothing
-        // Mouse down on unselected object
-        // Mouse down on selection box
-        // Mouse down on selected object
-        // Mouse down on unselected objected inside selection box
+        this.isRightMouseDown = true;
+        this.initialMouseX = this.currentMouseX;
+        this.initialMouseY = this.currentMouseY;
+
         if (this.isOnTarget) {
-            this.invertSelection(this.currentTarget);
+            this.singlyInvertSelect(this.currentTarget);
+        } else {
+            this.clearSelection();
+            this.startSelection();
         }
-        // if (this.hasSelected()) {
-        //     this.invertSelection();
-        // }
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -505,37 +557,37 @@ export class SelectionToolService extends AbstractToolService {
 
     handleLeftMouseUp(): void {
         this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
-        if (this.hasSelected() && this.isSelecting) {
+
+        if (this.isSelecting) {
             this.isSelecting = false;
-            this.isManipulating = true;
             this.computeSelectionBox();
-            this.appendFullSelectionBox();
-        } else if ((this.mouseIsInSelectionBox() && this.isOnTarget)) {
-
-            if (!this.isLeftMouseDragging) {
-
+        } else if (this.mouseIsInSelectionBox()) {
+            if (!this.isLeftMouseDragging && this.isOnTarget && !this.mouseIsInControlPoint()) {
                 this.singlySelect(this.currentTarget);
-            } else {
-
-                this.isOnTarget = false;
             }
         } else if (this.isOnTarget) {
             this.singlySelect(this.currentTarget);
-        }
-        else if (this.mouseIsInControlPoint() || this.mouseIsInSelectionBox()) {
-
         } else {
             this.clearSelection();
             this.removeFullSelectionBox();
         }
-        this.leftMouseIsDown = false;
+
+        this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
     }
 
     handleRightMouseUp(): void {
+        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        if (this.isSelecting) {
+            this.isSelecting = false;
+            this.computeSelectionBox();
+        }
         if (this.isOnTarget) {
             this.isOnTarget = false;
         }
+
+        this.isRightMouseDown = false;
+        this.isRightMouseDragging = false;
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -557,14 +609,14 @@ export class SelectionToolService extends AbstractToolService {
 
     onMouseEnter(event: MouseEvent): void {
         this.isTheCurrentTool = true;
-        this.isIn = true;
     }
     onMouseLeave(event: MouseEvent): void {
         this.isTheCurrentTool = true;
-        this.isIn = false;
     }
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
-        this.isTheCurrentTool = true;
+        if (event.key === Keys.s) {
+            this.isTheCurrentTool = true;
+        }
     }
 }

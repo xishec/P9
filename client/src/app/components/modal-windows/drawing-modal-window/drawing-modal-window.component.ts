@@ -3,9 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
-import { ColorToolService } from '../../services/tools/color-tool/color-tool.service';
+import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
+import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
+import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -17,8 +20,7 @@ export class DrawingModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     previewColor: string;
-    blankWorkZone = true;
-    displayNewDrawingModalWindow = false;
+    emptyDrawStack = true;
 
     constructor(
         formBuilder: FormBuilder,
@@ -26,40 +28,48 @@ export class DrawingModalWindowComponent implements OnInit {
         private drawingModalWindowService: DrawingModalWindowService,
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
+        private modalManagerService: ModalManagerService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit(): void {
-        this.drawingModalWindowService.currentDisplayNewDrawingModalWindow.subscribe((displayNewDrawingModalWindow) => {
-            this.displayNewDrawingModalWindow = displayNewDrawingModalWindow;
-        });
         this.colorToolService.previewColor.subscribe((previewColor) => {
             this.previewColor = previewColor;
         });
 
-        this.previewColor = this.colorToolService.backgroundColor.value;
-        this.blankWorkZone = this.drawingModalWindowService.blankDrawingZone.value;
+        this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
+            this.emptyDrawStack = emptyDrawStack;
+        });
+
         this.initializeForm();
     }
 
     initializeForm(): void {
         this.drawingModalForm = this.formBuilder.group({
-            confirm: this.blankWorkZone,
+            confirm: this.emptyDrawStack,
             width: [window.innerWidth - SIDEBAR_WIDTH, [Validators.required, Validators.min(0), Validators.max(10000)]],
             height: [window.innerHeight, [Validators.required, Validators.min(0), Validators.max(10000)]],
         });
     }
 
     onSubmit() {
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
-        this.drawingModalWindowService.changeDrawingInfoWidthHeight(
+        this.drawingModalWindowService.changeDrawingInfo(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
+            this.previewColor,
         );
+        this.drawingLoaderService.currentDrawing.next({
+            name: '',
+            labels: [],
+            svg: '',
+            idStack: [],
+            drawingInfo: new DrawingInfo(0, 0, ''),
+        });
         this.colorToolService.changeBackgroundColor(this.previewColor);
-        this.drawingModalWindowService.blankDrawingZone.next(false);
         this.colorToolService.addColorToQueue(this.previewColor);
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 
     @HostListener('window:resize')
@@ -72,6 +82,7 @@ export class DrawingModalWindowComponent implements OnInit {
 
     onCancel(): void {
         this.dialogRef.close();
+        this.modalManagerService.setModalIsDisplayed(false);
     }
 
     getUserColorIcon(): IconStyle {
