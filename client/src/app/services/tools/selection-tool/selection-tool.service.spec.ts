@@ -242,8 +242,18 @@ fdescribe('SelectionToolService', () => {
         expect(res).toBeFalsy();
     });
 
-    it('', () => {
-        
+    it('isInSelection should return false if elBottom < boxTop', () => {
+        const mockSelectionBox : {
+            x : 500,
+            y : 500,
+            width : 50,
+            height : 50,
+        };
+
+        const mockElementBox : {
+            x : 
+        }        
+
     });
 
     it('', () => {
