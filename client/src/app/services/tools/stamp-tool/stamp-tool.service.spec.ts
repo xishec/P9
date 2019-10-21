@@ -6,7 +6,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { createMouseEvent, MockRect, createKeyBoardEvent } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
 
-fdescribe('StampToolService', () => {
+describe('StampToolService', () => {
     const mockDrawRect: MockRect = new MockRect();
 
     let injector: TestBed;
