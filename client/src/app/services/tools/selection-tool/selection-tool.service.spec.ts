@@ -3,6 +3,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
+import { createMockSVGGElementWithAttribute } from 'src/classes/test-helpers';
 //import { MockRect } from 'src/classes/test-helpers';
 
 fdescribe('SelectionToolService', () => {
@@ -95,9 +96,12 @@ fdescribe('SelectionToolService', () => {
     });
 
     it('should call renderer.setAttribute for each control point', () => {
+        const nbPoints = 8;
+        const nbCallPerPoint = 3;
+        
         service.initControlPoints();
 
-        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(nbPoints*nbCallPerPoint);
     });
 
     it('should call renderer.setAttribute to set the attributes of selection box', () => {
@@ -126,5 +130,69 @@ fdescribe('SelectionToolService', () => {
         service.updateSelectionRectangle();
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('getStrokeWidth should return 0 if el has no stroke-width', () => {
+        const el = createMockSVGGElementWithAttribute(''    );
+        
+        const resNumber = service.getStrokeWidth(el);
+
+        expect(resNumber).toBe(0);
+    });
+
+    it('getStrokeWidth should return 10 if el has stroke-width', () => {
+        const el = createMockSVGGElementWithAttribute('stroke-width');
+
+        const resNumber = service.getStrokeWidth(el);
+
+        expect(resNumber).toBe(10);
+    });
+
+    it('mouseIsInSelectionBox should return true if mouse is in SelectionBonx', () => {
+        //
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
     });
 });
