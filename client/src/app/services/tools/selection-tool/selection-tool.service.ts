@@ -153,6 +153,8 @@ export class SelectionToolService extends AbstractToolService {
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
+        const boxTop = selectionBox.y + window.scrollY;
+        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
 
         let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
         let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
@@ -168,11 +170,12 @@ export class SelectionToolService extends AbstractToolService {
             elBottom = elBottom + halfStrokeWidth;
         }
 
+        // Check all cases where el and box don't touch each other
         if (elRight < boxLeft || boxRight < elLeft) {
             return false;
         }
 
-        if (elBottom < boxLeft || elBottom < elTop) {
+        if (elBottom < boxTop || boxBottom < elTop) {
             return false;
         }
 
