@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
@@ -8,19 +8,12 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
     providedIn: 'root',
 })
 export class DrawingModalWindowService {
-    private displayNewDrawingModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
     drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE));
-    currentDisplayNewDrawingModalWindow: Observable<boolean> = this.displayNewDrawingModalWindow.asObservable();
-    blankDrawingZone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-    changeDrawingInfoWidthHeight(width: number, height: number) {
+    changeDrawingInfo(width: number, height: number, color: string) {
         this.drawingInfo.value.width = width;
         this.drawingInfo.value.height = height;
+        this.drawingInfo.value.color = color;
         this.drawingInfo.next(this.drawingInfo.value);
-    }
-
-    changeDisplayNewDrawingModalWindow(displayNewDrawingModalWindow: boolean) {
-        this.displayNewDrawingModalWindow.next(displayNewDrawingModalWindow);
     }
 }

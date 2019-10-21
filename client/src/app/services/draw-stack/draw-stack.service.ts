@@ -2,18 +2,19 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DrawStackService {
-    private drawStack: SVGGElement[] = new Array<SVGGElement>();
+    drawStack: SVGGElement[] = new Array<SVGGElement>();
     idStack: string[] = new Array<string>();
     private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2) {
+    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
         this.renderer = renderer;
     }
 
@@ -39,6 +40,9 @@ export class DrawStackService {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
                 this.changeTargetElement(new StackTargetInfo(position, tool as string));
             });
+            this.renderer.listen(el.children.item(i), 'mouseup', () => {
+                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+            });
         }
 
         return el;
@@ -46,6 +50,7 @@ export class DrawStackService {
 
     push(el: SVGGElement): void {
         this.drawStack.push(this.makeTargetable(el));
+        if (this.idStack.length > 0) this.drawingLoaderService.emptyDrawStack.next(false);
     }
 
     pop(): SVGGElement | undefined {
@@ -53,6 +58,7 @@ export class DrawStackService {
     }
 
     reset(): SVGGElement[] {
+        this.drawingLoaderService.emptyDrawStack.next(true);
         this.idStack.splice(0, this.idStack.length);
         return this.drawStack.splice(0, this.drawStack.length);
     }

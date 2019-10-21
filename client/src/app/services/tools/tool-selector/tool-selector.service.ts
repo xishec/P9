@@ -2,10 +2,10 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { DrawingModalWindowComponent } from 'src/app/components/drawing-modal-window/drawing-modal-window.component';
+import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -16,13 +16,17 @@ import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
+import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
+import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { SelectionToolService } from '../selection-tool/selection-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
+    private selectionTool: SelectionToolService;
     private rectangleTool: RectangleToolService;
     private ellipsisTool: EllipsisToolService;
     private pencilTool: PencilToolService;
@@ -35,14 +39,21 @@ export class ToolSelectorService {
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
+    modalIsDisplayed: boolean = false;
 
     constructor(
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
-        private drawingModalWindowService: DrawingModalWindowService
-    ) {}
+        private modalManagerService: ModalManagerService,
+    ) {
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
+    }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
+        this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
+
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
         this.rectangleTool.initializeColorToolService(this.colorToolService);
 
@@ -71,14 +82,42 @@ export class ToolSelectorService {
     }
 
     displayNewDrawingModal(): void {
-        const dialogRef = this.dialog.open(DrawingModalWindowComponent, {
+        const newDrawingDialogRef = this.dialog.open(DrawingModalWindowComponent, {
             panelClass: 'myapp-max-width-dialog',
+            autoFocus: false,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        newDrawingDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
+    displayOpenFileModal(): void {
+        const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
             disableClose: true,
+            autoFocus: false,
         });
-        this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(true);
-        dialogRef.afterClosed().subscribe(() => {
-            this.drawingModalWindowService.changeDisplayNewDrawingModalWindow(false);
+        this.modalManagerService.setModalIsDisplayed(true);
+        openFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
         });
+    }
+
+    displaySaveFileModal(): void {
+        const saveFileDialogRef = this.dialog.open(SaveFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+            autoFocus: false,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        saveFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
+    getSelectiontool(): SelectionToolService {
+        return this.selectionTool;
     }
 
     getPencilTool(): PencilToolService {
@@ -125,7 +164,13 @@ export class ToolSelectorService {
 
         switch (tooltipName) {
             case ToolName.NewDrawing:
-                this.displayNewDrawingModal();
+                if (!this.modalIsDisplayed) {
+                    this.displayNewDrawingModal();
+                }
+                break;
+            case ToolName.Selection:
+                this.currentTool = this.selectionTool;
+                this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
@@ -166,8 +211,18 @@ export class ToolSelectorService {
                 this.currentTool = this.dropperTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.ArtGallery:
+                if (!this.modalIsDisplayed) {
+                    this.displayOpenFileModal();
+                }
+                break;
+            case ToolName.Save:
+                if (!this.modalIsDisplayed) {
+                    this.displaySaveFileModal();
+                }
+                break;
+            case ToolName.Export:
             case ToolName.Quill:
-            case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
             case ToolName.Line:
@@ -176,12 +231,6 @@ export class ToolSelectorService {
             case ToolName.Fill:
             case ToolName.Eraser:
             case ToolName.Text:
-            case ToolName.Save:
-            case ToolName.ArtGallery:
-            case ToolName.Export:
-                this.currentTool = undefined;
-                this.changeCurrentToolName(tooltipName);
-                break;
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
