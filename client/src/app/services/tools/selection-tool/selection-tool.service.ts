@@ -30,6 +30,7 @@ export class SelectionToolService extends AbstractToolService {
     selectionBox: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     controlPoints: SVGCircleElement[] = new Array(8);
     selection: Set<SVGGElement> = new Set();
+    invertSelection: Set<SVGGElement> = new Set();
 
     constructor(
         public drawStack: DrawStackService,
@@ -169,31 +170,12 @@ export class SelectionToolService extends AbstractToolService {
             elBottom = elBottom + halfStrokeWidth;
         }
 
-        const boxTopLeftCorner = {
-            x: boxLeft,
-            y: boxTop,
-        };
-
-        const boxBottomRightCorner = {
-            x: boxRight,
-            y: boxBottom,
-        };
-
-        const elTopLeftCorner = {
-            x: elLeft,
-            y: elTop,
-        };
-
-        const elBottomRightCorner = {
-            x: elRight,
-            y: elBottom,
-        };
-
-        if (elBottomRightCorner.x < boxTopLeftCorner.x || boxBottomRightCorner.x < elTopLeftCorner.x) {
+        // Check all cases where el and box don't touch each other
+        if (elRight < boxLeft || boxRight < elLeft) {
             return false;
         }
 
-        if (elBottomRightCorner.y < boxTopLeftCorner.y || boxBottomRightCorner.y < elTopLeftCorner.y) {
+        if (elBottom < boxTop || boxBottom < elTop) {
             return false;
         }
 
@@ -222,47 +204,27 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     applySelectionInvert(): void {
-        if (!this.hasSelected()) {
-            for (const el of this.drawStack.drawStack) {
-                this.selection.add(el);
-            }
-            return;
-        }
-
-        const invertedSelection: Set<SVGGElement> = new Set();
-
-        for (const el of this.drawStack.drawStack) {
-            if (!this.selection.has(el)) {
-                invertedSelection.add(el);
+        for(const el of this.invertSelection) {
+            if(this.selection.has(el)) {
+                this.selection.delete(el);
             }
         }
-
-        this.selection = invertedSelection;
     }
 
-    singlyInvertSelect(stackPosition?: number): void {
-        if (stackPosition === undefined) {
+    singlyInvertSelect(stackPosition: number): void {
+        if (!this.drawStack.drawStack[stackPosition]) {
             return;
         }
 
-        if (!this.selection.has(this.drawStack.drawStack[stackPosition])) {
-            for (const el of this.drawStack.drawStack) {
-                if (el !== this.drawStack.drawStack[stackPosition]) {
-                    this.selection.add(el);
-                }
-            }
-        } else {
-            this.selection.delete(this.drawStack.drawStack[stackPosition]);
-        }
+        this.selection.delete(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
 
         if (this.selection.size === 0) {
             this.removeFullSelectionBox();
             return;
         }
-        this.removeFullSelectionBox();
+
         this.computeSelectionBox();
-        this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
@@ -272,9 +234,17 @@ export class SelectionToolService extends AbstractToolService {
             const elBox = this.getDOMRect(el);
 
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-                this.selection.add(el);
+                if (this.isLeftMouseDown) {
+                    this.selection.add(el);
+                } else if (this.isRightMouseDown) {
+                    this.invertSelection.add(el);
+                }
             } else {
-                this.selection.delete(el);
+                if (this.isLeftMouseDown) {
+                    this.selection.delete(el);
+                } else if (this.isRightMouseDown) {
+                    this.invertSelection.delete(el);
+                }
             }
         }
     }
@@ -533,7 +503,7 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isOnTarget) {
             this.singlyInvertSelect(this.currentTarget);
         } else {
-            this.clearSelection();
+            this.invertSelection.clear();
             this.startSelection();
         }
     }
