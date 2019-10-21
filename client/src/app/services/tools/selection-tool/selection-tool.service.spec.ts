@@ -242,21 +242,65 @@ fdescribe('SelectionToolService', () => {
         expect(res).toBeFalsy();
     });
 
-    it('isInSelection should return false if elBottom < boxTop', () => {
-        const mockSelectionBox : {
+    it('isInSelection should return true if elBottom >= boxTop && boxBottom >= elTop && elRight >= boxLeft && boxRight >= elLeft', () => {
+        const mockSelectionBox = {
             x : 500,
             y : 500,
             width : 50,
             height : 50,
-        };
+        } as DOMRect;
 
-        const mockElementBox : {
-            x : 
-        }        
+        const mockElementBox = {
+            x : 500,
+            y : 500,
+            width : 50,
+            height : 50,
+        } as DOMRect;
 
+        const res = service.isInSelection(mockSelectionBox, mockElementBox);
+
+        expect(res).toBeTruthy();
     });
 
-    it('', () => {
+    it('isInSelection should return false if elBottom < boxTop ', () => {
+        const mockSelectionBox = {
+            x : 500,
+            y : 10,
+            width : 50,
+            height : 50,
+        } as DOMRect;
+
+        const mockElementBox = {
+            x : 500,
+            y : 500,
+            width : 50,
+            height : 50,
+        } as DOMRect;
+
+        const res = service.isInSelection(mockSelectionBox, mockElementBox);
+
+        expect(res).toBeFalsy();
+    });
+
+    it('singlySelect should call clearSelection if hasSelected', () => {
+        spyOn(service, 'hasSelected').and.returnValue(true);
+        spyOn(service, 'computeSelectionBox').and.returnValue();
+        const spy = spyOn(service, 'clearSelection');
+
+        service.singlySelect(1);
+
+        expect(spy).toHaveBeenCalled();
+        
+    });
+
+    it('singlySelect should call computeSelectionBox and set isOnTarget to false even if !hasSelected', () => {
+        spyOn(service, 'hasSelected').and.returnValue(false);
+        const spy = spyOn(service, 'computeSelectionBox').and.returnValue();
+
+        service.singlySelect(1);
+
+        expect(spy).toHaveBeenCalled();
+        expect(service.isOnTarget).toBeFalsy();
         
     });
 
