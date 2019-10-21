@@ -8,11 +8,10 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { Thickness } from 'src/constants/tool-constants';
 
-fdescribe('EllipsisAttributesComponent', () => {
+describe('EllipsisAttributesComponent', () => {
     let component: EllipsisAttributesComponent;
     let fixture: ComponentFixture<EllipsisAttributesComponent>;
     let event: MatSliderChange;
-    // let attributesManagerService: AttributesManagerService;
     let shortcutManagerService: ShortcutManagerService;
     const AVERAGE_THICKNESS = 50;
 
@@ -53,9 +52,6 @@ fdescribe('EllipsisAttributesComponent', () => {
 
         component.ngOnInit();
 
-        // attributesManagerService = fixture.debugElement.injector.get<AttributesManagerService>(
-        //     AttributesManagerService,
-        // );
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
     }));
 
