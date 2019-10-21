@@ -104,16 +104,6 @@ describe('WorkZoneComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should return DEFAULT_TRANSPARENT as drawingInfo.color is isEmpty', () => {
-        component.empty = true;
-        expect(component.changeStyle().fill).toEqual('#' + DEFAULT_TRANSPARENT);
-    });
-
-    it('should not return DEFAULT_TRANSPARENT as drawingInfo.color is not isEmpty', () => {
-        component.empty = false;
-        expect(component.changeStyle().fill).toEqual('#' + component.drawingInfo.color);
-    });
-
     it('should call window.alert with Veuillez créer un nouveau dessin!', () => {
         spyOn(window, 'alert');
         component.empty = true;
