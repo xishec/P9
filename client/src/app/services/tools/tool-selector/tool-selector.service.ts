@@ -19,12 +19,14 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { SelectionToolService } from '../selection-tool/selection-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
+    private selectionTool: SelectionToolService;
     private rectangleTool: RectangleToolService;
     private ellipsisTool: EllipsisToolService;
     private pencilTool: PencilToolService;
@@ -50,6 +52,8 @@ export class ToolSelectorService {
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
+        this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
+
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
         this.rectangleTool.initializeColorToolService(this.colorToolService);
 
@@ -112,6 +116,10 @@ export class ToolSelectorService {
         });
     }
 
+    getSelectiontool(): SelectionToolService {
+        return this.selectionTool;
+    }
+
     getPencilTool(): PencilToolService {
         return this.pencilTool;
     }
@@ -159,6 +167,10 @@ export class ToolSelectorService {
                 if (!this.modalIsDisplayed) {
                     this.displayNewDrawingModal();
                 }
+                break;
+            case ToolName.Selection:
+                this.currentTool = this.selectionTool;
+                this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
@@ -211,7 +223,6 @@ export class ToolSelectorService {
                 break;
             case ToolName.Export:
             case ToolName.Quill:
-            case ToolName.Selection:
             case ToolName.Pen:
             case ToolName.SprayCan:
             case ToolName.Line:
