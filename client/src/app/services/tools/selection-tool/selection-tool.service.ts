@@ -201,12 +201,6 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     applySelectionInvert(): void {
-        // if (!this.hasSelected()) {
-        //     for (const el of this.drawStack.drawStack) {
-        //         this.selection.add(el);
-        //     }
-        //     return;
-        // }
         for(const el of this.invertSelection) {
             if(this.selection.has(el)) {
                 this.selection.delete(el);
@@ -214,31 +208,20 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    singlyInvertSelect(stackPosition?: number): void {
-        if (stackPosition === undefined) {
+    singlyInvertSelect(stackPosition: number): void {
+        if (!this.drawStack.drawStack[stackPosition]) {
             return;
         }
 
         this.selection.delete(this.drawStack.drawStack[stackPosition]);
-
-        // if (!this.selection.has(this.drawStack.drawStack[stackPosition])) {
-        //     for (const el of this.drawStack.drawStack) {
-        //         if (el !== this.drawStack.drawStack[stackPosition]) {
-        //             this.selection.add(el);
-        //         }
-        //     }
-        // } else {
-        //     this.selection.delete(this.drawStack.drawStack[stackPosition]);
-        // }
         this.isOnTarget = false;
 
         if (this.selection.size === 0) {
             this.removeFullSelectionBox();
             return;
         }
-        //this.removeFullSelectionBox();
+
         this.computeSelectionBox();
-        //this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
