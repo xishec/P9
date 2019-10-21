@@ -82,21 +82,19 @@ export class SelectionToolService extends AbstractToolService {
         if (deltaX < 0) {
             deltaX *= -1;
             this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseX - deltaX).toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseX.toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
         }
+        this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
             this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseY - deltaY).toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseY.toString());
-            this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
         }
+        this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
 
         this.renderer.setAttribute(this.selectionRectangle, 'fill', 'white');
         this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
