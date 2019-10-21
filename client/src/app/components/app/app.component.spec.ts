@@ -137,8 +137,9 @@ describe('AppComponent', () => {
     });
 
     it('should not allow shortcut when drawing modal is on or focus on input or welcome window is on', () => {
-        app.displayWelcomeModalWindow = true;
+        app.modalIsDisplayed = true;
         app.isOnInput = false;
+
         expect(app.shouldAllowShortcut()).toBe(false);
     });
 

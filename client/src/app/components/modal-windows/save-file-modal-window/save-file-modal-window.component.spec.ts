@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
-fdescribe('SaveFileModalWindowComponent', () => {
+describe('SaveFileModalWindowComponent', () => {
     let component: SaveFileModalWindowComponent;
     let fixture: ComponentFixture<SaveFileModalWindowComponent>;
 
