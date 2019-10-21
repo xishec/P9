@@ -35,7 +35,19 @@ fdescribe('DropperToolService', () => {
                 {
                     provide: Renderer2,
                     useValue: {
-                        createElement: () => null,
+                        createElement: (elem: string) => {
+                            if(elem === 'canvas') {
+                                const mockCanvas = {
+                                    // functions and values of HTMLCanvasElement needed
+                                }
+                                return mockCanvas as HTMLCanvasElement;
+                            } else {
+                                const mockImg = {
+                                    // functions and values of HTMLImageElement
+                                }
+                                return mockImg as HTMLImageElement;
+                            }
+                        },
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
