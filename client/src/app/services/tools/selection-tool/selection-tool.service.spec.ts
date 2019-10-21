@@ -3,7 +3,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
-import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement } from 'src/classes/test-helpers';
+import { createMockSVGGElementWithAttribute, createMouseEvent } from 'src/classes/test-helpers';
 import { Mouse } from 'src/constants/constants';
 //import { MockRect } from 'src/classes/test-helpers';
 
@@ -82,6 +82,15 @@ fdescribe('SelectionToolService', () => {
         // spyOnStampHeight = spyOnProperty(service, 'stampHeight', 'get').and.callFake(() => {
         //     return mockDrawRect.height;
         // });
+
+        let mockDOMRect = {
+            x: 500,
+            y: 500,
+            width: 50,
+            height: 50,
+        };
+
+        spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
     });
 
     it('should be created', () => {
@@ -151,11 +160,33 @@ fdescribe('SelectionToolService', () => {
         expect(resNumber).toBe(10);
     });
 
-    it('', () => {
-        
+    it('getStrokeWidth should return 0 if el has no stroke-width', () => {
+        const el = createMockSVGGElementWithAttribute('');
+
+        const resNumber = service.getStrokeWidth(el);
+
+        expect(resNumber).toBe(0);
     });
 
-    it('', () => {
+    it('mousIsInSelectionBox should return true if mouseX is in selection box', () => {
+        service.currentMouseX = 160;
+        service.currentMouseY = 520;
+
+        let res = service.mouseIsInSelectionBox();
+
+        expect(res).toBeTruthy();
+    });
+
+    it('mousIsInSelectionBox should return false if mouseX not in selection box', () => {
+        service.currentMouseX = 1600;
+        service.currentMouseY = 5200;
+
+        let res = service.mouseIsInSelectionBox();
+
+        expect(res).toBeFalsy();
+    });
+
+    it('mouseIsInControlPoint should return true if mouseX and mouseY in one of controlPoint', () => {
         
     });
 
