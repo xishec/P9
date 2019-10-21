@@ -171,11 +171,7 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         // Check all cases where el and box don't touch each other
-        if (elRight < boxLeft || boxRight < elLeft) {
-            return false;
-        }
-
-        if (elBottom < boxTop || boxBottom < elTop) {
+        if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
             return false;
         }
 
