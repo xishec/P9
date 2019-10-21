@@ -3,13 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { WelcomeModalWindowService } from 'src/app/services/welcome-modal-window/welcome-modal-window.service';
 import { WelcomeModalWindowComponent } from './welcome-modal-window.component';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 describe('WelcomeModalWindowComponent', () => {
     let component: WelcomeModalWindowComponent;
     let fixture: ComponentFixture<WelcomeModalWindowComponent>;
-    let welcomeModalService: WelcomeModalWindowService;
+    let modalManagerService: ModalManagerService;
 
     const dialogMock = {
         close: () => null,
@@ -34,9 +34,9 @@ describe('WelcomeModalWindowComponent', () => {
                 set: {
                     providers: [
                         {
-                            provide: WelcomeModalWindowService,
+                            provide: ModalManagerService,
                             useValue: {
-                                changeWelcomeModalWindowClosed: () => null,
+                                setModalIsDisplayed: () => null,
                             },
                         },
                     ],
@@ -47,7 +47,7 @@ describe('WelcomeModalWindowComponent', () => {
         fixture = TestBed.createComponent(WelcomeModalWindowComponent);
         component = fixture.componentInstance;
 
-        welcomeModalService = fixture.debugElement.injector.get(WelcomeModalWindowService);
+        modalManagerService = fixture.debugElement.injector.get(ModalManagerService);
     }));
 
     it('should create', () => {
@@ -60,9 +60,9 @@ describe('WelcomeModalWindowComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('should set Welcome Modal Window Closed flag to true when form is submitted', () => {
-        const SPY = spyOn(welcomeModalService, 'changeWelcomeModalWindowClosed');
+    it('should set modal display flag to false when form is submitted', () => {
+        const SPY = spyOn(modalManagerService, 'setModalIsDisplayed');
         component.submitForm();
-        expect(SPY).toHaveBeenCalledWith(true);
+        expect(SPY).toHaveBeenCalledWith(false);
     });
 });
