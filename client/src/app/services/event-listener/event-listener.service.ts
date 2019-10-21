@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
@@ -25,6 +25,7 @@ export class EventListenerService {
         private gridToolService: GridToolService,
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
+        private renderer: Renderer2,
         ) 
     {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
@@ -42,50 +43,50 @@ export class EventListenerService {
     };
 
     addEventListeners(): void {
-        
-        this.workZoneSVGRef.nativeElement.addEventListener('mousemove', (event: MouseEvent) => {
+
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousemove', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseMove(event);
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mousedown', (event: MouseEvent) => {
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousedown', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseDown(event);
             }
         });
 
-        window.addEventListener('mouseup', (event: MouseEvent) => {
+        this.renderer.listen(window, 'mouseup', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseUp(event);
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseenter', (event: MouseEvent) => {
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseenter', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseEnter(event);
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('mouseleave', (event: MouseEvent) => {
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseleave', (event: MouseEvent) => {
             if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseLeave(event);
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('wheel', (event: WheelEvent) => {
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'wheel', (event: WheelEvent) => {
             if (this.currentTool instanceof StampToolService && !this.isWorkZoneEmpty) {
                 this.currentTool.onWheel(event);
             }
         });
 
-        this.workZoneSVGRef.nativeElement.addEventListener('dblclick', (event: WheelEvent) => {
+        this.renderer.listen(this.workZoneSVGRef.nativeElement, 'dblclick', (event: WheelEvent) => {
             if (this.currentTool instanceof LineToolService && !this.isWorkZoneEmpty) {
                 this.currentTool.onDblClick(event);
             }
         });
 
-        window.addEventListener('keydown', (event: KeyboardEvent) => {
+        this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
             
             // If control is pressed, change for ControlTools
             if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
@@ -119,7 +120,7 @@ export class EventListenerService {
         });
 
 
-        window.addEventListener('keyup', (event: KeyboardEvent) => {
+        this.renderer.listen(window, 'keyup', (event: KeyboardEvent) => {
             if(this.currentTool != undefined) {
                 this.currentTool.onKeyUp(event);
             }

@@ -54,7 +54,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
 
-        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService, this.modalManagerService);
+        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService, this.modalManagerService, this.renderer);
         this.eventListenerService.addEventListeners();
 
         this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
