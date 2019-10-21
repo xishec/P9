@@ -1,5 +1,6 @@
 <div id="container">
     <div>
+        <app-selection-attributes [hidden]="currentToolName !== ToolName.Selection"></app-selection-attributes>
         <app-pencil-attributes [hidden]="currentToolName !== ToolName.Pencil"></app-pencil-attributes>
         <app-rectangle-attributes [hidden]="currentToolName !== ToolName.Rectangle"></app-rectangle-attributes>
         <app-brush-attributes [hidden]="currentToolName !== ToolName.Brush"></app-brush-attributes>
