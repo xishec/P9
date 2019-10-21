@@ -4,7 +4,7 @@ import { SVG_NS } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { svgAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -34,8 +34,8 @@ export class BrushToolService extends TracingToolService {
 
         this.renderer.setAttribute(filter, 'id', this.currentStyle.toString());
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-        this.renderer.setAttribute(filter, svgAttribute.height, '100px');
-        this.renderer.setAttribute(filter, svgAttribute.width, '100px');
+        this.renderer.setAttribute(filter, HTMLAttribute.height, '100px');
+        this.renderer.setAttribute(filter, HTMLAttribute.width, '100px');
         this.renderer.setAttribute(filter, 'x', '-50px');
         this.renderer.setAttribute(filter, 'y', '-50px');
 
@@ -62,22 +62,22 @@ export class BrushToolService extends TracingToolService {
 
         switch (patternId) {
             case 2:
-                this.renderer.setAttribute(turbulence, svgAttribute.baseFrequency, '0.1 0.9');
-                this.renderer.setAttribute(turbulence, svgAttribute.numOctaves, '10');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.baseFrequency, '0.1 0.9');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.numOctaves, '10');
                 this.renderer.setAttribute(displacementMap, 'scale', '20');
                 break;
             case 3:
-                this.renderer.setAttribute(turbulence, svgAttribute.baseFrequency, '0.01 0.57');
-                this.renderer.setAttribute(turbulence, svgAttribute.numOctaves, '2');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.baseFrequency, '0.01 0.57');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.numOctaves, '2');
                 break;
             case 4:
-                this.renderer.setAttribute(turbulence, svgAttribute.baseFrequency, '0.05');
-                this.renderer.setAttribute(turbulence, svgAttribute.numOctaves, '2');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.baseFrequency, '0.05');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.numOctaves, '2');
                 break;
             case 5:
                 this.renderer.setAttribute(turbulence, 'type', 'fractalNoise');
-                this.renderer.setAttribute(turbulence, svgAttribute.baseFrequency, '0.9');
-                this.renderer.setAttribute(turbulence, svgAttribute.numOctaves, '4');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.baseFrequency, '0.9');
+                this.renderer.setAttribute(turbulence, HTMLAttribute.numOctaves, '4');
                 break;
         }
         this.renderer.appendChild(filter, turbulence);
@@ -92,13 +92,13 @@ export class BrushToolService extends TracingToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
-        this.renderer.setAttribute(circle, svgAttribute.filter, `url(#${this.currentStyle.toString()})`);
+        this.renderer.setAttribute(circle, HTMLAttribute.filter, `url(#${this.currentStyle.toString()})`);
         return circle;
     }
 
     createSVGPath(): void {
         super.createSVGPath();
-        this.renderer.setAttribute(this.svgPath, svgAttribute.filter, `url(#${this.currentStyle})`);
+        this.renderer.setAttribute(this.svgPath, HTMLAttribute.filter, `url(#${this.currentStyle})`);
     }
 
     // tslint:disable-next-line: no-empty

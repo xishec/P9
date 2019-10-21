@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { ToolName, svgAttribute } from 'src/constants/tool-constants';
+import { ToolName, HTMLAttribute } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -44,7 +44,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 case Mouse.LeftButton:
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                        svgAttribute.fill,
+                        HTMLAttribute.fill,
                         this.primaryColor,
                     );
                     if (
@@ -54,7 +54,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     ) {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                            svgAttribute.stroke,
+                            HTMLAttribute.stroke,
                             this.primaryColor,
                         );
                     }
@@ -69,7 +69,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     }
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                        svgAttribute.stroke,
+                        HTMLAttribute.stroke,
                         this.secondaryColor,
                     );
                     break;

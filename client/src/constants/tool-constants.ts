@@ -177,7 +177,7 @@ enum LineJointType {
     Circle = 3,
 }
 
-enum svgAttribute {
+enum HTMLAttribute {
     width = 'width',
     height = 'height',
     fill = 'fill',
@@ -198,7 +198,7 @@ enum svgAttribute {
 }
 
 export {
-    svgAttribute,
+    HTMLAttribute,
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
