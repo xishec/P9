@@ -157,12 +157,6 @@ export class PolygonToolService extends AbstractShapeToolService {
         }
     }
 
-    cleanUpPreview(): void {
-        this.isPreviewing = false;
-        // this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
-        this.renderer.removeChild(this.svgReference, this.drawPolygon);
-    }
-
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
@@ -205,8 +199,6 @@ export class PolygonToolService extends AbstractShapeToolService {
         }
     }
 
-    updatePoints() {}
-
     onMouseMove(event: MouseEvent): void {
         this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
@@ -227,7 +219,6 @@ export class PolygonToolService extends AbstractShapeToolService {
             this.updateDrawing();
 
             this.renderer.appendChild(this.svgReference.nativeElement, this.drawPolygon);
-            // this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
         }
     }
 
@@ -236,7 +227,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         if (button === Mouse.LeftButton && this.isIn && this.isValidePolygon()) {
             this.createSVG();
         }
-        this.cleanUpPreview();
+        this.cleanUp();
     }
 
     onMouseEnter(event: MouseEvent): void {
@@ -252,10 +243,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     onKeyUp(event: KeyboardEvent): void {}
 
     cleanUp(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.drawPolygon);
-    }
-
-    get drawPolygonPoints(): SVGPointList {
-        return this.drawPolygon.points;
+        this.isPreviewing = false;
+        this.renderer.removeChild(this.svgReference, this.drawPolygon);
     }
 }
