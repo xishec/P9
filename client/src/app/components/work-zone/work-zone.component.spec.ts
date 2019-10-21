@@ -8,7 +8,7 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
 // import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers';
-import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 // import { Keys, Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
@@ -102,16 +102,6 @@ describe('WorkZoneComponent', () => {
 
     it('should be created', () => {
         expect(component).toBeTruthy();
-    });
-
-    it('should return DEFAULT_TRANSPARENT as drawingInfo.color is isEmpty', () => {
-        component.empty = true;
-        expect(component.changeStyle().fill).toEqual('#' + DEFAULT_TRANSPARENT);
-    });
-
-    it('should not return DEFAULT_TRANSPARENT as drawingInfo.color is not isEmpty', () => {
-        component.empty = false;
-        expect(component.changeStyle().fill).toEqual('#' + component.drawingInfo.color);
     });
 
     it('should call window.alert with Veuillez créer un nouveau dessin!', () => {
