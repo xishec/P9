@@ -76,8 +76,8 @@ export class StampToolService extends AbstractToolService {
 
     verifyPosition(event: MouseEvent): boolean {
         return (
-            event.clientX > (this.svgReference.nativeElement.getBoundingClientRect().left + window.scrollX) &&
-            event.clientY > (this.svgReference.nativeElement.getBoundingClientRect().top + window.scrollY)
+            event.clientX > this.svgReference.nativeElement.getBoundingClientRect().left + window.scrollX &&
+            event.clientY > this.svgReference.nativeElement.getBoundingClientRect().top + window.scrollY
         );
     }
 
@@ -97,8 +97,16 @@ export class StampToolService extends AbstractToolService {
     }
 
     setStamp(): void {
-        this.renderer.setAttribute(this.stamp, HTMLAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
-        this.renderer.setAttribute(this.stamp, HTMLAttribute.height, (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(
+            this.stamp,
+            HTMLAttribute.width,
+            (this.STAMP_BASE_WIDTH * this.currentScaling).toString(),
+        );
+        this.renderer.setAttribute(
+            this.stamp,
+            HTMLAttribute.height,
+            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
 
@@ -119,23 +127,40 @@ export class StampToolService extends AbstractToolService {
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
-        this.renderer.setAttribute(stamp, HTMLAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
-        this.renderer.setAttribute(stamp, HTMLAttribute.height, (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(
+            stamp,
+            HTMLAttribute.width,
+            (this.STAMP_BASE_WIDTH * this.currentScaling).toString(),
+        );
+        this.renderer.setAttribute(
+            stamp,
+            HTMLAttribute.height,
+            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(rect, HTMLAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
-        this.renderer.setAttribute(rect, HTMLAttribute.height, (this.STAMP_BASE_HEIGHT * this.currentScaling).toString());
+        this.renderer.setAttribute(
+            rect,
+            HTMLAttribute.height,
+            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(rect, 'x', this.stampX.toString());
         this.renderer.setAttribute(rect, 'y', this.stampY.toString());
         this.renderer.setAttribute(rect, HTMLAttribute.fill, '#ffffff00');
+        this.renderer.setAttribute(rect, HTMLAttribute.stroke, 'none');
 
         this.renderer.appendChild(el, stamp);
         this.renderer.appendChild(el, rect);
         this.renderer.setAttribute(el, 'transform', `translate(${this.stampX}, ${this.stampY})`);
-        this.renderer.setAttribute(el, 'transform', `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`);
+        this.renderer.setAttribute(
+            el,
+            'transform',
+            `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`,
+        );
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
     }
@@ -227,5 +252,4 @@ export class StampToolService extends AbstractToolService {
             }
         }
     }
-
 }
