@@ -5,7 +5,7 @@ import { EllipsisToolService } from './ellipsis-tool.service';
 import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
 
-fdescribe('EllipsisToolService', () => {
+describe('EllipsisToolService', () => {
     const NONE: string = 'none';
     const NOTNONE: string = 'not none';
 
