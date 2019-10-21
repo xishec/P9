@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
-fdescribe('LineAttributesComponent', () => {
+describe('LineAttributesComponent', () => {
     let component: LineAttributesComponent;
     let fixture: ComponentFixture<LineAttributesComponent>;
 
