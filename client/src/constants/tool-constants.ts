@@ -177,34 +177,28 @@ enum LineJointType {
     Circle = 3,
 }
 
-const ToolNameShortcuts : Map<string , string> = new Map([
-    ['c', ToolName.Pencil],
-    ['w', ToolName.Brush],
-    ['p', ToolName.Quill],
-    ['y', ToolName.Pen],
-    ['a', ToolName.SprayCan],
-    ['1', ToolName.Rectangle],
-    ['2', ToolName.Ellipsis],
-    ['3', ToolName.Polygon],
-    ['l', ToolName.Line],
-    ['t', ToolName.Text],
-    ['r', ToolName.ColorApplicator],
-    ['b', ToolName.Fill],
-    ['e', ToolName.Eraser],
-    ['i', ToolName.Dropper],
-    ['s', ToolName.Selection],
-])
-
-const ToolNameControlShortcuts : Map<string, string> = new Map([
-    ['o', ToolName.NewDrawing],
-    ['s', ToolName.Save],
-    ['g', ToolName.ArtGallery],
-    ['e', ToolName.Export],
-])
+enum HTMLAttribute {
+    width = 'width',
+    height = 'height',
+    fill = 'fill',
+    stroke = 'stroke',
+    opacity = 'opacity',
+    stroke_width = 'stroke-width',
+    cx = 'cx',
+    cy = 'cy',
+    rx = 'rx',
+    ry = 'ry',
+    numOctaves = 'numOctaves',
+    baseFrequency = 'baseFrequency',
+    filter = 'filter',
+    points = 'points',
+    stroke_dasharray = 'stroke-dasharray',
+    stroke_linejoin = 'stroke-linejoin',
+    title = 'title',
+}
 
 export {
-    ToolNameShortcuts,
-    ToolNameControlShortcuts,
+    HTMLAttribute,
     TOOLS_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
