@@ -136,7 +136,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 
-    // tslint:disable-next-line: no-empty
     cleanUp(): void {
         if(this.isDrawing){
             this.renderer.removeChild(this.elementRef.nativeElement, this.svgWrap);
