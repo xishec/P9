@@ -46,6 +46,7 @@ import { DropperAttributesComponent } from './components/sidebar-tools/attribute
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
+import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-modal-window/welcome-modal-window.component';
@@ -88,6 +89,7 @@ import {
         DropperAttributesComponent,
         EllipsisAttributesComponent,
         SaveFileModalWindowComponent,
+        SelectionAttributesComponent
     ],
     imports: [
         MatSliderModule,
@@ -104,7 +106,6 @@ import {
         BrowserModule,
         HttpClientModule,
         MatTooltipModule,
-        MatSliderModule,
         MatSelectModule,
         MatFormFieldModule,
         MatSlideToggleModule,

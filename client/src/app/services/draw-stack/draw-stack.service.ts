@@ -8,7 +8,7 @@ import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.se
     providedIn: 'root',
 })
 export class DrawStackService {
-    private drawStack: SVGGElement[] = new Array<SVGGElement>();
+    drawStack: SVGGElement[] = new Array<SVGGElement>();
     idStack: string[] = new Array<string>();
     private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
@@ -38,6 +38,9 @@ export class DrawStackService {
 
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
+                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+            });
+            this.renderer.listen(el.children.item(i), 'mouseup', () => {
                 this.changeTargetElement(new StackTargetInfo(position, tool as string));
             });
         }
