@@ -153,8 +153,6 @@ export class SelectionToolService extends AbstractToolService {
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
-        const boxTop = selectionBox.y + window.scrollY;
-        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
 
         let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
         let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
@@ -170,31 +168,11 @@ export class SelectionToolService extends AbstractToolService {
             elBottom = elBottom + halfStrokeWidth;
         }
 
-        const boxTopLeftCorner = {
-            x: boxLeft,
-            y: boxTop,
-        };
-
-        const boxBottomRightCorner = {
-            x: boxRight,
-            y: boxBottom,
-        };
-
-        const elTopLeftCorner = {
-            x: elLeft,
-            y: elTop,
-        };
-
-        const elBottomRightCorner = {
-            x: elRight,
-            y: elBottom,
-        };
-
-        if (elBottomRightCorner.x < boxTopLeftCorner.x || boxBottomRightCorner.x < elTopLeftCorner.x) {
+        if (elRight < boxLeft || boxRight < elLeft) {
             return false;
         }
 
-        if (elBottomRightCorner.y < boxTopLeftCorner.y || boxBottomRightCorner.y < elTopLeftCorner.y) {
+        if (elBottom < boxLeft || elBottom < elTop) {
             return false;
         }
 
