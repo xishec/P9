@@ -7,10 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class WelcomeModalWindowService {
     readonly storageKey = 'display welcome modal';
     private displayWelcomeModalWindow: BehaviorSubject<boolean> = new BehaviorSubject(true);
-    private welcomeModalWindowClosed: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     currentDisplayWelcomeModalWindow: Observable<boolean> = this.displayWelcomeModalWindow.asObservable();
-    currentWelcomeModalWindowClosed: Observable<boolean> = this.welcomeModalWindowClosed.asObservable();
 
     getValueFromLocalStorage(): boolean {
         if (localStorage.getItem(this.storageKey)) {
@@ -33,9 +31,5 @@ export class WelcomeModalWindowService {
         } else if (value === 'false') {
             this.displayWelcomeModalWindow.next(false);
         }
-    }
-
-    changeWelcomeModalWindowClosed(welcomeModalWindowClosed: boolean) {
-        this.welcomeModalWindowClosed.next(welcomeModalWindowClosed);
     }
 }

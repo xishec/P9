@@ -1,3 +1,5 @@
+import { Renderer2 } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from './draw-stack.service';
@@ -5,11 +7,32 @@ import { DrawStackService } from './draw-stack.service';
 const NB_PUSH = 3;
 
 describe('DrawStackService', () => {
+    let injector: TestBed;
     let service: DrawStackService;
-    const mockSVGGElement: any = {};
+
+    const mockSVGGElement: any = {
+        getAttribute : () => null,
+        children : {
+            length : 0,
+        },
+    };
 
     beforeEach(() => {
-        service = new DrawStackService();
+        TestBed.configureTestingModule({
+            providers: [
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        listen: () => null,
+                        setAttribute: () => null,
+                    },
+                },
+            ],
+        });
+
+        injector = getTestBed();
+        service = injector.get(DrawStackService);
+
     });
 
     it('should be created', () => {
@@ -35,6 +58,8 @@ describe('DrawStackService', () => {
     });
 
     it('when push SVGGElement drawStack should contain the element', () => {
+        service.drawStack = new Array();
+
         service.push(mockSVGGElement);
 
         expect(service[`drawStack`]).toContain(mockSVGGElement);

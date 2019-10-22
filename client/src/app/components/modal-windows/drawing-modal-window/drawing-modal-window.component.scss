@@ -1,0 +1,61 @@
+.formGroup {
+    margin: 0 30px;
+
+    mat-form-field {
+        width: 110px;
+        margin: 20px 10px;
+
+        span {
+            color: #888888;
+            margin-right: 5px;
+        }
+    }
+}
+
+#userColor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .color {
+        margin-left: 10px;
+    }
+
+    #bigColor {
+        padding: 15px;
+    }
+}
+
+.color {
+    width: 0;
+    height: 0;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    margin: 5px;
+    border-radius: 100%;
+    outline: none;
+}
+
+.actionButton {
+    width: 90px;
+    margin: 0px 20px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+#confirmation {
+    margin-bottom: 20px;
+
+    #warning {
+        background-color: red;
+    }
+
+    mat-error {
+        margin-bottom: 10px;
+    }
+}
+
+.mat-typography {
+    overflow-x: hidden;
+}

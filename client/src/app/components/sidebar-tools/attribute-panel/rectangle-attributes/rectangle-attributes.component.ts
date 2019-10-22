@@ -4,6 +4,7 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
+import { predicate } from 'src/constants/constants';
 import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
@@ -18,11 +19,11 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Rectangle;
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
+    attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
-        private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
@@ -52,7 +53,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.rectangleAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -60,7 +61,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
 
     onThicknessChange(): void {
         const thickness: number = this.rectangleAttributesForm.value.thickness;
-        if (thickness >= Thickness.Min && thickness <= Thickness.Max) {
+        if (this.rectangleAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
@@ -70,10 +71,10 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
         this.attributesManagerService.changeTraceType(tracetype);
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }

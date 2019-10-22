@@ -94,8 +94,8 @@ describe('RectangleAttributesComponent', () => {
     });
 
     it(`onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+        const SPY = spyOn(component.attributesManagerService, 'changeThickness').and.returnValue();
         component.rectangleAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
@@ -137,7 +137,7 @@ describe('RectangleAttributesComponent', () => {
     });
 
     it('change should call changeStyle when user select a trace type', () => {
-        const SPY = spyOn(attributesManagerService, 'changeTraceType').and.returnValue();
+        const SPY = spyOn(component.attributesManagerService, 'changeTraceType').and.returnValue();
 
         component.onTraceTypeChange();
 

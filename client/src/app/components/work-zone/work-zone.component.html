@@ -1,14 +1,38 @@
 <svg
     #svgpad
-    [ngClass]="{ 'stop-scrolling': displayNewDrawingModalWindow }"
-    [attr.width]="drawingInfo.width"
-    [attr.height]="drawingInfo.height"
+    [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
+    [attr.width]="drawingInfo.width + 'px'"
+    [attr.height]="drawingInfo.height + 'px'"
     [ngStyle]="getCursorStyle()"
 >
+    <rect (click)="onClickRectangle()" />
+</svg>
+
+<svg
+    class="grid"
+    *ngIf="gridIsActive === true"
+    [ngClass]="{ 'stop-scrolling': modalIsDisplayed }"
+    [attr.width]="drawingInfo.width"
+    [attr.height]="drawingInfo.height"
+>
+    <defs>
+        <pattern id="smallGrid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <path
+                d="M 200 0 L 0 0 0 200"
+                fill="none"
+                stroke="gray"
+                stroke-width="2"
+                [attr.stroke-opacity]="gridOpacity"
+            />
+        </pattern>
+        <pattern id="grid" [attr.width]="gridSize" [attr.height]="gridSize" patternUnits="userSpaceOnUse">
+            <rect width="200" height="200" fill="url(#smallGrid)" />
+        </pattern>
+    </defs>
     <rect
-        (click)="onClickRectangle()"
-        [ngStyle]="changeStyle()"
-        [attr.height]="this.drawingInfo.height + 'px'"
-        [attr.width]="this.drawingInfo.width + 'px'"
+        class="grid"
+        [attr.height]="drawingInfo.height + 'px'"
+        [attr.width]="drawingInfo.width + 'px'"
+        fill="url(#grid)"
     />
 </svg>

@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Bienvenue à P9, votre nouvel ami pour le design!</h1>
+<mat-dialog-content class="mat-typography">
+    <h3>Dessinez ce que vous voulez!</h3>
+    <p>
+        En utilisant la toute nouvelle application web P9, vous pouvez mettre sur feuille toute idée créative qui passe
+        par votre tête! Que ce soit pour un projet d'école ou simplement un exercice pour entrainer votre cervelle
+        droite, cet outil est pour vous. Amusez-vous bien! 😊
+    </p>
+    <div id="user-guide-message">
+        <a target="_blank" mat-button id="user-guide-button" href="https://github.com/xishec/P9-Wiki/wiki">
+            <div id="user-guide-button-container">
+                <div id="user-guide-button-text">
+                    <i class="far fa-question-circle" id="question-icon"></i>
+                    <p>Guide d'utilisateur</p>
+                </div>
+            </div>
+        </a>
+        <p>
+            Consultez le guide d'utilisateur pour <br />
+            les détails concernant l'utilisation de l'application.
+        </p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions id="footer" align="end">
+    <mat-checkbox color="primary" id="checkbox" [(ngModel)]="displayWelcomeModalWindow"
+        ><p>Ne plus montrer ce message.</p></mat-checkbox
+    >
+    <button id="start-button" mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submitForm()">
+        Commencer
+    </button>
+</mat-dialog-actions>

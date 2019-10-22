@@ -5,6 +5,7 @@ import { DrawingModalWindowService } from './drawing-modal-window.service';
 
 const WIDTH = 100;
 const HEIGHT = 100;
+const COLOR = '000000';
 
 describe('DrawingModalWindowService', () => {
     let injector: TestBed;
@@ -23,17 +24,11 @@ describe('DrawingModalWindowService', () => {
         expect(service).toBeTruthy();
     });
 
-    it(`changeDrawingInfoWidthHeight with ${WIDTH} and ${HEIGHT} should update drawingInfo`, () => {
-        service.changeDrawingInfoWidthHeight(WIDTH, HEIGHT);
+    it(`changeDrawingInfo with ${WIDTH}, ${HEIGHT} and ${COLOR} should update drawingInfo`, () => {
+        service.changeDrawingInfo(WIDTH, HEIGHT, COLOR);
 
         expect(service.drawingInfo.value.width).toEqual(WIDTH);
         expect(service.drawingInfo.value.height).toEqual(HEIGHT);
-    });
-
-    it(`should call changeDisplayNewDrawingModalWindow with true`, () => {
-        service[`displayNewDrawingModalWindow`].next = () => null;
-        const SPY = spyOn(service[`displayNewDrawingModalWindow`], 'next');
-        service.changeDisplayNewDrawingModalWindow(true);
-        expect(SPY).toHaveBeenCalledWith(true);
+        expect(service.drawingInfo.value.color).toEqual(COLOR);
     });
 });

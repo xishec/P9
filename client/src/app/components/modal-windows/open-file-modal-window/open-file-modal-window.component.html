@@ -1,0 +1,125 @@
+<h1 mat-dialog-title>Ouvrir un dessin existant</h1>
+
+<input
+    autocomplete="off"
+    matInput
+    class="filter"
+    [(ngModel)]="nameFilter"
+    placeholder="Filter par nom ... (entrez '$tout' pour voir tous les dessins)"
+/>
+<input
+    autocomplete="off"
+    matInput
+    class="filter"
+    [(ngModel)]="labelFilter"
+    placeholder="Filter par étiquettes ... (ex.: pomme, melon, etc.)"
+/>
+
+<mat-dialog-content [formGroup]="openFileModalForm">
+    <div *ngIf="!isLoading">
+        <div id="header">
+            <div>
+                Nom :
+            </div>
+            <div>
+                Étiquettes :
+            </div>
+            <div>
+                Aperçu :
+            </div>
+        </div>
+
+        <mat-selection-list
+            #drawings
+            formControlName="selectedDrawing"
+            (selectionChange)="handleSelection($event, drawings.selectedOptions)"
+            id="selection-list"
+            required
+        >
+            <mat-list-option
+                *ngFor="
+                    let drawing of drawingsFromServer
+                        | nameFilter: nameFilter
+                        | labelFilter: labelFilter
+                        | mySlice: nameFilter;
+                    let i = index
+                "
+                id="list-option"
+                [value]="drawing.name"
+            >
+                <div id="drawing-option">
+                    <div id="drawing-name">
+                        {{ drawing.name }}
+                    </div>
+                    <div id="drawing-labels-list">
+                        <div id="drawing-label" *ngFor="let label of drawing.labels">
+                            {{ label }}
+                        </div>
+                    </div>
+                    <div id="drawing-thumbnail">
+                        <svg
+                            [attr.width]="getWidth(drawing.name)"
+                            [attr.height]="getHeight(drawing.name)"
+                            [attr.viewBox]="getViewBox(drawing.name)"
+                            [innerHTML]="getSVG(drawing.name) | toTrustHtml"
+                        ></svg>
+                    </div>
+                </div>
+            </mat-list-option>
+        </mat-selection-list>
+        <div
+            class="hidden-info"
+            *ngIf="
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
+                nameFilter !== '$tout'
+            "
+        >
+            {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
+            {{
+                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
+                    ? 'dessins masqués ...'
+                    : 'dessin masqué ...'
+            }}
+        </div>
+        <div
+            class="hidden-info"
+            *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
+        >
+            Aucun dessin trouvé!
+        </div>
+    </div>
+    <div *ngIf="isLoading" id="loading-div">
+        <img id="img" [src]="getGifSource()" alt="" />
+        <div>
+            Loading ...
+        </div>
+    </div>
+</mat-dialog-content>
+
+<div id="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
+    <mat-error class="center">
+        <i class="fas fa-exclamation-triangle"></i>
+        Un dessin existe déja dans votre zone de travail!
+        <i class="fas fa-exclamation-triangle"></i>
+    </mat-error>
+    <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+        Je confirme que je ne veux pas sauvegarder le dessin existant.
+    </mat-checkbox>
+</div>
+
+<mat-dialog-actions id="footer" align="end">
+    <button
+        class="actionButton"
+        mat-stroked-button
+        color="warn"
+        type="button"
+        (click)="onDelete()"
+        *ngIf="selectedOption !== ''"
+    >
+        Supprimer
+    </button>
+    <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+    <button class="actionButton" mat-stroked-button type="submit" [disabled]="formIsInvalid()" (click)="onSubmit()">
+        Ouvrir
+    </button>
+</mat-dialog-actions>

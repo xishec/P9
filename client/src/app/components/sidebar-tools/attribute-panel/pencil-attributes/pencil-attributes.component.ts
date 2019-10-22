@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { predicate } from 'src/constants/constants';
 import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PencilToolService } from '../../../../services/tools/pencil-tool/pencil-tool.service';
@@ -50,22 +51,22 @@ export class PencilAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (event.value !== null && event.value <= Thickness.Max && event.value >= Thickness.Min) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.pencilAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
     onThicknessChange(): void {
         const thickness: number = this.pencilAttributesForm.value.thickness;
-        if (this.pencilAttributesForm.valid) {
+        if (this.pencilAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.changeThickness(thickness);
         }
     }
 
-    onFocus() {
+    onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
-    onFocusOut() {
+    onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
     }
 }

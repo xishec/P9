@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 import { FILES_BUTTON_INFO, ToolName, TOOLS_BUTTON_INFO } from 'src/constants/tool-constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
@@ -8,7 +8,7 @@ import { ToolSelectorService } from '../../services/tools/tool-selector/tool-sel
     templateUrl: './sidebar-tools.component.html',
     styleUrls: ['./sidebar-tools.component.scss'],
 })
-export class SidebarToolsComponent implements OnInit {
+export class SidebarToolsComponent implements OnInit, AfterViewInit {
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
@@ -20,6 +20,9 @@ export class SidebarToolsComponent implements OnInit {
         this.toolSelectorService.currentToolName.subscribe((currentToolName) => {
             this.currentToolName = currentToolName;
         });
+    }
+
+    ngAfterViewInit(): void {
         this.toolSelectorService.changeTool(ToolName.Selection);
     }
 

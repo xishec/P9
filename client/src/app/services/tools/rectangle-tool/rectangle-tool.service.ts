@@ -1,8 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { ToolName, TraceType } from 'src/constants/tool-constants';
+import { HTMLAttribute, ToolName, TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -13,26 +12,22 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class RectangleToolService extends AbstractShapeToolService {
     drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-     fillColor = '';
-     strokeColor = '';
-     userFillColor = '';
-     userStrokeColor = '';
-     userStrokeWidth = 0;
-     traceType = '';
-     strokeWidth = 0;
-     isSquarePreview = false;
-     attributesManagerService: AttributesManagerService;
-     colorToolService: ColorToolService;
+    fillColor = '';
+    strokeColor = '';
+    userFillColor = '';
+    userStrokeColor = '';
+    userStrokeWidth = 0;
+    traceType = '';
+    strokeWidth = 0;
+    isSquarePreview = false;
+    attributesManagerService: AttributesManagerService;
+    colorToolService: ColorToolService;
 
-    constructor(
-         public drawStack: DrawStackService,
-         public svgReference: ElementRef<SVGElement>,
-         renderer: Renderer2,
-    ) {
+    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
         super(renderer);
     }
 
-    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
@@ -43,7 +38,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
     }
 
-    initializeColorToolService(colorToolService: ColorToolService) {
+    initializeColorToolService(colorToolService: ColorToolService): void {
         this.colorToolService = colorToolService;
         this.colorToolService.primaryColor.subscribe((fillColor: string) => {
             this.fillColor = fillColor;
@@ -76,26 +71,26 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'width',
+                HTMLAttribute.width,
                 (-(this.previewRectangleWidth - this.userStrokeWidth)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'width',
+                HTMLAttribute.width,
                 (this.previewRectangleWidth - this.userStrokeWidth).toString(),
             );
         }
         if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'height',
+                HTMLAttribute.height,
                 (-(this.previewRectangleHeight - this.userStrokeWidth)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'height',
+                HTMLAttribute.height,
                 (this.previewRectangleHeight - this.userStrokeWidth).toString(),
             );
         }
@@ -103,17 +98,19 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     renderDrawRectangle(): void {
         if (this.isValideRectangle()) {
-            this.renderer.setAttribute(this.drawRectangle, 'fill', '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', this.userStrokeWidth.toString());
+            this.userFillColor === 'none'
+                ? this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, this.userFillColor)
+                : this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
         } else {
-            this.renderer.setAttribute(this.drawRectangle, 'fill', 'none');
-            this.renderer.setAttribute(this.drawRectangle, 'stroke', 'none');
-            this.renderer.setAttribute(this.drawRectangle, 'stroke-width', '0');
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, 'none');
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, 'none');
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, '0');
         }
     }
 
-    cleanUpPreview(): void {
+    cleanUp(): void {
         this.isPreviewing = false;
         this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.svgReference, this.drawRectangle);
@@ -124,17 +121,15 @@ export class RectangleToolService extends AbstractShapeToolService {
         const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangleX.toString());
         this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangleY.toString());
-        this.renderer.setAttribute(drawRectangle, 'width', this.drawRectangleWidth.toString());
-        this.renderer.setAttribute(drawRectangle, 'height', this.drawRectangleHeight.toString());
-        this.renderer.setAttribute(el, 'stroke-width', this.userStrokeWidth.toString());
-        this.renderer.setAttribute(el, 'fill', '#' + this.userFillColor);
-        this.renderer.setAttribute(el, 'stroke', '#' + this.userStrokeColor);
+        this.renderer.setAttribute(drawRectangle, HTMLAttribute.width, this.drawRectangleWidth.toString());
+        this.renderer.setAttribute(drawRectangle, HTMLAttribute.height, this.drawRectangleHeight.toString());
+        this.userFillColor === 'none'
+            ? this.renderer.setAttribute(el, HTMLAttribute.fill, this.userFillColor)
+            : this.renderer.setAttribute(el, HTMLAttribute.fill, '#' + this.userFillColor);
 
-        const currentDrawStackLength = this.drawStack.getDrawStackLength();
-        drawRectangle.addEventListener('mousedown', (event: MouseEvent) => {
-            this.drawStack.changeTargetElement(new StackTargetInfo(currentDrawStackLength, ToolName.Rectangle));
-        });
-
+        this.renderer.setAttribute(el, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Rectangle);
         this.renderer.appendChild(el, drawRectangle);
         this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
@@ -169,12 +164,6 @@ export class RectangleToolService extends AbstractShapeToolService {
             );
         }
 
-        if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (-(minLength - this.userStrokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'width', (minLength - this.userStrokeWidth).toString());
-        }
-
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
@@ -189,25 +178,22 @@ export class RectangleToolService extends AbstractShapeToolService {
             );
         }
 
-        if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (-(minLength - this.userStrokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, 'height', (minLength - this.userStrokeWidth).toString());
-        }
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, Math.abs((minLength - this.userStrokeWidth)).toString());
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, Math.abs((minLength - this.userStrokeWidth)).toString());
     }
 
     updateTraceType(traceType: string) {
         this.traceType = traceType;
         switch (traceType) {
             case TraceType.Outline: {
-                this.userFillColor = 'ffffff00';
+                this.userFillColor = 'none';
                 this.userStrokeColor = this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
             case TraceType.Full: {
                 this.userFillColor = this.fillColor;
-                this.userStrokeColor = 'ffffff00';
+                this.userStrokeColor = 'none';
                 this.userStrokeWidth = 0;
                 break;
             }
@@ -265,7 +251,7 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (button === Mouse.LeftButton && this.isIn && this.isValideRectangle()) {
             this.createSVG();
         }
-        this.cleanUpPreview();
+        this.cleanUp();
     }
 
     onMouseEnter(event: MouseEvent): void {

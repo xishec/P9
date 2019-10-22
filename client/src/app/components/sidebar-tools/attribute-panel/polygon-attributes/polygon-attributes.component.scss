@@ -1,0 +1,33 @@
+#container {
+    padding: 30px 40px;
+    padding-bottom: 0px;
+
+    #attribute-header {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .attribute {
+        padding-top: 30px;
+    }
+}
+
+.mat-slider-horizontal {
+    width: 150px;
+}
+
+#nbVertices {
+    .mat-slider-horizontal {
+        width: 120px;
+    }
+}
+
+.small {
+    margin-left: 10px;
+    width: 25%;
+}
+
+.small-polygon {
+    margin-left: 10px;
+    width: 30%;
+}

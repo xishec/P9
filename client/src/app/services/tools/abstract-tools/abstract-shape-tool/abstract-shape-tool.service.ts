@@ -1,5 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
+import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
 
@@ -26,6 +27,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     abstract onMouseLeave(event: MouseEvent): void;
     abstract onKeyDown(event: KeyboardEvent): void;
     abstract onKeyUp(event: KeyboardEvent): void;
+    abstract cleanUp(): void;
     abstract createSVG(): void;
 
     get previewRectangleX(): number {
@@ -52,25 +54,25 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         if (deltaX < 0) {
             deltaX *= -1;
             this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - deltaX).toString());
-            this.renderer.setAttribute(this.previewRectangle, 'width', deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, deltaX.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
-            this.renderer.setAttribute(this.previewRectangle, 'width', deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, deltaX.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
             this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - deltaY).toString());
-            this.renderer.setAttribute(this.previewRectangle, 'height', deltaY.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, deltaY.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
-            this.renderer.setAttribute(this.previewRectangle, 'height', deltaY.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, deltaY.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, 'fill', 'white');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.fill, 'white');
         this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.previewRectangle, 'stroke', 'black');
-        this.renderer.setAttribute(this.previewRectangle, 'stroke-dasharray', '5 5');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.stroke, 'black');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.stroke_dasharray, '5 5');
     }
 }
