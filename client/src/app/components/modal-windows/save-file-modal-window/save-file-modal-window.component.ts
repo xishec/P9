@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { take, filter } from 'rxjs/operators';
+
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { take, filter } from 'rxjs/operators';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 
 @Component({

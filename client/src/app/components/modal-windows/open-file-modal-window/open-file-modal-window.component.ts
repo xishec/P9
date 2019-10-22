@@ -107,7 +107,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
-        private drawingLoaderService: DrawingLoaderService,
+        private drawingLoaderService: DrawingLoaderService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -127,7 +127,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     } else {
                         return true;
                     }
-                }),
+                })
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
@@ -164,7 +164,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
             let selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name == this.selectedOption,
+                (drawing) => drawing.name == this.selectedOption
             ) as Drawing;
 
             this.drawingLoaderService.currentDrawing.next(selectedDrawing);
@@ -188,30 +188,28 @@ export class OpenFileModalWindowComponent implements OnInit {
 
         return `0 0 ${width} ${height}`;
     }
+
     getWidth(drawingName: string): string {
         let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
         let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
-        if (width > height) {
-            return '100%';
-        }
-        return '60px';
+        return width > height ? '100%' : '60px';
     }
+
     getHeight(drawingName: string): string {
         let i: number = this.findIndexByName(drawingName);
         let height: number = this.drawingsFromServer[i].drawingInfo.height;
         let width: number = this.drawingsFromServer[i].drawingInfo.width;
 
-        if (width < height) {
-            return '100%';
-        }
-        return '60px';
+        return width < height ? '100%' : '60px';
     }
+
     getSVG(drawingName: string): string {
         let i: number = this.findIndexByName(drawingName);
         return this.drawingsFromServer[i].svg;
     }
+
     findIndexByName(drawingName: string): number {
         let drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
             return drawing.name === drawingName;
