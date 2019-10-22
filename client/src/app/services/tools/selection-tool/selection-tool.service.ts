@@ -581,6 +581,7 @@ export class SelectionToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
         this.isTheCurrentTool = true;
     }
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {

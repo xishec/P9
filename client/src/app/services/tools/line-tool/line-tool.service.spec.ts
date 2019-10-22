@@ -2,6 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+// tslint:disable-next-line: max-line-length
 import { createKeyBoardEvent, createMockSVGCircle, createMockSVGGElement, createMockSVGLine, createMouseEvent } from 'src/classes/test-helpers';
 import { Keys, Mouse } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';

@@ -243,8 +243,10 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.isIn = false;
     }
 
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
 
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
 
     cleanUp(): void {
