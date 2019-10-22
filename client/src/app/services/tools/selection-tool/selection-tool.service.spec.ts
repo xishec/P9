@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material';
 import { Renderer2, ElementRef } from '@angular/core';
-import { TestBed, getTestBed, fakeAsync } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
 import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement, createMockSVGCircle } from 'src/classes/test-helpers';
@@ -724,15 +724,37 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('handleRightMouseUp', () => {
+    it('handleRightMouseUp should call computeSelectionBox if isSelecting', () => {
+        service.isSelecting = true;
+        const spy = spyOn(service, 'computeSelectionBox');
 
+        service.handleRightMouseUp();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('handleRightMouseUp should change isOnTarget to false if isOnTarget', () => {
+        service.isOnTarget = true;
+        service.isSelecting = false;
 
+        service.handleRightMouseUp();
+
+        expect(service.isOnTarget).toBeFalsy();
     });
 
-    it('', () => {
+    it('onMouseUp should call handleLeftMouseUp if event.button is Left Button', () => {
+        const spy = spyOn(service, 'handleLeftMouseUp');
 
+        service.onMouseUp(MOCK_LEFT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('onMouseUp should call handleRightMouseUp if event.button is Right Button', () => {
+        const spy = spyOn(service, 'handleRightMouseUp');
+
+        service.onMouseUp(MOCK_RIGHT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
     });
 });
