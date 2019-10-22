@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
+
+import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
