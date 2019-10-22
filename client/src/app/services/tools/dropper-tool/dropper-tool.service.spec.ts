@@ -178,4 +178,16 @@ fdescribe('DropperToolService', () => {
         expect(service.isIn).toEqual(false);
     });
 
+    it('should return undefined if onKeyDown is not implemented', () => {
+        expect(service.onKeyDown(onAltKeyDown)).toBeUndefined();
+    });
+
+    it('should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onKeyUp(onAltKeyDown)).toBeUndefined();
+    });
+
+    it('should return undefined if cleanUp is not implemented', () => {
+        expect(service.cleanUp()).toBeUndefined();
+    });
+
 });
