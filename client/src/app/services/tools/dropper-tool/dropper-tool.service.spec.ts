@@ -2,17 +2,18 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { Renderer2, ElementRef } from '@angular/core';
-//import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers';
 //import { Keys } from 'src/constants/constants';
 import { MatDialog } from '@angular/material';
+import { createMouseEvent } from 'src/classes/test-helpers';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 fdescribe('DropperToolService', () => {
     //const mockDrawRect: MockRect = new MockRect();
 
     let injector: TestBed;
     let service: DropperToolService;
-    // let positiveMouseEvent: MouseEvent;
-    // let negativeMouseEvent: MouseEvent;
+    let positiveMouseEvent: MouseEvent;
+    let negativeMouseEvent: MouseEvent;
     // let onAltKeyDown: KeyboardEvent;
     // let onOtherKeyDown: KeyboardEvent;
 
@@ -20,8 +21,7 @@ fdescribe('DropperToolService', () => {
     // let spyOnStampHeight: jasmine.Spy;
     // let spyOnSetAttribute: jasmine.Spy;
     // let spyOnAppendChild: jasmine.Spy;
-    // let spyOnRemoveChild: jasmine.Spy;
-    let spyOnCreateElement: jasmine.Spy;
+    let spyOnSetProperty: jasmine.Spy;
     // let spyOnGetContext: jasmine.Spy;
 
     beforeEach(() => {
@@ -36,21 +36,23 @@ fdescribe('DropperToolService', () => {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
-                            if(elem === 'canvas') {
+                            if (elem === 'canvas') {
                                 const mockCanvas = {
                                     // functions and values of HTMLCanvasElement needed
-                                }
-                                return mockCanvas as HTMLCanvasElement;
+                                    getContext: () => null,
+                                };
+                                return (mockCanvas as unknown) as HTMLCanvasElement;
                             } else {
                                 const mockImg = {
                                     // functions and values of HTMLImageElement
-                                }
+                                };
                                 return mockImg as HTMLImageElement;
                             }
                         },
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        setProperty: () => null,
                     },
                 },
                 {
@@ -81,16 +83,15 @@ fdescribe('DropperToolService', () => {
         injector = getTestBed();
         service = injector.get(DropperToolService);
 
-        // positiveMouseEvent = createMouseEvent(10, 10, 0);
-        //negativeMouseEvent = createMouseEvent(-10, -10, 0);
+        positiveMouseEvent = createMouseEvent(10, 10, 0);
+        negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
         // onAltKeyDown = createKeyBoardEvent(Keys.Alt);
         // onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
 
         // spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         // spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        // spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
-        spyOnCreateElement = spyOn(service.renderer, 'createElement').and.returnValue(HTMLCanvasElement);
+        spyOnSetProperty = spyOn(service.renderer, 'setProperty').and.returnValue();
         //spyOnGetContext = spyOn(service.canvas, 'getContext').and.returnValue(new CanvasRenderingContext2D());
 
         // HTMLCanvasElement.prototype.getContext = () => {
@@ -106,9 +107,20 @@ fdescribe('DropperToolService', () => {
     });
 
     it('should be created', () => {
-        //const service: DropperToolService = TestBed.get(DropperToolService);
         expect(service).toBeTruthy();
-        //expect(spyOnGetContext).toBeDefined();
-        expect(spyOnCreateElement).toBeDefined();
+    });
+
+    it('should return true is the coordinates of the mouse are positive', () => {
+        expect(service.verifyPosition(positiveMouseEvent)).toBeTruthy();
+    });
+
+    it('should return false is the coordinates of the mouse are negative', () => {
+        expect(service.verifyPosition(negativeMouseEvent)).toBeFalsy();
+    });
+
+    it('should initialize the attribute colorTool to be the colorToolService', () => {
+        service.initializeColorToolService(new ColorToolService());
+
+        expect(service.colorTool).toEqual(new ColorToolService());
     });
 });
