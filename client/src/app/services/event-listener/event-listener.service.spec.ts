@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { EventListenerService } from '../event-listener/event-listener.service';
-import { ElementRef, Type } from '@angular/core';
+import { ElementRef, Type, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 describe('EventListenerService', () => {
@@ -21,6 +21,14 @@ describe('EventListenerService', () => {
                         }
 
                     }
+                },
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                        setAttribute: () => null,
+                        appendChild: () => null,
+                    },
                 },
                 {
                     provide: MatDialog,

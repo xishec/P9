@@ -13,6 +13,7 @@ import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
@@ -100,6 +101,7 @@ describe('AppComponent', () => {
                     },
                 },
             ],
+            imports: [HttpClientModule],
             schemas: [NO_ERRORS_SCHEMA],
         }).compileComponents();
     }));
@@ -137,8 +139,9 @@ describe('AppComponent', () => {
     });
 
     it('should not allow shortcut when drawing modal is on or focus on input or welcome window is on', () => {
-        app.displayWelcomeModalWindow = true;
+        app.modalIsDisplayed = true;
         app.isOnInput = false;
+
         expect(app.shouldAllowShortcut()).toBe(false);
     });
 
