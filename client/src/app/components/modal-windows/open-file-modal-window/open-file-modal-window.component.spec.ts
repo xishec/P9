@@ -1,15 +1,15 @@
+import { HttpClientModule } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
 describe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
@@ -137,7 +137,7 @@ describe('OpenFileModalWindowComponent', () => {
     it('should return 100% when width of a drawing sent from the server is bigger than its height', () => {
         component.drawingsFromServer = [TEST_DRAWING];
 
-        let i: number = 0;
+        const i = 0;
         component.drawingsFromServer[i].drawingInfo.height = 50;
         component.drawingsFromServer[i].drawingInfo.width = 100;
 
@@ -147,7 +147,7 @@ describe('OpenFileModalWindowComponent', () => {
     it('should return 60px when width of a drawing sent from the server is smaller than its height', () => {
         component.drawingsFromServer = [TEST_DRAWING];
 
-        let i: number = 0;
+        const i = 0;
         component.drawingsFromServer[i].drawingInfo.height = 50;
         component.drawingsFromServer[i].drawingInfo.width = 10;
 
