@@ -3,7 +3,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
-import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement } from 'src/classes/test-helpers';
+import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement, createMockSVGCircle } from 'src/classes/test-helpers';
 import { Mouse } from 'src/constants/constants';
 //import { MockRect } from 'src/classes/test-helpers';
 
@@ -320,7 +320,7 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should call selection.delete if this.selection has el that is in invertSelection', () => {
+    it('applySelectionInvert should call selection.delete if this.selection has el that is in invertSelection', () => {
         const el = createMockSVGGElement();
         service.invertSelection = new Set<SVGGElement>();
         service.invertSelection.add(el);
@@ -335,7 +335,7 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should not call selection.delete if this.selection does not have el that is in invertSelection', () => {
+    it('applySelectionInvert should not call selection.delete if this.selection does not have el that is in invertSelection', () => {
         const el = createMockSVGGElement();
         service.invertSelection = new Set<SVGGElement>();
         service.invertSelection.add(el);
@@ -420,20 +420,57 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('computeSelectionBox should call removeFullSelectionBox is !this.hasSelected', () => {
+        const spy = spyOn(service, 'removeFullSelectionBox');
+        spyOn(service, 'hasSelected').and.returnValue(false);
 
+        service.computeSelectionBox();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('computeSelectionBox should call renderer.setAttribute 4 times is this.hasSelected', () => {
+        spyOn(service, 'hasSelected').and.returnValue(true);
+        spyOn(service, 'findLeftMostCoord').and.returnValue(10);
+        spyOn(service, 'findRightMostCoord').and.returnValue(100);
+        spyOn(service, 'findTopMostCoord').and.returnValue(100);
+        spyOn(service, 'findBottomMostCoord').and.returnValue(10);
+        spyOn(service, 'computeControlPoints').and.returnValue();
 
+        service.computeSelectionBox();
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
     });
 
-    it('', () => {
+    it('computeControlPoints should call setAttribute 16 times : 8 selectionCorner * 2 attributes', () => {
+        let mockSVGRectElement = {
+            x : { baseVal : {value : 10, } },
+            y : { baseVal : { value : 10, } },
+            width : { baseVal : { value : 10, } },
+            height : { baseVal : { value : 10, } },
+        } as SVGRectElement;
 
+        service.selectionBox = mockSVGRectElement; 
+        
+        service.controlPoints = new Array();
+        for (let i = 0; i < 8; i++){
+            let mockSVG = createMockSVGCircle();
+            service.controlPoints.push(mockSVG);
+        }
+
+        service.computeControlPoints();
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(16);
     });
 
-    it('', () => {
+    it('hasSelected return true if this.selection.size > 0', () => {
+        service.selection = new Set();
+        const mockSVGElement = createMockSVGGElement();
+        service.selection.add(mockSVGElement);
 
+        const res = service.hasSelected();
+
+        expect(res).toBeTruthy();
     });
 
     // HANDLERS AND MOUSE EVENTS
