@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
 
 import { Application } from './app';
-import { Server } from './server';
 import { FileManagerController } from './controllers/file-manager.controller';
+import { Server } from './server';
 import Types from './types';
 
 const container: Container = new Container();

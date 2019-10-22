@@ -3,11 +3,10 @@ import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
 import * as express from 'express';
 import { inject, injectable } from 'inversify';
+import * as mongoose from 'mongoose';
 import * as logger from 'morgan';
 import { FileManagerController } from './controllers/file-manager.controller';
 import Types from './types';
-
-const mongoose = require('mongoose');
 
 @injectable()
 export class Application {
