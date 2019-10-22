@@ -1,13 +1,13 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { PolygonToolService } from './polygon-tool.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { MockPolygon, createMouseEvent, MockRect } from 'src/classes/test-helpers';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers';
 import { Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { PolygonToolService } from './polygon-tool.service';
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
@@ -165,7 +165,7 @@ describe('PolygonToolService', () => {
                     default:
                         break;
                 }
-            }
+            },
         );
         polygonTool.userFillColor = 'none';
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
@@ -228,7 +228,7 @@ describe('PolygonToolService', () => {
                     default:
                         break;
                 }
-            }
+            },
         );
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));

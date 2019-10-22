@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { ToolName, HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -11,11 +11,11 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class ColorApplicatorToolService extends AbstractToolService {
-    private currentStackTarget: StackTargetInfo;
+    currentStackTarget: StackTargetInfo;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
-    private isOnTarget = false;
+    isOnTarget = false;
 
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();

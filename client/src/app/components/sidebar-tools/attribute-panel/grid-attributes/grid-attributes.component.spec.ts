@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GridAttributesComponent } from './grid-attributes.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSliderChange } from '@angular/material';
-import { GridSize, GridOpacity } from 'src/constants/tool-constants';
-import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { GridAttributesComponent } from './grid-attributes.component';
 
 describe('GridAttributesComponent', () => {
     let component: GridAttributesComponent;

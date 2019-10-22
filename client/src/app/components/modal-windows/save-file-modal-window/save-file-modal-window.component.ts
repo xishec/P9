@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { take, filter } from 'rxjs/operators';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 
 @Component({
@@ -57,7 +57,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     onSubmit(): void {
-        let nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
+        const nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
         this.isSaving = true;
         this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
 

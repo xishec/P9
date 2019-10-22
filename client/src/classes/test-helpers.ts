@@ -10,6 +10,7 @@ export class MockRect {
     addEventListener(): void {}
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class MockPolygon {
     points = '200,10 250,190 160,210';
 }
@@ -19,7 +20,7 @@ export const createMouseEvent = (
     y: number,
     buttonPressed: number,
     offSetx?: number,
-    offSety?: number
+    offSety?: number,
 ): MouseEvent => {
     const mouseEvent = {
         clientX: x,
@@ -64,7 +65,7 @@ export const createMockSVGGElementWithAttribute = (att: string): any => {
                 return '10';
             } else {
                 return false;
-            };
+            }
         },
     };
     return (mockSVGElement as unknown) as SVGGElement;

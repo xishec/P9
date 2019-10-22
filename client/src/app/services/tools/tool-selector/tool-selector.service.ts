@@ -3,9 +3,11 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -16,10 +18,8 @@ import { LineToolService } from '../line-tool/line-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
-import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
-import { ModalManagerService } from '../../modal-manager/modal-manager.service';
-import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
+import { StampToolService } from '../stamp-tool/stamp-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -39,7 +39,7 @@ export class ToolSelectorService {
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
-    modalIsDisplayed: boolean = false;
+    modalIsDisplayed = false;
 
     constructor(
         private colorToolService: ColorToolService,

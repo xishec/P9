@@ -1,23 +1,23 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { filter } from 'rxjs/operators';
+import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
+import { Message } from '../../../../../common/communication/message';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
-import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
-import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
-import { Message } from '../../../../../common/communication/message';
-import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-work-zone',
@@ -54,11 +54,21 @@ export class WorkZoneComponent implements OnInit {
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
 
-        this.eventListenerService = new EventListenerService(this.refSVG, this.toolSelector, this.gridToolService, this.shortCutManagerService, this.modalManagerService, this.renderer);
+        this.eventListenerService = new EventListenerService(
+            this.refSVG,
+            this.toolSelector,
+            this.gridToolService,
+            this.shortCutManagerService,
+            this.modalManagerService,
+            this.renderer);
         this.eventListenerService.addEventListeners();
 
+        this.toolSelector.currentToolName.subscribe((toolName) => {
+            this.toolName = toolName;
+        });
+
         this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
-            if (selectedDrawing.svg === '') return;
+            if (selectedDrawing.svg === '') { return; }
 
             this.drawingInfo = selectedDrawing.drawingInfo;
             this.drawingModalWindowService.changeDrawingInfo(
@@ -72,18 +82,18 @@ export class WorkZoneComponent implements OnInit {
 
             this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
 
-            let idStack = Object.values(selectedDrawing.idStack);
+            const idStack = Object.values(selectedDrawing.idStack);
             idStack.forEach((id) => {
-                let children: Array<SVGElement> = Array.from(this.refSVG.nativeElement.children) as Array<SVGElement>;
-                let child: SVGElement = children.filter((child) => {
-                    return child.getAttribute('id_element') === id;
+                const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
+                const child: SVGElement = children.filter((filterChild) => {
+                    return filterChild.getAttribute('id_element') === id;
                 })[0];
                 this.drawStack.push(child as SVGAElement);
             });
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
-            if (drawingInfo.width === 0 || drawingInfo.height === 0) return;
+            if (drawingInfo.width === 0 || drawingInfo.height === 0) { return; }
             this.empty = false;
             this.eventListenerService.isWorkZoneEmpty = false;
             this.drawingInfo = drawingInfo;
@@ -96,7 +106,7 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            if (nameAndLabels.name.length === 0) return;
+            if (nameAndLabels.name.length === 0) { return; }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
@@ -114,7 +124,7 @@ export class WorkZoneComponent implements OnInit {
                     filter((subject) => {
                         if (subject === undefined) {
                             this.drawingSaverService.currentErrorMesaage.next(
-                                "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                                'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                             );
                             this.drawingSaverService.currentIsSaved.next(false);
                             return false;
