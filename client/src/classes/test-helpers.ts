@@ -51,6 +51,25 @@ export const createMockSVGLine = (): any => {
     return (mockLine as unknown) as SVGLineElement;
 };
 
+export const createMockSVGGElement = (): any => {
+    const mockSVGElement = {};
+    return (mockSVGElement as unknown) as SVGGElement;
+};
+
+export const createMockSVGGElementWithAttribute = (att: string): any => {
+    const attribute = att;
+    const mockSVGElement = {
+        getAttribute : (attToGet: string) => {
+            if (attToGet === attribute) {
+                return '10';
+            } else {
+                return false;
+            };
+        },
+    };
+    return (mockSVGElement as unknown) as SVGGElement;
+};
+
 export const createMockFilter = (): SVGFilterElement => {
     const mockFilter = {};
     return (mockFilter as unknown) as SVGFilterElement;

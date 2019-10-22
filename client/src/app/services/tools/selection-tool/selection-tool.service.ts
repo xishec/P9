@@ -1,8 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS, Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -30,6 +31,7 @@ export class SelectionToolService extends AbstractToolService {
     selectionBox: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     controlPoints: SVGCircleElement[] = new Array(8);
     selection: Set<SVGGElement> = new Set();
+    invertSelection: Set<SVGGElement> = new Set();
 
     constructor(
         public drawStack: DrawStackService,
@@ -64,14 +66,14 @@ export class SelectionToolService extends AbstractToolService {
         for (let i = 0; i < 8; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
             this.renderer.setAttribute(this.controlPoints[i], 'r', this.CONTROL_POINT_RADIUS.toString());
-            this.renderer.setAttribute(this.controlPoints[i], 'stroke', 'blue');
-            this.renderer.setAttribute(this.controlPoints[i], 'fill', 'white');
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, 'blue');
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, 'white');
         }
     }
 
     initSelectionBox(): void {
-        this.renderer.setAttribute(this.selectionBox, 'stroke', 'blue');
-        this.renderer.setAttribute(this.selectionBox, 'fill', 'none');
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, 'blue');
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.fill, 'none');
     }
 
     updateSelectionRectangle(): void {
@@ -85,7 +87,7 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseX.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, 'width', deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.fill, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
@@ -94,12 +96,12 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseY.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, 'height', deltaY.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, 'fill', 'white');
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.fill, 'white');
         this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, 'stroke', 'black');
-        this.renderer.setAttribute(this.selectionRectangle, 'stroke-dasharray', '5 5');
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.stroke, 'black');
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
     getDOMRect(el: SVGGElement): DOMRect {
@@ -107,8 +109,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute('stroke-width')) {
-            return parseInt(el.getAttribute('stroke-width') as string, 10);
+        if (el.getAttribute(HTMLAttribute.stroke_width)) {
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
         }
 
         return 0;
@@ -169,31 +171,8 @@ export class SelectionToolService extends AbstractToolService {
             elBottom = elBottom + halfStrokeWidth;
         }
 
-        const boxTopLeftCorner = {
-            x: boxLeft,
-            y: boxTop,
-        };
-
-        const boxBottomRightCorner = {
-            x: boxRight,
-            y: boxBottom,
-        };
-
-        const elTopLeftCorner = {
-            x: elLeft,
-            y: elTop,
-        };
-
-        const elBottomRightCorner = {
-            x: elRight,
-            y: elBottom,
-        };
-
-        if (elBottomRightCorner.x < boxTopLeftCorner.x || boxBottomRightCorner.x < elTopLeftCorner.x) {
-            return false;
-        }
-
-        if (elBottomRightCorner.y < boxTopLeftCorner.y || boxBottomRightCorner.y < elTopLeftCorner.y) {
+        // Check all cases where el and box don't touch each other
+        if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
             return false;
         }
 
@@ -222,47 +201,27 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     applySelectionInvert(): void {
-        if (!this.hasSelected()) {
-            for (const el of this.drawStack.drawStack) {
-                this.selection.add(el);
-            }
-            return;
-        }
-
-        const invertedSelection: Set<SVGGElement> = new Set();
-
-        for (const el of this.drawStack.drawStack) {
-            if (!this.selection.has(el)) {
-                invertedSelection.add(el);
+        for(const el of this.invertSelection) {
+            if(this.selection.has(el)) {
+                this.selection.delete(el);
             }
         }
-
-        this.selection = invertedSelection;
     }
 
-    singlyInvertSelect(stackPosition?: number): void {
-        if (stackPosition === undefined) {
+    singlyInvertSelect(stackPosition: number): void {
+        if (!this.drawStack.drawStack[stackPosition]) {
             return;
         }
 
-        if (!this.selection.has(this.drawStack.drawStack[stackPosition])) {
-            for (const el of this.drawStack.drawStack) {
-                if (el !== this.drawStack.drawStack[stackPosition]) {
-                    this.selection.add(el);
-                }
-            }
-        } else {
-            this.selection.delete(this.drawStack.drawStack[stackPosition]);
-        }
+        this.selection.delete(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
 
         if (this.selection.size === 0) {
             this.removeFullSelectionBox();
             return;
         }
-        this.removeFullSelectionBox();
+
         this.computeSelectionBox();
-        this.appendFullSelectionBox();
     }
 
     checkSelection(): void {
@@ -272,9 +231,17 @@ export class SelectionToolService extends AbstractToolService {
             const elBox = this.getDOMRect(el);
 
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-                this.selection.add(el);
+                if (this.isLeftMouseDown) {
+                    this.selection.add(el);
+                } else if (this.isRightMouseDown) {
+                    this.invertSelection.add(el);
+                }
             } else {
-                this.selection.delete(el);
+                if (this.isLeftMouseDown) {
+                    this.selection.delete(el);
+                } else if (this.isRightMouseDown) {
+                    this.invertSelection.delete(el);
+                }
             }
         }
     }
@@ -339,82 +306,82 @@ export class SelectionToolService extends AbstractToolService {
 
         this.renderer.setAttribute(this.selectionBox, 'x', left.toString());
         this.renderer.setAttribute(this.selectionBox, 'y', top.toString());
-        this.renderer.setAttribute(this.selectionBox, 'width', (right - left).toString());
-        this.renderer.setAttribute(this.selectionBox, 'height', (bottom - top).toString());
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.width, (right - left).toString());
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.height, (bottom - top).toString());
 
         this.computeControlPoints();
     }
 
     computeControlPoints(): void {
         // Top left corner
-        this.renderer.setAttribute(this.controlPoints[0], 'cx', this.selectionBox.x.baseVal.value.toString());
-        this.renderer.setAttribute(this.controlPoints[0], 'cy', this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[0], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[0], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
 
         // Top side
         this.renderer.setAttribute(
             this.controlPoints[1],
-            'cx',
+            HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
         );
-        this.renderer.setAttribute(this.controlPoints[1], 'cy', this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[1], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
 
         // Top right corner
         this.renderer.setAttribute(
             this.controlPoints[2],
-            'cx',
+            HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
         );
-        this.renderer.setAttribute(this.controlPoints[2], 'cy', this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[2], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
 
         // Right side
         this.renderer.setAttribute(
             this.controlPoints[3],
-            'cx',
+            HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
         );
         this.renderer.setAttribute(
             this.controlPoints[3],
-            'cy',
+            HTMLAttribute.cy,
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
         );
 
         // Bottom right corner
         this.renderer.setAttribute(
             this.controlPoints[4],
-            'cx',
+            HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
         );
         this.renderer.setAttribute(
             this.controlPoints[4],
-            'cy',
+            HTMLAttribute.cy,
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
         );
 
         // Bottom side
         this.renderer.setAttribute(
             this.controlPoints[5],
-            'cx',
+            HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
         );
         this.renderer.setAttribute(
             this.controlPoints[5],
-            'cy',
+            HTMLAttribute.cy,
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
         );
 
         // Bottom left corner
-        this.renderer.setAttribute(this.controlPoints[6], 'cx', this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[6], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
         this.renderer.setAttribute(
             this.controlPoints[6],
-            'cy',
+            HTMLAttribute.cy,
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
         );
 
         // Left side
-        this.renderer.setAttribute(this.controlPoints[7], 'cx', this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(this.controlPoints[7], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
         this.renderer.setAttribute(
             this.controlPoints[7],
-            'cy',
+            HTMLAttribute.cy,
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
         );
     }
@@ -533,7 +500,7 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isOnTarget) {
             this.singlyInvertSelect(this.currentTarget);
         } else {
-            this.clearSelection();
+            this.invertSelection.clear();
             this.startSelection();
         }
     }
@@ -574,6 +541,7 @@ export class SelectionToolService extends AbstractToolService {
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
+        this.isOnTarget = false;
     }
 
     handleRightMouseUp(): void {
