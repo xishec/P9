@@ -8,7 +8,7 @@ describe('EventListenerService', () => {
 
     let injector: TestBed;
     let service: EventListenerService;
-    let elementRef: ElementRef<SVGElement>
+    let rendererMock: Renderer2;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -28,6 +28,7 @@ describe('EventListenerService', () => {
                         createElement: () => null,
                         setAttribute: () => null,
                         appendChild: () => null,
+                        listen: () => null,
                     },
                 },
                 {
@@ -41,7 +42,8 @@ describe('EventListenerService', () => {
 
         injector = getTestBed();
         service = TestBed.get(EventListenerService);
-        elementRef = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+
+        rendererMock = injector.get<Renderer2>(Renderer2 as (unknown) as Type<Renderer2>);
     });
 
     
@@ -66,11 +68,11 @@ describe('EventListenerService', () => {
         expect(result).toBeFalsy();
     });
     
-    it('addEventListeners should call addEventListener 7 times', () => {
-        const spyOnAddEventListener = spyOn(elementRef.nativeElement, 'addEventListener');
+    it('addEventListeners should call listen 9 times', () => {
+        const spyOnListen = spyOn(rendererMock, 'listen');
 
         service.addEventListeners();
 
-        expect(spyOnAddEventListener).toHaveBeenCalledTimes(7);
+        expect(spyOnListen).toHaveBeenCalledTimes(9);
     })
 });
