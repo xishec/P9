@@ -111,7 +111,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
-        private drawingLoaderService: DrawingLoaderService
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -125,13 +125,13 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
+                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
                         this.isLoading = false;
                         return false;
                     } else {
                         return true;
                     }
-                })
+                }),
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
@@ -168,7 +168,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
             const selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name === this.selectedOption
+                (drawing) => drawing.name === this.selectedOption,
             ) as Drawing;
 
             this.drawingLoaderService.currentDrawing.next(selectedDrawing);

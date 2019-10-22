@@ -1,15 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormsModule, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
 
-import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
+import { BehaviorSubject } from 'rxjs';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { MAX_NB_LABELS } from 'src/constants/constants';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { BehaviorSubject } from 'rxjs';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { MAX_NB_LABELS } from 'src/constants/constants';
+import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
 
 describe('SaveFileModalWindowComponent', () => {
     let component: SaveFileModalWindowComponent;
@@ -46,7 +46,7 @@ describe('SaveFileModalWindowComponent', () => {
                         {
                             provide: ModalManagerService,
                             useValue: {
-                                setModalIsDisplayed: ()=> null,
+                                setModalIsDisplayed: () => null,
                             },
                         },
                         {
@@ -67,7 +67,7 @@ describe('SaveFileModalWindowComponent', () => {
 
         component.initializeForm();
         form = component.saveFileModalForm;
-        
+
         drawingSaverService = fixture.debugElement.injector.get(DrawingSaverService);
     }));
 
@@ -112,7 +112,7 @@ describe('SaveFileModalWindowComponent', () => {
     });
 
     it(`should push the new label if user selects less than ${MAX_NB_LABELS} labels`, () => {
-        const newLabel: string = 'test-label';
+        const newLabel = 'test-label';
         component.drawingLabels = ['a', 'b', 'c'];
         component.selectedLabels = ['a', 'b', 'c'];
 
