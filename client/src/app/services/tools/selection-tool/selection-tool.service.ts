@@ -87,7 +87,7 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseX.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.fill, deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
