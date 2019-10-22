@@ -1,6 +1,6 @@
-import { assert } from "chai";
+import { assert } from 'chai';
 
-it("should complete this test", (done) => {
+it('should complete this test', (done) => {
     assert.ok(true);
     done();
 });

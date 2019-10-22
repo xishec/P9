@@ -1,8 +1,8 @@
-import { inject, injectable } from "inversify";
-import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
-import Types from "../types";
-import { DateService } from "./date.service";
+import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
+import { Message } from '../../../common/communication/Message';
+import Types from '../types';
+import { DateService } from './date.service';
 
 @injectable()
 export class IndexService {
@@ -10,8 +10,8 @@ export class IndexService {
 
     about(): Message {
         return {
-            title: "This is merely a test",
-            body: "Lorem ipsum........",
+            title: 'This is merely a test',
+            body: 'Lorem ipsum........',
         };
     }
 
@@ -20,8 +20,8 @@ export class IndexService {
             .currentTime()
             .then((timeMessage: Message) => {
                 return {
-                    title: "Hello world",
-                    body: "Time is " + timeMessage.body,
+                    title: 'Hello world',
+                    body: 'Time is ' + timeMessage.body,
                 };
             })
             .catch((error: unknown) => {
