@@ -172,5 +172,5 @@ describe('TracingToolService', () => {
         service.cleanUp();
 
         expect(spy).toHaveBeenCalled();
-    })
+    });
 });

@@ -5,9 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 describe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
@@ -37,7 +37,7 @@ describe('ColorApplicatorToolService', () => {
                         getElementByPosition : () => {
                             const mockSVGGelement = {};
                             return mockSVGGelement as SVGGElement;
-                        }
+                        },
                     },
                 },
             ],
@@ -67,7 +67,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo  = {
             targetPosition: 0,
             toolName: ToolName.Brush,
-        }
+        };
         service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
@@ -81,7 +81,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo  = {
             targetPosition: 0,
             toolName: ToolName.Rectangle,
-        }
+        };
         service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
@@ -94,7 +94,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo  = {
             targetPosition: 0,
             toolName: ToolName.Brush,
-        }
+        };
         service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
@@ -108,7 +108,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo  = {
             targetPosition: 0,
             toolName: ToolName.Rectangle,
-        }
+        };
         service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);

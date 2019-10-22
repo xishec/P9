@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
-import { WelcomeModalWindowComponent } from './welcome-modal-window.component';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { WelcomeModalWindowComponent } from './welcome-modal-window.component';
 
 describe('WelcomeModalWindowComponent', () => {
     let component: WelcomeModalWindowComponent;

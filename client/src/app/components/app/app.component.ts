@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { WelcomeModalWindowComponent } from '../../components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
-import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 @Component({
     selector: 'app-root',

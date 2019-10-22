@@ -116,9 +116,9 @@ describe('ToolSelectorService', () => {
 
     it('should return polygon tool', () => {
         expect(service.getPolygonTool()).toEqual(service[`polygoneTool`]);
-    }); 
+    });
 
     it('should return line tool', () => {
         expect(service.getLineTool()).toEqual(service[`lineToolService`]);
-    }); 
+    });
 });

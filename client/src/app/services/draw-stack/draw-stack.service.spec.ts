@@ -14,7 +14,7 @@ describe('DrawStackService', () => {
         getAttribute : () => null,
         children : {
             length : 0,
-        }
+        },
     };
 
     beforeEach(() => {

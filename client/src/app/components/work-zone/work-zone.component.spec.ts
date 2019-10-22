@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { HttpClientModule } from '@angular/common/http';
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
@@ -13,7 +14,6 @@ import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
-import { HttpClientModule } from '@angular/common/http';
 
 // const MOCK_X = 10;
 // const MOCK_Y = 10;

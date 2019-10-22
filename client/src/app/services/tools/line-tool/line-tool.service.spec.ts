@@ -1,13 +1,13 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { LineToolService } from './line-tool.service';
-import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockSVGLine, createMockSVGGElement } from 'src/classes/test-helpers';
-import { Mouse, Keys } from 'src/constants/constants';
+import { createKeyBoardEvent, createMockSVGCircle, createMockSVGGElement, createMockSVGLine, createMouseEvent } from 'src/classes/test-helpers';
+import { Keys, Mouse } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { LineToolService } from './line-tool.service';
 
 describe('LineToolService', () => {
 
@@ -15,7 +15,7 @@ describe('LineToolService', () => {
     let service: LineToolService;
     let mockLeftButton: MouseEvent;
     let rendererMock: Renderer2;
-    let drawStackMock: DrawStackService;    
+    let drawStackMock: DrawStackService;
 
     const BOUNDLEFT = 0;
     const BOUNDTOP = 0;
@@ -53,12 +53,12 @@ describe('LineToolService', () => {
                                     top: boundtop,
                                 };
                                 return boundRect;
-                            }
+                            },
                         },
-                    }
-                }
-            ]
-        })
+                    },
+                },
+            ],
+        });
 
         injector = getTestBed();
         service = injector.get(LineToolService);
@@ -66,9 +66,9 @@ describe('LineToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
 
-        mockLeftButton = createMouseEvent(0,0,Mouse.LeftButton);
+        mockLeftButton = createMouseEvent(0, 0, Mouse.LeftButton);
     });
-    
+
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
@@ -146,7 +146,7 @@ describe('LineToolService', () => {
 
         expect(service.isMouseDown).toBeFalsy();
     });
-    
+
     it('should call previewLine when onMouseMove with isDrawing and !isMouseDown', () => {
         service.isDrawing = true;
         service.isMouseDown = false;
@@ -183,7 +183,7 @@ describe('LineToolService', () => {
         const mockBackspace = createKeyBoardEvent(Keys.Backspace);
 
         service.onKeyDown(mockBackspace);
-        
+
         const arrayLengthAfter = service.pointsArray.length;
         expect(arrayLengthAfter).toBe(arrayLengthBefore - 1);
         expect(service.pointsArray).not.toContain(pointToPop);
@@ -237,6 +237,7 @@ describe('LineToolService', () => {
         expect(spyOnPointsArrayPush).toHaveBeenCalled();
     });
 
+    // tslint:disable-next-line: max-line-length
     it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is Dotted_line', () => {
         service.currentStrokeType = LineStrokeType.Dotted_line;
         service.currentJointType = LineJointType.Straight;
@@ -244,9 +245,10 @@ describe('LineToolService', () => {
         service.currentStrokeWidth = mockCurrentStrokeWidth;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0,0);
+        service.startLine(0, 0);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-dasharray', `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth/2}`);
+        // tslint:disable-next-line: max-line-length
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-dasharray', `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth / 2}`);
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
@@ -254,7 +256,7 @@ describe('LineToolService', () => {
         service.currentJointType = LineJointType.Straight;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0,0);
+        service.startLine(0, 0);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linecap', 'round');
     });
@@ -263,7 +265,7 @@ describe('LineToolService', () => {
         service.currentJointType = LineJointType.Circle;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0,0);
+        service.startLine(0, 0);
 
         expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linejoin', 'round');
     });
@@ -277,7 +279,7 @@ describe('LineToolService', () => {
         const stringPointsArray = service.arrayToStringLine();
         service.currentLine = MOCK_LINE;
 
-        service.previewLine(x,y);
+        service.previewLine(x, y);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray} ${mousePosition}`);
     });
@@ -287,7 +289,7 @@ describe('LineToolService', () => {
         service.pointsArray.push('0,0');
         service.currentLine = MOCK_LINE;
 
-        service.appendLine(10,10);
+        service.appendLine(10, 10);
 
         const stringPointsArray = service.arrayToStringLine();
         expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray}`);
@@ -296,7 +298,7 @@ describe('LineToolService', () => {
     it('should call renderer.appendChild when appendCircle', () => {
         const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.appendCircle(0,0);
+        service.appendCircle(0, 0);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalled();
     });
@@ -319,7 +321,6 @@ describe('LineToolService', () => {
         service.cleanUp();
 
         expect(spyOnRemoveChild).toHaveBeenCalled();
-    })
-
+    });
 
 });

@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { LineJointType, LineStrokeType, ToolName, HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, LineJointType, LineStrokeType, ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -39,7 +39,7 @@ export class LineToolService extends AbstractToolService {
     constructor(
         private elementRef: ElementRef<SVGElement>,
         private renderer: Renderer2,
-        private drawStack: DrawStackService
+        private drawStack: DrawStackService,
     ) {
         super();
     }
@@ -71,7 +71,7 @@ export class LineToolService extends AbstractToolService {
     }
 
     getColorAndOpacity(): void {
-        this.currentColor = this.currentColorAndOpacity.slice(0,6);
+        this.currentColor = this.currentColorAndOpacity.slice(0, 6);
         this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
     }
 
@@ -117,7 +117,7 @@ export class LineToolService extends AbstractToolService {
                 this.renderer.setAttribute(
                     this.currentLine,
                     HTMLAttribute.points,
-                    `${this.arrayToStringLine()} ${this.currentMousePosition}`
+                    `${this.arrayToStringLine()} ${this.currentMousePosition}`,
                 );
 
                 if (this.currentJointType === LineJointType.Circle) {
@@ -173,7 +173,7 @@ export class LineToolService extends AbstractToolService {
                 this.renderer.setAttribute(
                     this.currentLine,
                     HTMLAttribute.stroke_dasharray,
-                    `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`
+                    `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`,
                 );
                 break;
             case LineStrokeType.Dotted_circle:
@@ -198,7 +198,7 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.currentLine,
             HTMLAttribute.points,
-            `${this.arrayToStringLine()} ${this.currentMousePosition}`
+            `${this.arrayToStringLine()} ${this.currentMousePosition}`,
         );
     }
 

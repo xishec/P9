@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Pipe, PipeTransform} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
-import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { Message } from '../../../../../../common/communication/message';
-import { Drawing } from '../../../../../../common/communication/Drawing';
-import { GIFS } from 'src/constants/constants';
 import { filter } from 'rxjs/operators';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
+import { GIFS } from 'src/constants/constants';
+import { Drawing } from '../../../../../../common/communication/Drawing';
+import { Message } from '../../../../../../common/communication/message';
 
 // tslint:disable-next-line: max-classes-per-file
 @Pipe({ name: 'toTrustHtml' })
@@ -69,10 +68,10 @@ export class LabelFilter implements PipeTransform {
             return drawings;
         } else {
             labelFilter = labelFilter.toLowerCase().replace(/\s/g, '');
-            let labelsFromFilter = labelFilter.split(',').map(String);
+            const labelsFromFilter = labelFilter.split(',').map(String);
 
             return drawings.filter((drawing: Drawing) => {
-                let checkLabels: boolean = false;
+                let checkLabels = false;
                 labelsFromFilter.forEach((labelFromFilter: string) => {
                     if (
                         drawing.labels.filter((label: string) => {
@@ -99,8 +98,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
-    selectedOption: string = '';
-    drawingOpenSuccess: boolean = true;
+    selectedOption = '';
+    drawingOpenSuccess = true;
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
@@ -126,7 +125,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
+                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -136,7 +135,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
-                    let drawing: Drawing = JSON.parse(el.body);
+                    const drawing: Drawing = JSON.parse(el.body);
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -168,8 +167,8 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
-            let selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name == this.selectedOption,
+            const selectedDrawing: Drawing = this.drawingsFromServer.find(
+                (drawing) => drawing.name === this.selectedOption,
             ) as Drawing;
 
             this.drawingLoaderService.currentDrawing.next(selectedDrawing);
@@ -187,16 +186,16 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     getViewBox(drawingName: string): string {
-        let i: number = this.findIndexByName(drawingName);
-        let height: number = this.drawingsFromServer[i].drawingInfo.height;
-        let width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const i: number = this.findIndexByName(drawingName);
+        const height: number = this.drawingsFromServer[i].drawingInfo.height;
+        const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         return `0 0 ${width} ${height}`;
     }
     getWidth(drawingName: string): string {
-        let i: number = this.findIndexByName(drawingName);
-        let height: number = this.drawingsFromServer[i].drawingInfo.height;
-        let width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const i: number = this.findIndexByName(drawingName);
+        const height: number = this.drawingsFromServer[i].drawingInfo.height;
+        const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         if (width > height) {
             return '100%';
@@ -204,9 +203,9 @@ export class OpenFileModalWindowComponent implements OnInit {
         return '60px';
     }
     getHeight(drawingName: string): string {
-        let i: number = this.findIndexByName(drawingName);
-        let height: number = this.drawingsFromServer[i].drawingInfo.height;
-        let width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const i: number = this.findIndexByName(drawingName);
+        const height: number = this.drawingsFromServer[i].drawingInfo.height;
+        const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         if (width < height) {
             return '100%';
@@ -214,12 +213,12 @@ export class OpenFileModalWindowComponent implements OnInit {
         return '60px';
     }
     getSVG(drawingName: string): string {
-        let i: number = this.findIndexByName(drawingName);
+        const i: number = this.findIndexByName(drawingName);
         return this.drawingsFromServer[i].svg;
     }
     findIndexByName(drawingName: string): number {
         // tslint:disable-next-line: no-shadowed-variable
-        let drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
+        const drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
             return drawing.name === drawingName;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Message } from '../../../../../../common/communication/message';
 import { environment } from 'src/environments/environment';
+import { Message } from '../../../../../../common/communication/message';
 
 @Injectable({
     providedIn: 'root',

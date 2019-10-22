@@ -1,7 +1,7 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
 import { GridToolService } from './grid-tool.service';
-import { GridSize, GRID_SIZE_INCREMENT, GRID_SIZE_DECREMENT, GridOpacity } from 'src/constants/tool-constants';
 
 describe('GridToolService', () => {
     let injector: TestBed;
@@ -66,6 +66,7 @@ describe('GridToolService', () => {
         expect(service.size.value).not.toEqual(OLD_VALUE);
     });
 
+    // tslint:disable-next-line: max-line-length
     it(`incrementSize should call changeSize with argument size + ${GRID_SIZE_INCREMENT} if size + ${GRID_SIZE_INCREMENT}  <= ${GridSize.Max}`, () => {
         const SPY = spyOn(service, 'changeSize');
         service.size.next(GridSize.Default);
@@ -85,6 +86,7 @@ describe('GridToolService', () => {
         expect(SPY).toHaveBeenCalledWith(GridSize.Max);
     });
 
+    // tslint:disable-next-line: max-line-length
     it(`decrementSize should call changeSize with argument size - ${GRID_SIZE_DECREMENT} if size - ${GRID_SIZE_DECREMENT}  >= ${GridSize.Min}`, () => {
         const SPY = spyOn(service, 'changeSize');
         service.size.next(GridSize.Default);

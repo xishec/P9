@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Mouse, SVG_NS } from 'src/constants/constants';
-import { ToolName, TraceType, PolygonRadiusCorrection, PolygonOffsetAngles, HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, PolygonOffsetAngles, PolygonRadiusCorrection, ToolName, TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -49,7 +49,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     setRadiusCorrection() {
-        let correction: number = PolygonRadiusCorrection.get(this.nbVertices) as number;
+        const correction: number = PolygonRadiusCorrection.get(this.nbVertices) as number;
         this.radiusCorrection = this.radius * correction;
     }
 
@@ -73,14 +73,14 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     calculateVertex(n: number): Vertex {
-        let r = this.radius;
-        let deltaX = this.currentMouseX - this.initialMouseX;
-        let deltaY = this.currentMouseY - this.initialMouseY;
+        const r = this.radius;
+        const deltaX = this.currentMouseX - this.initialMouseX;
+        const deltaY = this.currentMouseY - this.initialMouseY;
         let xValue;
         let yValue;
-        let polygonOffsetAngles: number = PolygonOffsetAngles.get(this.nbVertices) as number;
+        const polygonOffsetAngles: number = PolygonOffsetAngles.get(this.nbVertices) as number;
 
-        let cos =
+        const cos =
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         if (deltaX > 0) {
@@ -89,10 +89,10 @@ export class PolygonToolService extends AbstractShapeToolService {
             xValue = cos + this.initialMouseX - r;
         }
 
-        let sin =
+        const sin =
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
-        let nbVerticesIsEven = this.nbVertices % 2 === 0;
+        const nbVerticesIsEven = this.nbVertices % 2 === 0;
         if (deltaY > 0) {
             yValue = sin + this.initialMouseY + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
         } else {
@@ -105,7 +105,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     copyPreviewRectangleAttributes(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         let vertices = '';
         for (let n = 1; n <= this.nbVertices; n++) {
-            let vertex: Vertex = this.calculateVertex(n);
+            const vertex: Vertex = this.calculateVertex(n);
             vertices += vertex.x + ',' + vertex.y + ' ';
         }
 
@@ -113,8 +113,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     updatePreviewRectangle() {
-        let deltaX = this.currentMouseX - this.initialMouseX;
-        let deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseX - this.initialMouseX;
+        const deltaY = this.currentMouseY - this.initialMouseY;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
 
         this.radius = minLength / 2;

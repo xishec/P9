@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { predicate } from 'src/constants/constants';
+import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -21,7 +21,7 @@ export class GridAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService
+        private gridToolService: GridToolService,
     ) {
         this.formBuilder = formBuilder;
     }

@@ -40,8 +40,8 @@ describe('RectangleToolService', () => {
                     provide: DrawStackService,
                     useValue: {
                         makeTargetable : () => null,
-                        push: () => null, 
-                    }
+                        push: () => null,
+                    },
                 },
                 {
                     provide: Renderer2,

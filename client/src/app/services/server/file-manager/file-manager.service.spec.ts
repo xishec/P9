@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { FileManagerService } from './file-manager.service';
 
 describe('FileManagerService', () => {
-    beforeEach(() => 
+    beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientModule]
+            imports: [HttpClientModule],
         }));
 
     it('should be created', () => {
