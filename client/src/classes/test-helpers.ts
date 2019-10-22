@@ -10,12 +10,16 @@ export class MockRect {
     addEventListener(): void {}
 }
 
+export class MockPolygon {
+    points = '200,10 250,190 160,210';
+}
+
 export const createMouseEvent = (
     x: number,
     y: number,
     buttonPressed: number,
     offSetx?: number,
-    offSety?: number,
+    offSety?: number
 ): MouseEvent => {
     const mouseEvent = {
         clientX: x,
