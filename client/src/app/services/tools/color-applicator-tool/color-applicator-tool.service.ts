@@ -11,11 +11,11 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class ColorApplicatorToolService extends AbstractToolService {
-    private currentStackTarget: StackTargetInfo;
+    currentStackTarget: StackTargetInfo;
     private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
-    private isOnTarget = false;
+    isOnTarget = false;
 
     constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
         super();
