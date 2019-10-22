@@ -13,8 +13,6 @@ fdescribe('DropperToolService', () => {
     let negativeMouseEvent: MouseEvent;
     let onAltKeyDown: KeyboardEvent;
 
-    // let spyOnserializeToString: jasmine.Spy;
-
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -80,8 +78,6 @@ fdescribe('DropperToolService', () => {
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
         onAltKeyDown = createKeyBoardEvent(Keys.Alt);
-
-        // spyOnserializeToString = spyOn(XMLSerializer, 'serializeToString').and.returnValue(new XMLSerializer());
     });
 
     it('should be created', () => {
@@ -100,5 +96,13 @@ fdescribe('DropperToolService', () => {
         service.initializeColorToolService(new ColorToolService());
 
         expect(service.colorTool).toEqual(new ColorToolService());
+    });
+
+    it('should call updateSVGCopy after color is picked', () => {
+        let spyOnUpdateSVGCopy: jasmine.Spy = spyOn(service, 'updateSVGCopy').and.returnValue();
+
+        service.pickColor();
+
+        expect(spyOnUpdateSVGCopy).toHaveBeenCalled();
     });
 });
