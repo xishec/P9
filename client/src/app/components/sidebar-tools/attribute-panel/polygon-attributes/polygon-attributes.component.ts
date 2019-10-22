@@ -18,7 +18,7 @@ import { predicate } from 'src/constants/constants';
 export class PolygonAttributesComponent implements OnInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
-    polygonTollService: PolygonToolService;
+    polygonToolService: PolygonToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
     readonly thickness = Thickness;
@@ -40,9 +40,9 @@ export class PolygonAttributesComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        this.polygonTollService = this.toolSelectorService.getPolygonTool();
-        this.polygonTollService.initializeAttributesManagerService(this.attributesManagerService);
-        this.polygonTollService.initializeColorToolService(this.colorToolService);
+        this.polygonToolService = this.toolSelectorService.getPolygonTool();
+        this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);
+        this.polygonToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {
