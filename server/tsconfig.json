@@ -15,6 +15,5 @@
         "noImplicitReturns": true,
         "suppressImplicitAnyIndexErrors": true,
         "strictNullChecks": true,
-        "esModuleInterop": true,
-    }
+        }
 }
