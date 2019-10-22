@@ -129,4 +129,36 @@ fdescribe('DropperToolService', () => {
 
         expect(spyOnGetColor).toHaveBeenCalled();
     });
+
+    it('should call getColor and changePrimaryColor if left button of mouse is clicked', () => {
+        let spyOnGetColor: jasmine.Spy = spyOn(service, 'getColor').and.returnValue('ffffffff');
+
+        service.initializeColorToolService(new ColorToolService());
+
+        let spyOnChangePrimaryColor: jasmine.Spy = spyOn(service.colorTool, 'changePrimaryColor')
+            .withArgs('ffffffff')
+            .and.returnValue();
+        service.isIn = true;
+
+        service.onMouseUp(positiveMouseEvent);
+
+        expect(spyOnChangePrimaryColor).toHaveBeenCalled();
+        expect(spyOnGetColor).toHaveBeenCalled();
+    });
+
+    it('should call getColor and changeSecondaryColor if right button of mouse is clicked', () => {
+        let spyOnGetColor: jasmine.Spy = spyOn(service, 'getColor').and.returnValue('ffffffff');
+
+        service.initializeColorToolService(new ColorToolService());
+
+        let spyOnChangeSecondaryColor: jasmine.Spy = spyOn(service.colorTool, 'changeSecondaryColor')
+            .withArgs('ffffffff')
+            .and.returnValue();
+        service.isIn = true;
+
+        service.onMouseUp(createMouseEvent(10, 10, 2));
+
+        expect(spyOnChangeSecondaryColor).toHaveBeenCalled();
+        expect(spyOnGetColor).toHaveBeenCalled();
+    });
 });
