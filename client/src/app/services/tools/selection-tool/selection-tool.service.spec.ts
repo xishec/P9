@@ -6,7 +6,7 @@ import { SelectionToolService } from './selection-tool.service';
 import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement, createMockSVGCircle } from 'src/classes/test-helpers';
 import { Mouse, Keys, SIDEBAR_WIDTH } from 'src/constants/constants';
 
-fdescribe('SelectionToolService', () => {
+describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = createMouseEvent(0,0,Mouse.LeftButton);
     const MOCK_RIGHT_CLICK = createMouseEvent(0,0,Mouse.RightButton);
 
