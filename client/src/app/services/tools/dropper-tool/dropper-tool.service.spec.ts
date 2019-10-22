@@ -6,7 +6,7 @@ import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers'
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { Keys } from 'src/constants/constants';
 
-fdescribe('DropperToolService', () => {
+describe('DropperToolService', () => {
     let injector: TestBed;
     let service: DropperToolService;
     let positiveMouseEvent: MouseEvent;
@@ -190,4 +190,16 @@ fdescribe('DropperToolService', () => {
         expect(service.cleanUp()).toBeUndefined();
     });
 
+    it('should call pickColor and translateRGBToHex when function getColor is called', () => {
+        let spyOnPickColor: jasmine.Spy = spyOn(service, 'pickColor').and.returnValue(new Uint8ClampedArray());
+        service.initializeColorToolService(new ColorToolService());
+        let spyOnTranslateRGBToHex: jasmine.Spy = spyOn(service.colorTool, 'translateRGBToHex')
+            .withArgs(undefined, undefined, undefined)
+            .and.returnValue('test');
+
+        service.getColor(positiveMouseEvent);
+
+        expect(spyOnPickColor).toHaveBeenCalled();
+        expect(spyOnTranslateRGBToHex).toHaveBeenCalled();
+    });
 });
