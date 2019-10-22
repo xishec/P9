@@ -15,7 +15,7 @@ describe('LineToolService', () => {
     let service: LineToolService;
     let mockLeftButton: MouseEvent;
     let rendererMock: Renderer2;
-    let drawStackMock: DrawStackService;
+    let drawStackMock: DrawStackService;    
 
     const BOUNDLEFT = 0;
     const BOUNDTOP = 0;
