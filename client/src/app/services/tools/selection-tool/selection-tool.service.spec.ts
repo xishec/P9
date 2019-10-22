@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material';
 import { Renderer2, ElementRef } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed, getTestBed, fakeAsync } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
 import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement, createMockSVGCircle } from 'src/classes/test-helpers';
@@ -667,19 +667,64 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('handleRightMouse', () => {
+    it('handleRightMouseDown should call singlyInvertSelect if isOnTarget', () => {
+        service.isOnTarget = true;
+        const spy = spyOn(service, 'singlyInvertSelect');
 
+        service.handleRightMouseDown();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('handleRightMouseDown false call startSelection if !isOnTarget', () => {
+        service.isOnTarget = false;
+        const spy = spyOn(service, 'startSelection');
 
+        service.handleRightMouseDown();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('onMouseDown should call handleLeftMouseDown if mouseEvent is left button', () => {
+        const spy = spyOn(service, 'handleLeftMouseDown');
 
+        service.onMouseDown(MOCK_LEFT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('onMouseDown should call handleRightMouseDown if mouseEvent is right button', () => {
+        const spy = spyOn(service, 'handleRightMouseDown');
+
+        service.onMouseDown(MOCK_RIGHT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseUp should call computeSelectionBox if isSelecting', () => {
+        const spy = spyOn(service, 'computeSelectionBox');
+        service.isSelecting = true;
+
+        service.handleLeftMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseUp should call singlySelect if !isSelecting && mouseIsInSelectionBox && !isLeftMouseDragging && isOnTarget && !mouseIsInControlPoint', () => {
+        service.isSelecting = false;
+        spyOn(service, 'mouseIsInSelectionBox').and.returnValue(true);
+        service.isLeftMouseDragging = false;
+        service.isOnTarget = true;
+        spyOn(service, 'mouseIsInControlPoint').and.returnValue(false);
+
+        const spy = spyOn(service, 'singlySelect');
+        
+        service.handleLeftMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleRightMouseUp', () => {
 
     });
 
