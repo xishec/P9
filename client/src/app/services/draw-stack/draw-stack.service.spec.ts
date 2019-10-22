@@ -10,7 +10,12 @@ describe('DrawStackService', () => {
     let injector: TestBed;
     let service: DrawStackService;
 
-    const mockSVGGElement: any = {};
+    const mockSVGGElement: any = {
+        getAttribute : () => null,
+        children : {
+            length : 0,
+        }
+    };
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -53,6 +58,8 @@ describe('DrawStackService', () => {
     });
 
     it('when push SVGGElement drawStack should contain the element', () => {
+        service.drawStack = new Array();
+
         service.push(mockSVGGElement);
 
         expect(service[`drawStack`]).toContain(mockSVGGElement);

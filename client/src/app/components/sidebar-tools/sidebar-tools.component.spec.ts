@@ -48,9 +48,9 @@ describe('SidebarToolsComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('onInit should call function changeTool', () => {
+    it('ngAfterViewInit should call function changeTool', () => {
         const SPY = spyOn(toolSelectorService, 'changeTool');
-        component.ngOnInit();
+        component.ngAfterViewInit();
         expect(SPY).toHaveBeenCalled();
     });
 });
