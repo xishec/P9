@@ -105,4 +105,28 @@ fdescribe('DropperToolService', () => {
 
         expect(spyOnUpdateSVGCopy).toHaveBeenCalled();
     });
+
+    it('should change the position of the current cooridination of the mouse to be positive if the event is positive', () => {
+        service.currentMouseX = -5;
+
+        service.onMouseMove(positiveMouseEvent);
+
+        expect(service.currentMouseX).toBeGreaterThan(0);
+    });
+
+    it('should change the position of the current cooridination of the mouse to be negative if the event is negative', () => {
+        service.currentMouseX = 5;
+
+        service.onMouseMove(negativeMouseEvent);
+
+        expect(service.currentMouseX).toBeLessThan(0);
+    });
+
+    it('should call getColor', () => {
+        let spyOnGetColor: jasmine.Spy = spyOn(service, 'getColor').and.returnValue('test');
+
+        service.onMouseDown(positiveMouseEvent);
+
+        expect(spyOnGetColor).toHaveBeenCalled();
+    });
 });
