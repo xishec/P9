@@ -3,13 +3,13 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
-import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { BehaviorSubject } from 'rxjs';
 
 describe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
@@ -41,6 +41,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({ name: 'labelFilter' })
     class MockLabelFilterPipe implements PipeTransform {
         transform(value: number): number {
@@ -49,6 +50,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({ name: 'nameFilter' })
     class MockNameFilterPipe implements PipeTransform {
         transform(value: number): number {
@@ -57,6 +59,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({ name: 'toTrustHtml' })
     class MockToTrustHtmlPipe implements PipeTransform {
         transform(value: number): number {

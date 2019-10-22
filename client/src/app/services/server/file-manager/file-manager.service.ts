@@ -1,19 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FileManagerService {
     pipe(arg0: any) {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
     constructor(private http: HttpClient) {}
 
@@ -30,15 +30,15 @@ export class FileManagerService {
         idStack: string[],
         drawingInfo: DrawingInfo,
     ): Observable<Message> {
-        let drawing: Drawing = { name: name, labels: labels, svg: svg, idStack: idStack, drawingInfo: drawingInfo };
-        let message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
+        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo };
+        const message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
         return this.http
             .post<Message>(environment.BASE_URL + '/api/file-manager/save', message)
             .pipe(catchError(this.handleError<Message>('postDrawing')));
     }
 
     deleteDrawing(name: string): Observable<Message[] | Message> {
-        let message: Message = { title: 'Delete Drawing ' + name, body: name };
+        const message: Message = { title: 'Delete Drawing ' + name, body: name };
         return this.http
             .post<Message[]>(environment.BASE_URL + '/api/file-manager/delete', message)
             .pipe(catchError(this.handleError<Message>('deleteDrawing')));

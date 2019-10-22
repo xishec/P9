@@ -5,9 +5,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
-import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { MAX_NB_LABELS } from 'src/constants/constants';
+import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 
 
 fdescribe('SaveFileModalWindowComponent', () => {
@@ -49,9 +49,9 @@ fdescribe('SaveFileModalWindowComponent', () => {
                     {
                         provide: DrawingLoaderService,
                         useValue: {},
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         })
         .compileComponents();
 

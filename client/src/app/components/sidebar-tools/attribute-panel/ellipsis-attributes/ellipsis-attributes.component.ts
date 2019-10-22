@@ -6,8 +6,8 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { predicate } from 'src/constants/constants';
+import { Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-ellipsis-attributes',
@@ -25,7 +25,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
         private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }

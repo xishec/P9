@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 
 @Injectable({
     providedIn: 'root',
@@ -17,5 +17,6 @@ export class DrawingLoaderService {
 
     emptyDrawStack: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
+    // tslint:disable-next-line: no-empty
     constructor() {}
 }

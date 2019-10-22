@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Keys, Mouse } from 'src/constants/constants';
-import {  createKeyBoardEvent, createMockSVGCircle, createMouseEvent } from '../../../../../classes/test-helpers';
+import {  createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { TracingToolService } from './tracing-tool.service';
@@ -32,6 +32,7 @@ describe('TracingToolService', () => {
                     createElement: () => null,
                     setAttribute: () => null,
                     appendChild: () => null,
+                    removeChild: () => null,
                 },
             }, {
                 provide: ElementRef,
@@ -133,16 +134,6 @@ describe('TracingToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
     });
 
-    it('when createSVGCircle then renderer.createElement is called before setAttribute and before appendChild', () => {
-        const mockCircle = createMockSVGCircle();
-        const spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(mockCircle);
-
-        service.createSVGCircle(MOCK_X, MOCK_Y);
-
-        expect(spyOnCreateElement).toHaveBeenCalledBefore(spyOnSetAttribute);
-        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
-    });
-
     it('when updatePreviewCirlce then renderer.setAttribute is called twice', () => {
         service.updatePreviewCircle(MOCK_X, MOCK_Y);
 
@@ -155,17 +146,16 @@ describe('TracingToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
-    it('when createSVGCircle setAttribute is called three times and before appendChild', () => {
+    it('when createSVGCircle setAttribute is called 4 times', () => {
         service.createSVGCircle(MOCK_X, MOCK_Y);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
-        expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
     });
 
-    it('when createSVGPath then setAttribute is called three times and before appendChild', () => {
+    it('when createSVGPath then setAttribute is called 4 times and before appendChild', () => {
         service.createSVGPath();
 
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
     });
 
@@ -173,5 +163,14 @@ describe('TracingToolService', () => {
         expect(service.onMouseLeave(MOCK_LEFT_MOUSE_BUTTON_CLICK)).toBeUndefined();
         expect(service.onKeyDown(MOCK_KEYBOARD_SHIFT)).toBeUndefined();
         expect(service.onKeyUp(MOCK_KEYBOARD_SHIFT)).toBeUndefined();
+    });
+
+    it('cleanUp should call removeChild if isDrawing', () => {
+        service[`isDrawing`] = true;
+        const spy = spyOn(rendererMock, 'removeChild');
+
+        service.cleanUp();
+
+        expect(spy).toHaveBeenCalled();
     });
 });

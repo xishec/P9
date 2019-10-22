@@ -2,10 +2,10 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Mouse, SVG_NS } from 'src/constants/constants';
+import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
-import { ToolName, HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -137,7 +137,7 @@ export abstract class TracingToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        if(this.isDrawing){
+        if (this.isDrawing) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.svgWrap);
             this.svgWrap = this.renderer.createElement('g', SVG_NS);
             this.currentPath = '';

@@ -1,9 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Mouse, SIDEBAR_WIDTH, SVG_NS, Keys } from 'src/constants/constants';
+import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -36,7 +36,7 @@ export class SelectionToolService extends AbstractToolService {
     constructor(
         public drawStack: DrawStackService,
         public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2
+        public renderer: Renderer2,
     ) {
         super();
         this.initControlPoints();
@@ -201,8 +201,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     applySelectionInvert(): void {
-        for(const el of this.invertSelection) {
-            if(this.selection.has(el)) {
+        for (const el of this.invertSelection) {
+            if (this.selection.has(el)) {
                 this.selection.delete(el);
             }
         }
@@ -265,7 +265,7 @@ export class SelectionToolService extends AbstractToolService {
                     window.scrollX -
                     SIDEBAR_WIDTH +
                     this.getDOMRect(el).width +
-                    this.getStrokeWidth(el) / 2
+                    this.getStrokeWidth(el) / 2,
             );
         }
 
@@ -287,7 +287,7 @@ export class SelectionToolService extends AbstractToolService {
 
         for (const el of this.selection) {
             bottomCoords.push(
-                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2
+                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2,
             );
         }
 
@@ -321,7 +321,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.controlPoints[1],
             HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString(),
         );
         this.renderer.setAttribute(this.controlPoints[1], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
 
@@ -329,7 +329,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.controlPoints[2],
             HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
         );
         this.renderer.setAttribute(this.controlPoints[2], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
 
@@ -337,36 +337,36 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.controlPoints[3],
             HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
         );
         this.renderer.setAttribute(
             this.controlPoints[3],
             HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString(),
         );
 
         // Bottom right corner
         this.renderer.setAttribute(
             this.controlPoints[4],
             HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
         );
         this.renderer.setAttribute(
             this.controlPoints[4],
             HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
         );
 
         // Bottom side
         this.renderer.setAttribute(
             this.controlPoints[5],
             HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString(),
         );
         this.renderer.setAttribute(
             this.controlPoints[5],
             HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
         );
 
         // Bottom left corner
@@ -374,7 +374,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.controlPoints[6],
             HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
         );
 
         // Left side
@@ -382,7 +382,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.controlPoints[7],
             HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString(),
         );
     }
 
@@ -581,6 +581,7 @@ export class SelectionToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
         this.isTheCurrentTool = true;
     }
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {

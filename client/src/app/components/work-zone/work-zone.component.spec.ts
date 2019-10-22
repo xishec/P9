@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { HttpClientModule } from '@angular/common/http';
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
@@ -36,6 +37,7 @@ describe('WorkZoneComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WorkZoneComponent],
+            imports : [HttpClientModule],
             providers: [
                 {
                     provide: AbstractToolService,

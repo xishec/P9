@@ -1,12 +1,12 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
-import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
-import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
-import { LineToolService } from '../tools/line-tool/line-tool.service';
-import { ToolNameShortcuts, ToolNameControlShortcuts } from 'src/constants/tool-constants';
-import { GridToolService } from '../tools/grid-tool/grid-tool.service';
-import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
+import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
+import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
+import { GridToolService } from '../tools/grid-tool/grid-tool.service';
+import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
+import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,8 +26,7 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
-        ) 
-    {
+        ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
             this.currentTool = this.toolSelectorService.currentTool;
@@ -39,37 +38,37 @@ export class EventListenerService {
 
         this.modalManagerService.currentModalIsDisplayed.subscribe((isModalOpen: boolean) => {
             this.isModalOpen = isModalOpen;
-        })
-    };
+        });
+    }
 
     addEventListeners(): void {
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousemove', (event: MouseEvent) => {
-            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseMove(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousedown', (event: MouseEvent) => {
-            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseDown(event);
             }
         });
 
         this.renderer.listen(window, 'mouseup', (event: MouseEvent) => {
-            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseUp(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseenter', (event: MouseEvent) => {
-            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseEnter(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseleave', (event: MouseEvent) => {
-            if (this.currentTool!== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseLeave(event);
             }
         });
@@ -87,44 +86,44 @@ export class EventListenerService {
         });
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-            
+
             // If control is pressed, change for ControlTools
             if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
                 event.preventDefault();
+                // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
             }
 
-            // Call the onKeyDown of the current tool, if the current tool doesnt do anything 
-            if (this.currentTool != undefined && !this.isWorkZoneEmpty) {
+            // Call the onKeyDown of the current tool, if the current tool doesnt do anything
+            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onKeyDown(event);
             }
 
             // If the key is a shortcut for a tool, change current tool
             if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
+                // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
             }
 
-            if(event.key === 'g' && this.shouldAllowShortcuts()) {
-                this.gridToolService.switchState(); 
+            if (event.key === 'g' && this.shouldAllowShortcuts()) {
+                this.gridToolService.switchState();
             }
 
-            if(event.key === '+' && this.shouldAllowShortcuts()) {
+            if (event.key === '+' && this.shouldAllowShortcuts()) {
                 this.gridToolService.incrementSize();
             }
 
-            if(event.key === '-' && this.shouldAllowShortcuts()) {
+            if (event.key === '-' && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
 
-
         });
 
-
         this.renderer.listen(window, 'keyup', (event: KeyboardEvent) => {
-            if(this.currentTool != undefined) {
+            if (this.currentTool !== undefined) {
                 this.currentTool.onKeyUp(event);
             }
-        })
+        });
     }
 
     shouldAllowShortcuts(): boolean {

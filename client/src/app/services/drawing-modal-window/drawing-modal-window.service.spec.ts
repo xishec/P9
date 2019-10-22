@@ -5,7 +5,7 @@ import { DrawingModalWindowService } from './drawing-modal-window.service';
 
 const WIDTH = 100;
 const HEIGHT = 100;
-const COLOR = "000000";
+const COLOR = '000000';
 
 describe('DrawingModalWindowService', () => {
     let injector: TestBed;
