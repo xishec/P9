@@ -1,5 +1,6 @@
 import * as http from 'http';
 import { inject, injectable } from 'inversify';
+
 import { Application } from './app';
 import Types from './types';
 
