@@ -3,11 +3,10 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { LineToolService } from './line-tool.service';
-import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockSVGLine } from 'src/classes/test-helpers';
+import { createMouseEvent, createKeyBoardEvent, createMockSVGCircle, createMockSVGLine, createMockSVGGElement } from 'src/classes/test-helpers';
 import { Mouse, Keys } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 describe('LineToolService', () => {
@@ -72,13 +71,6 @@ describe('LineToolService', () => {
     
     it('should be created', () => {
         expect(service).toBeTruthy();
-    });
-
-    it('initializeColorToolService should be primaryColor from colorService', () => {
-        const colorService: ColorToolService = new ColorToolService();
-        const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
-        service.initializeColorToolService(new ColorToolService());
-        expect(service[`currentColor`]).toEqual(primaryColorTmp.value);
     });
 
     it('initializeAttributesManagerService should set strokeWidth, strokeType, jointType and circleJointDiameter', () => {
@@ -319,13 +311,14 @@ describe('LineToolService', () => {
         expect(resultString).toBe(expectedString);
     });
 
-    it('should push gWrap when cleanUp if !isLineInStack', () => {
+    it('should call renderer.removeChild when cleanUp if !isLineInStack', () => {
         service.isLineInStack = false;
-        const spyOnDrawStackPush = spyOn(drawStackMock, 'push');
+        const spyOnRemoveChild = spyOn(rendererMock, 'removeChild');
+        service.gWrap = createMockSVGGElement();
 
         service.cleanUp();
 
-        expect(spyOnDrawStackPush).toHaveBeenCalled();
+        expect(spyOnRemoveChild).toHaveBeenCalled();
     })
 
 
