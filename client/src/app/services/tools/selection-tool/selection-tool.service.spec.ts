@@ -21,7 +21,7 @@ fdescribe('SelectionToolService', () => {
 
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnAppendChild: jasmine.Spy;
-    // let spyOnRemoveChild: jasmine.Spy;
+    let spyOnRemoveChild: jasmine.Spy;
     // let spyOnDrawStackPush: jasmine.Spy;
     // let spyOnPreventDefault: jasmine.Spy;
 
@@ -72,7 +72,7 @@ fdescribe('SelectionToolService', () => {
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        // spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+        spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         // spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
         // spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
 
@@ -483,11 +483,10 @@ fdescribe('SelectionToolService', () => {
         const mockCtrlPnt = createMockSVGCircle();
         service.controlPoints = new Array();
         service.controlPoints.push(mockCtrlPnt);
-        const spy = spyOn(service.renderer, 'removeChild');
 
         service.removeControlPoints();
 
-        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spyOnRemoveChild).toHaveBeenCalledTimes(1);
     });
 
     it('appendFullSelectionBox should call appendControlPoints if !selectionBoxIsAppended', () => {
@@ -499,12 +498,101 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('removeFullSelectionBox should call removeControlPoints if selectionBoxIsAppended', () => {
+        service.selectionBoxIsAppended = true;
+        const spy = spyOn(service, 'removeControlPoints');
 
+        service.removeFullSelectionBox();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('translateSelection should call createSVGTransform if transformList.numberOfItems === 0', () => {
+        
+        const mockSVGTransform = {
+            type : 0,
+            setTranslate: () => null,
+            matrix: {
+                e : 0,
+                f : 0,
+            }
+            
+        } as (unknown) as SVGTransform;
 
+        const mockSVGTranformList = {
+            numberOfItems : 0,
+            getItem : () => mockSVGTransform,
+            insertItemBefore: () => null,
+        } as (unknown) as SVGTransformList;
+        
+        const mockSVGGelement = {
+            transform : {
+                baseVal : mockSVGTranformList,
+            }
+        } as (unknown) as SVGGElement;
+
+        service.selection = new Set();
+        service.selection.add(mockSVGGelement);
+
+        const mockTranslate = {
+            setTranslate : () => null,
+        } as (unknown) as SVGTransform;
+
+        const mockSVGSVGElement = {
+            createSVGTransform : () => mockTranslate,
+        } as SVGSVGElement
+
+        spyOn(service.renderer, 'createElement').and.returnValue(mockSVGSVGElement);
+
+        const spy = spyOn(mockSVGTransform, 'setTranslate');
+
+        service.translateSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('translateSelection should not call createSVGTransform if transformList.numberOfItems > 0 && getItem().type === SVGTransform.SVG_TRANSFORM_TRANSLATE ', () => {
+        
+        const mockSVGTransform = {
+            type : SVGTransform.SVG_TRANSFORM_TRANSLATE,
+            setTranslate: () => null,
+            matrix: {
+                e : 0,
+                f : 0,
+            }
+            
+        } as (unknown) as SVGTransform;
+
+        const mockSVGTranformList = {
+            numberOfItems : 5,
+            getItem : () => mockSVGTransform,
+            insertItemBefore: () => null,
+        } as (unknown) as SVGTransformList;
+        
+        const mockSVGGelement = {
+            transform : {
+                baseVal : mockSVGTranformList,
+            }
+        } as (unknown) as SVGGElement;
+
+        service.selection = new Set();
+        service.selection.add(mockSVGGelement);
+
+        const mockTranslate = {
+            setTranslate : () => null,
+        } as (unknown) as SVGTransform;
+
+        const mockSVGSVGElement = {
+            createSVGTransform : () => mockTranslate,
+        } as SVGSVGElement
+
+        spyOn(service.renderer, 'createElement').and.returnValue(mockSVGSVGElement);
+
+        const spy = spyOn(mockSVGTransform, 'setTranslate');
+
+        service.translateSelection();
+
+        expect(spy).toHaveBeenCalled();
     });
 
     // HANDLERS AND MOUSE EVENTS
@@ -555,11 +643,31 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('handleLeftMouseDown should call singlySelect if isOnTarget and !selection.has()', () => {
+        service.isOnTarget = true;
+        spyOn(service.selection, 'has').and.returnValue(false);
+        const spy = spyOn(service, 'singlySelect');
 
+        service.handleLeftMouseDown();
+
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('', () => {
+    it('handleLeftMouseDown should call clearSelection if !isOnTarget and selection.has() and !mouseIsInControlPoint && !mouseIsInSelectionBox', () => {
+        service.isOnTarget = false;
+        spyOn(service.selection, 'has').and.returnValue(true);
+        spyOn(service, 'mouseIsInControlPoint').and.returnValue(false);
+        spyOn(service, 'mouseIsInSelectionBox').and.returnValue(false);
+        spyOn(service, 'startSelection').and.returnValue();
+
+        const spy = spyOn(service, 'clearSelection').and.returnValue();
+
+        service.handleLeftMouseDown();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleRightMouse', () => {
 
     });
 
