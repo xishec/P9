@@ -161,4 +161,21 @@ fdescribe('DropperToolService', () => {
         expect(spyOnChangeSecondaryColor).toHaveBeenCalled();
         expect(spyOnGetColor).toHaveBeenCalled();
     });
+
+    it('should change attribute "isIn" to true onMouseEnter', () => {
+        service.isIn = false;
+
+        service.onMouseEnter(positiveMouseEvent);
+
+        expect(service.isIn).toEqual(true);
+    });
+
+    it('should change attribute "isIn" to false onMouseLeave', () => {
+        service.isIn = true;
+
+        service.onMouseLeave(positiveMouseEvent);
+
+        expect(service.isIn).toEqual(false);
+    });
+
 });
