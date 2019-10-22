@@ -13,6 +13,7 @@ import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
+import { HttpClientModule } from '@angular/common/http';
 
 // const MOCK_X = 10;
 // const MOCK_Y = 10;
@@ -36,6 +37,7 @@ describe('WorkZoneComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WorkZoneComponent],
+            imports : [HttpClientModule],
             providers: [
                 {
                     provide: AbstractToolService,
