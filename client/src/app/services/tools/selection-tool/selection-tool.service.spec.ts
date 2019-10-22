@@ -59,15 +59,6 @@ describe('SelectionToolService', () => {
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
-
-        // let mockDOMRect = {
-        //     x: 500,
-        //     y: 500,
-        //     width: 50,
-        //     height: 50,
-        // };
-
-        // spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
     });
 
     it('should be created', () => {
