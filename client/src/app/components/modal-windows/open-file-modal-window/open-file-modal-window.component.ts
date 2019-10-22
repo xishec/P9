@@ -12,6 +12,7 @@ import { Drawing } from '../../../../../../common/communication/Drawing';
 import { GIFS } from 'src/constants/constants';
 import { filter } from 'rxjs/operators';
 
+// tslint:disable-next-line: max-classes-per-file
 @Pipe({ name: 'toTrustHtml' })
 export class ToTrustHtmlPipe implements PipeTransform {
     constructor(private domSanitizer: DomSanitizer) {}
@@ -20,6 +21,7 @@ export class ToTrustHtmlPipe implements PipeTransform {
     }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @Pipe({
     name: 'mySlice',
     pure: false,
@@ -34,6 +36,7 @@ export class MySlice implements PipeTransform {
     }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @Pipe({
     name: 'nameFilter',
     pure: false,
@@ -55,6 +58,7 @@ export class NameFilter implements PipeTransform {
     }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @Pipe({
     name: 'labelFilter',
     pure: false,
@@ -84,6 +88,7 @@ export class LabelFilter implements PipeTransform {
     }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @Component({
     selector: 'app-open-file-modal-window',
     templateUrl: './open-file-modal-window.component.html',
@@ -213,6 +218,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         return this.drawingsFromServer[i].svg;
     }
     findIndexByName(drawingName: string): number {
+        // tslint:disable-next-line: no-shadowed-variable
         let drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
             return drawing.name === drawingName;
         }) as Drawing;

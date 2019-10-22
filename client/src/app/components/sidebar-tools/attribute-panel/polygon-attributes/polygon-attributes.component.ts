@@ -39,6 +39,7 @@ export class PolygonAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
+    // tslint:disable-next-line: use-lifecycle-interface
     ngAfterViewInit(): void {
         this.polygonToolService = this.toolSelectorService.getPolygonTool();
         this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);

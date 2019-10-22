@@ -25,6 +25,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({name: 'labelFilter'})
     class MockLabelFilterPipe implements PipeTransform {
         transform(value: number): number {
@@ -33,6 +34,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({name: 'nameFilter'})
     class MockNameFilterPipe implements PipeTransform {
         transform(value: number): number {
@@ -41,6 +43,7 @@ describe('OpenFileModalWindowComponent', () => {
         }
     }
 
+    // tslint:disable-next-line: max-classes-per-file
     @Pipe({name: 'toTrustHtml'})
     class MockToTrustHtmlPipe implements PipeTransform {
         transform(value: number): number {
