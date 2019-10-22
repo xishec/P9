@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS, Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 

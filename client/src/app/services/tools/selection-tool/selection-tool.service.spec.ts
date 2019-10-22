@@ -4,7 +4,7 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
 import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement, createMockSVGCircle } from 'src/classes/test-helpers';
-import { Mouse } from 'src/constants/constants';
+import { Mouse, Keys } from 'src/constants/constants';
 //import { MockRect } from 'src/classes/test-helpers';
 
 fdescribe('SelectionToolService', () => {
@@ -757,4 +757,32 @@ fdescribe('SelectionToolService', () => {
 
         expect(spy).toHaveBeenCalled();
     });
+
+    it('onMouseEnter should set isTheCurrentTool true', () => {
+        service.isTheCurrentTool = false;
+
+        service.onMouseEnter(MOCK_LEFT_CLICK);
+
+        expect(service.isTheCurrentTool).toBeTruthy();
+    });
+
+    it('onMouseLeave should set isTheCurrentTool true', () => {
+        service.isTheCurrentTool = false;
+
+        service.onMouseLeave(MOCK_LEFT_CLICK);
+
+        expect(service.isTheCurrentTool).toBeTruthy();
+    });
+
+    it('onKeyUp should set isTheCurrentTool to true if key is s', () => {
+        service.isTheCurrentTool = false;
+
+        const mockKeyS = {
+            key : Keys.s,
+        } as KeyboardEvent;
+
+        service.onKeyUp(mockKeyS);
+
+        expect(service.isTheCurrentTool).toBeTruthy();
+    })
 });
