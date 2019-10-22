@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { NO_STAMP, HTMLAttribute, BASE64_STAMPS_MAP } from 'src/constants/tool-constants';
+import { BASE64_STAMPS_MAP, HTMLAttribute, NO_STAMP } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';

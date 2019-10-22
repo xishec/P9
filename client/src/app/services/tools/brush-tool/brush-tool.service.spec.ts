@@ -57,13 +57,13 @@ describe('BrushToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('createSVGWrapper should call setAttribute 3 times in parent and appendChild twice (once in parent)', () => {
+    it('createSVGWrapper should call setAttribute 4 times in parent and appendChild twice (once in parent)', () => {
         spyOn(service, 'createFilter').and.returnValue(createMockFilter());
         const spyRendererAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
 
         service.createSVGWrapper();
 
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
         expect(spyRendererAppendChild).toHaveBeenCalledTimes(2);
     });
 

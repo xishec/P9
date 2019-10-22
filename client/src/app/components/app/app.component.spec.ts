@@ -7,13 +7,13 @@ import { Observable, of } from 'rxjs';
 // import { Keys } from 'src/constants/constants';
 // import { ToolName } from 'src/constants/tool-constants';
 import SpyObj = jasmine.SpyObj;
+import { HttpClientModule } from '@angular/common/http';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { IndexService } from '../../services/server/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;

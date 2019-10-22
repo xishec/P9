@@ -5,6 +5,7 @@ import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { predicate } from 'src/constants/constants';
 import {
     STAMP_NAMES,
     STAMP_TYPES,
@@ -14,7 +15,6 @@ import {
     ToolName,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
-import { predicate } from 'src/constants/constants';
 
 @Component({
     selector: 'app-stamp-attributes',
@@ -35,7 +35,7 @@ export class StampAttributesComponent implements OnInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }

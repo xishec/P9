@@ -1,13 +1,13 @@
 import { ElementRef, Renderer2 } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { EllipsisToolService } from './ellipsis-tool.service';
-import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
+import { EllipsisToolService } from './ellipsis-tool.service';
 
 describe('EllipsisToolService', () => {
-    const NONE: string = 'none';
-    const NOTNONE: string = 'not none';
+    const NONE = 'none';
+    const NOTNONE = 'not none';
 
     let injector: TestBed;
     let service: EllipsisToolService;
@@ -135,7 +135,7 @@ describe('EllipsisToolService', () => {
 
     it('should set userFillColor the fillColor if Outline is Full', () => {
         service.userFillColor = NOTNONE;
-        let fillColor = service.fillColor;
+        const fillColor = service.fillColor;
 
         service.updateTraceType('Plein');
 
@@ -144,7 +144,7 @@ describe('EllipsisToolService', () => {
 
     it('should set userFillColor the fillColor if Outline is Both', () => {
         service.userFillColor = NOTNONE;
-        let fillColor = service.fillColor;
+        const fillColor = service.fillColor;
 
         service.updateTraceType('Plein avec contour');
 
@@ -180,7 +180,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to userFillColor without "#" if userFillColor is none', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
         service.userFillColor = NONE;
 
         service.renderDrawEllipsis();
@@ -190,7 +190,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to userFillColor with "#" if userFillColor is different than none', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
         service.userFillColor = NOTNONE;
 
         service.renderDrawEllipsis();
@@ -200,7 +200,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to none if ellipse in not valide', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
 
         service.renderDrawEllipsis();
 
@@ -209,7 +209,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call copyRectanglePreview if isCirclePreview is false', () => {
-        let spyOnCopyRectanglePreview: jasmine.Spy = spyOn(service, 'copyRectanglePreview').and.returnValue();
+        const spyOnCopyRectanglePreview: jasmine.Spy = spyOn(service, 'copyRectanglePreview').and.returnValue();
         service.isCirclePreview = false;
 
         service.updateDrawing();
@@ -218,7 +218,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call updatePreviewCircle if isCirclePreview is true', () => {
-        let spyOnUpdatePreviewCircle: jasmine.Spy = spyOn(service, 'updatePreviewCircle').and.returnValue();
+        const spyOnUpdatePreviewCircle: jasmine.Spy = spyOn(service, 'updatePreviewCircle').and.returnValue();
         service.isCirclePreview = true;
 
         service.updateDrawing();
@@ -227,7 +227,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call updateDrawing if isPreviewing is true', () => {
-        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        const spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
         service.isPreviewing = true;
 
         service.onMouseMove(leftMouseEvent);
@@ -236,7 +236,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call updateDrawing if isPreviewing is false', () => {
-        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        const spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
         service.isPreviewing = false;
 
         service.onMouseMove(leftMouseEvent);
@@ -245,7 +245,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call updateDrawing if the left button of the mouse is clicked', () => {
-        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        const spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
 
         service.onMouseDown(leftMouseEvent);
 
@@ -253,7 +253,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call updateDrawing if the left button of the mouse is not clicked', () => {
-        let spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
+        const spyOnUpdateDrawing: jasmine.Spy = spyOn(service, 'updateDrawing').and.returnValue();
 
         service.onMouseDown(rightMouseEvent);
 
@@ -261,7 +261,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call isValideEllipse if the left button of the mouse is not clicked', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
 
         service.onMouseUp(rightMouseEvent);
 
@@ -269,8 +269,8 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call createSVG if the left button of the mouse is clicked and the ellipse is not valide', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
-        let spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
 
@@ -279,8 +279,8 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call createSVG if the left button of the mouse is clicked and the ellipse is valide', () => {
-        let spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
-        let spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
 

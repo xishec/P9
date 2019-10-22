@@ -50,7 +50,7 @@ export class DrawStackService {
 
     push(el: SVGGElement): void {
         this.drawStack.push(this.makeTargetable(el));
-        if (this.idStack.length > 0) this.drawingLoaderService.emptyDrawStack.next(false);
+        if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
     }
 
     pop(): SVGGElement | undefined {

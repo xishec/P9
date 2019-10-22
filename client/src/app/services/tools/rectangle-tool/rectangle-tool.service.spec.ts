@@ -36,7 +36,13 @@ describe('RectangleToolService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                DrawStackService,
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        makeTargetable : () => null,
+                        push: () => null,
+                    },
+                },
                 {
                     provide: Renderer2,
                     useValue: {

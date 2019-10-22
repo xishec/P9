@@ -1,10 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { StampToolService } from './stamp-tool.service';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Renderer2, ElementRef } from '@angular/core';
-import { createMouseEvent, MockRect, createKeyBoardEvent } from 'src/classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers';
 import { Keys } from 'src/constants/constants';
+import { StampToolService } from './stamp-tool.service';
 
 describe('StampToolService', () => {
     const mockDrawRect: MockRect = new MockRect();
@@ -137,7 +137,7 @@ describe('StampToolService', () => {
     });
 
     it('should call applyTransformation once after a call to positionStamp', () => {
-        let spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation');
+        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation');
 
         service.positionStamp();
 
@@ -173,10 +173,10 @@ describe('StampToolService', () => {
     });
 
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {
-        let spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+        const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
 
-        let currentMouseX = service.currentMouseX;
-        let currentMouseY = service.currentMouseY;
+        const currentMouseX = service.currentMouseX;
+        const currentMouseY = service.currentMouseY;
         service.onMouseMove(positiveMouseEvent);
 
         expect(service.currentMouseX).toBeGreaterThan(currentMouseX);
@@ -185,10 +185,10 @@ describe('StampToolService', () => {
     });
 
     it('should call positionStamp and decrease the current position of the mouse if the position is negative', () => {
-        let spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+        const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
 
-        let currentMouseX = service.currentMouseX;
-        let currentMouseY = service.currentMouseY;
+        const currentMouseX = service.currentMouseX;
+        const currentMouseY = service.currentMouseY;
         service.onMouseMove(negativeMouseEvent);
 
         expect(service.currentMouseX).toBeLessThan(currentMouseX);
@@ -197,7 +197,7 @@ describe('StampToolService', () => {
     });
 
     it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
-        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
+        const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
 
         service.shouldStamp = false;
         service.onMouseDown(positiveMouseEvent);
@@ -211,7 +211,7 @@ describe('StampToolService', () => {
     });
 
     it('should call initStamp if event is left click, shouldStamp is true and the position is correct', () => {
-        let spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
+        const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
 
         service.shouldStamp = false;
         service.onMouseUp(positiveMouseEvent);
@@ -224,7 +224,7 @@ describe('StampToolService', () => {
     });
 
     it('should call initStamp if shouldStamp is true and it should set isIn to true', () => {
-        let spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
+        const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
         service.isIn = false;
         service.shouldStamp = false;
 
@@ -238,7 +238,7 @@ describe('StampToolService', () => {
     });
 
     it('should call cleanUpStamp if shouldStamp is true and it should set isIn to false', () => {
-        let spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
+        const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         service.isIn = true;
         service.shouldStamp = false;
 
@@ -252,18 +252,18 @@ describe('StampToolService', () => {
     });
 
     it('should call alterRotateStamp if isAlterRotation is true and rotateStamp if isAlterRotation is false', () => {
-        let wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
-        let spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
+        const wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
+        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
 
         service.isAlterRotation = true;
-        let spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
+        const spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
 
         service.onWheel(wheelEvent);
         expect(spyOnAlterRotateStamp).toHaveBeenCalled();
         expect(spyOnApplyTransformation).toHaveBeenCalled();
 
         service.isAlterRotation = false;
-        let spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
+        const spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
 
         service.onWheel(wheelEvent);
         expect(spyOnRotateStamp).toHaveBeenCalled();

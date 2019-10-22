@@ -101,4 +101,24 @@ describe('ToolSelectorService', () => {
     it('should return color applicator tool', () => {
         expect(service.getColorApplicatorTool()).toEqual(service[`colorApplicatorTool`]);
     });
+
+    it('should return selection tool', () => {
+        expect(service.getSelectiontool()).toEqual(service[`selectionTool`]);
+    });
+
+    it('should return ellipsis tool', () => {
+        expect(service.getEllipsisTool()).toEqual(service[`ellipsisTool`]);
+    });
+
+    it('should return stamp tool', () => {
+        expect(service.getStampToolService()).toEqual(service[`stampTool`]);
+    });
+
+    it('should return polygon tool', () => {
+        expect(service.getPolygonTool()).toEqual(service[`polygoneTool`]);
+    });
+
+    it('should return line tool', () => {
+        expect(service.getLineTool()).toEqual(service[`lineToolService`]);
+    });
 });

@@ -10,7 +10,9 @@ import { ToolName } from 'src/constants/tool-constants';
 export class DropperAttributesComponent implements OnInit {
     toolName = ToolName.Dropper;
 
+    // tslint:disable-next-line: no-empty
     constructor() {}
 
+    // tslint:disable-next-line: no-empty
     ngOnInit() {}
 }

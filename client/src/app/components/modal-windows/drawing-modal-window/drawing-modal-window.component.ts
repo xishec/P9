@@ -2,13 +2,13 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
-import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 
 @Component({
     selector: 'app-drawing-modal-window',

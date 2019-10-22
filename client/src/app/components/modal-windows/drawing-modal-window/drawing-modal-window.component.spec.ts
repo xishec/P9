@@ -5,10 +5,10 @@ import { MatDialogRef } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { DrawingModalWindowComponent } from './drawing-modal-window.component';
-import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 
 describe('DrawingModalWindowComponent', () => {
     let component: DrawingModalWindowComponent;

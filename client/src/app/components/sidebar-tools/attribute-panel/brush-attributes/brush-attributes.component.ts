@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
 import { predicate } from 'src/constants/constants';
+import { BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-brush-attributes',
@@ -28,7 +28,7 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private attributesManagerService: AttributesManagerService,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }

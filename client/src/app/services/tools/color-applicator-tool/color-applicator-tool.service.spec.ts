@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
 
@@ -26,16 +27,27 @@ describe('ColorApplicatorToolService', () => {
                         appendChild: () => null,
                     },
                 },
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        push: () => null,
+                        currentStackTarget : {
+                            subscribe : () => null,
+                        },
+                        getElementByPosition : () => {
+                            const mockSVGGelement = {};
+                            return mockSVGGelement as SVGGElement;
+                        },
+                    },
+                },
             ],
         });
         injector = getTestBed();
         service = injector.get(ColorApplicatorToolService);
-        service[`currentStackTarget`].targetPosition = 0;
         service[`drawStack`].push(createMockSVGCircle());
 
         mockRenderer = injector.get(Renderer2);
         spyOnSetAttribute = spyOn(mockRenderer, 'setAttribute');
-
     });
 
     it('ColorApplicatorToolService should be created', () => {
@@ -51,7 +63,12 @@ describe('ColorApplicatorToolService', () => {
 
     it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.LeftButton);
-        service[`currentStackTarget`].toolName = ToolName.Brush;
+        service.isOnTarget = true;
+        const mockStackTargetInfo  = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
 
@@ -60,7 +77,12 @@ describe('ColorApplicatorToolService', () => {
 
     it('onMouseDown should call setAttribute once when left button clicked if tool is Rectangle', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.LeftButton);
-        service[`currentStackTarget`].toolName = ToolName.Rectangle;
+        service.isOnTarget = true;
+        const mockStackTargetInfo  = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
 
@@ -69,7 +91,11 @@ describe('ColorApplicatorToolService', () => {
 
     it('onMouseDown should not call setAttribute to stroke when right button clicked if tool is Brush', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.RightButton);
-        service[`currentStackTarget`].toolName = ToolName.Brush;
+        const mockStackTargetInfo  = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
 
@@ -78,7 +104,12 @@ describe('ColorApplicatorToolService', () => {
 
     it('onMouseDown should call setAttribute once when right button clicked if tool is Rectangle ', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.RightButton);
-        service[`currentStackTarget`].toolName = ToolName.Rectangle;
+        service.isOnTarget = true;
+        const mockStackTargetInfo  = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
 
         service.onMouseDown(mouseEventTmp);
 
