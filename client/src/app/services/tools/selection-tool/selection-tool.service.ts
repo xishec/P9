@@ -540,6 +540,7 @@ export class SelectionToolService extends AbstractToolService {
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
+        this.isOnTarget = false;
     }
 
     handleRightMouseUp(): void {
