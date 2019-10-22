@@ -20,7 +20,7 @@ fdescribe('SelectionToolService', () => {
     // let onOtherKeyDown: KeyboardEvent;
 
     let spyOnSetAttribute: jasmine.Spy;
-    // let spyOnAppendChild: jasmine.Spy;
+    let spyOnAppendChild: jasmine.Spy;
     // let spyOnRemoveChild: jasmine.Spy;
     // let spyOnDrawStackPush: jasmine.Spy;
     // let spyOnPreventDefault: jasmine.Spy;
@@ -71,7 +71,7 @@ fdescribe('SelectionToolService', () => {
         // onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        // spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
+        spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         // spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         // spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
         // spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
@@ -471,6 +471,40 @@ fdescribe('SelectionToolService', () => {
         const res = service.hasSelected();
 
         expect(res).toBeTruthy();
+    });
+
+    it('appendControlPoints should call renderer.appendChild for each points (8)', () => {
+        service.appendControlPoints();
+
+        expect(spyOnAppendChild).toHaveBeenCalledTimes(8);
+    });
+
+    it('removeControlPoints should call renderer.removeChild for each ctrlPt', () => {
+        const mockCtrlPnt = createMockSVGCircle();
+        service.controlPoints = new Array();
+        service.controlPoints.push(mockCtrlPnt);
+        const spy = spyOn(service.renderer, 'removeChild');
+
+        service.removeControlPoints();
+
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('appendFullSelectionBox should call appendControlPoints if !selectionBoxIsAppended', () => {
+        service.selectionBoxIsAppended = false;
+        const spy = spyOn(service, 'appendControlPoints');
+
+        service.appendFullSelectionBox();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
     });
 
     // HANDLERS AND MOUSE EVENTS
