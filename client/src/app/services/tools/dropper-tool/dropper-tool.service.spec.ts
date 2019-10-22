@@ -2,50 +2,42 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { Renderer2, ElementRef } from '@angular/core';
-//import { Keys } from 'src/constants/constants';
-import { MatDialog } from '@angular/material';
-import { createMouseEvent } from 'src/classes/test-helpers';
+import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { Keys } from 'src/constants/constants';
 
 fdescribe('DropperToolService', () => {
-    //const mockDrawRect: MockRect = new MockRect();
-
     let injector: TestBed;
     let service: DropperToolService;
     let positiveMouseEvent: MouseEvent;
     let negativeMouseEvent: MouseEvent;
-    // let onAltKeyDown: KeyboardEvent;
-    // let onOtherKeyDown: KeyboardEvent;
+    let onAltKeyDown: KeyboardEvent;
 
-    // let spyOnStampWidth: jasmine.Spy;
-    // let spyOnStampHeight: jasmine.Spy;
-    // let spyOnSetAttribute: jasmine.Spy;
-    // let spyOnAppendChild: jasmine.Spy;
-    let spyOnSetProperty: jasmine.Spy;
-    // let spyOnGetContext: jasmine.Spy;
+    // let spyOnserializeToString: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 DropperToolService,
                 {
-                    provide: MatDialog,
-                    useValue: {},
-                },
-                {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
                             if (elem === 'canvas') {
                                 const mockCanvas = {
-                                    // functions and values of HTMLCanvasElement needed
-                                    getContext: () => null,
+                                    getContext: (dimention: string) => {
+                                        const mockContext = {
+                                            getImageData: (x: number, y: number, sw: number, sh: number) => {
+                                                const mockImageData = {};
+                                                return (mockImageData as unknown) as ImageData;
+                                            },
+                                        };
+                                        return (mockContext as unknown) as CanvasRenderingContext2D;
+                                    },
                                 };
                                 return (mockCanvas as unknown) as HTMLCanvasElement;
                             } else {
-                                const mockImg = {
-                                    // functions and values of HTMLImageElement
-                                };
+                                const mockImg = {};
                                 return mockImg as HTMLImageElement;
                             }
                         },
@@ -72,9 +64,10 @@ fdescribe('DropperToolService', () => {
                     },
                 },
                 {
-                    provide: HTMLCanvasElement,
+                    provide: CanvasRenderingContext2D,
                     useValue: {
-                        getContext: () => null,
+                        getImageData: () => null,
+                        drawImage: () => null,
                     },
                 },
             ],
@@ -86,24 +79,9 @@ fdescribe('DropperToolService', () => {
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
-        // onAltKeyDown = createKeyBoardEvent(Keys.Alt);
-        // onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
+        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
 
-        // spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        // spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        spyOnSetProperty = spyOn(service.renderer, 'setProperty').and.returnValue();
-        //spyOnGetContext = spyOn(service.canvas, 'getContext').and.returnValue(new CanvasRenderingContext2D());
-
-        // HTMLCanvasElement.prototype.getContext = () => {
-        //     // return whatever getContext has to return
-        // };
-
-        // spyOnStampWidth = spyOnProperty(service, 'stampWidth', 'get').and.callFake(() => {
-        //     return mockDrawRect.width;
-        // });
-        // spyOnStampHeight = spyOnProperty(service, 'stampHeight', 'get').and.callFake(() => {
-        //     return mockDrawRect.height;
-        //});
+        // spyOnserializeToString = spyOn(XMLSerializer, 'serializeToString').and.returnValue(new XMLSerializer());
     });
 
     it('should be created', () => {
