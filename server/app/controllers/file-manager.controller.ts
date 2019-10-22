@@ -3,7 +3,8 @@ import { injectable } from 'inversify';
 
 import { Drawing } from '../../../common/communication/Drawing';
 import { Message } from '../../../common/communication/Message';
-import Post = require('../model/post');
+// tslint:disable-next-line
+const Post = require('../model/post');
 
 @injectable()
 export class FileManagerController {
