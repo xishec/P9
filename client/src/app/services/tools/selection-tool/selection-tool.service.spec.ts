@@ -3,7 +3,7 @@ import { Renderer2, ElementRef } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { SelectionToolService } from './selection-tool.service';
-import { createMockSVGGElementWithAttribute, createMouseEvent } from 'src/classes/test-helpers';
+import { createMockSVGGElementWithAttribute, createMouseEvent, createMockSVGGElement } from 'src/classes/test-helpers';
 import { Mouse } from 'src/constants/constants';
 //import { MockRect } from 'src/classes/test-helpers';
 
@@ -302,6 +302,138 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
         expect(service.isOnTarget).toBeFalsy();
         
+    });
+
+    it('startSelection should set isSelecting to true', () => {
+        service.isSelecting = false;
+
+        service.startSelection();
+
+        expect(service.isSelecting).toBeTruthy();
+    });
+
+    it('clearSelection should call selection.clear', () => {
+        const spy = spyOn(service.selection, 'clear');
+
+        service.clearSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call selection.delete if this.selection has el that is in invertSelection', () => {
+        const el = createMockSVGGElement();
+        service.invertSelection = new Set<SVGGElement>();
+        service.invertSelection.add(el);
+
+        service.selection = new Set<SVGGElement>();
+        service.selection.add(el);
+
+        const spy = spyOn(service.selection, 'delete');
+
+        service.applySelectionInvert();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not call selection.delete if this.selection does not have el that is in invertSelection', () => {
+        const el = createMockSVGGElement();
+        service.invertSelection = new Set<SVGGElement>();
+        service.invertSelection.add(el);
+
+        const spy = spyOn(service.selection, 'delete');
+
+        service.applySelectionInvert();
+
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('singlyInvertSelect should not call selection delete if drawStack.drawStack[]', () => {
+        service.drawStack.drawStack = new Array();
+        const spy = spyOn(service.selection, 'delete');
+
+        service.singlyInvertSelect(10);
+
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('checkSelection should call selection.add if this.isInSelection && isLeftMouseDown', () => {
+        service.drawStack.drawStack = new Array();
+        const mockSVGElement = createMockSVGGElement();
+        service.drawStack.drawStack.push(mockSVGElement);
+
+        spyOn(service, 'getStrokeWidth').and.returnValue(5);
+        spyOn(service, 'isInSelection').and.returnValue(true);
+        service.isLeftMouseDown = true;
+
+        const spy = spyOn(service.selection, 'add');
+
+        service.checkSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('checkSelection should call invertSelection.add if this.isInSelection && isRightMouseDown', () => {
+        service.drawStack.drawStack = new Array();
+        const mockSVGElement = createMockSVGGElement();
+        service.drawStack.drawStack.push(mockSVGElement);
+
+        spyOn(service, 'getStrokeWidth').and.returnValue(5);
+        spyOn(service, 'isInSelection').and.returnValue(true);
+        service.isRightMouseDown = true;
+
+        const spy = spyOn(service.invertSelection, 'add');
+
+        service.checkSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('checkSelection should call selection.delete if !this.isInSelection && isLeftMouseDown', () => {
+        service.drawStack.drawStack = new Array();
+        const mockSVGElement = createMockSVGGElement();
+        service.drawStack.drawStack.push(mockSVGElement);
+
+        spyOn(service, 'getStrokeWidth').and.returnValue(5);
+        spyOn(service, 'isInSelection').and.returnValue(false);
+        service.isLeftMouseDown = true;
+
+        const spy = spyOn(service.selection, 'delete');
+
+        service.checkSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('checkSelection should call invertSelection.delete if !this.isInSelection && isRightMouseDown', () => {
+        const mockSVGElement = createMockSVGGElement();
+        service.drawStack.drawStack = new Array();
+        service.drawStack.drawStack.push(mockSVGElement);
+
+        spyOn(service, 'getStrokeWidth').and.returnValue(5);
+        spyOn(service, 'isInSelection').and.returnValue(false);
+        service.isRightMouseDown = true;
+
+        const spy = spyOn(service.invertSelection, 'delete');
+
+        service.checkSelection();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
+    });
+
+    it('', () => {
+
     });
 
     // HANDLERS AND MOUSE EVENTS
