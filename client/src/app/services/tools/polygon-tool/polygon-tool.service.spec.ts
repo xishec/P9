@@ -6,6 +6,8 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { MockPolygon, createMouseEvent, MockRect } from 'src/classes/test-helpers';
 import { Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
@@ -13,7 +15,7 @@ const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
 const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 
-fdescribe('PolygonToolService', () => {
+describe('PolygonToolService', () => {
     let injector: TestBed;
     let polygonTool: PolygonToolService;
     let rendererMock: Renderer2;
@@ -22,6 +24,8 @@ fdescribe('PolygonToolService', () => {
     let spyCreateElement: jasmine.Spy;
     const mockPreviewRect: MockRect = new MockRect();
     const mockDrawPolygon: MockPolygon = new MockPolygon();
+    const mockColorTool: ColorToolService = new ColorToolService();
+    const mockAttributeManager: AttributesManagerService = new AttributesManagerService();
     let spyPreviewRectWidth: jasmine.Spy;
     let spyPreviewRectHeight: jasmine.Spy;
     let spyPreviewRectX: jasmine.Spy;
@@ -37,6 +41,12 @@ fdescribe('PolygonToolService', () => {
                         createElement: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                    },
+                },
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        push: () => null,
                     },
                 },
                 {
@@ -64,6 +74,7 @@ fdescribe('PolygonToolService', () => {
         polygonTool = new PolygonToolService(drawStackMock, elementRefMock, rendererMock);
         polygonTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         polygonTool.drawPolygon = (mockDrawPolygon as unknown) as SVGPolygonElement;
+
         spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
             return new MockPolygon();
         });
@@ -83,8 +94,24 @@ fdescribe('PolygonToolService', () => {
 
     it('should be created with call to new', () => {
         const newPolygonTool = new PolygonToolService(drawStackMock, elementRefMock, rendererMock);
+        polygonTool.initializeAttributesManagerService(mockAttributeManager);
+        polygonTool.initializeColorToolService(mockColorTool);
         expect(spyCreateElement).toHaveBeenCalled();
         expect(newPolygonTool).toBeTruthy();
+    });
+
+    it('should calculate the good vertex points', () => {
+        interface Vertex {
+            x: number;
+            y: number;
+        }
+        polygonTool.radius = 5;
+        polygonTool.currentMouseX = 10;
+        polygonTool.currentMouseY = 10;
+
+        let vertex: Vertex;
+        vertex = polygonTool.calculateVertex(5);
+        expect(vertex).toEqual({ x: 0.6698729810778055, y: 7.499999999999999 });
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
@@ -99,6 +126,14 @@ fdescribe('PolygonToolService', () => {
         expect(spyAppendChild).not.toHaveBeenCalled();
     });
 
+    it('should appendChild when createSVG when createSVG is called', () => {
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
+
+        polygonTool.createSVG();
+
+        expect(spyAppendChild).toHaveBeenCalled();
+    });
+
     it('should append the the draw polygon when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
@@ -108,7 +143,7 @@ fdescribe('PolygonToolService', () => {
         expect(spyAppendChild).toHaveBeenCalledTimes(1);
     });
 
-    it('should correctly update the draw polygon in the workzone on random mouse position', () => {
+    it('should correctly update the draw polygon in the workzone on random mouse position even if userfillColor is none', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -124,12 +159,15 @@ fdescribe('PolygonToolService', () => {
                     case 'height':
                         el.height = Number(value);
                         break;
+                    case 'points':
+                        el.points = String(value);
+                        break;
                     default:
                         break;
                 }
             }
         );
-
+        polygonTool.userFillColor = 'none';
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
         polygonTool.onMouseMove(MOUSEMOVE_EVENT);
@@ -160,14 +198,15 @@ fdescribe('PolygonToolService', () => {
 
     it('should cleanup correctly when creating a polygon', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
-
+        const spyAppendChild = spyOn(rendererMock, 'appendChild');
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
         polygonTool.onMouseMove(MOUSEMOVE_EVENT);
         polygonTool.onMouseUp(MOUSEUP_EVENT);
 
         expect(polygonTool.isPreviewing).toBeFalsy();
-        expect(spyRemove).toHaveBeenCalledTimes(1);
+        expect(spyRemove).toHaveBeenCalled();
+        expect(spyAppendChild).toHaveBeenCalled();
     });
 
     it('should give positive dimensions on negative input', () => {
@@ -191,14 +230,13 @@ fdescribe('PolygonToolService', () => {
                 }
             }
         );
-
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
         polygonTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
 
         expect(polygonTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();
-        expect(1).toBeGreaterThan(0);
-        expect(1).toBeGreaterThan(0);
+        expect(polygonTool.previewRectangleHeight).toBeGreaterThan(0);
+        expect(polygonTool.previewRectangleWidth).toBeGreaterThan(0);
     });
 });
