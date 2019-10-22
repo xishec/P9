@@ -164,12 +164,6 @@ export class RectangleToolService extends AbstractShapeToolService {
             );
         }
 
-        if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, (-(minLength - this.userStrokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, (minLength - this.userStrokeWidth).toString());
-        }
-
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
@@ -184,11 +178,8 @@ export class RectangleToolService extends AbstractShapeToolService {
             );
         }
 
-        if (minLength - this.userStrokeWidth < 0) {
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, (-(minLength - this.userStrokeWidth)).toString());
-        } else {
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, (minLength - this.userStrokeWidth).toString());
-        }
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, Math.abs((minLength - this.userStrokeWidth)).toString());
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, Math.abs((minLength - this.userStrokeWidth)).toString());
     }
 
     updateTraceType(traceType: string) {
