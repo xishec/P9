@@ -15,7 +15,7 @@ export class DropperToolService extends AbstractToolService {
     isIn = false;
     pixelColor: string;
     canvas: HTMLCanvasElement = this.renderer.createElement('canvas');
-    context2D: CanvasRenderingContext2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    context2D: CanvasRenderingContext2D;
     SVGImg: HTMLImageElement = this.renderer.createElement('img');
 
     constructor(
@@ -24,6 +24,7 @@ export class DropperToolService extends AbstractToolService {
         public renderer: Renderer2,
     ) {
         super();
+        this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     verifyPosition(event: MouseEvent): boolean {
