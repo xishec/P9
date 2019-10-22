@@ -7,6 +7,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
 describe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
@@ -26,6 +27,12 @@ describe('ColorApplicatorToolService', () => {
                         appendChild: () => null,
                     },
                 },
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        push: () => null,
+                    },
+                },
             ],
         });
         injector = getTestBed();
@@ -35,7 +42,6 @@ describe('ColorApplicatorToolService', () => {
 
         mockRenderer = injector.get(Renderer2);
         spyOnSetAttribute = spyOn(mockRenderer, 'setAttribute');
-
     });
 
     it('ColorApplicatorToolService should be created', () => {
