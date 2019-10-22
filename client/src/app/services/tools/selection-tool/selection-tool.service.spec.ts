@@ -620,7 +620,16 @@ fdescribe('SelectionToolService', () => {
         const spy = spyOn(service, 'checkSelection');
         service.isSelecting = true;
 
-        service.checkSelection();
+        service.handleRightMouseDrag();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleRightMouseDrag should call computeSelection if !this.isSelecting', () => {
+        const spy = spyOn(service, 'computeSelectionBox');
+        service.isSelecting = false;
+
+        service.handleRightMouseDrag();
 
         expect(spy).toHaveBeenCalled();
     });
@@ -719,6 +728,29 @@ fdescribe('SelectionToolService', () => {
 
         const spy = spyOn(service, 'singlySelect');
         
+        service.handleLeftMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseUp should call singlySelect if !isSelecting && !mouseIsInSelectionBox && isOnTarget', () => {
+        service.isSelecting = false;
+        spyOn(service, 'mouseIsInSelectionBox').and.returnValue(false);
+        service.isOnTarget = true;
+
+        const spy = spyOn(service, 'singlySelect');
+        
+        service.handleLeftMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseUp should call clearSelection if !isSelecting !mouseIsInSelectionBox !isOnTarger', () => {
+        const spy = spyOn(service, 'clearSelection');
+        service.isSelecting = false;
+        spyOn(service, 'mouseIsInSelectionBox').and.returnValue(false);
+        service.isOnTarget = false;
+
         service.handleLeftMouseUp();
 
         expect(spy).toHaveBeenCalled();
