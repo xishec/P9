@@ -129,7 +129,7 @@ export class ToolSelectorService {
         return this.pencilTool;
     }
 
-    getPenTool(): PencilToolService {
+    getPenTool(): PenToolService {
         return this.penTool;
     }
 
