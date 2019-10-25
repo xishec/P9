@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+// tslint:disable-next-line: max-line-length
+import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
@@ -20,7 +22,6 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
-import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 
 @Injectable({
     providedIn: 'root',
@@ -238,6 +239,7 @@ export class ToolSelectorService {
                 if (!this.modalIsDisplayed) {
                     this.displayExportFileModal();
                 }
+                break;
             case ToolName.Quill:
             case ToolName.Pen:
             case ToolName.SprayCan:

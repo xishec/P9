@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -11,14 +11,23 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 })
 export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
+    formBuilder: FormBuilder;
 
     constructor(
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
-        private modalManagerService: ModalManagerService
-    ) {}
+        private modalManagerService: ModalManagerService,
+    ) {
+        this.formBuilder = formBuilder;
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.initializeForm();
+    }
+
+    initializeForm(): void {
+        this.exportFileModalForm = this.formBuilder.group({});
+    }
 
     onCancel(): void {
         this.dialogRef.close();

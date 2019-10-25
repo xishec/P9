@@ -42,6 +42,8 @@ import { ColorPaletteComponent } from './components/color-palette/color-palette.
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+// tslint:disable-next-line: max-line-length
+import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import {
     LabelFilter,
     MySlice,
@@ -61,7 +63,6 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 
 @NgModule({
     declarations: [
@@ -121,7 +122,13 @@ import { ExportFileModalWindowComponent } from './components/modal-windows/expor
         SaveFileModalWindowComponent,
         ExportFileModalWindowComponent,
     ],
-    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService, EventListenerService],
+    providers: [
+        ToolSelectorService,
+        DrawingModalWindowService,
+        WelcomeModalWindowService,
+        ColorToolService,
+        EventListenerService,
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
