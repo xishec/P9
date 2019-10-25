@@ -37,7 +37,8 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.penToolService = this.toolSelectorService.getPencilTool();
+        this.penToolService = this.toolSelectorService.getPenTool();
+        console.log(this.attributesManagerService);
         this.penToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 

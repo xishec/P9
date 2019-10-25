@@ -129,6 +129,10 @@ export class ToolSelectorService {
         return this.pencilTool;
     }
 
+    getPenTool(): PencilToolService {
+        return this.penTool;
+    }
+
     getRectangleTool(): RectangleToolService {
         return this.rectangleTool;
     }
@@ -229,7 +233,6 @@ export class ToolSelectorService {
                 this.currentTool = this.penTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
-
             case ToolName.Export:
             case ToolName.Quill:
             case ToolName.SprayCan:
