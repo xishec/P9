@@ -16,7 +16,8 @@ export class PenToolService extends TracingToolService {
     oldSpeedX: number = 0;
     oldSpeedY: number = 0;
     speedY: number;
-    widthFromServer: number;
+    maxThickness: number;
+    minThickness: number;
 
     constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super(elementRef, renderer, drawStack);
@@ -31,7 +32,12 @@ export class PenToolService extends TracingToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
-            this.widthFromServer = thickness;
+        });
+        this.attributesManagerService.currentMaxThickness.subscribe((thickness) => {
+            this.maxThickness = thickness;
+        });
+        this.attributesManagerService.currentMinThickness.subscribe((thickness) => {
+            this.minThickness = thickness;
         });
     }
 
@@ -40,9 +46,8 @@ export class PenToolService extends TracingToolService {
         this.calculateSpeed(e);
 
         let totalSpeed = this.speedX + this.speedY > 500 ? 500 : this.speedX + this.speedY;
-        let targetWidth = this.widthFromServer * (1 - totalSpeed / 500) + 1;
+        let targetWidth = this.maxThickness * (1 - totalSpeed / 500) + this.minThickness;
         this.currentWidth += (targetWidth - this.currentWidth) / 8;
-        console.log(this.currentWidth);
 
         if ((this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) && this.isDrawing) {
             const x = this.getXPos(e.clientX);

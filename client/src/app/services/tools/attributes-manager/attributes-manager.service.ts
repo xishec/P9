@@ -24,6 +24,8 @@ export class AttributesManagerService {
         this._thickness = value;
     }
 
+    private maxThickness: BehaviorSubject<number> = new BehaviorSubject(10);
+    private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
     private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
@@ -35,6 +37,8 @@ export class AttributesManagerService {
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
+    currentMaxThickness: Observable<number> = this.maxThickness.asObservable();
+    currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
     currentNbVertices: Observable<number> = this.nbVertices.asObservable();
@@ -59,6 +63,14 @@ export class AttributesManagerService {
 
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);
+    }
+
+    changeMaxThickness(thickness: number): void {
+        this.maxThickness.next(thickness);
+    }
+
+    changeMinThickness(thickness: number): void {
+        this.minThickness.next(thickness);
     }
 
     changeTraceType(traceType: string): void {

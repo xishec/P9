@@ -33,7 +33,8 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.onThicknessChange();
+        this.onMaxThicknessChange();
+        this.onMinThicknessChange();
     }
 
     ngAfterViewInit(): void {
@@ -43,23 +44,43 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
 
     initializeForm(): void {
         this.penAttributesForm = this.formBuilder.group({
-            thickness: [
+            maxThickness: [
                 Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
+            ],
+            minThickness: [
+                Thickness.Min,
                 [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
         });
     }
 
-    onSliderChange(event: MatSliderChange): void {
+    onMaxSliderChange(event: MatSliderChange): void {
         if (predicate.eventIsValid(event, Thickness)) {
-            this.penAttributesForm.controls.thickness.setValue(event.value);
-            this.onThicknessChange();
+            this.penAttributesForm.controls.maxThickness.setValue(event.value);
+            this.onMaxThicknessChange();
         }
     }
-    onThicknessChange(): void {
-        const thickness: number = this.penAttributesForm.value.thickness;
-        if (this.penAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+    onMaxThicknessChange(): void {
+        const maxThickness: number = this.penAttributesForm.value.maxThickness;
+        if (this.penAttributesForm.controls.maxThickness.valid) {
+            this.attributesManagerService.changeMaxThickness(maxThickness);
+        }
+        if (this.penAttributesForm.value.minThickness > this.penAttributesForm.value.maxThickness) {
+            this.penAttributesForm.value.minThickness = this.penAttributesForm.value.maxThickness;
+        }
+    }
+
+    onMinSliderChange(event: MatSliderChange): void {
+        if (predicate.eventIsValid(event, Thickness)) {
+            this.penAttributesForm.controls.minThickness.setValue(event.value);
+            this.onMinThicknessChange();
+        }
+    }
+    onMinThicknessChange(): void {
+        const minThickness: number = this.penAttributesForm.value.minThickness;
+        if (this.penAttributesForm.controls.minThickness.valid) {
+            this.attributesManagerService.changeMinThickness(minThickness);
         }
     }
 
