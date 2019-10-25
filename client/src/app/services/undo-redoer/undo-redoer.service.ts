@@ -12,11 +12,9 @@ export class UndoRedoerService {
     statesArray = new Array<Drawing>();
     currentStateIndexPosition = 0;
     workzoneRef: ElementRef<SVGElement>;
-    drawingInfo: DrawingInfo;
 
-    constructor(private drawingLoaderService: DrawingLoaderService, workzoneRef: ElementRef<SVGElement>, drawingInfo: DrawingInfo) {
+    constructor(private drawingLoaderService: DrawingLoaderService, workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
-        this.drawingInfo = drawingInfo;
     }
 
     saveCurrentState(idStackArray: string[]): void {
@@ -26,7 +24,7 @@ export class UndoRedoerService {
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
             idStack: idStackArray,
-            drawingInfo: this.drawingInfo,
+            drawingInfo: new DrawingInfo(0, 0, ''),
         };
         this.statesArray.push(currentState);
         this.currentStateIndexPosition++;

@@ -33,6 +33,7 @@ export class WorkZoneComponent implements OnInit {
     toolName: ToolName = ToolName.Selection;
     empty = true;
     drawStack: DrawStackService;
+    undoRedoerService: UndoRedoerService;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -49,11 +50,12 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
-        private undoRedoerService: UndoRedoerService,
     ) {}
 
     ngOnInit(): void {
+        this.undoRedoerService = new UndoRedoerService(this.drawingLoaderService, this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
+
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
 
         this.eventListenerService = new EventListenerService(

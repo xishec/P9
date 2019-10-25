@@ -87,6 +87,10 @@ export class EventListenerService {
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
 
+            if (event.key === 'ArrowLeft') {
+                
+            }
+
             // If control is pressed, change for ControlTools
             if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
                 event.preventDefault();
