@@ -1,25 +1,59 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
 
+import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { ExportFileModalWindowComponent } from './export-file-modal-window.component';
 
 describe('ExportFileModalWindowComponent', () => {
-  let component: ExportFileModalWindowComponent;
-  let fixture: ComponentFixture<ExportFileModalWindowComponent>;
+    let component: ExportFileModalWindowComponent;
+    let fixture: ComponentFixture<ExportFileModalWindowComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ExportFileModalWindowComponent ]
-    })
-    .compileComponents();
-  }));
+    const dialogMock = {
+        close: () => null,
+    };
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ExportFileModalWindowComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ExportFileModalWindowComponent],
+            providers: [
+                FormBuilder,
+                {
+                    provide: MatDialogRef,
+                    useValue: {},
+                },
+            ],
+            schemas: [NO_ERRORS_SCHEMA],
+        })
+            .overrideComponent(ExportFileModalWindowComponent, {
+                set: {
+                    providers: [
+                        FormBuilder,
+                        FormsModule,
+                        {
+                            provide: MatDialogRef,
+                            useValue: dialogMock,
+                        },
+                        {
+                            provide: ModalManagerService,
+                            useValue: {
+                                setModalIsDisplayed: () => null,
+                            },
+                        },
+                    ],
+                },
+            })
+            .compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ExportFileModalWindowComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
