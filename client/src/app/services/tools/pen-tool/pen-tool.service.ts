@@ -2,7 +2,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
-import { Mouse } from 'src/constants/constants';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
