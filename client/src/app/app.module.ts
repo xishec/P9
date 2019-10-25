@@ -61,6 +61,7 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
 
 @NgModule({
     declarations: [
@@ -92,6 +93,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         EllipsisAttributesComponent,
         SaveFileModalWindowComponent,
         SelectionAttributesComponent,
+        PenAttributesComponent,
     ],
     imports: [
         MatSliderModule,

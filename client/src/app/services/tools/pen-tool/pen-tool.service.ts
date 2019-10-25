@@ -6,7 +6,7 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 @Injectable({
     providedIn: 'root',
 })
-export class PencilToolService extends TracingToolService {
+export class PenToolService extends TracingToolService {
     constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super(elementRef, renderer, drawStack);
     }
