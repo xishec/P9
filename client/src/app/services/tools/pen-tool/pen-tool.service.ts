@@ -51,7 +51,8 @@ export class PenToolService extends TracingToolService {
         this.lastMouseX = e.screenX;
         this.lastMouseY = e.screenY;
 
-        let targetWidth = 12 * ((this.speedX + this.speedY) / 600) + 1;
+        let totalSpeed = this.speedX + this.speedY > 600 ? 600 : this.speedX + this.speedY;
+        let targetWidth = 12 * (1 - totalSpeed / 600) + 1;
         this.currentWidth += (targetWidth - this.currentWidth) / 8;
         if (this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) {
             super.onMouseDown(e);
