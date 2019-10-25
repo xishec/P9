@@ -20,6 +20,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 
 @Injectable({
     providedIn: 'root',
@@ -112,6 +113,18 @@ export class ToolSelectorService {
         });
         this.modalManagerService.setModalIsDisplayed(true);
         saveFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
+    displayExportFileModal(): void {
+        const exportFileDialogRef = this.dialog.open(ExportFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+            autoFocus: false,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        exportFileDialogRef.afterClosed().subscribe(() => {
             this.modalManagerService.setModalIsDisplayed(false);
         });
     }
@@ -222,6 +235,9 @@ export class ToolSelectorService {
                 }
                 break;
             case ToolName.Export:
+                if (!this.modalIsDisplayed) {
+                    this.displayExportFileModal();
+                }
             case ToolName.Quill:
             case ToolName.Pen:
             case ToolName.SprayCan:

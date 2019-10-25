@@ -61,6 +61,7 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 
 @NgModule({
     declarations: [
@@ -92,6 +93,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         EllipsisAttributesComponent,
         SaveFileModalWindowComponent,
         SelectionAttributesComponent,
+        ExportFileModalWindowComponent,
     ],
     imports: [
         MatSliderModule,
@@ -117,6 +119,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         DrawingModalWindowComponent,
         OpenFileModalWindowComponent,
         SaveFileModalWindowComponent,
+        ExportFileModalWindowComponent,
     ],
     providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService, EventListenerService],
     bootstrap: [AppComponent],
