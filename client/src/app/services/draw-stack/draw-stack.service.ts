@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,7 @@ export class DrawStackService {
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
+    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService, private undoRedoerService: UndoRedoerService) {
         this.renderer = renderer;
     }
 
@@ -51,6 +52,9 @@ export class DrawStackService {
     push(el: SVGGElement): void {
         this.drawStack.push(this.makeTargetable(el));
         if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
+
+        // drawStack save current state on the undoRedoerService
+        this.undoRedoerService.saveCurrentState(this.idStack);
     }
 
     pop(): SVGGElement | undefined {

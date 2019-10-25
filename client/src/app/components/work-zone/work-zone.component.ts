@@ -9,6 +9,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -48,10 +49,11 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
+        private undoRedoerService: UndoRedoerService,
     ) {}
 
     ngOnInit(): void {
-        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
+        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
 
         this.eventListenerService = new EventListenerService(

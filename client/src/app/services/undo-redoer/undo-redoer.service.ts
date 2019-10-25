@@ -5,7 +5,7 @@ import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
-    providedIn: 'root';
+    providedIn: 'root',
 })
 export class UndoRedoerService {
 
@@ -19,23 +19,24 @@ export class UndoRedoerService {
         this.drawingInfo = drawingInfo;
     }
 
-    saveCurrentState(): void {
+    saveCurrentState(idStackArray: string[]): void {
 
-        let currentState: Drawing = {
+        const currentState: Drawing = {
             name: '',
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
-            idStack: [],
+            idStack: idStackArray,
             drawingInfo: this.drawingInfo,
-
-        }
+        };
+        this.statesArray.push(currentState);
+        this.currentStateIndexPosition++;
         // this should add the current state of the work-zone into the statesArray[];
     }
 
     loadPreviousState(): void {
         // verify if there is a previous state
         // when pressing control+z the previous state should load;
-        const drawingToLoad = this.statesArray[this.currentStateIndexPosition - 1];
+        const drawingToLoad = this.statesArray[this.currentStateIndexPosition--];
         this.drawingLoaderService.currentDrawing.next(drawingToLoad);
         // current state should be updated
     }
@@ -46,7 +47,6 @@ export class UndoRedoerService {
         // current state should be updated
     }
 
-    reset(): void {
-
-    }
+    // tslint:disable-next-line: no-empty
+    reset(): void {}
 }
