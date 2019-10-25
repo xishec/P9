@@ -2,6 +2,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
+import { Mouse } from 'src/constants/constants';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +16,7 @@ export class PenToolService extends TracingToolService {
     oldSpeedX: number = 0;
     oldSpeedY: number = 0;
     speedY: number;
+    widthFromServer: number;
 
     constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super(elementRef, renderer, drawStack);
@@ -24,13 +27,37 @@ export class PenToolService extends TracingToolService {
         return circle;
     }
 
-    createSVGPath(): void {
-        super.createSVGPath();
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributesManagerService;
+        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+            this.currentWidth = thickness;
+            this.widthFromServer = thickness;
+        });
     }
 
     onMouseMove(e: MouseEvent): void {
         super.onMouseMove(e);
+        this.calculateSpeed(e);
 
+        let totalSpeed = this.speedX + this.speedY > 500 ? 500 : this.speedX + this.speedY;
+        let targetWidth = this.widthFromServer * (1 - totalSpeed / 500) + 1;
+        this.currentWidth += (targetWidth - this.currentWidth) / 8;
+        console.log(this.currentWidth);
+
+        if ((this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) && this.isDrawing) {
+            const x = this.getXPos(e.clientX);
+            const y = this.getYPos(e.clientY);
+            this.currentPath = `M${x} ${y}`;
+            this.svgPreviewCircle = this.createSVGCircle(x, y);
+            this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
+            this.createSVGPath();
+        }
+        this.oldSpeedX = this.speedX;
+        this.oldSpeedY = this.speedY;
+        return;
+    }
+
+    calculateSpeed(e: MouseEvent): void {
         if (this.oldTimeStamp === -1) {
             this.speedX = 0;
             this.speedY = 0;
@@ -50,15 +77,5 @@ export class PenToolService extends TracingToolService {
         this.oldTimeStamp = now;
         this.lastMouseX = e.screenX;
         this.lastMouseY = e.screenY;
-
-        let totalSpeed = this.speedX + this.speedY > 600 ? 600 : this.speedX + this.speedY;
-        let targetWidth = 12 * (1 - totalSpeed / 600) + 1;
-        this.currentWidth += (targetWidth - this.currentWidth) / 8;
-        if (this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) {
-            super.onMouseDown(e);
-        }
-        this.oldSpeedX = this.speedX;
-        this.oldSpeedY = this.speedY;
-        return;
     }
 }
