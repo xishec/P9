@@ -3,6 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -44,9 +45,9 @@ export class PenToolService extends TracingToolService {
         super.onMouseMove(e);
         this.calculateSpeed(e);
 
-        let totalSpeed = this.speedX + this.speedY > 500 ? 500 : this.speedX + this.speedY;
-        let targetWidth = this.maxThickness * (1 - totalSpeed / 500) + this.minThickness;
-        this.currentWidth += (targetWidth - this.currentWidth) / 8;
+        let totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
+        let targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
+        this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
 
         if ((this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) && this.isDrawing) {
             const x = this.getXPos(e.clientX);
@@ -76,8 +77,8 @@ export class PenToolService extends TracingToolService {
         let dx = e.screenX - this.lastMouseX;
         let dy = e.screenY - this.lastMouseY;
 
-        this.speedX = Math.abs(Math.round((dx / dt) * 100));
-        this.speedY = Math.abs(Math.round((dy / dt) * 100));
+        this.speedX = Math.abs(Math.round(dx / dt));
+        this.speedY = Math.abs(Math.round(dy / dt));
         this.oldTimeStamp = now;
         this.lastMouseX = e.screenX;
         this.lastMouseY = e.screenY;
