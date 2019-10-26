@@ -1,20 +1,20 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PenToolService extends TracingToolService {
-    oldTimeStamp: number = -1;
+    oldTimeStamp = -1;
     lastMouseX: number;
     lastMouseY: number;
     speedX: number;
-    oldSpeedX: number = 0;
-    oldSpeedY: number = 0;
+    oldSpeedX = 0;
+    oldSpeedY = 0;
     speedY: number;
     maxThickness: number;
     minThickness: number;
@@ -68,10 +68,10 @@ export class PenToolService extends TracingToolService {
             return;
         }
 
-        let now = Date.now();
-        let dt = now - this.oldTimeStamp;
-        let dx = e.screenX - this.lastMouseX;
-        let dy = e.screenY - this.lastMouseY;
+        const now = Date.now();
+        const dt = now - this.oldTimeStamp;
+        const dx = e.screenX - this.lastMouseX;
+        const dy = e.screenY - this.lastMouseY;
 
         this.speedX = Math.abs(Math.round(dx / dt));
         this.speedY = Math.abs(Math.round(dy / dt));
@@ -79,8 +79,8 @@ export class PenToolService extends TracingToolService {
         this.lastMouseX = e.screenX;
         this.lastMouseY = e.screenY;
 
-        let totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
-        let targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
+        const totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
+        const targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
         this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
     }
 }
