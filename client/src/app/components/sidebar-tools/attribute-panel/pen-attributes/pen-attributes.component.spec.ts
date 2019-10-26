@@ -7,7 +7,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-fdescribe('PenAttributesComponent', () => {
+describe('PenAttributesComponent', () => {
     let component: PenAttributesComponent;
     let fixture: ComponentFixture<PenAttributesComponent>;
 
