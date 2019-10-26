@@ -19,8 +19,12 @@ export class PenToolService extends TracingToolService {
     maxThickness: number;
     minThickness: number;
 
-    constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
-        super(elementRef, renderer, drawStack);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {

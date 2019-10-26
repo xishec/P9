@@ -1,23 +1,35 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { Injectable, Renderer2, ElementRef } from '@angular/core';
 
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export abstract class AbstractShapeToolService extends AbstractToolService {
-     currentMouseX = 0;
-     currentMouseY = 0;
-     initialMouseX = 0;
-     initialMouseY = 0;
-     previewRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-     isPreviewing = false;
-     isIn = true;
+    currentMouseX = 0;
+    currentMouseY = 0;
+    initialMouseX = 0;
+    initialMouseY = 0;
+    previewRectangle: SVGRectElement;
+    isPreviewing = false;
+    isIn = true;
 
-    constructor(public renderer: Renderer2) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+        this.previewRectangle = this.renderer.createElement('rect', SVG_NS);
     }
 
     abstract onMouseMove(event: MouseEvent): void;
@@ -46,7 +58,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         return this.previewRectangle.height.baseVal.value;
     }
 
-     updatePreviewRectangle(): void {
+    updatePreviewRectangle(): void {
         let deltaX = this.currentMouseX - this.initialMouseX;
         let deltaY = this.currentMouseY - this.initialMouseY;
 

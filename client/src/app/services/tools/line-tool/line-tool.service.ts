@@ -36,16 +36,22 @@ export class LineToolService extends AbstractToolService {
     gWrap: SVGGElement;
     currentLine: SVGPolylineElement;
 
-    constructor(
-        private elementRef: ElementRef<SVGElement>,
-        private renderer: Renderer2,
-        private drawStack: DrawStackService,
-    ) {
+    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
     }
 
-    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+    }
 
     initializeColorToolService(colorToolService: ColorToolService) {
         this.colorToolService = colorToolService;
@@ -177,7 +183,11 @@ export class LineToolService extends AbstractToolService {
                 );
                 break;
             case LineStrokeType.Dotted_circle:
-                this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_dasharray, `1, ${this.currentStrokeWidth * 1.5}`);
+                this.renderer.setAttribute(
+                    this.currentLine,
+                    HTMLAttribute.stroke_dasharray,
+                    `1, ${this.currentStrokeWidth * 1.5}`,
+                );
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
