@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Keys, Mouse } from 'src/constants/constants';
-import {  createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers';
+import {  createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers.spec';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { TracingToolService } from './tracing-tool.service';

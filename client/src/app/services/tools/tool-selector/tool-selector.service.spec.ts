@@ -119,6 +119,6 @@ describe('ToolSelectorService', () => {
     });
 
     it('should return line tool', () => {
-        expect(service.getLineTool()).toEqual(service[`lineToolService`]);
+        expect(service.getLineTool()).toEqual(service[`lineTool`]);
     });
 });

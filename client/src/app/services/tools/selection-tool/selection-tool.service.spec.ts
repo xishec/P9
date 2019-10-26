@@ -2,7 +2,7 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 
-import { createMockSVGCircle, createMockSVGGElement, createMockSVGGElementWithAttribute, createMouseEvent } from 'src/classes/test-helpers';
+import { createMockSVGCircle, createMockSVGGElement, createMockSVGGElementWithAttribute, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys, Mouse, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { SelectionToolService } from './selection-tool.service';
 

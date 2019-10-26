@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
-import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
+import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';

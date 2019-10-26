@@ -1,7 +1,7 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers';
+import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers.spec';
 import { Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';

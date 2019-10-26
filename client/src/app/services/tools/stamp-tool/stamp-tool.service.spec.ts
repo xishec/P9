@@ -2,7 +2,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { StampToolService } from './stamp-tool.service';
 
