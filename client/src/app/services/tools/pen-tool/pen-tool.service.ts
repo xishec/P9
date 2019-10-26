@@ -45,11 +45,7 @@ export class PenToolService extends TracingToolService {
         super.onMouseMove(e);
         this.calculateSpeed(e);
 
-        let totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
-        let targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
-        this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
-
-        if ((this.speedX != this.oldSpeedX || this.speedY != this.oldSpeedY) && this.isDrawing) {
+        if (this.isDrawing) {
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
@@ -82,5 +78,9 @@ export class PenToolService extends TracingToolService {
         this.oldTimeStamp = now;
         this.lastMouseX = e.screenX;
         this.lastMouseY = e.screenY;
+
+        let totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
+        let targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
+        this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
     }
 }
