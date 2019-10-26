@@ -14,25 +14,29 @@ describe('PencilToolService', () => {
     let injector: TestBed;
     let service: PencilToolService;
 
-    beforeEach(() =>  {
+    beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [PencilToolService,
-            {
-                provide: Renderer2,
-                useValue: {
-                    createElement: () => null,
+            providers: [
+                PencilToolService,
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                    },
                 },
-            }, {
-                provide: ElementRef,
-                useValue: {
-                    nativeElement : {},
+                {
+                    provide: ElementRef,
+                    useValue: {
+                        nativeElement: {},
+                    },
                 },
-            }, {
-                provide: DrawStackService,
-                useValue: {
-                    getDrawStackLength: () => STACK_LENGTH,
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        getDrawStackLength: () => STACK_LENGTH,
+                    },
                 },
-            }],
+            ],
         });
 
         injector = getTestBed();
@@ -44,11 +48,12 @@ describe('PencilToolService', () => {
     });
 
     it('when createSVGCirle it should call super.createSVGCircle', () => {
-        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
+            createMockSVGCircle(),
+        );
 
         service.createSVGCircle(X, Y);
 
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
-
     });
 });

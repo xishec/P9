@@ -12,7 +12,7 @@ import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 const X = 10;
 const Y = 10;
 
-fdescribe('PenToolService', () => {
+describe('PenToolService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
             providers: [
