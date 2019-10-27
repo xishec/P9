@@ -7,7 +7,8 @@
         "build": "ng build",
         "test": "ng test",
         "coverage": "ng test --code-coverage --sourceMap=true",
-        "lint": "ng lint --type-check --format stylish"
+        "lint": "ng lint --type-check --format stylish",
+        "verify": "npm run lint -- --fix && npm run test"
     },
     "private": true,
     "dependencies": {
