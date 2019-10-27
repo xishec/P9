@@ -1,5 +1,5 @@
-import { ElementRef, Renderer2 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { createMockSVGCircle } from 'src/classes/test-helpers.spec';
 import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
@@ -12,8 +12,11 @@ import { PenToolService } from './pen-tool.service';
 const X = 10;
 const Y = 10;
 
+let injector: TestBed;
+let service: PenToolService;
+
 describe('PenToolService', () => {
-    beforeEach(() =>
+    beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 provideAutoMock(ElementRef),
@@ -27,16 +30,22 @@ describe('PenToolService', () => {
                 },
                 provideAutoMock(DrawStackService),
             ],
-        }),
-    );
+        });
+
+        injector = getTestBed();
+        service = TestBed.get(PenToolService);
+
+        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
+    });
 
     it('should be created', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         expect(service).toBeTruthy();
     });
 
     it('should call createSVGCircle of super on createSVGCircle', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
             createMockSVGCircle(),
         );
@@ -47,7 +56,6 @@ describe('PenToolService', () => {
     });
 
     it('should set default value on calculateSpeed initially', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         service.oldTimeStamp = -1;
         const mockLeftButton = {
             screenX: 10,
@@ -63,7 +71,6 @@ describe('PenToolService', () => {
     });
 
     it('should not set default value on calculateSpeed initially', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         service.oldTimeStamp = 1;
         const mockLeftButton = {
             screenX: 10,
@@ -79,7 +86,6 @@ describe('PenToolService', () => {
     });
 
     it('should change speed to max on calculateSpeed with a speed greater than max speed', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         service.oldTimeStamp = Date.now();
         service.lastMouseX = 0;
         service.lastMouseY = 0;
@@ -101,7 +107,6 @@ describe('PenToolService', () => {
     });
 
     it('should call onMouseMove of super on onMouseMove', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         const mouseEvent = {
             screenX: 10,
             screenY: 10,
@@ -113,7 +118,6 @@ describe('PenToolService', () => {
     });
 
     it('should call calculateSpeed on onMouseMove', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         const mouseEvent = {
             screenX: 10,
             screenY: 10,
@@ -125,7 +129,6 @@ describe('PenToolService', () => {
     });
 
     it('should not change current path on onMouseMove if not isDrawing', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         const mouseEvent = {
             screenX: 10,
             screenY: 10,
@@ -139,7 +142,6 @@ describe('PenToolService', () => {
     });
 
     it('should change current path on onMouseMove if isDrawing', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
         const mouseEvent = {
             screenX: 10,
             screenY: 10,
@@ -154,8 +156,6 @@ describe('PenToolService', () => {
     });
 
     it('should change attributesManagerService on initializeAttributesManagerService', () => {
-        const service: PenToolService = TestBed.get(PenToolService);
-
         const attributesManagerService = new AttributesManagerService();
 
         service.initializeAttributesManagerService(attributesManagerService as AttributesManagerService);
