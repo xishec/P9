@@ -1,12 +1,13 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { Keys, Mouse, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { SelectionToolService } from './selection-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-describe('SelectionToolService', () => {
+fdescribe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
     const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.RightButton);
 
@@ -55,6 +56,10 @@ describe('SelectionToolService', () => {
 
         injector = getTestBed();
         service = injector.get(SelectionToolService);
+        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
