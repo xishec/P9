@@ -3,7 +3,13 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
 // tslint:disable-next-line: max-line-length
-import { createKeyBoardEvent, createMockSVGCircle, createMockSVGGElement, createMockSVGLine, createMouseEvent } from 'src/classes/test-helpers.spec';
+import {
+    createKeyBoardEvent,
+    createMockSVGCircle,
+    createMockSVGGElement,
+    createMockSVGLine,
+    createMouseEvent,
+} from 'src/classes/test-helpers.spec';
 import { Keys, Mouse } from 'src/constants/constants';
 import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -11,7 +17,6 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 import { LineToolService } from './line-tool.service';
 
 describe('LineToolService', () => {
-
     let injector: TestBed;
     let service: LineToolService;
     let mockLeftButton: MouseEvent;
@@ -64,10 +69,12 @@ describe('LineToolService', () => {
         injector = getTestBed();
         service = injector.get(LineToolService);
 
+        mockLeftButton = createMouseEvent(0, 0, Mouse.LeftButton);
+
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-
-        mockLeftButton = createMouseEvent(0, 0, Mouse.LeftButton);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
     });
 
     it('should be created', () => {
@@ -249,7 +256,11 @@ describe('LineToolService', () => {
         service.startLine(0, 0);
 
         // tslint:disable-next-line: max-line-length
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-dasharray', `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth / 2}`);
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(
+            MOCK_LINE,
+            'stroke-dasharray',
+            `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth / 2}`,
+        );
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
@@ -282,7 +293,11 @@ describe('LineToolService', () => {
 
         service.previewLine(x, y);
 
-        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray} ${mousePosition}`);
+        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(
+            MOCK_LINE,
+            'points',
+            `${stringPointsArray} ${mousePosition}`,
+        );
     });
 
     it('should call renderer.setAttribute with currentLine, points, arrayToStringLine when appendLine', () => {
@@ -323,5 +338,4 @@ describe('LineToolService', () => {
 
         expect(spyOnRemoveChild).toHaveBeenCalled();
     });
-
 });
