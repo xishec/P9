@@ -7,7 +7,7 @@ import { DEFAULT_GRAY_0 } from 'src/constants/color-constants';
 
 let service: FileManagerService;
 
-fdescribe('FileManagerService', () => {
+describe('FileManagerService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule],
