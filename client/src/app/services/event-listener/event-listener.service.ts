@@ -92,6 +92,9 @@ export class EventListenerService {
             if (event.key === 'ArrowLeft') {
                 this.undoRedoer.loadPreviousState();
             }
+            if (event.key === 'ArrowRight') {
+                this.undoRedoer.loadNextState();
+            }
 
             // If control is pressed, change for ControlTools
             if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {

@@ -18,6 +18,10 @@ export class UndoRedoerService {
         this.workzoneRef = workzoneRef;
     }
 
+    initializeStateArray() : void {
+
+    }
+
     saveCurrentState(idStackArray: string[]): void {
         const currentState: Drawing = {
             name: '',
@@ -42,6 +46,8 @@ export class UndoRedoerService {
     loadNextState(): void {
         // verify if there is a next state
         // when pressing control-y the next state should load;
+        const drawingToLoad = this.statesArray[++this.currentStateIndexPosition];
+        this.drawingLoaderService.currentDrawing.next(drawingToLoad);
         // current state should be updated
     }
 
