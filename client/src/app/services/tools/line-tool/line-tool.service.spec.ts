@@ -16,7 +16,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { LineToolService } from './line-tool.service';
 
-fdescribe('LineToolService', () => {
+describe('LineToolService', () => {
     let injector: TestBed;
     let service: LineToolService;
     let mockLeftButton: MouseEvent;

@@ -1,11 +1,12 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { EllipsisToolService } from './ellipsis-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-describe('EllipsisToolService', () => {
+fdescribe('EllipsisToolService', () => {
     const NONE = 'none';
     const NOTNONE = 'not none';
 
@@ -61,6 +62,10 @@ describe('EllipsisToolService', () => {
 
         injector = getTestBed();
         service = injector.get(EllipsisToolService);
+        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
