@@ -9,6 +9,7 @@ import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -30,6 +31,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private shortcutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -70,6 +72,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);
+        this.undoRedoerService.initializeStateArray([]);
     }
 
     @HostListener('window:resize')
