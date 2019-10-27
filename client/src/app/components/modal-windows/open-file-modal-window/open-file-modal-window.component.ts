@@ -75,7 +75,10 @@ export class LabelFilter implements PipeTransform {
                 labelsFromFilter.forEach((labelFromFilter: string) => {
                     if (
                         drawing.labels.filter((label: string) => {
-                            return label.toLowerCase().replace(/\s/g, '') === labelFromFilter;
+                            return label
+                                .toLowerCase()
+                                .replace(/\s/g, '')
+                                .includes(labelFromFilter);
                         }).length !== 0
                     ) {
                         checkLabels = true;
@@ -125,7 +128,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
                         this.isLoading = false;
                         return false;
                     } else {
