@@ -1,12 +1,13 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { StampToolService } from './stamp-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-describe('StampToolService', () => {
+fdescribe('StampToolService', () => {
     const mockDrawRect: MockRect = new MockRect();
 
     let injector: TestBed;
@@ -62,6 +63,11 @@ describe('StampToolService', () => {
 
         injector = getTestBed();
         service = injector.get(StampToolService);
+
+        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
