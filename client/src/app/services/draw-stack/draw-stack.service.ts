@@ -49,12 +49,14 @@ export class DrawStackService {
         return el;
     }
 
-    push(el: SVGGElement): void {
+    push(el: SVGGElement, byTool: boolean = true): void {
         this.drawStack.push(this.makeTargetable(el));
         if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
 
         // drawStack save current state on the undoRedoerService
-        this.undoRedoerService.saveCurrentState(this.idStack);
+        if (byTool) {
+            this.undoRedoerService.saveCurrentState(this.idStack.slice(0));
+        }
     }
 
     pop(): SVGGElement | undefined {

@@ -93,7 +93,7 @@ export class WorkZoneComponent implements OnInit {
                 const child: SVGElement = children.filter((filterChild) => {
                     return filterChild.getAttribute('id_element') === id;
                 })[0];
-                this.drawStack.push(child as SVGAElement);
+                this.drawStack.push(child as SVGAElement, false);
             });
         });
 

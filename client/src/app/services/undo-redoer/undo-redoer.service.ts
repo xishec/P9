@@ -33,7 +33,7 @@ export class UndoRedoerService {
             name: '',
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
-            idStack:  idStackArray,
+            idStack: idStackArray,
             drawingInfo: new DrawingInfo(700, 700, DEFAULT_WHITE),
         };
 
@@ -46,10 +46,10 @@ export class UndoRedoerService {
 
     undo(): void {
         if (this.undos.length > 1) {
-            console.log('undo');
             const currentState = this.undos.pop();
             this.redos.push(currentState!);
-            this.drawingLoaderService.currentDrawing.next(this.undos[this.undos.length - 1]);
+            const stateToLoad = this.undos[this.undos.length - 1];
+            this.drawingLoaderService.currentDrawing.next(stateToLoad);
         }
     }
 
