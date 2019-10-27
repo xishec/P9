@@ -11,6 +11,7 @@ import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { AppComponent } from './app.component';
+import { ToolName } from 'src/constants/tool-constants';
 
 describe('AppComponent', () => {
     let indexServiceSpy: SpyObj<IndexService>;
@@ -53,7 +54,7 @@ describe('AppComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        changeTool: (arg: string) => null,
+                        changeTool: (arg: ToolName) => null,
                     },
                 },
                 {

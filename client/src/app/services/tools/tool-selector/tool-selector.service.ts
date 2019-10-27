@@ -179,7 +179,7 @@ export class ToolSelectorService {
         return this.lineTool;
     }
 
-    changeTool(tooltipName: string): void {
+    changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
