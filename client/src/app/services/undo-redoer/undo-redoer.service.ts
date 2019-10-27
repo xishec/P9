@@ -3,6 +3,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -18,13 +19,12 @@ export class UndoRedoerService {
     }
 
     saveCurrentState(idStackArray: string[]): void {
-
         const currentState: Drawing = {
             name: '',
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
             idStack: idStackArray,
-            drawingInfo: new DrawingInfo(0, 0, ''),
+            drawingInfo: new DrawingInfo(700, 700, DEFAULT_WHITE),
         };
         this.statesArray.push(currentState);
         this.currentStateIndexPosition++;
@@ -34,7 +34,7 @@ export class UndoRedoerService {
     loadPreviousState(): void {
         // verify if there is a previous state
         // when pressing control+z the previous state should load;
-        const drawingToLoad = this.statesArray[this.currentStateIndexPosition--];
+        const drawingToLoad = this.statesArray[--this.currentStateIndexPosition];
         this.drawingLoaderService.currentDrawing.next(drawingToLoad);
         // current state should be updated
     }

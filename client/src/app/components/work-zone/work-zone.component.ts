@@ -64,7 +64,8 @@ export class WorkZoneComponent implements OnInit {
             this.gridToolService,
             this.shortCutManagerService,
             this.modalManagerService,
-            this.renderer);
+            this.renderer,
+            this.undoRedoerService);
         this.eventListenerService.addEventListeners();
 
         this.toolSelector.currentToolName.subscribe((toolName) => {

@@ -7,6 +7,7 @@ import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +27,8 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
-        ) {
+        private undoRedoer: UndoRedoerService,
+    ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
             this.currentTool = this.toolSelectorService.currentTool;
@@ -88,7 +90,7 @@ export class EventListenerService {
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
 
             if (event.key === 'ArrowLeft') {
-                
+                this.undoRedoer.loadPreviousState();
             }
 
             // If control is pressed, change for ControlTools
