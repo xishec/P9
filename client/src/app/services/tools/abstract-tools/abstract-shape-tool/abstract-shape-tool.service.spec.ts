@@ -1,7 +1,7 @@
 import { Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { MockRect } from '../../../../../classes/test-helpers';
+import { MockRect } from '../../../../../classes/test-helpers.spec';
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
 
 describe('AbstractShapeToolService', () => {

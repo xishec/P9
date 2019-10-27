@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+// tslint:disable-next-line: max-line-length
+import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
@@ -15,6 +17,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
@@ -35,7 +38,8 @@ export class ToolSelectorService {
     private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
     private polygoneTool: PolygonToolService;
-    lineToolService: LineToolService;
+    private penTool: PenToolService;
+    private lineTool: LineToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -63,6 +67,9 @@ export class ToolSelectorService {
         this.pencilTool = new PencilToolService(ref, renderer, drawStack);
         this.pencilTool.initializeColorToolService(this.colorToolService);
 
+        this.penTool = new PenToolService(ref, renderer, drawStack);
+        this.penTool.initializeColorToolService(this.colorToolService);
+
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
@@ -77,8 +84,8 @@ export class ToolSelectorService {
         this.polygoneTool = new PolygonToolService(drawStack, ref, renderer);
         this.polygoneTool.initializeColorToolService(this.colorToolService);
 
-        this.lineToolService = new LineToolService(ref, renderer, drawStack);
-        this.lineToolService.initializeColorToolService(this.colorToolService);
+        this.lineTool = new LineToolService(ref, renderer, drawStack);
+        this.lineTool.initializeColorToolService(this.colorToolService);
     }
 
     displayNewDrawingModal(): void {
@@ -116,12 +123,28 @@ export class ToolSelectorService {
         });
     }
 
+    displayExportFileModal(): void {
+        const exportFileDialogRef = this.dialog.open(ExportFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+            autoFocus: false,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        exportFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
     getSelectiontool(): SelectionToolService {
         return this.selectionTool;
     }
 
     getPencilTool(): PencilToolService {
         return this.pencilTool;
+    }
+
+    getPenTool(): PenToolService {
+        return this.penTool;
     }
 
     getRectangleTool(): RectangleToolService {
@@ -153,11 +176,10 @@ export class ToolSelectorService {
     }
 
     getLineTool(): LineToolService {
-        return this.lineToolService;
+        return this.lineTool;
     }
 
     changeTool(tooltipName: string): void {
-
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
@@ -204,7 +226,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Line:
-                this.currentTool = this.lineToolService;
+                this.currentTool = this.lineTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Dropper:
@@ -221,13 +243,17 @@ export class ToolSelectorService {
                     this.displaySaveFileModal();
                 }
                 break;
-            case ToolName.Export:
-            case ToolName.Quill:
             case ToolName.Pen:
+                this.currentTool = this.penTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+            case ToolName.Export:
+                if (!this.modalIsDisplayed) {
+                    this.displayExportFileModal();
+                }
+                break;
+            case ToolName.Quill:
             case ToolName.SprayCan:
-            case ToolName.Line:
-            case ToolName.Ellipsis:
-            case ToolName.Polygon:
             case ToolName.Fill:
             case ToolName.Eraser:
             case ToolName.Text:

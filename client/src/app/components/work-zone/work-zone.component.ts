@@ -65,7 +65,8 @@ export class WorkZoneComponent implements OnInit {
             this.shortCutManagerService,
             this.modalManagerService,
             this.renderer,
-            this.undoRedoerService);
+            this.undoRedoerService,
+        );
         this.eventListenerService.addEventListeners();
 
         this.toolSelector.currentToolName.subscribe((toolName) => {
@@ -73,7 +74,9 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
-            if (selectedDrawing.svg === '') { return; }
+            if (selectedDrawing.svg === '') {
+                return;
+            }
 
             this.drawingInfo = selectedDrawing.drawingInfo;
             this.drawingModalWindowService.changeDrawingInfo(
@@ -98,7 +101,9 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
-            if (drawingInfo.width === 0 || drawingInfo.height === 0) { return; }
+            if (drawingInfo.width === 0 || drawingInfo.height === 0) {
+                return;
+            }
             this.empty = false;
             this.eventListenerService.isWorkZoneEmpty = false;
             this.drawingInfo = drawingInfo;
@@ -111,7 +116,9 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            if (nameAndLabels.name.length === 0) { return; }
+            if (nameAndLabels.name.length === 0) {
+                return;
+            }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
@@ -187,6 +194,15 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Pencil:
             case ToolName.Rectangle:
             case ToolName.Ellipsis:
+            case ToolName.Pen:
+            case ToolName.Polygon:
+            case ToolName.ColorApplicator:
+            case ToolName.Line:
+            case ToolName.Quill:
+            case ToolName.SprayCan:
+            case ToolName.Eraser:
+            case ToolName.Fill:
+            case ToolName.Selection:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };

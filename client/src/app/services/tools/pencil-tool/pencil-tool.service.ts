@@ -15,8 +15,4 @@ export class PencilToolService extends TracingToolService {
         const circle = super.createSVGCircle(x, y);
         return circle;
     }
-
-    createSVGPath(): void {
-        super.createSVGPath();
-    }
 }
