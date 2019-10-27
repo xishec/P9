@@ -38,9 +38,53 @@ describe('AbstractShapeToolService', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
     });
 
-    it('Should be created in providers', () => {
+    it('should be created in providers', () => {
         const abstractService: AbstractShapeToolService = TestBed.get(AbstractShapeToolService);
         expect(abstractService).toBeTruthy();
+    });
+
+    it('should get previewRectangleX', () => {
+        service.previewRectangle = {
+            x: {
+                baseVal: {
+                    value: 1,
+                },
+            },
+        } as SVGRectElement;
+        expect(service.previewRectangleX).toEqual(service.previewRectangle.x.baseVal.value);
+    });
+
+    it('should get previewRectangleY', () => {
+        service.previewRectangle = {
+            y: {
+                baseVal: {
+                    value: 1,
+                },
+            },
+        } as SVGRectElement;
+        expect(service.previewRectangleY).toEqual(service.previewRectangle.y.baseVal.value);
+    });
+
+    it('should get previewRectangleWidth', () => {
+        service.previewRectangle = {
+            width: {
+                baseVal: {
+                    value: 1,
+                },
+            },
+        } as SVGRectElement;
+        expect(service.previewRectangleWidth).toEqual(service.previewRectangle.width.baseVal.value);
+    });
+
+    it('should get previewRectangleHeight', () => {
+        service.previewRectangle = {
+            height: {
+                baseVal: {
+                    value: 1,
+                },
+            },
+        } as SVGRectElement;
+        expect(service.previewRectangleHeight).toEqual(service.previewRectangle.height.baseVal.value);
     });
 
     it('should call setAttribute 8 times when calling updatePreviewRectangle', () => {
