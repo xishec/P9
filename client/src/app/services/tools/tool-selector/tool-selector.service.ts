@@ -145,7 +145,7 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
-    getStampToolService(): StampToolService {
+    getStampTool(): StampToolService {
         return this.stampTool;
     }
 
