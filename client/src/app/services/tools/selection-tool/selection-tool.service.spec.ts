@@ -7,7 +7,7 @@ import { Keys, Mouse, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { SelectionToolService } from './selection-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-fdescribe('SelectionToolService', () => {
+describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
     const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.RightButton);
 
