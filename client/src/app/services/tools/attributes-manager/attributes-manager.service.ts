@@ -15,13 +15,12 @@ import {
     providedIn: 'root',
 })
 export class AttributesManagerService {
-    // tslint:disable-next-line: variable-name
-    private _thickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    private thicknessValue: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     get thickness(): BehaviorSubject<number> {
-        return this._thickness;
+        return this.thicknessValue;
     }
     set thickness(value: BehaviorSubject<number>) {
-        this._thickness = value;
+        this.thicknessValue = value;
     }
 
     private maxThickness: BehaviorSubject<number> = new BehaviorSubject(10);

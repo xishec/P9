@@ -128,7 +128,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
+                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -218,9 +218,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     findIndexByName(drawingName: string): number {
-        // tslint:disable-next-line: no-shadowed-variable
-        const drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
-            return drawing.name === drawingName;
+        const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
+            return el.name === drawingName;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
     }

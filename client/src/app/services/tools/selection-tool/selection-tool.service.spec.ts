@@ -447,13 +447,12 @@ describe('SelectionToolService', () => {
     it('findLeftMostCoord should return most left coords of elements', () => {
         const width = 10;
         spyOn(service, 'getStrokeWidth').and.returnValue(width);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
                 x: el.clientLeft,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const smallestX = 1000;
         const mockSVG1 = ({
             clientLeft: smallestX,
@@ -478,14 +477,13 @@ describe('SelectionToolService', () => {
         const strokeWidth = 10;
         const DOMRectWidth = 100;
         spyOn(service, 'getStrokeWidth').and.returnValue(strokeWidth);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
                 x: el.clientLeft,
                 width: DOMRectWidth,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const largestX = 1360;
         const mockSVG1 = ({
             clientLeft: 1000,

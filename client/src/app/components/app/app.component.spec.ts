@@ -1,20 +1,17 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
-import SpyObj = jasmine.SpyObj;
 import { HttpClientModule } from '@angular/common/http';
+import { ToolName } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { IndexService } from '../../services/server/index/index.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 import { WelcomeModalWindowService } from '../../services/welcome-modal-window/welcome-modal-window.service';
 import { AppComponent } from './app.component';
-import { ToolName } from 'src/constants/tool-constants';
 
 describe('AppComponent', () => {
-    let indexServiceSpy: SpyObj<IndexService>;
     let app: AppComponent;
     let fixture: ComponentFixture<AppComponent>;
 
@@ -22,14 +19,6 @@ describe('AppComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AppComponent],
             providers: [
-                {
-                    provide: IndexService,
-                    useValue: {
-                        basicGet: () => new Observable(),
-                        pipe: () => new Observable(),
-                        subscribe: () => null,
-                    },
-                },
                 {
                     provide: WelcomeModalWindowService,
                     useValue: {
@@ -86,9 +75,6 @@ describe('AppComponent', () => {
     }));
 
     beforeEach(() => {
-        indexServiceSpy = jasmine.createSpyObj('IndexService', ['basicGet']);
-        indexServiceSpy.basicGet.and.returnValue(of({ title: '', body: '' }));
-
         fixture = TestBed.createComponent(AppComponent);
         app = fixture.componentInstance;
         fixture.detectChanges();

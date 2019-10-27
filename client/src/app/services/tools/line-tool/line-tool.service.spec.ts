@@ -83,7 +83,7 @@ describe('LineToolService', () => {
 
     it('initializeAttributesManagerService should set strokeWidth, strokeType, jointType and circleJointDiameter', () => {
         const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`_thickness`];
+        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`thicknessValue`];
         const strokeType: BehaviorSubject<number> = attributeManagerService[`lineStrokeType`];
         const jointType: BehaviorSubject<number> = attributeManagerService[`lineJointType`];
         const jointDiameter: BehaviorSubject<number> = attributeManagerService[`circleJointDiameter`];

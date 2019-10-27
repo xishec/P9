@@ -5,9 +5,6 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
     providedIn: 'root',
 })
 export abstract class AbstractToolService {
-    // tslint:disable-next-line: no-empty
-    constructor() {}
-
     abstract initializeService(
         elementRef: ElementRef<SVGElement>,
         renderer: Renderer2,
