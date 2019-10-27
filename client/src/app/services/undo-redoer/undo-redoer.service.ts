@@ -37,18 +37,21 @@ export class UndoRedoerService {
 
     loadPreviousState(): void {
         // verify if there is a previous state
-        // when pressing control+z the previous state should load;
-        const drawingToLoad = this.statesArray[--this.currentStateIndexPosition];
-        this.drawingLoaderService.currentDrawing.next(drawingToLoad);
-        // current state should be updated
+        if (this.currentStateIndexPosition > 0) {
+            // when pressing control+z the previous state should load;
+            const drawingToLoad = this.statesArray[--this.currentStateIndexPosition];
+            this.drawingLoaderService.currentDrawing.next(drawingToLoad);
+            // current state should be updated
+        }
     }
 
     loadNextState(): void {
         // verify if there is a next state
-        // when pressing control-y the next state should load;
-        const drawingToLoad = this.statesArray[++this.currentStateIndexPosition];
-        this.drawingLoaderService.currentDrawing.next(drawingToLoad);
-        // current state should be updated
+        if (this.currentStateIndexPosition < this.statesArray.length - 1) {
+            // when pressing control-y the next state should load;
+            const drawingToLoad = this.statesArray[++this.currentStateIndexPosition];
+            this.drawingLoaderService.currentDrawing.next(drawingToLoad);
+        }
     }
 
     // tslint:disable-next-line: no-empty
