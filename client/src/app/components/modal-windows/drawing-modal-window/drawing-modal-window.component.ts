@@ -72,7 +72,7 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);
-        this.undoRedoerService.initializeStateArray([]);
+        this.undoRedoerService.initializeStacks([]);
     }
 
     @HostListener('window:resize')

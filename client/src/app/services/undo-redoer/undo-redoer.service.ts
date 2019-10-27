@@ -10,8 +10,9 @@ import { DEFAULT_WHITE } from 'src/constants/color-constants';
 })
 export class UndoRedoerService {
 
-    statesArray = new Array<Drawing>();
-    currentStateIndexPosition = 0;
+    undos = new Array<Drawing>();
+    redos = new Array<Drawing>();
+
     workzoneRef: ElementRef<SVGElement>;
 
     constructor(private drawingLoaderService: DrawingLoaderService) {
@@ -21,9 +22,9 @@ export class UndoRedoerService {
         this.workzoneRef = workzoneRef;
     }
 
-    initializeStateArray(idStackArray: string[]) : void {
-        this.statesArray = new Array<Drawing>();
-        this.currentStateIndexPosition = 0;
+    initializeStacks(idStackArray: string[]) : void {
+        this.undos = [];
+        this.redos = [];
         this.saveCurrentState(idStackArray);
     }
 
@@ -36,34 +37,27 @@ export class UndoRedoerService {
             drawingInfo: new DrawingInfo(700, 700, DEFAULT_WHITE),
         };
 
-        // verify
-        if (this.currentStateIndexPosition < this.statesArray.length - 2) {
-            this.statesArray = this.statesArray.slice(0, this.currentStateIndexPosition + 1);
-        }
-        this.statesArray.push(currentState);
-        this.currentStateIndexPosition = this.statesArray.length - 1;
-        // this should add the current state of the work-zone into the statesArray[];
-        console.log('save : ' + currentState.idStack);
-    }
+        this.undos.push(currentState);
 
-    loadPreviousState(): void {
-        // verify if there is a previous state
-        if (this.currentStateIndexPosition > 0) {
-            // when pressing control+z the previous state should load;
-            const drawingToLoad = this.statesArray[--this.currentStateIndexPosition];
-            this.drawingLoaderService.currentDrawing.next(drawingToLoad);
-            // current state should be updated
-            console.log('previous : ' + drawingToLoad.idStack);
+        if( this.redos.length > 0) {
+            this.redos = [];
         }
     }
 
-    loadNextState(): void {
-        // verify if there is a next state
-        if (this.currentStateIndexPosition < this.statesArray.length - 1) {
-            // when pressing control-y the next state should load;
-            const drawingToLoad = this.statesArray[++this.currentStateIndexPosition];
-            this.drawingLoaderService.currentDrawing.next(drawingToLoad);
-            console.log('next ' + drawingToLoad.idStack);
+    undo(): void {
+        if (this.undos.length > 1) {
+            console.log('undo');
+            const currentState = this.undos.pop();
+            this.redos.push(currentState!);
+            this.drawingLoaderService.currentDrawing.next(this.undos[this.undos.length - 1]);
+        }
+    }
+
+    redo(): void {
+        if (this.redos.length > 0) {
+            const stateToLoad = this.redos.pop();
+            this.undos.push(stateToLoad!);
+            this.drawingLoaderService.currentDrawing.next(stateToLoad!);
         }
     }
 

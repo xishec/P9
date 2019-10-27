@@ -90,10 +90,10 @@ export class EventListenerService {
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
 
             if (event.key === 'ArrowLeft') {
-                this.undoRedoer.loadPreviousState();
+                this.undoRedoer.undo();
             }
             if (event.key === 'ArrowRight') {
-                this.undoRedoer.loadNextState();
+                this.undoRedoer.redo();
             }
 
             // If control is pressed, change for ControlTools
