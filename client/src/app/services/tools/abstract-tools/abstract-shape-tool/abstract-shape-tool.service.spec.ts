@@ -1,10 +1,10 @@
-import { Renderer2, Type, ElementRef } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { MockRect } from '../../../../../classes/test-helpers.spec';
-import { AbstractShapeToolService } from './abstract-shape-tool.service';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
+import { MockRect } from '../../../../../classes/test-helpers.spec';
+import { AbstractShapeToolService } from './abstract-shape-tool.service';
 
 describe('AbstractShapeToolService', () => {
     let injector: TestBed;
@@ -33,8 +33,8 @@ describe('AbstractShapeToolService', () => {
         service = injector.get<AbstractShapeToolService>(AbstractShapeToolService as Type<AbstractShapeToolService>);
         mockRect = new MockRect();
 
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
     });
 

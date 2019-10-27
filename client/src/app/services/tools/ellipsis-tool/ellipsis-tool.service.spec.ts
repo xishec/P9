@@ -3,8 +3,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
-import { EllipsisToolService } from './ellipsis-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { EllipsisToolService } from './ellipsis-tool.service';
 
 describe('EllipsisToolService', () => {
     const NONE = 'none';
@@ -62,9 +62,9 @@ describe('EllipsisToolService', () => {
 
         injector = getTestBed();
         service = injector.get(EllipsisToolService);
-        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         leftMouseEvent = createMouseEvent(10, 10, 0);

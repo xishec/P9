@@ -1,5 +1,5 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createMockSVGCircle } from 'src/classes/test-helpers.spec';
 import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
@@ -35,9 +35,9 @@ describe('PenToolService', () => {
         injector = getTestBed();
         service = TestBed.get(PenToolService);
 
-        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
     });
 

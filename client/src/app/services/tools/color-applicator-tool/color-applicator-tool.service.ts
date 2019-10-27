@@ -1,4 +1,4 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';

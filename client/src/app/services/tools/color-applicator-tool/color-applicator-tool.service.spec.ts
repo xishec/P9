@@ -1,14 +1,14 @@
-import { Renderer2, Type, ElementRef } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
-import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 
 describe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
@@ -48,8 +48,8 @@ describe('ColorApplicatorToolService', () => {
         service = injector.get(ColorApplicatorToolService);
 
         mockRenderer = injector.get(Renderer2);
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, mockRenderer, drawStackMock);
 
         service[`drawStack`].push(createMockSVGCircle());

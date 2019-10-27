@@ -67,7 +67,7 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
             this.attributesManagerService.changeMaxThickness(maxThickness);
         }
         if (this.penAttributesForm.value.minThickness > this.penAttributesForm.value.maxThickness) {
-            let max = this.penAttributesForm.value.maxThickness;
+            const max = this.penAttributesForm.value.maxThickness;
             this.penAttributesForm.controls.minThickness.setValue(max);
         }
     }

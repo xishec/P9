@@ -1,9 +1,9 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
-import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 
 @Injectable({
     providedIn: 'root',

@@ -11,6 +11,10 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class LineToolService extends AbstractToolService {
+
+    constructor() {
+        super();
+    }
     colorToolService: ColorToolService;
     attributesManagerService: AttributesManagerService;
 
@@ -36,16 +40,12 @@ export class LineToolService extends AbstractToolService {
     gWrap: SVGGElement;
     currentLine: SVGPolylineElement;
 
-    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
-
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
-        super();
-    }
+    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         this.elementRef = elementRef;

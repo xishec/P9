@@ -71,7 +71,7 @@ describe('LineToolService', () => {
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         mockLeftButton = createMouseEvent(0, 0, Mouse.LeftButton);

@@ -71,8 +71,8 @@ describe('TracingToolService', () => {
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
