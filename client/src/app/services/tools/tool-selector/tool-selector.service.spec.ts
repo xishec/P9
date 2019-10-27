@@ -2,11 +2,11 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
-import { ToolName } from 'src/constants/tool-constants';
-import { ToolSelectorService } from './tool-selector.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
+import { ToolName } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ToolSelectorService } from './tool-selector.service';
 
 describe('ToolSelectorService', () => {
     let injector: TestBed;
@@ -144,7 +144,7 @@ describe('ToolSelectorService', () => {
         expect(service.getLineTool()).toEqual(service[`lineTool`]);
     });
 
-    //switch case tests
+    // switch case tests
     it('should change to selection tool', () => {
         service.changeTool(ToolName.Selection);
         expect(service.currentTool).toEqual(service[`selectionTool`]);
@@ -201,34 +201,34 @@ describe('ToolSelectorService', () => {
     });
 
     it('should change to grid tool', () => {
-        let spy = spyOn(service, 'changeCurrentToolName');
+        const spy = spyOn(service, 'changeCurrentToolName');
         service.changeTool(ToolName.Grid);
         expect(spy).toHaveBeenCalledWith(ToolName.Grid);
     });
 
     it('should call displaySaveFileModal on change to Save tool if modalIsDisplayed', () => {
-        let spy = spyOn(service, 'displaySaveFileModal');
+        const spy = spyOn(service, 'displaySaveFileModal');
         service.modalIsDisplayed = false;
         service.changeTool(ToolName.Save);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should not call displaySaveFileModal on change to Save tool if not modalIsDisplayed', () => {
-        let spy = spyOn(service, 'displaySaveFileModal');
+        const spy = spyOn(service, 'displaySaveFileModal');
         service.modalIsDisplayed = true;
         service.changeTool(ToolName.Save);
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call displayOpenFileModal on c tool if modalIsDisplayed', () => {
-        let spy = spyOn(service, 'displayOpenFileModal');
+        const spy = spyOn(service, 'displayOpenFileModal');
         service.modalIsDisplayed = false;
         service.changeTool(ToolName.ArtGallery);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should not call displayOpenFileModal on change to ArtGallery tool if not modalIsDisplayed', () => {
-        let spy = spyOn(service, 'displayOpenFileModal');
+        const spy = spyOn(service, 'displayOpenFileModal');
         service.modalIsDisplayed = true;
         service.changeTool(ToolName.ArtGallery);
         expect(spy).not.toHaveBeenCalled();
@@ -237,21 +237,20 @@ describe('ToolSelectorService', () => {
     it('should call cleanUp on changeTool', () => {
         service.currentTool = service.getBrushTool();
         service.currentTool.cleanUp = () => {};
-        let spy = spyOn(service.currentTool, 'cleanUp');
+        const spy = spyOn(service.currentTool, 'cleanUp');
         service.changeTool(ToolName.Pencil);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should initialize every tool on initTools', () => {
-        let spy = spyOn(service[`selectionTool`], 'initializeService');
+        const spy = spyOn(service[`selectionTool`], 'initializeService');
 
         service[`dropperTool`].initializeService = () => {};
         service[`colorApplicatorTool`].initializeService = () => {};
 
-
-        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initTools(drawStackMock, elementRefMock, rendererMock);
 
         expect(spy).toHaveBeenCalled();
