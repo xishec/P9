@@ -7,7 +7,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-fdescribe('DropperToolService', () => {
+describe('DropperToolService', () => {
     let injector: TestBed;
     let service: DropperToolService;
     let positiveMouseEvent: MouseEvent;
