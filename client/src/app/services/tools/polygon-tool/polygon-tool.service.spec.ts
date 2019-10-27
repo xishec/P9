@@ -15,7 +15,7 @@ const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
 const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 
-fdescribe('PolygonToolService', () => {
+describe('PolygonToolService', () => {
     let injector: TestBed;
     let polygonTool: PolygonToolService;
     let rendererMock: Renderer2;
