@@ -53,7 +53,10 @@
                     [min]="Thickness.Min"
                     [max]="penAttributesForm.value.maxThickness"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                <mat-error
+                    >La valeur inscrite doit être entre {{ Thickness.Min }} et
+                    {{ penAttributesForm.value.maxThickness }} px</mat-error
+                >
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>

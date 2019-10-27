@@ -70,6 +70,9 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
             let max = this.penAttributesForm.value.maxThickness;
             this.penAttributesForm.controls.minThickness.setValue(max);
         }
+        this.penAttributesForm.controls.minThickness.setValidators(
+            Validators.max(this.penAttributesForm.value.maxThickness),
+        );
     }
 
     onMinSliderChange(event: MatSliderChange): void {
