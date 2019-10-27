@@ -4,20 +4,15 @@ import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
+import { Selection } from '../../../../classes/selection/selection';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
     readonly CONTROL_POINT_RADIUS = 10;
-    //currentMouseX = 0;
-    //currentMouseY = 0;
     currentMouseCoords: MouseCoords = {x: 0, y: 0};
-    // lastCurrentMouseX = 0;
-    // lastCurrentMouseY = 0;
     lastMouseCoords: MouseCoords = {x: 0, y: 0};
-    // initialMouseX = 0;
-    // initialMouseY = 0;
     initialMouseCoords: MouseCoords = {x: 0, y: 0};
     currentTarget = 0;
 
@@ -29,6 +24,8 @@ export class SelectionToolService extends AbstractToolService {
     isRightMouseDown = false;
     isLeftMouseDragging = false;
     isRightMouseDragging = false;
+
+    proxy: Selection;
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
     selectionBox: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
