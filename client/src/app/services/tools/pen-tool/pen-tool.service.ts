@@ -35,9 +35,6 @@ export class PenToolService extends TracingToolService {
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
-            this.currentWidth = thickness;
-        });
-        this.attributesManagerService.currentMaxThickness.subscribe((thickness) => {
             this.maxThickness = thickness;
         });
         this.attributesManagerService.currentMinThickness.subscribe((thickness) => {

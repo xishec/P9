@@ -1,4 +1,3 @@
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,7 +13,7 @@ describe('LineAttributesComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ LineAttributesComponent ],
+            declarations: [LineAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 FormBuilder,
@@ -23,20 +22,22 @@ describe('LineAttributesComponent', () => {
                     useValue: {},
                 },
             ],
-        }).overrideComponent(LineAttributesComponent, {
-            set: {
-                providers: [
-                    {
-                        provide: AttributesManagerService,
-                        useValue: {},
-                    },
-                    {
-                        provide: ShortcutManagerService,
-                        useValue: {},
-                    },
-                ],
-            },
-        }).compileComponents();
+        })
+            .overrideComponent(LineAttributesComponent, {
+                set: {
+                    providers: [
+                        {
+                            provide: AttributesManagerService,
+                            useValue: {},
+                        },
+                        {
+                            provide: ShortcutManagerService,
+                            useValue: {},
+                        },
+                    ],
+                },
+            })
+            .compileComponents();
 
         fixture = TestBed.createComponent(LineAttributesComponent);
         component = fixture.componentInstance;
