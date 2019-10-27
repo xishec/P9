@@ -1,12 +1,13 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-describe('DropperToolService', () => {
+fdescribe('DropperToolService', () => {
     let injector: TestBed;
     let service: DropperToolService;
     let positiveMouseEvent: MouseEvent;
@@ -73,6 +74,10 @@ describe('DropperToolService', () => {
 
         injector = getTestBed();
         service = injector.get(DropperToolService);
+        let rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        let drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        let elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
