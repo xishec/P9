@@ -3,19 +3,22 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
     readonly CONTROL_POINT_RADIUS = 10;
-    currentMouseX = 0;
-    currentMouseY = 0;
-    lastCurrentMouseX = 0;
-    lastCurrentMouseY = 0;
-    initialMouseX = 0;
-    initialMouseY = 0;
+    //currentMouseX = 0;
+    //currentMouseY = 0;
+    currentMouseCoords: MouseCoords = {x: 0, y: 0};
+    // lastCurrentMouseX = 0;
+    // lastCurrentMouseY = 0;
+    lastMouseCoords: MouseCoords = {x: 0, y: 0};
+    // initialMouseX = 0;
+    // initialMouseY = 0;
+    initialMouseCoords: MouseCoords = {x: 0, y: 0};
     currentTarget = 0;
 
     isTheCurrentTool = false;
@@ -77,24 +80,24 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     updateSelectionRectangle(): void {
-        let deltaX = this.currentMouseX - this.initialMouseX;
-        let deltaY = this.currentMouseY - this.initialMouseY;
+        let deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        let deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
 
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseX - deltaX).toString());
+            this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseX.toString());
+            this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseY - deltaY).toString());
+            this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseY.toString());
+            this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.height, deltaY.toString());
 
@@ -127,10 +130,10 @@ export class SelectionToolService extends AbstractToolService {
         const selectionBoxBottom =
             this.getDOMRect(this.selectionBox).y + window.scrollY + this.getDOMRect(this.selectionBox).height;
         return (
-            this.currentMouseX >= selectionBoxLeft &&
-            this.currentMouseX <= selectionBoxRight &&
-            this.currentMouseY >= selectionBoxTop &&
-            this.currentMouseY <= selectionBoxBottom
+            this.currentMouseCoords.x >= selectionBoxLeft &&
+            this.currentMouseCoords.x <= selectionBoxRight &&
+            this.currentMouseCoords.y >= selectionBoxTop &&
+            this.currentMouseCoords.y <= selectionBoxBottom
         );
     }
 
@@ -140,8 +143,8 @@ export class SelectionToolService extends AbstractToolService {
             const cy = ctrlPt.cy.baseVal.value;
             const r = ctrlPt.r.baseVal.value;
 
-            const distX = this.currentMouseX - cx;
-            const distY = this.currentMouseY - cy;
+            const distX = this.currentMouseCoords.x - cx;
+            const distY = this.currentMouseCoords.y - cy;
 
             if (Math.abs(distX) <= r && Math.abs(distY) <= r) {
                 return true;
@@ -419,8 +422,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     translateSelection(): void {
-        const deltaX = this.currentMouseX - this.lastCurrentMouseX;
-        const deltaY = this.currentMouseY - this.lastCurrentMouseY;
+        const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
         for (const el of this.selection) {
             const transformsList = el.transform.baseVal;
             if (
@@ -467,10 +470,10 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.lastCurrentMouseX = this.currentMouseX;
-        this.lastCurrentMouseY = this.currentMouseY;
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.lastMouseCoords.x = this.currentMouseCoords.x;
+        this.lastMouseCoords.y = this.currentMouseCoords.y;
+        this.currentMouseCoords.x = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
 
         if (this.isLeftMouseDown) {
             this.handleLeftMouseDrag();
@@ -481,8 +484,8 @@ export class SelectionToolService extends AbstractToolService {
 
     handleLeftMouseDown(): void {
         this.isLeftMouseDown = true;
-        this.initialMouseX = this.currentMouseX;
-        this.initialMouseY = this.currentMouseY;
+        this.initialMouseCoords.x = this.currentMouseCoords.x;
+        this.initialMouseCoords.y = this.currentMouseCoords.y;
 
         if (this.isOnTarget && !this.selection.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
@@ -494,8 +497,8 @@ export class SelectionToolService extends AbstractToolService {
 
     handleRightMouseDown(): void {
         this.isRightMouseDown = true;
-        this.initialMouseX = this.currentMouseX;
-        this.initialMouseY = this.currentMouseY;
+        this.initialMouseCoords.x = this.currentMouseCoords.x;
+        this.initialMouseCoords.y = this.currentMouseCoords.y;
 
         if (this.isOnTarget) {
             this.singlyInvertSelect(this.currentTarget);
