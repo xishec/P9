@@ -7,7 +7,7 @@ import { Keys } from 'src/constants/constants';
 import { StampToolService } from './stamp-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 
-fdescribe('StampToolService', () => {
+describe('StampToolService', () => {
     const mockDrawRect: MockRect = new MockRect();
 
     let injector: TestBed;
