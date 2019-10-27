@@ -17,6 +17,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
@@ -37,7 +38,8 @@ export class ToolSelectorService {
     private dropperTool: DropperToolService;
     private colorApplicatorTool: ColorApplicatorToolService;
     private polygoneTool: PolygonToolService;
-    lineToolService: LineToolService;
+    private penTool: PenToolService;
+    private lineTool: LineToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -65,6 +67,9 @@ export class ToolSelectorService {
         this.pencilTool = new PencilToolService(ref, renderer, drawStack);
         this.pencilTool.initializeColorToolService(this.colorToolService);
 
+        this.penTool = new PenToolService(ref, renderer, drawStack);
+        this.penTool.initializeColorToolService(this.colorToolService);
+
         this.brushTool = new BrushToolService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
@@ -79,8 +84,8 @@ export class ToolSelectorService {
         this.polygoneTool = new PolygonToolService(drawStack, ref, renderer);
         this.polygoneTool.initializeColorToolService(this.colorToolService);
 
-        this.lineToolService = new LineToolService(ref, renderer, drawStack);
-        this.lineToolService.initializeColorToolService(this.colorToolService);
+        this.lineTool = new LineToolService(ref, renderer, drawStack);
+        this.lineTool.initializeColorToolService(this.colorToolService);
     }
 
     displayNewDrawingModal(): void {
@@ -138,6 +143,10 @@ export class ToolSelectorService {
         return this.pencilTool;
     }
 
+    getPenTool(): PenToolService {
+        return this.penTool;
+    }
+
     getRectangleTool(): RectangleToolService {
         return this.rectangleTool;
     }
@@ -167,11 +176,10 @@ export class ToolSelectorService {
     }
 
     getLineTool(): LineToolService {
-        return this.lineToolService;
+        return this.lineTool;
     }
 
     changeTool(tooltipName: string): void {
-
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
@@ -218,7 +226,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Line:
-                this.currentTool = this.lineToolService;
+                this.currentTool = this.lineTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
             case ToolName.Dropper:
@@ -235,17 +243,17 @@ export class ToolSelectorService {
                     this.displaySaveFileModal();
                 }
                 break;
+            case ToolName.Pen:
+                this.currentTool = this.penTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
             case ToolName.Export:
                 if (!this.modalIsDisplayed) {
                     this.displayExportFileModal();
                 }
                 break;
             case ToolName.Quill:
-            case ToolName.Pen:
             case ToolName.SprayCan:
-            case ToolName.Line:
-            case ToolName.Ellipsis:
-            case ToolName.Polygon:
             case ToolName.Fill:
             case ToolName.Eraser:
             case ToolName.Text:

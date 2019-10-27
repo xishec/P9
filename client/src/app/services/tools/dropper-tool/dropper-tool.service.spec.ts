@@ -1,7 +1,7 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2 } from '@angular/core';
-import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';

@@ -5,15 +5,15 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { LineAttributesComponent } from './line-attributes.component';
+import { PenAttributesComponent } from './pen-attributes.component';
 
-describe('LineAttributesComponent', () => {
-    let component: LineAttributesComponent;
-    let fixture: ComponentFixture<LineAttributesComponent>;
+describe('PenAttributesComponent', () => {
+    let component: PenAttributesComponent;
+    let fixture: ComponentFixture<PenAttributesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [LineAttributesComponent],
+            declarations: [PenAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 FormBuilder,
@@ -23,7 +23,7 @@ describe('LineAttributesComponent', () => {
                 },
             ],
         })
-            .overrideComponent(LineAttributesComponent, {
+            .overrideComponent(PenAttributesComponent, {
                 set: {
                     providers: [
                         {
@@ -39,7 +39,7 @@ describe('LineAttributesComponent', () => {
             })
             .compileComponents();
 
-        fixture = TestBed.createComponent(LineAttributesComponent);
+        fixture = TestBed.createComponent(PenAttributesComponent);
         component = fixture.componentInstance;
     }));
 
