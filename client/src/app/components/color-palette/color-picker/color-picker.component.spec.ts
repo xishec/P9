@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderChange } from '@angular/material';
 
-import { createMouseEvent } from 'src/classes/test-helpers';
+import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorPickerComponent } from './color-picker.component';
 

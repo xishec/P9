@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { Keys, Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
-import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
