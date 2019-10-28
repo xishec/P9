@@ -1,15 +1,23 @@
 <h1 mat-dialog-title>Exporter le dessin</h1>
 
-<mat-dialog-content class="mat-typography" [formGroup]="exportFileModalForm"> </mat-dialog-content>
+<mat-dialog-content class="mat-typography"> </mat-dialog-content>
+<form [formGroup]="exportFileModalForm">
+    <div>
+        Veuillez choisir le format de l'image à exporter :
+        <mat-form-field>
+            <mat-select formControlName="fileType">
+                <mat-option value="{{ FileType.SVG }}">SVG</mat-option>
+                <mat-option value="{{ FileType.BMP }}">BMP</mat-option>
+                <mat-option value="{{ FileType.JPG }}">JPG</mat-option>
+                <mat-option value="{{ FileType.PNG }}">PNG</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</form>
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        (click)="onSubmit()"
-    >
+    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()">
         Exporter
     </button>
 </mat-dialog-actions>
