@@ -22,6 +22,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { ExportToolService } from '../export-tool/export-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -47,6 +48,7 @@ export class ToolSelectorService {
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private modalManagerService: ModalManagerService,
+        private exportTool: ExportToolService
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -81,6 +83,8 @@ export class ToolSelectorService {
 
         this.lineToolService = new LineToolService(ref, renderer, drawStack);
         this.lineToolService.initializeColorToolService(this.colorToolService);
+
+        this.exportTool.initializeSVG(ref);
     }
 
     displayNewDrawingModal(): void {
@@ -171,7 +175,6 @@ export class ToolSelectorService {
     }
 
     changeTool(tooltipName: string): void {
-
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
