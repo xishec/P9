@@ -1,0 +1,35 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="eraserAttributesForm">
+        <div class="attribute">
+            <label for="eraserSize">Taille de l'éfface</label>
+            <mat-slider
+                placeholder="value"
+                formControlName="eraserSize"
+                (input)="onSliderChange($event)"
+                [min]="eraserSize.Min"
+                [max]="eraserSize.Max"
+                step="1"
+                value="{{ eraserAttributesForm.value.eraserSize }}"
+            ></mat-slider>
+
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="eraserSize"
+                    (input)="onSizeChange()"
+                    [min]="eraserSize.Min"
+                    [max]="eraserSize.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ eraserSize.Min }} et {{ eraserSize.Max }}</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
