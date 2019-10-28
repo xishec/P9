@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { ExportToolService } from 'src/app/services/tools/export-tool/export-tool.service';
+import { FileType } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-export-file-modal-window',
@@ -13,10 +15,13 @@ export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
+    readonly FileType = FileType;
+
     constructor(
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
+        private exportToolService: ExportToolService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -26,7 +31,9 @@ export class ExportFileModalWindowComponent implements OnInit {
     }
 
     initializeForm(): void {
-        this.exportFileModalForm = this.formBuilder.group({});
+        this.exportFileModalForm = this.formBuilder.group({
+            fileType: [FileType.SVG],
+        });
     }
 
     onCancel(): void {
@@ -35,6 +42,7 @@ export class ExportFileModalWindowComponent implements OnInit {
     }
 
     onSubmit(): void {
+        this.exportToolService.saveFile(this.exportFileModalForm.controls.fileType.value);
         this.onCancel();
     }
 }
