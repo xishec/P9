@@ -131,8 +131,10 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Rectangle);
         this.renderer.appendChild(el, drawRectangle);
-        this.drawStack.push(el);
         this.renderer.appendChild(this.svgReference.nativeElement, el);
+        
+        this.drawStack.push(el);
+       
     }
 
     updateDrawing(): void {
@@ -249,9 +251,9 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
         if (button === Mouse.LeftButton && this.isIn && this.isValideRectangle()) {
+            this.cleanUp();
             this.createSVG();
         }
-        this.cleanUp();
     }
 
     onMouseEnter(event: MouseEvent): void {

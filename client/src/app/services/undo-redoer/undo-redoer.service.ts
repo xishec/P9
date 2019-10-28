@@ -36,6 +36,8 @@ export class UndoRedoerService {
             idStack: idStackArray,
             drawingInfo: new DrawingInfo(700, 700, DEFAULT_WHITE),
         };
+        
+        // console.log(this.workzoneRef.nativeElement.innerHTML);
 
         this.undos.push(currentState);
 
