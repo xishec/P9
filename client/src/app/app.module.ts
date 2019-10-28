@@ -64,7 +64,7 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes/eraser-attributes.component';
+import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
 
 @NgModule({
     declarations: [
