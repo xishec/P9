@@ -23,6 +23,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -40,6 +41,7 @@ export class ToolSelectorService {
     private polygoneTool: PolygonToolService;
     private penTool: PenToolService;
     private lineTool: LineToolService;
+    private eraserTool: EraserToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -86,6 +88,8 @@ export class ToolSelectorService {
 
         this.lineTool = new LineToolService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
+
+        this.eraserTool = new EraserToolService(drawStack, ref, renderer);
     }
 
     displayNewDrawingModal(): void {
@@ -179,6 +183,10 @@ export class ToolSelectorService {
         return this.lineTool;
     }
 
+    getEraserTool(): EraserToolService {
+        return this.eraserTool;
+    }
+
     changeTool(tooltipName: string): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
@@ -252,10 +260,14 @@ export class ToolSelectorService {
                     this.displayExportFileModal();
                 }
                 break;
+            case ToolName.Eraser:
+                this.currentTool = this.eraserTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
+
             case ToolName.Quill:
             case ToolName.SprayCan:
             case ToolName.Fill:
-            case ToolName.Eraser:
             case ToolName.Text:
             default:
                 this.currentTool = undefined;
