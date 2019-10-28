@@ -130,6 +130,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     singlySelect(stackPosition: number): void {
+        this.proxy.emptySelection();
         this.proxy.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }

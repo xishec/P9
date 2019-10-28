@@ -89,7 +89,8 @@ export class Selection {
             currentMouseCoords.x >= selectionBoxLeft &&
             currentMouseCoords.x <= selectionBoxRight &&
             currentMouseCoords.y >= selectionBoxTop &&
-            currentMouseCoords.y <= selectionBoxBottom
+            currentMouseCoords.y <= selectionBoxBottom &&
+            this.isAppended
         );
     }
 
@@ -102,7 +103,7 @@ export class Selection {
             const distX = currentMouseCoords.x - cx;
             const distY = currentMouseCoords.y - cy;
 
-            if (Math.abs(distX) <= r && Math.abs(distY) <= r) {
+            if (Math.abs(distX) <= r && Math.abs(distY) <= r && this.isAppended) {
                 return true;
             }
         }
