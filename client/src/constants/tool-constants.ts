@@ -140,6 +140,12 @@ enum StampAngleOrientation {
     Max = 360,
 }
 
+enum EraserSize {
+    Min = 1,
+    Default = 1,
+    Max = 10,
+}
+
 const STAMP_TYPES = [
     '',
     '/assets/stamps/iconmonstr-smiley-14.svg',
@@ -272,4 +278,5 @@ export {
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
     PEN_WIDTH_FACTOR,
+    EraserSize,
 };
