@@ -12,6 +12,7 @@ export class ExportToolService {
     }
 
     saveFile(fileType: FileType) {
+        this.resizeCanvas();
         switch (fileType) {
             case FileType.SVG:
                 this.saveAsSVG();
@@ -31,11 +32,11 @@ export class ExportToolService {
         }
     }
 
-    saveAsSVG() {
-        this.refSVG.nativeElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        let preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        let svgBlob = new Blob([preface, this.refSVG.nativeElement.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
-        let svgUrl = URL.createObjectURL(svgBlob);
+    saveAsSVG(): void {
+        this.refAnchor.nativeElement.href = URL.createObjectURL(this.getSVGBlob());
+        this.launchDownload(FileType.SVG);
+    }
+
         let downloadLink = document.createElement('a');
         downloadLink.href = svgUrl;
         downloadLink.download = 'untitled.svg';
@@ -55,4 +56,16 @@ export class ExportToolService {
     saveAsBMP() {
         console.log('BMP');
     }
+
+    launchDownload(fileType: FileType): void {
+        this.refAnchor.nativeElement.download = 'untitled.' + fileType;
+        this.refAnchor.nativeElement.click();
+    }
+
+    getSVGBlob(): Blob {
+        this.refSVG.nativeElement.setAttribute('xmlns', SVG_NS);
+        let data = new XMLSerializer().serializeToString(this.refSVG.nativeElement);
+        return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    }
+
 }
