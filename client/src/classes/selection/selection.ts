@@ -70,10 +70,6 @@ export class Selection {
         return 0;
     }
 
-    inUse(): boolean {
-        return this.selection.size > 0;
-    }
-
     mouseIsInSelectionBox(currentMouseCoords: MouseCoords): boolean {
         const selectionBoxLeft = this.getDOMRect(this.selectionBox).x + window.scrollX - SIDEBAR_WIDTH;
         const selectionBoxRight =

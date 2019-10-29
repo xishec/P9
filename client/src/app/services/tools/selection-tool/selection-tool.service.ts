@@ -18,11 +18,11 @@ export class SelectionToolService extends AbstractToolService {
 
     isTheCurrentTool = false;
     isSelecting = false;
-    //selectionBoxIsAppended = false;
     isOnTarget = false;
     isLeftMouseDown = false;
     isRightMouseDown = false;
     isLeftMouseDragging = false;
+    isTranslatingSelection = false;
     isRightMouseDragging = false;
 
     proxy: Selection;
@@ -182,7 +182,8 @@ export class SelectionToolService extends AbstractToolService {
     handleLeftMouseDrag(): void {
         this.isLeftMouseDragging = true;
 
-        if(this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting) {
+        if(this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
+            this.isTranslatingSelection = true;
             this.proxy.moveBy(this.currentMouseCoords, this.lastMouseCoords);
         } else {
             this.startSelection();
@@ -229,11 +230,11 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isSelecting) {
             this.isSelecting = false;
-        } else if (this.isOnTarget) {
+        } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
             this.isOnTarget = false;
-        } else if (this.proxy.mouseIsInSelectionBox(this.currentMouseCoords)) {
-
+        } else if (this.isTranslatingSelection) {
+            this.isTranslatingSelection = false;
         } else {
             this.proxy.emptySelection();
         }
