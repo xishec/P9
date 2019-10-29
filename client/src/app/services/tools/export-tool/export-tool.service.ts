@@ -1,17 +1,25 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { FileType } from 'src/constants/tool-constants';
+import { SVG_NS } from 'src/constants/constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ExportToolService {
-    private refSVG: ElementRef<SVGElement>;
+    refSVG: ElementRef<SVGElement>;
+    refAnchor: ElementRef<HTMLAnchorElement>;
+    canvas: HTMLCanvasElement;
 
-    initializeSVG(ref: ElementRef<SVGElement>) {
+    initializeSVG(ref: ElementRef<SVGElement>): void {
         this.refSVG = ref;
     }
 
-    saveFile(fileType: FileType) {
+    initialize(refAnchor: ElementRef<HTMLAnchorElement>, refCanvas: ElementRef<HTMLCanvasElement>): void {
+        this.refAnchor = refAnchor;
+        this.canvas = refCanvas.nativeElement;
+    }
+
+    saveFile(fileType: FileType): void {
         this.resizeCanvas();
         switch (fileType) {
             case FileType.SVG:
@@ -28,6 +36,7 @@ export class ExportToolService {
 
             case FileType.PNG:
                 this.saveAsPNG();
+                console.log('Bonjour');
                 break;
         }
     }
@@ -37,23 +46,45 @@ export class ExportToolService {
         this.launchDownload(FileType.SVG);
     }
 
-        let downloadLink = document.createElement('a');
-        downloadLink.href = svgUrl;
-        downloadLink.download = 'untitled.svg';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+    saveAsPNG(): void {
+        let context = this.canvas.getContext('2d');
+        let img = new Image();
+        let url = URL.createObjectURL(this.getSVGBlob());
+        img.onload = () => {
+            if (context !== null) {
+                context.drawImage(img, 0, 0);
+            }
+
+            URL.revokeObjectURL(url);
+            let uri = this.canvas.toDataURL('image/png').replace('image/png', 'octet/stream');
+            this.refAnchor.nativeElement.href = uri;
+            this.launchDownload(FileType.PNG);
+
+            URL.revokeObjectURL(uri);
+        };
+        img.src = url;
     }
 
-    saveAsPNG() {
-        console.log('PNG');
+    saveAsJPG(): void {
+        let context = this.canvas.getContext('2d');
+        let img = new Image();
+        let url = URL.createObjectURL(this.getSVGBlob());
+        img.onload = () => {
+            if (context !== null) {
+                context.drawImage(img, 0, 0);
+            }
+
+            URL.revokeObjectURL(url);
+            let uri = this.canvas.toDataURL('image/jpg').replace('image/jpg', 'octet/stream');
+            this.refAnchor.nativeElement.href = uri;
+            this.launchDownload(FileType.JPG);
+
+            URL.revokeObjectURL(uri);
+        };
+        img.src = url;
     }
 
-    saveAsJPG() {
-        console.log('JPG');
-    }
-
-    saveAsBMP() {
+    saveAsBMP(): void {
         console.log('BMP');
     }
 
@@ -68,4 +99,9 @@ export class ExportToolService {
         return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     }
 
+    resizeCanvas() {
+        let svgSize = this.refSVG.nativeElement.getBoundingClientRect();
+        this.canvas.width = svgSize.width;
+        this.canvas.height = svgSize.height;
+    }
 }
