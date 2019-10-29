@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
@@ -14,6 +14,9 @@ import { FileType } from 'src/constants/tool-constants';
 export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
     formBuilder: FormBuilder;
+
+    @ViewChild('anchor', { static: true }) anchorRef: ElementRef<HTMLAnchorElement>;
+    @ViewChild('canPad', { static: true }) refCanvas: ElementRef<HTMLCanvasElement>;
 
     readonly FileType = FileType;
 
