@@ -36,6 +36,7 @@ export class PenToolService extends TracingToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.maxThickness = thickness;
+            this.currentWidth = thickness;
         });
         this.attributesManagerService.currentMinThickness.subscribe((thickness) => {
             this.minThickness = thickness;
@@ -81,7 +82,8 @@ export class PenToolService extends TracingToolService {
         this.lastMouseY = e.screenY;
 
         const totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
-        const targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
+        const targetWidth =
+            (this.maxThickness - this.minThickness) * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
         this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
     }
 }
