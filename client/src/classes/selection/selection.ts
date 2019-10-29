@@ -278,6 +278,18 @@ export class Selection {
         }
     }
 
+    invertAddToSelection(element: SVGGElement): void {
+        if (this.selection.has(element)) {
+            this.selection.delete(element);
+        } else {
+            this.selection.add(element);
+        }
+        this.updateFullSelectionBox();
+        if (this.selection.size > 0) {
+            this.appendFullSelectionBox();
+        }
+    }
+
     removeFromSelection(element: SVGGElement): void {
         this.selection.delete(element);
         this.updateFullSelectionBox();
@@ -289,6 +301,20 @@ export class Selection {
     emptySelection(): void {
         this.removeFullSelectionBox();
         this.selection.clear();
+    }
+
+    handleSelection(element: SVGGElement, isInSelectionRect: boolean): void {
+        if (isInSelectionRect) {
+            this.addToSelection(element);
+        } else {
+            this.removeFromSelection(element);
+        }
+    }
+
+    handleInvertSelection(element: SVGGElement, isInSelectionRect: boolean): void {
+        if (isInSelectionRect && this.selection.has(element)) {
+            this.removeFromSelection(element);
+        }
     }
 
     moveBy(currentMouseCoords: MouseCoords, lastMouseCoords: MouseCoords): void {
