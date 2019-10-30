@@ -202,6 +202,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isRightMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
+        this.proxy.invertSelectionBuffer.clear();
     }
 
     onMouseDown(event: MouseEvent): void {

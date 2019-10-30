@@ -8,6 +8,7 @@ export class Selection {
     svgRef: SVGElement;
 
     selection: Set<SVGGElement> = new Set();
+    invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
 
@@ -312,8 +313,12 @@ export class Selection {
     }
 
     handleInvertSelection(element: SVGGElement, isInSelectionRect: boolean): void {
-        if (isInSelectionRect && this.selection.has(element)) {
+        if (isInSelectionRect && this.selection.has(element) && !this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.add(element);
             this.removeFromSelection(element);
+        } else if (isInSelectionRect && !this.selection.has(element) && !this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.add(element);
+            this.addToSelection(element);
         }
     }
 
