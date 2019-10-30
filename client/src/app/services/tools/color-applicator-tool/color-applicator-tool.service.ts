@@ -91,7 +91,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 default:
                     break;
             }
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack.slice(0));
             this.isOnTarget = false;
         }
     }
