@@ -29,13 +29,13 @@ export class Selection {
 
     initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, 'purple');
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, '#34cfeb');
         this.renderer.setAttribute(this.selectionBox, HTMLAttribute.fill, 'none');
         for (let i = 0; i < 8; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
             this.renderer.setAttribute(this.controlPoints[i], 'r', '5');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, 'purple');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, 'white');
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, '#34cfeb');
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, '#34cfeb');
         }
     }
 
