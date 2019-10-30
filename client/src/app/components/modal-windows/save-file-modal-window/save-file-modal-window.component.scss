@@ -6,6 +6,14 @@
     padding: 15px 40px;
 }
 
+#tab-content {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    overflow-x: hidden;
+}
+
 #drawing-name-title {
     grid-column: 1 / 2;
     grid-row: 1 / 2;

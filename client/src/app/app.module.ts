@@ -18,6 +18,7 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatSlideToggleModule,
+    MatTabsModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************
@@ -109,6 +110,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         HttpClientModule,
         MatTooltipModule,
         MatSelectModule,
+        MatTabsModule,
         MatFormFieldModule,
         MatSlideToggleModule,
     ],
