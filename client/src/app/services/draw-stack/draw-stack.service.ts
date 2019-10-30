@@ -22,8 +22,30 @@ export class DrawStackService {
         this.stackTarget.next(stackTarget);
     }
 
+    changeEraserTargetElement(stackTarget: StackTargetInfo): void {
+        this.stackTarget.next(stackTarget);
+    }
+
     getElementByPosition(elementPosition: number): SVGGElement {
         return this.drawStack[elementPosition];
+    }
+
+    setElementByPosition(elementPosition: number, element: SVGGElement): void {
+        this.drawStack[elementPosition] = element;
+    }
+
+    removeElementByPosition(elementPosition: number): void {
+        console.log('elementPosition: ' + elementPosition);
+        console.log('getDrawStackLength:' + this.getDrawStackLength());
+        this.drawStack.splice(elementPosition, 1);
+        console.log('getDrawStackLength:' + this.getDrawStackLength());
+        console.log('stack: ', this.drawStack);
+
+        for (let i = 0; i < this.getDrawStackLength(); i++) {
+            if (i >= elementPosition) {
+                this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
+            }
+        }
     }
 
     getDrawStackLength(): number {
@@ -38,10 +60,26 @@ export class DrawStackService {
 
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
             });
             this.renderer.listen(el.children.item(i), 'mouseup', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
+            });
+
+            this.renderer.listen(el.children.item(i), 'mousehover', () => {
+                this.changeEraserTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
+            });
+
+            this.renderer.listen(el.children.item(i), 'onmouseout', () => {
+                this.changeEraserTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
             });
         }
 
@@ -50,7 +88,9 @@ export class DrawStackService {
 
     push(el: SVGGElement): void {
         this.drawStack.push(this.makeTargetable(el));
-        if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
+        if (this.idStack.length > 0) {
+            this.drawingLoaderService.emptyDrawStack.next(false);
+        }
     }
 
     pop(): SVGGElement | undefined {
