@@ -7,8 +7,12 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
-        super(elementRef, renderer, drawStack);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {

@@ -1,17 +1,6 @@
 <div id="container">
     <div id="userColorButtons">
         <div>
-            <span> Couleur de fond :</span>
-            <button
-                id="background-color-button"
-                (click)="onClickBackgroundColor()"
-                class="color"
-                type="button"
-                [ngStyle]="getBackgroundColorIcon()"
-            ></button>
-        </div>
-
-        <div>
             <span> Couleur principale :</span>
             <button
                 id="primary-color-button"
@@ -21,7 +10,6 @@
                 [ngStyle]="getPrimaryColorIcon()"
             ></button>
         </div>
-
         <div>
             <span> Couleur secondaire :</span>
             <button
@@ -30,6 +18,16 @@
                 class="color"
                 type="button"
                 [ngStyle]="getSecondaryColorIcon()"
+            ></button>
+        </div>
+        <div>
+            <span> Couleur de fond :</span>
+            <button
+                id="background-color-button"
+                (click)="onClickBackgroundColor()"
+                class="color"
+                type="button"
+                [ngStyle]="getBackgroundColorIcon()"
             ></button>
         </div>
 

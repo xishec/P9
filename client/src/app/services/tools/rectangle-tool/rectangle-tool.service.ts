@@ -11,7 +11,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class RectangleToolService extends AbstractShapeToolService {
-    drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+    drawRectangle: SVGRectElement;
     fillColor = '';
     strokeColor = '';
     userFillColor = '';
@@ -23,8 +23,13 @@ export class RectangleToolService extends AbstractShapeToolService {
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
 
-    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
-        super(renderer);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
+        this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
@@ -112,8 +117,8 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     cleanUp(): void {
         this.isPreviewing = false;
-        this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
-        this.renderer.removeChild(this.svgReference, this.drawRectangle);
+        this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
+        this.renderer.removeChild(this.elementRef, this.drawRectangle);
     }
 
     createSVG(): void {
@@ -184,8 +189,16 @@ export class RectangleToolService extends AbstractShapeToolService {
             );
         }
 
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, Math.abs((minLength - this.userStrokeWidth)).toString());
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, Math.abs((minLength - this.userStrokeWidth)).toString());
+        this.renderer.setAttribute(
+            this.drawRectangle,
+            HTMLAttribute.height,
+            Math.abs(minLength - this.userStrokeWidth).toString(),
+        );
+        this.renderer.setAttribute(
+            this.drawRectangle,
+            HTMLAttribute.width,
+            Math.abs(minLength - this.userStrokeWidth).toString(),
+        );
     }
 
     updateTraceType(traceType: string) {
@@ -229,8 +242,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -247,8 +260,8 @@ export class RectangleToolService extends AbstractShapeToolService {
 
             this.updateDrawing();
 
-            this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
-            this.renderer.appendChild(this.svgReference.nativeElement, this.drawRectangle);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.previewRectangle);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
         }
     }
 

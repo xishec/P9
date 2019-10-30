@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { ToolName, ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
@@ -13,7 +13,6 @@ import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
     providedIn: 'root',
 })
 export class EventListenerService {
-
     currentTool: AbstractToolService | undefined;
     toolName = '';
     isOnInput = false;
@@ -44,7 +43,6 @@ export class EventListenerService {
     }
 
     addEventListeners(): void {
-
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousemove', (event: MouseEvent) => {
             if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onMouseMove(event);
@@ -99,11 +97,10 @@ export class EventListenerService {
             // If control is pressed, change for ControlTools
             if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
                 event.preventDefault();
-                // tslint:disable-next-line: no-non-null-assertion
-                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key)!);
+                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
             }
 
-            // Call the onKeyDown of the current tool, if the current tool doesnt do anything
+            // Call the onKeyDown of the current tool, if the current tool doesn't do anything
             if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
                 this.currentTool.onKeyDown(event);
             }
@@ -111,7 +108,7 @@ export class EventListenerService {
             // If the key is a shortcut for a tool, change current tool
             if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
                 // tslint:disable-next-line: no-non-null-assertion
-                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key)!);
+                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key) as ToolName);
             }
 
             if (event.key === 'g' && this.shouldAllowShortcuts()) {
@@ -125,7 +122,6 @@ export class EventListenerService {
             if (event.key === '-' && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
-
         });
 
         this.renderer.listen(window, 'keyup', (event: KeyboardEvent) => {
@@ -136,6 +132,6 @@ export class EventListenerService {
     }
 
     shouldAllowShortcuts(): boolean {
-        return (!this.isOnInput && !this.isModalOpen);
+        return !this.isOnInput && !this.isModalOpen;
     }
 }
