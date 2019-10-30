@@ -41,7 +41,7 @@ export class UndoRedoerService {
 
         this.undos.push(currentState);
 
-        if( this.redos.length > 0) {
+        if (this.redos.length > 0) {
             this.redos = [];
         }
     }
