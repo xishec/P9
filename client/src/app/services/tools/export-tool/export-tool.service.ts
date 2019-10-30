@@ -75,7 +75,7 @@ export class ExportToolService {
             }
 
             URL.revokeObjectURL(url);
-            let uri = this.canvas.toDataURL('image/jpg').replace('image/jpg', 'octet/stream');
+            let uri = this.canvas.toDataURL('image/jpeg').replace('image/jpeg', 'octet/stream');
             this.refAnchor.nativeElement.href = uri;
             this.launchDownload(FileType.JPG);
 
