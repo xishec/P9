@@ -27,32 +27,42 @@ export class SelectionToolService extends AbstractToolService {
     isLeftMouseDragging = false;
     isRightMouseDragging = false;
 
-    selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-    selectionBox: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+    selectionRectangle: SVGRectElement;
+    selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
     selection: Set<SVGGElement> = new Set();
     invertSelection: Set<SVGGElement> = new Set();
 
-    constructor(
-        public drawStack: DrawStackService,
-        public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
-    ) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
-        this.initControlPoints();
-        this.initSelectionBox();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
         });
+        this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
+        this.selectionBox = this.renderer.createElement('rect', SVG_NS);
+
+        this.initControlPoints();
+        this.initSelectionBox();
     }
 
     cleanUp(): void {
         this.removeFullSelectionBox();
         if (this.isSelecting) {
-            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
         this.isTheCurrentTool = false;
         this.isLeftMouseDown = false;
@@ -193,7 +203,7 @@ export class SelectionToolService extends AbstractToolService {
     startSelection(): void {
         this.isSelecting = true;
         this.updateSelectionRectangle();
-        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
 
     clearSelection(): void {
@@ -314,8 +324,16 @@ export class SelectionToolService extends AbstractToolService {
 
     computeControlPoints(): void {
         // Top left corner
-        this.renderer.setAttribute(this.controlPoints[0], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
-        this.renderer.setAttribute(this.controlPoints[0], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(
+            this.controlPoints[0],
+            HTMLAttribute.cx,
+            this.selectionBox.x.baseVal.value.toString(),
+        );
+        this.renderer.setAttribute(
+            this.controlPoints[0],
+            HTMLAttribute.cy,
+            this.selectionBox.y.baseVal.value.toString(),
+        );
 
         // Top side
         this.renderer.setAttribute(
@@ -323,7 +341,11 @@ export class SelectionToolService extends AbstractToolService {
             HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString(),
         );
-        this.renderer.setAttribute(this.controlPoints[1], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(
+            this.controlPoints[1],
+            HTMLAttribute.cy,
+            this.selectionBox.y.baseVal.value.toString(),
+        );
 
         // Top right corner
         this.renderer.setAttribute(
@@ -331,7 +353,11 @@ export class SelectionToolService extends AbstractToolService {
             HTMLAttribute.cx,
             (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
         );
-        this.renderer.setAttribute(this.controlPoints[2], HTMLAttribute.cy, this.selectionBox.y.baseVal.value.toString());
+        this.renderer.setAttribute(
+            this.controlPoints[2],
+            HTMLAttribute.cy,
+            this.selectionBox.y.baseVal.value.toString(),
+        );
 
         // Right side
         this.renderer.setAttribute(
@@ -370,7 +396,11 @@ export class SelectionToolService extends AbstractToolService {
         );
 
         // Bottom left corner
-        this.renderer.setAttribute(this.controlPoints[6], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(
+            this.controlPoints[6],
+            HTMLAttribute.cx,
+            this.selectionBox.x.baseVal.value.toString(),
+        );
         this.renderer.setAttribute(
             this.controlPoints[6],
             HTMLAttribute.cy,
@@ -378,7 +408,11 @@ export class SelectionToolService extends AbstractToolService {
         );
 
         // Left side
-        this.renderer.setAttribute(this.controlPoints[7], HTMLAttribute.cx, this.selectionBox.x.baseVal.value.toString());
+        this.renderer.setAttribute(
+            this.controlPoints[7],
+            HTMLAttribute.cx,
+            this.selectionBox.x.baseVal.value.toString(),
+        );
         this.renderer.setAttribute(
             this.controlPoints[7],
             HTMLAttribute.cy,
@@ -392,19 +426,19 @@ export class SelectionToolService extends AbstractToolService {
 
     appendControlPoints(): void {
         for (let i = 0; i < 8; i++) {
-            this.renderer.appendChild(this.svgReference.nativeElement, this.controlPoints[i]);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.controlPoints[i]);
         }
     }
 
     removeControlPoints(): void {
         for (const ctrlPt of this.controlPoints) {
-            this.renderer.removeChild(this.svgReference, ctrlPt);
+            this.renderer.removeChild(this.elementRef, ctrlPt);
         }
     }
 
     appendFullSelectionBox(): void {
         if (!this.selectionBoxIsAppended) {
-            this.renderer.appendChild(this.svgReference.nativeElement, this.selectionBox);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.selectionBox);
             this.appendControlPoints();
             this.selectionBoxIsAppended = true;
         }
@@ -412,7 +446,7 @@ export class SelectionToolService extends AbstractToolService {
 
     removeFullSelectionBox(): void {
         if (this.selectionBoxIsAppended) {
-            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionBox);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.selectionBox);
             this.removeControlPoints();
             this.selectionBoxIsAppended = false;
         }
@@ -469,8 +503,8 @@ export class SelectionToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {
         this.lastCurrentMouseX = this.currentMouseX;
         this.lastCurrentMouseY = this.currentMouseY;
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isLeftMouseDown) {
             this.handleLeftMouseDrag();
@@ -523,7 +557,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleLeftMouseUp(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
 
         if (this.isSelecting) {
             this.isSelecting = false;
@@ -545,7 +579,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleRightMouseUp(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
             this.computeSelectionBox();

@@ -1,9 +1,10 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { Keys, Mouse, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
 
 describe('SelectionToolService', () => {
@@ -55,6 +56,10 @@ describe('SelectionToolService', () => {
 
         injector = getTestBed();
         service = injector.get(SelectionToolService);
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
@@ -442,13 +447,12 @@ describe('SelectionToolService', () => {
     it('findLeftMostCoord should return most left coords of elements', () => {
         const width = 10;
         spyOn(service, 'getStrokeWidth').and.returnValue(width);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
                 x: el.clientLeft,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const smallestX = 1000;
         const mockSVG1 = ({
             clientLeft: smallestX,
@@ -473,14 +477,13 @@ describe('SelectionToolService', () => {
         const strokeWidth = 10;
         const DOMRectWidth = 100;
         spyOn(service, 'getStrokeWidth').and.returnValue(strokeWidth);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
                 x: el.clientLeft,
                 width: DOMRectWidth,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const largestX = 1360;
         const mockSVG1 = ({
             clientLeft: 1000,

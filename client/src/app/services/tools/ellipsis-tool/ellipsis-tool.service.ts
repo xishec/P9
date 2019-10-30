@@ -23,10 +23,15 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     isCirclePreview = false;
 
-    drawEllipse: SVGEllipseElement = this.renderer.createElement('ellipse', SVG_NS);
+    drawEllipse: SVGEllipseElement;
 
-    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
-        super(renderer);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
+        this.drawEllipse = this.renderer.createElement('ellipse', SVG_NS);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
@@ -121,7 +126,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
                 (this.previewRectangleX + (this.previewRectangleWidth - minLength / 2)).toString(),
             );
         } else {
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.cx, (this.previewRectangleX + minLength / 2).toString());
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                HTMLAttribute.cx,
+                (this.previewRectangleX + minLength / 2).toString(),
+            );
         }
 
         if (deltaY < 0) {
@@ -131,7 +140,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
                 (this.previewRectangleY + (this.previewRectangleHeight - minLength / 2)).toString(),
             );
         } else {
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.cy, (this.previewRectangleY + minLength / 2).toString());
+            this.renderer.setAttribute(
+                this.drawEllipse,
+                HTMLAttribute.cy,
+                (this.previewRectangleY + minLength / 2).toString(),
+            );
         }
 
         this.renderer.setAttribute(
@@ -187,8 +200,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -203,8 +216,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
             this.initialMouseY = this.currentMouseY;
             this.isPreviewing = true;
             this.updateDrawing();
-            this.renderer.appendChild(this.svgReference.nativeElement, this.drawEllipse);
-            this.renderer.appendChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.drawEllipse);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.previewRectangle);
         }
     }
 
@@ -212,8 +225,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
         const button = event.button;
 
         if (button === Mouse.LeftButton) {
-            this.renderer.removeChild(this.svgReference.nativeElement, this.drawEllipse);
-            this.renderer.removeChild(this.svgReference.nativeElement, this.previewRectangle);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.drawEllipse);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
             this.isPreviewing = false;
             if (this.isValideEllipse() && this.isIn) {
                 this.createSVG();
@@ -267,12 +280,12 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
         this.renderer.appendChild(el, drawEllipse);
         this.drawStack.push(el);
-        this.renderer.appendChild(this.svgReference.nativeElement, el);
+        this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
     cleanUp(): void {
-        this.renderer.removeChild(this.svgReference, this.previewRectangle);
-        this.renderer.removeChild(this.svgReference, this.drawEllipse);
+        this.renderer.removeChild(this.elementRef, this.previewRectangle);
+        this.renderer.removeChild(this.elementRef, this.drawEllipse);
         this.isPreviewing = false;
     }
 }

@@ -12,8 +12,12 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 export class BrushToolService extends TracingToolService {
     private currentStyle = 1;
 
-    constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
-        super(elementRef, renderer, drawStack);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {

@@ -9,7 +9,4 @@ export class DrawingSaverService {
     currentNameAndLabels: BehaviorSubject<NameAndLabels> = new BehaviorSubject(new NameAndLabels('', ['']));
     currentIsSaved: BehaviorSubject<boolean | undefined> = new BehaviorSubject(undefined);
     currentErrorMesaage: BehaviorSubject<string> = new BehaviorSubject('');
-
-    // tslint:disable-next-line: no-empty
-    constructor() {}
 }
