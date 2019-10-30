@@ -162,11 +162,11 @@ export class SelectionToolService extends AbstractToolService {
     handleLeftMouseDrag(): void {
         this.isLeftMouseDragging = true;
 
-        if(this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
+        if (this.isOnTarget && !this.proxy.selection.has(this.drawStack.drawStack[this.currentTarget])) {
+            this.singlySelect(this.currentTarget);
+        } else if (this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
             this.isTranslatingSelection = true;
             this.proxy.moveBy(this.currentMouseCoords, this.lastMouseCoords);
-        } else if (this.isOnTarget) {
-            this.singlySelect(this.currentTarget);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
