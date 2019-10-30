@@ -6,6 +6,7 @@ import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private undoRedoerService: UndoRedoerService) {
         super();
     }
 
@@ -90,6 +91,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 default:
                     break;
             }
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
             this.isOnTarget = false;
         }
     }

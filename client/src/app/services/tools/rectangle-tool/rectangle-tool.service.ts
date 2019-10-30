@@ -136,10 +136,10 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Rectangle);
         this.renderer.appendChild(el, drawRectangle);
-        this.renderer.appendChild(this.svgReference.nativeElement, el);
+        this.renderer.appendChild(this.elementRef.nativeElement, el);
         
-        setTimeout(()=>{
-            console.log(this.svgReference.nativeElement.innerHTML);
+        setTimeout(() => {
+            console.log(this.elementRef.nativeElement.innerHTML);
             this.drawStack.push(el);
         },1);
 
