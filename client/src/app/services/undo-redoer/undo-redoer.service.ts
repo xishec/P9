@@ -14,12 +14,17 @@ export class UndoRedoerService {
     redos = new Array<Drawing>();
 
     workzoneRef: ElementRef<SVGElement>;
+    currentDrawingInfos: DrawingInfo;
 
     constructor(private drawingLoaderService: DrawingLoaderService) {
     }
 
     setWorkZoneRef(workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
+    }
+
+    setWorkZoneDrawingInfo(drawingInfo: DrawingInfo) {
+        this.currentDrawingInfos = drawingInfo;
     }
 
     initializeStacks(idStackArray: string[]) : void {
@@ -34,8 +39,10 @@ export class UndoRedoerService {
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
             idStack: idStackArray,
-            drawingInfo: new DrawingInfo(700, 700, DEFAULT_WHITE),
+            drawingInfo: this.currentDrawingInfos,
         };
+
+        console.log(currentState);
         
         // console.log(this.workzoneRef.nativeElement.innerHTML);
 

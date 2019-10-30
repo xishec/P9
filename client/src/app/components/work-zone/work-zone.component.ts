@@ -100,6 +100,8 @@ export class WorkZoneComponent implements OnInit {
             });
         });
 
+        this.undoRedoerService.setWorkZoneDrawingInfo(this.drawingInfo);
+
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width === 0 || drawingInfo.height === 0) {
                 return;

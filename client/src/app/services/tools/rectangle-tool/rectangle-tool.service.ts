@@ -139,7 +139,6 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         
         setTimeout(() => {
-            console.log(this.elementRef.nativeElement.innerHTML);
             this.drawStack.push(el);
         },1);
 
