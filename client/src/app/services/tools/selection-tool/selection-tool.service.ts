@@ -55,6 +55,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isSelecting = false;
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
+        this.isTranslatingSelection = false;
     }
 
     updateSelectionRectangle(): void {
@@ -164,6 +165,8 @@ export class SelectionToolService extends AbstractToolService {
         if(this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
             this.isTranslatingSelection = true;
             this.proxy.moveBy(this.currentMouseCoords, this.lastMouseCoords);
+        } else if (this.isOnTarget) {
+            this.singlySelect(this.currentTarget);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
