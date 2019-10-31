@@ -88,9 +88,11 @@ export class EventListenerService {
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
 
             if (event.key === 'ArrowLeft') {
+                this.currentTool!.cleanUp();
                 this.undoRedoer.undo();
             }
             if (event.key === 'ArrowRight') {
+                this.currentTool!.cleanUp();
                 this.undoRedoer.redo();
             }
 

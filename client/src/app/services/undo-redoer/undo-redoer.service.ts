@@ -3,7 +3,6 @@ import { ElementRef, Injectable } from '@angular/core';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -27,10 +26,16 @@ export class UndoRedoerService {
         this.currentDrawingInfos = drawingInfo;
     }
 
-    initializeStacks(idStackArray: string[]) : void {
+    setFirstState() { // NOT USED YET
+        if (this.undos.length === 0) {
+            console.log('save first state');
+            this.saveCurrentState([]);
+        }
+    }
+
+    initializeStacks() : void {
         this.undos = [];
         this.redos = [];
-        this.saveCurrentState(idStackArray);
     }
 
     saveCurrentState(idStackArray: string[]): void {
@@ -41,10 +46,7 @@ export class UndoRedoerService {
             idStack: idStackArray,
             drawingInfo: this.currentDrawingInfos,
         };
-
-        console.log(currentState);
         
-        // console.log(this.workzoneRef.nativeElement.innerHTML);
 
         this.undos.push(currentState);
 

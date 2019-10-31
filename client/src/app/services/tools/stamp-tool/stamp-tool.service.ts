@@ -170,8 +170,10 @@ export class StampToolService extends AbstractToolService {
             'transform',
             `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`,
         );
-        this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
+        setTimeout(() => {
+            this.drawStack.push(el);
+        },1);
     }
 
     rotateStamp(direction: number): void {
