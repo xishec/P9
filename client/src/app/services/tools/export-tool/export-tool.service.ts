@@ -36,7 +36,6 @@ export class ExportToolService {
 
             case FileType.PNG:
                 this.saveAsPNG();
-                console.log('Bonjour');
                 break;
         }
     }
@@ -85,7 +84,7 @@ export class ExportToolService {
     }
 
     saveAsBMP(): void {
-        console.log('BMP');
+        let context: CanvasRenderingContext2D | null = this.canvas.getContext('2d');
     }
 
     launchDownload(fileType: FileType): void {
