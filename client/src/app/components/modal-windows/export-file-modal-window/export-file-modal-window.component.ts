@@ -24,7 +24,7 @@ export class ExportFileModalWindowComponent implements OnInit {
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
-        private exportToolService: ExportToolService
+        public exportToolService: ExportToolService
     ) {
         this.formBuilder = formBuilder;
     }

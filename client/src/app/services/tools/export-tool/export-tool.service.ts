@@ -2,6 +2,7 @@ import { Injectable, ElementRef } from '@angular/core';
 import { FileType } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,14 @@ export class ExportToolService {
     refSVG: ElementRef<SVGElement>;
     refAnchor: ElementRef<HTMLAnchorElement>;
     canvas: HTMLCanvasElement;
+    workzoneIsEmpty = true;
+
+    constructor(private drawingModalWindowService: DrawingModalWindowService) {
+        this.drawingModalWindowService.drawingInfo.subscribe(() => {
+            this.workzoneIsEmpty = false;
+        });
+        this.workzoneIsEmpty = true;
+    }
 
     initializeSVG(ref: ElementRef<SVGElement>): void {
         this.refSVG = ref;
