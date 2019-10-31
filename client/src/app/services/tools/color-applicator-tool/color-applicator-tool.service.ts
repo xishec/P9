@@ -56,6 +56,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         ) {
             switch (button) {
                 case Mouse.LeftButton:
+                    if ((this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition).getAttribute('fill') as string) !== 'none')
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         HTMLAttribute.fill,
