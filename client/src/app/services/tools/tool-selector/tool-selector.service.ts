@@ -46,6 +46,7 @@ export class ToolSelectorService {
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
+    drawStack: DrawStackService;
 
     constructor(
         private colorToolService: ColorToolService,
@@ -58,6 +59,8 @@ export class ToolSelectorService {
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
+        this.drawStack = drawStack;
+
         this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
 
         this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
@@ -191,6 +194,7 @@ export class ToolSelectorService {
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
+        this.drawStack.isEraserTool = false;
 
         switch (tooltipName) {
             case ToolName.NewDrawing:
@@ -262,6 +266,7 @@ export class ToolSelectorService {
                 break;
             case ToolName.Eraser:
                 this.currentTool = this.eraserTool;
+                this.drawStack.isEraserTool = true;
                 this.changeCurrentToolName(tooltipName);
                 break;
 

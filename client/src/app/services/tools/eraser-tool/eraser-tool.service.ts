@@ -5,7 +5,7 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+//import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -37,11 +37,7 @@ export class EraserToolService extends AbstractToolService {
         });
     }
 
-    onMouseMove(event: MouseEvent): void {
-        // this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        // this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
-        // this.positionStamp();
-    }
+    onMouseMove(event: MouseEvent): void {}
 
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
@@ -79,20 +75,9 @@ export class EraserToolService extends AbstractToolService {
         // }
     }
 
-    onMouseEnter(event: MouseEvent): void {
-        let elementPosition = this.currentStackTarget.targetPosition;
-        if (this.isOnTarget && this.drawStack.getElementByPosition(elementPosition) !== undefined) {
-            //color on hover to red
-            //lastStrokeColor = this.svgReference.nativeElement.ge
+    onMouseEnter(event: MouseEvent): void {}
 
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(elementPosition),
-                HTMLAttribute.stroke,
-                '#ff0000',
-            );
-            console.log('color border in red');
-        }
-    }
+    onMouseOver(event: MouseEvent): void {}
 
     onMouseLeave(event: MouseEvent): void {
         // this.isIn = false;
