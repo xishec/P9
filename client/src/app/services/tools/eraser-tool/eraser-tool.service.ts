@@ -62,9 +62,8 @@ export class EraserToolService extends AbstractToolService {
                 // );
 
                 this.drawStack.removeElementByPosition(elementPosition);
-            } else {
-                // this.isOnTarget = false;
             }
+            this.isOnTarget = false;
         }
     }
 
