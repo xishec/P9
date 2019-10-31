@@ -85,6 +85,22 @@ export class ExportToolService {
 
     saveAsBMP(): void {
         let context: CanvasRenderingContext2D | null = this.canvas.getContext('2d');
+        let img: HTMLImageElement = new Image();
+        let url = URL.createObjectURL(this.getSVGBlob());
+        img.onload = () => {
+            if (context !== null) {
+                context.drawImage(img, 0, 0);
+            }
+
+            URL.revokeObjectURL(url);
+            let canvasToBMP = new CanvasToBMP();
+            let uri = canvasToBMP.toDataURL(this.canvas);
+            this.refAnchor.nativeElement.href = uri;
+            this.launchDownload(FileType.BMP);
+
+            URL.revokeObjectURL(uri);
+        };
+        img.src = url;
     }
 
     launchDownload(fileType: FileType): void {
