@@ -30,6 +30,7 @@ export class ExportToolService {
     }
 
     saveFile(fileType: FileType): void {
+        const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
         this.resizeCanvas();
         switch (fileType) {
             case FileType.SVG:
@@ -39,7 +40,7 @@ export class ExportToolService {
             case FileType.BMP:
                 this.compressSVG();
                 this.saveAsBMP();
-                this.decompressSVG();
+                this.decompressSVG(svgSize);
                 break;
 
             case FileType.JPG:
@@ -141,8 +142,7 @@ export class ExportToolService {
         this.resizeCanvas();
     }
 
-    decompressSVG(): void {
-        const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
+    decompressSVG(svgSize: ClientRect | DOMRect): void {
         this.refSVG.nativeElement.setAttribute('viewBox', 'none');
         this.refSVG.nativeElement.setAttribute('width', `${svgSize.width}`);
         this.refSVG.nativeElement.setAttribute('height', `${svgSize.height}`);
