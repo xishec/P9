@@ -16,6 +16,8 @@ export class UndoRedoerService {
     workzoneRef: ElementRef<SVGElement>;
     currentDrawingInfos: DrawingInfo;
 
+    fromLoader = false;
+
     constructor(private drawingLoaderService: DrawingLoaderService, private drawingModalWindowService: DrawingModalWindowService) {
     }
 

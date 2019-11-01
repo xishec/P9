@@ -10,6 +10,7 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 
 // tslint:disable-next-line: max-classes-per-file
 @Pipe({ name: 'toTrustHtml' })
@@ -115,6 +116,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
         private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -170,6 +172,10 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
+
+            this.undoRedoerService.initializeStacks();
+            this.undoRedoerService.fromLoader = true;
+        
             const selectedDrawing: Drawing = this.drawingsFromServer.find(
                 (drawing) => drawing.name === this.selectedOption,
             ) as Drawing;

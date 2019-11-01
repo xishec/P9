@@ -98,6 +98,11 @@ export class WorkZoneComponent implements OnInit {
                 })[0];
                 this.drawStack.push(child as SVGAElement, false);
             });
+
+            if(this.undoRedoerService.fromLoader) {
+                this.undoRedoerService.saveCurrentState([]);
+                this.undoRedoerService.fromLoader = false;
+            }
         });
         
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
@@ -111,7 +116,7 @@ export class WorkZoneComponent implements OnInit {
 
             this.setRectangleBackgroundStyle();
 
-            if (this.undoRedoerService.undos.length === 0) {
+            if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
                 this.undoRedoerService.saveCurrentState([]);
             }
 
