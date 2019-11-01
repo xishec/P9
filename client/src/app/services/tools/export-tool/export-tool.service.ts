@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { FileType } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
@@ -12,6 +12,7 @@ export class ExportToolService {
     refAnchor: ElementRef<HTMLAnchorElement>;
     canvas: HTMLCanvasElement;
     workzoneIsEmpty = true;
+    renderer: Renderer2;
 
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
@@ -20,17 +21,18 @@ export class ExportToolService {
         this.workzoneIsEmpty = true;
     }
 
-    initializeSVG(ref: ElementRef<SVGElement>): void {
+    initializeService(ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.refSVG = ref;
+        this.renderer = renderer;
     }
 
-    initialize(refAnchor: ElementRef<HTMLAnchorElement>, refCanvas: ElementRef<HTMLCanvasElement>): void {
+    initialize(refAnchor: ElementRef<HTMLAnchorElement>): void {
         this.refAnchor = refAnchor;
-        this.canvas = refCanvas.nativeElement;
+        this.canvas = this.renderer.createElement('canvas');
     }
 
     saveFile(fileType: FileType): void {
-        const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
+        const originalSvgSize = this.refSVG.nativeElement.getBoundingClientRect();
         this.resizeCanvas();
         switch (fileType) {
             case FileType.SVG:
@@ -40,7 +42,7 @@ export class ExportToolService {
             case FileType.BMP:
                 this.compressSVG();
                 this.saveAsBMP();
-                this.decompressSVG(svgSize);
+                this.decompressSVG(originalSvgSize);
                 break;
 
             case FileType.JPG:
@@ -145,7 +147,7 @@ export class ExportToolService {
     }
 
     decompressSVG(svgSize: ClientRect | DOMRect): void {
-        this.refSVG.nativeElement.setAttribute('viewBox', 'none');
+        this.refSVG.nativeElement.removeAttribute('viewbox');
         this.refSVG.nativeElement.setAttribute('width', `${svgSize.width}`);
         this.refSVG.nativeElement.setAttribute('height', `${svgSize.height}`);
     }

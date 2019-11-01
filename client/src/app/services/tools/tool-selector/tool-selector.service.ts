@@ -89,7 +89,7 @@ export class ToolSelectorService {
         this.lineTool.initializeService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
 
-        this.exportTool.initializeSVG(ref);
+        this.exportTool.initializeService(ref, renderer);
     }
 
     displayNewDrawingModal(): void {

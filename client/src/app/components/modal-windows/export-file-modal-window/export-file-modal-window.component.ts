@@ -16,7 +16,6 @@ export class ExportFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     @ViewChild('anchor', { static: true }) anchorRef: ElementRef<HTMLAnchorElement>;
-    @ViewChild('canPad', { static: true }) refCanvas: ElementRef<HTMLCanvasElement>;
 
     readonly FileType = FileType;
 
@@ -31,7 +30,7 @@ export class ExportFileModalWindowComponent implements OnInit {
 
     ngOnInit() {
         this.initializeForm();
-        this.exportToolService.initialize(this.anchorRef, this.refCanvas);
+        this.exportToolService.initialize(this.anchorRef);
     }
 
     initializeForm(): void {
