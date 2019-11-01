@@ -126,4 +126,30 @@ describe('UndoRedoerService', () => {
         expect(service.undos).toEqual([]);
         expect(service.redos).toEqual([]);
     })
+
+    it('redo should pop redos and push this to undos if length > 0', () => {
+        const mockState: Drawing = {
+            name: 'mockState',
+            labels: [],
+            svg: 'mockSVG',
+            idStack: [],
+            drawingInfo: MOCK_DRAWING_INFO,
+        };
+
+        service.redos.push(mockState);
+
+        service.redo();
+
+        expect(service.undos[0]).toEqual(mockState);
+    });
+
+    it('redo should not do anything if redos.length <= 0', () => {
+        service.undos = [];
+        service.redos =[];
+
+        service.redo();
+
+        expect(service.undos).toEqual([]);
+        expect(service.redos).toEqual([]);
+    })
 });
