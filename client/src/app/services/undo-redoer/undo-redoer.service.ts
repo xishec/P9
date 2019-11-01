@@ -3,6 +3,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
@@ -15,15 +16,14 @@ export class UndoRedoerService {
     workzoneRef: ElementRef<SVGElement>;
     currentDrawingInfos: DrawingInfo;
 
-    constructor(private drawingLoaderService: DrawingLoaderService) {
+    constructor(private drawingLoaderService: DrawingLoaderService, private drawingModalWindowService: DrawingModalWindowService) {
     }
 
-    setWorkZoneRef(workzoneRef: ElementRef<SVGElement>) {
+    initializeService(workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
-    }
-
-    setWorkZoneDrawingInfo(drawingInfo: DrawingInfo) {
-        this.currentDrawingInfos = drawingInfo;
+        this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
+            this.currentDrawingInfos = drawingInfo;
+        });
     }
 
     setFirstState() { // NOT USED YET

@@ -53,7 +53,7 @@ export class WorkZoneComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.undoRedoerService.setWorkZoneRef(this.refSVG);
+        this.undoRedoerService.initializeService(this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
@@ -99,15 +99,11 @@ export class WorkZoneComponent implements OnInit {
                 this.drawStack.push(child as SVGAElement, false);
             });
         });
-
-        this.undoRedoerService.setWorkZoneDrawingInfo(this.drawingInfo);
         
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width === 0 || drawingInfo.height === 0) {
                 return;
             }
-            
-            this.undoRedoerService.setWorkZoneDrawingInfo(drawingInfo);
 
             this.empty = false;
             this.eventListenerService.isWorkZoneEmpty = false;
