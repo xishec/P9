@@ -2,8 +2,8 @@ import { ElementRef, Injectable } from '@angular/core';
 
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
-import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
+import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',
@@ -28,7 +28,7 @@ export class UndoRedoerService {
         });
     }
 
-    initializeStacks() : void {
+    initializeStacks(): void {
         this.undos = [];
         this.redos = [];
     }
@@ -41,7 +41,7 @@ export class UndoRedoerService {
             idStack: idStackArray.slice(0),
             drawingInfo: this.currentDrawingInfos,
         };
-        
+
         this.undos.push(currentState);
 
         if (this.redos.length > 0) {
@@ -52,7 +52,7 @@ export class UndoRedoerService {
     undo(): void {
         if (this.undos.length > 1) {
             const currentState = this.undos.pop();
-            this.redos.push(currentState!);
+            this.redos.push(currentState as Drawing);
             const stateToLoad = this.undos[this.undos.length - 1];
             this.drawingLoaderService.currentDrawing.next(stateToLoad);
         }
@@ -61,7 +61,7 @@ export class UndoRedoerService {
     redo(): void {
         if (this.redos.length > 0) {
             const stateToLoad = this.redos.pop();
-            this.undos.push(stateToLoad!);
+            this.undos.push(stateToLoad as Drawing);
             this.drawingLoaderService.currentDrawing.next(stateToLoad!);
         }
     }

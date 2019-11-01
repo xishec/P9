@@ -4,9 +4,9 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',

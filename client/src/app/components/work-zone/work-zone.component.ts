@@ -99,12 +99,12 @@ export class WorkZoneComponent implements OnInit {
                 this.drawStack.push(child as SVGAElement, false);
             });
 
-            if(this.undoRedoerService.fromLoader) {
+            if (this.undoRedoerService.fromLoader) {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                 this.undoRedoerService.fromLoader = false;
             }
         });
-        
+
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width === 0 || drawingInfo.height === 0) {
                 return;

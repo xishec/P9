@@ -7,10 +7,10 @@ import { filter } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
-import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 
 // tslint:disable-next-line: max-classes-per-file
 @Pipe({ name: 'toTrustHtml' })
@@ -175,7 +175,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
             this.undoRedoerService.initializeStacks();
             this.undoRedoerService.fromLoader = true;
-        
+
             const selectedDrawing: Drawing = this.drawingsFromServer.find(
                 (drawing) => drawing.name === this.selectedOption,
             ) as Drawing;

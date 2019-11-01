@@ -1,21 +1,21 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { UndoRedoerService } from './undo-redoer.service';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { ElementRef } from '@angular/core';
-import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { BehaviorSubject } from 'rxjs';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
-import { BehaviorSubject } from 'rxjs';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
+import { UndoRedoerService } from './undo-redoer.service';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
-const MOCK_DRAWING_INFO = new DrawingInfo(0,0,DEFAULT_WHITE);
+const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
 
 describe('UndoRedoerService', () => {
     let injector: TestBed;
     let service: UndoRedoerService;
-    let mockElementRef : ElementRef<SVGElement>;
-    let drawingModalWindowServiceMock : DrawingModalWindowService;
+    let mockElementRef: ElementRef<SVGElement>;
+    let drawingModalWindowServiceMock: DrawingModalWindowService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -23,13 +23,13 @@ describe('UndoRedoerService', () => {
                 UndoRedoerService,
                 {
                     provide: DrawStackService,
-                    useValue : {}
+                    useValue : {},
                 },
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
                         drawingInfo : {},
-                    }
+                    },
                 },
                 {
                     provide: ElementRef,
@@ -37,10 +37,10 @@ describe('UndoRedoerService', () => {
                         nativeElement : {
                             innerHTML : {
 
-                            }
-                        }
+                            },
+                        },
                     },
-                }
+                },
             ],
         }).compileComponents();
 
@@ -65,7 +65,7 @@ describe('UndoRedoerService', () => {
         service.initializeService(mockElementRef);
 
         expect(service.workzoneRef.nativeElement.innerHTML).toEqual(mockExpectedInnerHTML);
-    })
+    });
 
     it('initializeStacks should reset undos and redos', () => {
         service.initializeStacks();
@@ -86,7 +86,7 @@ describe('UndoRedoerService', () => {
 
     it('saveCurrentState should reset redos if redos.length > 0', () => {
         service.redos.push({name: '', labels: [], svg: '', idStack: [], drawingInfo: MOCK_DRAWING_INFO});
-    
+
         service.saveCurrentState([]);
 
         expect(service.redos).toEqual([]);
@@ -125,7 +125,7 @@ describe('UndoRedoerService', () => {
 
         expect(service.undos).toEqual([]);
         expect(service.redos).toEqual([]);
-    })
+    });
 
     it('redo should pop redos and push this to undos if length > 0', () => {
         const mockState: Drawing = {
@@ -145,11 +145,11 @@ describe('UndoRedoerService', () => {
 
     it('redo should not do anything if redos.length <= 0', () => {
         service.undos = [];
-        service.redos =[];
+        service.redos = [];
 
         service.redo();
 
         expect(service.undos).toEqual([]);
         expect(service.redos).toEqual([]);
-    })
+    });
 });
