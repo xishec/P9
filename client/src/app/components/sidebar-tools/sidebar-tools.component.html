@@ -1,19 +1,22 @@
 <div id="sidebar">
     <div id="tools-buttons">
-        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" value="Sélection">
+        <mat-button-toggle-group vertical="true" value="Sélection">
             <mat-button-toggle
-                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO; let i = index"
                 matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }} {{ TOOL_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
+                (click)="onChangeTool(i)"
+                (contextmenu)="onRightClick()"
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
-                [checked]="currentToolName === TOOL_BUTTON_INFO.tooltipName"
+                [checked]="getChecked(i)"
             >
-                <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
+                <img *ngIf="i === 1" src="../../../assets/triangle.png" />
+                <i *ngIf="i === 1" [ngClass]="getTracingToolClass()"> </i>
+                <i *ngIf="i !== 1" class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
             </mat-button-toggle>
         </mat-button-toggle-group>
 
-        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
+        <mat-button-toggle-group vertical="true" id="file-buttons">
             <mat-button-toggle
                 *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
@@ -26,3 +29,17 @@
     </div>
     <app-attribute-panel></app-attribute-panel>
 </div>
+
+<mat-button-toggle-group *ngIf="showTracingTools" id="tracing-tools">
+    <mat-button-toggle
+        *ngFor="let buttonInfo of TRACING_BUTTON_INFO"
+        matTooltip="{{ buttonInfo.tooltipName }} {{ buttonInfo.shortcut }}"
+        matTooltipPosition="above"
+        (click)="onChangeTracingTool(buttonInfo.tooltipName)"
+        (contextmenu)="onRightClick()"
+        value="{{ buttonInfo.tooltipName }}"
+        [checked]="currentToolName === buttonInfo.tooltipName"
+    >
+        <i class="{{ buttonInfo.iconName }}"> </i>
+    </mat-button-toggle>
+</mat-button-toggle-group>
