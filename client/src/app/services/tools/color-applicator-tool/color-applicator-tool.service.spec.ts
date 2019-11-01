@@ -1,10 +1,11 @@
-import { Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
-import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers';
+import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
@@ -31,22 +32,27 @@ describe('ColorApplicatorToolService', () => {
                     provide: DrawStackService,
                     useValue: {
                         push: () => null,
-                        currentStackTarget : {
-                            subscribe : () => null,
+                        currentStackTarget: {
+                            subscribe: () => null,
                         },
-                        getElementByPosition : () => {
-                            const mockSVGGelement = {};
-                            return mockSVGGelement as SVGGElement;
+                        getElementByPosition: () => {
+                            const mockSVGGElement = {};
+                            return mockSVGGElement as SVGGElement;
                         },
                     },
                 },
+                provideAutoMock(ElementRef),
             ],
         });
         injector = getTestBed();
         service = injector.get(ColorApplicatorToolService);
-        service[`drawStack`].push(createMockSVGCircle());
 
         mockRenderer = injector.get(Renderer2);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, mockRenderer, drawStackMock);
+
+        service[`drawStack`].push(createMockSVGCircle());
         spyOnSetAttribute = spyOn(mockRenderer, 'setAttribute');
     });
 
@@ -64,7 +70,7 @@ describe('ColorApplicatorToolService', () => {
     it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.LeftButton);
         service.isOnTarget = true;
-        const mockStackTargetInfo  = {
+        const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: ToolName.Brush,
         };
@@ -78,7 +84,7 @@ describe('ColorApplicatorToolService', () => {
     it('onMouseDown should call setAttribute once when left button clicked if tool is Rectangle', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.LeftButton);
         service.isOnTarget = true;
-        const mockStackTargetInfo  = {
+        const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: ToolName.Rectangle,
         };
@@ -91,7 +97,7 @@ describe('ColorApplicatorToolService', () => {
 
     it('onMouseDown should not call setAttribute to stroke when right button clicked if tool is Brush', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.RightButton);
-        const mockStackTargetInfo  = {
+        const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: ToolName.Brush,
         };
@@ -105,7 +111,7 @@ describe('ColorApplicatorToolService', () => {
     it('onMouseDown should call setAttribute once when right button clicked if tool is Rectangle ', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.RightButton);
         service.isOnTarget = true;
-        const mockStackTargetInfo  = {
+        const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: ToolName.Rectangle,
         };

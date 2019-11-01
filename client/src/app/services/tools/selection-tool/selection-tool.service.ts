@@ -29,11 +29,11 @@ export class SelectionToolService extends AbstractToolService {
 
     selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
 
-    constructor(
-        public drawStack: DrawStackService,
-        public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
-    ) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
         this.proxy = new Selection(this.renderer, this.svgReference.nativeElement);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
@@ -42,12 +42,17 @@ export class SelectionToolService extends AbstractToolService {
                 this.isOnTarget = true;
             }
         });
+        this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
+        this.selectionBox = this.renderer.createElement('rect', SVG_NS);
+
+        this.initControlPoints();
+        this.initSelectionBox();
     }
 
     cleanUp(): void {
         this.proxy.cleanUp();
         if (this.isSelecting) {
-            this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
         this.isTheCurrentTool = false;
         this.isLeftMouseDown = false;
@@ -140,7 +145,7 @@ export class SelectionToolService extends AbstractToolService {
     startSelection(): void {
         this.isSelecting = true;
         this.updateSelectionRectangle();
-        this.renderer.appendChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
 
     checkSelection(): void {
@@ -226,7 +231,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleLeftMouseUp(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
 
         if (this.isSelecting) {
             this.isSelecting = false;

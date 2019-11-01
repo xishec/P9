@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
@@ -15,7 +15,7 @@ import { PolygonFormType, PolygonSides, Thickness, ToolName } from 'src/constant
     templateUrl: './polygon-attributes.component.html',
     styleUrls: ['./polygon-attributes.component.scss'],
 })
-export class PolygonAttributesComponent implements OnInit {
+export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonToolService: PolygonToolService;
@@ -39,7 +39,6 @@ export class PolygonAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
-    // tslint:disable-next-line: use-lifecycle-interface
     ngAfterViewInit(): void {
         this.polygonToolService = this.toolSelectorService.getPolygonTool();
         this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);

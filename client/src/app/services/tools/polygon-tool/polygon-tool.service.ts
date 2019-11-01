@@ -1,7 +1,13 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Mouse, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, PolygonOffsetAngles, PolygonRadiusCorrection, ToolName, TraceType } from 'src/constants/tool-constants';
+import {
+    HTMLAttribute,
+    PolygonOffsetAngles,
+    PolygonRadiusCorrection,
+    ToolName,
+    TraceType,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -16,7 +22,7 @@ interface Vertex {
     providedIn: 'root',
 })
 export class PolygonToolService extends AbstractShapeToolService {
-    drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
+    drawPolygon: SVGPolygonElement;
     fillColor = '';
     strokeColor = '';
     userFillColor = '';
@@ -30,8 +36,13 @@ export class PolygonToolService extends AbstractShapeToolService {
     radius = 0;
     radiusCorrection = 0;
 
-    constructor(public drawStack: DrawStackService, public svgReference: ElementRef<SVGElement>, renderer: Renderer2) {
-        super(renderer);
+    constructor() {
+        super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
+        this.drawPolygon = this.renderer.createElement('polygon', SVG_NS);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
@@ -164,6 +175,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Polygon);
         this.renderer.setAttribute(el, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, HTMLAttribute.stroke_linejoin, 'round');
         this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
         this.userFillColor === 'none'
             ? this.renderer.setAttribute(el, HTMLAttribute.fill, this.userFillColor)
@@ -171,7 +183,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         this.renderer.appendChild(el, drawPolygon);
         this.drawStack.push(el);
-        this.renderer.appendChild(this.svgReference.nativeElement, el);
+        this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
     updateDrawing(): void {
@@ -205,8 +217,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -223,7 +235,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
             this.updateDrawing();
 
-            this.renderer.appendChild(this.svgReference.nativeElement, this.drawPolygon);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.drawPolygon);
         }
     }
 
@@ -251,6 +263,6 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     cleanUp(): void {
         this.isPreviewing = false;
-        this.renderer.removeChild(this.svgReference, this.drawPolygon);
+        this.renderer.removeChild(this.elementRef, this.drawPolygon);
     }
 }

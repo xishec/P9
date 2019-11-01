@@ -1,14 +1,15 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 
-import { createMockSVGCircle, createMockSVGGElement, createMockSVGGElementWithAttribute, createMouseEvent } from 'src/classes/test-helpers';
+import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { Keys, Mouse, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
 
 describe('SelectionToolService', () => {
-    const MOCK_LEFT_CLICK = createMouseEvent(0, 0, Mouse.LeftButton);
-    const MOCK_RIGHT_CLICK = createMouseEvent(0, 0, Mouse.RightButton);
+    const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
+    const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.RightButton);
 
     let injector: TestBed;
     let service: SelectionToolService;
@@ -55,6 +56,10 @@ describe('SelectionToolService', () => {
 
         injector = getTestBed();
         service = injector.get(SelectionToolService);
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
@@ -113,7 +118,7 @@ describe('SelectionToolService', () => {
     });
 
     it('getStrokeWidth should return 0 if el has no stroke-width', () => {
-        const el = createMockSVGGElementWithAttribute(''    );
+        const el = TestHelpers.createMockSVGGElementWithAttribute('');
 
         const resNumber = service.getStrokeWidth(el);
 
@@ -121,7 +126,7 @@ describe('SelectionToolService', () => {
     });
 
     it('getStrokeWidth should return 10 if el has stroke-width', () => {
-        const el = createMockSVGGElementWithAttribute('stroke-width');
+        const el = TestHelpers.createMockSVGGElementWithAttribute('stroke-width');
 
         const resNumber = service.getStrokeWidth(el);
 
@@ -129,7 +134,7 @@ describe('SelectionToolService', () => {
     });
 
     it('getStrokeWidth should return 0 if el has no stroke-width', () => {
-        const el = createMockSVGGElementWithAttribute('');
+        const el = TestHelpers.createMockSVGGElementWithAttribute('');
 
         const resNumber = service.getStrokeWidth(el);
 
@@ -175,18 +180,18 @@ describe('SelectionToolService', () => {
     it('mouseIsInControlPoint should return true if mouseX and mouseY in one of controlPoint', () => {
         service.controlPoints = new Array();
         const mockControlPoint = {
-            cx : {
-                baseVal : {
-                    value : 10,
+            cx: {
+                baseVal: {
+                    value: 10,
                 },
             },
-            cy : {
-                baseVal : {
-                    value : 10,
+            cy: {
+                baseVal: {
+                    value: 10,
                 },
             },
-            r : {
-                baseVal : {
+            r: {
+                baseVal: {
                     value: 5,
                 },
             },
@@ -203,18 +208,18 @@ describe('SelectionToolService', () => {
     it('mouseIsInControlPoint should return true if mouseX and mouseY in one of controlPoint', () => {
         service.controlPoints = new Array();
         const mockControlPoint = {
-            cx : {
-                baseVal : {
-                    value : 10,
+            cx: {
+                baseVal: {
+                    value: 10,
                 },
             },
-            cy : {
-                baseVal : {
-                    value : 10,
+            cy: {
+                baseVal: {
+                    value: 10,
                 },
             },
-            r : {
-                baseVal : {
+            r: {
+                baseVal: {
                     value: 5,
                 },
             },
@@ -230,17 +235,17 @@ describe('SelectionToolService', () => {
 
     it('isInSelection should return true if elBottom >= boxTop && boxBottom >= elTop && elRight >= boxLeft && boxRight >= elLeft', () => {
         const mockSelectionBox = {
-            x : 500,
-            y : 500,
-            width : 50,
-            height : 50,
+            x: 500,
+            y: 500,
+            width: 50,
+            height: 50,
         } as DOMRect;
 
         const mockElementBox = {
-            x : 500,
-            y : 500,
-            width : 50,
-            height : 50,
+            x: 500,
+            y: 500,
+            width: 50,
+            height: 50,
         } as DOMRect;
 
         const res = service.isInSelection(mockSelectionBox, mockElementBox);
@@ -250,17 +255,17 @@ describe('SelectionToolService', () => {
 
     it('isInSelection should return false if elBottom < boxTop ', () => {
         const mockSelectionBox = {
-            x : 500,
-            y : 10,
-            width : 50,
-            height : 50,
+            x: 500,
+            y: 10,
+            width: 50,
+            height: 50,
         } as DOMRect;
 
         const mockElementBox = {
-            x : 500,
-            y : 500,
-            width : 50,
-            height : 50,
+            x: 500,
+            y: 500,
+            width: 50,
+            height: 50,
         } as DOMRect;
 
         const res = service.isInSelection(mockSelectionBox, mockElementBox);
@@ -276,7 +281,6 @@ describe('SelectionToolService', () => {
         service.singlySelect(1);
 
         expect(spy).toHaveBeenCalled();
-
     });
 
     it('singlySelect should call computeSelectionBox and set isOnTarget to false even if !hasSelected', () => {
@@ -287,7 +291,6 @@ describe('SelectionToolService', () => {
 
         expect(spy).toHaveBeenCalled();
         expect(service.isOnTarget).toBeFalsy();
-
     });
 
     it('startSelection should set isSelecting to true', () => {
@@ -307,7 +310,7 @@ describe('SelectionToolService', () => {
     });
 
     it('applySelectionInvert should call selection.delete if this.selection has el that is in invertSelection', () => {
-        const el = createMockSVGGElement();
+        const el = TestHelpers.createMockSVGGElement();
         service.invertSelection = new Set<SVGGElement>();
         service.invertSelection.add(el);
 
@@ -322,7 +325,7 @@ describe('SelectionToolService', () => {
     });
 
     it('applySelectionInvert should not call selection.delete if this.selection does not have el that is in invertSelection', () => {
-        const el = createMockSVGGElement();
+        const el = TestHelpers.createMockSVGGElement();
         service.invertSelection = new Set<SVGGElement>();
         service.invertSelection.add(el);
 
@@ -353,7 +356,7 @@ describe('SelectionToolService', () => {
         spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
 
         service.drawStack.drawStack = new Array();
-        const mockSVGElement = createMockSVGGElement();
+        const mockSVGElement = TestHelpers.createMockSVGGElement();
         service.drawStack.drawStack.push(mockSVGElement);
 
         spyOn(service, 'getStrokeWidth').and.returnValue(5);
@@ -377,7 +380,7 @@ describe('SelectionToolService', () => {
 
         spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
         service.drawStack.drawStack = new Array();
-        const mockSVGElement = createMockSVGGElement();
+        const mockSVGElement = TestHelpers.createMockSVGGElement();
         service.drawStack.drawStack.push(mockSVGElement);
 
         spyOn(service, 'getStrokeWidth').and.returnValue(5);
@@ -402,7 +405,7 @@ describe('SelectionToolService', () => {
         spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
 
         service.drawStack.drawStack = new Array();
-        const mockSVGElement = createMockSVGGElement();
+        const mockSVGElement = TestHelpers.createMockSVGGElement();
         service.drawStack.drawStack.push(mockSVGElement);
 
         spyOn(service, 'getStrokeWidth').and.returnValue(5);
@@ -426,7 +429,7 @@ describe('SelectionToolService', () => {
 
         spyOn(service, 'getDOMRect').and.returnValue(mockDOMRect as DOMRect);
 
-        const mockSVGElement = createMockSVGGElement();
+        const mockSVGElement = TestHelpers.createMockSVGGElement();
         service.drawStack.drawStack = new Array();
         service.drawStack.drawStack.push(mockSVGElement);
 
@@ -444,21 +447,20 @@ describe('SelectionToolService', () => {
     it('findLeftMostCoord should return most left coords of elements', () => {
         const width = 10;
         spyOn(service, 'getStrokeWidth').and.returnValue(width);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
-                x : el.clientLeft,
+                x: el.clientLeft,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const smallestX = 1000;
-        const mockSVG1 = {
+        const mockSVG1 = ({
             clientLeft: smallestX,
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
-        const mockSVG2 = {
+        const mockSVG2 = ({
             clientLeft: 1360,
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
         service.selection = new Set();
         service.selection.add(mockSVG1);
@@ -475,22 +477,21 @@ describe('SelectionToolService', () => {
         const strokeWidth = 10;
         const DOMRectWidth = 100;
         spyOn(service, 'getStrokeWidth').and.returnValue(strokeWidth);
-        // tslint:disable-next-line: only-arrow-functions
-        function fakeGetDOMRect(el: SVGGElement) {
+        const fakeGetDOMRect = (el: SVGGElement) => {
             const mockDOMRect = {
-                x : el.clientLeft,
-                width : DOMRectWidth,
+                x: el.clientLeft,
+                width: DOMRectWidth,
             } as DOMRect;
             return mockDOMRect;
-        }
+        };
         const largestX = 1360;
-        const mockSVG1 = {
+        const mockSVG1 = ({
             clientLeft: 1000,
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
-        const mockSVG2 = {
+        const mockSVG2 = ({
             clientLeft: largestX,
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
         service.selection = new Set();
         service.selection.add(mockSVG1);
@@ -527,17 +528,17 @@ describe('SelectionToolService', () => {
 
     it('computeControlPoints should call setAttribute 16 times : 8 selectionCorner * 2 attributes', () => {
         const mockSVGRectElement = {
-            x : { baseVal : {value : 10, } },
-            y : { baseVal : { value : 10, } },
-            width : { baseVal : { value : 10, } },
-            height : { baseVal : { value : 10, } },
+            x: { baseVal: { value: 10 } },
+            y: { baseVal: { value: 10 } },
+            width: { baseVal: { value: 10 } },
+            height: { baseVal: { value: 10 } },
         } as SVGRectElement;
 
         service.selectionBox = mockSVGRectElement;
 
         service.controlPoints = new Array();
         for (let i = 0; i < 8; i++) {
-            const mockSVG = createMockSVGCircle();
+            const mockSVG = TestHelpers.createMockSVGCircle();
             service.controlPoints.push(mockSVG);
         }
 
@@ -548,7 +549,7 @@ describe('SelectionToolService', () => {
 
     it('hasSelected return true if this.selection.size > 0', () => {
         service.selection = new Set();
-        const mockSVGElement = createMockSVGGElement();
+        const mockSVGElement = TestHelpers.createMockSVGGElement();
         service.selection.add(mockSVGElement);
 
         const res = service.hasSelected();
@@ -563,7 +564,7 @@ describe('SelectionToolService', () => {
     });
 
     it('removeControlPoints should call renderer.removeChild for each ctrlPt', () => {
-        const mockCtrlPnt = createMockSVGCircle();
+        const mockCtrlPnt = TestHelpers.createMockSVGCircle();
         service.controlPoints = new Array();
         service.controlPoints.push(mockCtrlPnt);
 
@@ -591,38 +592,36 @@ describe('SelectionToolService', () => {
     });
 
     it('translateSelection should call createSVGTransform if transformList.numberOfItems === 0', () => {
-
-        const mockSVGTransform = {
-            type : 0,
+        const mockSVGTransform = ({
+            type: 0,
             setTranslate: () => null,
             matrix: {
-                e : 0,
-                f : 0,
+                e: 0,
+                f: 0,
             },
+        } as (unknown)) as SVGTransform;
 
-        } as (unknown) as SVGTransform;
-
-        const mockSVGTranformList = {
-            numberOfItems : 0,
-            getItem : () => mockSVGTransform,
+        const mockSVGTranformList = ({
+            numberOfItems: 0,
+            getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown) as SVGTransformList;
+        } as (unknown)) as SVGTransformList;
 
-        const mockSVGGelement = {
-            transform : {
-                baseVal : mockSVGTranformList,
+        const mockSVGGelement = ({
+            transform: {
+                baseVal: mockSVGTranformList,
             },
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
         service.selection = new Set();
         service.selection.add(mockSVGGelement);
 
-        const mockTranslate = {
-            setTranslate : () => null,
-        } as (unknown) as SVGTransform;
+        const mockTranslate = ({
+            setTranslate: () => null,
+        } as (unknown)) as SVGTransform;
 
         const mockSVGSVGElement = {
-            createSVGTransform : () => mockTranslate,
+            createSVGTransform: () => mockTranslate,
         } as SVGSVGElement;
 
         spyOn(service.renderer, 'createElement').and.returnValue(mockSVGSVGElement);
@@ -636,38 +635,36 @@ describe('SelectionToolService', () => {
 
     // tslint:disable-next-line: max-line-length
     it('translateSelection should not call createSVGTransform if transformList.numberOfItems > 0 && getItem().type === SVGTransform.SVG_TRANSFORM_TRANSLATE ', () => {
-
-        const mockSVGTransform = {
-            type : SVGTransform.SVG_TRANSFORM_TRANSLATE,
+        const mockSVGTransform = ({
+            type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
             setTranslate: () => null,
             matrix: {
-                e : 0,
-                f : 0,
+                e: 0,
+                f: 0,
             },
+        } as (unknown)) as SVGTransform;
 
-        } as (unknown) as SVGTransform;
-
-        const mockSVGTranformList = {
-            numberOfItems : 5,
-            getItem : () => mockSVGTransform,
+        const mockSVGTranformList = ({
+            numberOfItems: 5,
+            getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown) as SVGTransformList;
+        } as (unknown)) as SVGTransformList;
 
-        const mockSVGGelement = {
-            transform : {
-                baseVal : mockSVGTranformList,
+        const mockSVGGelement = ({
+            transform: {
+                baseVal: mockSVGTranformList,
             },
-        } as (unknown) as SVGGElement;
+        } as (unknown)) as SVGGElement;
 
         service.selection = new Set();
         service.selection.add(mockSVGGelement);
 
-        const mockTranslate = {
-            setTranslate : () => null,
-        } as (unknown) as SVGTransform;
+        const mockTranslate = ({
+            setTranslate: () => null,
+        } as (unknown)) as SVGTransform;
 
         const mockSVGSVGElement = {
-            createSVGTransform : () => mockTranslate,
+            createSVGTransform: () => mockTranslate,
         } as SVGSVGElement;
 
         spyOn(service.renderer, 'createElement').and.returnValue(mockSVGSVGElement);
@@ -896,7 +893,7 @@ describe('SelectionToolService', () => {
         service.isTheCurrentTool = false;
 
         const mockKeyS = {
-            key : Keys.s,
+            key: Keys.s,
         } as KeyboardEvent;
 
         service.onKeyUp(mockKeyS);

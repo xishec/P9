@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { Keys, Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
-import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
@@ -39,7 +39,7 @@ describe('RectangleToolService', () => {
                 {
                     provide: DrawStackService,
                     useValue: {
-                        makeTargetable : () => null,
+                        makeTargetable: () => null,
                         push: () => null,
                     },
                 },
@@ -74,7 +74,8 @@ describe('RectangleToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        rectangleTool = new RectangleToolService(drawStackMock, elementRefMock, rendererMock);
+        rectangleTool = new RectangleToolService();
+        rectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
         spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
@@ -107,7 +108,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should be created with call to new', () => {
-        const newRectangleTool = new RectangleToolService(drawStackMock, elementRefMock, rendererMock);
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         expect(spyCreateElement).toHaveBeenCalled();
         expect(newRectangleTool).toBeTruthy();
     });

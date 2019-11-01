@@ -15,15 +15,15 @@ import {
     providedIn: 'root',
 })
 export class AttributesManagerService {
-    // tslint:disable-next-line: variable-name
-    private _thickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    private thicknessValue: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     get thickness(): BehaviorSubject<number> {
-        return this._thickness;
+        return this.thicknessValue;
     }
     set thickness(value: BehaviorSubject<number>) {
-        this._thickness = value;
+        this.thicknessValue = value;
     }
 
+    private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
     private style: BehaviorSubject<number> = new BehaviorSubject(1);
     private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
@@ -35,6 +35,7 @@ export class AttributesManagerService {
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
+    currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<number> = this.style.asObservable();
     currentNbVertices: Observable<number> = this.nbVertices.asObservable();
@@ -59,6 +60,10 @@ export class AttributesManagerService {
 
     changeThickness(thickness: number): void {
         this.thickness.next(thickness);
+    }
+
+    changeMinThickness(thickness: number): void {
+        this.minThickness.next(thickness);
     }
 
     changeTraceType(traceType: string): void {

@@ -42,6 +42,8 @@ import { ColorPaletteComponent } from './components/color-palette/color-palette.
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
 import { ColorQueueComponent } from './components/color-palette/color-queue/color-queue.component';
 import { DrawingModalWindowComponent } from './components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+// tslint:disable-next-line: max-line-length
+import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import {
     LabelFilter,
     MySlice,
@@ -55,6 +57,7 @@ import { DropperAttributesComponent } from './components/sidebar-tools/attribute
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
+import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
@@ -92,6 +95,8 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         EllipsisAttributesComponent,
         SaveFileModalWindowComponent,
         SelectionAttributesComponent,
+        ExportFileModalWindowComponent,
+        PenAttributesComponent,
     ],
     imports: [
         MatSliderModule,
@@ -117,8 +122,15 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         DrawingModalWindowComponent,
         OpenFileModalWindowComponent,
         SaveFileModalWindowComponent,
+        ExportFileModalWindowComponent,
     ],
-    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService, EventListenerService],
+    providers: [
+        ToolSelectorService,
+        DrawingModalWindowService,
+        WelcomeModalWindowService,
+        ColorToolService,
+        EventListenerService,
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
