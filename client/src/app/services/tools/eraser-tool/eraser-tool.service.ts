@@ -16,6 +16,7 @@ export class EraserToolService extends AbstractToolService {
     currentSize = 1;
     isOnTarget = false;
     lastStrokeColor = '';
+    isOnMouseDown = false;
 
     constructor(
         public drawStack: DrawStackService,
@@ -37,34 +38,28 @@ export class EraserToolService extends AbstractToolService {
         });
     }
 
-    onMouseMove(event: MouseEvent): void {}
+    onMouseMove(event: MouseEvent): void {
+        if (this.isOnMouseDown) {
+            this.onMouseDown(event);
+        }
+    }
 
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
+        this.isOnMouseDown = true;
         let elementPosition = this.currentStackTarget.targetPosition;
         if (this.isOnTarget && this.drawStack.getElementByPosition(elementPosition) !== undefined) {
             if (button === Mouse.LeftButton) {
                 this.renderer.removeChild(
-                    this.svgReference.nativeElement, //retourne le "g"
+                    this.svgReference.nativeElement,
                     this.drawStack.getElementByPosition(elementPosition),
                 );
 
-                // this.renderer.setAttribute(
-                //     this.drawStack.getElementByPosition(elementPosition),
-                //     HTMLAttribute.fill,
-                //     'none',
-                // );
-
-                // this.renderer.setAttribute(
-                //     this.drawStack.getElementByPosition(elementPosition),
-                //     HTMLAttribute.stroke,
-                //     'none',
-                // );
-
                 this.drawStack.removeElementByPosition(elementPosition);
             }
-            this.isOnTarget = false;
         }
+        this.isOnTarget = false;
+        console.log('in mouse down');
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -72,6 +67,7 @@ export class EraserToolService extends AbstractToolService {
         // if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
         //     this.initStamp();
         // }
+        this.isOnMouseDown = false;
     }
 
     onMouseEnter(event: MouseEvent): void {}
