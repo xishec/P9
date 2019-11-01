@@ -175,6 +175,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Polygon);
         this.renderer.setAttribute(el, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, HTMLAttribute.stroke_linejoin, 'round');
         this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
         this.userFillColor === 'none'
             ? this.renderer.setAttribute(el, HTMLAttribute.fill, this.userFillColor)
