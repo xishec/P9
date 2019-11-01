@@ -116,12 +116,14 @@ export class WorkZoneComponent implements OnInit {
 
             this.setRectangleBackgroundStyle();
 
-            if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
-                this.undoRedoerService.saveCurrentState([]);
-            }
-
             for (const el of this.drawStack.reset()) {
                 this.renderer.removeChild(this.refSVG.nativeElement, el);
+            }
+
+            if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
+                setTimeout(() => {
+                    this.undoRedoerService.saveCurrentState([]);
+                }, 1);
             }
         });
 

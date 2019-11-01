@@ -55,7 +55,7 @@ export class DrawStackService {
 
         // drawStack save current state on the undoRedoerService
         if (byTool) {
-            this.undoRedoerService.saveCurrentState(this.idStack.slice(0));
+            this.undoRedoerService.saveCurrentState(this.idStack);
         }
     }
 

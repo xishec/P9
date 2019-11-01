@@ -38,7 +38,7 @@ export class UndoRedoerService {
             name: '',
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
-            idStack: idStackArray,
+            idStack: idStackArray.slice(0),
             drawingInfo: this.currentDrawingInfos,
         };
         
