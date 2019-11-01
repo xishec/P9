@@ -126,7 +126,7 @@ export class Selection {
                     window.scrollX -
                     SIDEBAR_WIDTH +
                     this.getDOMRect(el).width +
-                    this.getStrokeWidth(el) / 2
+                    this.getStrokeWidth(el) / 2,
             );
         }
 
@@ -148,7 +148,7 @@ export class Selection {
 
         for (const el of this.selection) {
             bottomCoords.push(
-                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2
+                this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2,
             );
         }
 
@@ -174,101 +174,45 @@ export class Selection {
     }
 
     updateControlPoints(): void {
-        // Top left corner
-        this.renderer.setAttribute(
-            this.controlPoints[0],
-            HTMLAttribute.cx,
-            this.selectionBox.x.baseVal.value.toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[0],
-            HTMLAttribute.cy,
-            this.selectionBox.y.baseVal.value.toString()
-        );
+        let positionMap: Map<number, [string, string]> = new Map();
 
-        // Top side
-        this.renderer.setAttribute(
-            this.controlPoints[1],
-            HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[1],
-            HTMLAttribute.cy,
-            this.selectionBox.y.baseVal.value.toString()
-        );
+        positionMap.set(0, [
+            this.selectionBox.x.baseVal.value.toString(),
+            this.selectionBox.y.baseVal.value.toString(),
+        ]);
+        positionMap.set(1, [
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString(),
+            this.selectionBox.y.baseVal.value.toString(),
+        ]);
+        positionMap.set(2, [
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
+            this.selectionBox.y.baseVal.value.toString(),
+        ]);
+        positionMap.set(3, [
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString(),
+        ]);
+        positionMap.set(4, [
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString(),
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
+        ]);
+        positionMap.set(5, [
+            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString(),
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
+        ]);
+        positionMap.set(6, [
+            this.selectionBox.x.baseVal.value.toString(),
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString(),
+        ]);
+        positionMap.set(7, [
+            this.selectionBox.x.baseVal.value.toString(),
+            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString(),
+        ]);
 
-        // Top right corner
-        this.renderer.setAttribute(
-            this.controlPoints[2],
-            HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[2],
-            HTMLAttribute.cy,
-            this.selectionBox.y.baseVal.value.toString()
-        );
-
-        // Right side
-        this.renderer.setAttribute(
-            this.controlPoints[3],
-            HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[3],
-            HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
-        );
-
-        // Bottom right corner
-        this.renderer.setAttribute(
-            this.controlPoints[4],
-            HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value).toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[4],
-            HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
-        );
-
-        // Bottom side
-        this.renderer.setAttribute(
-            this.controlPoints[5],
-            HTMLAttribute.cx,
-            (this.selectionBox.x.baseVal.value + this.selectionBox.width.baseVal.value / 2).toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[5],
-            HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
-        );
-
-        // Bottom left corner
-        this.renderer.setAttribute(
-            this.controlPoints[6],
-            HTMLAttribute.cx,
-            this.selectionBox.x.baseVal.value.toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[6],
-            HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value).toString()
-        );
-
-        // Left side
-        this.renderer.setAttribute(
-            this.controlPoints[7],
-            HTMLAttribute.cx,
-            this.selectionBox.x.baseVal.value.toString()
-        );
-        this.renderer.setAttribute(
-            this.controlPoints[7],
-            HTMLAttribute.cy,
-            (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString()
-        );
+        for (let index = 0; index < this.controlPoints.length; ++index) {
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, positionMap.get(index)![0]);
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, positionMap.get(index)![1]);
+        }
     }
 
     addToSelection(element: SVGGElement): void {
