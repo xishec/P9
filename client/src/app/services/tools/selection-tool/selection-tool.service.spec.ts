@@ -15,9 +15,13 @@ fdescribe('SelectionToolService', () => {
     let injector: TestBed;
     let service: SelectionToolService;
 
+    let rendererMock: Renderer2;
+    let drawStackMock: DrawStackService;
+    let elementRefMock: ElementRef<SVGElement>;
+
     let spyOnSetAttribute: jasmine.Spy;
-    //let spyOnAppendChild: jasmine.Spy;
-    //let spyOnRemoveChild: jasmine.Spy;
+    let spyOnAppendChild: jasmine.Spy;
+    let spyOnRemoveChild: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -54,22 +58,28 @@ fdescribe('SelectionToolService', () => {
 
         injector = getTestBed();
         service = injector.get(SelectionToolService);
-        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        //spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        //spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+        spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
+        spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
+    it('should initialize the selectionRectangle and Selection on creation',() => {
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(service.selection).toBeTruthy();
+    });
+
     it('should call cleanUp of Selection and set isTheCurrentTool to false', () => {
-        const spyOnSelectionCleanUp: jasmine.Spy = spyOn(service.proxy, 'cleanUp');
+        const spyOnSelectionCleanUp: jasmine.Spy = spyOn(service.selection, 'cleanUp');
         service.isTheCurrentTool = true;
 
         service.cleanUp();
@@ -100,6 +110,12 @@ fdescribe('SelectionToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
+    it('should call setAttribute 8 times when calling updateSelectionRectangle', () => {
+        service.updateSelectionRectangle();
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(8);
+    });
+
     it('getStrokeWidth should return 0 if el has no stroke-width', () => {
         const el = TestHelpers.createMockSVGGElementWithAttribute('');
 
@@ -116,12 +132,14 @@ fdescribe('SelectionToolService', () => {
         expect(resNumber).toBe(10);
     });
 
-    it('getStrokeWidth should return 0 if el has no stroke-width', () => {
-        const el = TestHelpers.createMockSVGGElementWithAttribute('');
+    it('should append selectionRectangle, update it once and set isSelecting to true when calling startSelection', () => {
+        const spy = spyOn(service, 'updateSelectionRectangle');
 
-        const resNumber = service.getStrokeWidth(el);
+        service.startSelection();
 
-        expect(resNumber).toBe(0);
+        expect(spy).toHaveBeenCalled();
+        expect(service.isSelecting).toBeTruthy();
+        expect(spyOnAppendChild).toHaveBeenCalled();
     });
 
     it('isInSelection should return true if elBottom >= boxTop && boxBottom >= elTop && elRight >= boxLeft && boxRight >= elLeft', () => {
@@ -164,6 +182,26 @@ fdescribe('SelectionToolService', () => {
         expect(res).toBeFalsy();
     });
 
+    it('singlySelect should empty the selection, add the target to the selection and set isOnTarget to false', () => {
+        const spyEmptySelection = spyOn(service.selection, 'emptySelection');
+        const spyAddToSelection = spyOn(service.selection, 'addToSelection');
+
+        service.singlySelect(1);
+
+        expect(spyEmptySelection).toHaveBeenCalled();
+        expect(spyAddToSelection).toHaveBeenCalled();
+        expect(service.isOnTarget).toBeFalsy();
+    });
+
+    it('singlyInvert should call invertAddToSelection from Selection and set isOnTarget to false', () => {
+        const spyInvertAddToSelection = spyOn(service.selection, 'invertAddToSelection');
+
+        service.singlySelectInvert(1);
+
+        expect(spyInvertAddToSelection).toHaveBeenCalled();
+        expect(service.isOnTarget).toBeFalsy();
+    });
+
     it('startSelection should set isSelecting to true', () => {
         service.isSelecting = false;
 
@@ -175,12 +213,36 @@ fdescribe('SelectionToolService', () => {
     it('handleLeftMouseDrag should call checkSelection if mouse is not in selection or not translating and is not on target', () => {
         service.isOnTarget = false;
         const spy = spyOn(service, 'checkSelection');
-        const spyProxy = spyOn(service.proxy, 'mouseIsInSelectionBox').and.callFake(()=>{return false;});
+        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(()=>{return false;});
 
         service.handleLeftMouseDrag();
 
         expect(spy).toHaveBeenCalled();
-        expect(spyProxy).toHaveBeenCalled();
+        expect(spyselection).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseDrag should call moveBy of Selection if mouse is in selection and not selecting or was already translating', () => {
+        service.isOnTarget = false;
+        service.isSelecting = false;
+        service.isTranslatingSelection = true;
+        const spy = spyOn(service.selection, 'moveBy');
+        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(()=>{return true;});
+
+        service.handleLeftMouseDrag();
+
+        expect(spy).toHaveBeenCalled();
+        expect(spyselection).toHaveBeenCalled();
+    });
+
+    it('handleLeftMouseDrag should call singlySelect if on target and target not in Selection', () => {
+        service.isOnTarget = true;
+        const spy = spyOn(service, 'singlySelect');
+        const spySelection = spyOn(service.selection.selectedElements, 'has').and.callFake(()=>{return false;});
+
+        service.handleLeftMouseDrag();
+
+        expect(spy).toHaveBeenCalled();
+        expect(spySelection).toHaveBeenCalled();
     });
 
     it('handleRightMouseDrag should call checkSelectionInverse if this.isSelecting', () => {
@@ -195,6 +257,7 @@ fdescribe('SelectionToolService', () => {
     it('onMouseMove should call handleLeftMouseDrag if isLeftMouseDown', () => {
         const spy = spyOn(service, 'handleLeftMouseDrag');
         service.isLeftMouseDown = true;
+        service.isRightMouseDown = false;
 
         service.onMouseMove(MOCK_LEFT_CLICK);
 
@@ -204,8 +267,17 @@ fdescribe('SelectionToolService', () => {
     it('onMouseMove should call handleRightMouseDrag if isRightMouseDown', () => {
         const spy = spyOn(service, 'handleRightMouseDrag');
         service.isRightMouseDown = true;
+        service.isLeftMouseDown = false;
 
         service.onMouseMove(MOCK_RIGHT_CLICK);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('handleRightMouseDown should clear the invert selection buffer of Selection', () => {
+        const spy = spyOn(service.selection.invertSelectionBuffer, 'clear');
+
+        service.handleRightMouseDown();
 
         expect(spy).toHaveBeenCalled();
     });
@@ -224,6 +296,35 @@ fdescribe('SelectionToolService', () => {
         service.onMouseDown(MOCK_RIGHT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should remove the selection rectangle when handling a right mouse up', () => {
+        service.handleRightMouseUp();
+
+        expect(spyOnRemoveChild).toHaveBeenCalled();
+    });
+
+    it('should isSelecting to false when handling a right mouse up and isSelecting was true', () => {
+        service.handleRightMouseUp();
+
+        expect(service.isSelecting).toBeFalsy();
+    });
+
+    it('should singly invert select and set isOnTarget to false when handling a right mouse up, isOnTarget was true and isSelecting was false', () => {
+        const spy = spyOn(service, 'singlySelectInvert');
+        service.isSelecting = false;
+        service.isOnTarget = true;
+
+        service.handleRightMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+        expect(service.isOnTarget).toBeFalsy();
+    });
+
+    it('should remove the selection rectangle when handling a left mouse up', () => {
+        service.handleLeftMouseUp();
+
+        expect(spyOnRemoveChild).toHaveBeenCalled();
     });
 
     it('onMouseUp should call handleLeftMouseUp if event.button is Left Button', () => {

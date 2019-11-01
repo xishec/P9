@@ -7,7 +7,7 @@ export class Selection {
     renderer: Renderer2;
     svgRef: SVGElement;
 
-    selection: Set<SVGGElement> = new Set();
+    selectedElements: Set<SVGGElement> = new Set();
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
@@ -110,7 +110,7 @@ export class Selection {
     findLeftMostCoord(): number {
         const leftCoords: number[] = new Array();
 
-        for (const el of this.selection) {
+        for (const el of this.selectedElements) {
             leftCoords.push(this.getDOMRect(el).x + window.scrollX - SIDEBAR_WIDTH - this.getStrokeWidth(el) / 2);
         }
 
@@ -120,7 +120,7 @@ export class Selection {
     findRightMostCoord(): number {
         const rightCoords: number[] = new Array();
 
-        for (const el of this.selection) {
+        for (const el of this.selectedElements) {
             rightCoords.push(
                 this.getDOMRect(el).x +
                     window.scrollX -
@@ -136,7 +136,7 @@ export class Selection {
     findTopMostCoord(): number {
         const topCoords: number[] = new Array();
 
-        for (const el of this.selection) {
+        for (const el of this.selectedElements) {
             topCoords.push(this.getDOMRect(el).y + window.scrollY - this.getStrokeWidth(el) / 2);
         }
 
@@ -146,7 +146,7 @@ export class Selection {
     findBottomMostCoord(): number {
         const bottomCoords: number[] = new Array();
 
-        for (const el of this.selection) {
+        for (const el of this.selectedElements) {
             bottomCoords.push(
                 this.getDOMRect(el).y + window.scrollY + this.getDOMRect(el).height + this.getStrokeWidth(el) / 2,
             );
@@ -156,7 +156,7 @@ export class Selection {
     }
 
     updateFullSelectionBox(): void {
-        if (!(this.selection.size > 0)) {
+        if (!(this.selectedElements.size > 0)) {
             this.removeFullSelectionBox();
             return;
         }
@@ -216,36 +216,36 @@ export class Selection {
     }
 
     addToSelection(element: SVGGElement): void {
-        this.selection.add(element);
+        this.selectedElements.add(element);
         this.updateFullSelectionBox();
-        if (this.selection.size > 0) {
+        if (this.selectedElements.size > 0) {
             this.appendFullSelectionBox();
         }
     }
 
     invertAddToSelection(element: SVGGElement): void {
-        if (this.selection.has(element)) {
-            this.selection.delete(element);
+        if (this.selectedElements.has(element)) {
+            this.selectedElements.delete(element);
         } else {
-            this.selection.add(element);
+            this.selectedElements.add(element);
         }
         this.updateFullSelectionBox();
-        if (this.selection.size > 0) {
+        if (this.selectedElements.size > 0) {
             this.appendFullSelectionBox();
         }
     }
 
     removeFromSelection(element: SVGGElement): void {
-        this.selection.delete(element);
+        this.selectedElements.delete(element);
         this.updateFullSelectionBox();
-        if (this.selection.size == 0) {
+        if (this.selectedElements.size == 0) {
             this.removeFullSelectionBox();
         }
     }
 
     emptySelection(): void {
         this.removeFullSelectionBox();
-        this.selection.clear();
+        this.selectedElements.clear();
     }
 
     handleSelection(element: SVGGElement, isInSelectionRect: boolean): void {
@@ -257,10 +257,10 @@ export class Selection {
     }
 
     handleInvertSelection(element: SVGGElement, isInSelectionRect: boolean): void {
-        if (isInSelectionRect && this.selection.has(element) && !this.invertSelectionBuffer.has(element)) {
+        if (isInSelectionRect && this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.removeFromSelection(element);
-        } else if (isInSelectionRect && !this.selection.has(element) && !this.invertSelectionBuffer.has(element)) {
+        } else if (isInSelectionRect && !this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.addToSelection(element);
         }
@@ -269,7 +269,7 @@ export class Selection {
     moveBy(currentMouseCoords: MouseCoords, lastMouseCoords: MouseCoords): void {
         const deltaX = currentMouseCoords.x - lastMouseCoords.x;
         const deltaY = currentMouseCoords.y - lastMouseCoords.y;
-        for (const el of this.selection) {
+        for (const el of this.selectedElements) {
             const transformsList = el.transform.baseVal;
             if (
                 transformsList.numberOfItems === 0 ||

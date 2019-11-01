@@ -24,7 +24,7 @@ export class SelectionToolService extends AbstractToolService {
     isTranslatingSelection = false;
     isRightMouseDragging = false;
 
-    proxy: Selection;
+    selection: Selection;
 
     selectionRectangle: SVGRectElement;
 
@@ -37,7 +37,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        this.proxy.cleanUp();
+        this.selection.cleanUp();
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
@@ -56,7 +56,7 @@ export class SelectionToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.proxy = new Selection(this.renderer, this.elementRef.nativeElement);
+        this.selection = new Selection(this.renderer, this.elementRef.nativeElement);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
                 this.currentTarget = stackTarget.targetPosition;
@@ -134,13 +134,13 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     singlySelect(stackPosition: number): void {
-        this.proxy.emptySelection();
-        this.proxy.addToSelection(this.drawStack.drawStack[stackPosition]);
+        this.selection.emptySelection();
+        this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
     singlySelectInvert(stackPosition: number): void {
-        this.proxy.invertAddToSelection(this.drawStack.drawStack[stackPosition]);
+        this.selection.invertAddToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
@@ -154,7 +154,7 @@ export class SelectionToolService extends AbstractToolService {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
-            this.proxy.handleSelection(el, this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)));
+            this.selection.handleSelection(el, this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)));
         }
     }
 
@@ -162,18 +162,18 @@ export class SelectionToolService extends AbstractToolService {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
-            this.proxy.handleInvertSelection(el, this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)));
+            this.selection.handleInvertSelection(el, this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)));
         }
     }
 
     handleLeftMouseDrag(): void {
         this.isLeftMouseDragging = true;
 
-        if (this.isOnTarget && !this.proxy.selection.has(this.drawStack.drawStack[this.currentTarget])) {
+        if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if (this.proxy.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
+        } else if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
             this.isTranslatingSelection = true;
-            this.proxy.moveBy(this.currentMouseCoords, this.lastMouseCoords);
+            this.selection.moveBy(this.currentMouseCoords, this.lastMouseCoords);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
@@ -212,7 +212,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isRightMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
-        this.proxy.invertSelectionBuffer.clear();
+        this.selection.invertSelectionBuffer.clear();
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -243,7 +243,7 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
         } else {
-            this.proxy.emptySelection();
+            this.selection.emptySelection();
         }
 
         this.isLeftMouseDown = false;
