@@ -30,17 +30,26 @@ export class StampToolService extends AbstractToolService {
     readonly STAMP_BASE_ROTATION: number = 15;
     readonly STAMP_ALTER_ROTATION: number = 1;
 
-    stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
-    stampWrapper: SVGGElement = this.renderer.createElement('g', SVG_NS);
+    stamp: SVGImageElement;
+    stampWrapper: SVGGElement;
 
     attributesManagerService: AttributesManagerService;
 
-    constructor(
-        public drawStack: DrawStackService,
-        public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
-    ) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+
+        this.stamp = this.renderer.createElement('image', SVG_NS);
+        this.stampWrapper = this.renderer.createElement('g', SVG_NS);
         this.renderer.appendChild(this.stampWrapper, this.stamp);
     }
 
@@ -76,22 +85,22 @@ export class StampToolService extends AbstractToolService {
 
     verifyPosition(event: MouseEvent): boolean {
         return (
-            event.clientX > this.svgReference.nativeElement.getBoundingClientRect().left + window.scrollX &&
-            event.clientY > this.svgReference.nativeElement.getBoundingClientRect().top + window.scrollY
+            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
+            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
         );
     }
 
     initStamp(): void {
         if (!this.stampIsAppended) {
             this.setStamp();
-            this.renderer.appendChild(this.svgReference.nativeElement, this.stampWrapper);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.stampWrapper);
             this.stampIsAppended = true;
         }
     }
 
     cleanUp(): void {
         if (this.stampIsAppended) {
-            this.renderer.removeChild(this.svgReference.nativeElement, this.stampWrapper);
+            this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
             this.stampIsAppended = false;
         }
     }
@@ -162,7 +171,7 @@ export class StampToolService extends AbstractToolService {
             `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`,
         );
         this.drawStack.push(el);
-        this.renderer.appendChild(this.svgReference.nativeElement, el);
+        this.renderer.appendChild(this.elementRef.nativeElement, el);
     }
 
     rotateStamp(direction: number): void {
@@ -182,8 +191,8 @@ export class StampToolService extends AbstractToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         this.positionStamp();
     }

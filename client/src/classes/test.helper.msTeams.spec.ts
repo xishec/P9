@@ -12,8 +12,7 @@ export const autoMock: <T>(type: Type<T>) => Mock<T> = <T>(type: Type<T>): Mock<
         }
 
         for (const key of Object.getOwnPropertyNames(proto)) {
-            // tslint:disable-next-line: no-non-null-assertion
-            const descriptor = Object.getOwnPropertyDescriptor(proto, key)!;
+            const descriptor = Object.getOwnPropertyDescriptor(proto, key) as PropertyDescriptor;
 
             if (typeof descriptor.value === 'function' && key !== 'constructor') {
                 (provider as any)[key] = jasmine.createSpy(key);

@@ -75,7 +75,10 @@ export class LabelFilter implements PipeTransform {
                 labelsFromFilter.forEach((labelFromFilter: string) => {
                     if (
                         drawing.labels.filter((label: string) => {
-                            return label.toLowerCase().replace(/\s/g, '') === labelFromFilter;
+                            return label
+                                .toLowerCase()
+                                .replace(/\s/g, '')
+                                .includes(labelFromFilter);
                         }).length !== 0
                     ) {
                         checkLabels = true;
@@ -215,9 +218,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     findIndexByName(drawingName: string): number {
-        // tslint:disable-next-line: no-shadowed-variable
-        const drawing: Drawing = this.drawingsFromServer.find((drawing: Drawing) => {
-            return drawing.name === drawingName;
+        const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
+            return el.name === drawingName;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
     }

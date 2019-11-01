@@ -219,7 +219,7 @@ enum HTMLAttribute {
     title = 'title',
 }
 
-const ToolNameShortcuts: Map<string, string> = new Map([
+const ToolNameShortcuts: Map<string, ToolName> = new Map([
     ['c', ToolName.Pencil],
     ['w', ToolName.Brush],
     ['p', ToolName.Quill],
@@ -237,7 +237,7 @@ const ToolNameShortcuts: Map<string, string> = new Map([
     ['s', ToolName.Selection],
 ]);
 
-const ToolNameControlShortcuts: Map<string, string> = new Map([
+const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
     ['o', ToolName.NewDrawing],
     ['s', ToolName.Save],
     ['g', ToolName.ArtGallery],

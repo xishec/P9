@@ -1,4 +1,4 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
@@ -17,9 +17,21 @@ export class ColorApplicatorToolService extends AbstractToolService {
     private secondaryColor = '';
     isOnTarget = false;
 
-    constructor(private drawStack: DrawStackService, private renderer: Renderer2) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
+            console.log('what');
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
         });
@@ -39,9 +51,13 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        if (this.isOnTarget && this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined) {
+        if (
+            this.isOnTarget &&
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined
+        ) {
             switch (button) {
                 case Mouse.LeftButton:
+                    if ((this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition).getAttribute('fill') as string) !== 'none')
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         HTMLAttribute.fill,
@@ -80,7 +96,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
     }
     // tslint:disable-next-line: no-empty
-    onMouseUp(event: MouseEvent): void {}
+    onMouseUp(event: MouseEvent): void {this.isOnTarget = false;}
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
