@@ -4,7 +4,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Mouse, SVG_NS } from 'src/constants/constants';
+import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
 import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
 //import { HTMLAttribute } from 'src/constants/tool-constants';
@@ -19,7 +19,7 @@ export class EraserToolService extends AbstractToolService {
     currentSize = EraserSize.Default;
     isOnTarget = false;
     lastStrokeColor = '';
-    isOnMouseDown = false;
+    isLeftMouseDown = false;
 
     currentMouseX = 0;
     currentMouseY = 0;
@@ -62,7 +62,7 @@ export class EraserToolService extends AbstractToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.isOnMouseDown) {
+        if (this.isLeftMouseDown) {
             this.onMouseDown(event);
         }
         this.currentMouseX =
@@ -75,80 +75,95 @@ export class EraserToolService extends AbstractToolService {
 
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        this.isOnMouseDown = true;
-        let elementPosition = this.currentStackTarget.targetPosition;
-        if (this.isOnTarget && this.drawStack.getElementByPosition(elementPosition) !== undefined) {
-            if (button === Mouse.LeftButton) {
-                this.renderer.removeChild(
-                    this.elementRef.nativeElement,
-                    this.drawStack.getElementByPosition(elementPosition),
-                );
+        if (button === Mouse.LeftButton) {
+            this.isLeftMouseDown = true;
+        }
 
-                this.drawStack.removeElementByPosition(elementPosition);
-            }
+        let elementPosition = this.currentStackTarget.targetPosition;
+        if (
+            this.isOnTarget &&
+            this.drawStack.getElementByPosition(elementPosition) !== undefined &&
+            button === Mouse.LeftButton
+        ) {
+            this.renderer.removeChild(
+                this.elementRef.nativeElement,
+                this.drawStack.getElementByPosition(elementPosition),
+            );
+
+            this.drawStack.removeElementByPosition(elementPosition);
         }
         this.isOnTarget = false;
         console.log('in mouse down');
     }
 
-    appendRectangleOnMouse(): void {}
+    isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+        const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
+        const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
+        const boxTop = selectionBox.y + window.scrollY;
+        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
+
+        let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
+        let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
+        let elTop = elementBox.y + window.scrollY;
+        let elBottom = elementBox.y + window.scrollY + elementBox.height;
+
+        if (strokeWidth) {
+            const halfStrokeWidth = strokeWidth / 2;
+
+            elLeft = elLeft - halfStrokeWidth;
+            elRight = elRight + halfStrokeWidth;
+            elTop = elTop - halfStrokeWidth;
+            elBottom = elBottom + halfStrokeWidth;
+        }
+
+        // Check all cases where el and box don't touch each other
+        if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
+            return false;
+        }
+
+        return true;
+    }
 
     // checkSelection(): void {
-    //     const selectionBox = this.getDOMRect(this.selectionRectangle);
+    //     const selectionBox = this.getDOMRect(this.drawRectangle);
 
-    //     for (const el of this.drawStack.drawStack) {
-    //         const elBox = this.getDOMRect(el);
+    //         for (const el of this.drawStack.drawStack) {
+    //             const elBox = this.getDOMRect(el);
 
-    //         if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-    //             if (this.isLeftMouseDown) {
-    //                 this.selection.add(el);
-    //             } else if (this.isRightMouseDown) {
-    //                 this.invertSelection.add(el);
-    //             }
-    //         } else {
-    //             if (this.isLeftMouseDown) {
-    //                 this.selection.delete(el);
-    //             } else if (this.isRightMouseDown) {
-    //                 this.invertSelection.delete(el);
+    //             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
+    //                 if (this.isLeftMouseDown) {
+    //                     this.selection.add(el);
+    //                 } else if (this.isRightMouseDown) {
+    //                     this.invertSelection.add(el);
+    //                 }
+    //             } else {
+    //                 if (this.isLeftMouseDown) {
+    //                     this.selection.delete(el);
+    //                 } else if (this.isRightMouseDown) {
+    //                     this.invertSelection.delete(el);
+    //                 }
     //             }
     //         }
-    //     }
     // }
 
-    // isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
-    //     const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
-    //     const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
-    //     const boxTop = selectionBox.y + window.scrollY;
-    //     const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
+    getDOMRect(el: SVGGElement): DOMRect {
+        return el.getBoundingClientRect() as DOMRect;
+    }
 
-    //     let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
-    //     let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
-    //     let elTop = elementBox.y + window.scrollY;
-    //     let elBottom = elementBox.y + window.scrollY + elementBox.height;
+    getStrokeWidth(el: SVGGElement): number {
+        if (el.getAttribute(HTMLAttribute.stroke_width)) {
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
+        }
 
-    //     if (strokeWidth) {
-    //         const halfStrokeWidth = strokeWidth / 2;
-
-    //         elLeft = elLeft - halfStrokeWidth;
-    //         elRight = elRight + halfStrokeWidth;
-    //         elTop = elTop - halfStrokeWidth;
-    //         elBottom = elBottom + halfStrokeWidth;
-    //     }
-
-    //     // Check all cases where el and box don't touch each other
-    //     if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
+        return 0;
+    }
 
     onMouseUp(event: MouseEvent): void {
         // const button = event.button;
         // if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
         //     this.initStamp();
         // }
-        this.isOnMouseDown = false;
+        this.isLeftMouseDown = false;
     }
 
     // tslint:disable-next-line: no-empty
