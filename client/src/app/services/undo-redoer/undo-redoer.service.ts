@@ -60,9 +60,9 @@ export class UndoRedoerService {
 
     redo(): void {
         if (this.redos.length > 0) {
-            const stateToLoad = this.redos.pop();
+            const stateToLoad = this.redos.pop() as Drawing;
             this.undos.push(stateToLoad as Drawing);
-            this.drawingLoaderService.currentDrawing.next(stateToLoad!);
+            this.drawingLoaderService.currentDrawing.next(stateToLoad);
         }
     }
 
