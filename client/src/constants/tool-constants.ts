@@ -22,6 +22,8 @@ enum ToolName {
     Text = 'Zone de texte',
     Stamp = 'Étampe',
     Grid = 'Grille',
+    Undo = 'Annuler',
+    Redo = 'Refaire',
     NewDrawing = 'Nouveau dessin',
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
@@ -104,6 +106,8 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-undo-alt', tooltipName: ToolName.Undo, shortcut: '(Ctrl-Z)' },
+    { iconName: 'fas fa-redo-alt', tooltipName: ToolName.Redo, shortcut: '(Ctrl-Shift-Z)' },
     { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
     { iconName: 'far fa-save', tooltipName: ToolName.Save, shortcut: '(Ctrl-S)' },
     { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery, shortcut: '(Ctrl-G)' },
