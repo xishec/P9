@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 const MOCK_INNER_HTML = 'expectedInnerHtml';
 const MOCK_DRAWING_INFO = new DrawingInfo(0,0,DEFAULT_WHITE);
 
-fdescribe('UndoRedoerService', () => {
+describe('UndoRedoerService', () => {
     let injector: TestBed;
     let service: UndoRedoerService;
     let mockElementRef : ElementRef<SVGElement>;
@@ -56,5 +56,21 @@ fdescribe('UndoRedoerService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('initializeService should set workzoneRef', () => {
+        const mockExpectedInnerHTML = 'new expected string';
+        mockElementRef.nativeElement.innerHTML = mockExpectedInnerHTML;
+
+        service.initializeService(mockElementRef);
+
+        expect(service.workzoneRef.nativeElement.innerHTML).toEqual(mockExpectedInnerHTML);
+    })
+
+    it('initializeStacks should reset undos and redos', () => {
+        service.initializeStacks();
+
+        expect(service.undos).toEqual([]);
+        expect(service.redos).toEqual([]);
     });
 });
