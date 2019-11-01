@@ -142,8 +142,8 @@ enum StampAngleOrientation {
 
 enum EraserSize {
     Min = 1,
-    Default = 1,
-    Max = 10,
+    Default = 10,
+    Max = 100,
 }
 
 const STAMP_TYPES = [
