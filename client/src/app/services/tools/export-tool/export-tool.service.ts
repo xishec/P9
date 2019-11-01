@@ -13,6 +13,8 @@ export class ExportToolService {
     canvas: HTMLCanvasElement;
     workzoneIsEmpty = true;
     renderer: Renderer2;
+    img: HTMLImageElement;
+    fileType: FileType;
 
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
@@ -26,97 +28,59 @@ export class ExportToolService {
         this.renderer = renderer;
         this.canvas = this.renderer.createElement('canvas');
         this.anchor = this.renderer.createElement('a');
+        this.img = this.renderer.createElement('img');
     }
 
     saveFile(fileType: FileType): void {
-        const originalSvgSize = this.svg.getBoundingClientRect();
+        this.fileType = fileType;
         this.resizeCanvas();
-        switch (fileType) {
-            case FileType.SVG:
-                this.saveAsSVG();
-                break;
-
-            case FileType.BMP:
-                this.compressSVG();
-                this.saveAsBMP();
-                this.decompressSVG(originalSvgSize);
-                break;
-
-            case FileType.JPG:
-                this.saveAsJPG();
-                break;
-
-            case FileType.PNG:
-                this.saveAsPNG();
-                break;
+        if (this.fileType === FileType.SVG) {
+            this.saveAsSVG();
+        } else {
+            this.saveAsOther();
         }
     }
 
     saveAsSVG(): void {
         this.renderer.setAttribute(this.anchor, 'href', URL.createObjectURL(this.createSVGBlob()));
-        this.launchDownload(FileType.SVG);
+        this.launchDownload();
     }
 
-    saveAsPNG(): void {
-        let context = this.canvas.getContext('2d');
-        let img = new Image();
-        let url = URL.createObjectURL(this.createSVGBlob());
-        img.onload = () => {
-            if (context !== null) {
-                context.drawImage(img, 0, 0);
-            }
+    saveAsOther(): void {
+        const originalSvgSize: ClientRect | DOMRect = this.svg.getBoundingClientRect();
+
+        if (FileType.BMP === this.fileType) {
+            this.compressSVG();
+        }
+
+        const url: string = URL.createObjectURL(this.createSVGBlob());
+        this.img.onload = () => {
+            (this.canvas.getContext('2d') as CanvasRenderingContext2D).drawImage(this.img, 0, 0);
 
             URL.revokeObjectURL(url);
-            let uri = this.canvas.toDataURL('image/png').replace('image/png', 'octet/stream');
-            this.renderer.setAttribute(this.anchor, 'href', uri);
-            this.launchDownload(FileType.PNG);
 
-            URL.revokeObjectURL(uri);
-        };
-        img.src = url;
-    }
-
-    saveAsJPG(): void {
-        let context = this.canvas.getContext('2d');
-        let img = new Image();
-        let url = URL.createObjectURL(this.createSVGBlob());
-        img.onload = () => {
-            if (context !== null) {
-                context.drawImage(img, 0, 0);
+            let uri: string;
+            if (this.fileType !== FileType.BMP) {
+                uri = this.canvas.toDataURL('image/' + this.fileType).replace('image/' + this.fileType, 'octet/stream');
+            } else {
+                const canvasToBMP = new CanvasToBMP();
+                uri = canvasToBMP.toDataURL(this.canvas);
             }
 
-            URL.revokeObjectURL(url);
-            let uri = this.canvas.toDataURL('image/jpeg').replace('image/jpeg', 'octet/stream');
             this.renderer.setAttribute(this.anchor, 'href', uri);
-            this.launchDownload(FileType.JPG);
-
+            this.launchDownload();
             URL.revokeObjectURL(uri);
         };
-        img.src = url;
+
+        this.renderer.setAttribute(this.img, 'src', url);
+
+        if (FileType.BMP === this.fileType) {
+            this.decompressSVG(originalSvgSize);
+        }
     }
 
-    saveAsBMP(): void {
-        let context: CanvasRenderingContext2D | null = this.canvas.getContext('2d');
-        let img: HTMLImageElement = new Image();
-        let url = URL.createObjectURL(this.createSVGBlob());
-        img.onload = () => {
-            if (context !== null) {
-                context.drawImage(img, 0, 0);
-            }
-
-            URL.revokeObjectURL(url);
-            let canvasToBMP = new CanvasToBMP();
-            let uri = canvasToBMP.toDataURL(this.canvas);
-            this.renderer.setAttribute(this.anchor, 'href', uri);
-            this.launchDownload(FileType.BMP);
-
-            URL.revokeObjectURL(uri);
-        };
-        img.src = url;
-    }
-
-    launchDownload(fileType: FileType): void {
-        this.renderer.setAttribute(this.anchor, 'download', 'untitled.' + fileType);
+    launchDownload(): void {
+        this.renderer.setAttribute(this.anchor, 'download', 'untitled.' + this.fileType);
         this.anchor.click();
     }
 
@@ -137,7 +101,6 @@ export class ExportToolService {
         this.renderer.setAttribute(this.svg, 'viewBox', `0,0,${svgSize.width},${svgSize.height}`);
         this.renderer.setAttribute(this.svg, 'width', '620');
         this.renderer.setAttribute(this.svg, 'height', '620');
-
         this.resizeCanvas();
     }
 

@@ -248,7 +248,7 @@ enum FileType {
     SVG = 'svg',
     PNG = 'png',
     BMP = 'bmp',
-    JPG = 'jpg',
+    JPG = 'jpeg',
 }
 
 export {
