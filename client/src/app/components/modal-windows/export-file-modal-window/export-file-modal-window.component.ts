@@ -30,7 +30,6 @@ export class ExportFileModalWindowComponent implements OnInit {
 
     ngOnInit() {
         this.initializeForm();
-        this.exportToolService.initialize(this.anchorRef);
     }
 
     initializeForm(): void {
