@@ -26,13 +26,6 @@ export class UndoRedoerService {
         });
     }
 
-    setFirstState() { // NOT USED YET
-        if (this.undos.length === 0) {
-            console.log('save first state');
-            this.saveCurrentState([]);
-        }
-    }
-
     initializeStacks() : void {
         this.undos = [];
         this.redos = [];
@@ -47,7 +40,6 @@ export class UndoRedoerService {
             drawingInfo: this.currentDrawingInfos,
         };
         
-
         this.undos.push(currentState);
 
         if (this.redos.length > 0) {

@@ -57,6 +57,9 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
+
+        this.undoRedoerService.initializeStacks();
+        
         this.drawingModalWindowService.changeDrawingInfo(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
@@ -72,7 +75,6 @@ export class DrawingModalWindowComponent implements OnInit {
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);
-        this.undoRedoerService.initializeStacks();
     }
 
     @HostListener('window:resize')
