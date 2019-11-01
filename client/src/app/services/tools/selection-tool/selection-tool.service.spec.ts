@@ -172,14 +172,16 @@ fdescribe('SelectionToolService', () => {
         expect(service.isSelecting).toBeTruthy();
     });
 
-    // it('handleLeftMouseDrag should call checkSelection if this.isSelecting', () => {
-    //     service.isSelecting = true;
-    //     const spy = spyOn(service, 'checkSelection');
+    it('handleLeftMouseDrag should call checkSelection if mouse is not in selection or not translating and is not on target', () => {
+        service.isOnTarget = false;
+        const spy = spyOn(service, 'checkSelection');
+        const spyProxy = spyOn(service.proxy, 'mouseIsInSelectionBox').and.callFake(()=>{return false;});
 
-    //     service.handleLeftMouseDrag();
+        service.handleLeftMouseDrag();
 
-    //     expect(spy).toHaveBeenCalled();
-    // });
+        expect(spy).toHaveBeenCalled();
+        expect(spyProxy).toHaveBeenCalled();
+    });
 
     it('handleRightMouseDrag should call checkSelectionInverse if this.isSelecting', () => {
         const spy = spyOn(service, 'checkSelectionInverse');
