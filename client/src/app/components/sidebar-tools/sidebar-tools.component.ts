@@ -21,10 +21,8 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
     currentToolName: ToolName;
-
     currentTracingTool: ToolName;
     showTracingTools = false;
-
     currentShapeTool: ToolName;
     showShapeTools = false;
 
@@ -72,7 +70,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         this.toolSelectorService.changeTool(tooltipName);
     }
 
-    onRightClick(i: number) {
+    onRightClick(i: number): void {
         if (i === 1) {
             this.showTracingTools = true;
             this.showShapeTools = false;
@@ -82,7 +80,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         }
     }
 
-    onClickAttributePanel() {
+    onClickAttributePanel(): void {
         this.showShapeTools = false;
         this.showTracingTools = false;
     }
