@@ -73,4 +73,57 @@ describe('UndoRedoerService', () => {
         expect(service.undos).toEqual([]);
         expect(service.redos).toEqual([]);
     });
+
+    it('saveCurrentState should push the currentState to undos and have the same innerHTML', () => {
+        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
+        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+
+        service.saveCurrentState([]);
+
+        expect(service.undos[0].svg).toEqual(MOCK_INNER_HTML);
+        expect(service.undos[0].drawingInfo).toEqual(MOCK_DRAWING_INFO);
+    });
+
+    it('saveCurrentState should reset redos if redos.length > 0', () => {
+        service.redos.push({name: '', labels: [], svg: '', idStack: [], drawingInfo: MOCK_DRAWING_INFO});
+    
+        service.saveCurrentState([]);
+
+        expect(service.redos).toEqual([]);
+    });
+
+    it('undo should pop undos and push this to redos if undos.length > 1', () => {
+        const initState: Drawing = {
+            name: '1',
+            labels: [],
+            svg: '1',
+            idStack: [],
+            drawingInfo: MOCK_DRAWING_INFO,
+        };
+
+        const mockState: Drawing = {
+            name: '2',
+            labels: [],
+            svg: '2',
+            idStack: [],
+            drawingInfo: MOCK_DRAWING_INFO,
+        };
+
+        service.undos.push(initState);
+        service.undos.push(mockState);
+
+        service.undo();
+
+        expect(service.redos[0]).toEqual(mockState);
+    });
+
+    it('undo should not do anything if undos.length <= 1', () => {
+        service.undos = [];
+        service.redos = [];
+
+        service.undo();
+
+        expect(service.undos).toEqual([]);
+        expect(service.redos).toEqual([]);
+    })
 });
