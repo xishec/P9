@@ -21,6 +21,9 @@ export class EraserToolService extends AbstractToolService {
     lastStrokeColor = '';
     isOnMouseDown = false;
 
+    currentMouseX = 0;
+    currentMouseY = 0;
+
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
@@ -53,7 +56,8 @@ export class EraserToolService extends AbstractToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentEraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
-            // this.setStamp();
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
+            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
         });
     }
 
@@ -61,13 +65,12 @@ export class EraserToolService extends AbstractToolService {
         if (this.isOnMouseDown) {
             this.onMouseDown(event);
         }
-        let currentMouseX =
-            event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - EraserSize.Default / 2;
-        let currentMouseY =
-            event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - EraserSize.Default / 2;
-        this.renderer.setAttribute(this.drawRectangle, 'x', currentMouseX.toString());
-        this.renderer.setAttribute(this.drawRectangle, 'y', currentMouseY.toString());
-        //this.renderer.setAttribute(this.)
+        this.currentMouseX =
+            event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
+        this.currentMouseY =
+            event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
+        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseX.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseY.toString());
     }
 
     onMouseDown(event: MouseEvent): void {
