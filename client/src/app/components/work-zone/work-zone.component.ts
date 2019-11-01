@@ -185,6 +185,8 @@ export class WorkZoneComponent implements OnInit {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
+            case ToolName.Eraser:
+                return { cursor: 'none' };
             case ToolName.Brush:
             case ToolName.Pencil:
             case ToolName.Rectangle:
@@ -195,11 +197,6 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Line:
             case ToolName.Quill:
             case ToolName.SprayCan:
-            case ToolName.Eraser:
-                //  document.getElementById('container').style.cursor = 'wait';
-                // document.getElementById('container').style.backgroundImage = "url('../../../assets/eraser.png')";
-
-                return { cursor: 'none' };
             case ToolName.Fill:
             case ToolName.Selection:
                 return { cursor: 'crosshair' };

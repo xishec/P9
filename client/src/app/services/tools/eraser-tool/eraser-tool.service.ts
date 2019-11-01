@@ -16,7 +16,7 @@ export class EraserToolService extends AbstractToolService {
     drawRectangle: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentStackTarget: StackTargetInfo;
-    currentSize = 1;
+    currentSize = EraserSize.Default;
     isOnTarget = false;
     lastStrokeColor = '';
     isOnMouseDown = false;
@@ -41,8 +41,8 @@ export class EraserToolService extends AbstractToolService {
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, EraserSize.Default.toString());
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, EraserSize.Default.toString());
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
 
         this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
         this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
