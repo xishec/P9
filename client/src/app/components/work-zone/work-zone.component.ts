@@ -100,7 +100,7 @@ export class WorkZoneComponent implements OnInit {
             });
 
             if(this.undoRedoerService.fromLoader) {
-                this.undoRedoerService.saveCurrentState([]);
+                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                 this.undoRedoerService.fromLoader = false;
             }
         });
