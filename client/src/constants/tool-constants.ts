@@ -3,6 +3,7 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 const NO_STAMP = '';
 
 enum ToolName {
+    TracingTool = 'Outil de traçage',
     Selection = 'Sélection',
     Pencil = 'Crayon',
     Brush = 'Pinceau',
@@ -75,11 +76,7 @@ const GRID_SIZE_DECREMENT = 5;
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
-    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
-    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
-    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
-    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
-    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.TracingTool, shortcut: '' },
     { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
     { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
     { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
@@ -91,6 +88,14 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: ToolName.Stamp, shortcut: '' },
     { iconName: 'fas fa-border-all', tooltipName: ToolName.Grid, shortcut: '' },
+];
+
+const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
+    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
+    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
+    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
+    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -249,6 +254,7 @@ export {
     ToolNameShortcuts,
     HTMLAttribute,
     TOOLS_BUTTON_INFO,
+    TRACING_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
     Thickness,
