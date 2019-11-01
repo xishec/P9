@@ -1,13 +1,49 @@
-.mat-typography {
+.mat-typography, .mat-typography-local {
     display: grid;
-    grid-template-columns: 140px 315px 185px;
-    grid-template-rows: 30px 10px auto 10px 30px;
     align-self: center;
     padding: 15px 40px;
 }
 
+.mat-typography {
+    grid-template-columns: 140px 315px 185px;
+    grid-template-rows: 30px 10px auto 10px 30px;
+}
+
+.mat-typography-local {
+    grid-template-columns: 140px 500px;
+    grid-template-rows: 30px 10px 30px;
+}
+
+.file-name-title {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.file-name-input {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+
+    width: 492px;
+}
+
+#destination-label {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+
+    font-size: 14px;
+}
+
+#input-wrapper {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
 .tab-content {
-    height: 320px;
+    height: 280px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -58,15 +94,20 @@
 }
 
 .drawing-name-title,
-.drawing-label-title {
+.drawing-label-title,
+.file-name-title,
+#destination-label {
     align-self: center;
+    font-size: 14px;
 }
 
 .drawing-name-input,
-.new-label-input {
+.new-label-input,
+.file-name-input {
     padding-left: 8px;
     align-self: center;
     margin: 0;
+    font-size: 14px;
 }
 
 .label {
@@ -82,17 +123,6 @@
 
 ::ng-deep.mat-dialog-actions {
     margin-bottom: 0 !important;
-}
-
-#save-local-footer {
-    display: flex;
-    justify-content: space-between;
-}
-
-#save-destination {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
 #destination-path {
@@ -114,18 +144,8 @@
     }
 }
 
-#destination-label {
-    font-size: 14px;
-}
-
 .fas.fa-folder {
     font-size: 24px;
-}
-
-#input-wrapper {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
 }
 
 .inputfile {
