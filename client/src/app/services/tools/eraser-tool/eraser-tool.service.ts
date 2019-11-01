@@ -4,13 +4,16 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Mouse } from 'src/constants/constants';
+import { Mouse, SVG_NS } from 'src/constants/constants';
+import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
+import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
 //import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class EraserToolService extends AbstractToolService {
+    drawRectangle: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentStackTarget: StackTargetInfo;
     currentSize = 1;
@@ -18,7 +21,7 @@ export class EraserToolService extends AbstractToolService {
     lastStrokeColor = '';
     isOnMouseDown = false;
 
-    svgReference: ElementRef<SVGElement>;
+    elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
 
@@ -27,7 +30,7 @@ export class EraserToolService extends AbstractToolService {
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
-        this.svgReference = elementRef;
+        this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
 
@@ -36,6 +39,14 @@ export class EraserToolService extends AbstractToolService {
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
         });
+
+        this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, EraserSize.Default.toString());
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, EraserSize.Default.toString());
+
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, '3');
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
@@ -50,6 +61,13 @@ export class EraserToolService extends AbstractToolService {
         if (this.isOnMouseDown) {
             this.onMouseDown(event);
         }
+        let currentMouseX =
+            event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - EraserSize.Default / 2;
+        let currentMouseY =
+            event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - EraserSize.Default / 2;
+        this.renderer.setAttribute(this.drawRectangle, 'x', currentMouseX.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'y', currentMouseY.toString());
+        //this.renderer.setAttribute(this.)
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -59,7 +77,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.isOnTarget && this.drawStack.getElementByPosition(elementPosition) !== undefined) {
             if (button === Mouse.LeftButton) {
                 this.renderer.removeChild(
-                    this.svgReference.nativeElement,
+                    this.elementRef.nativeElement,
                     this.drawStack.getElementByPosition(elementPosition),
                 );
 
@@ -69,6 +87,8 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
         console.log('in mouse down');
     }
+
+    appendRectangleOnMouse(): void {}
 
     // checkSelection(): void {
     //     const selectionBox = this.getDOMRect(this.selectionRectangle);
@@ -129,13 +149,17 @@ export class EraserToolService extends AbstractToolService {
     }
 
     // tslint:disable-next-line: no-empty
-    onMouseEnter(event: MouseEvent): void {}
+    onMouseEnter(event: MouseEvent): void {
+        // document.getElementById('container').style.cursor = 'wait';
+        this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
+    }
 
     // tslint:disable-next-line: no-empty
     onMouseOver(event: MouseEvent): void {}
 
     // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {
+        this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // this.isIn = false;
         // if (this.shouldStamp) {
         //     this.cleanUp();
@@ -150,8 +174,9 @@ export class EraserToolService extends AbstractToolService {
 
     // tslint:disable-next-line: no-empty
     cleanUp(): void {
+        // this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // if (this.stampIsAppended) {
-        //     this.renderer.removeChild(this.svgReference.nativeElement, this.stampWrapper);
+        //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
         //     this.stampIsAppended = false;
         // }
     }

@@ -142,7 +142,7 @@ enum StampAngleOrientation {
 
 enum EraserSize {
     Min = 1,
-    Default = 10,
+    Default = 50,
     Max = 100,
 }
 

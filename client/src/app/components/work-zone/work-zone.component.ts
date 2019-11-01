@@ -199,9 +199,7 @@ export class WorkZoneComponent implements OnInit {
                 //  document.getElementById('container').style.cursor = 'wait';
                 // document.getElementById('container').style.backgroundImage = "url('../../../assets/eraser.png')";
 
-                return {
-                    cursor: "url('../../../assets/eraser.png')",
-                };
+                return { cursor: 'none' };
             case ToolName.Fill:
             case ToolName.Selection:
                 return { cursor: 'crosshair' };
