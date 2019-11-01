@@ -1,5 +1,5 @@
 import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { FileType } from 'src/constants/tool-constants';
+import { FileType, MAX_BMP_SIZE } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -99,8 +99,8 @@ export class ExportToolService {
     compressSVG(): void {
         const svgSize = this.svg.getBoundingClientRect();
         this.renderer.setAttribute(this.svg, 'viewBox', `0,0,${svgSize.width},${svgSize.height}`);
-        this.renderer.setAttribute(this.svg, 'width', '620');
-        this.renderer.setAttribute(this.svg, 'height', '620');
+        this.renderer.setAttribute(this.svg, 'width', `${MAX_BMP_SIZE}`);
+        this.renderer.setAttribute(this.svg, 'height', `${MAX_BMP_SIZE}`);
         this.resizeCanvas();
     }
 

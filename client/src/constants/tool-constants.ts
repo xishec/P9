@@ -251,6 +251,8 @@ enum FileType {
     JPG = 'jpeg',
 }
 
+const MAX_BMP_SIZE = 620;
+
 export {
     ToolNameControlShortcuts,
     ToolNameShortcuts,
@@ -280,4 +282,5 @@ export {
     GRID_SIZE_DECREMENT,
     FileType,
     PEN_WIDTH_FACTOR,
+    MAX_BMP_SIZE,
 };
