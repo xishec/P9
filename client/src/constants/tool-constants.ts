@@ -237,7 +237,7 @@ const ToolNameShortcuts: Map<string, ToolName> = new Map([
     ['s', ToolName.Selection],
 ]);
 
-const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
+const ControlShortcuts: Map<string, ToolName> = new Map([
     ['o', ToolName.NewDrawing],
     ['s', ToolName.Save],
     ['g', ToolName.ArtGallery],
@@ -245,7 +245,7 @@ const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
 ]);
 
 export {
-    ToolNameControlShortcuts,
+    ControlShortcuts,
     ToolNameShortcuts,
     HTMLAttribute,
     TOOLS_BUTTON_INFO,

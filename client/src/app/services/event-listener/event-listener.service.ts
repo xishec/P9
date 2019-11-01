@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { ToolName, ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { ToolName, ControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
@@ -86,20 +86,24 @@ export class EventListenerService {
         });
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-
-            if (event.key === 'ArrowLeft') {
-                this.currentTool!.cleanUp();
-                this.undoRedoer.undo();
-            }
-            if (event.key === 'ArrowRight') {
-                this.currentTool!.cleanUp();
-                this.undoRedoer.redo();
-            }
-
-            // If control is pressed, change for ControlTools
-            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+            
+            // If control is pressed
+            if (event.ctrlKey) {
                 event.preventDefault();
-                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+
+                // Control tools : new drawing, save, export, open...
+                if(ControlShortcuts.has(event.key)) {
+                    this.toolSelectorService.changeTool(ControlShortcuts.get(event.key) as ToolName);
+                }
+
+                // Undo Redo
+                if(event.key === 'z') {
+                    this.currentTool!.cleanUp();
+                    this.undoRedoer.undo();
+                } else if (event.key === 'Z') {
+                    this.currentTool!.cleanUp();
+                    this.undoRedoer.redo();
+                }
             }
 
             // Call the onKeyDown of the current tool, if the current tool doesn't do anything
