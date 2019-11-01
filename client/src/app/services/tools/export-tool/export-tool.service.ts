@@ -8,7 +8,7 @@ import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-mo
     providedIn: 'root',
 })
 export class ExportToolService {
-    refSVG: ElementRef<SVGElement>;
+    svg: SVGElement;
     anchor: HTMLAnchorElement;
     canvas: HTMLCanvasElement;
     workzoneIsEmpty = true;
@@ -22,14 +22,14 @@ export class ExportToolService {
     }
 
     initializeService(ref: ElementRef<SVGElement>, renderer: Renderer2): void {
-        this.refSVG = ref;
+        this.svg = ref.nativeElement;
         this.renderer = renderer;
         this.canvas = this.renderer.createElement('canvas');
         this.anchor = this.renderer.createElement('a');
     }
 
     saveFile(fileType: FileType): void {
-        const originalSvgSize = this.refSVG.nativeElement.getBoundingClientRect();
+        const originalSvgSize = this.svg.getBoundingClientRect();
         this.resizeCanvas();
         switch (fileType) {
             case FileType.SVG:
@@ -53,14 +53,14 @@ export class ExportToolService {
     }
 
     saveAsSVG(): void {
-        this.renderer.setAttribute(this.anchor, 'href', URL.createObjectURL(this.getSVGBlob()));
+        this.renderer.setAttribute(this.anchor, 'href', URL.createObjectURL(this.createSVGBlob()));
         this.launchDownload(FileType.SVG);
     }
 
     saveAsPNG(): void {
         let context = this.canvas.getContext('2d');
         let img = new Image();
-        let url = URL.createObjectURL(this.getSVGBlob());
+        let url = URL.createObjectURL(this.createSVGBlob());
         img.onload = () => {
             if (context !== null) {
                 context.drawImage(img, 0, 0);
@@ -79,7 +79,7 @@ export class ExportToolService {
     saveAsJPG(): void {
         let context = this.canvas.getContext('2d');
         let img = new Image();
-        let url = URL.createObjectURL(this.getSVGBlob());
+        let url = URL.createObjectURL(this.createSVGBlob());
         img.onload = () => {
             if (context !== null) {
                 context.drawImage(img, 0, 0);
@@ -98,7 +98,7 @@ export class ExportToolService {
     saveAsBMP(): void {
         let context: CanvasRenderingContext2D | null = this.canvas.getContext('2d');
         let img: HTMLImageElement = new Image();
-        let url = URL.createObjectURL(this.getSVGBlob());
+        let url = URL.createObjectURL(this.createSVGBlob());
         img.onload = () => {
             if (context !== null) {
                 context.drawImage(img, 0, 0);
@@ -120,30 +120,30 @@ export class ExportToolService {
         this.anchor.click();
     }
 
-    getSVGBlob(): Blob {
-        this.refSVG.nativeElement.setAttribute('xmlns', SVG_NS);
-        const data = new XMLSerializer().serializeToString(this.refSVG.nativeElement);
+    createSVGBlob(): Blob {
+        this.renderer.setAttribute(this.svg, 'xmlns', SVG_NS);
+        const data = new XMLSerializer().serializeToString(this.svg);
         return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     }
 
     resizeCanvas(): void {
-        const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
+        const svgSize = this.svg.getBoundingClientRect();
         this.canvas.width = svgSize.width;
         this.canvas.height = svgSize.height;
     }
 
     compressSVG(): void {
-        const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
-        this.refSVG.nativeElement.setAttribute('viewBox', `0,0,${svgSize.width},${svgSize.height}`);
-        this.refSVG.nativeElement.setAttribute('width', '620');
-        this.refSVG.nativeElement.setAttribute('height', '620');
+        const svgSize = this.svg.getBoundingClientRect();
+        this.renderer.setAttribute(this.svg, 'viewBox', `0,0,${svgSize.width},${svgSize.height}`);
+        this.renderer.setAttribute(this.svg, 'width', '620');
+        this.renderer.setAttribute(this.svg, 'height', '620');
 
         this.resizeCanvas();
     }
 
     decompressSVG(svgSize: ClientRect | DOMRect): void {
-        this.refSVG.nativeElement.removeAttribute('viewbox');
-        this.refSVG.nativeElement.setAttribute('width', `${svgSize.width}`);
-        this.refSVG.nativeElement.setAttribute('height', `${svgSize.height}`);
+        this.renderer.removeAttribute(this.svg, 'viewBox');
+        this.renderer.setAttribute(this.svg, 'width', `${svgSize.width}`);
+        this.renderer.setAttribute(this.svg, 'height', `${svgSize.height}`);
     }
 }
