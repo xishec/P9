@@ -17,19 +17,27 @@ export abstract class TracingToolService extends AbstractToolService {
     protected currentColorAndOpacity = '';
     protected currentOpacity = '';
     protected currentColor = '';
-    protected svgPath: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-    protected svgWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-    protected svgPreviewCircle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+    protected svgPath: SVGPathElement;
+    protected svgWrap: SVGGElement;
+    protected svgPreviewCircle: SVGCircleElement;
 
     protected attributesManagerService: AttributesManagerService;
     protected colorToolService: ColorToolService;
+    protected elementRef: ElementRef<SVGElement>;
+    protected renderer: Renderer2;
+    protected drawStack: DrawStackService;
 
-    constructor(
-        protected elementRef: ElementRef<SVGElement>,
-        protected renderer: Renderer2,
-        protected drawStack: DrawStackService,
-    ) {
+    constructor() {
         super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+        this.svgPath = this.renderer.createElement('path', SVG_NS);
+        this.svgWrap = this.renderer.createElement('g', SVG_NS);
+        this.svgPreviewCircle = this.renderer.createElement('circle', SVG_NS);
     }
 
     getIsDrawing = () => this.isDrawing;

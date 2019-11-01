@@ -16,7 +16,4 @@ export class DrawingLoaderService {
     });
 
     emptyDrawStack: BehaviorSubject<boolean> = new BehaviorSubject(true);
-
-    // tslint:disable-next-line: no-empty
-    constructor() {}
 }

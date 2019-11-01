@@ -34,9 +34,8 @@ describe('OpenFileModalWindowComponent', () => {
     };
 
     @Pipe({ name: 'mySlice' })
-    class MockMySclicePipe implements PipeTransform {
+    class MockMySlicePipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -45,7 +44,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'labelFilter' })
     class MockLabelFilterPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -54,7 +52,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'nameFilter' })
     class MockNameFilterPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -63,7 +60,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'toTrustHtml' })
     class MockToTrustHtmlPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -72,7 +68,7 @@ describe('OpenFileModalWindowComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 OpenFileModalWindowComponent,
-                MockMySclicePipe,
+                MockMySlicePipe,
                 MockLabelFilterPipe,
                 MockNameFilterPipe,
                 MockToTrustHtmlPipe,

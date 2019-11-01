@@ -71,7 +71,8 @@ describe('PolygonToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        polygonTool = new PolygonToolService(drawStackMock, elementRefMock, rendererMock);
+        polygonTool = new PolygonToolService();
+        polygonTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         polygonTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         polygonTool.drawPolygon = (mockDrawPolygon as unknown) as SVGPolygonElement;
 
@@ -93,8 +94,9 @@ describe('PolygonToolService', () => {
     });
 
     it('should be created with call to new', () => {
-        const newPolygonTool = new PolygonToolService(drawStackMock, elementRefMock, rendererMock);
-        polygonTool.initializeAttributesManagerService(mockAttributeManager);
+        const newPolygonTool = new PolygonToolService();
+        newPolygonTool.initializeAttributesManagerService(mockAttributeManager);
+        polygonTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         polygonTool.initializeColorToolService(mockColorTool);
         expect(spyCreateElement).toHaveBeenCalled();
         expect(newPolygonTool).toBeTruthy();

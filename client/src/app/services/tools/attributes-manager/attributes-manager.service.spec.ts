@@ -35,4 +35,28 @@ describe('AttributesManagerService', () => {
         service.changeStyle(2);
         expect(service[`style`].value).toEqual(2);
     });
+
+    it('should changeNbVertices', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.changeNbVertices(3);
+        expect(service[`nbVertices`].value).toEqual(3);
+    });
+
+    it('should changeScaling', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.changeScaling(3);
+        expect(service[`scaling`].value).toEqual(3);
+    });
+
+    it('should changeAngle', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.changeAngle(3);
+        expect(service[`angle`].value).toEqual(3);
+    });
+
+    it('should changeStampType', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.changeStampType('1');
+        expect(service[`stampType`].value).toEqual('1');
+    });
 });

@@ -30,18 +30,6 @@ import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
-    private selectionTool: SelectionToolService;
-    private rectangleTool: RectangleToolService;
-    private ellipsisTool: EllipsisToolService;
-    private pencilTool: PencilToolService;
-    private brushTool: BrushToolService;
-    private stampTool: StampToolService;
-    private dropperTool: DropperToolService;
-    private colorApplicatorTool: ColorApplicatorToolService;
-    private polygoneTool: PolygonToolService;
-    private penTool: PenToolService;
-    private lineTool: LineToolService;
-    private eraserTool: EraserToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
@@ -52,6 +40,18 @@ export class ToolSelectorService {
         private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private modalManagerService: ModalManagerService,
+        private selectionTool: SelectionToolService,
+        private rectangleTool: RectangleToolService,
+        private ellipsisTool: EllipsisToolService,
+        private pencilTool: PencilToolService,
+        private penTool: PenToolService,
+        private brushTool: BrushToolService,
+        private stampTool: StampToolService,
+        private dropperTool: DropperToolService,
+        private colorApplicatorTool: ColorApplicatorToolService,
+        private polygoneTool: PolygonToolService,
+        private lineTool: LineToolService,
+        private eraserTool: EraserToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -60,36 +60,35 @@ export class ToolSelectorService {
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
         this.drawStack = drawStack;
+        this.selectionTool.initializeService(ref, renderer, drawStack);
 
-        this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
-
-        this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
+        this.rectangleTool.initializeService(ref, renderer, drawStack);
         this.rectangleTool.initializeColorToolService(this.colorToolService);
 
-        this.ellipsisTool = new EllipsisToolService(drawStack, ref, renderer);
+        this.ellipsisTool.initializeService(ref, renderer, drawStack);
         this.ellipsisTool.initializeColorToolService(this.colorToolService);
 
-        this.pencilTool = new PencilToolService(ref, renderer, drawStack);
+        this.pencilTool.initializeService(ref, renderer, drawStack);
         this.pencilTool.initializeColorToolService(this.colorToolService);
 
-        this.penTool = new PenToolService(ref, renderer, drawStack);
+        this.penTool.initializeService(ref, renderer, drawStack);
         this.penTool.initializeColorToolService(this.colorToolService);
 
-        this.brushTool = new BrushToolService(ref, renderer, drawStack);
+        this.brushTool.initializeService(ref, renderer, drawStack);
         this.brushTool.initializeColorToolService(this.colorToolService);
 
-        this.stampTool = new StampToolService(drawStack, ref, renderer);
+        this.stampTool.initializeService(ref, renderer, drawStack);
 
-        this.dropperTool = new DropperToolService(drawStack, ref, renderer);
+        this.dropperTool.initializeService(ref, renderer, drawStack);
         this.dropperTool.initializeColorToolService(this.colorToolService);
 
-        this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
+        this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
 
-        this.polygoneTool = new PolygonToolService(drawStack, ref, renderer);
+        this.polygoneTool.initializeService(ref, renderer, drawStack);
         this.polygoneTool.initializeColorToolService(this.colorToolService);
 
-        this.lineTool = new LineToolService(ref, renderer, drawStack);
+        this.lineTool.initializeService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
 
         this.eraserTool = new EraserToolService(drawStack, ref, renderer);
@@ -166,7 +165,7 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
-    getStampToolService(): StampToolService {
+    getStampTool(): StampToolService {
         return this.stampTool;
     }
 
@@ -190,7 +189,7 @@ export class ToolSelectorService {
         return this.eraserTool;
     }
 
-    changeTool(tooltipName: string): void {
+    changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
