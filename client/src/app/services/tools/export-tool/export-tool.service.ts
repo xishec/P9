@@ -130,7 +130,9 @@ export class ExportToolService {
     resizeCanvas(): void {
         const svgSize = this.refSVG.nativeElement.getBoundingClientRect();
         this.canvas.width = svgSize.width;
-        this.canvas.height = svgSize.width;
+        console.log('width : ' + this.canvas.width);
+        this.canvas.height = svgSize.height;
+        console.log('height : ' + this.canvas.height);
     }
 
     compressSVG(): void {
