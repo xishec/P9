@@ -54,6 +54,11 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         }
         this.toolSelectorService.changeTool(tooltipName);
     }
+    onChangeFileTool(tooltipName: ToolName): void {
+        this.showTracingTools = true;
+        this.showShapeTools = false;
+        this.toolSelectorService.changeTool(tooltipName);
+    }
     onChangeTracingTool(tooltipName: ToolName): void {
         this.showTracingTools = false;
         this.currentTracingTool = tooltipName;
@@ -75,6 +80,11 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
             this.showShapeTools = true;
             this.showTracingTools = false;
         }
+    }
+
+    onClickAttributePanel() {
+        this.showShapeTools = false;
+        this.showTracingTools = false;
     }
 
     getChecked(i: number): boolean {

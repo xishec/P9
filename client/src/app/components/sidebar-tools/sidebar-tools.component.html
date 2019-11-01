@@ -22,13 +22,13 @@
                 *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(FILE_BUTTON_INFO.tooltipName)"
+                (click)="onChangeFileTool(FILE_BUTTON_INFO.tooltipName)"
             >
                 <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
-    <app-attribute-panel></app-attribute-panel>
+    <app-attribute-panel (click)="onClickAttributePanel()"></app-attribute-panel>
 </div>
 
 <mat-button-toggle-group *ngIf="showTracingTools" id="tracing-tools">
