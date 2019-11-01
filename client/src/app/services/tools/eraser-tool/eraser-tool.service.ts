@@ -62,6 +62,56 @@ export class EraserToolService extends AbstractToolService {
         console.log('in mouse down');
     }
 
+    // checkSelection(): void {
+    //     const selectionBox = this.getDOMRect(this.selectionRectangle);
+
+    //     for (const el of this.drawStack.drawStack) {
+    //         const elBox = this.getDOMRect(el);
+
+    //         if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
+    //             if (this.isLeftMouseDown) {
+    //                 this.selection.add(el);
+    //             } else if (this.isRightMouseDown) {
+    //                 this.invertSelection.add(el);
+    //             }
+    //         } else {
+    //             if (this.isLeftMouseDown) {
+    //                 this.selection.delete(el);
+    //             } else if (this.isRightMouseDown) {
+    //                 this.invertSelection.delete(el);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    //     const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
+    //     const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
+    //     const boxTop = selectionBox.y + window.scrollY;
+    //     const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
+
+    //     let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
+    //     let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
+    //     let elTop = elementBox.y + window.scrollY;
+    //     let elBottom = elementBox.y + window.scrollY + elementBox.height;
+
+    //     if (strokeWidth) {
+    //         const halfStrokeWidth = strokeWidth / 2;
+
+    //         elLeft = elLeft - halfStrokeWidth;
+    //         elRight = elRight + halfStrokeWidth;
+    //         elTop = elTop - halfStrokeWidth;
+    //         elBottom = elBottom + halfStrokeWidth;
+    //     }
+
+    //     // Check all cases where el and box don't touch each other
+    //     if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
+
     onMouseUp(event: MouseEvent): void {
         // const button = event.button;
         // if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
@@ -85,26 +135,10 @@ export class EraserToolService extends AbstractToolService {
     }
 
     // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {
-        // const key = event.key;
-        // if (key === Keys.Alt) {
-        //     event.preventDefault();
-        //     if (!this.isAlterRotation) {
-        //         this.isAlterRotation = true;
-        //     }
-        // }
-    }
+    onKeyDown(event: KeyboardEvent): void {}
 
     // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {
-        // const key = event.key;
-        // if (key === Keys.Alt) {
-        //     event.preventDefault();
-        //     if (this.isAlterRotation) {
-        //         this.isAlterRotation = false;
-        //     }
-        // }
-    }
+    onKeyUp(event: KeyboardEvent): void {}
 
     // tslint:disable-next-line: no-empty
     cleanUp(): void {

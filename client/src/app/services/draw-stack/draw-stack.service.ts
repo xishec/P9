@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
-import { EraserToolService } from '../tools/eraser-tool/eraser-tool.service';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
@@ -14,14 +13,12 @@ export class DrawStackService {
     idStack: string[] = new Array<string>();
     private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
+    currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
-    eraserTool: EraserToolService;
     isEraserTool = false;
 
     constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
         this.renderer = renderer;
-
-        //this.eraserTool = new EraserToolService(this, new ElementRef(this.drawStack.), renderer);
     }
 
     changeTargetElement(stackTarget: StackTargetInfo): void {
@@ -53,6 +50,7 @@ export class DrawStackService {
 
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke, border);
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke_width, borderWidth);
+            this.stackTarget.next(new StackTargetInfo(undefined, undefined));
         }
     }
 
