@@ -1,49 +1,75 @@
 .mat-typography {
     display: grid;
-    grid-template-columns: 140px 500px;
-    grid-template-rows: 30px 10px auto 60px;
+    grid-template-columns: 140px 315px 185px;
+    grid-template-rows: 30px 10px auto 10px 30px;
     align-self: center;
     padding: 15px 40px;
 }
 
-#tab-content {
+.tab-content {
     height: 320px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     overflow-x: hidden;
 }
 
-#drawing-name-title {
+.drawing-name-title {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
-    align-self: center;
 }
 
-#drawing-name-input {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    align-self: center;
-    margin: 0 4px;
-    padding-left: 4px;
-}
-
-#drawing-label-title {
+.drawing-label-title {
     grid-column: 1 / 2;
     grid-row: 3 / 4;
-    align-self: center;
 }
 
-#drawing-labels-list {
-    grid-column: 2 / 3;
+.drawing-name-input {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+
+    width: 492px;
+}
+
+.drawing-labels-list {
+    grid-column: 2 / 4;
     grid-row: 3 / 4;
+
     display: flex;
-
     justify-content: left;
     flex-wrap: wrap;
 }
 
-#label {
+.new-label-input {
+    grid-column: 2 / 3;
+    grid-row: 5 / 6;
+
+    width: 307px;
+}
+
+.new-label-button {
+    grid-column: 3 / 4;
+    grid-row: 5 / 6;
+
+    text-align: center;
+    line-height: 0;
+    margin-right: 20px;
+    padding: 0;
+}
+
+.drawing-name-title,
+.drawing-label-title {
+    align-self: center;
+}
+
+.drawing-name-input,
+.new-label-input {
+    padding-left: 8px;
+    align-self: center;
+    margin: 0;
+}
+
+.label {
     padding: 3px 6px;
     margin: 3px 4px;
     min-width: 60px;
@@ -54,21 +80,83 @@
     border-radius: 5px;
 }
 
-#new-label {
-    grid-column: 2 / 3;
-    grid-row: 4 / 5;
+::ng-deep.mat-dialog-actions {
+    margin-bottom: 0 !important;
+}
 
+#save-local-footer {
     display: flex;
-    align-self: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
-#new-label-input {
-    margin-right: 15px;
-    padding-left: 4px;
+#save-destination {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-#label-button {
-    padding: 0;
-    width: 60%;
+#destination-path {
+    margin: 0 10px 0 0;
+    text-align: left;
+    padding-left: 8px;
+    color: rgba(0, 0, 0, 0.87);
+
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14),
+        0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+    border: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    line-height: 20px;
+    font-size: 12px;
+
+    :focus {
+        outline: 1px dotted #000;
+    }
+}
+
+#destination-label {
+    font-size: 14px;
+}
+
+.fas.fa-folder {
+    font-size: 24px;
+}
+
+#input-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    color: rgba(0, 0, 0, 0.87);
+    cursor: pointer;
+}
+
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    color: #ff5722;
+}
+
+.submit-button-group-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.submit-button-group {
+    align-self: flex-end;
 }
