@@ -31,7 +31,6 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            console.log('what');
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
         });

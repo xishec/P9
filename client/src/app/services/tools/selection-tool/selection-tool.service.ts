@@ -10,7 +10,6 @@ import { Selection } from '../../../../classes/selection/selection';
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    readonly CONTROL_POINT_RADIUS = 10;
     currentMouseCoords: MouseCoords = {x: 0, y: 0};
     lastMouseCoords: MouseCoords = {x: 0, y: 0};
     initialMouseCoords: MouseCoords = {x: 0, y: 0};
@@ -27,7 +26,7 @@ export class SelectionToolService extends AbstractToolService {
 
     proxy: Selection;
 
-    selectionRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
+    selectionRectangle: SVGRectElement;
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -35,18 +34,6 @@ export class SelectionToolService extends AbstractToolService {
 
     constructor() {
         super();
-        this.proxy = new Selection(this.renderer, this.svgReference.nativeElement);
-        this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
-                this.currentTarget = stackTarget.targetPosition;
-                this.isOnTarget = true;
-            }
-        });
-        this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.selectionBox = this.renderer.createElement('rect', SVG_NS);
-
-        this.initControlPoints();
-        this.initSelectionBox();
     }
 
     cleanUp(): void {
@@ -61,6 +48,21 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+
+        this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
+        this.proxy = new Selection(this.renderer, this.elementRef.nativeElement);
+        this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
+            if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
+                this.currentTarget = stackTarget.targetPosition;
+                this.isOnTarget = true;
+            }
+        });
     }
 
     updateSelectionRectangle(): void {
@@ -190,8 +192,8 @@ export class SelectionToolService extends AbstractToolService {
     onMouseMove(event: MouseEvent): void {
         this.lastMouseCoords.x = this.currentMouseCoords.x;
         this.lastMouseCoords.y = this.currentMouseCoords.y;
-        this.currentMouseCoords.x = event.clientX - this.svgReference.nativeElement.getBoundingClientRect().left;
-        this.currentMouseCoords.y = event.clientY - this.svgReference.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isLeftMouseDown && !this.isRightMouseDown) {
             this.handleLeftMouseDrag();
@@ -250,7 +252,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     handleRightMouseUp(): void {
-        this.renderer.removeChild(this.svgReference.nativeElement, this.selectionRectangle);
+        this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
 
         if (this.isSelecting) {
             this.isSelecting = false;
