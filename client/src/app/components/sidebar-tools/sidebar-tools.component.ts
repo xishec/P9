@@ -1,6 +1,12 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
-import { FILES_BUTTON_INFO, ToolName, TOOLS_BUTTON_INFO, TRACING_BUTTON_INFO } from 'src/constants/tool-constants';
+import {
+    FILES_BUTTON_INFO,
+    ToolName,
+    TOOLS_BUTTON_INFO,
+    TRACING_BUTTON_INFO,
+    SHAPE_BUTTON_INFO,
+} from 'src/constants/tool-constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
 
 @Component({
@@ -11,11 +17,16 @@ import { ToolSelectorService } from '../../services/tools/tool-selector/tool-sel
 export class SidebarToolsComponent implements OnInit, AfterViewInit {
     readonly TOOLS_BUTTON_INFO = TOOLS_BUTTON_INFO;
     readonly TRACING_BUTTON_INFO = TRACING_BUTTON_INFO;
+    readonly SHAPE_BUTTON_INFO = SHAPE_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
 
     currentToolName: ToolName;
+
     currentTracingTool: ToolName;
     showTracingTools = false;
+
+    currentShapeTool: ToolName;
+    showShapeTools = false;
 
     constructor(private toolSelectorService: ToolSelectorService) {}
 
@@ -24,6 +35,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
             this.currentToolName = currentToolName;
         });
         this.currentTracingTool = ToolName.Pencil;
+        this.currentShapeTool = ToolName.Rectangle;
     }
 
     ngAfterViewInit(): void {
@@ -35,10 +47,11 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         let tooltipName: ToolName;
         if (i === 1) {
             tooltipName = this.currentTracingTool;
+        } else if (i === 2) {
+            tooltipName = this.currentShapeTool;
         } else {
             tooltipName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
         }
-        console.log(tooltipName);
         this.toolSelectorService.changeTool(tooltipName);
     }
     onChangeTracingTool(tooltipName: ToolName): void {
@@ -47,15 +60,29 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         this.currentToolName = ToolName.TracingTool;
         this.toolSelectorService.changeTool(tooltipName);
     }
+    onChangeShapeTool(tooltipName: ToolName): void {
+        this.showShapeTools = false;
+        this.currentShapeTool = tooltipName;
+        this.currentToolName = ToolName.ShapeTool;
+        this.toolSelectorService.changeTool(tooltipName);
+    }
 
-    onRightClick() {
-        this.showTracingTools = true;
+    onRightClick(i: number) {
+        if (i === 1) {
+            this.showTracingTools = true;
+            this.showShapeTools = false;
+        } else if (i === 2) {
+            this.showShapeTools = true;
+            this.showTracingTools = false;
+        }
     }
 
     getChecked(i: number): boolean {
         let tooltipName: ToolName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
         if (i === 1) {
             return this.currentToolName === this.currentTracingTool;
+        } else if (i === 2) {
+            return this.currentToolName === this.currentShapeTool;
         } else {
             return this.currentToolName === tooltipName;
         }
@@ -80,6 +107,22 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
 
             default:
                 return 'fas fa-pencil-alt';
+        }
+    }
+
+    getShapeToolClass(): string {
+        switch (this.currentShapeTool) {
+            case ToolName.Rectangle:
+                return 'far fa-square';
+
+            case ToolName.Ellipsis:
+                return 'far fa-circle';
+
+            case ToolName.Polygon:
+                return 'fas fa-draw-polygon';
+
+            default:
+                return 'far fa-square';
         }
     }
 }
