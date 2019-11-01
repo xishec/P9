@@ -70,10 +70,13 @@ export class EraserToolService extends AbstractToolService {
         this.isOnMouseDown = false;
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
 
+    // tslint:disable-next-line: no-empty
     onMouseOver(event: MouseEvent): void {}
 
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {
         // this.isIn = false;
         // if (this.shouldStamp) {
@@ -81,6 +84,7 @@ export class EraserToolService extends AbstractToolService {
         // }
     }
 
+    // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
         // const key = event.key;
         // if (key === Keys.Alt) {
@@ -91,6 +95,7 @@ export class EraserToolService extends AbstractToolService {
         // }
     }
 
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {
         // const key = event.key;
         // if (key === Keys.Alt) {
@@ -101,6 +106,7 @@ export class EraserToolService extends AbstractToolService {
         // }
     }
 
+    // tslint:disable-next-line: no-empty
     cleanUp(): void {
         // if (this.stampIsAppended) {
         //     this.renderer.removeChild(this.svgReference.nativeElement, this.stampWrapper);

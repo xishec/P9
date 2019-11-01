@@ -131,7 +131,7 @@ export class WorkZoneComponent implements OnInit {
                     filter((subject) => {
                         if (subject === undefined) {
                             this.drawingSaverService.currentErrorMesaage.next(
-                                'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                                "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                             );
                             this.drawingSaverService.currentIsSaved.next(false);
                             return false;
@@ -196,6 +196,12 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Quill:
             case ToolName.SprayCan:
             case ToolName.Eraser:
+                //  document.getElementById('container').style.cursor = 'wait';
+                // document.getElementById('container').style.backgroundImage = "url('../../../assets/eraser.png')";
+
+                return {
+                    cursor: "url('../../../assets/eraser.png')",
+                };
             case ToolName.Fill:
             case ToolName.Selection:
                 return { cursor: 'crosshair' };
