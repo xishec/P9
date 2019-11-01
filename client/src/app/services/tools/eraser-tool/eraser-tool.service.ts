@@ -18,13 +18,21 @@ export class EraserToolService extends AbstractToolService {
     lastStrokeColor = '';
     isOnMouseDown = false;
 
-    constructor(
-        public drawStack: DrawStackService,
-        public svgReference: ElementRef<SVGElement>,
-        public renderer: Renderer2,
-    ) {
+    svgReference: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor() {
         super();
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.svgReference = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
+
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
+            console.log('what2');
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
         });

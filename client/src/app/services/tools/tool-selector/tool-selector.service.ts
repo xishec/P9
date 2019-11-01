@@ -91,7 +91,7 @@ export class ToolSelectorService {
         this.lineTool.initializeService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
 
-        this.eraserTool = new EraserToolService(drawStack, ref, renderer);
+        this.eraserTool.initializeService(ref, renderer, drawStack);
     }
 
     displayNewDrawingModal(): void {
