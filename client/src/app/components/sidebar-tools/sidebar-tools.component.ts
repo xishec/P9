@@ -55,7 +55,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         this.toolSelectorService.changeTool(tooltipName);
     }
     onChangeFileTool(tooltipName: ToolName): void {
-        this.showTracingTools = true;
+        this.showTracingTools = false;
         this.showShapeTools = false;
         this.toolSelectorService.changeTool(tooltipName);
     }
