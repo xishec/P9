@@ -7,7 +7,7 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import * as TestHelpers from '../../classes/test-helpers.spec';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 
-fdescribe('Selection', () => {
+describe('Selection', () => {
     let injector: TestBed;
     let proxy: Selection;
 
