@@ -63,6 +63,18 @@ export class Selection {
         return el.getBoundingClientRect() as DOMRect;
     }
 
+    getControlPointCx(ctrlPt: SVGCircleElement): number {
+        return ctrlPt.cx.baseVal.value;
+    }
+
+    getControlPointCy(ctrlPt: SVGCircleElement): number {
+        return ctrlPt.cy.baseVal.value;
+    }
+
+    getControlPointR(ctrlPt: SVGCircleElement): number {
+        return ctrlPt.r.baseVal.value;
+    }
+
     getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
             return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
@@ -92,9 +104,9 @@ export class Selection {
 
     mouseIsInControlPoint(currentMouseCoords: MouseCoords): boolean {
         for (const ctrlPt of this.controlPoints) {
-            const cx = ctrlPt.cx.baseVal.value;
-            const cy = ctrlPt.cy.baseVal.value;
-            const r = ctrlPt.r.baseVal.value;
+            const cx = this.getControlPointCx(ctrlPt);
+            const cy = this.getControlPointCy(ctrlPt);
+            const r = this.getControlPointR(ctrlPt);
 
             const distX = currentMouseCoords.x - cx;
             const distY = currentMouseCoords.y - cy;
