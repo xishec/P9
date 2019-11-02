@@ -30,11 +30,11 @@ export class DrawStackService {
             if (stackTarget !== undefined) {
                 this.stackTarget.next(stackTarget);
             }
-            if (borderWidth !== '0' && borderWidth !== null) {
-                borderWidth = (parseInt(borderWidth) + 5).toString();
-            } else {
-                borderWidth = '5';
-            }
+            // if (borderWidth !== '0' && borderWidth !== null) {
+            //     borderWidth = (parseInt(borderWidth) + 5).toString();
+            // } else {
+            borderWidth = '5';
+            // }
             console.log('on mouse over');
 
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke, '#ff0000');
@@ -55,7 +55,7 @@ export class DrawStackService {
 
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke, border);
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke_width, borderWidth);
-            this.stackTarget.next(new StackTargetInfo(undefined, undefined));
+            //this.stackTarget.next(new StackTargetInfo(undefined, undefined));
         }
     }
 
