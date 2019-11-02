@@ -25,13 +25,17 @@ export class DrawStackService {
         this.stackTarget.next(stackTarget);
     }
 
-    mouseOverColorBorder(id_element: number, borderWidth: string | null): void {
+    mouseOverColorBorder(id_element: number, borderWidth: string | null, stackTarget?: StackTargetInfo): void {
         if (this.isEraserTool) {
+            if (stackTarget !== undefined) {
+                this.stackTarget.next(stackTarget);
+            }
             if (borderWidth !== '0' && borderWidth !== null) {
                 borderWidth = (parseInt(borderWidth) + 5).toString();
             } else {
                 borderWidth = '5';
             }
+            console.log('on mouse over');
 
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke, '#ff0000');
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke_width, borderWidth);
@@ -43,6 +47,7 @@ export class DrawStackService {
             if (border === null) {
                 border = '';
             }
+            console.log('on mouse out');
 
             if (borderWidth === null) {
                 borderWidth = '0';
@@ -104,7 +109,11 @@ export class DrawStackService {
             });
 
             this.renderer.listen(el.children.item(i), 'mouseover', (event: MouseEvent) => {
-                this.mouseOverColorBorder(parseInt(el.getAttribute('id_element') as string), borderWidth);
+                this.mouseOverColorBorder(
+                    parseInt(el.getAttribute('id_element') as string),
+                    borderWidth,
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
             });
 
             this.renderer.listen(el.children.item(i), 'mouseout', (event: MouseEvent) => {

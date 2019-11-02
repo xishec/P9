@@ -3,7 +3,7 @@ import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+//import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
 import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
@@ -15,7 +15,8 @@ import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
 export class EraserToolService extends AbstractToolService {
     drawRectangle: SVGRectElement;
     attributesManagerService: AttributesManagerService;
-    currentStackTarget: StackTargetInfo;
+    //currentStackTarget: StackTargetInfo;
+    currentTarget = 0;
     currentSize = EraserSize.Default;
     isOnTarget = false;
     lastStrokeColor = '';
@@ -38,9 +39,15 @@ export class EraserToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            console.log('what2');
-            this.currentStackTarget = stackTarget;
-            this.isOnTarget = true;
+            //console.log('what2');
+            //if (stackTarget.targetPosition !== undefined) {
+            this.currentTarget = stackTarget.targetPosition;
+            if (this.currentTarget !== undefined) {
+                this.isOnTarget = true;
+            } else {
+                this.isOnTarget = false;
+            }
+            //  }
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
@@ -65,6 +72,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.isLeftMouseDown) {
             this.onMouseDown(event);
         }
+        this.checkSelection();
         this.currentMouseX =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
         this.currentMouseY =
@@ -79,18 +87,18 @@ export class EraserToolService extends AbstractToolService {
             this.isLeftMouseDown = true;
         }
 
-        let elementPosition = this.currentStackTarget.targetPosition;
+        //let elementPosition = this.currentTarget;
         if (
             this.isOnTarget &&
-            this.drawStack.getElementByPosition(elementPosition) !== undefined &&
+            this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
             button === Mouse.LeftButton
         ) {
             this.renderer.removeChild(
                 this.elementRef.nativeElement,
-                this.drawStack.getElementByPosition(elementPosition),
+                this.drawStack.getElementByPosition(this.currentTarget),
             );
 
-            this.drawStack.removeElementByPosition(elementPosition);
+            this.drawStack.removeElementByPosition(this.currentTarget);
         }
         this.isOnTarget = false;
         console.log('in mouse down');
@@ -124,27 +132,31 @@ export class EraserToolService extends AbstractToolService {
         return true;
     }
 
-    // checkSelection(): void {
-    //     const selectionBox = this.getDOMRect(this.drawRectangle);
+    checkSelection(): void {
+        const selectionBox = this.getDOMRect(this.drawRectangle);
 
-    //         for (const el of this.drawStack.drawStack) {
-    //             const elBox = this.getDOMRect(el);
+        for (const el of this.drawStack.drawStack) {
+            const elBox = this.getDOMRect(el);
 
-    //             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-    //                 if (this.isLeftMouseDown) {
-    //                     this.selection.add(el);
-    //                 } else if (this.isRightMouseDown) {
-    //                     this.invertSelection.add(el);
-    //                 }
-    //             } else {
-    //                 if (this.isLeftMouseDown) {
-    //                     this.selection.delete(el);
-    //                 } else if (this.isRightMouseDown) {
-    //                     this.invertSelection.delete(el);
-    //                 }
-    //             }
-    //         }
-    // }
+            console.log(' this.currentTarget: ' + this.currentTarget);
+
+            if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
+                if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
+                    console.log('coloring border');
+                    this.drawStack.mouseOverColorBorder(
+                        this.currentTarget,
+                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                    );
+                } else {
+                    this.drawStack.mouseOutRestoreBorder(
+                        this.currentTarget,
+                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke),
+                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                    );
+                }
+            }
+        }
+    }
 
     getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
@@ -164,6 +176,7 @@ export class EraserToolService extends AbstractToolService {
         //     this.initStamp();
         // }
         this.isLeftMouseDown = false;
+        this.isOnTarget = false;
     }
 
     // tslint:disable-next-line: no-empty
