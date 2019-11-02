@@ -62,6 +62,8 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { DrawStackService } from './services/draw-stack/draw-stack.service';
+import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
 
 @NgModule({
     declarations: [
@@ -120,7 +122,15 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         OpenFileModalWindowComponent,
         SaveFileModalWindowComponent,
     ],
-    providers: [ToolSelectorService, DrawingModalWindowService, WelcomeModalWindowService, ColorToolService, EventListenerService],
+    providers: [
+        ToolSelectorService,
+        DrawingModalWindowService,
+        WelcomeModalWindowService,
+        ColorToolService,
+        EventListenerService,
+        DrawStackService,
+        DrawingSaverService,
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

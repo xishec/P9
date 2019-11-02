@@ -85,7 +85,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToLocal(): void {
-        return;
+        this.drawingSaverService.saveDrawingLocal(this.saveFileLocalModalForm.value.filename);
     }
 
     addLabel(newLabel: string): void {
