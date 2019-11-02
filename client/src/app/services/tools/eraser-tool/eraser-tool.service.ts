@@ -103,6 +103,13 @@ export class EraserToolService extends AbstractToolService {
             );
 
             this.drawStack.removeElementByPosition(this.currentTarget);
+
+            //set currentTarget to equal the next currentTarget
+            if (this.currentTarget + 1) {
+                this.changedElements.set(this.currentTarget.toString(), this.changedElements.get(
+                    (this.currentTarget + 1).toString(),
+                ) as SVGGElementInfo);
+            }
         }
         this.isOnTarget = false;
         console.log('in mouse down');
