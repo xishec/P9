@@ -22,6 +22,8 @@ export class DrawStackService {
     }
 
     changeTargetElement(stackTarget: StackTargetInfo): void {
+        console.log('changeTragent Element to: ' + stackTarget.targetPosition);
+
         this.stackTarget.next(stackTarget);
     }
 
@@ -84,8 +86,8 @@ export class DrawStackService {
     makeTargetable(el: SVGGElement): SVGGElement {
         const position = this.drawStack.length;
         const tool = el.getAttribute('title');
-        const border = el.getAttribute(HTMLAttribute.stroke);
-        const borderWidth = el.getAttribute(HTMLAttribute.stroke_width);
+        //  const border = el.getAttribute(HTMLAttribute.stroke);
+        //  const borderWidth = el.getAttribute(HTMLAttribute.stroke_width);
         this.renderer.setAttribute(el, 'id_element', position.toString());
         this.idStack.push(el.getAttribute('id_element') as string);
 
@@ -96,11 +98,11 @@ export class DrawStackService {
                 );
             });
 
-            this.renderer.listen(el.children.item(i), 'mousemove', () => {
-                this.changeTargetElement(
-                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
-                );
-            });
+            // this.renderer.listen(el.children.item(i), 'mousemove', () => {
+            //     this.changeTargetElement(
+            //         new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+            //     );
+            // });
 
             this.renderer.listen(el.children.item(i), 'mouseup', () => {
                 this.changeTargetElement(
@@ -108,18 +110,19 @@ export class DrawStackService {
                 );
             });
 
-            this.renderer.listen(el.children.item(i), 'mouseover', (event: MouseEvent) => {
-                this.mouseOverColorBorder(
-                    parseInt(el.getAttribute('id_element') as string),
-                    borderWidth,
-                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
-                );
-            });
+            // this.renderer.listen(el.children.item(i), 'mouseover', (event: MouseEvent) => {
+            //     this.mouseOverColorBorder(
+            //         parseInt(el.getAttribute('id_element') as string),
+            //         borderWidth,
+            //         new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+            //     );
+            // });
 
-            this.renderer.listen(el.children.item(i), 'mouseout', (event: MouseEvent) => {
-                this.mouseOutRestoreBorder(parseInt(el.getAttribute('id_element') as string), border, borderWidth);
-            });
+            // this.renderer.listen(el.children.item(i), 'mouseout', (event: MouseEvent) => {
+            //     this.mouseOutRestoreBorder(parseInt(el.getAttribute('id_element') as string), border, borderWidth);
+            // });
         }
+        //console.log(this.idStack);
 
         return el;
     }

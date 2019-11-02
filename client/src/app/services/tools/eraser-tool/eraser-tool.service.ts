@@ -7,6 +7,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
 import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 //import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
@@ -39,7 +40,6 @@ export class EraserToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            //console.log('what2');
             //if (stackTarget.targetPosition !== undefined) {
             this.currentTarget = stackTarget.targetPosition;
             if (this.currentTarget !== undefined) {
@@ -138,23 +138,31 @@ export class EraserToolService extends AbstractToolService {
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
 
-            console.log(' this.currentTarget: ' + this.currentTarget);
-
-            if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-                if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-                    console.log('coloring border');
-                    this.drawStack.mouseOverColorBorder(
-                        this.currentTarget,
-                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
-                    );
-                } else {
+            //if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
+            if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
+                const tool = el.getAttribute('title');
+                this.drawStack.changeTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                );
+                console.log(' this.currentTarget: ' + this.currentTarget);
+                this.isOnTarget = true;
+                this.drawStack.mouseOverColorBorder(
+                    this.currentTarget,
+                    this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                );
+                break;
+            } else {
+                this.isOnTarget = false;
+                if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
                     this.drawStack.mouseOutRestoreBorder(
                         this.currentTarget,
                         this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke),
                         this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                     );
+                    //mettre current target undefined en appelant changeTargetElement
                 }
             }
+            // }
         }
     }
 
@@ -166,16 +174,15 @@ export class EraserToolService extends AbstractToolService {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
             return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
         }
-
         return 0;
     }
 
     onMouseUp(event: MouseEvent): void {
-        // const button = event.button;
-        // if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
-        //     this.initStamp();
-        // }
-        this.isLeftMouseDown = false;
+        const button = event.button;
+        if (button === Mouse.LeftButton) {
+            this.isLeftMouseDown = false;
+        }
+
         this.isOnTarget = false;
     }
 
