@@ -8,7 +8,7 @@ import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-mo
     providedIn: 'root',
 })
 export class ExportToolService {
-    svg: SVGElement;
+    svg: ElementRef<SVGElement>;
     anchor: HTMLAnchorElement;
     canvas: HTMLCanvasElement;
     workzoneIsEmpty = true;
@@ -23,8 +23,20 @@ export class ExportToolService {
         this.workzoneIsEmpty = true;
     }
 
+    launchDownload(): void {
+        this.renderer.setAttribute(this.anchor, 'download', 'untitled.' + this.fileType);
+        console.log(typeof this.anchor);
+        this.anchor.click();
+    }
+
+    createSVGBlob(): Blob {
+        this.renderer.setAttribute(this.svg, 'xmlns', SVG_NS);
+        const data = new XMLSerializer().serializeToString(this.svg.nativeElement);
+        return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    }
+
     initializeService(ref: ElementRef<SVGElement>, renderer: Renderer2): void {
-        this.svg = ref.nativeElement;
+        this.svg = ref;
         this.renderer = renderer;
         this.canvas = this.renderer.createElement('canvas');
         this.anchor = this.renderer.createElement('a');
@@ -47,7 +59,7 @@ export class ExportToolService {
     }
 
     saveAsOther(): void {
-        const originalSvgSize: ClientRect | DOMRect = this.svg.getBoundingClientRect();
+        const originalSvgSize: ClientRect | DOMRect = this.svg.nativeElement.getBoundingClientRect();
 
         if (FileType.BMP === this.fileType) {
             this.compressSVG();
@@ -66,38 +78,25 @@ export class ExportToolService {
                 const canvasToBMP = new CanvasToBMP();
                 uri = canvasToBMP.toDataURL(this.canvas);
             }
-
             this.renderer.setAttribute(this.anchor, 'href', uri);
             this.launchDownload();
             URL.revokeObjectURL(uri);
         };
 
         this.renderer.setAttribute(this.img, 'src', url);
-
         if (FileType.BMP === this.fileType) {
             this.decompressSVG(originalSvgSize);
         }
     }
 
-    launchDownload(): void {
-        this.renderer.setAttribute(this.anchor, 'download', 'untitled.' + this.fileType);
-        this.anchor.click();
-    }
-
-    createSVGBlob(): Blob {
-        this.renderer.setAttribute(this.svg, 'xmlns', SVG_NS);
-        const data = new XMLSerializer().serializeToString(this.svg);
-        return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
-    }
-
     resizeCanvas(): void {
-        const svgSize = this.svg.getBoundingClientRect();
+        const svgSize = this.svg.nativeElement.getBoundingClientRect();
         this.canvas.width = svgSize.width;
         this.canvas.height = svgSize.height;
     }
 
     compressSVG(): void {
-        const svgSize = this.svg.getBoundingClientRect();
+        const svgSize = this.svg.nativeElement.getBoundingClientRect();
         this.renderer.setAttribute(this.svg, 'viewBox', `0,0,${svgSize.width},${svgSize.height}`);
         this.renderer.setAttribute(this.svg, 'width', `${MAX_BMP_SIZE}`);
         this.renderer.setAttribute(this.svg, 'height', `${MAX_BMP_SIZE}`);
