@@ -1,8 +1,67 @@
-//import { Selection } from './selection';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
-describe('Selection', () => {
+import { Selection } from './selection';
+import { Renderer2, ElementRef, Type } from '@angular/core';
 
+fdescribe('Selection', () => {
+    let injector: TestBed;
+    let proxy: Selection;
+
+    let rendererMock: Renderer2;
+    let elementRefMock: ElementRef<SVGGElement>;
+
+    //let spyOnSetAttribute: jasmine.Spy;
+    //let spyOnAppendChild: jasmine.Spy;
+    //let spyOnRemoveChild: jasmine.Spy;
+    //let spyOnCreateElement: jasmine.Spy;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                Selection,
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                        setAttribute: () => null,
+                        appendChild: () => null,
+                        removeChild: () => null,
+                    },
+                },
+                {
+                    provide: ElementRef,
+                    useValue: {
+                        nativeElement: {
+                            getBoundingClientRect: () => {
+                                const boundLeft = 0;
+                                const boundTop = 0;
+                                const boundRect = {
+                                    left: boundLeft,
+                                    top: boundTop,
+                                };
+                                return boundRect;
+                            },
+                        },
+                    },
+                },
+            ],
+        });
+        injector = getTestBed();
+        rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        proxy = new Selection(rendererMock, elementRefMock);
+
+        //spyOnSetAttribute = spyOn(proxy.renderer, 'setAttribute').and.returnValue();
+        //spyOnAppendChild = spyOn(proxy.renderer, 'appendChild').and.returnValue();
+        //spyOnRemoveChild = spyOn(proxy.renderer, 'removeChild').and.returnValue();
+        //spyOnCreateElement = spyOn(proxy.renderer, 'createElement');
+    });
+
+    it('should be created', () => {
+        expect(proxy).toBeTruthy();
+    });
 });
+
 /*
 it('should call renderer.setAttribute for each control point', () => {
         const nbPoints = 8;

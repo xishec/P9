@@ -56,7 +56,7 @@ export class SelectionToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.selection = new Selection(this.renderer, this.elementRef.nativeElement);
+        this.selection = new Selection(this.renderer, this.elementRef);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
                 this.currentTarget = stackTarget.targetPosition;

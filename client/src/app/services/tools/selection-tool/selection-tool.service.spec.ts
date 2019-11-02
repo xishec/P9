@@ -8,7 +8,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
 import { Selection } from '../../../../classes/selection/selection';
 
-fdescribe('SelectionToolService', () => {
+describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
     const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.RightButton);
 

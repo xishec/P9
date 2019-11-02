@@ -1,11 +1,11 @@
-import { Renderer2 } from '@angular/core';
+import { Renderer2, ElementRef } from '@angular/core';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 
 export class Selection {
     renderer: Renderer2;
-    svgRef: SVGElement;
+    svgRef: ElementRef<SVGElement>;
 
     selectedElements: Set<SVGGElement> = new Set();
     invertSelectionBuffer: Set<SVGGElement> = new Set();
@@ -14,7 +14,7 @@ export class Selection {
 
     isAppended = false;
 
-    constructor(renderer: Renderer2, svgReference: SVGElement) {
+    constructor(renderer: Renderer2, svgReference: ElementRef<SVGElement>) {
         this.renderer = renderer;
         this.svgRef = svgReference;
 
@@ -41,9 +41,9 @@ export class Selection {
 
     removeFullSelectionBox(): void {
         if (this.isAppended) {
-            this.renderer.removeChild(this.svgRef, this.selectionBox);
+            this.renderer.removeChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
-                this.renderer.removeChild(this.svgRef, ctrlPt);
+                this.renderer.removeChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = false;
         }
@@ -51,9 +51,9 @@ export class Selection {
 
     appendFullSelectionBox(): void {
         if (!this.isAppended) {
-            this.renderer.appendChild(this.svgRef, this.selectionBox);
+            this.renderer.appendChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
-                this.renderer.appendChild(this.svgRef, ctrlPt);
+                this.renderer.appendChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = true;
         }
