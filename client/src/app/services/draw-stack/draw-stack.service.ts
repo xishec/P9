@@ -54,6 +54,7 @@ export class DrawStackService {
             if (borderWidth === null) {
                 borderWidth = '0';
             }
+            console.log('border: ' + border);
 
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke, border);
             this.renderer.setAttribute(this.getElementByPosition(id_element), HTMLAttribute.stroke_width, borderWidth);
