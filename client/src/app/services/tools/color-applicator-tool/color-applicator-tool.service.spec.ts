@@ -36,8 +36,10 @@ describe('ColorApplicatorToolService', () => {
                             subscribe: () => null,
                         },
                         getElementByPosition: () => {
-                            const mockSVGGElement = {};
-                            return mockSVGGElement as SVGGElement;
+                            const mockSVGGElement = {
+                                getAttribute: () => null,
+                            };
+                            return mockSVGGElement as unknown as SVGGElement;
                         },
                     },
                 },
