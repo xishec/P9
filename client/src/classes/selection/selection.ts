@@ -1,7 +1,7 @@
-import { Renderer2, ElementRef } from '@angular/core';
-import { HTMLAttribute } from 'src/constants/tool-constants';
-import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
+import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 
 export class Selection {
     renderer: Renderer2;
@@ -186,7 +186,7 @@ export class Selection {
     }
 
     updateControlPoints(): void {
-        let positionMap: Map<number, [string, string]> = new Map();
+        const positionMap: Map<number, [string, string]> = new Map();
 
         positionMap.set(0, [
             this.selectionBox.x.baseVal.value.toString(),
@@ -222,8 +222,8 @@ export class Selection {
         ]);
 
         for (let index = 0; index < this.controlPoints.length; ++index) {
-            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, positionMap.get(index)![0]);
-            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, positionMap.get(index)![1]);
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, (positionMap.get(index) as [string, string])[0]);
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, (positionMap.get(index) as [string, string])[1]);
         }
     }
 
@@ -250,7 +250,7 @@ export class Selection {
     removeFromSelection(element: SVGGElement): void {
         this.selectedElements.delete(element);
         this.updateFullSelectionBox();
-        if (this.selectedElements.size == 0) {
+        if (this.selectedElements.size === 0) {
             this.removeFullSelectionBox();
         }
     }

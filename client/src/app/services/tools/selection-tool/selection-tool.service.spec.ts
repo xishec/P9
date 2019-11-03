@@ -4,9 +4,9 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Keys, Mouse, /*SIDEBAR_WIDTH*/ } from 'src/constants/constants';
+import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
-import { Selection } from '../../../../classes/selection/selection';
 
 describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
@@ -72,7 +72,7 @@ describe('SelectionToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should initialize the selectionRectangle and Selection on creation',() => {
+    it('should initialize the selectionRectangle and Selection on creation', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(service.selection).toBeTruthy();
@@ -213,7 +213,7 @@ describe('SelectionToolService', () => {
     it('handleLeftMouseDrag should call checkSelection if mouse is not in selection or not translating and is not on target', () => {
         service.isOnTarget = false;
         const spy = spyOn(service, 'checkSelection');
-        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(()=>{return false;});
+        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => false);
 
         service.handleLeftMouseDrag();
 
@@ -226,7 +226,7 @@ describe('SelectionToolService', () => {
         service.isSelecting = false;
         service.isTranslatingSelection = true;
         const spy = spyOn(service.selection, 'moveBy');
-        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(()=>{return true;});
+        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
 
         service.handleLeftMouseDrag();
 
@@ -237,7 +237,7 @@ describe('SelectionToolService', () => {
     it('handleLeftMouseDrag should call singlySelect if on target and target not in Selection', () => {
         service.isOnTarget = true;
         const spy = spyOn(service, 'singlySelect');
-        const spySelection = spyOn(service.selection.selectedElements, 'has').and.callFake(()=>{return false;});
+        const spySelection = spyOn(service.selection.selectedElements, 'has').and.callFake(() => false);
 
         service.handleLeftMouseDrag();
 
@@ -310,7 +310,7 @@ describe('SelectionToolService', () => {
         expect(service.isSelecting).toBeFalsy();
     });
 
-    it('should singly invert select and set isOnTarget to false when handling a right mouse up, isOnTarget was true and isSelecting was false', () => {
+    it('should singly invert select when handling a right mouse up, isOnTarget was true and isSelecting was false', () => {
         const spy = spyOn(service, 'singlySelectInvert');
         service.isSelecting = false;
         service.isOnTarget = true;
