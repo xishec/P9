@@ -2,8 +2,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { SidebarToolsComponent } from './sidebar-tools.component';
 import { SHAPE_TOOL_POSITION } from 'src/constants/tool-constants';
+import { SidebarToolsComponent } from './sidebar-tools.component';
 
 describe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;

@@ -1,16 +1,16 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
+import { SidebarButtonInfo } from 'src/classes/SidebarButtonInfo';
 import {
     FILES_BUTTON_INFO,
     SHAPE_BUTTON_INFO,
+    SHAPE_TOOL_POSITION,
     ToolName,
     TOOLS_BUTTON_INFO,
     TRACING_BUTTON_INFO,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION,
 } from 'src/constants/tool-constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
-import { SidebarButtonInfo } from 'src/classes/SidebarButtonInfo';
 
 @Component({
     selector: 'app-sidebar-tools',
