@@ -79,8 +79,8 @@ const GRID_SIZE_DECREMENT = 5;
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
-    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.TracingTool, shortcut: '' },
-    { iconName: 'far fa-square', tooltipName: ToolName.ShapeTool, shortcut: '' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.TracingTool, shortcut: '(clique droit)' },
+    { iconName: 'far fa-square', tooltipName: ToolName.ShapeTool, shortcut: '(clique droit)' },
     { iconName: 'fas fa-slash', tooltipName: ToolName.Line, shortcut: '(L)' },
     { iconName: 'fas fa-font', tooltipName: ToolName.Text, shortcut: '(T)' },
     { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator, shortcut: '(R)' },
@@ -258,6 +258,9 @@ const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
     ['e', ToolName.Export],
 ]);
 
+const TRACING_TOOL_POSITION = 1;
+const SHAPE_TOOL_POSITION = 2;
+
 export {
     ToolNameControlShortcuts,
     ToolNameShortcuts,
@@ -288,4 +291,6 @@ export {
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
     PEN_WIDTH_FACTOR,
+    TRACING_TOOL_POSITION,
+    SHAPE_TOOL_POSITION
 };
