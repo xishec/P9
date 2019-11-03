@@ -293,7 +293,11 @@ export class SelectionToolService extends AbstractToolService {
     }
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
-
+        if (event.key === Keys.Backspace) {
+            this.clipBoard.cut();
+        } else if(event.key === Keys.Digit4) {
+            this.clipBoard.paste();
+        }
     }
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {

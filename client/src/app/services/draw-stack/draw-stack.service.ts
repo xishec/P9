@@ -38,10 +38,10 @@ export class DrawStackService {
 
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string));
             });
             this.renderer.listen(el.children.item(i), 'mouseup', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string));
             });
         }
 
@@ -55,6 +55,25 @@ export class DrawStackService {
 
     pop(): SVGGElement | undefined {
         return this.drawStack.pop();
+    }
+
+    delete(elementToDelete: SVGGElement): void {
+        const indexOfDeletion = this.drawStack.indexOf(elementToDelete);
+
+        this.drawStack.splice(indexOfDeletion, 1);
+        this.idStack.splice(indexOfDeletion, 1);
+
+        this.resolveDrawStackOrdering(indexOfDeletion);
+    }
+
+    resolveDrawStackOrdering(displacementIndex: number): void {
+        for (let i = displacementIndex; i < this.drawStack.length; i++) {
+            this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
+        }
+
+        for (let i = displacementIndex; i < this.idStack.length; i++) {
+            this.idStack[i] = i.toString();
+        }
     }
 
     reset(): SVGGElement[] {

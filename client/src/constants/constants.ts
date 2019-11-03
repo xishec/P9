@@ -7,6 +7,9 @@ enum Keys {
     Digit1 = '1',
     Digit2 = '2',
     Digit3 = '3',
+    //REMOVE
+    Digit4 = '4',
+    //REMOVE
     a = 'a',
     b = 'b',
     c = 'c',
