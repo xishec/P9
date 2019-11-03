@@ -222,8 +222,8 @@ export class Selection {
         ]);
 
         for (let index = 0; index < this.controlPoints.length; ++index) {
-            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, positionMap.get(index)![0]);
-            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, positionMap.get(index)![1]);
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, (positionMap.get(index) as [string, string])[0]);
+            this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, (positionMap.get(index) as [string, string])[1]);
         }
     }
 
