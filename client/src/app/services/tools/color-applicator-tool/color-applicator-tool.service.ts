@@ -64,7 +64,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                             HTMLAttribute.fill,
-                            this.primaryColor
+                            this.primaryColor,
                         );
                     }
                     if (
@@ -75,7 +75,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                             HTMLAttribute.stroke,
-                            this.primaryColor
+                            this.primaryColor,
                         );
                     }
                     break;
@@ -90,7 +90,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         HTMLAttribute.stroke,
-                        this.secondaryColor
+                        this.secondaryColor,
                     );
                     break;
                 default:
