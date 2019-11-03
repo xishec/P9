@@ -5,6 +5,7 @@ import { HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 import { Selection } from '../../../../classes/selection/selection';
+import { ClipboardService } from '../../clipboard/clipboard.service';
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +33,7 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(public clipBoard: ClipboardService) {
         super();
     }
 
@@ -63,6 +64,8 @@ export class SelectionToolService extends AbstractToolService {
                 this.isOnTarget = true;
             }
         });
+
+        this.clipBoard.initializeService(this.elementRef, this.renderer, this.drawStack, this.selection);
     }
 
     updateSelectionRectangle(): void {
@@ -289,7 +292,9 @@ export class SelectionToolService extends AbstractToolService {
         this.isTheCurrentTool = true;
     }
     // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {}
+    onKeyDown(event: KeyboardEvent): void {
+
+    }
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {
             this.isTheCurrentTool = true;
