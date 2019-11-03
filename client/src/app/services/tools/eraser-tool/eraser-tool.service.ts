@@ -3,13 +3,11 @@ import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-//import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
 import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
-//import { HTMLAttribute } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +15,6 @@ import { SVGGElementInfo } from 'src/classes/svggelement-info';
 export class EraserToolService extends AbstractToolService {
     drawRectangle: SVGRectElement;
     attributesManagerService: AttributesManagerService;
-    //currentStackTarget: StackTargetInfo;
     currentTarget = 0;
     currentSize = EraserSize.Default;
     isOnTarget = false;
@@ -46,14 +43,12 @@ export class EraserToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            //if (stackTarget.targetPosition !== undefined) {
             this.currentTarget = stackTarget.targetPosition;
             if (this.currentTarget !== undefined) {
                 this.isOnTarget = true;
             } else {
                 this.isOnTarget = false;
             }
-            //  }
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
@@ -108,7 +103,6 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.checkSelection();
-        console.log(this.isOnTarget);
 
         if (
             this.isOnTarget &&
@@ -122,14 +116,15 @@ export class EraserToolService extends AbstractToolService {
 
             this.drawStack.removeElementByPosition(this.currentTarget);
 
-            //set currentTarget to equal the next Target
+            //set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
                 this.changedElements.set(this.currentTarget.toString(), this.changedElements.get(
                     (this.currentTarget + 1).toString(),
                 ) as SVGGElementInfo);
             }
+            this.checkSelection();
         }
-        this.lastElementColoredNumber = -1;
+
         this.isOnTarget = false;
     }
 
@@ -187,8 +182,6 @@ export class EraserToolService extends AbstractToolService {
                         new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
                     );
 
-                    console.log(' this.currentTarget: ' + this.currentTarget);
-
                     topElement = i;
                     this.lastElementColoredNumber = topElement;
                     this.mouseOverColorBorder(
@@ -199,7 +192,6 @@ export class EraserToolService extends AbstractToolService {
                 enteredInSelection = true;
                 this.isOnTarget = true;
             } else {
-                // this.isOnTarget = false;
                 topElement--;
                 this.removeBorder(el.getAttribute('id_element') as string);
             }
@@ -246,8 +238,6 @@ export class EraserToolService extends AbstractToolService {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             let element = this.changedElements.get(position) as SVGGElementInfo;
             if (element !== undefined) {
-                console.log('position : ' + position);
-
                 this.mouseOutRestoreBorder(parseInt(position), element.borderColor, element.borderWidth);
                 this.changedElements.delete(position);
             }
@@ -274,22 +264,15 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
     }
 
-    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {
-        // document.getElementById('container').style.cursor = 'wait';
         this.appendSquare();
     }
 
     // tslint:disable-next-line: no-empty
     onMouseOver(event: MouseEvent): void {}
 
-    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
-        // this.isIn = false;
-        // if (this.shouldStamp) {
-        //     this.cleanUp();
-        // }
     }
 
     // tslint:disable-next-line: no-empty
@@ -298,16 +281,10 @@ export class EraserToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
 
-    // tslint:disable-next-line: no-empty
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
-        this.removeBorder(this.currentTarget.toString()); //remove all those that are colored
+        this.removeBorder(this.currentTarget.toString());
         this.lastElementColoredNumber = -1;
-
-        // if (this.stampIsAppended) {
-        //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
-        //     this.stampIsAppended = false;
-        // }
     }
 }

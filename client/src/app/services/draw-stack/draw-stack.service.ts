@@ -20,8 +20,6 @@ export class DrawStackService {
     }
 
     changeTargetElement(stackTarget: StackTargetInfo): void {
-        console.log('changeTragent Element to: ' + stackTarget.targetPosition);
-
         this.stackTarget.next(stackTarget);
     }
 
