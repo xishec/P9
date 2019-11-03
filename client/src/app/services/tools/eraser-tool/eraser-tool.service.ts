@@ -23,6 +23,7 @@ export class EraserToolService extends AbstractToolService {
     isOnTarget = false;
     lastStrokeColor = '';
     isLeftMouseDown = false;
+    isSquareAppended = false;
 
     //the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -77,12 +78,27 @@ export class EraserToolService extends AbstractToolService {
             this.onMouseDown(event);
         }
         this.checkSelection();
+        this.setSquareToMouse(event);
+    }
+
+    setSquareToMouse(event: MouseEvent): void {
         this.currentMouseX =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
         this.currentMouseY =
             event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
+
         this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseX.toString());
         this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseY.toString());
+
+        if (!this.isSquareAppended) {
+            this.appendSquare();
+        }
+    }
+
+    appendSquare(): void {
+        this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
+        this.isSquareAppended = true;
+        //this.setSquareToMouse();
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -91,7 +107,9 @@ export class EraserToolService extends AbstractToolService {
             this.isLeftMouseDown = true;
         }
 
-        //let elementPosition = this.currentTarget;
+        this.checkSelection();
+        console.log(this.isOnTarget);
+
         if (
             this.isOnTarget &&
             this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
@@ -104,15 +122,15 @@ export class EraserToolService extends AbstractToolService {
 
             this.drawStack.removeElementByPosition(this.currentTarget);
 
-            //set currentTarget to equal the next currentTarget
+            //set currentTarget to equal the next Target
             if (this.currentTarget + 1) {
                 this.changedElements.set(this.currentTarget.toString(), this.changedElements.get(
                     (this.currentTarget + 1).toString(),
                 ) as SVGGElementInfo);
             }
+            console.log('in mouse down WORKED!!!!!');
         }
         this.isOnTarget = false;
-        console.log('in mouse down');
     }
 
     isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
@@ -146,15 +164,15 @@ export class EraserToolService extends AbstractToolService {
     checkSelection(): void {
         const selectionBox = this.getDOMRect(this.drawRectangle);
 
+        let enteredInSelection = false;
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
 
-            //if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-
-            if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el))) {
-                const tool = el.getAttribute('title');
-                //ajouter l'obet ici et créer une variable à new StackTargetElement
-
+            if (
+                this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) // &&
+                // (this.currentTarget !== parseInt(el.getAttribute('id_element').toString()) ||
+                //   parseInt(el.getAttribute('id_element') as string) == 0)
+            ) {
                 if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
                     this.changedElements.set(
                         el.getAttribute('id_element') as string,
@@ -166,34 +184,48 @@ export class EraserToolService extends AbstractToolService {
                     console.log("created new 'changedElements'");
                 }
 
+                const tool = el.getAttribute('title');
+                //update the current stackTarget
                 this.drawStack.changeTargetElement(
                     new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
                 );
 
                 console.log(' this.currentTarget: ' + this.currentTarget);
                 this.isOnTarget = true;
+                enteredInSelection = true;
 
+                //color border in red
+
+                // if (this.currentTarget - 1 >= 0) {
+                //     console.log('CURRENT ELEMENT IS BIGGER THAN ID_ELEMENT');
+                //     this.removeBorder(this.drawStack.drawStack[this.currentTarget - 1]);
+                // }
                 this.drawStack.mouseOverColorBorder(
                     this.currentTarget,
                     this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                 );
-
-                break;
             } else {
-                this.isOnTarget = false;
-                if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-                    let position = parseInt(el.getAttribute('id_element') as string);
-                    let element = this.changedElements.get(position.toString());
-                    if (element !== undefined) {
-                        console.log('position : ' + position);
-
-                        this.drawStack.mouseOutRestoreBorder(position, element.borderColor, element.borderWidth);
-                        this.changedElements.delete(position.toString());
-                    }
-                    //mettre current target undefined en appelant changeTargetElement => pas necessaire si mouseOutRestore le fait
-                }
+                // this.isOnTarget = false;
+                this.removeBorder(el);
             }
-            // }
+        }
+        if (!enteredInSelection) {
+            this.isOnTarget = false;
+        }
+    }
+
+    removeBorder(el: SVGGElement): void {
+        if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
+            let position = parseInt(el.getAttribute('id_element') as string);
+            let element = this.changedElements.get(position.toString());
+            if (element !== undefined) {
+                console.log('position : ' + position);
+
+                this.drawStack.mouseOutRestoreBorder(position, element.borderColor, element.borderWidth);
+                this.changedElements.delete(position.toString());
+            }
+            //mettre current target undefined en appelant changeTargetElement => pas necessaire si mouseOutRestore le fait
+            //this.drawStack.changeTargetElement(new StackTargetInfo(undefined, undefined));
         }
     }
 
@@ -220,7 +252,7 @@ export class EraserToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {
         // document.getElementById('container').style.cursor = 'wait';
-        this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
+        this.appendSquare();
     }
 
     // tslint:disable-next-line: no-empty
@@ -243,6 +275,8 @@ export class EraserToolService extends AbstractToolService {
 
     // tslint:disable-next-line: no-empty
     cleanUp(): void {
+        this.renderer.removeChild(this.elementRef, this.drawRectangle);
+        this.isSquareAppended = false;
         // this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // if (this.stampIsAppended) {
         //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
