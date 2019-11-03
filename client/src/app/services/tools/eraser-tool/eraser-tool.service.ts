@@ -211,58 +211,46 @@ export class EraserToolService extends AbstractToolService {
     }
 
     mouseOverColorBorder(id_element: number, borderWidth: string | null): void {
-        if (this.drawStack.isEraserTool) {
-            // if (borderWidth !== '0' && borderWidth !== null) {
-            //     borderWidth = (parseInt(borderWidth) + 5).toString();
-            // } else {
-            borderWidth = '5';
-            // }
+        // if (borderWidth !== '0' && borderWidth !== null) {
+        //     borderWidth = (parseInt(borderWidth) + 5).toString();
+        // } else {
+        borderWidth = '5';
+        // }
 
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(id_element),
-                HTMLAttribute.stroke,
-                '#ff0000',
-            );
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(id_element),
-                HTMLAttribute.stroke_width,
-                borderWidth,
-            );
-        }
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, '#ff0000');
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(id_element),
+            HTMLAttribute.stroke_width,
+            borderWidth,
+        );
     }
 
     mouseOutRestoreBorder(id_element: number, border: string | null, borderWidth: string | null): void {
-        if (this.drawStack.isEraserTool) {
-            if (border === null) {
-                border = '';
-            }
-
-            if (borderWidth === null) {
-                borderWidth = '0';
-            }
-
-            this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, border);
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(id_element),
-                HTMLAttribute.stroke_width,
-                borderWidth,
-            );
-            //this.stackTarget.next(new StackTargetInfo(undefined, undefined));
+        if (border === null) {
+            border = '';
         }
+
+        if (borderWidth === null) {
+            borderWidth = '0';
+        }
+
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, border);
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(id_element),
+            HTMLAttribute.stroke_width,
+            borderWidth,
+        );
     }
 
     removeBorder(position: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            // let position = ;
-            let element = this.changedElements.get(position.toString()) as SVGGElementInfo;
+            let element = this.changedElements.get(position) as SVGGElementInfo;
             if (element !== undefined) {
                 console.log('position : ' + position);
 
                 this.mouseOutRestoreBorder(parseInt(position), element.borderColor, element.borderWidth);
-                this.changedElements.delete(position.toString());
+                this.changedElements.delete(position);
             }
-            //mettre current target undefined en appelant changeTargetElement => pas necessaire si mouseOutRestore le fait
-            //this.drawStack.changeTargetElement(new StackTargetInfo(undefined, undefined));
         }
     }
 
@@ -314,7 +302,7 @@ export class EraserToolService extends AbstractToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
-        this.removeBorder(this.currentTarget.toString());
+        this.removeBorder(this.currentTarget.toString()); //remove all those that are colored
 
         // this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // if (this.stampIsAppended) {

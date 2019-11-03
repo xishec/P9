@@ -59,7 +59,6 @@ export class ToolSelectorService {
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
-        this.drawStack = drawStack;
         this.selectionTool.initializeService(ref, renderer, drawStack);
 
         this.rectangleTool.initializeService(ref, renderer, drawStack);
@@ -193,7 +192,6 @@ export class ToolSelectorService {
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
-        this.drawStack.isEraserTool = false;
 
         switch (tooltipName) {
             case ToolName.NewDrawing:
@@ -265,7 +263,6 @@ export class ToolSelectorService {
                 break;
             case ToolName.Eraser:
                 this.currentTool = this.eraserTool;
-                this.drawStack.isEraserTool = true;
                 this.changeCurrentToolName(tooltipName);
                 break;
 

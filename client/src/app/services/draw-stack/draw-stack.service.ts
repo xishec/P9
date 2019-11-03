@@ -14,7 +14,6 @@ export class DrawStackService {
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
-    isEraserTool = false;
 
     constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
         this.renderer = renderer;
