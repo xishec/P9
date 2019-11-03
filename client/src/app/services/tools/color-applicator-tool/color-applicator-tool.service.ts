@@ -31,7 +31,6 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            console.log('what');
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
         });
@@ -57,12 +56,17 @@ export class ColorApplicatorToolService extends AbstractToolService {
         ) {
             switch (button) {
                 case Mouse.LeftButton:
-                    if ((this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition).getAttribute('fill') as string) !== 'none')
-                    this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                        HTMLAttribute.fill,
-                        this.primaryColor,
-                    );
+                    if (
+                        (this.drawStack
+                            .getElementByPosition(this.currentStackTarget.targetPosition)
+                            .getAttribute('fill') as string) !== 'none'
+                    ) {
+                        this.renderer.setAttribute(
+                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+                            HTMLAttribute.fill,
+                            this.primaryColor
+                        );
+                    }
                     if (
                         this.currentStackTarget.toolName === ToolName.Brush ||
                         this.currentStackTarget.toolName === ToolName.Pencil ||
@@ -71,7 +75,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                             HTMLAttribute.stroke,
-                            this.primaryColor,
+                            this.primaryColor
                         );
                     }
                     break;
@@ -86,7 +90,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.renderer.setAttribute(
                         this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                         HTMLAttribute.stroke,
-                        this.secondaryColor,
+                        this.secondaryColor
                     );
                     break;
                 default:
@@ -96,7 +100,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
     }
     // tslint:disable-next-line: no-empty
-    onMouseUp(event: MouseEvent): void {this.isOnTarget = false;}
+    onMouseUp(event: MouseEvent): void {
+        this.isOnTarget = false;
+    }
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
