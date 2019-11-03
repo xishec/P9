@@ -24,6 +24,7 @@ export class EraserToolService extends AbstractToolService {
     lastStrokeColor = '';
     isLeftMouseDown = false;
     isSquareAppended = false;
+    lastElementColoredNumber = -1;
 
     //the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -128,6 +129,7 @@ export class EraserToolService extends AbstractToolService {
                 ) as SVGGElementInfo);
             }
         }
+        this.lastElementColoredNumber = -1;
         this.isOnTarget = false;
     }
 
@@ -165,65 +167,55 @@ export class EraserToolService extends AbstractToolService {
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
         for (let i = this.drawStack.getDrawStackLength() - 1; i >= 0; i--) {
-            //for (const el of this.drawStack.drawStack) {
             let el = this.drawStack.drawStack[i];
             const elBox = this.getDOMRect(el);
 
-            if (
-                this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) &&
-                topElement <= i
-                // (this.currentTarget !== parseInt(el.getAttribute('id_element').toString()) ||
-                //   parseInt(el.getAttribute('id_element') as string) == 0)
-            ) {
-                if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
-                    this.changedElements.set(
-                        el.getAttribute('id_element') as string,
-                        new SVGGElementInfo(
-                            el.getAttribute(HTMLAttribute.stroke) as string,
-                            el.getAttribute(HTMLAttribute.stroke_width) as string,
-                        ),
+            if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
+                if (this.lastElementColoredNumber !== topElement) {
+                    if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
+                        this.changedElements.set(
+                            el.getAttribute('id_element') as string,
+                            new SVGGElementInfo(
+                                el.getAttribute(HTMLAttribute.stroke) as string,
+                                el.getAttribute(HTMLAttribute.stroke_width) as string,
+                            ),
+                        );
+                    }
+
+                    const tool = el.getAttribute('title');
+                    this.drawStack.changeTargetElement(
+                        new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                    );
+
+                    console.log(' this.currentTarget: ' + this.currentTarget);
+
+                    topElement = i;
+                    this.lastElementColoredNumber = topElement;
+                    this.mouseOverColorBorder(
+                        this.currentTarget,
+                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                     );
                 }
-
-                const tool = el.getAttribute('title');
-                this.drawStack.changeTargetElement(
-                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
-                );
-
-                console.log(' this.currentTarget: ' + this.currentTarget);
-                this.isOnTarget = true;
                 enteredInSelection = true;
-
-                //color border in red
-
-                // if (this.currentTarget - 1 >= 0) {
-                //     console.log('CURRENT ELEMENT IS BIGGER THAN ID_ELEMENT');
-                //     this.removeBorder(this.drawStack.drawStack[this.currentTarget - 1]);
-                // }
-                topElement = i;
-                this.mouseOverColorBorder(
-                    this.currentTarget,
-                    this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
-                );
-                // break;
+                this.isOnTarget = true;
             } else {
                 // this.isOnTarget = false;
                 topElement--;
                 this.removeBorder(el.getAttribute('id_element') as string);
             }
-            //  }
         }
         if (!enteredInSelection) {
             this.isOnTarget = false;
+            this.lastElementColoredNumber = -1;
         }
     }
 
     mouseOverColorBorder(id_element: number, borderWidth: string | null): void {
-        // if (borderWidth !== '0' && borderWidth !== null) {
-        //     borderWidth = (parseInt(borderWidth) + 5).toString();
-        // } else {
-        borderWidth = '5';
-        // }
+        if (borderWidth !== '0' && borderWidth !== null) {
+            borderWidth = (parseInt(borderWidth) + 5).toString();
+        } else {
+            borderWidth = '5';
+        }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, '#ff0000');
         this.renderer.setAttribute(
@@ -311,6 +303,7 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
         this.removeBorder(this.currentTarget.toString()); //remove all those that are colored
+        this.lastElementColoredNumber = -1;
 
         // if (this.stampIsAppended) {
         //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
