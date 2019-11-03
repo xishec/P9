@@ -79,6 +79,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                             this.primaryColor,
                         );
                     }
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                     break;
                 case Mouse.RightButton:
                     if (
@@ -93,11 +94,11 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         HTMLAttribute.stroke,
                         this.secondaryColor,
                     );
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                     break;
                 default:
                     break;
             }
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
             this.isOnTarget = false;
         }
     }
