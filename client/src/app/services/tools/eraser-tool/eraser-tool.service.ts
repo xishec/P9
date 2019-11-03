@@ -98,7 +98,6 @@ export class EraserToolService extends AbstractToolService {
     appendSquare(): void {
         this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
         this.isSquareAppended = true;
-        //this.setSquareToMouse();
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -128,7 +127,6 @@ export class EraserToolService extends AbstractToolService {
                     (this.currentTarget + 1).toString(),
                 ) as SVGGElementInfo);
             }
-            console.log('in mouse down WORKED!!!!!');
         }
         this.isOnTarget = false;
     }
@@ -181,11 +179,9 @@ export class EraserToolService extends AbstractToolService {
                             el.getAttribute(HTMLAttribute.stroke_width) as string,
                         ),
                     );
-                    console.log("created new 'changedElements'");
                 }
 
                 const tool = el.getAttribute('title');
-                //update the current stackTarget
                 this.drawStack.changeTargetElement(
                     new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
                 );
@@ -206,7 +202,7 @@ export class EraserToolService extends AbstractToolService {
                 );
             } else {
                 // this.isOnTarget = false;
-                this.removeBorder(el);
+                this.removeBorder(el.getAttribute('id_element') as string);
             }
         }
         if (!enteredInSelection) {
@@ -214,17 +210,13 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    mouseOverColorBorder(id_element: number, borderWidth: string | null, stackTarget?: StackTargetInfo): void {
+    mouseOverColorBorder(id_element: number, borderWidth: string | null): void {
         if (this.drawStack.isEraserTool) {
-            if (stackTarget !== undefined) {
-                this.drawStack.changeTargetElement(stackTarget);
-            }
             // if (borderWidth !== '0' && borderWidth !== null) {
             //     borderWidth = (parseInt(borderWidth) + 5).toString();
             // } else {
             borderWidth = '5';
             // }
-            console.log('on mouse over');
 
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(id_element),
@@ -244,12 +236,10 @@ export class EraserToolService extends AbstractToolService {
             if (border === null) {
                 border = '';
             }
-            console.log('on mouse out');
 
             if (borderWidth === null) {
                 borderWidth = '0';
             }
-            console.log('border: ' + border);
 
             this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, border);
             this.renderer.setAttribute(
@@ -261,14 +251,14 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    removeBorder(el: SVGGElement): void {
+    removeBorder(position: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            let position = parseInt(el.getAttribute('id_element') as string);
-            let element = this.changedElements.get(position.toString());
+            // let position = ;
+            let element = this.changedElements.get(position.toString()) as SVGGElementInfo;
             if (element !== undefined) {
                 console.log('position : ' + position);
 
-                this.mouseOutRestoreBorder(position, element.borderColor, element.borderWidth);
+                this.mouseOutRestoreBorder(parseInt(position), element.borderColor, element.borderWidth);
                 this.changedElements.delete(position.toString());
             }
             //mettre current target undefined en appelant changeTargetElement => pas necessaire si mouseOutRestore le fait
@@ -324,6 +314,8 @@ export class EraserToolService extends AbstractToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
+        this.removeBorder(this.currentTarget.toString());
+
         // this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // if (this.stampIsAppended) {
         //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
