@@ -163,11 +163,15 @@ export class EraserToolService extends AbstractToolService {
         const selectionBox = this.getDOMRect(this.drawRectangle);
 
         let enteredInSelection = false;
-        for (const el of this.drawStack.drawStack) {
+        let topElement = this.drawStack.getDrawStackLength() - 1;
+        for (let i = this.drawStack.getDrawStackLength() - 1; i >= 0; i--) {
+            //for (const el of this.drawStack.drawStack) {
+            let el = this.drawStack.drawStack[i];
             const elBox = this.getDOMRect(el);
 
             if (
-                this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) // &&
+                this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) &&
+                topElement <= i
                 // (this.currentTarget !== parseInt(el.getAttribute('id_element').toString()) ||
                 //   parseInt(el.getAttribute('id_element') as string) == 0)
             ) {
@@ -196,14 +200,18 @@ export class EraserToolService extends AbstractToolService {
                 //     console.log('CURRENT ELEMENT IS BIGGER THAN ID_ELEMENT');
                 //     this.removeBorder(this.drawStack.drawStack[this.currentTarget - 1]);
                 // }
+                topElement = i;
                 this.mouseOverColorBorder(
                     this.currentTarget,
                     this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                 );
+                // break;
             } else {
                 // this.isOnTarget = false;
+                topElement--;
                 this.removeBorder(el.getAttribute('id_element') as string);
             }
+            //  }
         }
         if (!enteredInSelection) {
             this.isOnTarget = false;
@@ -304,7 +312,6 @@ export class EraserToolService extends AbstractToolService {
         this.isSquareAppended = false;
         this.removeBorder(this.currentTarget.toString()); //remove all those that are colored
 
-        // this.renderer.removeChild(this.elementRef, this.drawRectangle);
         // if (this.stampIsAppended) {
         //     this.renderer.removeChild(this.elementRef.nativeElement, this.stampWrapper);
         //     this.stampIsAppended = false;
