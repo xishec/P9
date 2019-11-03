@@ -2,9 +2,9 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
-import { Selection } from '../../../../classes/selection/selection';
 
 @Injectable({
     providedIn: 'root',

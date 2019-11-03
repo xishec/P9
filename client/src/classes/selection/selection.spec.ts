@@ -1,13 +1,13 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { Selection } from './selection';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { Selection } from './selection';
 
-import * as TestHelpers from '../../classes/test-helpers.spec';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import * as TestHelpers from '../../classes/test-helpers.spec';
 
-describe('Selection', () => {
+fdescribe('Selection', () => {
     let injector: TestBed;
     let proxy: Selection;
 
@@ -82,7 +82,7 @@ describe('Selection', () => {
         expect(spyEmptySelection).toHaveBeenCalled();
     });
 
-    it('should remove the selection box, the control points and set isAppended to false if isAppended was true when calling removeFullSelectionBox', () => {
+    it('should remove the selection box and control points if isAppended was true when calling removeFullSelectionBox', () => {
         proxy.isAppended = true;
 
         proxy.removeFullSelectionBox();
@@ -91,7 +91,7 @@ describe('Selection', () => {
         expect(proxy.isAppended).toBeFalsy();
     });
 
-    it('should append the selection box, the control points and set isAppended to true if isAppended was false when calling appendFullSelectionBox', () => {
+    it('should append the selection box and control points if isAppended was false when calling appendFullSelectionBox', () => {
         proxy.isAppended = false;
 
         proxy.appendFullSelectionBox();
@@ -117,7 +117,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInSelectionBox should return true if mouseCoords are in selectionBox and selectionBox is appended', () => {
-        let mockMouseCoords: MouseCoords = { x: 5, y: 5 };
+        const mockMouseCoords: MouseCoords = { x: 5, y: 5 };
 
         const mockDOMRect = {
             x: 360,
@@ -135,7 +135,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInSelectionBox should return false if mouseCoords are not in selectionBox and selectionBox is appended', () => {
-        let mockMouseCoords: MouseCoords = { x: 0, y: 0 };
+        const mockMouseCoords: MouseCoords = { x: 0, y: 0 };
 
         const mockDOMRect = {
             x: 370,
@@ -153,7 +153,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInControlPoint should return true if mouse is in a controlPoint and isAppended is true', () => {
-        let mockMouseCoords: MouseCoords = { x: 0, y: 0 };
+        const mockMouseCoords: MouseCoords = { x: 0, y: 0 };
 
         proxy.isAppended = true;
 
@@ -173,7 +173,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInControlPoint should return false if mouse is not in a controlPoint and isAppended is true', () => {
-        let mockMouseCoords: MouseCoords = { x: 20, y: 20 };
+        const mockMouseCoords: MouseCoords = { x: 20, y: 20 };
 
         proxy.isAppended = true;
 
@@ -254,10 +254,10 @@ describe('Selection', () => {
 
     it('should update the selectionBox and the controlPoints when calling updateFullSelectionBox', () => {
         proxy.selectedElements.add(TestHelpers.createMockSVGGElement());
-        spyOn(proxy, 'findLeftMostCoord').and.callFake(() => {return 0;});
-        spyOn(proxy, 'findRightMostCoord').and.callFake(() => {return 0;});
-        spyOn(proxy, 'findTopMostCoord').and.callFake(() => {return 0;});
-        spyOn(proxy, 'findBottomMostCoord').and.callFake(() => {return 0;});
+        spyOn(proxy, 'findLeftMostCoord').and.callFake(() => 0);
+        spyOn(proxy, 'findRightMostCoord').and.callFake(() => 0);
+        spyOn(proxy, 'findTopMostCoord').and.callFake(() => 0);
+        spyOn(proxy, 'findBottomMostCoord').and.callFake(() => 0);
         const spy = spyOn(proxy, 'updateControlPoints');
 
         proxy.updateFullSelectionBox();
@@ -285,7 +285,7 @@ describe('Selection', () => {
         expect(spyAppendFullSelectionBox).toHaveBeenCalled();
     });
 
-    it('should add to selectedElements, update the full selectionBox but not append the full selection box when adding an element ad no element is added', () => {
+    it('should update the selectionBox but not render the selectionBox when adding an element already in selectedElements', () => {
         const spyAddToSelectedElements = spyOn(proxy.selectedElements, 'add');
         const spyUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox');
         const spyAppendFullSelectionBox = spyOn(proxy, 'appendFullSelectionBox');
@@ -297,7 +297,7 @@ describe('Selection', () => {
         expect(spyAppendFullSelectionBox).not.toHaveBeenCalled();
     });
 
-    it('should remove from selectedElements and update the full selectionBox if element is already selected when calling invertAddToSelection', () => {
+    it('should remove already selected element from selectedElements and update selectionBox when calling invertAddToSelection', () => {
         const dummyG = TestHelpers.createMockSVGGElement();
         proxy.selectedElements.add(dummyG);
         const spyDeleteFromSelectedElements = spyOn(proxy.selectedElements, 'delete');
@@ -311,7 +311,7 @@ describe('Selection', () => {
         expect(spyAppendFullSelectionBox).toHaveBeenCalled();
     });
 
-    it('should add to selectedElements and update the full selectionBox if element is not selected when calling invertAddToSelection', () => {
+    it('should add unselected element to selectedElements and update the selectionBox when calling invertAddToSelection', () => {
         const dummyG = TestHelpers.createMockSVGGElement();
         proxy.selectedElements.add(dummyG);
         const spyAddToSelectedElements = spyOn(proxy.selectedElements, 'add');
@@ -325,7 +325,7 @@ describe('Selection', () => {
         expect(spyAppendFullSelectionBox).toHaveBeenCalled();
     });
 
-    it('should delete the element from the selection and update the full selection box when calling removeFromSelection', () => {
+    it('should delete the element from the selection and update the selectionBox when calling removeFromSelection', () => {
         const spy = spyOn(proxy.selectedElements, 'delete');
         const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox');
 
@@ -335,7 +335,7 @@ describe('Selection', () => {
         expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
     });
 
-    it('should delete the element from the selection, update the full selection box and remove the full seleciton box when calling removeFromSelection if the selection is empty', () => {
+    it('should delete the element, update the selectionBox and remove the selectionBox if empty when calling removeFromSelection', () => {
         const spy = spyOn(proxy.selectedElements, 'delete');
         const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox');
         const spyOnRemoveFullSelectionBox = spyOn(proxy, 'removeFullSelectionBox');
@@ -376,7 +376,7 @@ describe('Selection', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should add element to invertSelectionBuffer and remove from selection if element is in selectionRect, has been selected and was not in invert selection buffer when calling handleInvertSelection', () => {
+    it('should buffer and remove a selected element when calling handleInvertSelection', () => {
         const spyAddInvertBuffer = spyOn(proxy.invertSelectionBuffer, 'add');
         const spy = spyOn(proxy, 'removeFromSelection');
         spyOn(proxy.selectedElements, 'has').and.returnValue(true);
@@ -386,9 +386,9 @@ describe('Selection', () => {
 
         expect(spyAddInvertBuffer).toHaveBeenCalled();
         expect(spy).toHaveBeenCalled();
-    })
+    });
 
-    it('should add element to invertSelectionBuffer and add to selection if element is in selectionRect, has not been selected and was not in invert selection buffer when calling handleInvertSelection', () => {
+    it('should buffer and add an unselected element when calling handleInvertSelection', () => {
         const spyAddInvertBuffer = spyOn(proxy.invertSelectionBuffer, 'add');
         const spy = spyOn(proxy, 'addToSelection');
         spyOn(proxy.selectedElements, 'has').and.returnValue(false);
@@ -398,7 +398,7 @@ describe('Selection', () => {
 
         expect(spyAddInvertBuffer).toHaveBeenCalled();
         expect(spy).toHaveBeenCalled();
-    })
+    });
 
     it('should not do anything when calling handleInvertSelection and nothing is in the selectionRect', () => {
         const spyAddInvertBuffer = spyOn(proxy.invertSelectionBuffer, 'add');
@@ -410,7 +410,7 @@ describe('Selection', () => {
 
         expect(spyAddInvertBuffer).not.toHaveBeenCalled();
         expect(spy).not.toHaveBeenCalled();
-    })
+    });
 
     it('moveBy should call createSVGTransform if transformList.numberOfItems === 0', () => {
         const mockSVGTransform = ({
@@ -448,7 +448,7 @@ describe('Selection', () => {
         spyOnCreateElement.and.returnValue(mockSVGSVGElement);
 
         const spy = spyOn(mockSVGTransform, 'setTranslate');
-        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => {});
+        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => null);
 
         const dummyMouseCoordsInit: MouseCoords = {x: 10, y: 10};
         const dummyMouseCoordsCurr: MouseCoords = {x: 20, y: 20};
@@ -495,7 +495,7 @@ describe('Selection', () => {
         spyOnCreateElement.and.returnValue(mockSVGSVGElement);
 
         const spy = spyOn(mockSVGTransform, 'setTranslate');
-        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => {});
+        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => null);
 
         const dummyMouseCoordsInit: MouseCoords = {x: 10, y: 10};
         const dummyMouseCoordsCurr: MouseCoords = {x: 20, y: 20};
