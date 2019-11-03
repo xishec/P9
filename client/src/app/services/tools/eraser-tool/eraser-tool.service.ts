@@ -18,7 +18,6 @@ export class EraserToolService extends AbstractToolService {
     currentTarget = 0;
     currentSize = EraserSize.Default;
     isOnTarget = false;
-    lastStrokeColor = '';
     isLeftMouseDown = false;
     isSquareAppended = false;
     lastElementColoredNumber = -1;
