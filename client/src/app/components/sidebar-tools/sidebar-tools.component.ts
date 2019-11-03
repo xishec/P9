@@ -31,6 +31,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.toolSelectorService.currentToolName.subscribe((currentToolName) => {
             this.currentToolName = currentToolName;
+            this.verifyToolChange();
         });
         this.currentTracingTool = ToolName.Pencil;
         this.currentShapeTool = ToolName.Rectangle;
@@ -38,6 +39,26 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.toolSelectorService.changeTool(ToolName.Selection);
+    }
+
+    verifyToolChange() {
+        this.showTracingTools = false;
+        this.showShapeTools = false;
+
+        if (
+            this.TRACING_BUTTON_INFO.filter((el) => {
+                return el.tooltipName === this.currentToolName;
+            }).length
+        ) {
+            this.currentTracingTool = this.currentToolName;
+        }
+        if (
+            this.SHAPE_BUTTON_INFO.filter((el) => {
+                return el.tooltipName === this.currentToolName;
+            }).length
+        ) {
+            this.currentShapeTool = this.currentToolName;
+        }
     }
 
     onChangeTool(i: number): void {
