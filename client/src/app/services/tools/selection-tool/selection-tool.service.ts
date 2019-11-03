@@ -5,6 +5,7 @@ import { HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +33,7 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private undoRedoerService: UndoRedoerService) {
         super();
     }
 
@@ -242,6 +243,17 @@ export class SelectionToolService extends AbstractToolService {
             this.isOnTarget = false;
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
+
+            setTimeout(() => {
+                this.selection.removeFullSelectionBox();
+            }, 1);
+            setTimeout(() => {
+                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+            }, 1);
+            setTimeout(() => {
+                this.selection.appendFullSelectionBox();
+            }, 1);
+
         } else {
             this.selection.emptySelection();
         }
