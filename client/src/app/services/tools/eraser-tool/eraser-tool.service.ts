@@ -200,7 +200,7 @@ export class EraserToolService extends AbstractToolService {
                 //     console.log('CURRENT ELEMENT IS BIGGER THAN ID_ELEMENT');
                 //     this.removeBorder(this.drawStack.drawStack[this.currentTarget - 1]);
                 // }
-                this.drawStack.mouseOverColorBorder(
+                this.mouseOverColorBorder(
                     this.currentTarget,
                     this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                 );
@@ -214,6 +214,53 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
+    mouseOverColorBorder(id_element: number, borderWidth: string | null, stackTarget?: StackTargetInfo): void {
+        if (this.drawStack.isEraserTool) {
+            if (stackTarget !== undefined) {
+                this.drawStack.changeTargetElement(stackTarget);
+            }
+            // if (borderWidth !== '0' && borderWidth !== null) {
+            //     borderWidth = (parseInt(borderWidth) + 5).toString();
+            // } else {
+            borderWidth = '5';
+            // }
+            console.log('on mouse over');
+
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(id_element),
+                HTMLAttribute.stroke,
+                '#ff0000',
+            );
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(id_element),
+                HTMLAttribute.stroke_width,
+                borderWidth,
+            );
+        }
+    }
+
+    mouseOutRestoreBorder(id_element: number, border: string | null, borderWidth: string | null): void {
+        if (this.drawStack.isEraserTool) {
+            if (border === null) {
+                border = '';
+            }
+            console.log('on mouse out');
+
+            if (borderWidth === null) {
+                borderWidth = '0';
+            }
+            console.log('border: ' + border);
+
+            this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, border);
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(id_element),
+                HTMLAttribute.stroke_width,
+                borderWidth,
+            );
+            //this.stackTarget.next(new StackTargetInfo(undefined, undefined));
+        }
+    }
+
     removeBorder(el: SVGGElement): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             let position = parseInt(el.getAttribute('id_element') as string);
@@ -221,7 +268,7 @@ export class EraserToolService extends AbstractToolService {
             if (element !== undefined) {
                 console.log('position : ' + position);
 
-                this.drawStack.mouseOutRestoreBorder(position, element.borderColor, element.borderWidth);
+                this.mouseOutRestoreBorder(position, element.borderColor, element.borderWidth);
                 this.changedElements.delete(position.toString());
             }
             //mettre current target undefined en appelant changeTargetElement => pas necessaire si mouseOutRestore le fait
