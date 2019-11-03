@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { SidebarToolsComponent } from './sidebar-tools.component';
+import { SHAPE_TOOL_POSITION } from 'src/constants/tool-constants';
 
 describe('SidebarToolsComponent', () => {
     let component: SidebarToolsComponent;
@@ -42,7 +43,7 @@ describe('SidebarToolsComponent', () => {
     it('onChangeTool should call function changeTool when a tool is selected', () => {
         const SPY = spyOn(toolSelectorService, 'changeTool');
 
-        component.onChangeTool(1);
+        component.onChangeTool(SHAPE_TOOL_POSITION);
 
         expect(SPY).toHaveBeenCalled();
     });
