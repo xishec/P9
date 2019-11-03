@@ -2,12 +2,15 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 import {
     FILES_BUTTON_INFO,
+    SHAPE_BUTTON_INFO,
     ToolName,
     TOOLS_BUTTON_INFO,
     TRACING_BUTTON_INFO,
-    SHAPE_BUTTON_INFO,
+    TRACING_TOOL_POSITION,
+    SHAPE_TOOL_POSITION,
 } from 'src/constants/tool-constants';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
+import { SidebarButtonInfo } from 'src/classes/SidebarButtonInfo';
 
 @Component({
     selector: 'app-sidebar-tools',
@@ -19,6 +22,8 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     readonly TRACING_BUTTON_INFO = TRACING_BUTTON_INFO;
     readonly SHAPE_BUTTON_INFO = SHAPE_BUTTON_INFO;
     readonly FILES_BUTTON_INFO = FILES_BUTTON_INFO;
+    readonly TRACING_TOOL_POSITION = TRACING_TOOL_POSITION;
+    readonly SHAPE_TOOL_POSITION = SHAPE_TOOL_POSITION;
 
     currentToolName: ToolName;
     currentTracingTool: ToolName;
@@ -64,9 +69,9 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     onChangeTool(i: number): void {
         this.showTracingTools = false;
         let tooltipName: ToolName;
-        if (i === 1) {
+        if (i === TRACING_TOOL_POSITION) {
             tooltipName = this.currentTracingTool;
-        } else if (i === 2) {
+        } else if (i === SHAPE_TOOL_POSITION) {
             tooltipName = this.currentShapeTool;
         } else {
             tooltipName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
@@ -92,10 +97,10 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     }
 
     onRightClick(i: number): void {
-        if (i === 1) {
+        if (i === TRACING_TOOL_POSITION) {
             this.showTracingTools = true;
             this.showShapeTools = false;
-        } else if (i === 2) {
+        } else if (i === SHAPE_TOOL_POSITION) {
             this.showShapeTools = true;
             this.showTracingTools = false;
         }
@@ -107,10 +112,10 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     }
 
     getChecked(i: number): boolean {
-        let tooltipName: ToolName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
-        if (i === 1) {
+        const tooltipName: ToolName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
+        if (i === TRACING_TOOL_POSITION) {
             return this.currentToolName === this.currentTracingTool;
-        } else if (i === 2) {
+        } else if (i === SHAPE_TOOL_POSITION) {
             return this.currentToolName === this.currentShapeTool;
         } else {
             return this.currentToolName === tooltipName;
@@ -118,40 +123,22 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     }
 
     getTracingToolClass(): string {
-        switch (this.currentTracingTool) {
-            case ToolName.Pencil:
-                return 'fas fa-pencil-alt';
-
-            case ToolName.Brush:
-                return 'fas fa-paint-brush';
-
-            case ToolName.Pen:
-                return 'fas fa-pen-nib';
-
-            case ToolName.Quill:
-                return 'fas fa-pen-alt';
-
-            case ToolName.SprayCan:
-                return 'fas fa-spray-can';
-
-            default:
-                return 'fas fa-pencil-alt';
-        }
+        let iconClass = TRACING_BUTTON_INFO[0].iconName;
+        TRACING_BUTTON_INFO.forEach((el: SidebarButtonInfo) => {
+            if (el.tooltipName === this.currentTracingTool) {
+                iconClass = el.iconName;
+            }
+        });
+        return iconClass;
     }
 
     getShapeToolClass(): string {
-        switch (this.currentShapeTool) {
-            case ToolName.Rectangle:
-                return 'far fa-square';
-
-            case ToolName.Ellipsis:
-                return 'far fa-circle';
-
-            case ToolName.Polygon:
-                return 'fas fa-draw-polygon';
-
-            default:
-                return 'far fa-square';
-        }
+        let iconClass = SHAPE_BUTTON_INFO[0].iconName;
+        SHAPE_BUTTON_INFO.forEach((el: SidebarButtonInfo) => {
+            if (el.tooltipName === this.currentShapeTool) {
+                iconClass = el.iconName;
+            }
+        });
+        return iconClass;
     }
 }
