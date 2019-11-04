@@ -3,13 +3,22 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { EraserToolService } from './eraser-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import {
+    createMouseEvent,
+    createMockSVGGElementWithAttribute,
+    createKeyBoardEvent,
+} from 'src/classes/test-helpers.spec';
+import { SVG_NS, Keys } from 'src/constants/constants';
+import { SVGGElementInfo } from 'src/classes/svggelement-info';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 
 fdescribe('EraserToolService', () => {
     let injector: TestBed;
     let service: EraserToolService;
-    //let positiveMouseEvent: MouseEvent;
-    //  let negativeMouseEvent: MouseEvent;
-    //  let onAltKeyDown: KeyboardEvent;
+    let leftMouseEvent: MouseEvent;
+    let rightMouseEvent: MouseEvent;
+
+    let spyOnremoveChild: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -18,29 +27,39 @@ fdescribe('EraserToolService', () => {
                 {
                     provide: Renderer2,
                     useValue: {
-                        createElement: (elem: string) => {
-                            if (elem === 'canvas') {
-                                const mockCanvas = {
-                                    getContext: (dimention: string) => {
-                                        const mockContext = {
-                                            getImageData: (x: number, y: number, sw: number, sh: number) => {
-                                                const mockImageData = {};
-                                                return (mockImageData as unknown) as ImageData;
-                                            },
-                                        };
-                                        return (mockContext as unknown) as CanvasRenderingContext2D;
-                                    },
-                                };
-                                return (mockCanvas as unknown) as HTMLCanvasElement;
-                            } else {
-                                const mockImg = {};
-                                return mockImg as HTMLImageElement;
-                            }
-                        },
+                        createElement: () => null,
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
                         setProperty: () => null,
+                    },
+                },
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        push: () => null,
+                        currentStackTarget: {
+                            subscribe: () => null,
+                        },
+                        getElementByPosition: () => {
+                            const mockSVGGElement = {
+                                getAttribute: () => null,
+                            };
+                            return (mockSVGGElement as unknown) as SVGGElement;
+                        },
+                        removeElementByPosition: () => null,
+                        getDrawStackLength: () => 1,
+                        drawStack: () => {
+                            const mockdrawStack = {
+                                getAttribute: () => null,
+                            };
+                            return (mockdrawStack as unknown) as Array<SVGGElement>;
+                        },
+                        renderer: () => {
+                            const mockrenderer = {};
+                            return (mockrenderer as unknown) as Renderer2;
+                        },
+                        changeTargetElement: () => null,
                     },
                 },
                 {
@@ -59,13 +78,6 @@ fdescribe('EraserToolService', () => {
                         },
                     },
                 },
-                {
-                    provide: CanvasRenderingContext2D,
-                    useValue: {
-                        getImageData: () => null,
-                        drawImage: () => null,
-                    },
-                },
             ],
         });
 
@@ -76,10 +88,10 @@ fdescribe('EraserToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        //  positiveMouseEvent = createMouseEvent(10, 10, 0);
-        //  negativeMouseEvent = createMouseEvent(-10, -10, 0);
+        leftMouseEvent = createMouseEvent(10, 10, 0);
+        rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        // onAltKeyDown = createKeyBoardEvent(Keys.Alt);
+        spyOnremoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
     });
 
     it('should be created', () => {
