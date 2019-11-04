@@ -137,4 +137,43 @@ fdescribe('EraserToolService', () => {
 
         expect(spyOnappendSquare).toHaveBeenCalledTimes(0);
     });
+
+    it('should call removeChild if isOnTarget is true and getElementByPosition returns an element', () => {
+        service.isOnTarget = true;
+        const spyOncheckSelection: jasmine.Spy = spyOn(service, 'checkSelection');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
+            service.renderer.createElement('rect', SVG_NS),
+        );
+
+        service.onMouseDown(leftMouseEvent);
+
+        expect(service.isLeftMouseDown).toEqual(true);
+        expect(spyOncheckSelection).toHaveBeenCalled();
+        expect(spyOnremoveChild).toHaveBeenCalled();
+        expect(spyOngetElementByPosition).toHaveBeenCalled();
+    });
+
+    it('should call checkSelection if isOnTarget is false and set isOnTarget to false', () => {
+        service.isOnTarget = false;
+        const spyOncheckSelection: jasmine.Spy = spyOn(service, 'checkSelection');
+
+        service.onMouseDown(rightMouseEvent);
+
+        expect(service.isOnTarget).toEqual(false);
+        expect(spyOncheckSelection).toHaveBeenCalled();
+    });
+
+    it('#isInSelection should return true if selection box and elementBox are in touch', () => {
+        const selectionBox = new DOMRect(0, 0, 0, 0);
+        const elBox = new DOMRect(0, 0, 0, 0);
+
+        expect(service.isInSelection(selectionBox, elBox, 1)).toEqual(true);
+    });
+
+    it('#isInSelection should return false if selection box and elementBox are not in touch', () => {
+        const selectionBox = new DOMRect(0, 0, 0, 0);
+        const elBox = new DOMRect(10, 10, 1, 1);
+
+        expect(service.isInSelection(selectionBox, elBox)).toEqual(false);
+    });
 });
