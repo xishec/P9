@@ -44,13 +44,8 @@ export class ClipboardService {
 
     isInBounds(): boolean {
         const boxLeft = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH;
-        const boxRight = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH + this.clippingsBound.width;
         const boxTop = this.clippingsBound.y + window.scrollY;
-        const boxBottom = this.clippingsBound.y + window.scrollY + this.clippingsBound.height;
-
-        const parentBoxLeft = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x + window.scrollX - SIDEBAR_WIDTH;
         const parentBoxRight = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x + window.scrollX - SIDEBAR_WIDTH + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).width;
-        const parentBoxTop = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y + window.scrollY;
         const parentBoxBottom = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y + window.scrollY + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).height;
 
         return (boxLeft < parentBoxRight && boxTop < parentBoxBottom);
