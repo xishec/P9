@@ -11,9 +11,9 @@ describe('DrawStackService', () => {
     let service: DrawStackService;
 
     const mockSVGGElement: any = {
-        getAttribute : () => null,
-        children : {
-            length : 0,
+        getAttribute: () => null,
+        children: {
+            length: 0,
         },
     };
 
@@ -32,7 +32,6 @@ describe('DrawStackService', () => {
 
         injector = getTestBed();
         service = injector.get(DrawStackService);
-
     });
 
     it('should be created', () => {
@@ -91,5 +90,33 @@ describe('DrawStackService', () => {
         const stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
         service.changeTargetElement(stackTarget);
         expect(SPY).toHaveBeenCalledWith(stackTarget);
+    });
+
+    it('removeElementByPosition should call setAttribute if there are higher positions than the requested position to remove', () => {
+        service.push(mockSVGGElement);
+        service.push(mockSVGGElement);
+        const spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');
+
+        service.removeElementByPosition(0);
+
+        expect(service.getDrawStackLength()).toEqual(1);
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('removeElementByPosition should not call setAttribute if there are not higher positions than the requested position to remove', () => {
+        service.push(mockSVGGElement);
+        service.push(mockSVGGElement);
+        const spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');
+
+        service.removeElementByPosition(1);
+
+        expect(service.getDrawStackLength()).toEqual(1);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(0);
+    });
+
+    it('setElementByPosition should set the correct element to the correct position', () => {
+        service.setElementByPosition(0, mockSVGGElement);
+
+        expect(service.drawStack[0]).toEqual(mockSVGGElement);
     });
 });
