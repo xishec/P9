@@ -11,6 +11,8 @@ fdescribe('ExportToolService', () => {
     let spyCreateSVGBlob: jasmine.Spy;
     let spyLaunchDownload: jasmine.Spy;
 
+    const FAKE_URL = 'http://localhost:4200/';
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -109,7 +111,7 @@ fdescribe('ExportToolService', () => {
         expect(spySaveAsSVG).toHaveBeenCalled();
     });
 
-    it('should launch download as bmp if filetype is bmp', () => {
+    it('should launch download as bmp if filetype is bmp and do the compression/decompression of svg', () => {
         const spyOnCompressSVG = spyOn(service, 'compressSVG').and.callThrough();
         const spyOnDecompressSVG = spyOn(service, 'decompressSVG').and.callThrough();
         const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
@@ -142,5 +144,17 @@ fdescribe('ExportToolService', () => {
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
     });
+
+    it('shoud call toDataURL from canvas is filetype is JPEG or PNG', () => {
+        const spy = spyOn(service.canvas, 'toDataURL').and.returnValue('');
+
+        service.fileType = FileType.PNG;
+        service.setUri(FAKE_URL);
+        service.fileType = FileType.JPG;
+        service.setUri(FAKE_URL);
+
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+
     });
 });
