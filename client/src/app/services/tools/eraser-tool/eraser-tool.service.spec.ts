@@ -273,4 +273,39 @@ fdescribe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
+    it('#removeBorder should call mouseOutRestoreBorder if element is not undefined', () => {
+        service.currentTarget = 0;
+        service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
+        service.changedElements.set('0', new SVGGElementInfo());
+        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
+
+        service.removeBorder('0');
+
+        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalled();
+        expect(spyOnget).toHaveBeenCalled();
+    });
+
+    it('#removeBorder should call get of changedElements if currentTraget is not undefined', () => {
+        service.currentTarget = 0;
+        service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
+        service.changedElements.set('0', new SVGGElementInfo());
+        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
+
+        service.removeBorder('0');
+
+        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
+        expect(spyOnget).toHaveBeenCalled();
+    });
+
+    it('#removeBorder should not call spyOnmouseOutRestoreBorder if currentTraget is undefined', () => {
+        service.currentTarget = -1;
+        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+
+        service.removeBorder('0');
+
+        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
+    });
+
 });
