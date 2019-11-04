@@ -53,13 +53,6 @@ fdescribe('ExportToolService', () => {
                         removeChild: () => null,
                         setProperty: () => null,
                         removeAttribute: () => null,
-                        click: () => null,
-                    },
-                },
-                {
-                    provide: HTMLElement,
-                    useValue: {
-                        click: () => null,
                     },
                 },
                 {
@@ -75,16 +68,16 @@ fdescribe('ExportToolService', () => {
                                 };
                                 return boundRect;
                             },
-                            click: () => null,
                         },
-                        click: () => null,
                     },
                 },
                 {
                     provide: CanvasRenderingContext2D,
                     useValue: {
-                        getImageData: () => null,
-                        drawImage: () => null,
+                        drawImage: () => {
+                            const mockDrawImage = {};
+                            return (mockDrawImage as unknown) as CanvasDrawImage;
+                        },
                     },
                 },
             ],
