@@ -1,8 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { ExportToolService } from './export-tool.service';
 import { FileType } from 'src/constants/tool-constants';
+import { ExportToolService } from './export-tool.service';
 
 describe('ExportToolService', () => {
     let injector: TestBed;
@@ -26,7 +26,7 @@ describe('ExportToolService', () => {
                                     getContext: (dimention: string) => {
                                         const mockContext = {
                                             drawImage: (img: CanvasImageSource, dx: number, dy: number) => {
-                                                null;
+                                                null; // tslint:disable-line
                                             },
                                             getImageData: (x: number, y: number, sw: number, sh: number) => {
                                                 const mockImageData = {};

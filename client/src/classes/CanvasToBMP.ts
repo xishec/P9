@@ -1,4 +1,5 @@
 // Source : https://stackoverflow.com/questions/29652307/canvas-unable-to-generate-bmp-image-dataurl-in-chrome
+/* tslint:disable */
 export class CanvasToBMP {
     private view: DataView = new DataView(new ArrayBuffer(0));
     private pos = 0;
@@ -77,13 +78,14 @@ export class CanvasToBMP {
     }
 
     toDataURL(canvas: HTMLCanvasElement): string {
-        var buffer = new Uint8Array(this.toArrayBuffer(canvas));
+        const buffer = new Uint8Array(this.toArrayBuffer(canvas));
         let bs = '';
         let i = 0;
-        let length = buffer.length;
+        const length = buffer.length;
         while (i < length) {
             bs += String.fromCharCode(buffer[i++]);
         }
         return 'data:image/bmp;base64,' + btoa(bs);
     }
 }
+/* tslint:enable */

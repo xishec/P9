@@ -20,7 +20,7 @@ export const createMouseEvent = (
     y: number,
     buttonPressed: number,
     offSetx?: number,
-    offSety?: number
+    offSety?: number,
 ): MouseEvent => {
     const mouseEvent = {
         clientX: x,

@@ -1,7 +1,7 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { FileType, MAX_BMP_SIZE, HTMLAttribute } from 'src/constants/tool-constants';
-import { SVG_NS } from 'src/constants/constants';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
+import { SVG_NS } from 'src/constants/constants';
+import { FileType, HTMLAttribute, MAX_BMP_SIZE } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
@@ -67,7 +67,9 @@ export class ExportToolService {
 
         const url: string = URL.createObjectURL(this.createSVGBlob());
         this.img.onload = () => {
-            let uri = this.setUri(url);
+            console.log(this.img);
+
+            const uri = this.setUri(url);
             this.launchDownload();
             URL.revokeObjectURL(uri);
         };

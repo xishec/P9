@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
@@ -23,7 +23,7 @@ export class ExportFileModalWindowComponent implements OnInit {
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
-        public exportToolService: ExportToolService
+        public exportToolService: ExportToolService,
     ) {
         this.formBuilder = formBuilder;
     }
