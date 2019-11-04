@@ -160,6 +160,11 @@ enum EraserSize {
     Max = 100,
 }
 
+const ERASER_STROKE_WIDTH = '3';
+const ADDITIONAL_BORDER_WIDTH = 5;
+const RESET_POSITION_NUMBER = -1;
+const DEFAULT_RADIX = 10;
+
 const STAMP_TYPES = [
     '',
     '/assets/stamps/iconmonstr-smiley-14.svg',
@@ -299,5 +304,9 @@ export {
     PEN_WIDTH_FACTOR,
     EraserSize,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION
+    SHAPE_TOOL_POSITION,
+    ERASER_STROKE_WIDTH,
+    ADDITIONAL_BORDER_WIDTH,
+    RESET_POSITION_NUMBER,
+    DEFAULT_RADIX,
 };

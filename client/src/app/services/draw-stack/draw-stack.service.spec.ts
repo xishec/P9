@@ -103,7 +103,7 @@ describe('DrawStackService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
-    it('removeElementByPosition should not call setAttribute if there are not higher positions than the requested position to remove', () => {
+    it('removeElementByPosition should not call setAttribute if there are not higher positions than the requested position', () => {
         service.push(mockSVGGElement);
         service.push(mockSVGGElement);
         const spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');

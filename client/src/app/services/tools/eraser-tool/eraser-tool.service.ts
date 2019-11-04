@@ -2,9 +2,16 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
-import { DEFAULT_GRAY_0, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
+import {
+    ADDITIONAL_BORDER_WIDTH,
+    DEFAULT_RADIX,
+    ERASER_STROKE_WIDTH,
+    EraserSize,
+    HTMLAttribute,
+    RESET_POSITION_NUMBER,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -20,7 +27,7 @@ export class EraserToolService extends AbstractToolService {
     isOnTarget = false;
     isLeftMouseDown = false;
     isSquareAppended = false;
-    lastElementColoredNumber = -1;
+    lastElementColoredNumber = RESET_POSITION_NUMBER;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -56,7 +63,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
         this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, '3');
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, ERASER_STROKE_WIDTH);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
@@ -178,7 +185,10 @@ export class EraserToolService extends AbstractToolService {
 
                     const tool = el.getAttribute('title');
                     this.drawStack.changeTargetElement(
-                        new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
+                        new StackTargetInfo(
+                            parseInt(el.getAttribute('id_element') as string, DEFAULT_RADIX),
+                            tool as string,
+                        ),
                     );
 
                     topElement = i;
@@ -197,18 +207,22 @@ export class EraserToolService extends AbstractToolService {
         }
         if (!enteredInSelection) {
             this.isOnTarget = false;
-            this.lastElementColoredNumber = -1;
+            this.lastElementColoredNumber = RESET_POSITION_NUMBER;
         }
     }
 
     mouseOverColorBorder(idElement: number, borderWidth: string | null): void {
         if (borderWidth !== '0' && borderWidth !== null) {
-            borderWidth = (parseInt(borderWidth, 10) + 5).toString();
+            borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
-            borderWidth = '5';
+            borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, '#ff0000');
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement),
+            HTMLAttribute.stroke,
+            '#' + DEFAULT_RED,
+        );
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke_width,
@@ -237,7 +251,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(position) as SVGGElementInfo;
             if (element !== undefined) {
-                this.mouseOutRestoreBorder(parseInt(position, 10), element.borderColor, element.borderWidth);
+                this.mouseOutRestoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth);
                 this.changedElements.delete(position);
             }
         }
@@ -249,7 +263,7 @@ export class EraserToolService extends AbstractToolService {
 
     getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
         }
         return 0;
     }
@@ -284,6 +298,6 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
         this.removeBorder(this.currentTarget.toString());
-        this.lastElementColoredNumber = -1;
+        this.lastElementColoredNumber = RESET_POSITION_NUMBER;
     }
 }
