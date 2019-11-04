@@ -347,4 +347,35 @@ fdescribe('EraserToolService', () => {
         expect(service.isLeftMouseDown).toEqual(true);
     });
 
+    it('#onMouseEnter should call appendSquare', () => {
+        const spyOnappendSquare: jasmine.Spy = spyOn(service, 'appendSquare');
+
+        service.onMouseEnter(leftMouseEvent);
+
+        expect(spyOnappendSquare).toHaveBeenCalled();
+    });
+
+    it('#onMouseOver should return undefined if onMouseOver is not implemented', () => {
+        expect(service.onMouseOver(leftMouseEvent)).toBeUndefined();
+    });
+
+    it('#onKeyDown should return undefined if onKeyDown is not implemented', () => {
+        expect(service.onKeyDown(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
+    });
+
+    it('#onKeyUp should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onKeyUp(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
+    });
+
+    it('#onMouseLeave should call removeChild', () => {
+        service.onMouseLeave(leftMouseEvent);
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
+    });
+
+    it('#cleanUp should call removeChild', () => {
+        service.cleanUp();
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
+    });
 });
