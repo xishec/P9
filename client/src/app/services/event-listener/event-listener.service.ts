@@ -111,7 +111,7 @@ export class EventListenerService {
             }
 
             // If the key is a shortcut for a tool, change current tool
-            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
+            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key) as ToolName);
             }
@@ -126,6 +126,10 @@ export class EventListenerService {
 
             if (event.key === '-' && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
+            }
+
+            if (event.key === 'Delete') {
+                this.clipboard.delete();
             }
         });
 

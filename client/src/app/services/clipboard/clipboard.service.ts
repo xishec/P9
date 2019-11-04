@@ -41,10 +41,22 @@ export class ClipboardService {
         this.selection.emptySelection();
     }
 
-    copy(): void {}
+    copy(): void {
+        this.clippings.clear();
+        this.offSetValue = 0;
+        for (const el of this.selection.selectedElements) {
+            this.clippings.add(el);
+        }
+    }
 
     duplicate(): void {
-
+        for (const el of this.selection.selectedElements) {
+            let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
+            this.drawStack.push(deepCopy);
+            this.offSet(deepCopy);
+            this.offSetValue++;
+            this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
+        }
     }
 
     paste(): void {
