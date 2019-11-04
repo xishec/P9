@@ -15,6 +15,7 @@ export class ExportToolService {
     renderer: Renderer2;
     img: HTMLImageElement;
     fileType: FileType;
+    canvasToBMP = new CanvasToBMP();
 
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
