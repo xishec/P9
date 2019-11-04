@@ -220,6 +220,10 @@ enum HTMLAttribute {
     canvas = 'canvas',
     a = 'a',
     img = 'img',
+    download = 'download',
+    href = 'href',
+    src = 'src',
+    viewBox = 'viewBox',
 }
 
 const ToolNameShortcuts: Map<string, ToolName> = new Map([
