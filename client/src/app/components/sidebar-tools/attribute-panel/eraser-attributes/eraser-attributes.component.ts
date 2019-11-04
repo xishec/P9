@@ -45,7 +45,7 @@ export class EraserAttributesComponent implements OnInit {
             ],
         });
     }
-    //TODO size in pixels.
+
     onSliderChange(event: MatSliderChange): void {
         if (predicate.eventIsValid(event, EraserSize)) {
             this.eraserAttributesForm.controls.eraserSize.setValue(event.value);
