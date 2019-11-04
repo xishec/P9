@@ -241,4 +241,36 @@ fdescribe('EraserToolService', () => {
         expect(spyOnremoveBorder).toHaveBeenCalled();
     });
 
+    it('#mouseOverColorBorder should call setAttribute if border width is null', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.mouseOverColorBorder(0, null);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('#mouseOverColorBorder should call setAttribute if border width is not null', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.mouseOverColorBorder(0, '5');
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('#mouseOutRestoreBorder should call setAttribute if border width is null', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.mouseOutRestoreBorder(0, null, null);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('#mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.mouseOutRestoreBorder(0, 'ffffff', '1');
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
 });
