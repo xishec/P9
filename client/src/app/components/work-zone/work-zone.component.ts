@@ -18,6 +18,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -48,6 +49,7 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
+        private clipboard: ClipboardService,
     ) {}
 
     ngOnInit(): void {
@@ -61,6 +63,7 @@ export class WorkZoneComponent implements OnInit {
             this.shortCutManagerService,
             this.modalManagerService,
             this.renderer,
+            this.clipboard,
         );
         this.eventListenerService.addEventListeners();
 

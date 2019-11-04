@@ -7,6 +7,7 @@ import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
+import { ClipboardService } from '../clipboard/clipboard.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,6 +26,7 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
+        private clipboard: ClipboardService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -85,9 +87,22 @@ export class EventListenerService {
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
             // If control is pressed, change for ControlTools
-            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+            if (event.ctrlKey && this.currentTool !== undefined) {
                 event.preventDefault();
-                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+
+                if (ToolNameControlShortcuts.has(event.key)) {
+                    this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+                }
+
+                if (event.key === 'x') {
+                    this.clipboard.cut();
+                } else if (event.key === 'v') {
+                    this.clipboard.paste();
+                } else if (event.key === 'c') {
+                    this.clipboard.copy();
+                } else if (event.key === 'd') {
+                    this.clipboard.duplicate();
+                }
             }
 
             // Call the onKeyDown of the current tool, if the current tool doesn't do anything

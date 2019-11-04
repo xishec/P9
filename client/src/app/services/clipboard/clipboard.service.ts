@@ -32,6 +32,7 @@ export class ClipboardService {
 
     cut(): void {
         this.clippings.clear();
+        this.offSetValue = 0;
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
             this.drawStack.delete(el);
@@ -42,13 +43,17 @@ export class ClipboardService {
 
     copy(): void {}
 
+    duplicate(): void {
+
+    }
+
     paste(): void {
         for (const el of this.clippings) {
-            let deep: SVGGElement = el.cloneNode(true) as SVGGElement;
-            this.drawStack.push(deep);
-            this.offSet(deep);
+            let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
+            this.drawStack.push(deepCopy);
+            this.offSet(deepCopy);
             this.offSetValue++;
-            this.renderer.appendChild(this.elementRef.nativeElement, deep);
+            this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
         }
     }
 

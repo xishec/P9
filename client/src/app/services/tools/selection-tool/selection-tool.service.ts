@@ -37,6 +37,13 @@ export class SelectionToolService extends AbstractToolService {
         super();
     }
 
+    verifyPosition(event: MouseEvent): boolean {
+        return (
+            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
+            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
+        );
+    }
+
     cleanUp(): void {
         this.selection.cleanUp();
         if (this.isSelecting) {
@@ -272,6 +279,9 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseUp(event: MouseEvent): void {
+        if (!this.verifyPosition(event)) {
+            return;
+        }
         const button = event.button;
 
         switch (button) {
@@ -296,11 +306,7 @@ export class SelectionToolService extends AbstractToolService {
     }
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
-        if (event.key === Keys.Backspace) {
-            this.clipBoard.delete();
-        } else if (event.key === Keys.Digit4) {
-            this.clipBoard.paste();
-        }
+
     }
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {
