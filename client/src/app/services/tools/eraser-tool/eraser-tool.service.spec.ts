@@ -163,21 +163,21 @@ describe('EraserToolService', () => {
         expect(spyOncheckSelection).toHaveBeenCalled();
     });
 
-    it('#isInSelection should return true if selection box and elementBox are in touch', () => {
+    it('isInSelection should return true if selection box and elementBox are in touch', () => {
         const selectionBox = new DOMRect(0, 0, 0, 0);
         const elBox = new DOMRect(0, 0, 0, 0);
 
         expect(service.isInSelection(selectionBox, elBox, 1)).toEqual(true);
     });
 
-    it('#isInSelection should return false if selection box and elementBox are not in touch', () => {
+    it('isInSelection should return false if selection box and elementBox are not in touch', () => {
         const selectionBox = new DOMRect(0, 0, 0, 0);
         const elBox = new DOMRect(10, 10, 1, 1);
 
         expect(service.isInSelection(selectionBox, elBox)).toEqual(false);
     });
 
-    it('#checkSelection should call get and set function of changedElements if an element does not exist', () => {
+    it('checkSelection should call get and set function of changedElements if an element does not exist', () => {
         const spyOngetDOMRect: jasmine.Spy = spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
         const spyOngetDrawStackLength: jasmine.Spy = spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
         const spyOnisInSelection: jasmine.Spy = spyOn(service, 'isInSelection').and.returnValue(true);
@@ -195,7 +195,7 @@ describe('EraserToolService', () => {
         expect(spyOnset).toHaveBeenCalled();
     });
 
-    it('#checkSelection should not call set function of changedElements if an element exists', () => {
+    it('checkSelection should not call set function of changedElements if an element exists', () => {
         spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
         spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
         spyOn(service, 'isInSelection').and.returnValue(true);
@@ -210,7 +210,7 @@ describe('EraserToolService', () => {
         expect(spyOnset).toHaveBeenCalledTimes(0);
     });
 
-    it('#checkSelection should not call set function of changedElements if lastElementColoredNumber equals "topElement"', () => {
+    it('checkSelection should not call set function of changedElements if lastElementColoredNumber equals "topElement"', () => {
         spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
         spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
         spyOn(service, 'isInSelection').and.returnValue(true);
@@ -224,7 +224,7 @@ describe('EraserToolService', () => {
         expect(spyOnset).toHaveBeenCalledTimes(0);
     });
 
-    it('#checkSelection should call removeBorder if isInSelection returns false', () => {
+    it('checkSelection should call removeBorder if isInSelection returns false', () => {
         const spyOngetDOMRect: jasmine.Spy = spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
         const spyOngetDrawStackLength: jasmine.Spy = spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
         const spyOnisInSelection: jasmine.Spy = spyOn(service, 'isInSelection').and.returnValue(false);
@@ -241,7 +241,7 @@ describe('EraserToolService', () => {
         expect(spyOnremoveBorder).toHaveBeenCalled();
     });
 
-    it('#mouseOverColorBorder should call setAttribute if border width is null', () => {
+    it('mouseOverColorBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
         service.mouseOverColorBorder(0, null);
@@ -249,7 +249,7 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('#mouseOverColorBorder should call setAttribute if border width is not null', () => {
+    it('mouseOverColorBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
         service.mouseOverColorBorder(0, '5');
@@ -257,7 +257,7 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('#mouseOutRestoreBorder should call setAttribute if border width is null', () => {
+    it('mouseOutRestoreBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
         service.mouseOutRestoreBorder(0, null, null);
@@ -265,7 +265,7 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('#mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
+    it('mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
         service.mouseOutRestoreBorder(0, 'ffffff', '1');
@@ -273,7 +273,7 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('#removeBorder should call mouseOutRestoreBorder if element is not undefined', () => {
+    it('removeBorder should call mouseOutRestoreBorder if element is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
         service.changedElements.set('0', new SVGGElementInfo());
@@ -286,7 +286,7 @@ describe('EraserToolService', () => {
         expect(spyOnget).toHaveBeenCalled();
     });
 
-    it('#removeBorder should call get of changedElements if currentTraget is not undefined', () => {
+    it('removeBorder should call get of changedElements if currentTraget is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
         service.changedElements.set('0', new SVGGElementInfo());
@@ -299,7 +299,7 @@ describe('EraserToolService', () => {
         expect(spyOnget).toHaveBeenCalled();
     });
 
-    it('#removeBorder should not call spyOnmouseOutRestoreBorder if currentTraget is undefined', () => {
+    it('removeBorder should not call spyOnmouseOutRestoreBorder if currentTraget is undefined', () => {
         service.currentTarget = -1;
         const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
 
@@ -308,7 +308,7 @@ describe('EraserToolService', () => {
         expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
     });
 
-    it('#getDOMRect should return a new DOMRect object', () => {
+    it('getDOMRect should return a new DOMRect object', () => {
         const mockDOMRect = {
             x: 500,
             y: 500,
@@ -319,19 +319,19 @@ describe('EraserToolService', () => {
         expect(service.getDOMRect(createMockSVGGElementWithAttribute('test'))).toEqual(mockDOMRect as DOMRect);
     });
 
-    it('#getStrokeWidth should return 10 if the getAttribute requested exists', () => {
+    it('getStrokeWidth should return 10 if the getAttribute requested exists', () => {
         const element = createMockSVGGElementWithAttribute(HTMLAttribute.stroke_width);
 
         expect(service.getStrokeWidth(element)).toEqual(10);
     });
 
-    it('#getStrokeWidth should return 0 if the getAttribute requested does not exist', () => {
+    it('getStrokeWidth should return 0 if the getAttribute requested does not exist', () => {
         const element = createMockSVGGElementWithAttribute('test');
 
         expect(service.getStrokeWidth(element)).toEqual(0);
     });
 
-    it('#onMouseUp should set isLeftMouseDown to false if it is a left mouse click ', () => {
+    it('onMouseUp should set isLeftMouseDown to false if it is a left mouse click ', () => {
         service.isLeftMouseDown = true;
 
         service.onMouseUp(leftMouseEvent);
@@ -339,7 +339,7 @@ describe('EraserToolService', () => {
         expect(service.isLeftMouseDown).toEqual(false);
     });
 
-    it('#onMouseUp should not set isLeftMouseDown to false if it is a right mouse click ', () => {
+    it('onMouseUp should not set isLeftMouseDown to false if it is a right mouse click ', () => {
         service.isLeftMouseDown = true;
 
         service.onMouseUp(rightMouseEvent);
@@ -347,7 +347,7 @@ describe('EraserToolService', () => {
         expect(service.isLeftMouseDown).toEqual(true);
     });
 
-    it('#onMouseEnter should call appendSquare', () => {
+    it('onMouseEnter should call appendSquare', () => {
         const spyOnappendSquare: jasmine.Spy = spyOn(service, 'appendSquare');
 
         service.onMouseEnter(leftMouseEvent);
@@ -355,25 +355,25 @@ describe('EraserToolService', () => {
         expect(spyOnappendSquare).toHaveBeenCalled();
     });
 
-    it('#onMouseOver should return undefined if onMouseOver is not implemented', () => {
+    it('onMouseOver should return undefined if onMouseOver is not implemented', () => {
         expect(service.onMouseOver(leftMouseEvent)).toBeUndefined();
     });
 
-    it('#onKeyDown should return undefined if onKeyDown is not implemented', () => {
+    it('onKeyDown should return undefined if onKeyDown is not implemented', () => {
         expect(service.onKeyDown(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
     });
 
-    it('#onKeyUp should return undefined if onKeyUp is not implemented', () => {
+    it('onKeyUp should return undefined if onKeyUp is not implemented', () => {
         expect(service.onKeyUp(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
     });
 
-    it('#onMouseLeave should call removeChild', () => {
+    it('onMouseLeave should call removeChild', () => {
         service.onMouseLeave(leftMouseEvent);
 
         expect(spyOnremoveChild).toHaveBeenCalled();
     });
 
-    it('#cleanUp should call removeChild', () => {
+    it('cleanUp should call removeChild', () => {
         service.cleanUp();
 
         expect(spyOnremoveChild).toHaveBeenCalled();
