@@ -19,3 +19,8 @@ export abstract class AbstractToolService {
     abstract onKeyUp(event: KeyboardEvent): void;
     abstract cleanUp(): void;
 }
+
+export interface MouseCoords {
+    x: number;
+    y: number;
+}

@@ -89,7 +89,7 @@ export class ExportToolService {
         this.renderer.setAttribute(
             this.svg.nativeElement,
             HTMLAttribute.viewBox,
-            `0,0,${svgSize.width},${svgSize.height}`
+            `0,0,${svgSize.width},${svgSize.height}`,
         );
         this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.width, `${MAX_BMP_SIZE}`);
         this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.height, `${MAX_BMP_SIZE}`);
