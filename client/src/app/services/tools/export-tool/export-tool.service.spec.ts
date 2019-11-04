@@ -4,7 +4,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { ExportToolService } from './export-tool.service';
 import { FileType } from 'src/constants/tool-constants';
 
-fdescribe('ExportToolService', () => {
+describe('ExportToolService', () => {
     let injector: TestBed;
     let service: ExportToolService;
 
