@@ -176,4 +176,69 @@ fdescribe('EraserToolService', () => {
 
         expect(service.isInSelection(selectionBox, elBox)).toEqual(false);
     });
+
+    it('#checkSelection should call get and set function of changedElements if an element does not exist', () => {
+        const spyOngetDOMRect: jasmine.Spy = spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
+        const spyOngetDrawStackLength: jasmine.Spy = spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
+        const spyOnisInSelection: jasmine.Spy = spyOn(service, 'isInSelection').and.returnValue(true);
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
+        const spyOnset: jasmine.Spy = spyOn(service.changedElements, 'set');
+
+        service.drawStack.drawStack[0] = createMockSVGGElementWithAttribute('id_element');
+
+        service.checkSelection();
+
+        expect(spyOngetDOMRect).toHaveBeenCalled();
+        expect(spyOngetDrawStackLength).toHaveBeenCalled();
+        expect(spyOnisInSelection).toHaveBeenCalled();
+        expect(spyOnget).toHaveBeenCalled();
+        expect(spyOnset).toHaveBeenCalled();
+    });
+
+    it('#checkSelection should not call set function of changedElements if an element exists', () => {
+        spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
+        spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
+        spyOn(service, 'isInSelection').and.returnValue(true);
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
+        const spyOnset: jasmine.Spy = spyOn(service.changedElements, 'set');
+
+        service.drawStack.drawStack[0] = createMockSVGGElementWithAttribute('id_element');
+
+        service.checkSelection();
+
+        expect(spyOnget).toHaveBeenCalled();
+        expect(spyOnset).toHaveBeenCalledTimes(0);
+    });
+
+    it('#checkSelection should not call set function of changedElements if lastElementColoredNumber equals "topElement"', () => {
+        spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
+        spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
+        spyOn(service, 'isInSelection').and.returnValue(true);
+        service.lastElementColoredNumber = 0;
+        const spyOnset: jasmine.Spy = spyOn(service.changedElements, 'set');
+
+        service.drawStack.drawStack[0] = createMockSVGGElementWithAttribute('id_element');
+
+        service.checkSelection();
+
+        expect(spyOnset).toHaveBeenCalledTimes(0);
+    });
+
+    it('#checkSelection should call removeBorder if isInSelection returns false', () => {
+        const spyOngetDOMRect: jasmine.Spy = spyOn(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
+        const spyOngetDrawStackLength: jasmine.Spy = spyOn(service.drawStack, 'getDrawStackLength').and.returnValue(1);
+        const spyOnisInSelection: jasmine.Spy = spyOn(service, 'isInSelection').and.returnValue(false);
+
+        service.drawStack.drawStack[0] = createMockSVGGElementWithAttribute('id_element');
+
+        const spyOnremoveBorder: jasmine.Spy = spyOn(service, 'removeBorder');
+
+        service.checkSelection();
+
+        expect(spyOngetDOMRect).toHaveBeenCalled();
+        expect(spyOngetDrawStackLength).toHaveBeenCalled();
+        expect(spyOnisInSelection).toHaveBeenCalled();
+        expect(spyOnremoveBorder).toHaveBeenCalled();
+    });
+
 });
