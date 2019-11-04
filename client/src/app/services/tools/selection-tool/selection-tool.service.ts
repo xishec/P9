@@ -37,6 +37,12 @@ export class SelectionToolService extends AbstractToolService {
         super();
     }
 
+    selectAll(): void {
+        for(const el of this.drawStack.drawStack) {
+            this.selection.addToSelection(el);
+        }
+    }
+
     verifyPosition(event: MouseEvent): boolean {
         return (
             event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
@@ -306,7 +312,9 @@ export class SelectionToolService extends AbstractToolService {
     }
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
-
+        if(event.key === Keys.Backspace) {
+            this.selectAll();
+        }
     }
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {
