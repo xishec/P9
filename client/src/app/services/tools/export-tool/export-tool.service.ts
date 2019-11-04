@@ -66,18 +66,7 @@ export class ExportToolService {
 
         const url: string = URL.createObjectURL(this.createSVGBlob());
         this.img.onload = () => {
-            (this.canvas.getContext('2d') as CanvasRenderingContext2D).drawImage(this.img, 0, 0);
-
-            URL.revokeObjectURL(url);
-
-            let uri: string;
-            if (this.fileType !== FileType.BMP) {
-                uri = this.canvas.toDataURL('image/' + this.fileType).replace('image/' + this.fileType, 'octet/stream');
-            } else {
-                const canvasToBMP = new CanvasToBMP();
-                uri = canvasToBMP.toDataURL(this.canvas);
-            }
-            this.renderer.setAttribute(this.anchor, 'href', uri);
+            let uri = this.setUri(url);
             this.launchDownload();
             URL.revokeObjectURL(uri);
         };
@@ -106,5 +95,20 @@ export class ExportToolService {
         this.renderer.removeAttribute(this.svg, 'viewBox');
         this.renderer.setAttribute(this.svg, 'width', `${svgSize.width}`);
         this.renderer.setAttribute(this.svg, 'height', `${svgSize.height}`);
+    }
+
+    setUri(url: string): string {
+        (this.canvas.getContext('2d') as CanvasRenderingContext2D).drawImage(this.img, 0, 0);
+
+        URL.revokeObjectURL(url);
+
+        let uri: string;
+        if (this.fileType !== FileType.BMP) {
+            uri = this.canvas.toDataURL('image/' + this.fileType).replace('image/' + this.fileType, 'octet/stream');
+        } else {
+            uri = this.canvasToBMP.toDataURL(this.canvas);
+        }
+        this.renderer.setAttribute(this.anchor, 'href', uri);
+        return uri;
     }
 }
