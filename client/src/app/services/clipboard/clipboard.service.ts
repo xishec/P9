@@ -1,7 +1,7 @@
 import { Injectable, Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { Selection } from '../../../classes/selection/selection';
-import { SVG_NS } from 'src/constants/constants';
+import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +14,11 @@ export class ClipboardService {
 
     clippings: Set<SVGGElement> = new Set<SVGGElement>();
 
-    offSetValue = 0;
+    offsetValue = 0;
+
+    firstDuplication = true;
+
+    clippingsBound: DOMRect;
 
     constructor() {}
 
@@ -30,9 +34,33 @@ export class ClipboardService {
         this.selection = selection;
     }
 
+    fetchSelectionBounds(): void {
+        this.clippingsBound = this.selection.selectionBox.getBoundingClientRect() as DOMRect;
+    }
+
+    increaseOffsetValue(): void {
+        this.offsetValue += 5;
+    }
+
+    isInBounds(): boolean {
+        const boxLeft = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH;
+        const boxRight = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH + this.clippingsBound.width;
+        const boxTop = this.clippingsBound.y + window.scrollY;
+        const boxBottom = this.clippingsBound.y + window.scrollY + this.clippingsBound.height;
+
+        const parentBoxLeft = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x + window.scrollX - SIDEBAR_WIDTH;
+        const parentBoxRight = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x + window.scrollX - SIDEBAR_WIDTH + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).width;
+        const parentBoxTop = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y + window.scrollY;
+        const parentBoxBottom = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y + window.scrollY + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).height;
+
+        return (boxLeft < parentBoxRight && boxTop < parentBoxBottom);
+    }
+
     cut(): void {
+        this.firstDuplication = true;
         this.clippings.clear();
-        this.offSetValue = 0;
+        this.fetchSelectionBounds();
+        this.offsetValue = 0;
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
             this.drawStack.delete(el);
@@ -42,34 +70,64 @@ export class ClipboardService {
     }
 
     copy(): void {
+        this.firstDuplication = true;
         this.clippings.clear();
-        this.offSetValue = 0;
+        this.fetchSelectionBounds();
+        this.offsetValue = 0;
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
     }
 
     duplicate(): void {
+        if (this.firstDuplication) {
+            console.log('first duplication');
+            this.offsetValue = 0;
+            this.firstDuplication = false;
+        }
+        this.fetchSelectionBounds();
+        if (!this.isInBounds()) {
+            this.offsetValue = 0;
+        }
+
+        let dupBuffer: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of this.selection.selectedElements) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
             this.offSet(deepCopy);
-            this.offSetValue++;
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
+            dupBuffer.add(deepCopy);
+        }
+        this.increaseOffsetValue();
+        this.selection.emptySelection();
+        for (const el of dupBuffer) {
+            this.selection.addToSelection(el);
         }
     }
 
     paste(): void {
+        this.firstDuplication = true;
+        this.fetchSelectionBounds();
+        if (!this.isInBounds()) {
+            this.offsetValue = 0;
+        }
+        let dupBuffer: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of this.clippings) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
             this.offSet(deepCopy);
-            this.offSetValue++;
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
+            dupBuffer.add(deepCopy);
+        }
+        this.increaseOffsetValue();
+        this.selection.emptySelection();
+        for(const el of dupBuffer){
+            this.selection.addToSelection(el);
         }
     }
 
     delete(): void {
+        this.firstDuplication = true;
         for (const el of this.selection.selectedElements) {
             this.drawStack.delete(el);
             this.renderer.removeChild(this.elementRef.nativeElement, el);
@@ -79,6 +137,7 @@ export class ClipboardService {
 
     offSet(el: SVGGElement): void {
         const transformsList = el.transform.baseVal;
+        console.log(transformsList);
         if (
             transformsList.numberOfItems === 0 ||
             transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
@@ -91,6 +150,6 @@ export class ClipboardService {
         const initialTransform = transformsList.getItem(0);
         const offsetX = -initialTransform.matrix.e;
         const offsetY = -initialTransform.matrix.f;
-        el.transform.baseVal.getItem(0).setTranslate(this.offSetValue - offsetX, this.offSetValue - offsetY);
+        el.transform.baseVal.getItem(0).setTranslate(this.offsetValue - offsetX, this.offsetValue - offsetY);
     }
 }
