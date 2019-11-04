@@ -121,7 +121,6 @@ fdescribe('ExportToolService', () => {
         expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spyOnDecompressSVG).toHaveBeenCalled();
-        //expect(spyLaunchDownload).toHaveBeenCalled();
     });
 
     it('should launch download as jpeg if filetype is jpeg', () => {
@@ -132,7 +131,6 @@ fdescribe('ExportToolService', () => {
         expect(service.fileType).toEqual(FileType.JPG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
-        //expect(spyLaunchDownload).toHaveBeenCalled();
     });
 
     it('should launch download as png if filetype is png', () => {
@@ -140,10 +138,9 @@ fdescribe('ExportToolService', () => {
 
         service.saveFile(FileType.PNG);
 
-        service.anchor;
         expect(service.fileType).toEqual(FileType.PNG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
-        //expect(spyLaunchDownload).toHaveBeenCalled();
+    });
     });
 });
