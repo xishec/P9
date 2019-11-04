@@ -1,16 +1,16 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { EraserToolService } from './eraser-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import {
-    createMouseEvent,
-    createMockSVGGElementWithAttribute,
-    createKeyBoardEvent,
-} from 'src/classes/test-helpers.spec';
-import { SVG_NS, Keys } from 'src/constants/constants';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
+import {
+    createKeyBoardEvent,
+    createMockSVGGElementWithAttribute,
+    createMouseEvent,
+} from 'src/classes/test-helpers.spec';
+import { Keys, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { EraserToolService } from './eraser-tool.service';
 
 describe('EraserToolService', () => {
     let injector: TestBed;
@@ -53,7 +53,7 @@ describe('EraserToolService', () => {
                             const mockdrawStack = {
                                 getAttribute: () => null,
                             };
-                            return (mockdrawStack as unknown) as Array<SVGGElement>;
+                            return (mockdrawStack as unknown) as SVGGElement[];
                         },
                         renderer: () => {
                             const mockrenderer = {};

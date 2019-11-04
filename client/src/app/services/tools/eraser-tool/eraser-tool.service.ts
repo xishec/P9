@@ -1,13 +1,13 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { SVGGElementInfo } from 'src/classes/svggelement-info';
+import { DEFAULT_GRAY_0, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { Mouse, SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
-import { EraserSize, HTMLAttribute } from 'src/constants/tool-constants';
-import { DEFAULT_WHITE, DEFAULT_GRAY_0 } from 'src/constants/color-constants';
-import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { SVGGElementInfo } from 'src/classes/svggelement-info';
 
 @Injectable({
     providedIn: 'root',
@@ -22,7 +22,7 @@ export class EraserToolService extends AbstractToolService {
     isSquareAppended = false;
     lastElementColoredNumber = -1;
 
-    //the string represents the id_element
+    // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
 
     currentMouseX = 0;
@@ -115,7 +115,7 @@ export class EraserToolService extends AbstractToolService {
 
             this.drawStack.removeElementByPosition(this.currentTarget);
 
-            //set currentTarget in changedElements to equal the next Target
+            // set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
                 this.changedElements.set(this.currentTarget.toString(), this.changedElements.get(
                     (this.currentTarget + 1).toString(),
@@ -161,7 +161,7 @@ export class EraserToolService extends AbstractToolService {
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
         for (let i = this.drawStack.getDrawStackLength() - 1; i >= 0; i--) {
-            let el = this.drawStack.drawStack[i];
+            const el = this.drawStack.drawStack[i];
             const elBox = this.getDOMRect(el);
 
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
@@ -178,7 +178,7 @@ export class EraserToolService extends AbstractToolService {
 
                     const tool = el.getAttribute('title');
                     this.drawStack.changeTargetElement(
-                        new StackTargetInfo(parseInt(el.getAttribute('id_element') as string), tool as string),
+                        new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
                     );
 
                     topElement = i;
@@ -201,22 +201,22 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    mouseOverColorBorder(id_element: number, borderWidth: string | null): void {
+    mouseOverColorBorder(idElement: number, borderWidth: string | null): void {
         if (borderWidth !== '0' && borderWidth !== null) {
-            borderWidth = (parseInt(borderWidth) + 5).toString();
+            borderWidth = (parseInt(borderWidth, 10) + 5).toString();
         } else {
             borderWidth = '5';
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, '#ff0000');
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, '#ff0000');
         this.renderer.setAttribute(
-            this.drawStack.getElementByPosition(id_element),
+            this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke_width,
             borderWidth,
         );
     }
 
-    mouseOutRestoreBorder(id_element: number, border: string | null, borderWidth: string | null): void {
+    mouseOutRestoreBorder(idElement: number, border: string | null, borderWidth: string | null): void {
         if (border === null) {
             border = '';
         }
@@ -225,9 +225,9 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = '0';
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(id_element), HTMLAttribute.stroke, border);
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);
         this.renderer.setAttribute(
-            this.drawStack.getElementByPosition(id_element),
+            this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke_width,
             borderWidth,
         );
@@ -235,9 +235,9 @@ export class EraserToolService extends AbstractToolService {
 
     removeBorder(position: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            let element = this.changedElements.get(position) as SVGGElementInfo;
+            const element = this.changedElements.get(position) as SVGGElementInfo;
             if (element !== undefined) {
-                this.mouseOutRestoreBorder(parseInt(position), element.borderColor, element.borderWidth);
+                this.mouseOutRestoreBorder(parseInt(position, 10), element.borderColor, element.borderWidth);
                 this.changedElements.delete(position);
             }
         }

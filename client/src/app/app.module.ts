@@ -55,6 +55,7 @@ import { SaveFileModalWindowComponent } from './components/modal-windows/save-fi
 import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
+import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
 import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
@@ -64,7 +65,6 @@ import { SelectionAttributesComponent } from './components/sidebar-tools/attribu
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
-import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
 
 @NgModule({
     declarations: [

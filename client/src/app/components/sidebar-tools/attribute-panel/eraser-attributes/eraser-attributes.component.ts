@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSliderChange } from '@angular/material';
 
-import { ToolName } from 'src/constants/tool-constants';
-import { EraserToolService } from 'src/app/services/tools/eraser-tool/eraser-tool.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
+import { EraserToolService } from 'src/app/services/tools/eraser-tool/eraser-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { EraserSize } from 'src/constants/tool-constants';
 import { predicate } from 'src/constants/constants';
+import { EraserSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-eraser-attributes',
