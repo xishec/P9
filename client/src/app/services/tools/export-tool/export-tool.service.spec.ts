@@ -23,6 +23,9 @@ fdescribe('ExportToolService', () => {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {
+                                            drawImage: (img: CanvasImageSource, dx: number, dy: number) => {
+                                                null;
+                                            },
                                             getImageData: (x: number, y: number, sw: number, sh: number) => {
                                                 const mockImageData = {};
                                                 return (mockImageData as unknown) as ImageData;
@@ -30,11 +33,19 @@ fdescribe('ExportToolService', () => {
                                         };
                                         return (mockContext as unknown) as CanvasRenderingContext2D;
                                     },
+                                    toDataURL: () => {
+                                        return 'newuri';
+                                    },
                                 };
                                 return (mockCanvas as unknown) as HTMLCanvasElement;
-                            } else {
+                            } else if (elem === 'img') {
                                 const mockImg = {};
                                 return mockImg as HTMLImageElement;
+                            } else {
+                                const mockAnchor = {
+                                    click: () => null,
+                                };
+                                return (mockAnchor as unknown) as HTMLAnchorElement;
                             }
                         },
                         setAttribute: () => null,
