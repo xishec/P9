@@ -12,7 +12,7 @@ import { SVG_NS, Keys } from 'src/constants/constants';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 
-fdescribe('EraserToolService', () => {
+describe('EraserToolService', () => {
     let injector: TestBed;
     let service: EraserToolService;
     let leftMouseEvent: MouseEvent;
