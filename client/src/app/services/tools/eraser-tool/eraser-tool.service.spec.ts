@@ -308,4 +308,43 @@ fdescribe('EraserToolService', () => {
         expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
     });
 
+    it('#getDOMRect should return a new DOMRect object', () => {
+        const mockDOMRect = {
+            x: 500,
+            y: 500,
+            width: 50,
+            height: 50,
+        };
+
+        expect(service.getDOMRect(createMockSVGGElementWithAttribute('test'))).toEqual(mockDOMRect as DOMRect);
+    });
+
+    it('#getStrokeWidth should return 10 if the getAttribute requested exists', () => {
+        const element = createMockSVGGElementWithAttribute(HTMLAttribute.stroke_width);
+
+        expect(service.getStrokeWidth(element)).toEqual(10);
+    });
+
+    it('#getStrokeWidth should return 0 if the getAttribute requested does not exist', () => {
+        const element = createMockSVGGElementWithAttribute('test');
+
+        expect(service.getStrokeWidth(element)).toEqual(0);
+    });
+
+    it('#onMouseUp should set isLeftMouseDown to false if it is a left mouse click ', () => {
+        service.isLeftMouseDown = true;
+
+        service.onMouseUp(leftMouseEvent);
+
+        expect(service.isLeftMouseDown).toEqual(false);
+    });
+
+    it('#onMouseUp should not set isLeftMouseDown to false if it is a right mouse click ', () => {
+        service.isLeftMouseDown = true;
+
+        service.onMouseUp(rightMouseEvent);
+
+        expect(service.isLeftMouseDown).toEqual(true);
+    });
+
 });
