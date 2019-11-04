@@ -14,6 +14,8 @@ export class ClipboardService {
 
     clippings: Set<SVGGElement> = new Set<SVGGElement>();
 
+    offSetValue = 0;
+
     constructor() {}
 
     initializeService(
@@ -44,9 +46,34 @@ export class ClipboardService {
         for (const el of this.clippings) {
             let deep: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deep);
+            this.offSet(deep);
+            this.offSetValue++;
             this.renderer.appendChild(this.elementRef.nativeElement, deep);
         }
     }
 
-    delete(): void {}
+    delete(): void {
+        for (const el of this.selection.selectedElements) {
+            this.drawStack.delete(el);
+            this.renderer.removeChild(this.elementRef.nativeElement, el);
+        }
+        this.selection.emptySelection();
+    }
+
+    offSet(el: SVGGElement): void {
+        const transformsList = el.transform.baseVal;
+        if (
+            transformsList.numberOfItems === 0 ||
+            transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
+        ) {
+            const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+            const translateToZero = svg.createSVGTransform();
+            translateToZero.setTranslate(0, 0);
+            el.transform.baseVal.insertItemBefore(translateToZero, 0);
+        }
+        const initialTransform = transformsList.getItem(0);
+        const offsetX = -initialTransform.matrix.e;
+        const offsetY = -initialTransform.matrix.f;
+        el.transform.baseVal.getItem(0).setTranslate(this.offSetValue - offsetX, this.offSetValue - offsetY);
+    }
 }

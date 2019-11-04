@@ -5,16 +5,15 @@ import { HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
-import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: MouseCoords = {x: 0, y: 0};
-    lastMouseCoords: MouseCoords = {x: 0, y: 0};
-    initialMouseCoords: MouseCoords = {x: 0, y: 0};
+    currentMouseCoords: MouseCoords = { x: 0, y: 0 };
+    lastMouseCoords: MouseCoords = { x: 0, y: 0 };
+    initialMouseCoords: MouseCoords = { x: 0, y: 0 };
     currentTarget = 0;
 
     isTheCurrentTool = false;
@@ -175,7 +174,10 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
+        } else if (
+            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting) ||
+            this.isTranslatingSelection
+        ) {
             this.isTranslatingSelection = true;
             this.selection.moveBy(this.currentMouseCoords, this.lastMouseCoords);
         } else {
@@ -295,8 +297,8 @@ export class SelectionToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === Keys.Backspace) {
-            this.clipBoard.cut();
-        } else if(event.key === Keys.Digit4) {
+            this.clipBoard.delete();
+        } else if (event.key === Keys.Digit4) {
             this.clipBoard.paste();
         }
     }
