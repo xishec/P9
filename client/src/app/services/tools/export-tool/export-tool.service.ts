@@ -30,7 +30,7 @@ export class ExportToolService {
     }
 
     createSVGBlob(): Blob {
-        this.renderer.setAttribute(this.svg, 'xmlns', SVG_NS);
+        this.renderer.setAttribute(this.svg.nativeElement, 'xmlns', SVG_NS);
         const data = new XMLSerializer().serializeToString(this.svg.nativeElement);
         return new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     }
@@ -86,16 +86,20 @@ export class ExportToolService {
 
     compressSVG(): void {
         const svgSize = this.svg.nativeElement.getBoundingClientRect();
-        this.renderer.setAttribute(this.svg, HTMLAttribute.viewBox, `0,0,${svgSize.width},${svgSize.height}`);
-        this.renderer.setAttribute(this.svg, HTMLAttribute.width, `${MAX_BMP_SIZE}`);
-        this.renderer.setAttribute(this.svg, HTMLAttribute.height, `${MAX_BMP_SIZE}`);
+        this.renderer.setAttribute(
+            this.svg.nativeElement,
+            HTMLAttribute.viewBox,
+            `0,0,${svgSize.width},${svgSize.height}`
+        );
+        this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.width, `${MAX_BMP_SIZE}`);
+        this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.height, `${MAX_BMP_SIZE}`);
         this.resizeCanvas();
     }
 
     decompressSVG(svgSize: ClientRect | DOMRect): void {
-        this.renderer.removeAttribute(this.svg, HTMLAttribute.viewBox);
-        this.renderer.setAttribute(this.svg, HTMLAttribute.width, `${svgSize.width}`);
-        this.renderer.setAttribute(this.svg, HTMLAttribute.height, `${svgSize.height}`);
+        this.renderer.removeAttribute(this.svg.nativeElement, HTMLAttribute.viewBox);
+        this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.width, `${svgSize.width}`);
+        this.renderer.setAttribute(this.svg.nativeElement, HTMLAttribute.height, `${svgSize.height}`);
     }
 
     setUri(url: string): string {
