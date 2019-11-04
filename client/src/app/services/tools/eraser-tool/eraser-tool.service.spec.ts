@@ -97,4 +97,44 @@ fdescribe('EraserToolService', () => {
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
+
+    it('should call onMouseDown if isLeftMouseDown is true', () => {
+        service.isLeftMouseDown = true;
+        const spyOnMouseDown: jasmine.Spy = spyOn(service, 'onMouseDown');
+        const spyOncheckSelection: jasmine.Spy = spyOn(service, 'checkSelection');
+
+        service.onMouseMove(leftMouseEvent);
+
+        expect(spyOnMouseDown).toHaveBeenCalled();
+        expect(spyOncheckSelection).toHaveBeenCalled();
+    });
+
+    it('should not call onMouseDown if isLeftMouseDown is false', () => {
+        service.isLeftMouseDown = false;
+        const spyOnMouseDown: jasmine.Spy = spyOn(service, 'onMouseDown');
+        const spyOncheckSelection: jasmine.Spy = spyOn(service, 'checkSelection');
+
+        service.onMouseMove(leftMouseEvent);
+
+        expect(spyOnMouseDown).toHaveBeenCalledTimes(0);
+        expect(spyOncheckSelection).toHaveBeenCalled();
+    });
+
+    it('should call appendSquare if isSquareAppended is false', () => {
+        service.isSquareAppended = false;
+        const spyOnappendSquare: jasmine.Spy = spyOn(service, 'appendSquare');
+
+        service.setSquareToMouse(leftMouseEvent);
+
+        expect(spyOnappendSquare).toHaveBeenCalled();
+    });
+
+    it('should not call appendSquare if isSquareAppended is true', () => {
+        service.isSquareAppended = true;
+        const spyOnappendSquare: jasmine.Spy = spyOn(service, 'appendSquare');
+
+        service.setSquareToMouse(leftMouseEvent);
+
+        expect(spyOnappendSquare).toHaveBeenCalledTimes(0);
+    });
 });
