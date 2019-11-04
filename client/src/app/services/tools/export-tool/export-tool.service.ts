@@ -67,8 +67,6 @@ export class ExportToolService {
 
         const url: string = URL.createObjectURL(this.createSVGBlob());
         this.img.onload = () => {
-            console.log(this.img);
-
             const uri = this.setUri(url);
             this.launchDownload();
             URL.revokeObjectURL(uri);
