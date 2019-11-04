@@ -156,5 +156,12 @@ fdescribe('ExportToolService', () => {
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
+    it('should call toDataURL from CanvasToBMP if filetype is BMP', () => {
+        service.fileType = FileType.BMP;
+        const spy = spyOn(service.canvasToBMP, 'toDataURL').and.returnValue('');
+
+        service.setUri(FAKE_URL);
+
+        expect(spy).toHaveBeenCalled();
     });
 });
