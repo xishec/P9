@@ -198,7 +198,6 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Quill:
             case ToolName.SprayCan:
             case ToolName.Fill:
-            case ToolName.Selection:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };

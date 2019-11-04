@@ -60,12 +60,13 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         (this.drawStack
                             .getElementByPosition(this.currentStackTarget.targetPosition)
                             .getAttribute('fill') as string) !== 'none'
-                    )
+                    ) {
                         this.renderer.setAttribute(
                             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
                             HTMLAttribute.fill,
                             this.primaryColor,
                         );
+                    }
                     if (
                         this.currentStackTarget.toolName === ToolName.Brush ||
                         this.currentStackTarget.toolName === ToolName.Pencil ||

@@ -3,6 +3,8 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 const NO_STAMP = '';
 
 enum ToolName {
+    TracingTool = 'Outil de traçage',
+    ShapeTool = 'Outil de forme',
     Selection = 'Sélection',
     Pencil = 'Crayon',
     Brush = 'Pinceau',
@@ -20,6 +22,8 @@ enum ToolName {
     Text = 'Zone de texte',
     Stamp = 'Étampe',
     Grid = 'Grille',
+    Undo = 'Annuler',
+    Redo = 'Refaire',
     NewDrawing = 'Nouveau dessin',
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
@@ -75,14 +79,8 @@ const GRID_SIZE_DECREMENT = 5;
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
-    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
-    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
-    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
-    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
-    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
-    { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
-    { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
-    { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.TracingTool, shortcut: '(clique droit)' },
+    { iconName: 'far fa-square', tooltipName: ToolName.ShapeTool, shortcut: '(clique droit)' },
     { iconName: 'fas fa-slash', tooltipName: ToolName.Line, shortcut: '(L)' },
     { iconName: 'fas fa-font', tooltipName: ToolName.Text, shortcut: '(T)' },
     { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator, shortcut: '(R)' },
@@ -93,7 +91,23 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-border-all', tooltipName: ToolName.Grid, shortcut: '' },
 ];
 
+const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
+    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
+    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
+    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
+    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
+];
+
+const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
+    { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
+    { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
+];
+
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-undo-alt', tooltipName: ToolName.Undo, shortcut: '(Ctrl-Z)' },
+    { iconName: 'fas fa-redo-alt', tooltipName: ToolName.Redo, shortcut: '(Ctrl-Shift-Z)' },
     { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
     { iconName: 'far fa-save', tooltipName: ToolName.Save, shortcut: '(Ctrl-S)' },
     { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery, shortcut: '(Ctrl-G)' },
@@ -250,11 +264,16 @@ const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
     ['e', ToolName.Export],
 ]);
 
+const TRACING_TOOL_POSITION = 1;
+const SHAPE_TOOL_POSITION = 2;
+
 export {
     ToolNameControlShortcuts,
     ToolNameShortcuts,
     HTMLAttribute,
     TOOLS_BUTTON_INFO,
+    TRACING_BUTTON_INFO,
+    SHAPE_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
     Thickness,
@@ -279,4 +298,6 @@ export {
     GRID_SIZE_DECREMENT,
     PEN_WIDTH_FACTOR,
     EraserSize,
+    TRACING_TOOL_POSITION,
+    SHAPE_TOOL_POSITION
 };
