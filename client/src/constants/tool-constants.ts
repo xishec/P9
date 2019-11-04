@@ -217,6 +217,9 @@ enum HTMLAttribute {
     stroke_dasharray = 'stroke-dasharray',
     stroke_linejoin = 'stroke-linejoin',
     title = 'title',
+    canvas = 'canvas',
+    a = 'a',
+    img = 'img',
 }
 
 const ToolNameShortcuts: Map<string, ToolName> = new Map([
