@@ -3,7 +3,6 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { ExportToolService } from './export-tool.service';
 import { FileType } from 'src/constants/tool-constants';
-import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 
 fdescribe('ExportToolService', () => {
     let injector: TestBed;
@@ -16,7 +15,6 @@ fdescribe('ExportToolService', () => {
         TestBed.configureTestingModule({
             providers: [
                 ExportToolService,
-                provideAutoMock(HTMLAnchorElement),
                 {
                     provide: Renderer2,
                     useValue: {
