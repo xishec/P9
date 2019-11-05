@@ -32,6 +32,12 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
         this.textToolService = this.toolSelectorService.getTextTool();
     }
 
+    initializeForm(): void {
+        this.textAttributesForm = this.formBuilder.group({
+            font: [],
+        });
+    }
+
     onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
