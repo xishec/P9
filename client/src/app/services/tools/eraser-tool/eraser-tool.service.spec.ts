@@ -263,10 +263,14 @@ describe('EraserToolService', () => {
 
     it('mouseOutRestoreBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
+            createMockSVGGElementWithAttribute('id_element'),
+        );
 
         service.mouseOutRestoreBorder(0, null, null, ToolName.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
     it('mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
