@@ -76,7 +76,7 @@ export class DrawStackService {
     }
 
     pop(): SVGGElement | undefined {
-        let result = this.drawStack.pop();
+        const result = this.drawStack.pop();
         if (this.idStack.length === 0) {
             this.drawingLoaderService.emptyDrawStack.next(true);
         }

@@ -72,10 +72,10 @@ export const createMockSVGGElementWithAttribute = (att: string): any => {
             return (mockDOMRect as unknown) as DOMRect;
         },
         childElementCount: 3,
-        childNodes: () =>{
-            const mockGelementArray:SVGGElement[] = [createMockSVGGElement(),createMockSVGGElement(),createMockSVGGElement()]; 
+        childNodes: () => {
+            const mockGelementArray: SVGGElement[] = [createMockSVGGElement(), createMockSVGGElement(), createMockSVGGElement()];
             return mockGelementArray;
-        }
+        },
 
     };
     return (mockSVGElement as unknown) as SVGGElement;

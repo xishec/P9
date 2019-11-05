@@ -222,7 +222,7 @@ export class EraserToolService extends AbstractToolService {
         }
 
         if (tool === ToolName.Pen) {
-            let childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
                 HTMLAttribute.fill,
@@ -257,7 +257,7 @@ export class EraserToolService extends AbstractToolService {
         }
 
         if (tool === ToolName.Pen) {
-            let childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
                 HTMLAttribute.fill,
