@@ -270,7 +270,17 @@ const FONTS: FontInfo[] = [
     { fontName: 'Verdana', fontFamily: 'Verdana, sans-serif' },
     { fontName: 'Arial', fontFamily: 'Arial, sans-serif' },
     { fontName: 'Helvetica', fontFamily: 'Helvetica, sans-serif' },
+
+    { fontName: 'Lucida', fontFamily: 'Lucida, monospace' },
+    { fontName: 'Console', fontFamily: 'Console, monospace' },
+    { fontName: 'Courier', fontFamily: 'Courier, monospace' },
 ];
+
+enum FontSize {
+    Min = 1,
+    Default = 5,
+    Max = 72,
+}
 
 export {
     ToolNameControlShortcuts,
@@ -305,4 +315,5 @@ export {
     TRACING_TOOL_POSITION,
     SHAPE_TOOL_POSITION,
     FONTS,
+    FontSize,
 };
