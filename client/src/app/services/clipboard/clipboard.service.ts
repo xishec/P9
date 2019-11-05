@@ -13,6 +13,7 @@ export class ClipboardService {
     selection: Selection;
 
     clippings: Set<SVGGElement> = new Set<SVGGElement>();
+    buffer: Set<SVGGElement> = new Set<SVGGElement>();
 
     offsetValue = 0;
 
@@ -76,31 +77,34 @@ export class ClipboardService {
 
     duplicate(): void {
         if (this.firstDuplication) {
-            console.log('first duplication');
             this.offsetValue = 0;
             this.firstDuplication = false;
+            this.increaseOffsetValue();
         }
-        this.fetchSelectionBounds();
-        if (!this.isInBounds()) {
-            this.offsetValue = 0;
+
+        this.buffer.clear();
+        for (const el of this.selection.selectedElements) {
+            this.buffer.add(el);
         }
 
         let dupBuffer: Set<SVGGElement> = new Set<SVGGElement>();
-        for (const el of this.selection.selectedElements) {
+        for (const el of this.buffer) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
+            this.preventAdditionnalOffset(deepCopy);
             this.drawStack.push(deepCopy);
             this.offSet(deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             dupBuffer.add(deepCopy);
         }
-        this.increaseOffsetValue();
+
         this.selection.emptySelection();
-        for (const el of dupBuffer) {
+        for(const el of dupBuffer){
             this.selection.addToSelection(el);
         }
     }
 
     paste(): void {
+        this.increaseOffsetValue();
         this.firstDuplication = true;
         this.fetchSelectionBounds();
         if (!this.isInBounds()) {
@@ -114,7 +118,6 @@ export class ClipboardService {
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             dupBuffer.add(deepCopy);
         }
-        this.increaseOffsetValue();
         this.selection.emptySelection();
         for(const el of dupBuffer){
             this.selection.addToSelection(el);
@@ -130,9 +133,15 @@ export class ClipboardService {
         this.selection.emptySelection();
     }
 
+    preventAdditionnalOffset(el: SVGGElement): void {
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        const translateToZero = svg.createSVGTransform();
+        translateToZero.setTranslate(0, 0);
+        el.transform.baseVal.insertItemBefore(translateToZero, 0);
+    }
+
     offSet(el: SVGGElement): void {
         const transformsList = el.transform.baseVal;
-        console.log(transformsList);
         if (
             transformsList.numberOfItems === 0 ||
             transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
