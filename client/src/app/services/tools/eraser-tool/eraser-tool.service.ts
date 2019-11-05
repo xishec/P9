@@ -11,6 +11,7 @@ import {
     EraserSize,
     HTMLAttribute,
     RESET_POSITION_NUMBER,
+    ToolName,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -28,6 +29,7 @@ export class EraserToolService extends AbstractToolService {
     isLeftMouseDown = false;
     isSquareAppended = false;
     lastElementColoredNumber = RESET_POSITION_NUMBER;
+    lastToolName = '';
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -171,6 +173,7 @@ export class EraserToolService extends AbstractToolService {
             const el = this.drawStack.drawStack[i];
             const elBox = this.getDOMRect(el);
 
+            this.lastToolName = el.getAttribute('title') as string;
             if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
                 if (this.lastElementColoredNumber !== topElement) {
                     if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
@@ -183,11 +186,10 @@ export class EraserToolService extends AbstractToolService {
                         );
                     }
 
-                    const tool = el.getAttribute('title');
                     this.drawStack.changeTargetElement(
                         new StackTargetInfo(
                             parseInt(el.getAttribute('id_element') as string, DEFAULT_RADIX),
-                            tool as string,
+                            this.lastToolName,
                         ),
                     );
 
@@ -196,13 +198,14 @@ export class EraserToolService extends AbstractToolService {
                     this.mouseOverColorBorder(
                         this.currentTarget,
                         this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                        this.lastToolName,
                     );
                 }
                 enteredInSelection = true;
                 this.isOnTarget = true;
             } else {
                 topElement--;
-                this.removeBorder(el.getAttribute('id_element') as string);
+                this.removeBorder(el.getAttribute('id_element') as string, this.lastToolName);
             }
         }
         if (!enteredInSelection) {
@@ -211,11 +214,20 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    mouseOverColorBorder(idElement: number, borderWidth: string | null): void {
+    mouseOverColorBorder(idElement: number, borderWidth: string | null, tool: string | null): void {
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
+        }
+
+        if (tool === ToolName.Pen) {
+            let childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
+                HTMLAttribute.fill,
+                '#' + DEFAULT_RED,
+            );
         }
 
         this.renderer.setAttribute(
@@ -230,13 +242,27 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    mouseOutRestoreBorder(idElement: number, border: string | null, borderWidth: string | null): void {
+    mouseOutRestoreBorder(
+        idElement: number,
+        border: string | null,
+        borderWidth: string | null,
+        tool: string | null,
+    ): void {
         if (border === null) {
             border = '';
         }
 
         if (borderWidth === null) {
             borderWidth = '0';
+        }
+
+        if (tool === ToolName.Pen) {
+            let childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
+                HTMLAttribute.fill,
+                border,
+            );
         }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);
@@ -247,11 +273,16 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    removeBorder(position: string): void {
+    removeBorder(position: string, tool?: string | null): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(position) as SVGGElementInfo;
-            if (element !== undefined) {
-                this.mouseOutRestoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth);
+            if (element !== undefined && tool !== undefined) {
+                this.mouseOutRestoreBorder(
+                    parseInt(position, DEFAULT_RADIX),
+                    element.borderColor,
+                    element.borderWidth,
+                    tool,
+                );
                 this.changedElements.delete(position);
             }
         }
@@ -297,8 +328,8 @@ export class EraserToolService extends AbstractToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
-        if (this.currentTarget) {
-            this.removeBorder(this.currentTarget.toString());
+        if (this.currentTarget !== undefined) {
+            this.removeBorder(this.currentTarget.toString(), this.lastToolName as string);
         }
         this.lastElementColoredNumber = RESET_POSITION_NUMBER;
     }
