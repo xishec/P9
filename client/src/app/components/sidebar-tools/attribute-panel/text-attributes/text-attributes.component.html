@@ -5,21 +5,58 @@
 
     <form [formGroup]="textAttributesForm">
         <div class="attribute">
-            <mat-form-field appearance="outline">
-                <mat-select formControlName="font">
-                    <mat-option *ngFor="let FONT of FONTS" [ngStyle]="{ 'font-family': FONT.fontFamily }">
+            <mat-form-field>
+                <mat-select
+                    formControlName="font"
+                    (selectionChange)="onFontChange()"
+                    [ngStyle]="{ 'font-family': getCurrentFont() }"
+                >
+                    <mat-option
+                        *ngFor="let FONT of FONTS"
+                        [ngStyle]="{ 'font-family': FONT.fontFamily }"
+                        value="{{ FONT.fontFamily }}"
+                    >
                         {{ FONT.fontName }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <mat-form-field id="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="fontSize"
+                    (input)="onFontChange()"
+                    [min]="fontSize.Min"
+                    [max]="fontSize.Max"
+                />
+            </mat-form-field>
+
             <br />
-            <mat-button-toggle-group>
-                <mat-button-toggle><i class="fas fa-align-left"></i></mat-button-toggle>
-                <mat-button-toggle><i class="fas fa-align-center"></i></mat-button-toggle>
-                <mat-button-toggle><i class="fas fa-align-right"></i></mat-button-toggle>
+            <mat-button-toggle-group formControlName="align" (click)="onAlignChange()">
+                <mat-button-toggle matTooltip="Aligner à gauche" value="left"
+                    ><i class="fas fa-align-left"></i
+                ></mat-button-toggle>
+
+                <mat-button-toggle matTooltip="Aligner au centre" value="center"
+                    ><i class="fas fa-align-center"></i
+                ></mat-button-toggle>
+
+                <mat-button-toggle matTooltip="Aligner à droite" value="right"
+                    ><i class="fas fa-align-right"></i
+                ></mat-button-toggle>
             </mat-button-toggle-group>
-            <button mat-stroked-button><i class="fas fa-bold"></i></button>
-            <button mat-stroked-button><i class="fas fa-italic"></i></button>
+
+            <mat-button-toggle matTooltip="Gras"
+                ><i class="fas fa-bold" (click)="onBoldChange()"></i
+            ></mat-button-toggle>
+
+            <mat-button-toggle matTooltip="Italique" (click)="onItalicChange()"
+                ><i class="fas fa-italic"></i
+            ></mat-button-toggle>
         </div>
     </form>
 </div>

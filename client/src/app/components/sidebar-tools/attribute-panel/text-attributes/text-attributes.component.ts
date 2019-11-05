@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ToolName, FONTS } from 'src/constants/tool-constants';
+import { ToolName, FONTS, FontSize } from 'src/constants/tool-constants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
@@ -19,6 +19,8 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
     readonly FONTS = FONTS;
+    readonly fontSize = FontSize;
+
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
@@ -28,7 +30,9 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
         this.formBuilder = formBuilder;
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.initializeForm();
+    }
 
     ngAfterViewInit() {
         this.textToolService = this.toolSelectorService.getTextTool();
@@ -36,8 +40,30 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
 
     initializeForm(): void {
         this.textAttributesForm = this.formBuilder.group({
-            fontSize: [],
+            font: ['Times New Roman, serif'],
+            fontSize: [FontSize.Default],
+            align: ['left'],
         });
+    }
+
+    onFontChange() {
+        console.log(this.textAttributesForm.controls.font.value);
+    }
+
+    onFontSizeChange() {
+        console.log(this.textAttributesForm.controls.fontSize.value);
+    }
+
+    onAlignChange() {
+        console.log(this.textAttributesForm.controls.align.value);
+    }
+
+    onBoldChange() {}
+
+    onItalicChange() {}
+
+    getCurrentFont(): string {
+        return this.textAttributesForm.controls.font.value;
     }
 
     onFocus(): void {
