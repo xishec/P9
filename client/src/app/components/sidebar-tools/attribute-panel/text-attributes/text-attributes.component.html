@@ -29,10 +29,11 @@
                     matInput
                     type="number"
                     formControlName="fontSize"
-                    (input)="onFontChange()"
+                    (input)="onFontSizeChange()"
                     [min]="fontSize.Min"
                     [max]="fontSize.Max"
                 />
+                <mat-error>La valeur inscrite doit être entre {{ fontSize.Min }} et {{ fontSize.Max }} </mat-error>
             </mat-form-field>
 
             <br />
@@ -50,8 +51,8 @@
                 ></mat-button-toggle>
             </mat-button-toggle-group>
 
-            <mat-button-toggle matTooltip="Gras"
-                ><i class="fas fa-bold" (click)="onBoldChange()"></i
+            <mat-button-toggle matTooltip="Gras" (click)="onBoldChange()"
+                ><i class="fas fa-bold"></i
             ></mat-button-toggle>
 
             <mat-button-toggle matTooltip="Italique" (click)="onItalicChange()"

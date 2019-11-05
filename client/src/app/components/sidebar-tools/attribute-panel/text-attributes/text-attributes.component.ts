@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ToolName, FONTS, FontSize } from 'src/constants/tool-constants';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
@@ -14,6 +14,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 })
 export class TextAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Text;
+    isBold = false;
+    isItalic = false;
     textAttributesForm: FormGroup;
     textToolService: TextToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
@@ -41,26 +43,35 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.textAttributesForm = this.formBuilder.group({
             font: ['Times New Roman, serif'],
-            fontSize: [FontSize.Default],
+            fontSize: [
+                FontSize.Default,
+                [Validators.required, Validators.min(FontSize.Min), Validators.max(FontSize.Max)],
+            ],
             align: ['left'],
         });
     }
 
-    onFontChange() {
+    onFontChange(): void {
         console.log(this.textAttributesForm.controls.font.value);
     }
 
-    onFontSizeChange() {
+    onFontSizeChange(): void {
         console.log(this.textAttributesForm.controls.fontSize.value);
     }
 
-    onAlignChange() {
+    onAlignChange(): void {
         console.log(this.textAttributesForm.controls.align.value);
     }
 
-    onBoldChange() {}
+    onBoldChange(): void {
+        this.isBold = !this.isBold;
+        console.log(this.isBold);
+    }
 
-    onItalicChange() {}
+    onItalicChange(): void {
+        this.isItalic = !this.isItalic;
+        console.log(this.isItalic);
+    }
 
     getCurrentFont(): string {
         return this.textAttributesForm.controls.font.value;
