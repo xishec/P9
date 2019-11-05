@@ -297,7 +297,9 @@ export class EraserToolService extends AbstractToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
-        this.removeBorder(this.currentTarget.toString());
+        if (this.currentTarget) {
+            this.removeBorder(this.currentTarget.toString());
+        }
         this.lastElementColoredNumber = RESET_POSITION_NUMBER;
     }
 }
