@@ -9,6 +9,7 @@ import {
     StampScaling,
     Thickness,
     TraceType,
+    FontSize,
 } from 'src/constants/tool-constants';
 
 @Injectable({
@@ -34,6 +35,12 @@ export class AttributesManagerService {
     private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
 
+    private boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
+    private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
+    private fontAlign: BehaviorSubject<string> = new BehaviorSubject('left');
+
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
@@ -45,6 +52,12 @@ export class AttributesManagerService {
     currentAngle: Observable<number> = this.angle.asObservable();
     currentScaling: Observable<number> = this.scaling.asObservable();
     currentStampType: Observable<string> = this.stampType.asObservable();
+
+    currentBoldState: Observable<boolean> = this.boldState.asObservable();
+    currentItalicState: Observable<boolean> = this.italicState.asObservable();
+    currentFont: Observable<string> = this.font.asObservable();
+    currentFontSize: Observable<number> = this.fontSize.asObservable();
+    currenTfontAlign: Observable<string> = this.fontAlign.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -88,5 +101,21 @@ export class AttributesManagerService {
 
     changeStampType(stampType: string): void {
         this.stampType.next(stampType);
+    }
+
+    changeBoldState(boldState: boolean) {
+        this.boldState.next(boldState);
+    }
+    changeItalicState(italicState: boolean) {
+        this.italicState.next(italicState);
+    }
+    changeFont(font: string) {
+        this.font.next(font);
+    }
+    changeFontSize(fontSize: number) {
+        this.fontSize.next(fontSize);
+    }
+    changeFontAlign(fontAlign: string) {
+        this.fontAlign.next(fontAlign);
     }
 }
