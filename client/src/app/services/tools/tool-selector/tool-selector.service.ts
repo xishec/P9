@@ -23,6 +23,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { TextToolService } from '../text-tool/text-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -49,6 +50,7 @@ export class ToolSelectorService {
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygoneTool: PolygonToolService,
         private lineTool: LineToolService,
+        private textTool: TextToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -86,6 +88,8 @@ export class ToolSelectorService {
 
         this.lineTool.initializeService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
+
+        this.textTool.initializeService(ref, renderer, drawStack);
     }
 
     displayNewDrawingModal(): void {
