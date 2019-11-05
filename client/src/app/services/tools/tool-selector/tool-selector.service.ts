@@ -251,16 +251,21 @@ export class ToolSelectorService {
                 this.currentTool = this.penTool;
                 this.changeCurrentToolName(tooltipName);
                 break;
+            case ToolName.Text:
+                this.currentTool = this.textTool;
+                this.changeCurrentToolName(tooltipName);
+                break; 
             case ToolName.Export:
                 if (!this.modalIsDisplayed) {
                     this.displayExportFileModal();
                 }
                 break;
+
             case ToolName.Quill:
             case ToolName.SprayCan:
             case ToolName.Fill:
             case ToolName.Eraser:
-            case ToolName.Text:
+            
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
