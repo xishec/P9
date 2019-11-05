@@ -25,8 +25,8 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
-        private shortcutManagerService: ShortcutManagerService,
+        private colorToolService: ColorToolService, //Do we keep it ?
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }

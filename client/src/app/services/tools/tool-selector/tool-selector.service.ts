@@ -50,7 +50,7 @@ export class ToolSelectorService {
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygoneTool: PolygonToolService,
         private lineTool: LineToolService,
-        private textTool: TextToolService,
+        private textTool: TextToolService
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -183,6 +183,10 @@ export class ToolSelectorService {
         return this.lineTool;
     }
 
+    getTextTool(): TextToolService {
+        return this.textTool;
+    }
+
     changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
@@ -254,7 +258,7 @@ export class ToolSelectorService {
             case ToolName.Text:
                 this.currentTool = this.textTool;
                 this.changeCurrentToolName(tooltipName);
-                break; 
+                break;
             case ToolName.Export:
                 if (!this.modalIsDisplayed) {
                     this.displayExportFileModal();
@@ -265,7 +269,7 @@ export class ToolSelectorService {
             case ToolName.SprayCan:
             case ToolName.Fill:
             case ToolName.Eraser:
-            
+
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);
