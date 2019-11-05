@@ -6,7 +6,7 @@ import { DrawStackService } from './draw-stack.service';
 
 const NB_PUSH = 3;
 
-fdescribe('DrawStackService', () => {
+describe('DrawStackService', () => {
     let injector: TestBed;
     let service: DrawStackService;
 
