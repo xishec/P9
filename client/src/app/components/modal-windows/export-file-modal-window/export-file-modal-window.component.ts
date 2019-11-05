@@ -15,15 +15,13 @@ export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
-    @ViewChild('anchor', { static: true }) anchorRef: ElementRef<HTMLAnchorElement>;
-
     readonly FileType = FileType;
 
     constructor(
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
-        public exportToolService: ExportToolService,
+        public exportToolService: ExportToolService
     ) {
         this.formBuilder = formBuilder;
     }
