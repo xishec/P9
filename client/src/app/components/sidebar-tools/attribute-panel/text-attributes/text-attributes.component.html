@@ -1,1 +1,21 @@
-<p>text-attributes works!</p>
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="textAttributesForm">
+        <div class="attribute-button">
+            <label for="align">Alignement du texte</label>
+            <br />
+            <mat-button-toggle-group>
+                <mat-button-toggle><i class="fas fa-align-left"></i></mat-button-toggle>
+                <mat-button-toggle><i class="fas fa-align-center"></i></mat-button-toggle>
+                <mat-button-toggle><i class="fas fa-align-right"></i></mat-button-toggle>
+            </mat-button-toggle-group>
+            <button mat-stroked-button><i class="fas fa-bold"></i></button>
+            <button mat-stroked-button><i class="fas fa-italic"></i></button>
+        </div>
+
+        <div class="attribute-button"><label for="align">Atribut de texte</label> <br /></div>
+    </form>
+</div>
