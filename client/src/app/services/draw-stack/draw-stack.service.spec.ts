@@ -6,7 +6,7 @@ import { DrawStackService } from './draw-stack.service';
 
 const NB_PUSH = 3;
 
-describe('DrawStackService', () => {
+fdescribe('DrawStackService', () => {
     let injector: TestBed;
     let service: DrawStackService;
 
@@ -71,6 +71,16 @@ describe('DrawStackService', () => {
 
         expect(popElement).toEqual(mockSVGGElement);
         expect(service[`drawStack`]).not.toContain(mockSVGGElement);
+    });
+
+    it('when pop return the last element and idStack.length is not zero', () => {
+        service[`drawStack`].push(mockSVGGElement);
+        service.makeTargetable(mockSVGGElement);
+
+        const popElement = service.pop();
+
+        expect(popElement).toEqual(mockSVGGElement);
+        expect(service.idStack.length).toBeGreaterThan(0);
     });
 
     it('when reset then drawStack is empty and length zero', () => {
