@@ -19,6 +19,7 @@ export class TextToolService extends AbstractToolService {
     textBox : SVGTextElement;
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
+    isWriting = false;
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
         super();
@@ -47,32 +48,39 @@ export class TextToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        // create the rectangle
-        // disable shortcuts until on mouse down outside
-        this.text = '';
-        this.shortCutManagerService.changeIsOnInput(true);
+        if(!this.isWriting) {
+            // create the rectangle
+            // disable shortcuts until on mouse down outside
+            this.text = '';
+            this.shortCutManagerService.changeIsOnInput(true);
 
-        this.gWrap = this.renderer.createElement('g', SVG_NS);
+            this.gWrap = this.renderer.createElement('g', SVG_NS);
 
-        // init the text box with position and style
-        this.textBox = this.renderer.createElement('text', SVG_NS);
-        this.renderer.setAttribute(this.textBox, 'x', this.getXPos(event.clientX).toString());
-        this.renderer.setAttribute(this.textBox, 'y', this.getYPos(event.clientY).toString());
-        this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
-        this.renderer.setAttribute(this.textBox, 'font-size', '12');
+            // init the text box with position and style
+            this.textBox = this.renderer.createElement('text', SVG_NS);
+            this.renderer.setAttribute(this.textBox, 'x', this.getXPos(event.clientX).toString());
+            this.renderer.setAttribute(this.textBox, 'y', this.getYPos(event.clientY).toString());
+            this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
+            this.renderer.setAttribute(this.textBox, 'font-size', '12');
 
-        // init the preview Box with position and style
-        this.previewBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewBox, 'x', this.getXPos(event.clientX).toString());
-        this.renderer.setAttribute(this.previewBox, 'y', this.getYPos(event.clientY).toString());
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
+            // init the preview Box with position and style
+            this.previewBox = this.renderer.createElement('rect', SVG_NS);
+            this.renderer.setAttribute(this.previewBox, 'x', this.getXPos(event.clientX).toString());
+            this.renderer.setAttribute(this.previewBox, 'y', this.getYPos(event.clientY).toString());
+            this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
+            this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
+            this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
 
-        this.renderer.appendChild(this.gWrap, this.previewBox);
-        this.renderer.appendChild(this.gWrap, this.textBox);
+            this.renderer.appendChild(this.gWrap, this.previewBox);
+            this.renderer.appendChild(this.gWrap, this.textBox);
 
-        this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
+            this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
+            this.isWriting = true;
+        } else {
+            this.renderer.removeChild(this.gWrap, this.previewBox);
+            this.isWriting = false;
+        }
+        
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -83,9 +91,11 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
     }
     onKeyDown(event: KeyboardEvent): void {
-        this.text += event.key;
-        this.renderer.setProperty(this.textBox, 'innerHTML', this.text);
-        this.updatePreviewBox();
+        if(!event.ctrlKey && !event.shiftKey) {
+            this.text += event.key;
+            this.renderer.setProperty(this.textBox, 'innerHTML', this.text);
+            this.updatePreviewBox();
+        }
     }
     onKeyUp(event: KeyboardEvent): void {
     }
