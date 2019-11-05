@@ -8,7 +8,7 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { Keys, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EraserToolService } from './eraser-tool.service';
 
@@ -243,16 +243,20 @@ describe('EraserToolService', () => {
 
     it('mouseOverColorBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
+            createMockSVGGElementWithAttribute('id_element'),
+        );
 
-        service.mouseOverColorBorder(0, null);
+        service.mouseOverColorBorder(0, null, ToolName.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
     it('mouseOverColorBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOverColorBorder(0, '5');
+        service.mouseOverColorBorder(0, '5', ToolName.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -260,7 +264,7 @@ describe('EraserToolService', () => {
     it('mouseOutRestoreBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOutRestoreBorder(0, null, null);
+        service.mouseOutRestoreBorder(0, null, null, ToolName.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -268,7 +272,7 @@ describe('EraserToolService', () => {
     it('mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOutRestoreBorder(0, 'ffffff', '1');
+        service.mouseOutRestoreBorder(0, 'ffffff', '1', ToolName.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -280,7 +284,7 @@ describe('EraserToolService', () => {
         const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
-        service.removeBorder('0');
+        service.removeBorder('0', '');
 
         expect(spyOnmouseOutRestoreBorder).toHaveBeenCalled();
         expect(spyOnget).toHaveBeenCalled();
