@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ToolName } from 'src/constants/tool-constants';
+import { ToolName, FONTS } from 'src/constants/tool-constants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
@@ -17,6 +17,8 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     textAttributesForm: FormGroup;
     textToolService: TextToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
+
+    readonly FONTS = FONTS;
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
@@ -34,7 +36,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
 
     initializeForm(): void {
         this.textAttributesForm = this.formBuilder.group({
-            font: [],
+            fontSize: [],
         });
     }
 
