@@ -1,10 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ToolName, FONTS, FontSize } from 'src/constants/tool-constants';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { ToolName, FONTS, FontSize } from 'src/constants/tool-constants';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-//import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 
 @Component({
@@ -26,7 +26,6 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        //private colorToolService: ColorToolService, //Do we keep it
         private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
@@ -52,29 +51,30 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onFontChange(): void {
-        console.log(this.textAttributesForm.controls.font.value);
+        const align = this.textAttributesForm.controls.font.value;
+        this.attributesManagerService.changeFont(align);
     }
 
     onFontSizeChange(): void {
-        console.log(this.textAttributesForm.controls.fontSize.value);
+        const fontSize = this.textAttributesForm.controls.fontSize.value;
+        if (this.textAttributesForm.controls.fontSize.valid) {
+            this.attributesManagerService.changeFontSize(fontSize);
+        }
     }
 
     onAlignChange(): void {
-        console.log(this.textAttributesForm.controls.align.value);
+        const align = this.textAttributesForm.controls.align.value;
+        this.attributesManagerService.changeFontAlign(align);
     }
 
     onBoldChange(): void {
         this.isBold = !this.isBold;
-        console.log(this.isBold);
+        this.attributesManagerService.changeBoldState(this.isBold);
     }
 
     onItalicChange(): void {
         this.isItalic = !this.isItalic;
-        console.log(this.isItalic);
-    }
-
-    getCurrentFont(): string {
-        return this.textAttributesForm.controls.font.value;
+        this.attributesManagerService.changeItalicState(this.isItalic);
     }
 
     onFocus(): void {
@@ -82,5 +82,9 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     }
     onFocusOut(): void {
         this.shortcutManagerService.changeIsOnInput(false);
+    }
+
+    getCurrentFont(): string {
+        return this.textAttributesForm.controls.font.value;
     }
 }
