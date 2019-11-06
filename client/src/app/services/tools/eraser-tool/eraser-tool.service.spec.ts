@@ -387,4 +387,14 @@ describe('EraserToolService', () => {
 
         expect(spyOnremoveChild).toHaveBeenCalled();
     });
+
+    it('cleanUp should call removeBorder if lastElementColoredNumber is different than 1', () => {
+        service.lastElementColoredNumber = 1;
+        const spyOnremoveBorder: jasmine.Spy = spyOn(service, 'removeBorder');
+
+        service.cleanUp();
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
+        expect(spyOnremoveBorder).toHaveBeenCalled();
+    });
 });
