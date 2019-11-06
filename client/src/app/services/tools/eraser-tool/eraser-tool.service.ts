@@ -81,7 +81,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.isLeftMouseDown) {
             this.onMouseDown(event);
         }
-        this.checkSelection();
+        this.checkElementsToErase();
         this.setSquareToMouse(event);
     }
 
@@ -110,7 +110,7 @@ export class EraserToolService extends AbstractToolService {
             this.isLeftMouseDown = true;
         }
 
-        this.checkSelection();
+        this.checkElementsToErase();
 
         if (
             this.isOnTarget &&
@@ -122,7 +122,7 @@ export class EraserToolService extends AbstractToolService {
                 this.drawStack.getElementByPosition(this.currentTarget),
             );
 
-            this.drawStack.removeElementByPosition(this.currentTarget);
+            this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
 
             // set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
@@ -130,13 +130,13 @@ export class EraserToolService extends AbstractToolService {
                     (this.currentTarget + 1).toString(),
                 ) as SVGGElementInfo);
             }
-            this.checkSelection();
+            this.checkElementsToErase();
         }
 
         this.isOnTarget = false;
     }
 
-    isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    isTouchingElementBox(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
         const boxTop = selectionBox.y + window.scrollY;
@@ -164,7 +164,7 @@ export class EraserToolService extends AbstractToolService {
         return true;
     }
 
-    checkSelection(): void {
+    checkElementsToErase(): void {
         const selectionBox = this.getDOMRect(this.drawRectangle);
 
         let enteredInSelection = false;
@@ -173,8 +173,7 @@ export class EraserToolService extends AbstractToolService {
             const el = this.drawStack.drawStack[i];
             const elBox = this.getDOMRect(el);
 
-            this.lastToolName = el.getAttribute('title') as string;
-            if (this.isInSelection(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
+            if (this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
                 if (this.lastElementColoredNumber !== topElement) {
                     if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
                         this.changedElements.set(
@@ -185,6 +184,8 @@ export class EraserToolService extends AbstractToolService {
                             ),
                         );
                     }
+
+                    this.lastToolName = el.getAttribute('title') as string;
 
                     this.drawStack.changeTargetElement(
                         new StackTargetInfo(
@@ -205,7 +206,7 @@ export class EraserToolService extends AbstractToolService {
                 this.isOnTarget = true;
             } else {
                 topElement--;
-                this.removeBorder(el.getAttribute('id_element') as string, this.lastToolName);
+                this.removeBorder(el.getAttribute('id_element') as string, el.getAttribute('title') as string);
             }
         }
         if (!enteredInSelection) {
@@ -255,7 +256,6 @@ export class EraserToolService extends AbstractToolService {
         if (borderWidth === null) {
             borderWidth = '0';
         }
-
         if (tool === ToolName.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
@@ -328,8 +328,8 @@ export class EraserToolService extends AbstractToolService {
     cleanUp(): void {
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
         this.isSquareAppended = false;
-        if (this.currentTarget !== undefined) {
-            this.removeBorder(this.currentTarget.toString(), this.lastToolName as string);
+        if (this.lastElementColoredNumber !== -1) {
+            this.removeBorder(this.lastElementColoredNumber.toString(), this.lastToolName as string);
         }
         this.lastElementColoredNumber = RESET_POSITION_NUMBER;
     }
