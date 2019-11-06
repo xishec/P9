@@ -21,6 +21,8 @@ export class TextToolService extends AbstractToolService {
     fontType: string;
     fontSize: number;
     fontAlign: string;
+    fontStyle = 'normal';
+    fontWeight = 'normal';
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
@@ -53,7 +55,6 @@ export class TextToolService extends AbstractToolService {
         
         this.attributesManagerService.currentFont.subscribe((font) => {
             this.updateFont(font);
-            
         });
         this.attributesManagerService.currentFontSize.subscribe((size) => {
             this.updateFontSize(size);
@@ -61,6 +62,12 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService.currenTfontAlign.subscribe((align) => {
             this.updateAlign(align);
         });
+        this.attributesManagerService.currentItalicState.subscribe((italic) => {
+            this.updateItalic(italic);
+        });
+        this.attributesManagerService.currentBoldState.subscribe((bold) => {
+            this.updateBold(bold);
+        })
     }
 
     updateFont(font: string) {
@@ -85,6 +92,22 @@ export class TextToolService extends AbstractToolService {
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
                 this.renderer.setAttribute(tspan, 'text-anchor', this.fontAlign);
             });
+            this.updatePreviewBox();
+        }
+    }
+
+    updateItalic(isItalic: boolean) {
+        this.fontStyle = isItalic ? 'italic' : 'normal';
+        if (this.isWriting) {
+            this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
+            this.updatePreviewBox();
+        }
+    }
+
+    updateBold(isBold: boolean) {
+        this.fontWeight = isBold ? 'bold' : 'normal';
+        if (this.isWriting) {
+            this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
             this.updatePreviewBox();
         }
     }
@@ -119,6 +142,8 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
         this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
         this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
+        this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
+        this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
 
         
     }
