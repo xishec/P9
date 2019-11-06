@@ -47,7 +47,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
                 FontSize.Default,
                 [Validators.required, Validators.min(FontSize.Min), Validators.max(FontSize.Max)],
             ],
-            align: ['left'],
+            align: ['start'],
         });
     }
 

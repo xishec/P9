@@ -55,10 +55,9 @@ export class TextToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentFontSize.subscribe((size) => {
             this.updateFontSize(size);
-            this.fontSize = size;
         });
         this.attributesManagerService.currenTfontAlign.subscribe((align) => {
-            this.fontAlign = align;
+            this.updateAlign(align);
         });
     }
 
@@ -81,6 +80,9 @@ export class TextToolService extends AbstractToolService {
     updateAlign(align : string) {
         this.fontAlign = align;
         if (this.isWriting) {
+            this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
+                this.renderer.setAttribute(tspan, 'text-anchor', this.fontAlign);
+            });
             this.updatePreviewBox();
         }
     }
