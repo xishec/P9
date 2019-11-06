@@ -289,7 +289,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseUp(event: MouseEvent): void {
-        this.clipBoard.restartOffset();
+        this.clipBoard.restartDuplication();
         if (!this.verifyPosition(event)) {
             return;
         }
