@@ -277,28 +277,4 @@ export class Selection {
             this.addToSelection(element);
         }
     }
-
-    moveBy(currentMouseCoords: MouseCoords, lastMouseCoords: MouseCoords): void {
-        const deltaX = currentMouseCoords.x - lastMouseCoords.x;
-        const deltaY = currentMouseCoords.y - lastMouseCoords.y;
-        for (const el of this.selectedElements) {
-            const transformsList = el.transform.baseVal;
-            if (
-                transformsList.numberOfItems === 0 ||
-                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
-            ) {
-                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                const translateToZero = svg.createSVGTransform();
-                translateToZero.setTranslate(0, 0);
-                el.transform.baseVal.insertItemBefore(translateToZero, 0);
-            }
-
-            const initialTransform = transformsList.getItem(0);
-            const offsetX = -initialTransform.matrix.e;
-            const offsetY = -initialTransform.matrix.f;
-            el.transform.baseVal.getItem(0).setTranslate(deltaX - offsetX, deltaY - offsetY);
-        }
-
-        this.updateFullSelectionBox();
-    }
 }

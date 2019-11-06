@@ -2,6 +2,7 @@ import { Injectable, Renderer2, ElementRef } from '@angular/core';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { Selection } from '../../../classes/selection/selection';
 import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
+import { ManipulatorService } from '../manipulator/manipulator.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,7 +23,7 @@ export class ClipboardService {
 
     clippingsBound: DOMRect;
 
-    constructor() {}
+    constructor(public manipulator: ManipulatorService) {}
 
     initializeService(
         elementRef: ElementRef<SVGElement>,
@@ -106,7 +107,7 @@ export class ClipboardService {
         for (const el of this.buffer) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
-            this.offSet(deepCopy);
+            this.manipulator.offsetSingle(this.offsetValue, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             dupBuffer.add(deepCopy);
         }
@@ -130,7 +131,7 @@ export class ClipboardService {
         for (const el of this.clippings) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
-            this.offSet(deepCopy);
+            this.manipulator.offsetSingle(this.offsetValue, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             dupBuffer.add(deepCopy);
         }
@@ -154,22 +155,5 @@ export class ClipboardService {
         const translateToZero = svg.createSVGTransform();
         translateToZero.setTranslate(0, 0);
         el.transform.baseVal.insertItemBefore(translateToZero, 0);
-    }
-
-    offSet(el: SVGGElement): void {
-        const transformsList = el.transform.baseVal;
-        if (
-            transformsList.numberOfItems === 0 ||
-            transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
-        ) {
-            const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-            const translateToZero = svg.createSVGTransform();
-            translateToZero.setTranslate(0, 0);
-            el.transform.baseVal.insertItemBefore(translateToZero, 0);
-        }
-        const initialTransform = transformsList.getItem(0);
-        const offsetX = -initialTransform.matrix.e;
-        const offsetY = -initialTransform.matrix.f;
-        el.transform.baseVal.getItem(0).setTranslate(this.offsetValue - offsetX, this.offsetValue - offsetY);
     }
 }

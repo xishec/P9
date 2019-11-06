@@ -6,6 +6,7 @@ import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
+import { ManipulatorService } from '../../manipulator/manipulator.service';
 
 @Injectable({
     providedIn: 'root',
@@ -33,7 +34,7 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(public clipBoard: ClipboardService) {
+    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService) {
         super();
     }
 
@@ -68,6 +69,7 @@ export class SelectionToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+        this.manipulator.renderer = renderer;
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
@@ -192,7 +194,9 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection
         ) {
             this.isTranslatingSelection = true;
-            this.selection.moveBy(this.currentMouseCoords, this.lastMouseCoords);
+            const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
+            const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
+            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
