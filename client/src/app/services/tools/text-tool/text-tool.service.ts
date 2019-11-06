@@ -80,6 +80,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
     createTextBox(x: number, y: number) {

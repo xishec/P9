@@ -277,8 +277,8 @@ const FONTS: FontInfo[] = [
 ];
 
 enum FontSize {
-    Min = 1,
-    Default = 5,
+    Min = 10,
+    Default = 15,
     Max = 72,
 }
 
