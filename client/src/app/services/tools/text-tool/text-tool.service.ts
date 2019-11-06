@@ -1,9 +1,9 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
@@ -85,9 +85,10 @@ export class TextToolService extends AbstractToolService {
     updateAlign(align: string) {
         this.fontAlign = align;
         if (this.isWriting) {
-            this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                this.renderer.setAttribute(tspan, 'text-anchor', this.fontAlign);
-            });
+            // this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
+            //     this.renderer.setAttribute(tspan, 'text-anchor', this.fontAlign);
+            // });
+            this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
             this.updatePreviewBox();
         }
     }
@@ -117,8 +118,10 @@ export class TextToolService extends AbstractToolService {
         const textBBox = this.textBox.getBBox();
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, textBBox.width.toString());
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
-        this.renderer.setAttribute(this.previewBox, 'x', this.xPosition.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', this.yPosition.toString());
+        this.renderer.setAttribute(this.previewBox, 'x', textBBox.x.toString());
+        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        // this.renderer.setAttribute(this.previewBox, 'x', this.xPosition.toString());
+        // this.renderer.setAttribute(this.previewBox, 'y', this.yPosition.toString());
     }
 
     createPreviewRect(x: number, y: number) {
@@ -140,12 +143,12 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
         this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
         this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
+        this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
     }
 
     createNewLine() {
         this.text = '';
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'text-anchor', this.fontAlign);
         this.renderer.setAttribute(this.currentLine, 'x', this.xPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.appendChild(this.textBox, this.currentLine);
@@ -187,7 +190,7 @@ export class TextToolService extends AbstractToolService {
             return;
         }
 
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter') {
             this.createNewLine();
         } else if (event.key == 'Backspace') {
             this.text = this.text.slice(0, -1);

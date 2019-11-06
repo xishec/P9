@@ -1,5 +1,5 @@
-import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 import { FontInfo } from 'src/classes/FontInfo';
+import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
 

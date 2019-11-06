@@ -50,7 +50,7 @@ export class ToolSelectorService {
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygoneTool: PolygonToolService,
         private lineTool: LineToolService,
-        private textTool: TextToolService
+        private textTool: TextToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
