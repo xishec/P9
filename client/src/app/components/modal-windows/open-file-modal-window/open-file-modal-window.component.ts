@@ -105,13 +105,14 @@ export class OpenFileModalWindowComponent implements OnInit {
     emptyDrawStack = true;
     isLoading: boolean;
     randomGifIndex: number;
+    localFileContent: string | null = '';
 
     constructor(
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<OpenFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
-        private drawingLoaderService: DrawingLoaderService,
+        private drawingLoaderService: DrawingLoaderService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -125,13 +126,13 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
                         this.isLoading = false;
                         return false;
                     } else {
                         return true;
                     }
-                }),
+                })
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
@@ -168,7 +169,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
             const selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name === this.selectedOption,
+                (drawing) => drawing.name === this.selectedOption
             ) as Drawing;
 
             this.drawingLoaderService.currentDrawing.next(selectedDrawing);
@@ -176,6 +177,31 @@ export class OpenFileModalWindowComponent implements OnInit {
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
+    }
+
+    loadLocalFile(e: Event): void {
+        var reader = new FileReader();
+        const target = e.target as HTMLInputElement;
+        if (target !== null && target.files !== null) {
+            reader.readAsText(target.files[0]);
+        }
+        reader.onload = () => {
+            if (typeof reader.result === 'string') {
+                const localFileContent = JSON.parse(reader.result);
+                const selectedDrawing: Drawing = {
+                    name: target.name,
+                    labels: [],
+                    svg: localFileContent.svgRef,
+                    idStack: localFileContent.drawStack,
+                    drawingInfo: localFileContent.drawingInfo,
+                };
+                console.log(selectedDrawing);
+                
+                // this.drawingLoaderService.currentDrawing.next(selectedDrawing);
+                this.dialogRef.close();
+                this.modalManagerService.setModalIsDisplayed(false);
+            }
+        };
     }
 
     formIsInvalid(): boolean {

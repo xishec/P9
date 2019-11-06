@@ -1,5 +1,16 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
 
+<mat-label id="destination-label">Choisir un fichier local:</mat-label>
+<div id="input-wrapper">
+    <input id="destination-path" type="text" value="/Users/noboruyoshida/Downloads/" size="74" />
+    <input type="file" accept=".txt" name="file" id="file" class="inputfile" (change)="loadLocalFile($event)"/>
+    <label for="file">
+        <i class="fas fa-folder"></i>
+    </label>
+</div>
+
+<label>OU</label>
+
 <input
     autocomplete="off"
     matInput

@@ -31,9 +31,9 @@ export class DrawingSaverService {
 
     getLocalFileDownloadUrl(): SafeResourceUrl {
         const jsonObj: string = JSON.stringify({
-            SVGRef: this.workZoneRef,
-            Drawstack: this.drawStackService.idStack,
-            DrawingInfo: this.currentDrawingInfo,
+            svgRef: this.workZoneRef,
+            drawstack: this.drawStackService.idStack,
+            drawingInfo: this.currentDrawingInfo,
         });
 
         const blob = new Blob([jsonObj], { type: 'text/plain' });
