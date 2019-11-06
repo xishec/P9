@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
+    FontSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -9,7 +10,6 @@ import {
     StampScaling,
     Thickness,
     TraceType,
-    FontSize,
 } from 'src/constants/tool-constants';
 
 @Injectable({

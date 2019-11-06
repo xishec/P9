@@ -1,9 +1,9 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
@@ -65,7 +65,7 @@ export class TextToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentBoldState.subscribe((bold) => {
             this.updateBold(bold);
-        })
+        });
     }
 
     updateFont(font: string) {
@@ -73,7 +73,7 @@ export class TextToolService extends AbstractToolService {
         if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
             this.updatePreviewBox();
-        };
+        }
     }
 
     updateFontSize(size: number) {
@@ -84,7 +84,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align : string) {
+    updateAlign(align: string) {
         this.fontAlign = align;
         if (this.isWriting) {
             // this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
@@ -194,11 +194,11 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
     }
     onKeyDown(event: KeyboardEvent): void {
-        if(!this.isWriting || event.ctrlKey || event.shiftKey) {
+        if (!this.isWriting || event.ctrlKey || event.shiftKey) {
             return;
         }
 
-        if(event.key == 'Enter') {
+        if (event.key === 'Enter') {
             this.createNewLine();
         } else {
             this.text += event.key;

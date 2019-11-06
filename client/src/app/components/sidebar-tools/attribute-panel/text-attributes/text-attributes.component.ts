@@ -1,11 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { ToolName, FONTS, FontSize } from 'src/constants/tool-constants';
-import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
-import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
+import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { FONTS, FontSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-text-attributes',
@@ -26,7 +26,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
