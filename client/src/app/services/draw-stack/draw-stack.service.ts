@@ -92,25 +92,6 @@ export class DrawStackService {
         return result;
     }
 
-    delete(elementToDelete: SVGGElement): void {
-        const indexOfDeletion = this.drawStack.indexOf(elementToDelete);
-
-        this.drawStack.splice(indexOfDeletion, 1);
-        this.idStack.splice(indexOfDeletion, 1);
-
-        this.resolveDrawStackOrdering(indexOfDeletion);
-    }
-
-    resolveDrawStackOrdering(displacementIndex: number): void {
-        for (let i = displacementIndex; i < this.drawStack.length; i++) {
-            this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
-        }
-
-        for (let i = displacementIndex; i < this.idStack.length; i++) {
-            this.idStack[i] = i.toString();
-        }
-    }
-
     reset(): SVGGElement[] {
         this.drawingLoaderService.emptyDrawStack.next(true);
         this.idStack.splice(0, this.idStack.length);
