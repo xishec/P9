@@ -25,9 +25,11 @@ export class TextToolService extends AbstractToolService {
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
     textBox: SVGTextElement;
-    xPosition: number;
     currentLine: SVGTSpanElement;
     text = '';
+
+    xPosition: number;
+    yPosition: number;
     
     isWriting = false;
 
@@ -96,8 +98,8 @@ export class TextToolService extends AbstractToolService {
         const textBBox = this.textBox.getBBox();
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, textBBox.width.toString());
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
-        this.renderer.setAttribute(this.previewBox, 'x', textBBox.x.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, 'x', this.xPosition.toString());
+        this.renderer.setAttribute(this.previewBox, 'y', this.yPosition.toString());
     }
 
     createPreviewRect(x: number, y: number) {
@@ -124,6 +126,7 @@ export class TextToolService extends AbstractToolService {
     createNewLine() {
         this.text = '';
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
+        this.renderer.setAttribute(this.currentLine, 'text-anchor', this.fontAlign);
         this.renderer.setAttribute(this.currentLine, 'x', this.xPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.appendChild(this.textBox, this.currentLine);
@@ -135,13 +138,13 @@ export class TextToolService extends AbstractToolService {
             this.shortCutManagerService.changeIsOnInput(true);
 
             this.xPosition = this.getXPos(event.clientX);
-            const y = this.getYPos(event.clientY);
+            this.yPosition = this.getYPos(event.clientY);
 
             // init the text box with position and style
-            this.createTextBox(this.xPosition,y);
+            this.createTextBox(this.xPosition,this.yPosition);
 
             // init the preview Box with position and style
-            this.createPreviewRect(this.xPosition,y);
+            this.createPreviewRect(this.xPosition,this.yPosition);
 
             this.createNewLine();
 
