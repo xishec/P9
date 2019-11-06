@@ -176,17 +176,17 @@ export class StampToolService extends AbstractToolService {
 
     rotateStamp(direction: number): void {
         if (direction < 0) {
-            this.currentAngle -= this.STAMP_BASE_ROTATION;
+            this.currentAngle = (this.currentAngle - this.STAMP_BASE_ROTATION) % 360;
         } else {
-            this.currentAngle += this.STAMP_BASE_ROTATION;
+            this.currentAngle = (this.currentAngle + this.STAMP_BASE_ROTATION) % 360;
         }
     }
 
     alterRotateStamp(direction: number): void {
         if (direction < 0) {
-            this.currentAngle -= this.STAMP_ALTER_ROTATION;
+            this.currentAngle = (this.currentAngle - this.STAMP_ALTER_ROTATION) % 360;
         } else {
-            this.currentAngle += this.STAMP_ALTER_ROTATION;
+            this.currentAngle = (this.currentAngle + this.STAMP_ALTER_ROTATION) % 360;
         }
     }
 

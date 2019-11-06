@@ -11,9 +11,9 @@ describe('DrawStackService', () => {
     let service: DrawStackService;
 
     const mockSVGGElement: any = {
-        getAttribute : () => null,
-        children : {
-            length : 0,
+        getAttribute: () => null,
+        children: {
+            length: 0,
         },
     };
 
@@ -32,7 +32,6 @@ describe('DrawStackService', () => {
 
         injector = getTestBed();
         service = injector.get(DrawStackService);
-
     });
 
     it('should be created', () => {
@@ -74,6 +73,16 @@ describe('DrawStackService', () => {
         expect(service[`drawStack`]).not.toContain(mockSVGGElement);
     });
 
+    it('when pop return the last element and idStack.length is not zero', () => {
+        service[`drawStack`].push(mockSVGGElement);
+        service.makeTargetable(mockSVGGElement);
+
+        const popElement = service.pop();
+
+        expect(popElement).toEqual(mockSVGGElement);
+        expect(service.idStack.length).toBeGreaterThan(0);
+    });
+
     it('when reset then drawStack is empty and length zero', () => {
         for (let i = 0; i < NB_PUSH; i++) {
             service[`drawStack`].push(mockSVGGElement);
@@ -91,5 +100,44 @@ describe('DrawStackService', () => {
         const stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
         service.changeTargetElement(stackTarget);
         expect(SPY).toHaveBeenCalledWith(stackTarget);
+    });
+
+    it('delete should call resolveDrawStackOrdering and splice of drawStack and idStack', () => {
+        service.push(mockSVGGElement);
+        const spyOnResolveDrawStack = spyOn(service, 'resolveDrawStackOrdering');
+        const spyOnspliceDrawStack = spyOn(service.drawStack, 'splice');
+        const spyOnspliceIdStack = spyOn(service.idStack, 'splice');
+
+        service.delete(mockSVGGElement);
+
+        expect(service.drawStack[0]).toEqual(mockSVGGElement);
+        expect(spyOnResolveDrawStack).toHaveBeenCalled();
+        expect(spyOnspliceDrawStack).toHaveBeenCalled();
+        expect(spyOnspliceIdStack).toHaveBeenCalled();
+    });
+
+    it('delete should call setAttribute if there are elements to resolve', () => {
+        service.push(mockSVGGElement);
+        service.push(mockSVGGElement);
+        const spyOnsetAttribute = spyOn(service.renderer, 'setAttribute');
+
+        service.resolveDrawStackOrdering(0);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('delete should not call setAttribute if there are not elements to resolve', () => {
+        service.drawStack.length = 2;
+        const spyOnsetAttribute = spyOn(service.renderer, 'setAttribute');
+
+        service.resolveDrawStackOrdering(2);
+
+        expect(spyOnsetAttribute).toHaveBeenCalledTimes(0);
+    });
+
+    it('setElementByPosition should set the correct element to the correct position', () => {
+        service.setElementByPosition(0, mockSVGGElement);
+
+        expect(service.drawStack[0]).toEqual(mockSVGGElement);
     });
 });

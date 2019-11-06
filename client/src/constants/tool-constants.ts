@@ -149,10 +149,20 @@ enum StampScaling {
 }
 
 enum StampAngleOrientation {
-    Min = -360,
-    Default = 0,
+    Min = 0,
     Max = 360,
 }
+
+enum EraserSize {
+    Min = 1,
+    Default = 50,
+    Max = 100,
+}
+
+const ERASER_STROKE_WIDTH = '3';
+const ADDITIONAL_BORDER_WIDTH = 5;
+const RESET_POSITION_NUMBER = -1;
+const DEFAULT_RADIX = 10;
 
 const STAMP_TYPES = [
     '',
@@ -291,6 +301,11 @@ export {
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
     PEN_WIDTH_FACTOR,
+    EraserSize,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION
+    SHAPE_TOOL_POSITION,
+    ERASER_STROKE_WIDTH,
+    ADDITIONAL_BORDER_WIDTH,
+    RESET_POSITION_NUMBER,
+    DEFAULT_RADIX,
 };
