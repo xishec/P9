@@ -37,6 +37,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.textToolService = this.toolSelectorService.getTextTool();
+        this.textToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
     initializeForm(): void {

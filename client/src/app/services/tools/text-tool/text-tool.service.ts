@@ -4,6 +4,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +15,12 @@ export class TextToolService extends AbstractToolService {
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
+
+    attributesManagerService: AttributesManagerService;
+
+    fontType: string;
+    fontSize: number;
+    fontAlign: string;
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
@@ -26,6 +33,8 @@ export class TextToolService extends AbstractToolService {
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
         super();
+
+        
     }
 
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
@@ -35,6 +44,20 @@ export class TextToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+    }
+
+    initializeAttributesManagerService (attributeManagerService: AttributesManagerService){
+        this.attributesManagerService = attributeManagerService;
+        
+        this.attributesManagerService.currentFont.subscribe((font) => {
+            this.fontType = font;
+        });
+        this.attributesManagerService.currentFontSize.subscribe((size) => {
+            this.fontSize = size;
+        });
+        this.attributesManagerService.currenTfontAlign.subscribe((align) => {
+            this.fontAlign = align;
+        });
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -60,11 +83,12 @@ export class TextToolService extends AbstractToolService {
     }
 
     createTextBox(x: number, y: number) {
+        console.log('size : ' + this.fontSize);
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
-        this.renderer.setAttribute(this.textBox, 'font-size', '12');
+        this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
+        this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
 
         
     }
