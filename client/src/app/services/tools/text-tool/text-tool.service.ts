@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, INVALID_KEY } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -27,7 +27,6 @@ export class TextToolService extends AbstractToolService {
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
     text = '';
-    notValidKey: string[] = ['Dead', 'Shift'];
 
     xPosition: number;
     yPosition: number;
@@ -210,8 +209,7 @@ export class TextToolService extends AbstractToolService {
 
     validKey(eventKey: string): boolean {
         return !(
-            this.notValidKey.find((key: string) => {
-                console.log(eventKey);
+            INVALID_KEY.find((key: string) => {
                 return key === eventKey;
             }) !== undefined
         );

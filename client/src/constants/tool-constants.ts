@@ -282,6 +282,8 @@ enum FontSize {
     Max = 72,
 }
 
+const INVALID_KEY: string[] = ['Dead', 'Shift'];
+
 export {
     ToolNameControlShortcuts,
     ToolNameShortcuts,
@@ -316,4 +318,5 @@ export {
     SHAPE_TOOL_POSITION,
     FONTS,
     FontSize,
+    INVALID_KEY,
 };
