@@ -31,13 +31,22 @@ export class DrawStackService {
         this.drawStack[elementPosition] = element;
     }
 
-    removeElementByPosition(elementPosition: number): void {
-        this.drawStack.splice(elementPosition, 1);
+    delete(elementToDelete: SVGGElement): void {
+        const indexOfDeletion = this.drawStack.indexOf(elementToDelete);
 
-        for (let i = 0; i < this.getDrawStackLength(); i++) {
-            if (i >= elementPosition) {
-                this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
-            }
+        this.drawStack.splice(indexOfDeletion, 1);
+        this.idStack.splice(indexOfDeletion, 1);
+
+        this.resolveDrawStackOrdering(indexOfDeletion);
+    }
+
+    resolveDrawStackOrdering(displacementIndex: number): void {
+        for (let i = displacementIndex; i < this.drawStack.length; i++) {
+            this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
+        }
+
+        for (let i = displacementIndex; i < this.idStack.length; i++) {
+            this.idStack[i] = i.toString();
         }
     }
 
