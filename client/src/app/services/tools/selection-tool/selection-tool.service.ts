@@ -316,11 +316,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isTheCurrentTool = true;
     }
     // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {
-        if(event.key === Keys.Backspace) {
-            this.selectAll();
-        }
-    }
+    onKeyDown(event: KeyboardEvent): void {}
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === Keys.s) {
             this.isTheCurrentTool = true;

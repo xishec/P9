@@ -45,7 +45,7 @@ export class ClipboardService {
         this.firstDuplication = true;
     }
 
-    clone(elementsToClone: Set<SVGGElement>, ): void {
+    clone(elementsToClone: Set<SVGGElement>): void {
         this.increaseOffsetValue();
         let newSelection: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of elementsToClone) {
@@ -60,13 +60,20 @@ export class ClipboardService {
 
     updateSelection(newSelection: Set<SVGGElement>): void {
         this.selection.emptySelection();
-        for(const el of newSelection){
+        for (const el of newSelection) {
             this.selection.addToSelection(el);
         }
     }
 
     fetchSelectionBounds(): void {
         this.clippingsBound = this.selection.selectionBox.getBoundingClientRect() as DOMRect;
+    }
+
+    handleOutOfBounds(): void {
+        this.fetchSelectionBounds();
+        if (!this.isInBounds()) {
+            this.offsetValue = 0;
+        }
     }
 
     increaseOffsetValue(): void {
@@ -76,10 +83,17 @@ export class ClipboardService {
     isInBounds(): boolean {
         const boxLeft = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH;
         const boxTop = this.clippingsBound.y + window.scrollY;
-        const parentBoxRight = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x + window.scrollX - SIDEBAR_WIDTH + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).width;
-        const parentBoxBottom = (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y + window.scrollY + (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).height;
+        const parentBoxRight =
+            (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).x +
+            window.scrollX -
+            SIDEBAR_WIDTH +
+            (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).width;
+        const parentBoxBottom =
+            (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).y +
+            window.scrollY +
+            (this.elementRef.nativeElement.getBoundingClientRect() as DOMRect).height;
 
-        return (boxLeft < parentBoxRight && boxTop < parentBoxBottom);
+        return boxLeft < parentBoxRight && boxTop < parentBoxBottom;
     }
 
     cut(): void {
@@ -109,27 +123,18 @@ export class ClipboardService {
         if (this.firstDuplication) {
             this.duplicationBuffer.clear();
             for (const el of this.selection.selectedElements) {
-            this.duplicationBuffer.add(el);
+                this.duplicationBuffer.add(el);
             }
             this.offsetValue = 0;
             this.firstDuplication = false;
         }
-
-        this.fetchSelectionBounds();
-        if (!this.isInBounds()) {
-            this.offsetValue = 0;
-            this.increaseOffsetValue();
-        }
-
+        this.handleOutOfBounds();
         this.clone(this.duplicationBuffer);
     }
 
     paste(): void {
         this.firstDuplication = true;
-        this.fetchSelectionBounds();
-        if (!this.isInBounds()) {
-            this.offsetValue = 0;
-        }
+        this.handleOutOfBounds();
         this.clone(this.clippings);
     }
 
