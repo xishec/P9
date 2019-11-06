@@ -17,8 +17,9 @@ export class TextToolService extends AbstractToolService {
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
-    textBox : SVGTextElement;
-    currentLine: SVGTSpanElement
+    textBox: SVGTextElement;
+    xPosition: number;
+    currentLine: SVGTSpanElement;
     text = '';
     
     isWriting = false;
@@ -64,12 +65,14 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
         this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
         this.renderer.setAttribute(this.textBox, 'font-size', '12');
+
+        
     }
 
-    createNewLine(x: number) {
+    createNewLine() {
         this.text = '';
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'x', '0');
+        this.renderer.setAttribute(this.currentLine, 'x', this.xPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.appendChild(this.textBox, this.currentLine);
     }
@@ -79,14 +82,14 @@ export class TextToolService extends AbstractToolService {
 
             this.shortCutManagerService.changeIsOnInput(true);
 
-            const x = this.getXPos(event.clientX);
+            this.xPosition = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
 
             // init the text box with position and style
-            this.createTextBox(x,y);
+            this.createTextBox(this.xPosition,y);
 
             // init the preview Box with position and style
-            this.createPreviewRect(x,y);
+            this.createPreviewRect(this.xPosition,y);
 
             this.createNewLine();
 
