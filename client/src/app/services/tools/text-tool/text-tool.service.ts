@@ -15,10 +15,12 @@ export class TextToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    text = '';
-    textBox : SVGTextElement;
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
+    textBox : SVGTextElement;
+    currentLine: SVGTSpanElement
+    text = '';
+    
     isWriting = false;
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
@@ -40,36 +42,55 @@ export class TextToolService extends AbstractToolService {
 
     updatePreviewBox() {
         // after the text is appended, get the bounding box of the text element and update the preview rectangle
-        const bBox = this.textBox.getBBox();
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, bBox.width.toString());
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, bBox.height.toString());
-        this.renderer.setAttribute(this.previewBox, 'x', bBox.x.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', bBox.y.toString());
+        const textBBox = this.textBox.getBBox();
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, textBBox.width.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
+        this.renderer.setAttribute(this.previewBox, 'x', textBBox.x.toString());
+        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+    }
+
+    createPreviewRect(x: number, y: number) {
+        this.previewBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.previewBox, 'x', x.toString());
+        this.renderer.setAttribute(this.previewBox, 'y', y.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
+    }
+
+    createTextBox(x: number, y: number) {
+        this.textBox = this.renderer.createElement('text', SVG_NS);
+        this.renderer.setAttribute(this.textBox, 'x', x.toString());
+        this.renderer.setAttribute(this.textBox, 'y', y.toString());
+        this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
+        this.renderer.setAttribute(this.textBox, 'font-size', '12');
+    }
+
+    createNewLine(x: number) {
+        this.text = '';
+        this.currentLine = this.renderer.createElement('tspan', SVG_NS);
+        this.renderer.setAttribute(this.currentLine, 'x', '0');
+        this.renderer.setAttribute(this.currentLine, 'dy', '1em');
+        this.renderer.appendChild(this.textBox, this.currentLine);
     }
 
     onMouseDown(event: MouseEvent): void {
         if(!this.isWriting) {
-            // create the rectangle
-            // disable shortcuts until on mouse down outside
-            this.text = '';
+
             this.shortCutManagerService.changeIsOnInput(true);
 
-            this.gWrap = this.renderer.createElement('g', SVG_NS);
+            const x = this.getXPos(event.clientX);
+            const y = this.getYPos(event.clientY);
 
             // init the text box with position and style
-            this.textBox = this.renderer.createElement('text', SVG_NS);
-            this.renderer.setAttribute(this.textBox, 'x', this.getXPos(event.clientX).toString());
-            this.renderer.setAttribute(this.textBox, 'y', this.getYPos(event.clientY).toString());
-            this.renderer.setAttribute(this.textBox, 'font-family', 'Verdana');
-            this.renderer.setAttribute(this.textBox, 'font-size', '12');
+            this.createTextBox(x,y);
 
             // init the preview Box with position and style
-            this.previewBox = this.renderer.createElement('rect', SVG_NS);
-            this.renderer.setAttribute(this.previewBox, 'x', this.getXPos(event.clientX).toString());
-            this.renderer.setAttribute(this.previewBox, 'y', this.getYPos(event.clientY).toString());
-            this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
-            this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
-            this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
+            this.createPreviewRect(x,y);
+
+            this.createNewLine();
+
+            this.gWrap = this.renderer.createElement('g', SVG_NS);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);
@@ -91,9 +112,15 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {
     }
     onKeyDown(event: KeyboardEvent): void {
-        if(!event.ctrlKey && !event.shiftKey) {
+        if(!this.isWriting || event.ctrlKey || event.shiftKey) {
+            return;
+        }
+
+        if(event.key == 'Enter') {
+            this.createNewLine();
+        } else {
             this.text += event.key;
-            this.renderer.setProperty(this.textBox, 'innerHTML', this.text);
+            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
             this.updatePreviewBox();
         }
     }
