@@ -112,7 +112,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(wrap, HTMLAttribute.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(wrap, HTMLAttribute.opacity, this.currentOpacity);
         this.renderer.setAttribute(wrap, HTMLAttribute.fill, '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, HTMLAttribute.title, ToolName.Pencil);
+        this.renderer.setAttribute(wrap, HTMLAttribute.title, ToolName.Pen);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
+    EraserSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -33,6 +34,7 @@ export class AttributesManagerService {
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
     private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Min);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
+    private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentMinThickness: Observable<number> = this.minThickness.asObservable();
@@ -45,6 +47,7 @@ export class AttributesManagerService {
     currentAngle: Observable<number> = this.angle.asObservable();
     currentScaling: Observable<number> = this.scaling.asObservable();
     currentStampType: Observable<string> = this.stampType.asObservable();
+    currentEraserSize: Observable<number> = this.eraserSize.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -88,5 +91,9 @@ export class AttributesManagerService {
 
     changeStampType(stampType: string): void {
         this.stampType.next(stampType);
+    }
+
+    changeEraserSize(size: number): void {
+        this.eraserSize.next(size);
     }
 }
