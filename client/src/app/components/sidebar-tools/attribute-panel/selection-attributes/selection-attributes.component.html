@@ -9,4 +9,15 @@
     <p>
         Inversez la sélection en effectuant un glisser-déposer du clique droit.
     </p>
+
+    <mat-button-toggle-group horizontal="true" id="clipboard-buttons">
+        <mat-button-toggle
+            *ngFor="let CLIPBOARD_BUTTON of CLIPBOARD_BUTTONS"
+            matTooltip="{{ CLIPBOARD_BUTTON.tooltipName }} {{ CLIPBOARD_BUTTON.shortcut }}"
+            matTooltipPosition="after"
+            (click)="onButtonTrigger()"
+            >
+            <i class="CLIPBOARD_BUTTON.iconName"></i>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
 </div>
