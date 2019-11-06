@@ -102,26 +102,37 @@ describe('DrawStackService', () => {
         expect(SPY).toHaveBeenCalledWith(stackTarget);
     });
 
-    it('removeElementByPosition should call setAttribute if there are higher positions than the requested position to remove', () => {
+    it('delete should call resolveDrawStackOrdering and splice of drawStack and idStack', () => {
         service.push(mockSVGGElement);
-        service.push(mockSVGGElement);
-        const spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');
+        const spyOnResolveDrawStack = spyOn(service, 'resolveDrawStackOrdering');
+        const spyOnspliceDrawStack = spyOn(service.drawStack, 'splice');
+        const spyOnspliceIdStack = spyOn(service.idStack, 'splice');
 
-        service.removeElementByPosition(0);
+        service.delete(mockSVGGElement);
 
-        expect(service.getDrawStackLength()).toEqual(1);
-        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(service.drawStack[0]).toEqual(mockSVGGElement);
+        expect(spyOnResolveDrawStack).toHaveBeenCalled();
+        expect(spyOnspliceDrawStack).toHaveBeenCalled();
+        expect(spyOnspliceIdStack).toHaveBeenCalled();
     });
 
-    it('removeElementByPosition should not call setAttribute if there are not higher positions than the requested position', () => {
+    it('delete should call setAttribute if there are elements to resolve', () => {
         service.push(mockSVGGElement);
         service.push(mockSVGGElement);
-        const spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');
+        const spyOnsetAttribute = spyOn(service.renderer, 'setAttribute');
 
-        service.removeElementByPosition(1);
+        service.resolveDrawStackOrdering(0);
 
-        expect(service.getDrawStackLength()).toEqual(1);
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(0);
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('delete should not call setAttribute if there are not elements to resolve', () => {
+        service.drawStack.length = 2;
+        const spyOnsetAttribute = spyOn(service.renderer, 'setAttribute');
+
+        service.resolveDrawStackOrdering(2);
+
+        expect(spyOnsetAttribute).toHaveBeenCalledTimes(0);
     });
 
     it('setElementByPosition should set the correct element to the correct position', () => {
