@@ -54,7 +54,7 @@ export class StampAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(StampScaling.Min), Validators.max(StampScaling.Max)],
             ],
             angle: [
-                StampAngleOrientation.Default,
+                StampAngleOrientation.Min,
                 [
                     Validators.required,
                     Validators.min(StampAngleOrientation.Min),
