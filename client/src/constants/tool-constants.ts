@@ -111,11 +111,14 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
 ];
 
-const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
+const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
     { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
     { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
-    { iconName: 'fas fa-clipboard', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
+    { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
+];
+
+const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-undo-alt', tooltipName: ToolName.Undo, shortcut: '(Ctrl-Z)' },
     { iconName: 'fas fa-redo-alt', tooltipName: ToolName.Redo, shortcut: '(Ctrl-Shift-Z)' },
     { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
@@ -290,6 +293,7 @@ export {
     SHAPE_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
+    CLIPBOARD_BUTTON_INFO,
     Thickness,
     TraceType,
     ToolName,
