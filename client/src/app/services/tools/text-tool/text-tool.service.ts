@@ -27,6 +27,7 @@ export class TextToolService extends AbstractToolService {
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
     text = '';
+    notValidKey: string[] = ['Dead', 'Shift'];
 
     xPosition: number;
     yPosition: number;
@@ -197,14 +198,22 @@ export class TextToolService extends AbstractToolService {
         } else if (event.key == ' ') {
             this.text += '\xa0';
         } else {
-            if (event.key != 'Shift') {
+            if (this.validKey(event.key)) {
                 this.text += event.key;
             }
-            console.log(event.key);
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         this.updatePreviewBox();
     }
     onKeyUp(event: KeyboardEvent): void {}
     cleanUp(): void {}
+
+    validKey(eventKey: string): boolean {
+        return !(
+            this.notValidKey.find((key: string) => {
+                console.log(eventKey);
+                return key === eventKey;
+            }) !== undefined
+        );
+    }
 }
