@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, INVALID_KEY } from 'src/constants/tool-constants';
+import { HTMLAttribute, INVALID_KEYS } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -208,10 +208,10 @@ export class TextToolService extends AbstractToolService {
     cleanUp(): void {}
 
     validKey(eventKey: string): boolean {
-        return !(
-            INVALID_KEY.find((key: string) => {
+        return (
+            INVALID_KEYS.find((key: string) => {
                 return key === eventKey;
-            }) !== undefined
+            }) === undefined
         );
     }
 }
