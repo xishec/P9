@@ -16,6 +16,7 @@ export class ClipboardService {
     buffer: Set<SVGGElement> = new Set<SVGGElement>();
 
     offsetValue = 0;
+    initialDuplicateOffset = {x: 0, y: 0};
 
     firstDuplication = true;
 
@@ -33,6 +34,15 @@ export class ClipboardService {
         this.elementRef = elementRef;
         this.drawStack = drawStack;
         this.selection = selection;
+    }
+
+    restartOffset(): void {
+        this.offsetValue = 0;
+        this.buffer.clear();
+        for (const el of this.selection.selectedElements) {
+            this.buffer.add(el);
+        }
+        this.firstDuplication = true;
     }
 
     fetchSelectionBounds(): void {
@@ -77,25 +87,31 @@ export class ClipboardService {
 
     duplicate(): void {
         if (this.firstDuplication) {
+            this.buffer.clear();
+            for (const el of this.selection.selectedElements) {
+            this.buffer.add(el);
+            }
             this.offsetValue = 0;
             this.firstDuplication = false;
             this.increaseOffsetValue();
         }
 
-        this.buffer.clear();
-        for (const el of this.selection.selectedElements) {
-            this.buffer.add(el);
+        this.fetchSelectionBounds();
+        if (!this.isInBounds()) {
+            this.offsetValue = 0;
+            this.increaseOffsetValue();
         }
 
         let dupBuffer: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of this.buffer) {
             let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
-            this.preventAdditionnalOffset(deepCopy);
             this.drawStack.push(deepCopy);
             this.offSet(deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             dupBuffer.add(deepCopy);
         }
+
+        this.increaseOffsetValue();
 
         this.selection.emptySelection();
         for(const el of dupBuffer){
