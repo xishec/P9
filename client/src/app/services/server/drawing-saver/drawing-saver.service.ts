@@ -5,6 +5,7 @@ import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Injectable({
     providedIn: 'root',
@@ -18,9 +19,7 @@ export class DrawingSaverService {
     currentDrawingInfo: DrawingInfo;
     drawStackService: DrawStackService;
 
-    constructor(
-        private drawingModalWindowService: DrawingModalWindowService,
-    ) {}
+    constructor(private drawingModalWindowService: DrawingModalWindowService, private sanitizer: DomSanitizer) {}
 
     updateDrawingSaverService(ref: ElementRef<SVGElement>, drawStackService: DrawStackService) {
         this.workZoneRef = ref;
@@ -30,13 +29,15 @@ export class DrawingSaverService {
         });
     }
 
-    saveDrawingLocal(filename: string): void {
-        let jsonObj: string = JSON.stringify({
-            "SVGRef": this.workZoneRef,
-            "Drawstack": this.drawStackService.idStack,
-            "DrawingInfo": this.currentDrawingInfo
+    getLocalFileDownloadUrl(): SafeResourceUrl {
+        const jsonObj: string = JSON.stringify({
+            SVGRef: this.workZoneRef,
+            Drawstack: this.drawStackService.idStack,
+            DrawingInfo: this.currentDrawingInfo,
         });
 
-        console.log(jsonObj);
+        const blob = new Blob([jsonObj], { type: 'text/plain' });
+
+        return this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 }

@@ -8,6 +8,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { MAX_NB_LABELS } from 'src/constants/constants';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-save-file-modal-window',
@@ -23,6 +24,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     selectedLabels: string[] = [];
     errorMesaage: string;
     isSaving: boolean;
+    saveFileUrl: SafeResourceUrl = "";
+    filename: string = "";
 
     constructor(
         formBuilderServer: FormBuilder,
@@ -56,6 +59,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         });
         this.saveFileLocalModalForm = this.formBuilderLocal.group({
             filename: ['', [Validators.required, Validators.minLength(1)]],
+            // Check filename so it only takes valid string
         });
     }
 
@@ -85,7 +89,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToLocal(): void {
-        this.drawingSaverService.saveDrawingLocal(this.saveFileLocalModalForm.value.filename);
+        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
+        this.filename = this.saveFileLocalModalForm.value.filename;
     }
 
     addLabel(newLabel: string): void {
