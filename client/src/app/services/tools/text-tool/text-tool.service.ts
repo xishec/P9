@@ -183,7 +183,7 @@ export class TextToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.isWriting || event.ctrlKey || event.shiftKey) {
+        if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
 
@@ -191,8 +191,13 @@ export class TextToolService extends AbstractToolService {
             this.createNewLine();
         } else if (event.key == 'Backspace') {
             this.text = this.text.slice(0, -1);
+        } else if (event.key == ' ') {
+            this.text += '\xa0';
         } else {
-            this.text += event.key;
+            if (event.key != 'Shift') {
+                this.text += event.key;
+            }
+            console.log(event.key);
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         this.updatePreviewBox();
