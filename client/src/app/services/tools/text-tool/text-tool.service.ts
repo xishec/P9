@@ -50,14 +50,39 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService = attributeManagerService;
         
         this.attributesManagerService.currentFont.subscribe((font) => {
-            this.fontType = font;
+            this.updateFont(font);
+            
         });
         this.attributesManagerService.currentFontSize.subscribe((size) => {
+            this.updateFontSize(size);
             this.fontSize = size;
         });
         this.attributesManagerService.currenTfontAlign.subscribe((align) => {
             this.fontAlign = align;
         });
+    }
+
+    updateFont(font: string) {
+        this.fontType = font;
+        if (this.isWriting) {
+            this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
+            this.updatePreviewBox();
+        };
+    }
+
+    updateFontSize(size: number) {
+        this.fontSize = size;
+        if (this.isWriting) {
+            this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
+            this.updatePreviewBox();
+        }
+    }
+
+    updateAlign(align : string) {
+        this.fontAlign = align;
+        if (this.isWriting) {
+            this.updatePreviewBox();
+        }
     }
 
     onMouseMove(event: MouseEvent): void {
