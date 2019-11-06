@@ -3,6 +3,7 @@ import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { Selection } from '../../../classes/selection/selection';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { ManipulatorService } from '../manipulator/manipulator.service';
+import { OFFSET_STEP } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -77,7 +78,11 @@ export class ClipboardService {
     }
 
     increaseOffsetValue(): void {
-        this.offsetValue += 5;
+        this.offsetValue += OFFSET_STEP;
+    }
+
+    decrementOffsetValue(): void {
+        this.offsetValue -= OFFSET_STEP;
     }
 
     isInBounds(): boolean {

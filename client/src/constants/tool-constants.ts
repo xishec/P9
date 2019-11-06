@@ -2,10 +2,16 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
 
+const OFFSET_STEP = 5;
+
 enum ToolName {
     TracingTool = 'Outil de traçage',
     ShapeTool = 'Outil de forme',
     Selection = 'Sélection',
+    Copy = 'Copier',
+    Cut = 'Couper',
+    Duplicate = 'Dupliquer',
+    Paste = 'Coller',
     Pencil = 'Crayon',
     Brush = 'Pinceau',
     Quill = 'Plume',
@@ -106,6 +112,10 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
+    { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
+    { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
+    { iconName: 'fas fa-clipboard', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
     { iconName: 'fas fa-undo-alt', tooltipName: ToolName.Undo, shortcut: '(Ctrl-Z)' },
     { iconName: 'fas fa-redo-alt', tooltipName: ToolName.Redo, shortcut: '(Ctrl-Shift-Z)' },
     { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
@@ -283,6 +293,7 @@ export {
     Thickness,
     TraceType,
     ToolName,
+    OFFSET_STEP,
     PolygonFormType,
     PolygonSides,
     PolygonRadiusCorrection,
