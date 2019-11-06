@@ -9,9 +9,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 @Injectable({
     providedIn: 'root',
 })
-
 export class TextToolService extends AbstractToolService {
-
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
@@ -32,13 +30,11 @@ export class TextToolService extends AbstractToolService {
 
     xPosition: number;
     yPosition: number;
-    
+
     isWriting = false;
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
         super();
-
-        
     }
 
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
@@ -50,9 +46,9 @@ export class TextToolService extends AbstractToolService {
         this.drawStack = drawStack;
     }
 
-    initializeAttributesManagerService (attributeManagerService: AttributesManagerService){
+    initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
         this.attributesManagerService = attributeManagerService;
-        
+
         this.attributesManagerService.currentFont.subscribe((font) => {
             this.updateFont(font);
         });
@@ -67,7 +63,7 @@ export class TextToolService extends AbstractToolService {
         });
         this.attributesManagerService.currentBoldState.subscribe((bold) => {
             this.updateBold(bold);
-        })
+        });
     }
 
     updateFont(font: string) {
@@ -75,7 +71,7 @@ export class TextToolService extends AbstractToolService {
         if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
             this.updatePreviewBox();
-        };
+        }
     }
 
     updateFontSize(size: number) {
@@ -86,7 +82,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align : string) {
+    updateAlign(align: string) {
         this.fontAlign = align;
         if (this.isWriting) {
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
@@ -144,8 +140,6 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
         this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
         this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
-
-        
     }
 
     createNewLine() {
@@ -158,18 +152,17 @@ export class TextToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if(!this.isWriting) {
-
+        if (!this.isWriting) {
             this.shortCutManagerService.changeIsOnInput(true);
 
             this.xPosition = this.getXPos(event.clientX);
             this.yPosition = this.getYPos(event.clientY);
 
             // init the text box with position and style
-            this.createTextBox(this.xPosition,this.yPosition);
+            this.createTextBox(this.xPosition, this.yPosition);
 
             // init the preview Box with position and style
-            this.createPreviewRect(this.xPosition,this.yPosition);
+            this.createPreviewRect(this.xPosition, this.yPosition);
 
             this.createNewLine();
 
@@ -184,35 +177,26 @@ export class TextToolService extends AbstractToolService {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             this.isWriting = false;
         }
-        
     }
 
-    onMouseUp(event: MouseEvent): void {
-        
-    }
-    onMouseEnter(event: MouseEvent): void {
-    }
-    onMouseLeave(event: MouseEvent): void {
-    }
+    onMouseUp(event: MouseEvent): void {}
+    onMouseEnter(event: MouseEvent): void {}
+    onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
-        if(!this.isWriting || event.ctrlKey || event.shiftKey) {
+        if (!this.isWriting || event.ctrlKey || event.shiftKey) {
             return;
         }
 
-        if(event.key == 'Enter') {
+        if (event.key == 'Enter') {
             this.createNewLine();
+        } else if (event.key == 'Backspace') {
+            this.text = this.text.slice(0, -1);
         } else {
             this.text += event.key;
-            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
-            this.updatePreviewBox();
         }
+        this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+        this.updatePreviewBox();
     }
-    onKeyUp(event: KeyboardEvent): void {
-    }
-    cleanUp(): void {
-    }
-
-    
-
-    
+    onKeyUp(event: KeyboardEvent): void {}
+    cleanUp(): void {}
 }
