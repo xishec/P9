@@ -2,6 +2,7 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export class Selection {
     renderer: Renderer2;
@@ -11,6 +12,9 @@ export class Selection {
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
+
+    inactiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    isInactiveSelection: Observable<boolean> = this.inactiveSelection.asObservable();
 
     isAppended = false;
 
@@ -46,6 +50,7 @@ export class Selection {
                 this.renderer.removeChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = false;
+            this.inactiveSelection.next(true);
         }
     }
 
@@ -56,6 +61,7 @@ export class Selection {
                 this.renderer.appendChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = true;
+            this.inactiveSelection.next(false);
         }
     }
 

@@ -15,11 +15,19 @@
             Manipulation de sélection:
         </p>
         <mat-button-toggle-group horizontal="true" id="clipboard-buttons">
+                <mat-button-toggle
+                matTooltip="{{ SELECT_ALL_BUTTON.tooltipName }} {{ SELECT_ALL_BUTTON.shortcut }}"
+                matTooltipPosition="after"
+                (click)="onButtonTrigger(SELECT_ALL_BUTTON.tooltipName)"
+                >
+                <i class="{{ SELECT_ALL_BUTTON.iconName }}"></i>
+            </mat-button-toggle>
             <mat-button-toggle
                 *ngFor="let CLIPBOARD_BUTTON of CLIPBOARD_BUTTONS"
                 matTooltip="{{ CLIPBOARD_BUTTON.tooltipName }} {{ CLIPBOARD_BUTTON.shortcut }}"
                 matTooltipPosition="after"
                 (click)="onButtonTrigger(CLIPBOARD_BUTTON.tooltipName)"
+                [disabled]="this.shouldDisable"
                 >
                 <i class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
             </mat-button-toggle>
