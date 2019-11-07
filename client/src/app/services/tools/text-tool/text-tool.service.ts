@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, INVALID_KEYS } from 'src/constants/tool-constants';
+import { HTMLAttribute, INVALID_KEYS, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -26,6 +26,7 @@ export class TextToolService extends AbstractToolService {
     previewBox: SVGRectElement;
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
+    tspanStack: SVGTSpanElement[] = new Array<SVGTSpanElement>();
     text = '';
 
     xPosition: number;
@@ -147,11 +148,36 @@ export class TextToolService extends AbstractToolService {
     }
 
     createNewLine() {
-        this.text = '';
+        if (this.tspanStack.length !== 0) {
+            this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
+            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+        }
+
+        this.text = TEXT_CURSOR;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
         this.renderer.setAttribute(this.currentLine, 'x', this.xPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
+        this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         this.renderer.appendChild(this.textBox, this.currentLine);
+        this.tspanStack.push(this.currentLine);
+    }
+
+    removeLine(): void {
+        console.log(this.textBox.getBBox());
+        this.renderer.removeChild(this.textBox, this.currentLine);
+        console.log(this.textBox.getBBox());
+        this.tspanStack.pop();
+        this.currentLine = this.tspanStack[this.tspanStack.length - 1];
+        let textContent = this.currentLine.textContent as string;
+        this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR;
+    }
+    erase(): void {
+        if (this.text.length === 1 && this.tspanStack[0] !== this.currentLine) {
+            this.removeLine();
+        } else if (this.text.length !== 1) {
+            this.text = this.text.slice(0, -2);
+            this.text += TEXT_CURSOR;
+        }
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -175,10 +201,17 @@ export class TextToolService extends AbstractToolService {
             this.renderer.appendChild(this.gWrap, this.textBox);
 
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
+            this.updatePreviewBox();
             this.isWriting = true;
         } else {
             this.renderer.removeChild(this.gWrap, this.previewBox);
+            if (this.tspanStack.length === 1 && this.text.length === 1)
+                //textbox is empty
+                this.renderer.removeChild(this.elementRef, this.gWrap);
+
             this.isWriting = false;
+            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
+            while (this.tspanStack.length !== 0) this.tspanStack.pop();
         }
     }
 
@@ -193,19 +226,21 @@ export class TextToolService extends AbstractToolService {
         if (event.key === 'Enter') {
             this.createNewLine();
         } else if (event.key == 'Backspace') {
-            this.text = this.text.slice(0, -1);
+            this.erase();
         } else if (event.key == ' ') {
-            this.text += '\xa0';
+            this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
+            this.text += TEXT_CURSOR;
         } else {
             if (this.validKey(event.key)) {
-                this.text += event.key;
+                this.text = this.text.replace(TEXT_CURSOR, event.key);
+                this.text += TEXT_CURSOR;
             }
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
-        this.updatePreviewBox();
+        setTimeout(() => {
+            this.updatePreviewBox();
+        }, 0);
     }
-    onKeyUp(event: KeyboardEvent): void {}
-    cleanUp(): void {}
 
     validKey(eventKey: string): boolean {
         return (
@@ -214,4 +249,7 @@ export class TextToolService extends AbstractToolService {
             }) === undefined
         );
     }
+
+    onKeyUp(event: KeyboardEvent): void {}
+    cleanUp(): void {}
 }
