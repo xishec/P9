@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
     FontSize,
+    EraserSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -32,8 +33,9 @@ export class AttributesManagerService {
     private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
-    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Min);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
+    private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
 
     private boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -52,6 +54,7 @@ export class AttributesManagerService {
     currentAngle: Observable<number> = this.angle.asObservable();
     currentScaling: Observable<number> = this.scaling.asObservable();
     currentStampType: Observable<string> = this.stampType.asObservable();
+    currentEraserSize: Observable<number> = this.eraserSize.asObservable();
 
     currentBoldState: Observable<boolean> = this.boldState.asObservable();
     currentItalicState: Observable<boolean> = this.italicState.asObservable();
@@ -117,5 +120,9 @@ export class AttributesManagerService {
     }
     changeFontAlign(fontAlign: string) {
         this.fontAlign.next(fontAlign);
+    }
+    
+    changeEraserSize(size: number): void {
+        this.eraserSize.next(size);
     }
 }
