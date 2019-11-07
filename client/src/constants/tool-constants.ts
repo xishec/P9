@@ -2,7 +2,7 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
 
-const OFFSET_STEP = 5;
+const OFFSET_STEP = 10;
 
 enum ToolName {
     TracingTool = 'Outil de traçage',
