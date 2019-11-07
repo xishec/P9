@@ -212,6 +212,7 @@ export class TextToolService extends AbstractToolService {
             this.isWriting = false;
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
             while (this.tspanStack.length !== 0) this.tspanStack.pop();
+            this.shortCutManagerService.changeIsOnInput(false);
         }
     }
 
@@ -222,6 +223,7 @@ export class TextToolService extends AbstractToolService {
         if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
+        event.preventDefault();
 
         if (event.key === 'Enter') {
             this.createNewLine();

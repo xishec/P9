@@ -10,6 +10,7 @@
                     formControlName="font"
                     (selectionChange)="onFontChange()"
                     [ngStyle]="{ 'font-family': getCurrentFont() }"
+                    (keydown)="$event.stopPropagation()"
                 >
                     <mat-option
                         *ngFor="let FONT of FONTS"
