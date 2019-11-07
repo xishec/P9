@@ -314,6 +314,9 @@ const INVALID_KEYS: string[] = [
     'Tab',
 ];
 
+const TEXT_CURSOR = '█';
+const TEXT_SPACE = '\xa0';
+
 export {
     ToolNameControlShortcuts,
     ToolNameShortcuts,
@@ -349,4 +352,6 @@ export {
     FONTS,
     FontSize,
     INVALID_KEYS,
+    TEXT_CURSOR,
+    TEXT_SPACE,
 };
