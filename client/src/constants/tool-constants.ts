@@ -13,6 +13,7 @@ enum ToolName {
     Cut = 'Couper',
     Duplicate = 'Dupliquer',
     Paste = 'Coller',
+    Delete = 'Supprimer',
     Pencil = 'Crayon',
     Brush = 'Pinceau',
     Quill = 'Plume',
@@ -118,6 +119,7 @@ const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
     { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
     { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
+    { iconName: 'fas fa-trash-alt', tooltipName: ToolName.Delete, shortcut: '(Supprimer)' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [

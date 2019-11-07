@@ -19,7 +19,7 @@
                 *ngFor="let CLIPBOARD_BUTTON of CLIPBOARD_BUTTONS"
                 matTooltip="{{ CLIPBOARD_BUTTON.tooltipName }} {{ CLIPBOARD_BUTTON.shortcut }}"
                 matTooltipPosition="after"
-                (click)="onButtonTrigger()"
+                (click)="onButtonTrigger(CLIPBOARD_BUTTON.tooltipName)"
                 >
                 <i class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
             </mat-button-toggle>

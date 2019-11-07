@@ -104,6 +104,7 @@ export class ClipboardService {
     cut(): void {
         this.firstDuplication = true;
         this.clippings.clear();
+        this.duplicationBuffer.clear();
         this.fetchSelectionBounds();
         this.offsetValue = 0;
         for (const el of this.selection.selectedElements) {
@@ -117,6 +118,7 @@ export class ClipboardService {
     copy(): void {
         this.firstDuplication = true;
         this.clippings.clear();
+        this.duplicationBuffer.clear();
         this.fetchSelectionBounds();
         this.offsetValue = 0;
         for (const el of this.selection.selectedElements) {
@@ -125,7 +127,7 @@ export class ClipboardService {
     }
 
     duplicate(): void {
-        if (this.firstDuplication) {
+        if (this.firstDuplication && this.selection.selectedElements.size > 0) {
             this.duplicationBuffer.clear();
             for (const el of this.selection.selectedElements) {
                 this.duplicationBuffer.add(el);
@@ -145,6 +147,7 @@ export class ClipboardService {
 
     delete(): void {
         this.firstDuplication = true;
+        this.duplicationBuffer.clear();
         for (const el of this.selection.selectedElements) {
             this.drawStack.delete(el);
             this.renderer.removeChild(this.elementRef.nativeElement, el);
