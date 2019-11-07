@@ -11,3 +11,20 @@
         padding-top: 30px;
     }
 }
+
+.mat-button-toggle-checked {
+    background: #ffffff;
+    * {
+        color: black;
+    }
+}
+
+.mat-button-toggle {
+    width: 40px;
+    height: 40px;
+    border: none;
+
+    i {
+        font-size: 100%;
+    }
+}
