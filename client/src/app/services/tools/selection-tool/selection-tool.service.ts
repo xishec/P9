@@ -257,7 +257,6 @@ export class SelectionToolService extends AbstractToolService {
 
     handleLeftMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
-
         if (this.isSelecting) {
             this.isSelecting = false;
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
