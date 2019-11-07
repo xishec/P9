@@ -281,6 +281,12 @@ export class Selection {
         } else if (isInSelectionRect && !this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.addToSelection(element);
+        } else if (!isInSelectionRect && !this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.delete(element);
+            this.addToSelection(element);
+        } else if (!isInSelectionRect && this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.delete(element);
+            this.removeFromSelection(element);
         }
     }
 }
