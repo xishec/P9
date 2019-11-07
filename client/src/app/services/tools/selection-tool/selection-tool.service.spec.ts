@@ -225,12 +225,10 @@ describe('SelectionToolService', () => {
         service.isOnTarget = false;
         service.isSelecting = false;
         service.isTranslatingSelection = true;
-        const spy = spyOn(service.selection, 'moveBy');
         const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
 
         service.handleLeftMouseDrag();
 
-        expect(spy).toHaveBeenCalled();
         expect(spyselection).toHaveBeenCalled();
     });
 

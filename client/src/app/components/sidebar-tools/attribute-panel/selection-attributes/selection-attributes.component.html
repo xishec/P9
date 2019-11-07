@@ -30,8 +30,8 @@
                 [class.disabled]="shouldDisable"
                 [disabled]="shouldDisable"
                 >
-                <i *ngIf="!shouldDisable; else active_icon" class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
-                <ng-template #active_icon><i style="color:grey;" class="{{ CLIPBOARD_BUTTON.iconName }}"></i></ng-template>
+                <i *ngIf="!shouldDisable; else inactive_icon" class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
+                <ng-template #inactive_icon><i style="color:grey;" class="{{ CLIPBOARD_BUTTON.iconName }}"></i></ng-template>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
