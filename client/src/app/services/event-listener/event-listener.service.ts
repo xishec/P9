@@ -97,11 +97,15 @@ export class EventListenerService {
                 if (event.key === 'x') {
                     this.clipboard.cut();
                 } else if (event.key === 'v') {
+                    this.toolSelectorService.changeTool(ToolName.Selection);
                     this.clipboard.paste();
                 } else if (event.key === 'c') {
                     this.clipboard.copy();
                 } else if (event.key === 'd') {
                     this.clipboard.duplicate();
+                } else if (event.key === 'a') {
+                    this.toolSelectorService.changeTool(ToolName.Selection);
+                    this.toolSelectorService.getSelectiontool().selectAll();
                 }
             }
 
