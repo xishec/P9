@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -261,7 +261,6 @@ export class SelectionToolService extends AbstractToolService {
             this.isSelecting = false;
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
-            this.isOnTarget = false;
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
         } else {
@@ -280,7 +279,6 @@ export class SelectionToolService extends AbstractToolService {
             this.isSelecting = false;
         } else if (this.isOnTarget) {
             this.singlySelectInvert(this.currentTarget);
-            this.isOnTarget = false;
         }
         this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
@@ -309,17 +307,9 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    onMouseEnter(event: MouseEvent): void {
-        this.isTheCurrentTool = true;
-    }
-    onMouseLeave(event: MouseEvent): void {
-        this.isTheCurrentTool = true;
-    }
+    onMouseEnter(event: MouseEvent): void {}
+    onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
-    onKeyUp(event: KeyboardEvent): void {
-        if (event.key === Keys.s) {
-            this.isTheCurrentTool = true;
-        }
-    }
+    onKeyUp(event: KeyboardEvent): void {}
 }
