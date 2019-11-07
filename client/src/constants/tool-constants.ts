@@ -8,6 +8,7 @@ enum ToolName {
     TracingTool = 'Outil de traçage',
     ShapeTool = 'Outil de forme',
     Selection = 'Sélection',
+    SelectAll = 'Tout sélectionner',
     Copy = 'Copier',
     Cut = 'Couper',
     Duplicate = 'Dupliquer',
@@ -112,6 +113,7 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-object-group', tooltipName: ToolName.SelectAll, shortcut: '' },
     { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
     { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
     { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
