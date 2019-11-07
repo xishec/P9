@@ -9,6 +9,7 @@ import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 @Component({
     selector: 'app-drawing-modal-window',
@@ -43,7 +44,10 @@ export class DrawingModalWindowComponent implements OnInit {
             this.emptyDrawStack = emptyDrawStack;
         });
 
-        this.previewColor = this.colorToolService.backgroundColor.value;
+        this.previewColor =
+            this.colorToolService.backgroundColor === undefined
+                ? DEFAULT_WHITE
+                : this.colorToolService.backgroundColor.value;
         this.initializeForm();
     }
 
