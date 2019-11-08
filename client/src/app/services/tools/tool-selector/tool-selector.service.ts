@@ -16,6 +16,7 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
+import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
@@ -34,6 +35,7 @@ export class ToolSelectorService {
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
+    drawStack: DrawStackService;
 
     constructor(
         private colorToolService: ColorToolService,
@@ -51,6 +53,7 @@ export class ToolSelectorService {
         private polygoneTool: PolygonToolService,
         private lineTool: LineToolService,
         private textTool: TextToolService,
+        private eraserTool: EraserToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -90,6 +93,8 @@ export class ToolSelectorService {
         this.lineTool.initializeColorToolService(this.colorToolService);
 
         this.textTool.initializeService(ref, renderer, drawStack);
+        
+        this.eraserTool.initializeService(ref, renderer, drawStack);
     }
 
     displayNewDrawingModal(): void {
@@ -186,6 +191,10 @@ export class ToolSelectorService {
     getTextTool(): TextToolService {
         return this.textTool;
     }
+    
+    getEraserTool(): EraserToolService {
+        return this.eraserTool;
+    }
 
     changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
@@ -264,12 +273,14 @@ export class ToolSelectorService {
                     this.displayExportFileModal();
                 }
                 break;
+            case ToolName.Eraser:
+                this.currentTool = this.eraserTool;
+                this.changeCurrentToolName(tooltipName);
+                break;
 
             case ToolName.Quill:
             case ToolName.SprayCan:
             case ToolName.Fill:
-            case ToolName.Eraser:
-
             default:
                 this.currentTool = undefined;
                 this.changeCurrentToolName(ToolName.Selection);

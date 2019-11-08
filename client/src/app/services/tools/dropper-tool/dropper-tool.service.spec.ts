@@ -1,6 +1,6 @@
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
