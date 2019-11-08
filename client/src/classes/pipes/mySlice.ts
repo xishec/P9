@@ -7,10 +7,6 @@ import { Drawing } from '../../../../common/communication/Drawing';
 })
 export class MySlice implements PipeTransform {
     transform(drawings: Drawing[], nameFilter: string): Drawing[] {
-        if (nameFilter === '$tout') {
-            return drawings;
-        } else {
-            return drawings.slice(0, 5);
-        }
+        return nameFilter === '$tout' ? drawings : drawings.slice(0, 5);
     }
 }
