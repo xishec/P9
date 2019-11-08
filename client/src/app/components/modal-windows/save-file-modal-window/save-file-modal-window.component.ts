@@ -47,7 +47,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     initializeForm(): void {
         this.saveFileModalForm = this.formBuilder.group({
             name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15)]],
-            label: ['', [Validators.maxLength(15)]],
+            label: ['', [Validators.maxLength(15), Validators.pattern('[A-Za-z0-9àÀéÉèÈôÔîÏçÇùÙ]*')]],
         });
     }
 
