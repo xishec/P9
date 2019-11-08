@@ -193,18 +193,20 @@ export class TextToolService extends AbstractToolService {
     }
 
     removeLine(): void {
+        const remainingText = this.text.slice(this.currentCursorIndex + 1);
         this.renderer.removeChild(this.textBox, this.currentLine);
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         const textContent = this.currentLine.textContent as string;
-        this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR;
+        this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR + remainingText;
     }
     erase(): void {
-        if (this.text.length === 1 && this.tspanStack[0] !== this.currentLine) {
+        if (this.currentCursorIndex === 0 && this.tspanStack[0] !== this.currentLine) {
             this.removeLine();
         } else if (this.text.length !== 1) {
-            this.text = this.text.slice(0, -2);
-            this.text += TEXT_CURSOR;
+            const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).slice(0, -2);
+            const rightSideText = this.text.slice(this.currentCursorIndex + 1);
+            this.text = leftSideText + TEXT_CURSOR + rightSideText;
         }
     }
 
@@ -255,10 +257,8 @@ export class TextToolService extends AbstractToolService {
             this.erase();
         } else if (event.key === ' ') {
             this.addText(TEXT_SPACE);
-        } else if (event.key === 'ArrowLeft') {
-            this.moveCursorLeft();
-        } else if (event.key === 'ArrowRight') {
-            this.moveCursorRight();
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            this.moveCursor(event.key);
         } else {
             if (event.key.length < 2) {
                 this.addText(event.key);
@@ -287,14 +287,10 @@ export class TextToolService extends AbstractToolService {
             this.shortCutManagerService.changeIsOnInput(false);
         }
     }
-    moveCursorLeft(): void {
-        if (this.currentCursorIndex !== 0) {
+    moveCursor(key: string): void {
+        if (key === 'ArrowLeft' && this.currentCursorIndex !== 0) {
             this.swapCursor(-1);
-        }
-    }
-
-    moveCursorRight(): void {
-        if (this.currentCursorIndex !== this.text.length - 1) {
+        } else if (this.currentCursorIndex !== this.text.length - 1) {
             this.swapCursor(1);
         }
     }
@@ -306,9 +302,8 @@ export class TextToolService extends AbstractToolService {
     }
 
     addText(key: string): void {
-        let textToAddValue = this.text.slice(0, this.currentCursorIndex + 1);
-        const restOfText = this.text.slice(this.currentCursorIndex + 1);
-        textToAddValue = textToAddValue.replace(TEXT_CURSOR, key);
-        this.text = textToAddValue + TEXT_CURSOR + restOfText;
+        const rightSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
+        const leftSideText = this.text.slice(this.currentCursorIndex + 1);
+        this.text = rightSideText + TEXT_CURSOR + leftSideText;
     }
 }
