@@ -46,7 +46,7 @@ export class EraserToolService extends AbstractToolService {
         super();
     }
 
-    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
@@ -113,11 +113,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkElementsToErase();
 
-        if (
-            this.isOnTarget &&
-            this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
-            button === Mouse.LeftButton
-        ) {
+        if (this.needToBeErased(button)) {
             this.renderer.removeChild(
                 this.elementRef.nativeElement,
                 this.drawStack.getElementByPosition(this.currentTarget),
@@ -137,6 +133,14 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.isOnTarget = false;
+    }
+
+    needToBeErased(button: number): boolean {
+        return (
+            this.isOnTarget &&
+            this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
+            button === Mouse.LeftButton
+        );
     }
 
     isTouchingElementBox(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
