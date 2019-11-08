@@ -1,5 +1,5 @@
 import { ElementRef, Renderer2 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
@@ -13,8 +13,7 @@ export class Selection {
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
 
-    inactiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-    isInactiveSelection: Observable<boolean> = this.inactiveSelection.asObservable();
+    isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     isAppended = false;
 
@@ -50,7 +49,7 @@ export class Selection {
                 this.renderer.removeChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = false;
-            this.inactiveSelection.next(true);
+            this.isActiveSelection.next(false);
         }
     }
 
@@ -61,7 +60,7 @@ export class Selection {
                 this.renderer.appendChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = true;
-            this.inactiveSelection.next(false);
+            this.isActiveSelection.next(true);
         }
     }
 
@@ -278,12 +277,15 @@ export class Selection {
         if (isInSelectionRect && this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.removeFromSelection(element);
+
         } else if (isInSelectionRect && !this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.addToSelection(element);
+
         } else if (!isInSelectionRect && !this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.delete(element);
             this.addToSelection(element);
+
         } else if (!isInSelectionRect && this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.delete(element);
             this.removeFromSelection(element);

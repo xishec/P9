@@ -4,6 +4,7 @@ import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../manipulator/manipulator.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -20,6 +21,7 @@ export class ClipboardService {
     offsetValue = 0;
 
     firstDuplication = true;
+    isClippingsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     clippingsBound: DOMRect;
 
@@ -116,6 +118,7 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
+        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
     }
 
     copy(): void {
@@ -127,6 +130,7 @@ export class ClipboardService {
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
+        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
     }
 
     duplicate(): void {

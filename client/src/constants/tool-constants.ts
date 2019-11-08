@@ -114,11 +114,11 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'fas fa-object-group', tooltipName: ToolName.SelectAll, shortcut: '' },
+    { iconName: 'fas fa-object-group', tooltipName: ToolName.SelectAll, shortcut: '(Ctrl-A)' },
+    { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
     { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
     { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
     { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
-    { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
     { iconName: 'fas fa-trash-alt', tooltipName: ToolName.Delete, shortcut: '(Supprimer)' },
 ];
 

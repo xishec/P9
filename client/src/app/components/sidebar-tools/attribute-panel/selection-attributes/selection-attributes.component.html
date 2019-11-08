@@ -23,14 +23,26 @@
                 <i class="{{ SELECT_ALL_BUTTON.iconName }}"></i>
             </mat-button-toggle>
             <mat-button-toggle
+                matTooltip="{{ PASTE_BUTTON.tooltipName }} {{ PASTE_BUTTON.shortcut }}"
+                matTooltipPosition="after"
+                (click)="onButtonTrigger(PASTE_BUTTON.tooltipName)"
+                [class.disabled]="isClippingsEmpty"
+                [disabled]="isClippingsEmpty"
+            >
+                <i *ngIf="!isClippingsEmpty; else inactive_paste" class="{{ PASTE_BUTTON.iconName }}"></i>
+                <ng-template #inactive_paste
+                    ><i style="color:grey;" class="{{ PASTE_BUTTON.iconName }}"></i
+                ></ng-template>
+            </mat-button-toggle>
+            <mat-button-toggle
                 *ngFor="let CLIPBOARD_BUTTON of CLIPBOARD_BUTTONS"
                 matTooltip="{{ CLIPBOARD_BUTTON.tooltipName }} {{ CLIPBOARD_BUTTON.shortcut }}"
                 matTooltipPosition="after"
                 (change)="onButtonTrigger(CLIPBOARD_BUTTON.tooltipName)"
-                [class.disabled]="shouldDisable"
-                [disabled]="shouldDisable"
+                [class.disabled]="!isActiveSelection"
+                [disabled]="!isActiveSelection"
             >
-                <i *ngIf="!shouldDisable; else inactive_icon" class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
+                <i *ngIf="isActiveSelection; else inactive_icon" class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
                 <ng-template #inactive_icon
                     ><i style="color:grey;" class="{{ CLIPBOARD_BUTTON.iconName }}"></i
                 ></ng-template>
