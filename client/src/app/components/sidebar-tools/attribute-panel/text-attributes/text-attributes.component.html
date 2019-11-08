@@ -21,7 +21,6 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-
             <mat-form-field id="small">
                 <input
                     autocomplete="off"
@@ -33,6 +32,7 @@
                     (input)="onFontSizeChange()"
                     [min]="fontSize.Min"
                     [max]="fontSize.Max"
+                    (keydown)="$event.stopPropagation()"
                 />
                 <mat-error>La valeur inscrite doit être entre {{ fontSize.Min }} et {{ fontSize.Max }} </mat-error>
             </mat-form-field>

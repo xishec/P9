@@ -73,7 +73,7 @@ export class TextToolService extends AbstractToolService {
 
     updateFont(font: string) {
         this.fontType = font;
-        if (this.isWriting) {
+        if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
             this.updatePreviewBox();
         }
@@ -81,7 +81,7 @@ export class TextToolService extends AbstractToolService {
 
     updateFontSize(size: number) {
         this.fontSize = size;
-        if (this.isWriting) {
+        if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
             this.updatePreviewBox();
         }
@@ -89,7 +89,7 @@ export class TextToolService extends AbstractToolService {
 
     updateAlign(align: string) {
         this.fontAlign = align;
-        if (this.isWriting) {
+        if (this.attributesManagerService.isWriting) {
 
             // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
 
@@ -119,7 +119,7 @@ export class TextToolService extends AbstractToolService {
 
     updateItalic(isItalic: boolean) {
         this.fontStyle = isItalic ? 'italic' : 'normal';
-        if (this.isWriting) {
+        if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
             this.updatePreviewBox();
         }
@@ -127,7 +127,7 @@ export class TextToolService extends AbstractToolService {
 
     updateBold(isBold: boolean) {
         this.fontWeight = isBold ? 'bold' : 'normal';
-        if (this.isWriting) {
+        if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
             this.updatePreviewBox();
         }
@@ -205,7 +205,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (!this.isWriting) {
+        if (!this.attributesManagerService.isWriting) {
             this.shortCutManagerService.changeIsOnInput(true);
 
             this.xPosition = this.getXPos(event.clientX);
@@ -226,17 +226,9 @@ export class TextToolService extends AbstractToolService {
 
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
-            this.isWriting = true;
+            this.attributesManagerService.changeIsWriting(true);
         } else {
-            this.renderer.removeChild(this.gWrap, this.previewBox);
-            if (this.tspanStack.length === 1 && this.text.length === 1)
-                //textbox is empty
-                this.renderer.removeChild(this.elementRef, this.gWrap);
-
-            this.isWriting = false;
-            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
-            while (this.tspanStack.length !== 0) this.tspanStack.pop();
-            this.shortCutManagerService.changeIsOnInput(false);
+            this.cleanUp();
         }
     }
 
@@ -244,7 +236,7 @@ export class TextToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.isWriting || event.ctrlKey || event.altKey) {
+        if (!this.attributesManagerService.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
         event.preventDefault();
@@ -257,7 +249,7 @@ export class TextToolService extends AbstractToolService {
             this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
             this.text += TEXT_CURSOR;
         } else {
-            if (this.validKey(event.key)) {
+            if (this.isValidKey(event.key)) {
                 this.text = this.text.replace(TEXT_CURSOR, event.key);
                 this.text += TEXT_CURSOR;
             }
@@ -271,7 +263,7 @@ export class TextToolService extends AbstractToolService {
         console.log(this.textBox.getBBox().x);
     }
 
-    validKey(eventKey: string): boolean {
+    isValidKey(eventKey: string): boolean {
         return (
             INVALID_KEYS.find((key: string) => {
                 return key === eventKey;
@@ -280,5 +272,20 @@ export class TextToolService extends AbstractToolService {
     }
 
     onKeyUp(event: KeyboardEvent): void {}
-    cleanUp(): void {}
+    cleanUp(): void {
+        if (this.gWrap !== undefined) {
+            //Possible smell...
+            this.renderer.removeChild(this.gWrap, this.previewBox);
+            if (this.tspanStack.length === 1 && this.text.length === 1)
+                //textbox is empty
+                this.renderer.removeChild(this.elementRef, this.gWrap);
+
+            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
+            while (this.tspanStack.length !== 0) this.tspanStack.pop();
+
+            this.drawStack.push(this.gWrap);
+            this.attributesManagerService.changeIsWriting(false);
+            this.shortCutManagerService.changeIsOnInput(false);
+        }
+    }
 }
