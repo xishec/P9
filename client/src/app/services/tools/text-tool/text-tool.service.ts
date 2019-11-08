@@ -29,7 +29,6 @@ export class TextToolService extends AbstractToolService {
     tspanStack: SVGTSpanElement[] = new Array<SVGTSpanElement>();
     text = '';
 
-
     bBoxAnchorLeft: number;
     bBoxWidth: number;
 
@@ -88,32 +87,28 @@ export class TextToolService extends AbstractToolService {
     }
 
     updateAlign(align: string) {
+
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
 
-            // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
-
-            if(this.fontAlign === 'end') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth).toString());
-                })
+            switch (align) {
+                case 'middle' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
+                    break;
+                }
+                case 'start' : {
+                    this.xPosition = this.bBoxAnchorLeft;
+                    break;
+                }
+                case 'end' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth;
+                }
             }
 
-            if(this.fontAlign === 'middle') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth/2).toString());
-                })
-            }
-
-            if(this.fontAlign === 'start') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', this.bBoxAnchorLeft.toString());
-                })
-            }
-
-
+            this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
+                this.renderer.setAttribute(tspan, 'x', this.xPosition.toString());
+            });
             this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
-            this.updatePreviewBox();
         }
     }
 
@@ -138,15 +133,14 @@ export class TextToolService extends AbstractToolService {
     }
 
     updatePreviewBox() {
-        // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
 
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
         this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
     }
 
     createPreviewRect(x: number, y: number) {
@@ -160,7 +154,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     createTextBox(x: number, y: number) {
-        console.log('size : ' + this.fontSize);
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
@@ -187,9 +180,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     removeLine(): void {
-        console.log(this.textBox.getBBox());
         this.renderer.removeChild(this.textBox, this.currentLine);
-        console.log(this.textBox.getBBox());
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         let textContent = this.currentLine.textContent as string;
@@ -258,9 +249,6 @@ export class TextToolService extends AbstractToolService {
         setTimeout(() => {
             this.updatePreviewBox();
         }, 0);
-
-
-        console.log(this.textBox.getBBox().x);
     }
 
     isValidKey(eventKey: string): boolean {
