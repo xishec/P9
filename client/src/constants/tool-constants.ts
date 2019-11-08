@@ -258,6 +258,13 @@ enum HTMLAttribute {
     stroke_dasharray = 'stroke-dasharray',
     stroke_linejoin = 'stroke-linejoin',
     title = 'title',
+    canvas = 'canvas',
+    a = 'a',
+    img = 'img',
+    download = 'download',
+    href = 'href',
+    src = 'src',
+    viewBox = 'viewBox',
 }
 
 const ToolNameShortcuts: Map<string, ToolName> = new Map([
@@ -284,6 +291,15 @@ const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
     ['g', ToolName.ArtGallery],
     ['e', ToolName.Export],
 ]);
+
+enum FileType {
+    SVG = 'svg',
+    PNG = 'png',
+    BMP = 'bmp',
+    JPG = 'jpeg',
+}
+
+const MAX_BMP_SIZE = 620;
 
 const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
@@ -319,12 +335,13 @@ export {
     GridOpacity,
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
+    FileType,
     PEN_WIDTH_FACTOR,
     EraserSize,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION,
     ERASER_STROKE_WIDTH,
     ADDITIONAL_BORDER_WIDTH,
     RESET_POSITION_NUMBER,
     DEFAULT_RADIX,
+    MAX_BMP_SIZE,
 };
