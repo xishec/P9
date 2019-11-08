@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -31,12 +32,13 @@ export class TextToolService extends AbstractToolService {
 
     bBoxAnchorLeft: number;
     bBoxWidth: number;
+    bBoxHeight: number;
 
-    xPosition: number;
-    yPosition: number;
+    textBoxXPosition: number;
+    textBoxYPosition: number;
 
-    isWriting = false;
     currentCursorIndex = 0;
+    isWriting: boolean;
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
         super();
@@ -69,11 +71,14 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService.currentBoldState.subscribe((bold) => {
             this.updateBold(bold);
         });
+        this.attributesManagerService.currentIsWriting.subscribe((isWriting) => {
+            this.isWriting = isWriting;
+        });
     }
 
     updateFont(font: string): void {
         this.fontType = font;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
             this.updatePreviewBox();
         }
@@ -81,31 +86,31 @@ export class TextToolService extends AbstractToolService {
 
     updateFontSize(size: number): void {
         this.fontSize = size;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
             this.updatePreviewBox();
         }
     }
 
-    updateAlign(align: string) {
+    updateAlign(align: string): void {
         this.fontAlign = align;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             switch (align) {
                 case 'middle': {
-                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
+                    this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
                     break;
                 }
                 case 'start': {
-                    this.xPosition = this.bBoxAnchorLeft;
+                    this.textBoxXPosition = this.bBoxAnchorLeft;
                     break;
                 }
                 case 'end': {
-                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth;
+                    this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth;
                 }
             }
 
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                this.renderer.setAttribute(tspan, 'x', this.xPosition.toString());
+                this.renderer.setAttribute(tspan, 'x', this.textBoxXPosition.toString());
             });
             this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
         }
@@ -113,7 +118,7 @@ export class TextToolService extends AbstractToolService {
 
     updateItalic(isItalic: boolean): void {
         this.fontStyle = isItalic ? 'italic' : 'normal';
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
             this.updatePreviewBox();
         }
@@ -121,10 +126,19 @@ export class TextToolService extends AbstractToolService {
 
     updateBold(isBold: boolean): void {
         this.fontWeight = isBold ? 'bold' : 'normal';
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
             this.updatePreviewBox();
         }
+    }
+
+    ifClickInTextBox(x: number, y: number): boolean {
+        return (
+            x >= this.bBoxAnchorLeft &&
+            x <= this.bBoxAnchorLeft + this.bBoxWidth &&
+            y >= this.textBoxYPosition &&
+            y <= this.textBoxYPosition + this.bBoxHeight
+        );
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -136,6 +150,7 @@ export class TextToolService extends AbstractToolService {
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
+        this.bBoxHeight = textBBox.height;
 
         this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
@@ -143,17 +158,15 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
     }
 
-    createPreviewRect(x: number, y: number): void {
+    initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewBox, 'x', x.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', y.toString());
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke, 'black');
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_width, '1');
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.fill, 'none');
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
-    createTextBox(x: number, y: number) {
+    createTextBox(x: number, y: number): void {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
@@ -172,7 +185,7 @@ export class TextToolService extends AbstractToolService {
 
         this.text = TEXT_CURSOR;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'x', this.xPosition.toString());
+        this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         this.renderer.appendChild(this.textBox, this.currentLine);
@@ -183,7 +196,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.removeChild(this.textBox, this.currentLine);
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
-        let textContent = this.currentLine.textContent as string;
+        const textContent = this.currentLine.textContent as string;
         this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR;
     }
     erase(): void {
@@ -196,17 +209,19 @@ export class TextToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (!this.attributesManagerService.isWriting) {
+        const xClick = this.getXPos(event.clientX);
+        const yClick = this.getYPos(event.clientY);
+        if (!this.isWriting) {
             this.shortCutManagerService.changeIsOnInput(true);
 
-            this.xPosition = this.getXPos(event.clientX);
-            this.yPosition = this.getYPos(event.clientY);
+            this.textBoxXPosition = xClick;
+            this.textBoxYPosition = yClick;
 
             // init the text box with position and style
-            this.createTextBox(this.xPosition, this.yPosition);
+            this.createTextBox(this.textBoxXPosition, this.textBoxYPosition);
 
-            // init the preview Box with position and style
-            this.createPreviewRect(this.xPosition, this.yPosition);
+            // init the preview Box with style
+            this.initPreviewRect();
 
             this.createNewLine();
 
@@ -218,7 +233,7 @@ export class TextToolService extends AbstractToolService {
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
             this.attributesManagerService.changeIsWriting(true);
-        } else {
+        } else if (!this.ifClickInTextBox(xClick, yClick)) {
             this.cleanUp();
         }
     }
@@ -227,7 +242,8 @@ export class TextToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.attributesManagerService.isWriting || event.ctrlKey || event.altKey) {
+        console.log(event.key.toString());
+        if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
         event.preventDefault();
@@ -258,16 +274,15 @@ export class TextToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {}
     cleanUp(): void {
         if (this.gWrap !== undefined) {
-            //Possible smell...
             this.renderer.removeChild(this.gWrap, this.previewBox);
-            if (this.tspanStack.length === 1 && this.text.length === 1)
-                //textbox is empty
+            if (this.tspanStack.length === 1 && this.text.length === 1) {
+                // textbox is empty
                 this.renderer.removeChild(this.elementRef, this.gWrap);
-
-            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
-            while (this.tspanStack.length !== 0) this.tspanStack.pop();
-
-            this.drawStack.push(this.gWrap);
+            } else {
+                this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
+                this.drawStack.push(this.gWrap);
+            }
+            this.tspanStack = new Array<SVGTSpanElement>();
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
