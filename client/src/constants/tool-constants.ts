@@ -376,7 +376,6 @@ export {
     PEN_WIDTH_FACTOR,
     EraserSize,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION,
     FONTS,
     FontSize,
     INVALID_KEYS,
