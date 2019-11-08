@@ -170,7 +170,7 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine() {
         if (this.tspanStack.length !== 0) {
-            this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
+            this.text = this.text.length === 1 ? this.text.slice(0, -1) : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
@@ -233,6 +233,7 @@ export class TextToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
+        console.log(event.key.toString());
         if (!this.attributesManagerService.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
@@ -243,9 +244,12 @@ export class TextToolService extends AbstractToolService {
         } else if (event.key == 'Backspace') {
             this.erase();
         } else if (event.key == ' ') {
-            console.log(event.key);
             this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
             this.text += TEXT_CURSOR;
+        } else if (event.key === 'ArrowLeft') {
+            this.moveCursorLeft();
+        } else if (event.key === 'ArrowRight') {
+            this.moveCursorRight();
         } else {
             if (event.key.length < 2) {
                 this.text = this.text.replace(TEXT_CURSOR, event.key);
@@ -276,6 +280,25 @@ export class TextToolService extends AbstractToolService {
             this.drawStack.push(this.gWrap);
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
+        }
+    }
+    moveCursorLeft(): void {
+        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+        if (currentCursorIndex !== 0) {
+            let arr = this.text.split('');
+            arr[currentCursorIndex] = arr[currentCursorIndex - 1];
+            arr[currentCursorIndex - 1] = TEXT_CURSOR;
+            this.text = arr.join('').toString();
+        }
+    }
+
+    moveCursorRight(): void {
+        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+        if (currentCursorIndex !== this.text.length - 1) {
+            let arr = this.text.split('');
+            arr[currentCursorIndex] = arr[currentCursorIndex + 1];
+            arr[currentCursorIndex + 1] = TEXT_CURSOR;
+            this.text = arr.join('').toString();
         }
     }
 }
