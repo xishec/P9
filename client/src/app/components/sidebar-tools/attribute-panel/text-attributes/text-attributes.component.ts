@@ -26,7 +26,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService
+        private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
     }
