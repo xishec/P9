@@ -16,8 +16,8 @@ import { ColorApplicatorToolService } from '../color-applicator-tool/color-appli
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
-import { ExportToolService } from '../export-tool/export-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
+import { ExportToolService } from '../export-tool/export-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
