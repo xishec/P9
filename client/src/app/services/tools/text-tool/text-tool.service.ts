@@ -192,15 +192,17 @@ export class TextToolService extends AbstractToolService {
     }
 
     createNewLine(): void {
+        const rightSideText = this.text.slice(this.currentCursorIndex);
         if (this.tspanStack.length !== 0) {
             this.text =
                 this.text.length === 1
                     ? this.text.slice(0, -1) + TEXT_SPACE
-                    : this.text.slice(0, this.currentCursorIndex - 1);
+                    : this.text.slice(0, this.currentCursorIndex);
+
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
-        this.text = TEXT_CURSOR;
+        this.text = rightSideText.length === 0 ? TEXT_CURSOR : rightSideText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
         this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
