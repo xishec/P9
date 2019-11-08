@@ -95,7 +95,7 @@ export class ToolSelectorService {
         this.lineTool.initializeColorToolService(this.colorToolService);
 
         this.textTool.initializeService(ref, renderer, drawStack);
-        
+
         this.exportTool.initializeService(ref, renderer);
 
         this.eraserTool.initializeService(ref, renderer, drawStack);

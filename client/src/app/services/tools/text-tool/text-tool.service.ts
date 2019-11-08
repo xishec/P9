@@ -6,6 +6,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -40,8 +41,13 @@ export class TextToolService extends AbstractToolService {
     currentCursorIndex = 0;
     isWriting: boolean;
 
-    constructor(private shortCutManagerService: ShortcutManagerService) {
+    primColor: string;
+
+    constructor(private shortCutManagerService: ShortcutManagerService, private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((color: string) => {
+            this.updateColor(color);
+        });
     }
 
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
@@ -74,6 +80,13 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService.currentIsWriting.subscribe((isWriting) => {
             this.isWriting = isWriting;
         });
+    }
+
+    updateColor(color: string) {
+        this.primColor = color;
+        if (this.isWriting) {
+            this.renderer.setAttribute(this.textBox, 'fill', '#' + this.primColor);
+        }
     }
 
     updateFont(font: string): void {
@@ -175,6 +188,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
         this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
         this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
+        this.renderer.setAttribute(this.textBox, 'fill', '#' + this.primColor);
     }
 
     createNewLine(): void {
