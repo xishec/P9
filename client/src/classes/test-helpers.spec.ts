@@ -97,10 +97,13 @@ export const createMockSVGGElementWithAttribute = (att: string): any => {
         },
         childElementCount: 3,
         childNodes: () => {
-            const mockGelementArray: SVGGElement[] = [createMockSVGGElement(), createMockSVGGElement(), createMockSVGGElement()];
+            const mockGelementArray: SVGGElement[] = [
+                createMockSVGGElement(),
+                createMockSVGGElement(),
+                createMockSVGGElement(),
+            ];
             return mockGelementArray;
         },
-
     };
     return (mockSVGElement as unknown) as SVGGElement;
 };
@@ -114,3 +117,10 @@ export const createMockFilter = (): SVGFilterElement => {
 export class MockElementRef extends ElementRef {
     nativeElement: {};
 }
+
+export const createMockSVGTextElement = (): SVGTextElement => {
+    const mockSVGTextElement = {
+        childNodes: [createMockSVGElement(), createMockSVGElement()] as Array<SVGTSpanElement>,
+    };
+    return (mockSVGTextElement as unknown) as SVGTextElement;
+};

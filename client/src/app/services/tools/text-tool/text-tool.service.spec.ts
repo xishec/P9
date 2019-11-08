@@ -4,10 +4,12 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import { TextToolService } from './text-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { createMockSVGTextElement } from 'src/classes/test-helpers.spec';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
     let service: TextToolService;
+    let attServ: AttributesManagerService;
     // let leftMouseEvent: MouseEvent;
     // let rightMouseEvent: MouseEvent;
     // let keyboardEvent: KeyboardEvent
@@ -91,9 +93,12 @@ fdescribe('TextToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        service.initializeAttributesManagerService(attributeManagerService);
+        attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
 
+        // const attributeManagerService: AttributesManagerService = new AttributesManagerService();
+        service.initializeAttributesManagerService(attServ);
+
+        service.textBox = createMockSVGTextElement();
         // leftMouseEvent = createMouseEvent(10, 10, 0);
         //rightMouseEvent = createMouseEvent(10, 10, 2);
 
@@ -150,12 +155,15 @@ fdescribe('TextToolService', () => {
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
 
+        attServ.changeIsWriting(true);
+
         service.updateAlign('middle');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
         expect(spyOnsetAttributed).toHaveBeenCalled();
     });
 
+    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft', () => {
         service.attributesManagerService.changeIsWriting(true);
         service.bBoxAnchorLeft = 2;
@@ -166,6 +174,7 @@ fdescribe('TextToolService', () => {
         expect(spyOnsetAttributed).toHaveBeenCalled();
     });
 
+    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
         service.attributesManagerService.changeIsWriting(true);
         service.bBoxAnchorLeft = 2;
