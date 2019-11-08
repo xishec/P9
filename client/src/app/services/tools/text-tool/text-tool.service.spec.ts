@@ -115,6 +115,21 @@ fdescribe('TextToolService', () => {
         expect(service.getYPos(2)).toBeLessThan(2);
     });
 
+    it('updateColor should change the primColor', () => {
+        service.updateColor('ffffff');
+
+        expect(service.primColor).toEqual('ffffff');
+    });
+
+    it('updateColor should change the primColor and call setAttribute if isWriting is true', () => {
+        service.isWriting = true;
+
+        service.updateColor('ffffff');
+
+        expect(service.primColor).toEqual('ffffff');
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
     it('updateFont should change the fontType', () => {
         service.updateFont('Times');
 
