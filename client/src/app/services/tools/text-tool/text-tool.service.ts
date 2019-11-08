@@ -193,7 +193,10 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine(): void {
         if (this.tspanStack.length !== 0) {
-            this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
+            this.text =
+                this.text.length === 1
+                    ? this.text.slice(0, -1) + TEXT_SPACE
+                    : this.text.slice(0, this.currentCursorIndex - 1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
@@ -322,8 +325,8 @@ export class TextToolService extends AbstractToolService {
     }
 
     addText(key: string): void {
-        const rightSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
-        const leftSideText = this.text.slice(this.currentCursorIndex + 1);
-        this.text = rightSideText + TEXT_CURSOR + leftSideText;
+        const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
+        const rightSideText = this.text.slice(this.currentCursorIndex + 1);
+        this.text = leftSideText + TEXT_CURSOR + rightSideText;
     }
 }
