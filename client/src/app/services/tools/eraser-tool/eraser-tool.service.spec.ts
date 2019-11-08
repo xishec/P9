@@ -121,6 +121,18 @@ describe('EraserToolService', () => {
         expect(spyOncheckElementsToErase).toHaveBeenCalled();
     });
 
+    it('needToBeErased should return true if the left button is clicked', () => {
+        service.isOnTarget = true;
+
+        expect(service.needToBeErased(leftMouseEvent.button)).toEqual(true);
+    });
+
+    it('needToBeErased should return false if the right button is clicked', () => {
+        service.isOnTarget = true;
+
+        expect(service.needToBeErased(rightMouseEvent.button)).toEqual(false);
+    });
+
     it('should call appendSquare if isSquareAppended is false', () => {
         service.isSquareAppended = false;
         const spyOnappendSquare: jasmine.Spy = spyOn(service, 'appendSquare');
