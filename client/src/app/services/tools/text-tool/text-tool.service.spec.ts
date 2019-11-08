@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { createMockSVGTextElement, createMouseEvent } from 'src/classes/test-helpers.spec';
+import { createMockSVGTextElement, createMouseEvent, createMockSVGTSpanElement } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
@@ -229,5 +229,41 @@ fdescribe('TextToolService', () => {
         service.initPreviewRect();
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createTextBox should call setAttribute', () => {
+        service.fontSize = 12;
+        service.createTextBox(3, 3);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createNewLine should call setAttribute', () => {
+        service.textBoxXPosition = 1;
+
+        service.createNewLine();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createNewLine should call setAttribute and setProperty if tspanStack.length is not zero', () => {
+        service.tspanStack.push(createMockSVGTSpanElement());
+        service.textBoxXPosition = 1;
+        const spyOnsetProperty = spyOn(service.renderer, 'setProperty');
+
+        service.createNewLine();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOnsetProperty).toHaveBeenCalled();
+    });
+
+    it('removeLine should call removeChild', () => {
+        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+        service.tspanStack.push(createMockSVGTSpanElement());
+        service.tspanStack.push(createMockSVGTSpanElement());
+
+        service.removeLine();
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
     });
 });

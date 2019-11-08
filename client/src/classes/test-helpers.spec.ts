@@ -128,3 +128,8 @@ export const createMockSVGTextElement = (): SVGTextElement => {
     };
     return (mockSVGTextElement as unknown) as SVGTextElement;
 };
+
+export const createMockSVGTSpanElement = (): SVGTSpanElement => {
+    const mockFilter = {};
+    return (mockFilter as unknown) as SVGTSpanElement;
+};
