@@ -7,7 +7,7 @@ import { Selection } from './selection';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import * as TestHelpers from '../../classes/test-helpers.spec';
 
-fdescribe('Selection', () => {
+describe('Selection', () => {
     let injector: TestBed;
     let proxy: Selection;
 

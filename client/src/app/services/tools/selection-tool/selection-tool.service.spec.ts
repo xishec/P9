@@ -3,10 +3,11 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
-import { Keys, Mouse, /*SIDEBAR_WIDTH*/ } from 'src/constants/constants';
+import { Mouse } from 'src/constants/constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
+import { ClipboardService } from '../../clipboard/clipboard.service';
 
 describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
@@ -27,6 +28,7 @@ describe('SelectionToolService', () => {
         TestBed.configureTestingModule({
             providers: [
                 SelectionToolService,
+                ClipboardService,
                 {
                     provide: Renderer2,
                     useValue: {
@@ -72,20 +74,57 @@ describe('SelectionToolService', () => {
         expect(service).toBeTruthy();
     });
 
+    it('should select all drawStack when calling selectAll', () => {
+        const spy = spyOn(service.selection, 'addToSelection');
+
+        service.selectAll();
+
+        expect(spy).toHaveBeenCalledTimes(service.drawStack.getDrawStackLength());
+    });
+
+    it('should return true if mousePosition is in workzone when calling verifyPosition', () => {
+        const mockMouseEvent = {
+            clientX: 10,
+            clientY: 10,
+        };
+
+        const res = service.verifyPosition(mockMouseEvent as unknown as MouseEvent);
+
+        expect(res).toBeTruthy();
+    })
+
+    it('should return false if mousePosition is not in workzone when calling verifyPosition', () => {
+        const mockMouseEvent = {
+            clientX: -10,
+            clientY: -10,
+        };
+
+        const res = service.verifyPosition(mockMouseEvent as unknown as MouseEvent);
+
+        expect(res).toBeFalsy();
+    })
+
     it('should initialize the selectionRectangle and Selection on creation', () => {
+        const spyClipboard = spyOn(service.clipBoard, 'initializeService');
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(service.selection).toBeTruthy();
+        expect(spyClipboard).toHaveBeenCalled();
     });
 
-    it('should call cleanUp of Selection and set isTheCurrentTool to false', () => {
-        const spyOnSelectionCleanUp: jasmine.Spy = spyOn(service.selection, 'cleanUp');
-        service.isTheCurrentTool = true;
+    it('should set all behavioral booleans to false and remove the selection rectangle', () => {
+        service.isSelecting = true;
 
         service.cleanUp();
 
-        expect(spyOnSelectionCleanUp).toHaveBeenCalled();
+        expect(spyOnRemoveChild).toHaveBeenCalled();
         expect(service.isTheCurrentTool).toBeFalsy();
+        expect(service.isLeftMouseDown).toBeFalsy();
+        expect(service.isRightMouseDown).toBeFalsy();
+        expect(service.isLeftMouseDragging).toBeFalsy();
+        expect(service.isRightMouseDragging).toBeFalsy();
+        expect(service.isSelecting).toBeFalsy();
+        expect(service.isTranslatingSelection).toBeFalsy();
     });
 
     it('should update the selection rectangle for a negative X/Y difference', () => {
@@ -302,7 +341,7 @@ describe('SelectionToolService', () => {
         expect(spyOnRemoveChild).toHaveBeenCalled();
     });
 
-    it('should isSelecting to false when handling a right mouse up and isSelecting was true', () => {
+    it('should set isSelecting to false when handling a right mouse up and isSelecting was true', () => {
         service.handleRightMouseUp();
 
         expect(service.isSelecting).toBeFalsy();
@@ -317,55 +356,73 @@ describe('SelectionToolService', () => {
 
         expect(spy).toHaveBeenCalled();
         expect(service.isOnTarget).toBeFalsy();
-    });
-
-    it('should remove the selection rectangle when handling a left mouse up', () => {
-        service.handleLeftMouseUp();
-
         expect(spyOnRemoveChild).toHaveBeenCalled();
     });
 
-    it('onMouseUp should call handleLeftMouseUp if event.button is Left Button', () => {
+    it('should set isSelecting to false when handling a left mouse up and isSelecting was true', () => {
+        service.isSelecting = true;
+
+        service.handleLeftMouseUp();
+
+        expect(spyOnRemoveChild).toHaveBeenCalled();
+        expect(service.isSelecting).toBeFalsy();
+    });
+
+    it('should set isOnTarget to false when handling a left mouse up, isTarget is true and was not translating', () => {
+        service.isOnTarget = true;
+        service.isTranslatingSelection = false;
+        const spyOnSinglySelect = spyOn(service, 'singlySelect');
+
+        service.handleLeftMouseUp();
+
+        expect(service.isOnTarget).toBeFalsy();
+        expect(spyOnSinglySelect).toHaveBeenCalled();
+    });
+
+    it('should set isTranslatinSelection to false when handling a left mouse up was translating', () => {
+        service.isTranslatingSelection = false;
+
+        service.handleLeftMouseUp();
+
+        expect(service.isTranslatingSelection).toBeFalsy();
+    });
+
+    it('should empty selection when handling a left mouse up outside of selection', () => {
+        const spyOnEmptySelection = spyOn(service.selection, 'emptySelection');
+
+        service.handleLeftMouseUp();
+
+        expect(spyOnEmptySelection).toHaveBeenCalled();
+    });
+
+    it('onMouseUp should call handleLeftMouseUp and restartDuplication from clipboard if event.button is Left Button', () => {
         const spy = spyOn(service, 'handleLeftMouseUp');
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);;
+        spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+        expect(spyClipboard).toHaveBeenCalled();
+    });
+
+    it('onMouseUp should not do anything if mouse is not in workzone', () => {
+        const spy = spyOn(service, 'handleLeftMouseUp');
+        spyOn(service, 'verifyPosition').and.returnValue(false);
+
+        service.onMouseUp(MOCK_LEFT_CLICK);
+
+        expect(spy).not.toHaveBeenCalled();
     });
 
     it('onMouseUp should call handleRightMouseUp if event.button is Right Button', () => {
         const spy = spyOn(service, 'handleRightMouseUp');
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);;
+        spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.onMouseUp(MOCK_RIGHT_CLICK);
 
         expect(spy).toHaveBeenCalled();
-    });
-
-    it('onMouseEnter should set isTheCurrentTool true', () => {
-        service.isTheCurrentTool = false;
-
-        service.onMouseEnter(MOCK_LEFT_CLICK);
-
-        expect(service.isTheCurrentTool).toBeTruthy();
-    });
-
-    it('onMouseLeave should set isTheCurrentTool true', () => {
-        service.isTheCurrentTool = false;
-
-        service.onMouseLeave(MOCK_LEFT_CLICK);
-
-        expect(service.isTheCurrentTool).toBeTruthy();
-    });
-
-    it('onKeyUp should set isTheCurrentTool to true if key is s', () => {
-        service.isTheCurrentTool = false;
-
-        const mockKeyS = {
-            key: Keys.s,
-        } as KeyboardEvent;
-
-        service.onKeyUp(mockKeyS);
-
-        expect(service.isTheCurrentTool).toBeTruthy();
+        expect(spyClipboard).toHaveBeenCalled();
     });
 });
