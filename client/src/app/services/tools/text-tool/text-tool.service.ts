@@ -86,31 +86,29 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align: string): void {
+    updateAlign(align: string) {
+
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
-            // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
 
-            if (this.fontAlign === 'end') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth).toString());
-                });
+            switch (align) {
+                case 'middle' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
+                    break;
+                }
+                case 'start' : {
+                    this.xPosition = this.bBoxAnchorLeft;
+                    break;
+                }
+                case 'end' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth;
+                }
             }
 
-            if (this.fontAlign === 'middle') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth / 2).toString());
-                });
-            }
-
-            if (this.fontAlign === 'start') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', this.bBoxAnchorLeft.toString());
-                });
-            }
-
+            this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
+                this.renderer.setAttribute(tspan, 'x', this.xPosition.toString());
+            });
             this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
-            this.updatePreviewBox();
         }
     }
 
@@ -140,10 +138,10 @@ export class TextToolService extends AbstractToolService {
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
 
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
         this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
     }
 
     createPreviewRect(x: number, y: number): void {
@@ -156,8 +154,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
-    createTextBox(x: number, y: number): void {
-        console.log('size : ' + this.fontSize);
+    createTextBox(x: number, y: number) {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
@@ -170,7 +167,7 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine(): void {
         if (this.tspanStack.length !== 0) {
-            this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
+            this.text = this.text.length === 1 ? this.text.slice(0, -1) : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
@@ -184,9 +181,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     removeLine(): void {
-        console.log(this.textBox.getBBox());
         this.renderer.removeChild(this.textBox, this.currentLine);
-        console.log(this.textBox.getBBox());
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         let textContent = this.currentLine.textContent as string;
@@ -233,6 +228,7 @@ export class TextToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
+        console.log(event.key.toString());
         if (!this.attributesManagerService.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
@@ -243,9 +239,12 @@ export class TextToolService extends AbstractToolService {
         } else if (event.key == 'Backspace') {
             this.erase();
         } else if (event.key == ' ') {
-            console.log(event.key);
             this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
             this.text += TEXT_CURSOR;
+        } else if (event.key === 'ArrowLeft') {
+            this.moveCursorLeft();
+        } else if (event.key === 'ArrowRight') {
+            this.moveCursorRight();
         } else {
             if (event.key.length < 2) {
                 this.text = this.text.replace(TEXT_CURSOR, event.key);
@@ -257,8 +256,6 @@ export class TextToolService extends AbstractToolService {
             //Change me
             this.updatePreviewBox();
         }, 0);
-
-        console.log(this.textBox.getBBox().x);
     }
 
     onKeyUp(event: KeyboardEvent): void {}
@@ -276,6 +273,25 @@ export class TextToolService extends AbstractToolService {
             this.drawStack.push(this.gWrap);
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
+        }
+    }
+    moveCursorLeft(): void {
+        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+        if (currentCursorIndex !== 0) {
+            let arr = this.text.split('');
+            arr[currentCursorIndex] = arr[currentCursorIndex - 1];
+            arr[currentCursorIndex - 1] = TEXT_CURSOR;
+            this.text = arr.join('').toString();
+        }
+    }
+
+    moveCursorRight(): void {
+        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+        if (currentCursorIndex !== this.text.length - 1) {
+            let arr = this.text.split('');
+            arr[currentCursorIndex] = arr[currentCursorIndex + 1];
+            arr[currentCursorIndex + 1] = TEXT_CURSOR;
+            this.text = arr.join('').toString();
         }
     }
 }
