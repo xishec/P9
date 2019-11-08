@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
@@ -6,8 +7,8 @@ import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
-import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
+import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
