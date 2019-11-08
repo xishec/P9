@@ -18,6 +18,7 @@
                 id="label"
                 *ngFor="let label of drawingLabels"
                 (click)="toggleLabel(label)"
+                [disabled]="!selectedLabels.includes(label)"
                 [checked]="selectedLabels.includes(label)"
             >
                 {{ label }}

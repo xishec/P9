@@ -86,11 +86,23 @@ export class SaveFileModalWindowComponent implements OnInit {
         }
     }
 
-    toggleLabel(label: string) {
+    toggleLabel(label: string): void {
         if (this.selectedLabels.includes(label)) {
-            this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
-                return selectedLabel !== label;
-            });
+            this.deselect(label);
+        } else {
+            this.select(label);
+        }
+    }
+
+    deselect(label: string): void {
+        this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
+            return selectedLabel !== label;
+        });
+    }
+
+    select(label: string): void {
+        if (this.selectedLabels.length >= MAX_NB_LABELS) {
+            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
         } else {
             this.selectedLabels.push(label);
         }
