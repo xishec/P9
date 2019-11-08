@@ -10,6 +10,10 @@ export class ManipulatorService {
 
   constructor() { }
 
+  initializeService(renderer: Renderer2): void {
+      this.renderer = renderer;
+  }
+
   translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
     for (const el of selection.selectedElements) {
         const transformsList = el.transform.baseVal;

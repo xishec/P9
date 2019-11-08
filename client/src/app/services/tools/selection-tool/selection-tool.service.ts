@@ -69,7 +69,7 @@ export class SelectionToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
-        this.manipulator.renderer = renderer;
+        this.manipulator.initializeService(this.renderer);
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
