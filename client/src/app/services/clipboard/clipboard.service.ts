@@ -81,8 +81,11 @@ export class ClipboardService {
         this.offsetValue += OFFSET_STEP;
     }
 
-    decrementOffsetValue(): void {
+    decreaseOffsetValue(): void {
         this.offsetValue -= OFFSET_STEP;
+        if (this.offsetValue < 0) {
+            this.offsetValue = 0;
+        }
     }
 
     isInBounds(): boolean {

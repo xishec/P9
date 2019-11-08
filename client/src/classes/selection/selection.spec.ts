@@ -468,8 +468,6 @@ describe('Selection', () => {
         expect(spyAppendFullSelectionBox).toHaveBeenCalled();
     });
 
-
-
     it('should add unselected element to selectedElements and update the selectionBox when calling invertAddToSelection', () => {
         const dummyG = TestHelpers.createMockSVGGElement();
         proxy.selectedElements.add(dummyG);
