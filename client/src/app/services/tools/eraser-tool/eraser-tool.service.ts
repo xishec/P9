@@ -30,6 +30,7 @@ export class EraserToolService extends AbstractToolService {
     isSquareAppended = false;
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
+    erasedSomething = false;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -123,6 +124,8 @@ export class EraserToolService extends AbstractToolService {
             );
 
             this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
+
+            this.erasedSomething = true;
 
             // set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
@@ -306,6 +309,8 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.isOnTarget = false;
+
+        this.erasedSomething = false;
     }
 
     onMouseEnter(event: MouseEvent): void {
