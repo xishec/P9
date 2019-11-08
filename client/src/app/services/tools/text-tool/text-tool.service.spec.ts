@@ -145,7 +145,7 @@ fdescribe('TextToolService', () => {
     });
 
     //doesn't work yet
-    it('updateAlign should change the xPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
+    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
         service.attributesManagerService.changeIsWriting(true);
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
@@ -153,6 +153,27 @@ fdescribe('TextToolService', () => {
         service.updateAlign('middle');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
+        expect(spyOnsetAttributed).toHaveBeenCalled();
+    });
+
+    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft', () => {
+        service.attributesManagerService.changeIsWriting(true);
+        service.bBoxAnchorLeft = 2;
+
+        service.updateAlign('start');
+
+        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
+        expect(spyOnsetAttributed).toHaveBeenCalled();
+    });
+
+    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
+        service.attributesManagerService.changeIsWriting(true);
+        service.bBoxAnchorLeft = 2;
+        service.bBoxWidth = 2;
+
+        service.updateAlign('end');
+
+        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
         expect(spyOnsetAttributed).toHaveBeenCalled();
     });
 });
