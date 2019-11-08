@@ -37,6 +37,8 @@ export class TextToolService extends AbstractToolService {
     textBoxXPosition: number;
     textBoxYPosition: number;
 
+    isWriting: boolean;
+
     constructor(private shortCutManagerService: ShortcutManagerService) {
         super();
     }
@@ -68,11 +70,14 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService.currentBoldState.subscribe((bold) => {
             this.updateBold(bold);
         });
+        this.attributesManagerService.currentIsWriting.subscribe((isWriting) => {
+            this.isWriting = isWriting;
+        });
     }
 
     updateFont(font: string): void {
         this.fontType = font;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
             this.updatePreviewBox();
         }
@@ -80,7 +85,7 @@ export class TextToolService extends AbstractToolService {
 
     updateFontSize(size: number): void {
         this.fontSize = size;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
             this.updatePreviewBox();
         }
@@ -88,17 +93,17 @@ export class TextToolService extends AbstractToolService {
 
     updateAlign(align: string): void {
         this.fontAlign = align;
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             switch (align) {
-                case 'middle' : {
+                case 'middle': {
                     this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
                     break;
                 }
-                case 'start' : {
+                case 'start': {
                     this.textBoxXPosition = this.bBoxAnchorLeft;
                     break;
                 }
-                case 'end' : {
+                case 'end': {
                     this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth;
                 }
             }
@@ -112,7 +117,7 @@ export class TextToolService extends AbstractToolService {
 
     updateItalic(isItalic: boolean): void {
         this.fontStyle = isItalic ? 'italic' : 'normal';
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
             this.updatePreviewBox();
         }
@@ -120,7 +125,7 @@ export class TextToolService extends AbstractToolService {
 
     updateBold(isBold: boolean): void {
         this.fontWeight = isBold ? 'bold' : 'normal';
-        if (this.attributesManagerService.isWriting) {
+        if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
             this.updatePreviewBox();
         }
@@ -205,7 +210,7 @@ export class TextToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const xClick = this.getXPos(event.clientX);
         const yClick = this.getYPos(event.clientY);
-        if (!this.attributesManagerService.isWriting) {
+        if (!this.isWriting) {
             this.shortCutManagerService.changeIsOnInput(true);
 
             this.textBoxXPosition = xClick;
@@ -237,7 +242,7 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {}
     onKeyDown(event: KeyboardEvent): void {
         console.log(event.key.toString());
-        if (!this.attributesManagerService.isWriting || event.ctrlKey || event.altKey) {
+        if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
         event.preventDefault();
@@ -268,7 +273,6 @@ export class TextToolService extends AbstractToolService {
 
     onKeyUp(event: KeyboardEvent): void {}
     cleanUp(): void {
-
         if (this.gWrap !== undefined) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             if (this.tspanStack.length === 1 && this.text.length === 1) {
@@ -277,7 +281,6 @@ export class TextToolService extends AbstractToolService {
             } else {
                 this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
                 this.drawStack.push(this.gWrap);
-
             }
             this.tspanStack = new Array<SVGTSpanElement>();
             this.attributesManagerService.changeIsWriting(false);
