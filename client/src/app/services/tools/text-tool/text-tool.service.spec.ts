@@ -3,6 +3,7 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 
 import { TextToolService } from './text-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
@@ -61,8 +62,8 @@ fdescribe('TextToolService', () => {
                     useValue: {
                         nativeElement: {
                             getBoundingClientRect: () => {
-                                const boundleft = 0;
-                                const boundtop = 0;
+                                const boundleft = 1;
+                                const boundtop = 1;
                                 const boundRect = {
                                     left: boundleft,
                                     top: boundtop,
@@ -70,6 +71,14 @@ fdescribe('TextToolService', () => {
                                 return boundRect;
                             },
                         },
+                    },
+                },
+                {
+                    provide: AttributesManagerService,
+                    useValue: {
+                        changeIsWriting: () => null,
+                        changeIsOnInput: () => null,
+                        isWriting: false,
                     },
                 },
             ],
@@ -82,6 +91,9 @@ fdescribe('TextToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
+        const attributeManagerService: AttributesManagerService = new AttributesManagerService();
+        service.initializeAttributesManagerService(attributeManagerService);
+
         // leftMouseEvent = createMouseEvent(10, 10, 0);
         //rightMouseEvent = createMouseEvent(10, 10, 2);
 
@@ -89,7 +101,30 @@ fdescribe('TextToolService', () => {
     });
 
     it('should be created', () => {
-        const service: TextToolService = TestBed.get(TextToolService);
         expect(service).toBeTruthy();
+    });
+
+    it('getXPos should return a number that is smaller than the original number', () => {
+        expect(service.getXPos(2)).toBeLessThan(2);
+    });
+
+    it('getYPos should return a number that is smaller than the original number', () => {
+        expect(service.getYPos(2)).toBeLessThan(2);
+    });
+
+    it('updateFont should change the fontType', () => {
+        service.updateFont('Times');
+
+        expect(service.fontType).toEqual('Times');
+    });
+
+    it('updateFont should change the fontType and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.attributesManagerService.changeIsWriting(true);
+
+        service.updateFont('Times');
+
+        expect(service.fontType).toEqual('Times');
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 });
