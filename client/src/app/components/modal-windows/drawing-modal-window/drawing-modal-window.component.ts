@@ -6,6 +6,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
@@ -45,7 +46,10 @@ export class DrawingModalWindowComponent implements OnInit {
             this.emptyDrawStack = emptyDrawStack;
         });
 
-        this.previewColor = this.colorToolService.backgroundColor.value;
+        this.previewColor =
+            this.colorToolService.backgroundColor === undefined
+                ? DEFAULT_WHITE
+                : this.colorToolService.backgroundColor.value;
         this.initializeForm();
     }
 
