@@ -12,7 +12,7 @@ fdescribe('TextToolService', () => {
     // let rightMouseEvent: MouseEvent;
     // let keyboardEvent: KeyboardEvent
 
-    //let spyOnremoveChild: jasmine.Spy;
+    let spyOnsetAttributed: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -97,7 +97,7 @@ fdescribe('TextToolService', () => {
         // leftMouseEvent = createMouseEvent(10, 10, 0);
         //rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        //spyOnremoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+        spyOnsetAttributed = spyOn(service.renderer, 'setAttribute').and.returnValue();
     });
 
     it('should be created', () => {
@@ -126,5 +126,33 @@ fdescribe('TextToolService', () => {
 
         expect(service.fontType).toEqual('Times');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('updateFontSize should change the fontSize', () => {
+        service.updateFontSize(10);
+
+        expect(service.fontSize).toEqual(10);
+    });
+
+    it('updateFontSize should change the fontSize and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.attributesManagerService.changeIsWriting(true);
+
+        service.updateFontSize(10);
+
+        expect(service.fontSize).toEqual(10);
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    //doesn't work yet
+    it('updateAlign should change the xPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
+        service.attributesManagerService.changeIsWriting(true);
+        service.bBoxAnchorLeft = 2;
+        service.bBoxWidth = 2;
+
+        service.updateAlign('middle');
+
+        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
+        expect(spyOnsetAttributed).toHaveBeenCalled();
     });
 });

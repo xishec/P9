@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -85,11 +86,9 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align: string) {
-
+    updateAlign(align: string): void {
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
-
             switch (align) {
                 case 'middle' : {
                     this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
@@ -161,7 +160,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
-    createTextBox(x: number, y: number) {
+    createTextBox(x: number, y: number): void {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
