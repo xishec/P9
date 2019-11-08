@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { SidebarButtonInfo } from 'src/classes/SidebarButtonInfo';
 import {
     FILES_BUTTON_INFO,
@@ -31,7 +32,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     currentShapeTool: ToolName;
     showShapeTools = false;
 
-    constructor(private toolSelectorService: ToolSelectorService) {}
+    constructor(private toolSelectorService: ToolSelectorService, private undoRedoerService: UndoRedoerService) {}
 
     ngOnInit(): void {
         this.toolSelectorService.currentToolName.subscribe((currentToolName) => {
@@ -140,5 +141,14 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
             }
         });
         return iconClass;
+    }
+
+    checkIfCanUndoRedo(toolName: ToolName): boolean {
+        if (toolName === ToolName.Undo) {
+            return this.undoRedoerService.undos.length <= 1;
+        } else if (toolName === ToolName.Redo) {
+            return this.undoRedoerService.redos.length === 0;
+        }
+        return false;
     }
 }

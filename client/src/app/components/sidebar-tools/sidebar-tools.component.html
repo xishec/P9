@@ -23,6 +23,7 @@
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
                 (click)="onChangeFileTool(FILE_BUTTON_INFO.tooltipName)"
+                [disabled]="checkIfCanUndoRedo(FILE_BUTTON_INFO.tooltipName)"
             >
                 <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
             </mat-button-toggle>
