@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, INVALID_KEYS, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
+import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -50,7 +50,7 @@ export class TextToolService extends AbstractToolService {
         this.drawStack = drawStack;
     }
 
-    initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.currentFont.subscribe((font) => {
@@ -70,7 +70,7 @@ export class TextToolService extends AbstractToolService {
         });
     }
 
-    updateFont(font: string) {
+    updateFont(font: string): void {
         this.fontType = font;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
@@ -78,7 +78,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateFontSize(size: number) {
+    updateFontSize(size: number): void {
         this.fontSize = size;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
@@ -112,7 +112,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateItalic(isItalic: boolean) {
+    updateItalic(isItalic: boolean): void {
         this.fontStyle = isItalic ? 'italic' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
@@ -120,7 +120,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateBold(isBold: boolean) {
+    updateBold(isBold: boolean): void {
         this.fontWeight = isBold ? 'bold' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
@@ -132,7 +132,8 @@ export class TextToolService extends AbstractToolService {
         // nothing
     }
 
-    updatePreviewBox() {
+    updatePreviewBox(): void {
+        // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
@@ -143,7 +144,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
     }
 
-    createPreviewRect(x: number, y: number) {
+    createPreviewRect(x: number, y: number): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.previewBox, 'x', x.toString());
         this.renderer.setAttribute(this.previewBox, 'y', y.toString());
@@ -164,7 +165,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
     }
 
-    createNewLine() {
+    createNewLine(): void {
         if (this.tspanStack.length !== 0) {
             this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
@@ -237,26 +238,20 @@ export class TextToolService extends AbstractToolService {
         } else if (event.key == 'Backspace') {
             this.erase();
         } else if (event.key == ' ') {
+            console.log(event.key);
             this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
             this.text += TEXT_CURSOR;
         } else {
-            if (this.isValidKey(event.key)) {
+            if (event.key.length < 2) {
                 this.text = this.text.replace(TEXT_CURSOR, event.key);
                 this.text += TEXT_CURSOR;
             }
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         setTimeout(() => {
+            //Change me
             this.updatePreviewBox();
         }, 0);
-    }
-
-    isValidKey(eventKey: string): boolean {
-        return (
-            INVALID_KEYS.find((key: string) => {
-                return key === eventKey;
-            }) === undefined
-        );
     }
 
     onKeyUp(event: KeyboardEvent): void {}

@@ -376,7 +376,6 @@ export {
     PEN_WIDTH_FACTOR,
     EraserSize,
     TRACING_TOOL_POSITION,
-    SHAPE_TOOL_POSITION,
     FONTS,
     FontSize,
     INVALID_KEYS,
@@ -387,4 +386,5 @@ export {
     RESET_POSITION_NUMBER,
     DEFAULT_RADIX,
     MAX_BMP_SIZE,
+    SHAPE_TOOL_POSITION,
 };
