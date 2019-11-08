@@ -52,11 +52,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
             this.currentTarget = stackTarget.targetPosition;
-            if (this.currentTarget !== undefined) {
-                this.isOnTarget = true;
-            } else {
-                this.isOnTarget = false;
-            }
+            this.isOnTarget = this.currentTarget !== undefined;
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
