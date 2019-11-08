@@ -50,7 +50,7 @@ export class TextToolService extends AbstractToolService {
         this.drawStack = drawStack;
     }
 
-    initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.currentFont.subscribe((font) => {
@@ -70,7 +70,7 @@ export class TextToolService extends AbstractToolService {
         });
     }
 
-    updateFont(font: string) {
+    updateFont(font: string): void {
         this.fontType = font;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
@@ -78,7 +78,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateFontSize(size: number) {
+    updateFontSize(size: number): void {
         this.fontSize = size;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
@@ -87,34 +87,32 @@ export class TextToolService extends AbstractToolService {
     }
 
     updateAlign(align: string) {
+
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
-            // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
 
-            if (this.fontAlign === 'end') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth).toString());
-                });
+            switch (align) {
+                case 'middle' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
+                    break;
+                }
+                case 'start' : {
+                    this.xPosition = this.bBoxAnchorLeft;
+                    break;
+                }
+                case 'end' : {
+                    this.xPosition = this.bBoxAnchorLeft + this.bBoxWidth;
+                }
             }
 
-            if (this.fontAlign === 'middle') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth / 2).toString());
-                });
-            }
-
-            if (this.fontAlign === 'start') {
-                this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', this.bBoxAnchorLeft.toString());
-                });
-            }
-
+            this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
+                this.renderer.setAttribute(tspan, 'x', this.xPosition.toString());
+            });
             this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
-            this.updatePreviewBox();
         }
     }
 
-    updateItalic(isItalic: boolean) {
+    updateItalic(isItalic: boolean): void {
         this.fontStyle = isItalic ? 'italic' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
@@ -122,7 +120,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateBold(isBold: boolean) {
+    updateBold(isBold: boolean): void {
         this.fontWeight = isBold ? 'bold' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
@@ -134,19 +132,19 @@ export class TextToolService extends AbstractToolService {
         // nothing
     }
 
-    updatePreviewBox() {
+    updatePreviewBox(): void {
         // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
 
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
         this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.previewBox, HTMLAttribute.height, textBBox.height.toString());
     }
 
-    createPreviewRect(x: number, y: number) {
+    createPreviewRect(x: number, y: number): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.previewBox, 'x', x.toString());
         this.renderer.setAttribute(this.previewBox, 'y', y.toString());
@@ -157,7 +155,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     createTextBox(x: number, y: number) {
-        console.log('size : ' + this.fontSize);
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
@@ -168,7 +165,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
     }
 
-    createNewLine() {
+    createNewLine(): void {
         if (this.tspanStack.length !== 0) {
             this.text = this.text.length === 1 ? this.text.slice(0, -1) : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
@@ -184,9 +181,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     removeLine(): void {
-        console.log(this.textBox.getBBox());
         this.renderer.removeChild(this.textBox, this.currentLine);
-        console.log(this.textBox.getBBox());
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         let textContent = this.currentLine.textContent as string;
@@ -261,8 +256,6 @@ export class TextToolService extends AbstractToolService {
             //Change me
             this.updatePreviewBox();
         }, 0);
-
-        console.log(this.textBox.getBBox().x);
     }
 
     onKeyUp(event: KeyboardEvent): void {}
