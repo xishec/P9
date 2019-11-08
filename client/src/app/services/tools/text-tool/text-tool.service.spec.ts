@@ -1,5 +1,5 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
 import { Renderer2, ElementRef, Type } from '@angular/core';
+import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { TextToolService } from './text-tool.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -14,7 +14,7 @@ fdescribe('TextToolService', () => {
     // let rightMouseEvent: MouseEvent;
     // let keyboardEvent: KeyboardEvent
 
-    let spyOnsetAttributed: jasmine.Spy;
+    let spyOnsetAttribute: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -94,19 +94,20 @@ fdescribe('TextToolService', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
+        //service.initializeAttributesManagerService(attServ);
 
         // const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        service.initializeAttributesManagerService(attServ);
 
         service.textBox = createMockSVGTextElement();
         // leftMouseEvent = createMouseEvent(10, 10, 0);
         //rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        spyOnsetAttributed = spyOn(service.renderer, 'setAttribute').and.returnValue();
+        spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+        expect(attServ).toBeDefined();
     });
 
     it('getXPos should return a number that is smaller than the original number', () => {
@@ -125,7 +126,7 @@ fdescribe('TextToolService', () => {
 
     it('updateFont should change the fontType and call updatePreviewBox if isWriting is true', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
 
         service.updateFont('Times');
 
@@ -141,7 +142,7 @@ fdescribe('TextToolService', () => {
 
     it('updateFontSize should change the fontSize and call updatePreviewBox if isWriting is true', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
 
         service.updateFontSize(10);
 
@@ -149,40 +150,71 @@ fdescribe('TextToolService', () => {
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
-
-        attServ.changeIsWriting(true);
 
         service.updateAlign('middle');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
 
         service.updateAlign('start');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
 
         service.updateAlign('end');
 
-        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth);
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('updateItalic should change the fontStyle', () => {
+        service.updateItalic(true);
+
+        expect(service.fontStyle).toEqual('italic');
+    });
+
+    it('updateItalic should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.isWriting = true;
+
+        service.updateItalic(false);
+
+        expect(service.fontStyle).toEqual('normal');
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('updateBold should change the fontStyle', () => {
+        service.updateBold(true);
+
+        expect(service.fontWeight).toEqual('bold');
+    });
+
+    it('updateBold should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.isWriting = true;
+
+        service.updateBold(false);
+
+        expect(service.fontWeight).toEqual('normal');
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('ifClickInTextBox return false if not clicked in textBox', () => {
+        expect(service.ifClickInTextBox(1, 1)).toEqual(false);
     });
 });
