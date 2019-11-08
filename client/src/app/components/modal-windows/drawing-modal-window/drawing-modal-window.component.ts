@@ -43,6 +43,7 @@ export class DrawingModalWindowComponent implements OnInit {
             this.emptyDrawStack = emptyDrawStack;
         });
 
+        this.previewColor = this.colorToolService.backgroundColor.value;
         this.initializeForm();
     }
 

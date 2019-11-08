@@ -185,6 +185,8 @@ export class WorkZoneComponent implements OnInit {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
+            case ToolName.Eraser:
+                return { cursor: 'none' };
             case ToolName.Brush:
             case ToolName.Pencil:
             case ToolName.Rectangle:
@@ -195,7 +197,6 @@ export class WorkZoneComponent implements OnInit {
             case ToolName.Line:
             case ToolName.Quill:
             case ToolName.SprayCan:
-            case ToolName.Eraser:
             case ToolName.Fill:
                 return { cursor: 'crosshair' };
             default:
