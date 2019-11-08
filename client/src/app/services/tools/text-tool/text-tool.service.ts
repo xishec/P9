@@ -37,6 +37,7 @@ export class TextToolService extends AbstractToolService {
     textBoxXPosition: number;
     textBoxYPosition: number;
 
+    currentCursorIndex = 0;
     isWriting: boolean;
 
     constructor(private shortCutManagerService: ShortcutManagerService) {
@@ -178,7 +179,7 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine(): void {
         if (this.tspanStack.length !== 0) {
-            this.text = this.text.length === 1 ? this.text.slice(0, -1) : this.text.slice(0, -1);
+            this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
@@ -195,7 +196,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.removeChild(this.textBox, this.currentLine);
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
-        let textContent = this.currentLine.textContent as string;
+        const textContent = this.currentLine.textContent as string;
         this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR;
     }
     erase(): void {
@@ -246,22 +247,21 @@ export class TextToolService extends AbstractToolService {
             return;
         }
         event.preventDefault();
+        this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
         if (event.key === 'Enter') {
             this.createNewLine();
-        } else if (event.key == 'Backspace') {
+        } else if (event.key === 'Backspace') {
             this.erase();
-        } else if (event.key == ' ') {
-            this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
-            this.text += TEXT_CURSOR;
+        } else if (event.key === ' ') {
+            this.addText(TEXT_SPACE);
         } else if (event.key === 'ArrowLeft') {
             this.moveCursorLeft();
         } else if (event.key === 'ArrowRight') {
             this.moveCursorRight();
         } else {
             if (event.key.length < 2) {
-                this.text = this.text.replace(TEXT_CURSOR, event.key);
-                this.text += TEXT_CURSOR;
+                this.addText(event.key);
             }
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
@@ -288,22 +288,27 @@ export class TextToolService extends AbstractToolService {
         }
     }
     moveCursorLeft(): void {
-        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
-        if (currentCursorIndex !== 0) {
-            let arr = this.text.split('');
-            arr[currentCursorIndex] = arr[currentCursorIndex - 1];
-            arr[currentCursorIndex - 1] = TEXT_CURSOR;
-            this.text = arr.join('').toString();
+        if (this.currentCursorIndex !== 0) {
+            this.swapCursor(-1);
         }
     }
 
     moveCursorRight(): void {
-        let currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
-        if (currentCursorIndex !== this.text.length - 1) {
-            let arr = this.text.split('');
-            arr[currentCursorIndex] = arr[currentCursorIndex + 1];
-            arr[currentCursorIndex + 1] = TEXT_CURSOR;
-            this.text = arr.join('').toString();
+        if (this.currentCursorIndex !== this.text.length - 1) {
+            this.swapCursor(1);
         }
+    }
+    swapCursor(offset: number): void {
+        const arr = this.text.split('');
+        arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
+        arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
+        this.text = arr.join('').toString();
+    }
+
+    addText(key: string): void {
+        let textToAddValue = this.text.slice(0, this.currentCursorIndex + 1);
+        const restOfText = this.text.slice(this.currentCursorIndex + 1);
+        textToAddValue = textToAddValue.replace(TEXT_CURSOR, key);
+        this.text = textToAddValue + TEXT_CURSOR + restOfText;
     }
 }
