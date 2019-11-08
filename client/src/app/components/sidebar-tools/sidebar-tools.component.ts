@@ -143,7 +143,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         return iconClass;
     }
 
-    checkIfCanUndoRedo(toolName: ToolName): boolean {
+    checkIfCantUndoRedo(toolName: ToolName): boolean {
         if (toolName === ToolName.Undo) {
             return this.undoRedoerService.undos.length <= 1;
         } else if (toolName === ToolName.Redo) {
