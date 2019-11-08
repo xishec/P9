@@ -157,7 +157,7 @@ describe('ExportToolService', () => {
     });
 
     it('should call toDataURL from CanvasToBMP if filetype is BMP', () => {
-        service.fileType = FileType.BMP;
+        service.saveFile(FileType.BMP);
         const spy = spyOn(service.canvasToBMP, 'toDataURL').and.returnValue('');
 
         service.setUri(FAKE_URL);
