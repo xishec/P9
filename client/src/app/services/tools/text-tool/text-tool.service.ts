@@ -50,7 +50,7 @@ export class TextToolService extends AbstractToolService {
         this.drawStack = drawStack;
     }
 
-    initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.currentFont.subscribe((font) => {
@@ -70,7 +70,7 @@ export class TextToolService extends AbstractToolService {
         });
     }
 
-    updateFont(font: string) {
+    updateFont(font: string): void {
         this.fontType = font;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
@@ -78,7 +78,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateFontSize(size: number) {
+    updateFontSize(size: number): void {
         this.fontSize = size;
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
@@ -86,7 +86,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align: string) {
+    updateAlign(align: string): void {
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
             // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
@@ -114,7 +114,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateItalic(isItalic: boolean) {
+    updateItalic(isItalic: boolean): void {
         this.fontStyle = isItalic ? 'italic' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
@@ -122,7 +122,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateBold(isBold: boolean) {
+    updateBold(isBold: boolean): void {
         this.fontWeight = isBold ? 'bold' : 'normal';
         if (this.attributesManagerService.isWriting) {
             this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
@@ -134,7 +134,7 @@ export class TextToolService extends AbstractToolService {
         // nothing
     }
 
-    updatePreviewBox() {
+    updatePreviewBox(): void {
         // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
@@ -146,7 +146,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
     }
 
-    createPreviewRect(x: number, y: number) {
+    createPreviewRect(x: number, y: number): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.previewBox, 'x', x.toString());
         this.renderer.setAttribute(this.previewBox, 'y', y.toString());
@@ -156,7 +156,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, HTMLAttribute.stroke_dasharray, '5 5');
     }
 
-    createTextBox(x: number, y: number) {
+    createTextBox(x: number, y: number): void {
         console.log('size : ' + this.fontSize);
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
@@ -168,7 +168,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
     }
 
-    createNewLine() {
+    createNewLine(): void {
         if (this.tspanStack.length !== 0) {
             this.text = this.text.length === 1 ? this.text.slice(0, -1) + TEXT_SPACE : this.text.slice(0, -1);
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
