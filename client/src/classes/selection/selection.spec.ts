@@ -65,6 +65,23 @@ describe('Selection', () => {
         expect(proxy).toBeTruthy();
     });
 
+    it('should return a DOMRect when calling getDOMRect', () => {
+        const mockDOMRect = {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+        };
+
+        const mockSVGGElement = {
+            getBoundingClientRect: () => mockDOMRect,
+        };
+
+        const res = proxy.getDOMRect(mockSVGGElement as unknown as SVGGElement);
+
+        expect(res).toEqual(mockDOMRect as DOMRect);
+    });
+
     it('should initialize the selection box and the control points when calling initFullSelectionBox', () => {
         proxy.initFullSelectionBox();
 
@@ -98,6 +115,54 @@ describe('Selection', () => {
 
         expect(spyOnAppendChild).toHaveBeenCalled();
         expect(proxy.isAppended).toBeTruthy();
+    });
+
+    it('should not append the selection box and control points if isAppended was true when calling appendFullSelectionBox', () => {
+        proxy.isAppended = true;
+
+        proxy.appendFullSelectionBox();
+
+        expect(spyOnAppendChild).not.toHaveBeenCalled();
+        expect(proxy.isAppended).toBeTruthy();
+    });
+
+    it('should return the radius of the control point when calling getControlPointR and the radius is 10', () => {
+        const RADIUS = 10;
+        const mockCircle = {
+            r: {
+                baseVal: {
+                    value: RADIUS,
+                },
+            },
+        };
+        const res = proxy.getControlPointR(mockCircle as unknown as SVGCircleElement);
+        expect(res).toEqual(RADIUS);
+    });
+
+    it('should return the cx of the control point when calling getControlPointCx and the cx is 10', () => {
+        const CX = 10;
+        const mockCircle = {
+            cx: {
+                baseVal: {
+                    value: CX,
+                },
+            },
+        };
+        const res = proxy.getControlPointCx(mockCircle as unknown as SVGCircleElement);
+        expect(res).toEqual(CX);
+    });
+
+    it('should return the cy of the control point when calling getControlPointCx and the cy is 10', () => {
+        const CY = 10;
+        const mockCircle = {
+            cy: {
+                baseVal: {
+                    value: CY,
+                },
+            },
+        };
+        const res = proxy.getControlPointCy(mockCircle as unknown as SVGCircleElement);
+        expect(res).toEqual(CY);
     });
 
     it('getStrokeWidth should return 0 if el has no stroke-width', () => {
@@ -192,6 +257,36 @@ describe('Selection', () => {
         expect(res).toBeFalsy();
     });
 
+    it('should update all 16 control points when calling updateControlPoints', () => {
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: 0,
+                },
+            },
+            y: {
+                baseVal: {
+                    value: 0,
+                },
+            },
+            width: {
+                baseVal: {
+                    value: 100,
+                },
+            },
+            height: {
+                baseVal: {
+                    value: 100,
+                },
+            },
+        };
+
+        proxy.selectionBox = mockRect as unknown as SVGRectElement;
+        proxy.updateControlPoints();
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(16);
+    });
+
     it('findLeftMostCoord should return most left coords of elements', () => {
         const width = 10;
         spyOn(proxy, 'getStrokeWidth').and.returnValue(width);
@@ -250,6 +345,68 @@ describe('Selection', () => {
         const leftMostCoord = proxy.findRightMostCoord();
 
         expect(leftMostCoord).toBe(largestX - SIDEBAR_WIDTH + DOMRectWidth + strokeWidth / 2);
+    });
+
+    it('findTopMostCoord should return most top coords of elements', () => {
+        const strokeWidth = 10;
+        const DOMRectHeight = 100;
+        spyOn(proxy, 'getStrokeWidth').and.returnValue(strokeWidth);
+        const fakeGetDOMRect = (el: SVGGElement) => {
+            const mockDOMRect = {
+                y: el.clientTop,
+                height: DOMRectHeight,
+            } as DOMRect;
+            return mockDOMRect;
+        };
+        const largestY = 1000;
+        const mockSVG1 = ({
+            clientTop: 1000,
+        } as (unknown)) as SVGGElement;
+
+        const mockSVG2 = ({
+            clientTop: largestY,
+        } as (unknown)) as SVGGElement;
+
+        proxy.selectedElements = new Set();
+        proxy.selectedElements.add(mockSVG1);
+        proxy.selectedElements.add(mockSVG2);
+
+        spyOn(proxy, 'getDOMRect').and.callFake(fakeGetDOMRect);
+
+        const topMostCoord = proxy.findTopMostCoord();
+
+        expect(topMostCoord).toBe(largestY - strokeWidth / 2);
+    });
+
+    it('findBottomMostCoord should return most bottom coords of elements', () => {
+        const strokeWidth = 10;
+        const DOMRectHeight = 100;
+        spyOn(proxy, 'getStrokeWidth').and.returnValue(strokeWidth);
+        const fakeGetDOMRect = (el: SVGGElement) => {
+            const mockDOMRect = {
+                y: el.clientTop,
+                height: DOMRectHeight,
+            } as DOMRect;
+            return mockDOMRect;
+        };
+        const largestY = 1000;
+        const mockSVG1 = ({
+            clientTop: 1000,
+        } as (unknown)) as SVGGElement;
+
+        const mockSVG2 = ({
+            clientTop: largestY,
+        } as (unknown)) as SVGGElement;
+
+        proxy.selectedElements = new Set();
+        proxy.selectedElements.add(mockSVG1);
+        proxy.selectedElements.add(mockSVG2);
+
+        spyOn(proxy, 'getDOMRect').and.callFake(fakeGetDOMRect);
+
+        const bottomMostCoord = proxy.findBottomMostCoord();
+
+        expect(bottomMostCoord).toBe(largestY + DOMRectHeight + strokeWidth / 2);
     });
 
     it('should update the selectionBox and the controlPoints when calling updateFullSelectionBox', () => {
@@ -412,96 +569,27 @@ describe('Selection', () => {
         expect(spy).not.toHaveBeenCalled();
     });
 
-    it('moveBy should call createSVGTransform if transformList.numberOfItems === 0', () => {
-        const mockSVGTransform = ({
-            type: 0,
-            setTranslate: () => null,
-            matrix: {
-                e: 0,
-                f: 0,
-            },
-        } as (unknown)) as SVGTransform;
+    it('should unbuffer and add an unselected element when calling handleInvertSelection for element not in selection rect', () => {
+        const spyAddInvertBuffer = spyOn(proxy.invertSelectionBuffer, 'delete');
+        const spy = spyOn(proxy, 'addToSelection');
+        spyOn(proxy.selectedElements, 'has').and.returnValue(false);
+        spyOn(proxy.invertSelectionBuffer, 'has').and.returnValue(true);
 
-        const mockSVGTranformList = ({
-            numberOfItems: 0,
-            getItem: () => mockSVGTransform,
-            insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        proxy.handleInvertSelection(TestHelpers.createMockSVGGElement(), false);
 
-        const mockSVGGelement = ({
-            transform: {
-                baseVal: mockSVGTranformList,
-            },
-        } as (unknown)) as SVGGElement;
-
-        proxy.selectedElements = new Set<SVGGElement>();
-        proxy.selectedElements.add(mockSVGGelement);
-
-        const mockTranslate = ({
-            setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
-
-        const mockSVGSVGElement = {
-            createSVGTransform: () => mockTranslate,
-        } as SVGSVGElement;
-
-        spyOnCreateElement.and.returnValue(mockSVGSVGElement);
-
-        const spy = spyOn(mockSVGTransform, 'setTranslate');
-        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => null);
-
-        const dummyMouseCoordsInit: MouseCoords = {x: 10, y: 10};
-        const dummyMouseCoordsCurr: MouseCoords = {x: 20, y: 20};
-        proxy.moveBy(dummyMouseCoordsInit, dummyMouseCoordsCurr);
-
+        expect(spyAddInvertBuffer).toHaveBeenCalled();
         expect(spy).toHaveBeenCalled();
-        expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
     });
 
-    // tslint:disable-next-line: max-line-length
-    it('moveBy should not call createSVGTransform if transformList.numberOfItems > 0 && getItem().type === SVGTransform.SVG_TRANSFORM_TRANSLATE ', () => {
-        const mockSVGTransform = ({
-            type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
-            setTranslate: () => null,
-            matrix: {
-                e: 0,
-                f: 0,
-            },
-        } as (unknown)) as SVGTransform;
+    it('should unbuffer and remove a selected element when calling handleInvertSelection for element in selection rect', () => {
+        const spyAddInvertBuffer = spyOn(proxy.invertSelectionBuffer, 'delete');
+        const spy = spyOn(proxy, 'removeFromSelection');
+        spyOn(proxy.selectedElements, 'has').and.returnValue(true);
+        spyOn(proxy.invertSelectionBuffer, 'has').and.returnValue(true);
 
-        const mockSVGTranformList = ({
-            numberOfItems: 5,
-            getItem: () => mockSVGTransform,
-            insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        proxy.handleInvertSelection(TestHelpers.createMockSVGGElement(), false);
 
-        const mockSVGGelement = ({
-            transform: {
-                baseVal: mockSVGTranformList,
-            },
-        } as (unknown)) as SVGGElement;
-
-        proxy.selectedElements = new Set<SVGGElement>();
-        proxy.selectedElements.add(mockSVGGelement);
-
-        const mockTranslate = ({
-            setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
-
-        const mockSVGSVGElement = {
-            createSVGTransform: () => mockTranslate,
-        } as SVGSVGElement;
-
-        spyOnCreateElement.and.returnValue(mockSVGSVGElement);
-
-        const spy = spyOn(mockSVGTransform, 'setTranslate');
-        const spyOnUpdateFullSelectionBox = spyOn(proxy, 'updateFullSelectionBox').and.callFake(() => null);
-
-        const dummyMouseCoordsInit: MouseCoords = {x: 10, y: 10};
-        const dummyMouseCoordsCurr: MouseCoords = {x: 20, y: 20};
-        proxy.moveBy(dummyMouseCoordsInit, dummyMouseCoordsCurr);
-
+        expect(spyAddInvertBuffer).toHaveBeenCalled();
         expect(spy).toHaveBeenCalled();
-        expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
     });
 });
