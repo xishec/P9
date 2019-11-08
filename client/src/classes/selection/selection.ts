@@ -1,4 +1,5 @@
 import { ElementRef, Renderer2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
@@ -11,6 +12,8 @@ export class Selection {
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(8);
+
+    isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     isAppended = false;
 
@@ -46,6 +49,7 @@ export class Selection {
                 this.renderer.removeChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = false;
+            this.isActiveSelection.next(false);
         }
     }
 
@@ -56,6 +60,7 @@ export class Selection {
                 this.renderer.appendChild(this.svgRef.nativeElement, ctrlPt);
             }
             this.isAppended = true;
+            this.isActiveSelection.next(true);
         }
     }
 
@@ -272,33 +277,18 @@ export class Selection {
         if (isInSelectionRect && this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.removeFromSelection(element);
+
         } else if (isInSelectionRect && !this.selectedElements.has(element) && !this.invertSelectionBuffer.has(element)) {
             this.invertSelectionBuffer.add(element);
             this.addToSelection(element);
+
+        } else if (!isInSelectionRect && !this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.delete(element);
+            this.addToSelection(element);
+
+        } else if (!isInSelectionRect && this.selectedElements.has(element) && this.invertSelectionBuffer.has(element)) {
+            this.invertSelectionBuffer.delete(element);
+            this.removeFromSelection(element);
         }
-    }
-
-    moveBy(currentMouseCoords: MouseCoords, lastMouseCoords: MouseCoords): void {
-        const deltaX = currentMouseCoords.x - lastMouseCoords.x;
-        const deltaY = currentMouseCoords.y - lastMouseCoords.y;
-        for (const el of this.selectedElements) {
-            const transformsList = el.transform.baseVal;
-            if (
-                transformsList.numberOfItems === 0 ||
-                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE
-            ) {
-                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                const translateToZero = svg.createSVGTransform();
-                translateToZero.setTranslate(0, 0);
-                el.transform.baseVal.insertItemBefore(translateToZero, 0);
-            }
-
-            const initialTransform = transformsList.getItem(0);
-            const offsetX = -initialTransform.matrix.e;
-            const offsetY = -initialTransform.matrix.f;
-            el.transform.baseVal.getItem(0).setTranslate(deltaX - offsetX, deltaY - offsetY);
-        }
-
-        this.updateFullSelectionBox();
     }
 }
