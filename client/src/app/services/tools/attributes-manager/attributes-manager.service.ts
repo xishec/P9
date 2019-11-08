@@ -40,6 +40,10 @@ export class AttributesManagerService {
     private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
     private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
     private fontAlign: BehaviorSubject<string> = new BehaviorSubject('left');
+    private _isWriting: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    get isWriting(): boolean {
+        return this._isWriting.value;
+    }
 
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentMinThickness: Observable<number> = this.minThickness.asObservable();
@@ -58,6 +62,7 @@ export class AttributesManagerService {
     currentFont: Observable<string> = this.font.asObservable();
     currentFontSize: Observable<number> = this.fontSize.asObservable();
     currenTfontAlign: Observable<string> = this.fontAlign.asObservable();
+    currentIsWriting: Observable<boolean> = this._isWriting.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -117,5 +122,9 @@ export class AttributesManagerService {
     }
     changeFontAlign(fontAlign: string) {
         this.fontAlign.next(fontAlign);
+    }
+
+    changeIsWriting(isWriting: boolean) {
+        this._isWriting.next(isWriting);
     }
 }

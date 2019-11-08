@@ -26,7 +26,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private shortcutManagerService: ShortcutManagerService,
+        private shortcutManagerService: ShortcutManagerService
     ) {
         this.formBuilder = formBuilder;
     }
@@ -82,7 +82,9 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
         this.shortcutManagerService.changeIsOnInput(true);
     }
     onFocusOut(): void {
-        this.shortcutManagerService.changeIsOnInput(false);
+        if (!this.attributesManagerService.isWriting) {
+            this.shortcutManagerService.changeIsOnInput(false);
+        }
     }
 
     getCurrentFont(): string {
