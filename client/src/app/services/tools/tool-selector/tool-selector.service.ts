@@ -195,7 +195,7 @@ export class ToolSelectorService {
     getTextTool(): TextToolService {
         return this.textTool;
     }
-    
+
     getEraserTool(): EraserToolService {
         return this.eraserTool;
     }

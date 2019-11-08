@@ -1,16 +1,16 @@
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { TextToolService } from './text-tool.service';
+import { createMockSVGTextElement, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { createMockSVGTextElement } from 'src/classes/test-helpers.spec';
+import { TextToolService } from './text-tool.service';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
     let service: TextToolService;
     let attServ: AttributesManagerService;
-    // let leftMouseEvent: MouseEvent;
+    let leftMouseEvent: MouseEvent;
     // let rightMouseEvent: MouseEvent;
     // let keyboardEvent: KeyboardEvent
 
@@ -94,13 +94,10 @@ fdescribe('TextToolService', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
-        //service.initializeAttributesManagerService(attServ);
-
-        // const attributeManagerService: AttributesManagerService = new AttributesManagerService();
 
         service.textBox = createMockSVGTextElement();
-        // leftMouseEvent = createMouseEvent(10, 10, 0);
-        //rightMouseEvent = createMouseEvent(10, 10, 2);
+        leftMouseEvent = createMouseEvent(10, 10, 0);
+        // rightMouseEvent = createMouseEvent(10, 10, 2);
 
         spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
     });
@@ -216,5 +213,21 @@ fdescribe('TextToolService', () => {
 
     it('ifClickInTextBox return false if not clicked in textBox', () => {
         expect(service.ifClickInTextBox(1, 1)).toEqual(false);
+    });
+
+    it('onMouseMove should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onMouseMove(leftMouseEvent)).toBeUndefined();
+    });
+
+    it('updatePreviewBox should call setAttribute', () => {
+        service.updatePreviewBox();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('initPreviewRect should call setAttribute', () => {
+        service.initPreviewRect();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 });

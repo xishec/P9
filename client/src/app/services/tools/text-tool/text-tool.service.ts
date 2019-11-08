@@ -252,9 +252,13 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
+
     onKeyDown(event: KeyboardEvent): void {
         console.log(event.key.toString());
         if (!this.isWriting || event.ctrlKey || event.altKey) {
@@ -280,12 +284,14 @@ export class TextToolService extends AbstractToolService {
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         setTimeout(() => {
-            //Change me
+            // Change me
             this.updatePreviewBox();
         }, 0);
     }
 
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
+
     cleanUp(): void {
         if (this.gWrap !== undefined) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
