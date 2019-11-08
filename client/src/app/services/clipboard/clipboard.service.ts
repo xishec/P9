@@ -71,10 +71,17 @@ export class ClipboardService {
         this.clippingsBound = this.selection.selectionBox.getBoundingClientRect() as DOMRect;
     }
 
-    handleOutOfBounds(): void {
+    handleDuplicateOutOfBounds(): void {
         this.fetchSelectionBounds();
         if (!this.isInBounds()) {
-            this.offsetValue = 0;
+            this.duplicateOffsetValue = 0;
+        }
+    }
+
+    handlePasteOutOfBounds(): void {
+        this.fetchSelectionBounds();
+        if (!this.isInBounds()) {
+            this.pasteOffsetValue = 0;
         }
     }
 
@@ -152,14 +159,14 @@ export class ClipboardService {
             this.duplicateOffsetValue = 0;
             this.firstDuplication = false;
         }
-        this.handleOutOfBounds();
+        this.handleDuplicateOutOfBounds();
         this.increaseDuplicateOffsetValue();
         this.clone(this.duplicationBuffer, this.duplicateOffsetValue);
     }
 
     paste(): void {
         this.firstDuplication = true;
-        this.handleOutOfBounds();
+        this.handlePasteOutOfBounds();
         this.increasePasteOffsetValue();
         this.clone(this.clippings, this.pasteOffsetValue);
     }
