@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
-    FontSize,
     EraserSize,
+    FontSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -42,9 +42,9 @@ export class AttributesManagerService {
     private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
     private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
     private fontAlign: BehaviorSubject<string> = new BehaviorSubject('left');
-    private _isWriting: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private isWritingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     get isWriting(): boolean {
-        return this._isWriting.value;
+        return this.isWritingState.value;
     }
 
     currentThickness: Observable<number> = this.thickness.asObservable();
@@ -65,7 +65,7 @@ export class AttributesManagerService {
     currentFont: Observable<string> = this.font.asObservable();
     currentFontSize: Observable<number> = this.fontSize.asObservable();
     currenTfontAlign: Observable<string> = this.fontAlign.asObservable();
-    currentIsWriting: Observable<boolean> = this._isWriting.asObservable();
+    currentIsWriting: Observable<boolean> = this.isWritingState.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -128,7 +128,7 @@ export class AttributesManagerService {
     }
 
     changeIsWriting(isWriting: boolean) {
-        this._isWriting.next(isWriting);
+        this.isWritingState.next(isWriting);
     }
     changeEraserSize(size: number): void {
         this.eraserSize.next(size);

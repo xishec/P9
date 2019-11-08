@@ -120,7 +120,16 @@ export class MockElementRef extends ElementRef {
 
 export const createMockSVGTextElement = (): SVGTextElement => {
     const mockSVGTextElement = {
-        childNodes: [createMockSVGElement(), createMockSVGElement()] as Array<SVGTSpanElement>,
+        childNodes: [createMockSVGElement(), createMockSVGElement()] as SVGTSpanElement[],
+        getBBox: () => {
+            const mockDOMRect = { x: 500, y: 500, width: 50, height: 50 };
+            return (mockDOMRect as unknown) as DOMRect;
+        },
     };
     return (mockSVGTextElement as unknown) as SVGTextElement;
+};
+
+export const createMockSVGTSpanElement = (): SVGTSpanElement => {
+    const mockFilter = {};
+    return (mockFilter as unknown) as SVGTSpanElement;
 };

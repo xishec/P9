@@ -1,20 +1,20 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { Renderer2, ElementRef, Type } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { TextToolService } from './text-tool.service';
+import { createMockSVGTextElement, createMouseEvent, createMockSVGTSpanElement } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { createMockSVGTextElement } from 'src/classes/test-helpers.spec';
+import { TextToolService } from './text-tool.service';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
     let service: TextToolService;
     let attServ: AttributesManagerService;
-    // let leftMouseEvent: MouseEvent;
+    let leftMouseEvent: MouseEvent;
     // let rightMouseEvent: MouseEvent;
     // let keyboardEvent: KeyboardEvent
 
-    let spyOnsetAttributed: jasmine.Spy;
+    let spyOnsetAttribute: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -95,18 +95,16 @@ fdescribe('TextToolService', () => {
 
         attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
 
-        // const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        service.initializeAttributesManagerService(attServ);
-
         service.textBox = createMockSVGTextElement();
-        // leftMouseEvent = createMouseEvent(10, 10, 0);
-        //rightMouseEvent = createMouseEvent(10, 10, 2);
+        leftMouseEvent = createMouseEvent(10, 10, 0);
+        // rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        spyOnsetAttributed = spyOn(service.renderer, 'setAttribute').and.returnValue();
+        spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+        expect(attServ).toBeDefined();
     });
 
     it('getXPos should return a number that is smaller than the original number', () => {
@@ -117,6 +115,21 @@ fdescribe('TextToolService', () => {
         expect(service.getYPos(2)).toBeLessThan(2);
     });
 
+    it('updateColor should change the primColor', () => {
+        service.updateColor('ffffff');
+
+        expect(service.primColor).toEqual('ffffff');
+    });
+
+    it('updateColor should change the primColor and call setAttribute if isWriting is true', () => {
+        service.isWriting = true;
+
+        service.updateColor('ffffff');
+
+        expect(service.primColor).toEqual('ffffff');
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
     it('updateFont should change the fontType', () => {
         service.updateFont('Times');
 
@@ -125,7 +138,7 @@ fdescribe('TextToolService', () => {
 
     it('updateFont should change the fontType and call updatePreviewBox if isWriting is true', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
 
         service.updateFont('Times');
 
@@ -141,7 +154,7 @@ fdescribe('TextToolService', () => {
 
     it('updateFontSize should change the fontSize and call updatePreviewBox if isWriting is true', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
 
         service.updateFontSize(10);
 
@@ -149,40 +162,123 @@ fdescribe('TextToolService', () => {
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
-
-        attServ.changeIsWriting(true);
 
         service.updateAlign('middle');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
 
         service.updateAlign('start');
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    //doesn't work yet
     it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
-        service.attributesManagerService.changeIsWriting(true);
+        service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
 
         service.updateAlign('end');
 
-        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
-        expect(spyOnsetAttributed).toHaveBeenCalled();
+        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth);
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('updateItalic should change the fontStyle', () => {
+        service.updateItalic(true);
+
+        expect(service.fontStyle).toEqual('italic');
+    });
+
+    it('updateItalic should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.isWriting = true;
+
+        service.updateItalic(false);
+
+        expect(service.fontStyle).toEqual('normal');
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('updateBold should change the fontStyle', () => {
+        service.updateBold(true);
+
+        expect(service.fontWeight).toEqual('bold');
+    });
+
+    it('updateBold should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.isWriting = true;
+
+        service.updateBold(false);
+
+        expect(service.fontWeight).toEqual('normal');
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('ifClickInTextBox return false if not clicked in textBox', () => {
+        expect(service.ifClickInTextBox(1, 1)).toEqual(false);
+    });
+
+    it('onMouseMove should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onMouseMove(leftMouseEvent)).toBeUndefined();
+    });
+
+    it('updatePreviewBox should call setAttribute', () => {
+        service.updatePreviewBox();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('initPreviewRect should call setAttribute', () => {
+        service.initPreviewRect();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createTextBox should call setAttribute', () => {
+        service.fontSize = 12;
+        service.createTextBox(3, 3);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createNewLine should call setAttribute', () => {
+        service.textBoxXPosition = 1;
+
+        service.createNewLine();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('createNewLine should call setAttribute and setProperty if tspanStack.length is not zero', () => {
+        service.tspanStack.push(createMockSVGTSpanElement());
+        service.textBoxXPosition = 1;
+        const spyOnsetProperty = spyOn(service.renderer, 'setProperty');
+
+        service.createNewLine();
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOnsetProperty).toHaveBeenCalled();
+    });
+
+    it('removeLine should call removeChild', () => {
+        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+        service.tspanStack.push(createMockSVGTSpanElement());
+        service.tspanStack.push(createMockSVGTSpanElement());
+
+        service.removeLine();
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
     });
 });
