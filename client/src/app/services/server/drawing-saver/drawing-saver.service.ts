@@ -1,11 +1,11 @@
 import { Injectable, ElementRef } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +21,7 @@ export class DrawingSaverService {
 
     constructor(private drawingModalWindowService: DrawingModalWindowService, private sanitizer: DomSanitizer) {}
 
-    updateDrawingSaverService(ref: ElementRef<SVGElement>, drawStackService: DrawStackService) {
+    initializeDrawingSaverService(ref: ElementRef<SVGElement>, drawStackService: DrawStackService) {
         this.workZoneRef = ref;
         this.drawStackService = drawStackService;
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
@@ -31,8 +31,8 @@ export class DrawingSaverService {
 
     getLocalFileDownloadUrl(): SafeResourceUrl {
         const jsonObj: string = JSON.stringify({
-            svgRef: this.workZoneRef,
-            drawstack: this.drawStackService.idStack,
+            svg: this.workZoneRef.nativeElement.innerHTML,
+            idStack: this.drawStackService.idStack,
             drawingInfo: this.currentDrawingInfo,
         });
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -8,7 +9,6 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { MAX_NB_LABELS } from 'src/constants/constants';
-import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-save-file-modal-window',

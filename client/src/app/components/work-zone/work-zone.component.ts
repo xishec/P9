@@ -105,7 +105,7 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingSaverService.updateDrawingSaverService(this.refSVG, this.drawStack);
+        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
             if (nameAndLabels.name.length === 0) { return; }

@@ -2,8 +2,8 @@ import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
 import { filter } from 'rxjs/operators';
+
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
@@ -182,26 +182,28 @@ export class OpenFileModalWindowComponent implements OnInit {
     loadLocalFile(e: Event): void {
         var reader = new FileReader();
         const target = e.target as HTMLInputElement;
-        if (target !== null && target.files !== null) {
-            reader.readAsText(target.files[0]);
+        const files = target.files;
+        if (target !== null && files !== null) {
+            reader.readAsText(files[0]);
+            reader.onload = () => {
+                if (typeof reader.result === 'string') {
+                    const localFileContent = JSON.parse(reader.result);
+                    const selectedDrawing: Drawing = {
+                        name: files[0].name,
+                        labels: [],
+                        svg: localFileContent.svg,
+                        idStack: localFileContent.idStack,
+                        drawingInfo: localFileContent.drawingInfo,
+                    };
+                    console.log(selectedDrawing);
+                    console.log(e);
+
+                    this.drawingLoaderService.currentDrawing.next(selectedDrawing);
+                    this.dialogRef.close();
+                    this.modalManagerService.setModalIsDisplayed(false);
+                }
+            };
         }
-        reader.onload = () => {
-            if (typeof reader.result === 'string') {
-                const localFileContent = JSON.parse(reader.result);
-                const selectedDrawing: Drawing = {
-                    name: target.name,
-                    labels: [],
-                    svg: localFileContent.svgRef,
-                    idStack: localFileContent.drawStack,
-                    drawingInfo: localFileContent.drawingInfo,
-                };
-                console.log(selectedDrawing);
-                
-                // this.drawingLoaderService.currentDrawing.next(selectedDrawing);
-                this.dialogRef.close();
-                this.modalManagerService.setModalIsDisplayed(false);
-            }
-        };
     }
 
     formIsInvalid(): boolean {
