@@ -25,7 +25,7 @@ export class GridToolService {
     currentWorkzoneIsEmpty: Observable<boolean> = this.workzoneIsEmpty.asObservable();
 
     changeState(state: boolean): void {
-        if (this.workzoneIsEmpty.value === false) {
+        if (!this.workzoneIsEmpty.value) {
             this.state.next(state);
         }
     }
