@@ -202,7 +202,6 @@ export class ToolSelectorService {
             case ToolName.Selection:
                 this.currentTool = this.selectionTool;
                 this.changeCurrentToolName(tooltipName);
-                this.selectionTool.isTheCurrentTool = true;
                 break;
             case ToolName.Rectangle:
                 this.currentTool = this.rectangleTool;
@@ -276,6 +275,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(ToolName.Selection);
                 break;
         }
+        if (this.currentTool instanceof SelectionToolService) this.selectionTool.isTheCurrentTool = true;
     }
 
     changeCurrentToolName(toolName: ToolName): void {
