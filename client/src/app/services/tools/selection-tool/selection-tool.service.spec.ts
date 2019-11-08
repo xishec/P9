@@ -8,6 +8,7 @@ import { Selection } from '../../../../classes/selection/selection';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SelectionToolService } from './selection-tool.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
+import { ManipulatorService } from '../../manipulator/manipulator.service';
 
 describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
@@ -29,6 +30,7 @@ describe('SelectionToolService', () => {
             providers: [
                 SelectionToolService,
                 ClipboardService,
+                ManipulatorService,
                 {
                     provide: Renderer2,
                     useValue: {
@@ -260,15 +262,17 @@ describe('SelectionToolService', () => {
         expect(spyselection).toHaveBeenCalled();
     });
 
-    it('handleLeftMouseDrag should call moveBy of Selection if mouse is in selection and not selecting or was already translating', () => {
+    it('handleLeftMouseDrag should use manipulator if mouse is in selection and not selecting or was already translating', () => {
         service.isOnTarget = false;
         service.isSelecting = false;
         service.isTranslatingSelection = true;
-        const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
+        const spySelection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
+        const spyManipulator = spyOn(service.manipulator, 'translateSelection');
 
         service.handleLeftMouseDrag();
 
-        expect(spyselection).toHaveBeenCalled();
+        expect(spySelection).toHaveBeenCalled();
+        expect(spyManipulator).toHaveBeenCalled();
     });
 
     it('handleLeftMouseDrag should call singlySelect if on target and target not in Selection', () => {
