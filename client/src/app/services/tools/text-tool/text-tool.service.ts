@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, INVALID_KEYS, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
+import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -28,7 +28,6 @@ export class TextToolService extends AbstractToolService {
     currentLine: SVGTSpanElement;
     tspanStack: SVGTSpanElement[] = new Array<SVGTSpanElement>();
     text = '';
-
 
     bBoxAnchorLeft: number;
     bBoxWidth: number;
@@ -90,27 +89,25 @@ export class TextToolService extends AbstractToolService {
     updateAlign(align: string) {
         this.fontAlign = align;
         if (this.attributesManagerService.isWriting) {
-
             // IF THE TSPAN COULD HERITS FROM THE TEXT FOR THE X POSITION ????????
 
-            if(this.fontAlign === 'end') {
+            if (this.fontAlign === 'end') {
                 this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
                     this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth).toString());
-                })
+                });
             }
 
-            if(this.fontAlign === 'middle') {
+            if (this.fontAlign === 'middle') {
                 this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth/2).toString());
-                })
+                    this.renderer.setAttribute(tspan, 'x', (this.bBoxAnchorLeft + this.bBoxWidth / 2).toString());
+                });
             }
 
-            if(this.fontAlign === 'start') {
+            if (this.fontAlign === 'start') {
                 this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
                     this.renderer.setAttribute(tspan, 'x', this.bBoxAnchorLeft.toString());
-                })
+                });
             }
-
 
             this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
             this.updatePreviewBox();
@@ -246,29 +243,22 @@ export class TextToolService extends AbstractToolService {
         } else if (event.key == 'Backspace') {
             this.erase();
         } else if (event.key == ' ') {
+            console.log(event.key);
             this.text = this.text.replace(TEXT_CURSOR, TEXT_SPACE);
             this.text += TEXT_CURSOR;
         } else {
-            if (this.isValidKey(event.key)) {
+            if (event.key.length < 2) {
                 this.text = this.text.replace(TEXT_CURSOR, event.key);
                 this.text += TEXT_CURSOR;
             }
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         setTimeout(() => {
+            //Change me
             this.updatePreviewBox();
         }, 0);
 
-
         console.log(this.textBox.getBBox().x);
-    }
-
-    isValidKey(eventKey: string): boolean {
-        return (
-            INVALID_KEYS.find((key: string) => {
-                return key === eventKey;
-            }) === undefined
-        );
     }
 
     onKeyUp(event: KeyboardEvent): void {}
