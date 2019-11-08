@@ -15,6 +15,7 @@ export class ExportToolService {
     renderer: Renderer2;
     img: HTMLImageElement;
     fileType: FileType;
+    canvasToBMP: CanvasToBMP;
 
     constructor(private drawingModalWindowService: DrawingModalWindowService) {
         this.drawingModalWindowService.drawingInfo.subscribe(() => {
@@ -24,7 +25,6 @@ export class ExportToolService {
     }
 
     launchDownload(): void {
-        console.log(this.anchor.href);
         this.renderer.setAttribute(this.anchor, HTMLAttribute.download, 'untitled.' + this.fileType);
         this.anchor.click();
     }
@@ -46,6 +46,7 @@ export class ExportToolService {
     saveFile(fileType: FileType): void {
         this.fileType = fileType;
         this.resizeCanvas();
+        this.canvasToBMP = new CanvasToBMP();
         if (this.fileType === FileType.SVG) {
             this.saveAsSVG();
         } else {
@@ -111,8 +112,7 @@ export class ExportToolService {
         if (this.fileType !== FileType.BMP) {
             uri = this.canvas.toDataURL('image/' + this.fileType).replace('image/' + this.fileType, 'octet/stream');
         } else {
-            const canvasToBMP = new CanvasToBMP();
-            uri = canvasToBMP.toDataURL(this.canvas);
+            uri = this.canvasToBMP.toDataURL(this.canvas);
         }
         this.renderer.setAttribute(this.anchor, HTMLAttribute.href, uri);
         return uri;

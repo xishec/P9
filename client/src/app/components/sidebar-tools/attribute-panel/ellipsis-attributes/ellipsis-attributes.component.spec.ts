@@ -26,25 +26,27 @@ describe('EllipsisAttributesComponent', () => {
                     useValue: {},
                 },
             ],
-        }).overrideComponent(EllipsisAttributesComponent, {
-            set: {
-                providers: [
-                    {
-                        provide: AttributesManagerService,
-                        useValue: {
-                            changeThickness: () => console.log('bonour'),
-                            changeTraceType: () => null,
+        })
+            .overrideComponent(EllipsisAttributesComponent, {
+                set: {
+                    providers: [
+                        {
+                            provide: AttributesManagerService,
+                            useValue: {
+                                changeThickness: () => null,
+                                changeTraceType: () => null,
+                            },
                         },
-                    },
-                    {
-                        provide: ShortcutManagerService,
-                        useValue: {
-                            changeIsOnInput: () => null,
+                        {
+                            provide: ShortcutManagerService,
+                            useValue: {
+                                changeIsOnInput: () => null,
+                            },
                         },
-                    },
-                ],
-            },
-        }).compileComponents();
+                    ],
+                },
+            })
+            .compileComponents();
         fixture = TestBed.createComponent(EllipsisAttributesComponent);
         component = fixture.componentInstance;
 
@@ -115,7 +117,7 @@ describe('EllipsisAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('attributesManagerService shoudl call changeTraceType when onTraceTypeChage',  () => {
+    it('attributesManagerService shoudl call changeTraceType when onTraceTypeChage', () => {
         const SPY = spyOn(component.attributesManagerService, 'changeTraceType');
 
         component.onTraceTypeChange();
