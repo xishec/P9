@@ -1,9 +1,9 @@
-import { Injectable, Renderer2, ElementRef } from '@angular/core';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { Selection } from '../../../classes/selection/selection';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { ManipulatorService } from '../manipulator/manipulator.service';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
+import { Selection } from '../../../classes/selection/selection';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { ManipulatorService } from '../manipulator/manipulator.service';
 
 @Injectable({
     providedIn: 'root',
@@ -29,7 +29,7 @@ export class ClipboardService {
         elementRef: ElementRef<SVGElement>,
         renderer: Renderer2,
         drawStack: DrawStackService,
-        selection: Selection
+        selection: Selection,
     ): void {
         this.renderer = renderer;
         this.elementRef = elementRef;
@@ -48,9 +48,9 @@ export class ClipboardService {
 
     clone(elementsToClone: Set<SVGGElement>): void {
         this.increaseOffsetValue();
-        let newSelection: Set<SVGGElement> = new Set<SVGGElement>();
+        const newSelection: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of elementsToClone) {
-            let deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
+            const deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
             this.manipulator.offsetSingle(this.offsetValue, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);

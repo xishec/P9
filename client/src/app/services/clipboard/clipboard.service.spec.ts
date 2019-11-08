@@ -1,12 +1,12 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ClipboardService } from './clipboard.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from '../draw-stack/draw-stack.service';
-import { ManipulatorService } from '../manipulator/manipulator.service';
-import { Selection } from '../../../classes/selection/selection';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
+import { Selection } from '../../../classes/selection/selection';
+import { DrawStackService } from '../draw-stack/draw-stack.service';
+import { ManipulatorService } from '../manipulator/manipulator.service';
+import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardService', () => {
     let injector: TestBed;
@@ -140,7 +140,7 @@ describe('ClipboardService', () => {
         service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
         spyOn(service.selection.selectionBox, 'getBoundingClientRect').and.returnValue(
-            (mockDOMRect as unknown) as DOMRect
+            (mockDOMRect as unknown) as DOMRect,
         );
 
         service.fetchSelectionBounds();
@@ -164,7 +164,7 @@ describe('ClipboardService', () => {
         };
         service.clippingsBound = (mockClippingsBound as unknown) as DOMRect;
         spyOn(service.elementRef.nativeElement, 'getBoundingClientRect').and.returnValue(
-            (mockDOMRect as unknown) as DOMRect
+            (mockDOMRect as unknown) as DOMRect,
         );
 
         const res = service.isInBounds();
@@ -188,7 +188,7 @@ describe('ClipboardService', () => {
         };
         service.clippingsBound = (mockClippingsBound as unknown) as DOMRect;
         spyOn(service.elementRef.nativeElement, 'getBoundingClientRect').and.returnValue(
-            (mockDOMRect as unknown) as DOMRect
+            (mockDOMRect as unknown) as DOMRect,
         );
 
         const res = service.isInBounds();

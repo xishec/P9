@@ -3,10 +3,10 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
+import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -39,7 +39,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     selectAll(): void {
-        for(const el of this.drawStack.drawStack) {
+        for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
     }
@@ -307,9 +307,12 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
 }

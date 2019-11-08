@@ -137,7 +137,7 @@ describe('Selection', () => {
         };
         const res = proxy.getControlPointR(mockCircle as unknown as SVGCircleElement);
         expect(res).toEqual(RADIUS);
-    })
+    });
 
     it('should return the cx of the control point when calling getControlPointCx and the cx is 10', () => {
         const CX = 10;
@@ -150,7 +150,7 @@ describe('Selection', () => {
         };
         const res = proxy.getControlPointCx(mockCircle as unknown as SVGCircleElement);
         expect(res).toEqual(CX);
-    })
+    });
 
     it('should return the cy of the control point when calling getControlPointCx and the cy is 10', () => {
         const CY = 10;
@@ -163,7 +163,7 @@ describe('Selection', () => {
         };
         const res = proxy.getControlPointCy(mockCircle as unknown as SVGCircleElement);
         expect(res).toEqual(CY);
-    })
+    });
 
     it('getStrokeWidth should return 0 if el has no stroke-width', () => {
         const el = TestHelpers.createMockSVGGElementWithAttribute('');

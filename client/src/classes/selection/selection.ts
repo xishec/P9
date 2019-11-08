@@ -1,8 +1,8 @@
 import { ElementRef, Renderer2 } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 export class Selection {
     renderer: Renderer2;

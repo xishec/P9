@@ -1,10 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ManipulatorService } from './manipulator.service';
-import { Selection } from '../../../classes/selection/selection';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { MouseCoords } from '../tools/abstract-tools/abstract-tool.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
+import { Selection } from '../../../classes/selection/selection';
+import { MouseCoords } from '../tools/abstract-tools/abstract-tool.service';
+import { ManipulatorService } from './manipulator.service';
 
 describe('ManipulatorService', () => {
     let selection: Selection;
@@ -102,14 +102,14 @@ describe('ManipulatorService', () => {
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-            selection
+            selection,
         );
 
         expect(spy).toHaveBeenCalled();
         expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
     });
 
-    it('translateSelection should not call createSVGTransform if transformList.numberOfItems > 0 && getItem().type === SVGTransform.SVG_TRANSFORM_TRANSLATE ', () => {
+    it('translateSelection should not call createSVGTransform if transformList is not empty and first transform is translate', () => {
         const mockSVGTransform = ({
             type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
             setTranslate: () => null,
@@ -152,7 +152,7 @@ describe('ManipulatorService', () => {
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-            selection
+            selection,
         );
 
         expect(spy).toHaveBeenCalled();
@@ -199,7 +199,7 @@ describe('ManipulatorService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('translateSelection should not call createSVGTransform if transformList.numberOfItems > 0 && getItem().type === SVGTransform.SVG_TRANSFORM_TRANSLATE ', () => {
+    it('translateSelection should not call createSVGTransform if transformList is empty and first transform is translate', () => {
         const mockSVGTransform = ({
             type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
             setTranslate: () => null,

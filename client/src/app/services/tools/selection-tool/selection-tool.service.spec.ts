@@ -5,10 +5,10 @@ import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Mouse } from 'src/constants/constants';
 import { Selection } from '../../../../classes/selection/selection';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { SelectionToolService } from './selection-tool.service';
 import { ClipboardService } from '../../clipboard/clipboard.service';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
+import { SelectionToolService } from './selection-tool.service';
 
 describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
@@ -90,10 +90,10 @@ describe('SelectionToolService', () => {
             clientY: 10,
         };
 
-        const res = service.verifyPosition(mockMouseEvent as unknown as MouseEvent);
+        const res = service.verifyPosition((mockMouseEvent as unknown) as MouseEvent);
 
         expect(res).toBeTruthy();
-    })
+    });
 
     it('should return false if mousePosition is not in workzone when calling verifyPosition', () => {
         const mockMouseEvent = {
@@ -101,10 +101,10 @@ describe('SelectionToolService', () => {
             clientY: -10,
         };
 
-        const res = service.verifyPosition(mockMouseEvent as unknown as MouseEvent);
+        const res = service.verifyPosition((mockMouseEvent as unknown) as MouseEvent);
 
         expect(res).toBeFalsy();
-    })
+    });
 
     it('should initialize the selectionRectangle and Selection on creation', () => {
         const spyClipboard = spyOn(service.clipBoard, 'initializeService');
@@ -401,7 +401,7 @@ describe('SelectionToolService', () => {
 
     it('onMouseUp should call handleLeftMouseUp and restartDuplication from clipboard if event.button is Left Button', () => {
         const spy = spyOn(service, 'handleLeftMouseUp');
-        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);;
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
         spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
@@ -421,7 +421,7 @@ describe('SelectionToolService', () => {
 
     it('onMouseUp should call handleRightMouseUp if event.button is Right Button', () => {
         const spy = spyOn(service, 'handleRightMouseUp');
-        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);;
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
         spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.onMouseUp(MOCK_RIGHT_CLICK);
