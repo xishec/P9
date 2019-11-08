@@ -17,6 +17,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
+import { ExportToolService } from '../export-tool/export-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
@@ -53,6 +54,7 @@ export class ToolSelectorService {
         private polygoneTool: PolygonToolService,
         private lineTool: LineToolService,
         private textTool: TextToolService,
+        private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
@@ -94,6 +96,8 @@ export class ToolSelectorService {
 
         this.textTool.initializeService(ref, renderer, drawStack);
         
+        this.exportTool.initializeService(ref, renderer);
+
         this.eraserTool.initializeService(ref, renderer, drawStack);
     }
 
