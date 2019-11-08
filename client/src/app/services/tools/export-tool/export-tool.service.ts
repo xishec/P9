@@ -24,7 +24,6 @@ export class ExportToolService {
     }
 
     launchDownload(): void {
-        console.log(this.anchor.href);
         this.renderer.setAttribute(this.anchor, HTMLAttribute.download, 'untitled.' + this.fileType);
         this.anchor.click();
     }
