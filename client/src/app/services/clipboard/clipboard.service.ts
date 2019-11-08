@@ -18,7 +18,8 @@ export class ClipboardService {
     clippings: Set<SVGGElement> = new Set<SVGGElement>();
     duplicationBuffer: Set<SVGGElement> = new Set<SVGGElement>();
 
-    offsetValue = 0;
+    pasteOffsetValue = 0;
+    duplicateOffsetValue = 0;
 
     firstDuplication = true;
     isClippingsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -40,7 +41,6 @@ export class ClipboardService {
     }
 
     restartDuplication(): void {
-        this.offsetValue = 0;
         this.duplicationBuffer.clear();
         for (const el of this.selection.selectedElements) {
             this.duplicationBuffer.add(el);
@@ -48,13 +48,12 @@ export class ClipboardService {
         this.firstDuplication = true;
     }
 
-    clone(elementsToClone: Set<SVGGElement>): void {
-        this.increaseOffsetValue();
+    clone(elementsToClone: Set<SVGGElement>, offset: number): void {
         const newSelection: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of elementsToClone) {
             const deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy);
-            this.manipulator.offsetSingle(this.offsetValue, deepCopy);
+            this.manipulator.offsetSingle(offset, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             newSelection.add(deepCopy);
         }
@@ -79,14 +78,25 @@ export class ClipboardService {
         }
     }
 
-    increaseOffsetValue(): void {
-        this.offsetValue += OFFSET_STEP;
+    increasePasteOffsetValue(): void {
+        this.pasteOffsetValue += OFFSET_STEP;
     }
 
-    decreaseOffsetValue(): void {
-        this.offsetValue -= OFFSET_STEP;
-        if (this.offsetValue < 0) {
-            this.offsetValue = 0;
+    decreasePasteOffsetValue(): void {
+        this.pasteOffsetValue -= OFFSET_STEP;
+        if (this.pasteOffsetValue < 0) {
+            this.pasteOffsetValue = 0;
+        }
+    }
+
+    increaseDuplicateOffsetValue(): void {
+        this.duplicateOffsetValue += OFFSET_STEP;
+    }
+
+    decreaseDuplicateOffsetValue(): void {
+        this.duplicateOffsetValue -= OFFSET_STEP;
+        if (this.duplicateOffsetValue < 0) {
+            this.duplicateOffsetValue = 0;
         }
     }
 
@@ -111,7 +121,7 @@ export class ClipboardService {
         this.clippings.clear();
         this.duplicationBuffer.clear();
         this.fetchSelectionBounds();
-        this.offsetValue = 0;
+        this.pasteOffsetValue = 0;
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
             this.drawStack.delete(el);
@@ -126,7 +136,7 @@ export class ClipboardService {
         this.clippings.clear();
         this.duplicationBuffer.clear();
         this.fetchSelectionBounds();
-        this.offsetValue = 0;
+        this.pasteOffsetValue = 0;
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
@@ -139,17 +149,19 @@ export class ClipboardService {
             for (const el of this.selection.selectedElements) {
                 this.duplicationBuffer.add(el);
             }
-            this.offsetValue = 0;
+            this.duplicateOffsetValue = 0;
             this.firstDuplication = false;
         }
         this.handleOutOfBounds();
-        this.clone(this.duplicationBuffer);
+        this.increaseDuplicateOffsetValue();
+        this.clone(this.duplicationBuffer, this.duplicateOffsetValue);
     }
 
     paste(): void {
         this.firstDuplication = true;
         this.handleOutOfBounds();
-        this.clone(this.clippings);
+        this.increasePasteOffsetValue();
+        this.clone(this.clippings, this.pasteOffsetValue);
     }
 
     delete(): void {
