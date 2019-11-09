@@ -3,6 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from './draw-stack.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 const NB_PUSH = 3;
 
@@ -26,6 +27,12 @@ describe('DrawStackService', () => {
                         listen: () => null,
                         setAttribute: () => null,
                     },
+                },
+                {
+                    provide: UndoRedoerService,
+                    useValue : {
+                        saveCurrentState: () => null,
+                    }
                 },
             ],
         });
