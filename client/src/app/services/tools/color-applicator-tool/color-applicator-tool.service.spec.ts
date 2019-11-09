@@ -9,6 +9,7 @@ import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 
 describe('ColorApplicatorToolService', () => {
     let service: ColorApplicatorToolService;
@@ -42,6 +43,12 @@ describe('ColorApplicatorToolService', () => {
                             return mockSVGGElement as unknown as SVGGElement;
                         },
                     },
+                },
+                {
+                    provide: UndoRedoerService,
+                    useValue : {
+                        saveCurrentState: () => null,
+                    }
                 },
                 provideAutoMock(ElementRef),
             ],
