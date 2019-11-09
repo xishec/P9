@@ -1,4 +1,4 @@
-import { FontInfo } from 'src/classes/FontInfo';
+import { FontType } from 'src/classes/FontType';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
@@ -294,7 +294,7 @@ const MAX_BMP_SIZE = 620;
 const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
-const FONTS: FontInfo[] = [
+const FONTS: FontType[] = [
     { fontName: 'Times', fontFamily: 'Times, serif' },
     { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
     { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
