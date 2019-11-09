@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { filter } from 'rxjs/operators';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -48,6 +49,7 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
+        private clipboard: ClipboardService,
     ) {}
 
     ngOnInit(): void {
@@ -61,6 +63,7 @@ export class WorkZoneComponent implements OnInit {
             this.shortCutManagerService,
             this.modalManagerService,
             this.renderer,
+            this.clipboard,
         );
         this.eventListenerService.addEventListeners();
 

@@ -1,18 +1,20 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Keys, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
+import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: MouseCoords = {x: 0, y: 0};
-    lastMouseCoords: MouseCoords = {x: 0, y: 0};
-    initialMouseCoords: MouseCoords = {x: 0, y: 0};
+    currentMouseCoords: MouseCoords = { x: 0, y: 0 };
+    lastMouseCoords: MouseCoords = { x: 0, y: 0 };
+    initialMouseCoords: MouseCoords = { x: 0, y: 0 };
     currentTarget = 0;
 
     isTheCurrentTool = false;
@@ -32,8 +34,21 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService) {
         super();
+    }
+
+    selectAll(): void {
+        for (const el of this.drawStack.drawStack) {
+            this.selection.addToSelection(el);
+        }
+    }
+
+    verifyPosition(event: MouseEvent): boolean {
+        return (
+            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
+            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
+        );
     }
 
     cleanUp(): void {
@@ -54,6 +69,7 @@ export class SelectionToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+        this.manipulator.initializeService(this.renderer);
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
@@ -63,6 +79,8 @@ export class SelectionToolService extends AbstractToolService {
                 this.isOnTarget = true;
             }
         });
+
+        this.clipBoard.initializeService(this.elementRef, this.renderer, this.drawStack, this.selection);
     }
 
     updateSelectionRectangle(): void {
@@ -171,9 +189,14 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting || this.isTranslatingSelection) {
+        } else if (
+            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting) ||
+            this.isTranslatingSelection
+        ) {
             this.isTranslatingSelection = true;
-            this.selection.moveBy(this.currentMouseCoords, this.lastMouseCoords);
+            const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
+            const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
+            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
@@ -234,12 +257,10 @@ export class SelectionToolService extends AbstractToolService {
 
     handleLeftMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
-
         if (this.isSelecting) {
             this.isSelecting = false;
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
-            this.isOnTarget = false;
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
         } else {
@@ -258,7 +279,6 @@ export class SelectionToolService extends AbstractToolService {
             this.isSelecting = false;
         } else if (this.isOnTarget) {
             this.singlySelectInvert(this.currentTarget);
-            this.isOnTarget = false;
         }
         this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
@@ -266,6 +286,11 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseUp(event: MouseEvent): void {
+        if (!this.verifyPosition(event)) {
+            return;
+        }
+        this.clipBoard.restartDuplication();
+
         const button = event.button;
 
         switch (button) {
@@ -282,17 +307,12 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    onMouseEnter(event: MouseEvent): void {
-        this.isTheCurrentTool = true;
-    }
-    onMouseLeave(event: MouseEvent): void {
-        this.isTheCurrentTool = true;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
-    onKeyUp(event: KeyboardEvent): void {
-        if (event.key === Keys.s) {
-            this.isTheCurrentTool = true;
-        }
-    }
+    // tslint:disable-next-line: no-empty
+    onKeyUp(event: KeyboardEvent): void {}
 }

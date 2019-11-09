@@ -1,7 +1,6 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { filter } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -11,86 +10,6 @@ import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
 
-// tslint:disable-next-line: max-classes-per-file
-@Pipe({ name: 'toTrustHtml' })
-export class ToTrustHtmlPipe implements PipeTransform {
-    constructor(private domSanitizer: DomSanitizer) {}
-    transform(svg: string): SafeHtml {
-        return this.domSanitizer.bypassSecurityTrustHtml(svg);
-    }
-}
-
-// tslint:disable-next-line: max-classes-per-file
-@Pipe({
-    name: 'mySlice',
-    pure: false,
-})
-export class MySlice implements PipeTransform {
-    transform(drawings: Drawing[], nameFilter: string): Drawing[] {
-        if (nameFilter === '$tout') {
-            return drawings;
-        } else {
-            return drawings.slice(0, 5);
-        }
-    }
-}
-
-// tslint:disable-next-line: max-classes-per-file
-@Pipe({
-    name: 'nameFilter',
-    pure: false,
-})
-export class NameFilter implements PipeTransform {
-    transform(drawings: Drawing[], nameFilter: string): Drawing[] {
-        if (nameFilter === '$tout') {
-            return drawings;
-        }
-
-        if (nameFilter === undefined || nameFilter.length === 0) {
-            return drawings;
-        } else {
-            nameFilter = nameFilter.toLowerCase();
-            return drawings.filter((drawing: Drawing) => {
-                return drawing.name.toLowerCase().includes(nameFilter);
-            });
-        }
-    }
-}
-
-// tslint:disable-next-line: max-classes-per-file
-@Pipe({
-    name: 'labelFilter',
-    pure: false,
-})
-export class LabelFilter implements PipeTransform {
-    transform(drawings: Drawing[], labelFilter: string): Drawing[] {
-        if (labelFilter === undefined || labelFilter.length === 0) {
-            return drawings;
-        } else {
-            labelFilter = labelFilter.toLowerCase().replace(/\s/g, '');
-            const labelsFromFilter = labelFilter.split(',').map(String);
-
-            return drawings.filter((drawing: Drawing) => {
-                let checkLabels = false;
-                labelsFromFilter.forEach((labelFromFilter: string) => {
-                    if (
-                        drawing.labels.filter((label: string) => {
-                            return label
-                                .toLowerCase()
-                                .replace(/\s/g, '')
-                                .includes(labelFromFilter);
-                        }).length !== 0
-                    ) {
-                        checkLabels = true;
-                    }
-                });
-                return checkLabels;
-            });
-        }
-    }
-}
-
-// tslint:disable-next-line: max-classes-per-file
 @Component({
     selector: 'app-open-file-modal-window',
     templateUrl: './open-file-modal-window.component.html',
@@ -128,7 +47,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
                         this.isLoading = false;
                         return false;
                     } else {

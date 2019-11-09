@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { ToolName, ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
@@ -25,6 +26,7 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
+        private clipboard: ClipboardService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -85,9 +87,26 @@ export class EventListenerService {
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
             // If control is pressed, change for ControlTools
-            if (event.ctrlKey && ToolNameControlShortcuts.has(event.key)) {
+            if (event.ctrlKey && this.currentTool !== undefined) {
                 event.preventDefault();
-                this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+
+                if (ToolNameControlShortcuts.has(event.key)) {
+                    this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+                }
+
+                if (event.key === 'x') {
+                    this.clipboard.cut();
+                } else if (event.key === 'v') {
+                    this.toolSelectorService.changeTool(ToolName.Selection);
+                    this.clipboard.paste();
+                } else if (event.key === 'c') {
+                    this.clipboard.copy();
+                } else if (event.key === 'd') {
+                    this.clipboard.duplicate();
+                } else if (event.key === 'a') {
+                    this.toolSelectorService.changeTool(ToolName.Selection);
+                    this.toolSelectorService.getSelectiontool().selectAll();
+                }
             }
 
             // Call the onKeyDown of the current tool, if the current tool doesn't do anything
@@ -96,7 +115,7 @@ export class EventListenerService {
             }
 
             // If the key is a shortcut for a tool, change current tool
-            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key)) {
+            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key) as ToolName);
             }
@@ -111,6 +130,10 @@ export class EventListenerService {
 
             if (event.key === '-' && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
+            }
+
+            if (event.key === 'Delete') {
+                this.clipboard.delete();
             }
         });
 

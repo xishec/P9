@@ -14,6 +14,7 @@ import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { MatSnackBar } from '@angular/material';
+import { FontInfo } from 'src/classes/FontInfos';
 
 @Injectable({
     providedIn: 'root',
@@ -25,11 +26,7 @@ export class TextToolService extends AbstractToolService {
 
     attributesManagerService: AttributesManagerService;
 
-    fontType: string;
-    fontSize: string;
-    fontAlign: string;
-    fontStyle = 'normal';
-    fontWeight = 'normal';
+    fontInfo: FontInfo = new FontInfo();
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
@@ -47,8 +44,6 @@ export class TextToolService extends AbstractToolService {
 
     currentCursorIndex = 0;
     isWriting: boolean;
-
-    primColor: string;
 
     actionMap: Map<string, Function> = new Map([
         [Keys.Enter, this.createNewLine],
@@ -104,13 +99,13 @@ export class TextToolService extends AbstractToolService {
     updateStyle(attribute: HTMLAttribute, value: string) {
         switch (attribute) {
             case HTMLAttribute.fill:
-                this.primColor = value;
+                this.fontInfo.fontColor = value;
                 break;
             case HTMLAttribute.font_family:
-                this.fontType = value;
+                this.fontInfo.fontType = value;
                 break;
             case HTMLAttribute.font_size:
-                this.fontSize = value;
+                this.fontInfo.fontSize = value;
                 break;
         }
         if (this.isWriting) {
@@ -120,7 +115,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     updateAlign(align: string): void {
-        this.fontAlign = align;
+        this.fontInfo.fontAlign = align;
         if (this.isWriting) {
             switch (align) {
                 case 'middle': {
@@ -139,22 +134,22 @@ export class TextToolService extends AbstractToolService {
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
                 this.renderer.setAttribute(tspan, 'x', this.textBoxXPosition.toString());
             });
-            this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
+            this.renderer.setAttribute(this.textBox, HTMLAttribute.text_anchor, this.fontInfo.fontAlign);
         }
     }
 
     updateItalic(isItalic: boolean): void {
-        this.fontStyle = isItalic ? 'italic' : 'normal';
+        this.fontInfo.fontStyle = isItalic ? 'italic' : 'normal';
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
+            this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontInfo.fontStyle);
             this.updatePreviewBox();
         }
     }
 
     updateBold(isBold: boolean): void {
-        this.fontWeight = isBold ? 'bold' : 'normal';
+        this.fontInfo.fontWeight = isBold ? 'bold' : 'normal';
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
+            this.renderer.setAttribute(this.textBox, 'font-weight', this.fontInfo.fontWeight);
             this.updatePreviewBox();
         }
     }
@@ -197,12 +192,12 @@ export class TextToolService extends AbstractToolService {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_family, this.fontType);
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_size, this.fontSize.toString());
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontStyle);
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontWeight);
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.text_anchor, this.fontAlign);
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.fill, this.primColor);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_family, this.fontInfo.fontType);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_size, this.fontInfo.fontSize);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontInfo.fontStyle);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontInfo.fontWeight);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.text_anchor, this.fontInfo.fontAlign);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.fill, this.fontInfo.fontColor);
     }
 
     createNewLine(): void {
@@ -308,7 +303,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        console.log('cleanUp');
         if (this.gWrap !== undefined && this.tspanStack.length !== 0) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             if (this.tspanStack.length === 1 && this.text.length === 1) {

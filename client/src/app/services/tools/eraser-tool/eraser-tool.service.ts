@@ -30,6 +30,7 @@ export class EraserToolService extends AbstractToolService {
     isSquareAppended = false;
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
+    erasedSomething = false;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -45,7 +46,7 @@ export class EraserToolService extends AbstractToolService {
         super();
     }
 
-    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
@@ -112,17 +113,15 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkElementsToErase();
 
-        if (
-            this.isOnTarget &&
-            this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
-            button === Mouse.LeftButton
-        ) {
+        if (this.needToBeErased(button)) {
             this.renderer.removeChild(
                 this.elementRef.nativeElement,
                 this.drawStack.getElementByPosition(this.currentTarget),
             );
 
             this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
+
+            this.erasedSomething = true;
 
             // set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
@@ -134,6 +133,14 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.isOnTarget = false;
+    }
+
+    needToBeErased(button: number): boolean {
+        return (
+            this.isOnTarget &&
+            this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
+            button === Mouse.LeftButton
+        );
     }
 
     isTouchingElementBox(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
@@ -306,6 +313,8 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.isOnTarget = false;
+
+        this.erasedSomething = false;
     }
 
     onMouseEnter(event: MouseEvent): void {
