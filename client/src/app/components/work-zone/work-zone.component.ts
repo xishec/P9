@@ -72,58 +72,18 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
-            if (drawingInfo.width === 0 || drawingInfo.height === 0) {
-                return;
-            }
-            this.empty = false;
-            this.eventListenerService.isWorkZoneEmpty = false;
-            this.drawingInfo = drawingInfo;
-
-            this.setRectangleBackgroundStyle();
-
-            for (const el of this.drawStack.reset()) {
-                this.renderer.removeChild(this.refSVG.nativeElement, el);
+            if (drawingInfo.width !== 0 && drawingInfo.height !== 0) {
+                this.resetWorkzone(drawingInfo);
             }
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            if (nameAndLabels.name.length === 0) {
-                return;
-            }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-                return;
+            } else if (nameAndLabels.name.length < 0) {
+                this.postDrawing(nameAndLabels);
             }
-            this.fileManagerService
-                .postDrawing(
-                    nameAndLabels.name,
-                    nameAndLabels.drawingLabels,
-                    this.refSVG.nativeElement.innerHTML,
-                    this.drawStack.idStack,
-                    this.drawingInfo,
-                )
-                .pipe(
-                    filter((subject) => {
-                        if (subject === undefined) {
-                            this.drawingSaverService.currentErrorMesaage.next(
-                                "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
-                            );
-                            this.drawingSaverService.currentIsSaved.next(false);
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }),
-                )
-                .subscribe((message: Message) => {
-                    if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
-                        this.drawingSaverService.currentIsSaved.next(true);
-                    } else {
-                        this.drawingSaverService.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
-                        this.drawingSaverService.currentIsSaved.next(false);
-                    }
-                });
         });
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
@@ -187,6 +147,50 @@ export class WorkZoneComponent implements OnInit {
             this.clipboard,
         );
         this.eventListenerService.addEventListeners();
+    }
+
+    postDrawing(nameAndLabels: NameAndLabels) {
+        this.fileManagerService
+            .postDrawing(
+                nameAndLabels.name,
+                nameAndLabels.drawingLabels,
+                this.refSVG.nativeElement.innerHTML,
+                this.drawStack.idStack,
+                this.drawingInfo,
+            )
+            .pipe(
+                filter((subject) => {
+                    if (subject === undefined) {
+                        this.drawingSaverService.currentErrorMesaage.next(
+                            "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                        );
+                        this.drawingSaverService.currentIsSaved.next(false);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }),
+            )
+            .subscribe((message: Message) => {
+                if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
+                    this.drawingSaverService.currentIsSaved.next(true);
+                } else {
+                    this.drawingSaverService.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
+                    this.drawingSaverService.currentIsSaved.next(false);
+                }
+            });
+    }
+
+    resetWorkzone(drawingInfo: DrawingInfo) {
+        this.empty = false;
+        this.eventListenerService.isWorkZoneEmpty = false;
+        this.drawingInfo = drawingInfo;
+
+        this.setRectangleBackgroundStyle();
+
+        for (const el of this.drawStack.reset()) {
+            this.renderer.removeChild(this.refSVG.nativeElement, el);
+        }
     }
 
     onClickRectangle() {
