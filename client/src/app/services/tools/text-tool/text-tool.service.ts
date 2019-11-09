@@ -299,19 +299,22 @@ export class TextToolService extends AbstractToolService {
         event.preventDefault();
         this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
-        if (event.key === 'Enter') {
+        if (event.key === Keys.Enter) {
             this.createNewLine();
-        } else if (event.key === 'Backspace') {
+        } else if (event.key === Keys.Backspace) {
             this.erase();
-        } else if (event.key === ' ') {
+        } else if (event.key === Keys.Space) {
             this.addText(TEXT_SPACE);
-        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        } else if (event.key === Keys.ArrowLeft || event.key === Keys.ArrowRight) {
             this.moveCursor(event.key);
         } else if (event.key === Keys.SmallerThan || event.key === Keys.GreaterThan) {
-            this.snackBar.open('Les carractères ne sont malheureusement pas disponible', '', {
-                duration: SNACKBAR_DURATION,
-            });
-            this.addText('<');
+            this.snackBar.open(
+                `Les carractères ${Keys.SmallerThan} et ${Keys.GreaterThan} ne sont malheureusement pas disponible`,
+                '',
+                {
+                    duration: SNACKBAR_DURATION,
+                }
+            );
         } else {
             if (event.key.length < 2) {
                 this.addText(event.key);
