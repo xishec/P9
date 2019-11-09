@@ -50,6 +50,14 @@ export class TextToolService extends AbstractToolService {
 
     primColor: string;
 
+    actionMap: Map<string, Function> = new Map([
+        [Keys.Enter, this.createNewLine],
+        [Keys.Backspace, this.erase],
+        [Keys.ArrowLeft, this.moveCursor],
+        [Keys.ArrowRight, this.moveCursor],
+        [Keys.SmallerThan, this.openSnackBar],
+    ]); //Change my name plz
+
     constructor(
         private shortCutManagerService: ShortcutManagerService,
         private colorToolService: ColorToolService,
@@ -288,29 +296,10 @@ export class TextToolService extends AbstractToolService {
         event.preventDefault();
         this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
-        switch (event.key) {
-            case Keys.Enter:
-                this.createNewLine();
-                break;
-            case Keys.Backspace:
-                this.erase();
-                break;
-
-            case Keys.Space:
-                this.addText(TEXT_SPACE);
-                break;
-            case Keys.ArrowLeft:
-            case Keys.ArrowRight:
-                this.moveCursor(event.key);
-                break;
-            case Keys.SmallerThan:
-                this.snackBar.open(`Le carractères ${Keys.SmallerThan}  n'est malheureusement pas disponible`, '', {
-                    duration: SNACKBAR_DURATION,
-                });
-                break;
-            default:
-                this.addText(event.key);
-                break;
+        if (this.actionMap.has(event.key)) {
+            (this.actionMap.get(event.key) as Function).apply(this, [event.key]);
+        } else {
+            event.key === Keys.Space ? this.addText(TEXT_SPACE) : this.addText(event.key);
         }
         this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         setTimeout(() => {
@@ -392,6 +381,12 @@ export class TextToolService extends AbstractToolService {
         const buffer = this.text.split('');
         buffer.splice(this.currentCursorIndex, 1);
         this.text = buffer.join('').toString();
+    }
+
+    openSnackBar(): void {
+        this.snackBar.open(`Le carractères ${Keys.SmallerThan}  n'est malheureusement pas disponible`, '', {
+            duration: SNACKBAR_DURATION,
+        });
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}
