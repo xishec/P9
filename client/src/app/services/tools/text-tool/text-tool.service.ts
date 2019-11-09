@@ -193,7 +193,11 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine(): void {
         const rightSideText = this.text.slice(this.currentCursorIndex);
-        if (this.tspanStack.length !== 0) {
+        const tsSpanStackIsNotEmpty = this.tspanStack.length !== 0;
+        let refChilpos = 0;
+
+        if (tsSpanStackIsNotEmpty) {
+            refChilpos = this.findCurrentLinePosition();
             if (this.currentCursorIndex === 0) {
                 this.text = TEXT_LINEBREAK;
             } else {
@@ -207,19 +211,24 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
-        this.renderer.appendChild(this.textBox, this.currentLine);
-        this.tspanStack.push(this.currentLine);
+        if (tsSpanStackIsNotEmpty) {
+            this.renderer.insertBefore(this.textBox, this.currentLine, this.tspanStack[refChilpos + 1]);
+
+            this.tspanStack.splice(refChilpos + 1, 0, this.currentLine);
+        } else {
+            this.renderer.appendChild(this.textBox, this.currentLine);
+            this.tspanStack.push(this.currentLine);
+        }
     }
 
     removeLine(): void {
         const remainingText = this.text.slice(this.currentCursorIndex + 1);
-
         this.renderer.removeChild(this.textBox, this.currentLine);
-        this.tspanStack.pop();
+        const toRemoveChildPos = this.findCurrentLinePosition();
+        this.tspanStack.splice(toRemoveChildPos, 1);
+        this.currentLine = this.tspanStack[toRemoveChildPos - 1];
 
-        this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         const textContent = this.currentLine.textContent as string;
-
         this.text =
             textContent === TEXT_LINEBREAK ? TEXT_CURSOR + remainingText : textContent + TEXT_CURSOR + remainingText;
     }
