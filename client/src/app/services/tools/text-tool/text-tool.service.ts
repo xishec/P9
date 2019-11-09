@@ -389,6 +389,9 @@ export class TextToolService extends AbstractToolService {
     }
 
     addText(key: string): void {
+        if (key.length > 1) {
+            return;
+        }
         const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
         const rightSideText = this.text.slice(this.currentCursorIndex + 1);
         this.text = leftSideText + TEXT_CURSOR + rightSideText;
