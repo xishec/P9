@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { SVG_NS } from 'src/constants/constants';
+import { SVG_NS, Mouse } from 'src/constants/constants';
 import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE, TEXT_LINEBREAK } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -232,7 +232,9 @@ export class TextToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const xClick = this.getXPos(event.clientX);
         const yClick = this.getYPos(event.clientY);
-        if (!this.isWriting) {
+        const button = event.button;
+
+        if (!this.isWriting && button === Mouse.LeftButton) {
             this.shortCutManagerService.changeIsOnInput(true);
 
             this.textBoxXPosition = xClick;
@@ -253,7 +255,7 @@ export class TextToolService extends AbstractToolService {
 
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
-            this.attributesManagerService.changeIsWriting(true);
+            this.isWriting = true;
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
             this.cleanUp();
         }

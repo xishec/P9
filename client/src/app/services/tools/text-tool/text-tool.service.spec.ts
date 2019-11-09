@@ -1,7 +1,13 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { createMockSVGTextElement, createMouseEvent, createMockSVGTSpanElement } from 'src/classes/test-helpers.spec';
+import {
+    createKeyBoardEvent,
+    createMockSVGTextElement,
+    createMockSVGTSpanElement,
+    createMouseEvent,
+} from 'src/classes/test-helpers.spec';
+import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
@@ -11,8 +17,11 @@ fdescribe('TextToolService', () => {
     let service: TextToolService;
     let attServ: AttributesManagerService;
     let leftMouseEvent: MouseEvent;
-    // let rightMouseEvent: MouseEvent;
-    // let keyboardEvent: KeyboardEvent
+    let rightMouseEvent: MouseEvent;
+    let enterKeyboardEvent: KeyboardEvent;
+    let backspaceKeyboardEvent: KeyboardEvent;
+    let arrowRightKeyboardEvent: KeyboardEvent;
+    let arrowLeftKeyboardEvent: KeyboardEvent;
 
     let spyOnsetAttribute: jasmine.Spy;
 
@@ -97,7 +106,11 @@ fdescribe('TextToolService', () => {
 
         service.textBox = createMockSVGTextElement();
         leftMouseEvent = createMouseEvent(10, 10, 0);
-        // rightMouseEvent = createMouseEvent(10, 10, 2);
+        rightMouseEvent = createMouseEvent(10, 10, 2);
+        enterKeyboardEvent = createKeyBoardEvent(Keys.Enter);
+        backspaceKeyboardEvent = createKeyBoardEvent(Keys.Backspace);
+        arrowRightKeyboardEvent = createKeyBoardEvent(Keys.ArrowRight);
+        arrowLeftKeyboardEvent = createKeyBoardEvent(Keys.ArrowLeft);
 
         spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
     });
@@ -281,4 +294,109 @@ fdescribe('TextToolService', () => {
 
         expect(spyOnremoveChild).toHaveBeenCalled();
     });
+
+    // no idea how to make it work
+    it('erase should call removeLine', () => {
+        const spyOnremoveLine = spyOn(service, 'removeLine');
+        service.text = 'test';
+        // service.tspanStack.push(createMockSVGTSpanElement());
+        service.currentLine = createMockSVGTSpanElement();
+
+        service.erase();
+
+        expect(spyOnremoveLine).toHaveBeenCalled();
+    });
+
+    it('erase should change text', () => {
+        service.text = 'test';
+
+        service.erase();
+
+        expect('test'.length).toBeGreaterThan(service.text.length);
+    });
+
+    it('onMouseDown should call updatePreviewBox if isWriting is false and left button is clicked', () => {
+        service.isWriting = false;
+        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
+        service.fontSize = 3;
+        spyOn(service, 'createTextBox').withArgs(9, 9);
+
+        service.onMouseDown(leftMouseEvent);
+
+        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
+    });
+
+    it('onMouseDown should call cleanUp ifClickInTextBox is false ', () => {
+        service.isWriting = true;
+        const spyOnuifClickInTextBox = spyOn(service, 'ifClickInTextBox').and.returnValue(false);
+        const spyOncleanUp = spyOn(service, 'cleanUp');
+
+        service.onMouseDown(rightMouseEvent);
+
+        expect(spyOnuifClickInTextBox).toHaveBeenCalled();
+        expect(spyOncleanUp).toHaveBeenCalled();
+    });
+
+    it('onMouseUp should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onMouseUp(rightMouseEvent)).toBeUndefined();
+    });
+
+    it('onMouseEnter should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onMouseEnter(leftMouseEvent)).toBeUndefined();
+    });
+
+    it('onMouseLeave should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onMouseLeave(leftMouseEvent)).toBeUndefined();
+    });
+
+    it('onKeyUp should return undefined if onKeyUp is not implemented', () => {
+        expect(service.onKeyUp(enterKeyboardEvent)).toBeUndefined();
+    });
+
+    it('onKeyDown should call createNewLine if key is enter', () => {
+        const spyOncreateNewLine = spyOn(service, 'createNewLine').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(enterKeyboardEvent);
+
+        expect(spyOncreateNewLine).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should call erase if key is Backspace', () => {
+        const spyOnerase = spyOn(service, 'erase').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(backspaceKeyboardEvent);
+
+        expect(spyOnerase).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should stop execution if isWriting is false', () => {
+        service.isWriting = false;
+        const spyOnsetProperty = spyOn(service.renderer, 'setProperty').and.returnValue();
+
+        service.onKeyDown(backspaceKeyboardEvent);
+
+        expect(spyOnsetProperty).toHaveBeenCalledTimes(0);
+    });
+
+    it('onKeyDown should call moveCursorLeft if key is ArrowRight', () => {
+        const spyOnmoveCursorLeft = spyOn(service, 'moveCursorLeft').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(arrowLeftKeyboardEvent);
+
+        expect(spyOnmoveCursorLeft).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should call moveCursorRight if key is ArrowRight', () => {
+        const spyOnmoveCursorRight = spyOn(service, 'moveCursorRight').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(arrowRightKeyboardEvent);
+
+        expect(spyOnmoveCursorRight).toHaveBeenCalled();
+    });
+
+    //TO DO case event.key === ' '
 });
