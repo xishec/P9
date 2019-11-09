@@ -259,7 +259,7 @@ export class TextToolService extends AbstractToolService {
 
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
-            this.isWriting = true;
+            this.attributesManagerService.changeIsWriting(true);
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
             this.cleanUp();
         }
