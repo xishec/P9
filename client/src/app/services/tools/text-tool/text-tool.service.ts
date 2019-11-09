@@ -52,7 +52,7 @@ export class TextToolService extends AbstractToolService {
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
-            this.updateStyle(HTMLAttribute.fill, '#'+color);
+            this.updateStyle(HTMLAttribute.fill, '#' + color);
         });
     }
 
@@ -271,16 +271,10 @@ export class TextToolService extends AbstractToolService {
             this.updatePreviewBox();
             this.attributesManagerService.changeIsWriting(true);
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
+            this.currentCursorIndex = this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
             this.cleanUp();
         }
     }
-
-    // tslint:disable-next-line: no-empty
-    onMouseUp(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onMouseEnter(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onMouseLeave(event: MouseEvent): void {}
 
     onKeyDown(event: KeyboardEvent): void {
         if (!this.isWriting || event.ctrlKey || event.altKey) {
@@ -319,22 +313,21 @@ export class TextToolService extends AbstractToolService {
         }, 0);
     }
 
-    // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {}
-
     cleanUp(): void {
         console.log('cleanUp');
-        if (this.gWrap !== undefined) {
+        if (this.gWrap !== undefined && this.tspanStack.length !== 0) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             if (this.tspanStack.length === 1 && this.text.length === 1) {
                 // textbox is empty
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text.slice(0, -1));
+                this.eraseCursor();
+                this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
             this.tspanStack = new Array<SVGTSpanElement>();
             this.text = '';
+            this.gWrap;
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
@@ -346,23 +339,19 @@ export class TextToolService extends AbstractToolService {
             this.currentCursorIndex !== this.text.length - 1 ? this.swapCursor(1, true) : this.swapCursor(1, false);
         }
     }
-    swapCursor(offset: number, changeCurrentLine: boolean): void {
-        // Cursor is swaped in current line
-        if (changeCurrentLine) {
+    swapCursor(offset: number, swapInCurrentLine: boolean): void {
+        if (swapInCurrentLine) {
             const arr = this.text.split('');
             arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
             arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
             this.text = arr.join('').toString();
-        }
-        //Cursor is swaped to previous or next line
-        else {
+        } else {
             const nextLinePosition = this.findCurrentLinePosition() + offset;
             if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
                 return;
             }
-            const buffer = this.text.split('');
-            buffer.splice(this.currentCursorIndex, 1); //Erase Cursor
-            this.text = buffer.join('').toString();
+
+            this.eraseCursor();
 
             if (this.text === '') {
                 this.text += TEXT_LINEBREAK;
@@ -393,4 +382,18 @@ export class TextToolService extends AbstractToolService {
             return el === this.currentLine;
         });
     }
+
+    eraseCursor(): void {
+        const buffer = this.text.split('');
+        buffer.splice(this.currentCursorIndex, 1);
+        this.text = buffer.join('').toString();
+    }
+    // tslint:disable-next-line: no-empty
+    onMouseUp(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyUp(event: KeyboardEvent): void {}
 }
