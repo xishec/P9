@@ -213,11 +213,15 @@ export class TextToolService extends AbstractToolService {
 
     removeLine(): void {
         const remainingText = this.text.slice(this.currentCursorIndex + 1);
+
         this.renderer.removeChild(this.textBox, this.currentLine);
         this.tspanStack.pop();
+
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         const textContent = this.currentLine.textContent as string;
-        this.text = textContent === TEXT_LINEBREAK ? TEXT_CURSOR : textContent + TEXT_CURSOR + remainingText;
+
+        this.text =
+            textContent === TEXT_LINEBREAK ? TEXT_CURSOR + remainingText : textContent + TEXT_CURSOR + remainingText;
     }
     erase(): void {
         if (this.currentCursorIndex === 0 && this.tspanStack[0] !== this.currentLine) {
