@@ -4,6 +4,7 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -11,8 +12,10 @@ import { AbstractToolService } from '../abstract-tool.service';
 export abstract class AbstractShapeToolService extends AbstractToolService {
     currentMouseX = 0;
     currentMouseY = 0;
+    currentMouseCoords: Coords2D = {x: 0, y: 0};
     initialMouseX = 0;
     initialMouseY = 0;
+    initialMouseCoords: Coords2D = {x: 0, y: 0};
     previewRectangle: SVGRectElement;
     isPreviewing = false;
     isIn = true;
