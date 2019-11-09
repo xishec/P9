@@ -281,6 +281,7 @@ export class TextToolService extends AbstractToolService {
             this.updatePreviewBox();
             this.attributesManagerService.changeIsWriting(true);
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
+            this.currentCursorIndex = this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
             this.cleanUp();
         }
     }
@@ -322,9 +323,6 @@ export class TextToolService extends AbstractToolService {
         }, 0);
     }
 
-    // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {}
-
     cleanUp(): void {
         if (this.gWrap !== undefined) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
@@ -332,7 +330,10 @@ export class TextToolService extends AbstractToolService {
                 // textbox is empty
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
+                console.log(this.text);
+                this.eraseCursor();
+                console.log(this.text);
+                this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
                 this.drawStack.push(this.gWrap);
             }
             this.tspanStack = new Array<SVGTSpanElement>();
@@ -348,23 +349,19 @@ export class TextToolService extends AbstractToolService {
             this.currentCursorIndex !== this.text.length - 1 ? this.swapCursor(1, true) : this.swapCursor(1, false);
         }
     }
-    swapCursor(offset: number, changeCurrentLine: boolean): void {
-        // Cursor is swaped in current line
-        if (changeCurrentLine) {
+    swapCursor(offset: number, swapInCurrentLine: boolean): void {
+        if (swapInCurrentLine) {
             const arr = this.text.split('');
             arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
             arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
             this.text = arr.join('').toString();
-        }
-        //Cursor is swaped to previous or next line
-        else {
+        } else {
             const nextLinePosition = this.findCurrentLinePosition() + offset;
             if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
                 return;
             }
-            const buffer = this.text.split('');
-            buffer.splice(this.currentCursorIndex, 1); //Erase Cursor
-            this.text = buffer.join('').toString();
+
+            this.eraseCursor();
 
             if (this.text === '') {
                 this.text += TEXT_LINEBREAK;
@@ -394,6 +391,15 @@ export class TextToolService extends AbstractToolService {
         return this.tspanStack.findIndex((el: SVGTSpanElement) => {
             return el === this.currentLine;
         });
+    }
+
+    eraseCursor(): void {
+        console.log(this.text);
+
+        const buffer = this.text.split('');
+        buffer.splice(this.currentCursorIndex, 1);
+        this.text = buffer.join('').toString();
+        console.log(this.text);
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {}
