@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { SVG_NS, Mouse } from 'src/constants/constants';
-import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE } from 'src/constants/tool-constants';
+import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE, TEXT_LINEBREAK } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -194,11 +194,11 @@ export class TextToolService extends AbstractToolService {
     createNewLine(): void {
         const rightSideText = this.text.slice(this.currentCursorIndex);
         if (this.tspanStack.length !== 0) {
-            this.text =
-                this.text.length === 1
-                    ? this.text.slice(0, -1) + TEXT_SPACE
-                    : this.text.slice(0, this.currentCursorIndex);
-
+            if (this.currentCursorIndex === 0) {
+                this.text = TEXT_LINEBREAK;
+            } else {
+                this.text = this.text.slice(0, this.currentCursorIndex);
+            }
             this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         }
 
@@ -217,7 +217,7 @@ export class TextToolService extends AbstractToolService {
         this.tspanStack.pop();
         this.currentLine = this.tspanStack[this.tspanStack.length - 1];
         const textContent = this.currentLine.textContent as string;
-        this.text = textContent === TEXT_SPACE ? TEXT_CURSOR : textContent + TEXT_CURSOR + remainingText;
+        this.text = textContent === TEXT_LINEBREAK ? TEXT_CURSOR : textContent + TEXT_CURSOR + remainingText;
     }
     erase(): void {
         if (this.currentCursorIndex === 0 && this.tspanStack[0] !== this.currentLine) {
@@ -269,7 +269,6 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {}
 
     onKeyDown(event: KeyboardEvent): void {
-        console.log(event.key.toString());
         if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
         }
@@ -291,7 +290,6 @@ export class TextToolService extends AbstractToolService {
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         setTimeout(() => {
-            // Change me
             this.updatePreviewBox();
         }, 0);
     }
@@ -310,27 +308,60 @@ export class TextToolService extends AbstractToolService {
                 this.drawStack.push(this.gWrap);
             }
             this.tspanStack = new Array<SVGTSpanElement>();
+            this.text = '';
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
     }
     moveCursor(key: string): void {
-        if (key === 'ArrowLeft' && this.currentCursorIndex !== 0) {
-            this.swapCursor(-1);
-        } else if (this.currentCursorIndex !== this.text.length - 1) {
-            this.swapCursor(1);
+        if (key === 'ArrowLeft') {
+            this.currentCursorIndex !== 0 ? this.swapCursor(-1, true) : this.swapCursor(-1, false);
+        } else {
+            this.currentCursorIndex !== this.text.length - 1 ? this.swapCursor(1, true) : this.swapCursor(1, false);
         }
     }
-    swapCursor(offset: number): void {
-        const arr = this.text.split('');
-        arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
-        arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
-        this.text = arr.join('').toString();
+    swapCursor(offset: number, changeCurrentLine: boolean): void {
+        // Cursor is swaped in current line
+        if (changeCurrentLine) {
+            const arr = this.text.split('');
+            arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
+            arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
+            this.text = arr.join('').toString();
+        }
+        //Cursor is swaped to previous or next line
+        else {
+            const nextLinePosition = this.findCurrentLinePosition() + offset;
+            if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
+                return;
+            }
+            const buffer = this.text.split('');
+            buffer.splice(this.currentCursorIndex, 1); //Erase Cursor
+            this.text = buffer.join('').toString();
+
+            if (this.text === '') {
+                this.text += TEXT_LINEBREAK;
+            }
+            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+
+            this.currentLine = this.tspanStack[nextLinePosition];
+            this.text = this.currentLine.textContent as string;
+
+            if (this.text === TEXT_LINEBREAK) {
+                this.text = '';
+            }
+            offset < 0 ? (this.text += TEXT_CURSOR) : (this.text = TEXT_CURSOR + this.text);
+        }
     }
 
     addText(key: string): void {
         const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
         const rightSideText = this.text.slice(this.currentCursorIndex + 1);
         this.text = leftSideText + TEXT_CURSOR + rightSideText;
+    }
+
+    findCurrentLinePosition(): number {
+        return this.tspanStack.findIndex((el: SVGTSpanElement) => {
+            return el === this.currentLine;
+        });
     }
 }
