@@ -249,6 +249,12 @@ enum HTMLAttribute {
     href = 'href',
     src = 'src',
     viewBox = 'viewBox',
+    font_family = 'font-family',
+    font_size = 'font-size',
+    font_weight = 'font-weight',
+    font_style = 'font-style',
+    text_anchor = 'text-anchor',
+    innerHTML = 'innerHTML',
 }
 
 const ToolNameShortcuts: Map<string, ToolName> = new Map([

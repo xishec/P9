@@ -26,7 +26,7 @@ export class TextToolService extends AbstractToolService {
     attributesManagerService: AttributesManagerService;
 
     fontType: string;
-    fontSize: number;
+    fontSize: string;
     fontAlign: string;
     fontStyle = 'normal';
     fontWeight = 'normal';
@@ -57,7 +57,7 @@ export class TextToolService extends AbstractToolService {
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
-            this.updateColor(color);
+            this.updateStyle(HTMLAttribute.fill, '#'+color);
         });
     }
 
@@ -74,10 +74,10 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.currentFont.subscribe((font) => {
-            this.updateFont(font);
+            this.updateStyle(HTMLAttribute.font_family, font);
         });
         this.attributesManagerService.currentFontSize.subscribe((size) => {
-            this.updateFontSize(size);
+            this.updateStyle(HTMLAttribute.font_size, size.toString());
         });
         this.attributesManagerService.currenTfontAlign.subscribe((align) => {
             this.updateAlign(align);
@@ -93,25 +93,20 @@ export class TextToolService extends AbstractToolService {
         });
     }
 
-    updateColor(color: string) {
-        this.primColor = color;
-        if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'fill', '#' + this.primColor);
+    updateStyle(attribute: HTMLAttribute, value: string) {
+        switch (attribute) {
+            case HTMLAttribute.fill:
+                this.primColor = value;
+                break;
+            case HTMLAttribute.font_family:
+                this.fontType = value;
+                break;
+            case HTMLAttribute.font_size:
+                this.fontSize = value;
+                break;
         }
-    }
-
-    updateFont(font: string): void {
-        this.fontType = font;
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
-            this.updatePreviewBox();
-        }
-    }
-
-    updateFontSize(size: number): void {
-        this.fontSize = size;
-        if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
+            this.renderer.setAttribute(this.textBox, attribute, value);
             this.updatePreviewBox();
         }
     }
