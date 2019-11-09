@@ -37,7 +37,7 @@ export class ToolSelectorService {
     modalIsDisplayed = false;
     drawStack: DrawStackService;
     TOOLS_MAP: Map<ToolName, AbstractToolService>;
-    WORKZONE_TOOLS_MAP: Map<ToolName, Function>;
+    WORKZONE_TOOLS_MAP: Map<ToolName, () => void>;
 
     constructor(
         private colorToolService: ColorToolService,
@@ -52,7 +52,7 @@ export class ToolSelectorService {
         private stampTool: StampToolService,
         private dropperTool: DropperToolService,
         private colorApplicatorTool: ColorApplicatorToolService,
-        private polygoneTool: PolygonToolService,
+        private polygonTool: PolygonToolService,
         private lineTool: LineToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
@@ -88,8 +88,8 @@ export class ToolSelectorService {
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
 
-        this.polygoneTool.initializeService(ref, renderer, drawStack);
-        this.polygoneTool.initializeColorToolService(this.colorToolService);
+        this.polygonTool.initializeService(ref, renderer, drawStack);
+        this.polygonTool.initializeColorToolService(this.colorToolService);
 
         this.lineTool.initializeService(ref, renderer, drawStack);
         this.lineTool.initializeColorToolService(this.colorToolService);
@@ -106,7 +106,7 @@ export class ToolSelectorService {
             [ToolName.Brush, this.brushTool as AbstractToolService],
             [ToolName.Stamp, this.stampTool as AbstractToolService],
             [ToolName.ColorApplicator, this.colorApplicatorTool as AbstractToolService],
-            [ToolName.Polygon, this.polygoneTool as AbstractToolService],
+            [ToolName.Polygon, this.polygonTool as AbstractToolService],
             [ToolName.Line, this.lineTool as AbstractToolService],
             [ToolName.Dropper, this.dropperTool as AbstractToolService],
             [ToolName.Pen, this.penTool as AbstractToolService],
@@ -237,7 +237,7 @@ export class ToolSelectorService {
     }
 
     getPolygonTool(): PolygonToolService {
-        return this.polygoneTool;
+        return this.polygonTool;
     }
 
     getLineTool(): LineToolService {
@@ -258,16 +258,16 @@ export class ToolSelectorService {
             return;
         }
 
-        let tool: AbstractToolService | undefined = this.TOOLS_MAP.get(tooltipName);
+        const tool: AbstractToolService | undefined = this.TOOLS_MAP.get(tooltipName);
         if (tool !== undefined) {
             this.currentTool = tool;
             this.changeCurrentToolName(tooltipName);
             return;
         }
 
-        let workzone_tool: Function | undefined = this.WORKZONE_TOOLS_MAP.get(tooltipName);
-        if (workzone_tool != undefined) {
-            workzone_tool(tooltipName);
+        const workzoneTool: (() => void) | undefined = this.WORKZONE_TOOLS_MAP.get(tooltipName);
+        if (workzoneTool !== undefined) {
+            workzoneTool();
             return;
         }
     }
