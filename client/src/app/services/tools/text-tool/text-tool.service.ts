@@ -314,7 +314,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        console.log('cleanUp');
         if (this.gWrap !== undefined && this.tspanStack.length !== 0) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             if (this.tspanStack.length === 1 && this.text.length === 1) {

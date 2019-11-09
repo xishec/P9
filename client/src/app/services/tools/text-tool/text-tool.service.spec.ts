@@ -11,6 +11,8 @@ import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
+import { HTMLAttribute } from 'src/constants/tool-constants';
+import { MatSnackBar } from '@angular/material';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
@@ -37,6 +39,7 @@ fdescribe('TextToolService', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                         setProperty: () => null,
+                        insertBefore: () => null,
                     },
                 },
                 {
@@ -92,6 +95,12 @@ fdescribe('TextToolService', () => {
                         isWriting: false,
                     },
                 },
+                {
+                    provide: MatSnackBar,
+                    useValue: {
+
+                    }
+                }
             ],
         });
 
@@ -103,6 +112,8 @@ fdescribe('TextToolService', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
+
+        service.attributesManagerService = attServ;
 
         service.textBox = createMockSVGTextElement();
         leftMouseEvent = createMouseEvent(10, 10, 0);
@@ -128,54 +139,34 @@ fdescribe('TextToolService', () => {
         expect(service.getYPos(2)).toBeLessThan(2);
     });
 
-    it('updateColor should change the primColor', () => {
-        service.updateColor('ffffff');
+    it('updateStyle with fill should change the fontColor of fontInfo', () => {
+        service.updateStyle(HTMLAttribute.fill, '#' + 'ffffff');
 
-        expect(service.primColor).toEqual('ffffff');
+        expect(service.fontInfo.fontColor).toEqual('#ffffff');
     });
 
-    it('updateColor should change the primColor and call setAttribute if isWriting is true', () => {
-        service.isWriting = true;
+    it('updateStyle with font_family should change the fontType', () => {
+        service.updateStyle(HTMLAttribute.font_family, 'Times');
 
-        service.updateColor('ffffff');
-
-        expect(service.primColor).toEqual('ffffff');
-        expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(service.fontInfo.fontType).toEqual('Times');
     });
 
-    it('updateFont should change the fontType', () => {
-        service.updateFont('Times');
+    it('updateStyle with font_size should change the fontSize', () => {
+        service.updateStyle(HTMLAttribute.font_size, '15');
 
-        expect(service.fontType).toEqual('Times');
+        expect(service.fontInfo.fontSize).toEqual('15');
     });
 
-    it('updateFont should change the fontType and call updatePreviewBox if isWriting is true', () => {
+    it('updateStyle should call updatePreviewBox if isWriting is true', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
         service.isWriting = true;
 
-        service.updateFont('Times');
+        service.updateStyle(HTMLAttribute.font_family, 'Times');
 
-        expect(service.fontType).toEqual('Times');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
-    it('updateFontSize should change the fontSize', () => {
-        service.updateFontSize(10);
-
-        expect(service.fontSize).toEqual(10);
-    });
-
-    it('updateFontSize should change the fontSize and call updatePreviewBox if isWriting is true', () => {
-        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.isWriting = true;
-
-        service.updateFontSize(10);
-
-        expect(service.fontSize).toEqual(10);
-        expect(spyOnupdatePreviewBox).toHaveBeenCalled();
-    });
-
-    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
+    it('updateAlign middle should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
         service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
@@ -186,7 +177,7 @@ fdescribe('TextToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft', () => {
+    it('updateAlign start should change the textBoxXPosition to bBoxAnchorLeft', () => {
         service.isWriting = true;
         service.bBoxAnchorLeft = 2;
 
@@ -196,7 +187,7 @@ fdescribe('TextToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('updateAlign should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
+    it('updateAlign end should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
         service.isWriting = true;
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
@@ -210,7 +201,7 @@ fdescribe('TextToolService', () => {
     it('updateItalic should change the fontStyle', () => {
         service.updateItalic(true);
 
-        expect(service.fontStyle).toEqual('italic');
+        expect(service.fontInfo.fontStyle).toEqual('italic');
     });
 
     it('updateItalic should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
@@ -219,14 +210,14 @@ fdescribe('TextToolService', () => {
 
         service.updateItalic(false);
 
-        expect(service.fontStyle).toEqual('normal');
+        expect(service.fontInfo.fontStyle).toEqual('normal');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
     it('updateBold should change the fontStyle', () => {
         service.updateBold(true);
 
-        expect(service.fontWeight).toEqual('bold');
+        expect(service.fontInfo.fontWeight).toEqual('bold');
     });
 
     it('updateBold should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
@@ -235,7 +226,7 @@ fdescribe('TextToolService', () => {
 
         service.updateBold(false);
 
-        expect(service.fontWeight).toEqual('normal');
+        expect(service.fontInfo.fontWeight).toEqual('normal');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
@@ -260,7 +251,7 @@ fdescribe('TextToolService', () => {
     });
 
     it('createTextBox should call setAttribute', () => {
-        service.fontSize = 12;
+        service.fontInfo.fontSize = '12';
         service.createTextBox(3, 3);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
@@ -289,6 +280,7 @@ fdescribe('TextToolService', () => {
         const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
         service.tspanStack.push(createMockSVGTSpanElement());
         service.tspanStack.push(createMockSVGTSpanElement());
+        service.currentLine = createMockSVGTSpanElement();
 
         service.removeLine();
 
@@ -318,7 +310,7 @@ fdescribe('TextToolService', () => {
     it('onMouseDown should call updatePreviewBox if isWriting is false and left button is clicked', () => {
         service.isWriting = false;
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.fontSize = 3;
+        service.fontInfo.fontSize = '10';
         spyOn(service, 'createTextBox').withArgs(9, 9);
 
         service.onMouseDown(leftMouseEvent);
