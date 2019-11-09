@@ -353,4 +353,50 @@ fdescribe('TextToolService', () => {
         expect(service.onKeyUp(enterKeyboardEvent)).toBeUndefined();
     });
 
+    it('onKeyDown should call createNewLine if key is enter', () => {
+        const spyOncreateNewLine = spyOn(service, 'createNewLine').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(enterKeyboardEvent);
+
+        expect(spyOncreateNewLine).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should call erase if key is Backspace', () => {
+        const spyOnerase = spyOn(service, 'erase').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(backspaceKeyboardEvent);
+
+        expect(spyOnerase).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should stop execution if isWriting is false', () => {
+        service.isWriting = false;
+        const spyOnsetProperty = spyOn(service.renderer, 'setProperty').and.returnValue();
+
+        service.onKeyDown(backspaceKeyboardEvent);
+
+        expect(spyOnsetProperty).toHaveBeenCalledTimes(0);
+    });
+
+    it('onKeyDown should call moveCursorLeft if key is ArrowRight', () => {
+        const spyOnmoveCursorLeft = spyOn(service, 'moveCursorLeft').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(arrowLeftKeyboardEvent);
+
+        expect(spyOnmoveCursorLeft).toHaveBeenCalled();
+    });
+
+    it('onKeyDown should call moveCursorRight if key is ArrowRight', () => {
+        const spyOnmoveCursorRight = spyOn(service, 'moveCursorRight').and.returnValue();
+        service.isWriting = true;
+
+        service.onKeyDown(arrowRightKeyboardEvent);
+
+        expect(spyOnmoveCursorRight).toHaveBeenCalled();
+    });
+
+    //TO DO case event.key === ' '
 });
