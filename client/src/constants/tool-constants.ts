@@ -343,6 +343,7 @@ const INVALID_KEYS: string[] = [
 const TEXT_CURSOR = '█';
 const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
+const SNACKBAR_DURATION = 3000;
 
 export {
     ToolNameControlShortcuts,
@@ -389,4 +390,5 @@ export {
     DEFAULT_RADIX,
     MAX_BMP_SIZE,
     SHAPE_TOOL_POSITION,
+    SNACKBAR_DURATION,
 };

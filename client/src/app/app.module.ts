@@ -19,6 +19,7 @@ import {
     MatSliderModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    MatSnackBarModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -120,6 +121,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         MatSelectModule,
         MatFormFieldModule,
         MatSlideToggleModule,
+        MatSnackBarModule,
     ],
     entryComponents: [
         WelcomeModalWindowComponent,

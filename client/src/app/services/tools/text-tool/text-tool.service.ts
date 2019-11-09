@@ -1,12 +1,19 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { SVG_NS, Mouse } from 'src/constants/constants';
-import { HTMLAttribute, TEXT_CURSOR, TEXT_SPACE, TEXT_LINEBREAK } from 'src/constants/tool-constants';
+import { SVG_NS, Mouse, Keys } from 'src/constants/constants';
+import {
+    HTMLAttribute,
+    TEXT_CURSOR,
+    TEXT_SPACE,
+    TEXT_LINEBREAK,
+    SNACKBAR_DURATION,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
@@ -43,7 +50,11 @@ export class TextToolService extends AbstractToolService {
 
     primColor: string;
 
-    constructor(private shortCutManagerService: ShortcutManagerService, private colorToolService: ColorToolService) {
+    constructor(
+        private shortCutManagerService: ShortcutManagerService,
+        private colorToolService: ColorToolService,
+        private snackBar: MatSnackBar
+    ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
             this.updateColor(color);
@@ -296,6 +307,11 @@ export class TextToolService extends AbstractToolService {
             this.addText(TEXT_SPACE);
         } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
             this.moveCursor(event.key);
+        } else if (event.key === Keys.SmallerThan || event.key === Keys.GreaterThan) {
+            this.snackBar.open('Les carractères ne sont malheureusement pas disponible', '', {
+                duration: SNACKBAR_DURATION,
+            });
+            this.addText('<');
         } else {
             if (event.key.length < 2) {
                 this.addText(event.key);
@@ -377,4 +393,6 @@ export class TextToolService extends AbstractToolService {
             return el === this.currentLine;
         });
     }
+
+    openSnackBar() {}
 }

@@ -26,6 +26,9 @@ enum Keys {
     Enter = 'Enter',
     ArrowLeft = 'ArrowLeft',
     ArrowRight = 'ArrowRight',
+    Space = ' ',
+    SmallerThan = '<',
+    GreaterThan = '>',
 }
 
 enum Mouse {
