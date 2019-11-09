@@ -243,7 +243,7 @@ fdescribe('TextToolService', () => {
         expect(service.ifClickInTextBox(1, 1)).toEqual(false);
     });
 
-    it('onMouseMove should return undefined if onKeyUp is not implemented', () => {
+    it('onMouseMove should return undefined if onMouseMove is not implemented', () => {
         expect(service.onMouseMove(leftMouseEvent)).toBeUndefined();
     });
 
@@ -337,15 +337,15 @@ fdescribe('TextToolService', () => {
         expect(spyOncleanUp).toHaveBeenCalled();
     });
 
-    it('onMouseUp should return undefined if onKeyUp is not implemented', () => {
+    it('onMouseUp should return undefined if onMouseUp is not implemented', () => {
         expect(service.onMouseUp(rightMouseEvent)).toBeUndefined();
     });
 
-    it('onMouseEnter should return undefined if onKeyUp is not implemented', () => {
+    it('onMouseEnter should return undefined if onMouseEnter is not implemented', () => {
         expect(service.onMouseEnter(leftMouseEvent)).toBeUndefined();
     });
 
-    it('onMouseLeave should return undefined if onKeyUp is not implemented', () => {
+    it('onMouseLeave should return undefined if onMouseLeave is not implemented', () => {
         expect(service.onMouseLeave(leftMouseEvent)).toBeUndefined();
     });
 
@@ -380,22 +380,22 @@ fdescribe('TextToolService', () => {
         expect(spyOnsetProperty).toHaveBeenCalledTimes(0);
     });
 
-    it('onKeyDown should call moveCursorLeft if key is ArrowRight', () => {
-        const spyOnmoveCursorLeft = spyOn(service, 'moveCursorLeft').and.returnValue();
+    it('onKeyDown should call moveCursor if key is ArrowRight', () => {
+        const spyOnmoveCursor = spyOn(service, 'moveCursor').and.returnValue();
         service.isWriting = true;
 
         service.onKeyDown(arrowLeftKeyboardEvent);
 
-        expect(spyOnmoveCursorLeft).toHaveBeenCalled();
+        expect(spyOnmoveCursor).toHaveBeenCalled();
     });
 
     it('onKeyDown should call moveCursorRight if key is ArrowRight', () => {
-        const spyOnmoveCursorRight = spyOn(service, 'moveCursorRight').and.returnValue();
+        const spyOnmoveCursor = spyOn(service, 'moveCursor').and.returnValue();
         service.isWriting = true;
 
         service.onKeyDown(arrowRightKeyboardEvent);
 
-        expect(spyOnmoveCursorRight).toHaveBeenCalled();
+        expect(spyOnmoveCursor).toHaveBeenCalled();
     });
 
     //TO DO case event.key === ' '
