@@ -13,7 +13,7 @@ const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 
-fdescribe('RectangleToolService', () => {
+describe('RectangleToolService', () => {
     let injector: TestBed;
     let rectangleTool: RectangleToolService;
     let rendererMock: Renderer2;

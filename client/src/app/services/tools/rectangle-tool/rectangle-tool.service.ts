@@ -55,54 +55,56 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
     }
 
-    isValideRectangle(): boolean {
-        const height = this.previewRectangleHeight;
-        const width = this.previewRectangleWidth;
+    isValidRectangle(): boolean {
+        const isValidPreviewHeight = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
+        const isValidPreviewWidth = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
 
-        return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
+        return (
+            isValidPreviewWidth && isValidPreviewHeight && (this.drawRectangleWidth > 0 || this.drawRectangleHeight > 0)
+        );
     }
 
     copyPreviewRectangleAttributes(): void {
         this.renderer.setAttribute(
             this.drawRectangle,
             'x',
-            (this.previewRectangleX + this.userStrokeWidth / 2).toString(),
+            (this.previewRectangleX + this.userStrokeWidth / 2).toString()
         );
         this.renderer.setAttribute(
             this.drawRectangle,
             'y',
-            (this.previewRectangleY + this.userStrokeWidth / 2).toString(),
+            (this.previewRectangleY + this.userStrokeWidth / 2).toString()
         );
         if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.width,
-                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString(),
+                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.width,
-                (this.previewRectangleWidth - this.userStrokeWidth).toString(),
+                (this.previewRectangleWidth - this.userStrokeWidth).toString()
             );
         }
         if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.height,
-                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString(),
+                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.height,
-                (this.previewRectangleHeight - this.userStrokeWidth).toString(),
+                (this.previewRectangleHeight - this.userStrokeWidth).toString()
             );
         }
     }
 
     renderDrawRectangle(): void {
-        if (this.isValideRectangle()) {
+        if (this.isValidRectangle()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, this.userFillColor)
                 : this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + this.userFillColor);
@@ -119,6 +121,12 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.isPreviewing = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
+        this.disableDrawRectangle();
+    }
+
+    disableDrawRectangle(): void {
+        this.renderer.setAttribute(this.drawRectangle, 'width', '0');
+        this.renderer.setAttribute(this.drawRectangle, 'height', '0');
     }
 
     createSVG(): void {
@@ -159,13 +167,13 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString()
             );
         }
 
@@ -173,25 +181,25 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString()
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString()
             );
         }
 
         this.renderer.setAttribute(
             this.drawRectangle,
             HTMLAttribute.height,
-            Math.abs(minLength - this.userStrokeWidth).toString(),
+            Math.abs(minLength - this.userStrokeWidth).toString()
         );
         this.renderer.setAttribute(
             this.drawRectangle,
             HTMLAttribute.width,
-            Math.abs(minLength - this.userStrokeWidth).toString(),
+            Math.abs(minLength - this.userStrokeWidth).toString()
         );
     }
 
@@ -261,7 +269,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValideRectangle()) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValidRectangle()) {
             this.createSVG();
         }
         this.cleanUp();
