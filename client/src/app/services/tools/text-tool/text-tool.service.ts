@@ -189,12 +189,12 @@ export class TextToolService extends AbstractToolService {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, 'font-family', this.fontType);
-        this.renderer.setAttribute(this.textBox, 'font-size', this.fontSize.toString());
-        this.renderer.setAttribute(this.textBox, 'font-style', this.fontStyle);
-        this.renderer.setAttribute(this.textBox, 'font-weight', this.fontWeight);
-        this.renderer.setAttribute(this.textBox, 'text-anchor', this.fontAlign);
-        this.renderer.setAttribute(this.textBox, 'fill', '#' + this.primColor);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_family, this.fontType);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_size, this.fontSize.toString());
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontStyle);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontWeight);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.text_anchor, this.fontAlign);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.fill, this.primColor);
     }
 
     createNewLine(): void {
@@ -209,14 +209,14 @@ export class TextToolService extends AbstractToolService {
             } else {
                 this.text = this.text.slice(0, this.currentCursorIndex);
             }
-            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+            this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         }
 
         this.text = rightSideText.length === 0 ? TEXT_CURSOR : rightSideText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
         this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
-        this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+        this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         if (tsSpanStackIsNotEmpty) {
             this.renderer.insertBefore(this.textBox, this.currentLine, this.tspanStack[refChilpos + 1]);
 
@@ -318,7 +318,7 @@ export class TextToolService extends AbstractToolService {
                 this.addText(event.key);
                 break;
         }
-        this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+        this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         setTimeout(() => {
             this.updatePreviewBox();
         }, 0);
@@ -328,13 +328,14 @@ export class TextToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {}
 
     cleanUp(): void {
+        console.log('cleanUp');
         if (this.gWrap !== undefined) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
             if (this.tspanStack.length === 1 && this.text.length === 1) {
                 // textbox is empty
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.renderer.setProperty(this.currentLine, 'innerHTML', this.text.slice(0, -1));
+                this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text.slice(0, -1));
                 this.drawStack.push(this.gWrap);
             }
             this.tspanStack = new Array<SVGTSpanElement>();
@@ -371,7 +372,7 @@ export class TextToolService extends AbstractToolService {
             if (this.text === '') {
                 this.text += TEXT_LINEBREAK;
             }
-            this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
+            this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
 
             this.currentLine = this.tspanStack[nextLinePosition];
             this.text = this.currentLine.textContent as string;
