@@ -294,26 +294,29 @@ export class TextToolService extends AbstractToolService {
         event.preventDefault();
         this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
-        if (event.key === Keys.Enter) {
-            this.createNewLine();
-        } else if (event.key === Keys.Backspace) {
-            this.erase();
-        } else if (event.key === Keys.Space) {
-            this.addText(TEXT_SPACE);
-        } else if (event.key === Keys.ArrowLeft || event.key === Keys.ArrowRight) {
-            this.moveCursor(event.key);
-        } else if (event.key === Keys.SmallerThan || event.key === Keys.GreaterThan) {
-            this.snackBar.open(
-                `Les carractères ${Keys.SmallerThan} et ${Keys.GreaterThan} ne sont malheureusement pas disponible`,
-                '',
-                {
+        switch (event.key) {
+            case Keys.Enter:
+                this.createNewLine();
+                break;
+            case Keys.Backspace:
+                this.erase();
+                break;
+
+            case Keys.Space:
+                this.addText(TEXT_SPACE);
+                break;
+            case Keys.ArrowLeft:
+            case Keys.ArrowRight:
+                this.moveCursor(event.key);
+                break;
+            case Keys.SmallerThan:
+                this.snackBar.open(`Le carractères ${Keys.SmallerThan}  n'est malheureusement pas disponible`, '', {
                     duration: SNACKBAR_DURATION,
-                }
-            );
-        } else {
-            if (event.key.length < 2) {
+                });
+                break;
+            default:
                 this.addText(event.key);
-            }
+                break;
         }
         this.renderer.setProperty(this.currentLine, 'innerHTML', this.text);
         setTimeout(() => {
@@ -381,6 +384,9 @@ export class TextToolService extends AbstractToolService {
     }
 
     addText(key: string): void {
+        if (key.length > 1) {
+            return;
+        }
         const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
         const rightSideText = this.text.slice(this.currentCursorIndex + 1);
         this.text = leftSideText + TEXT_CURSOR + rightSideText;
@@ -391,6 +397,4 @@ export class TextToolService extends AbstractToolService {
             return el === this.currentLine;
         });
     }
-
-    openSnackBar() {}
 }
