@@ -140,7 +140,7 @@ export class ClipboardService {
 
         setTimeout(() => {
             this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        });
+        }, 0);
 
         this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
     }
@@ -218,6 +218,6 @@ export class ClipboardService {
         this.selection.emptySelection();
         setTimeout(() => {
             this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        });
+        }, 0);
     }
 }

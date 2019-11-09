@@ -7,6 +7,7 @@ import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../manipulator/manipulator.service';
 import { ClipboardService } from './clipboard.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 describe('ClipboardService', () => {
     let injector: TestBed;
@@ -43,6 +44,12 @@ describe('ClipboardService', () => {
                         },
                     },
                 },
+                {
+                    provide: UndoRedoerService,
+                    useValue: {
+                        saveCurrentState: () => null,
+                    }
+                }
             ],
         });
 
@@ -58,7 +65,13 @@ describe('ClipboardService', () => {
 
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+
+        jasmine.clock().install();
     });
+
+    afterEach(function() {
+        jasmine.clock().uninstall();
+    })
 
     it('should be created', () => {
         expect(service).toBeTruthy();
@@ -346,6 +359,7 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.cut();
+        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(service.pasteOffsetValue).toEqual(0);
@@ -382,6 +396,9 @@ describe('ClipboardService', () => {
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
@@ -395,6 +412,9 @@ describe('ClipboardService', () => {
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
@@ -407,9 +427,14 @@ describe('ClipboardService', () => {
     it('should call clone and handleOutOfBounds when calling paste', () => {
         const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
         const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+        service.clippings.add(TestHelpers.createMockSVGElement());
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+
         service.paste();
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
@@ -424,6 +449,7 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.delete();
+        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
