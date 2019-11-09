@@ -285,13 +285,6 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    // tslint:disable-next-line: no-empty
-    onMouseUp(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onMouseEnter(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onMouseLeave(event: MouseEvent): void {}
-
     onKeyDown(event: KeyboardEvent): void {
         if (!this.isWriting || event.ctrlKey || event.altKey) {
             return;
@@ -402,4 +395,12 @@ export class TextToolService extends AbstractToolService {
             return el === this.currentLine;
         });
     }
+    // tslint:disable-next-line: no-empty
+    onMouseUp(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onKeyUp(event: KeyboardEvent): void {}
 }
