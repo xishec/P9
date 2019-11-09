@@ -3,10 +3,18 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
 
+const OFFSET_STEP = 10;
+
 enum ToolName {
     TracingTool = 'Outil de traçage',
     ShapeTool = 'Outil de forme',
     Selection = 'Sélection',
+    SelectAll = 'Tout sélectionner',
+    Copy = 'Copier',
+    Cut = 'Couper',
+    Duplicate = 'Dupliquer',
+    Paste = 'Coller',
+    Delete = 'Supprimer',
     Pencil = 'Crayon',
     Brush = 'Pinceau',
     Quill = 'Plume',
@@ -104,6 +112,15 @@ const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
     { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
     { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
+];
+
+const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
+    { iconName: 'fas fa-object-group', tooltipName: ToolName.SelectAll, shortcut: '(Ctrl-A)' },
+    { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
+    { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
+    { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
+    { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
+    { iconName: 'fas fa-trash-alt', tooltipName: ToolName.Delete, shortcut: '(Supprimer)' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -360,9 +377,11 @@ export {
     SHAPE_BUTTON_INFO,
     FILES_BUTTON_INFO,
     BRUSH_STYLES,
+    CLIPBOARD_BUTTON_INFO,
     Thickness,
     TraceType,
     ToolName,
+    OFFSET_STEP,
     PolygonFormType,
     PolygonSides,
     PolygonRadiusCorrection,
