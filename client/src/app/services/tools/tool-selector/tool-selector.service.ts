@@ -279,7 +279,7 @@ export class ToolSelectorService {
                 this.changeCurrentToolName(ToolName.Selection);
                 break;
         }
-        if (this.currentTool instanceof SelectionToolService) this.selectionTool.isTheCurrentTool = true;
+        if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
     }
 
     changeCurrentToolName(toolName: ToolName): void {
