@@ -19,6 +19,7 @@ import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
+import { Drawing } from '../../../../../common/communication/Drawing';
 
 @Component({
     selector: 'app-work-zone',
@@ -55,47 +56,19 @@ export class WorkZoneComponent implements OnInit {
     ngOnInit(): void {
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
-
-        this.eventListenerService = new EventListenerService(
-            this.refSVG,
-            this.toolSelector,
-            this.gridToolService,
-            this.shortCutManagerService,
-            this.modalManagerService,
-            this.renderer,
-            this.clipboard,
-        );
-        this.eventListenerService.addEventListeners();
+        this.initializeEventListeners();
 
         this.toolSelector.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
         });
 
-        this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
-            if (selectedDrawing.svg === '') {
-                return;
+        this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing: Drawing) => {
+            if (selectedDrawing.svg !== '') {
+                this.empty = false;
+                this.eventListenerService.isWorkZoneEmpty = false;
+                this.updateDrawingInfo(selectedDrawing.drawingInfo);
+                this.appendDrawingToView(selectedDrawing);
             }
-
-            this.drawingInfo = selectedDrawing.drawingInfo;
-            this.drawingModalWindowService.changeDrawingInfo(
-                this.drawingInfo.width,
-                this.drawingInfo.height,
-                this.drawingInfo.color,
-            );
-
-            this.empty = false;
-            this.eventListenerService.isWorkZoneEmpty = false;
-
-            this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
-
-            const idStack = Object.values(selectedDrawing.idStack);
-            idStack.forEach((id) => {
-                const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
-                const child: SVGElement = children.filter((filterChild) => {
-                    return filterChild.getAttribute('id_element') === id;
-                })[0];
-                this.drawStack.push(child as SVGAElement);
-            });
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
@@ -134,7 +107,7 @@ export class WorkZoneComponent implements OnInit {
                     filter((subject) => {
                         if (subject === undefined) {
                             this.drawingSaverService.currentErrorMesaage.next(
-                                'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                                "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                             );
                             this.drawingSaverService.currentIsSaved.next(false);
                             return false;
@@ -169,12 +142,51 @@ export class WorkZoneComponent implements OnInit {
             this.gridOpacity = opacity;
         });
 
+        this.setDefaultWorkZoneProperties();
+    }
+
+    setDefaultWorkZoneProperties() {
         this.drawingInfo.height = window.innerHeight;
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
         this.empty = true;
         this.eventListenerService.isWorkZoneEmpty = true;
         this.setRectangleBackgroundStyle();
+    }
+
+    updateDrawingInfo(newDrawingInfo: DrawingInfo) {
+        this.drawingInfo = newDrawingInfo;
+        this.drawingModalWindowService.changeDrawingInfo(
+            this.drawingInfo.width,
+            this.drawingInfo.height,
+            this.drawingInfo.color,
+        );
+    }
+
+    appendDrawingToView(selectedDrawing: Drawing) {
+        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
+
+        const idStack = Object.values(selectedDrawing.idStack);
+        idStack.forEach((id) => {
+            const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
+            const child: SVGElement = children.filter((filterChild) => {
+                return filterChild.getAttribute('id_element') === id;
+            })[0];
+            this.drawStack.push(child as SVGAElement);
+        });
+    }
+
+    initializeEventListeners() {
+        this.eventListenerService = new EventListenerService(
+            this.refSVG,
+            this.toolSelector,
+            this.gridToolService,
+            this.shortCutManagerService,
+            this.modalManagerService,
+            this.renderer,
+            this.clipboard,
+        );
+        this.eventListenerService.addEventListeners();
     }
 
     onClickRectangle() {
