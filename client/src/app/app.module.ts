@@ -44,13 +44,10 @@ import { ColorQueueComponent } from './components/color-palette/color-queue/colo
 import { DrawingModalWindowComponent } from './components/modal-windows/drawing-modal-window/drawing-modal-window.component';
 // tslint:disable-next-line: max-line-length
 import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
-import {
-    LabelFilter,
-    MySlice,
-    NameFilter,
-    OpenFileModalWindowComponent,
-    ToTrustHtmlPipe,
-} from './components/modal-windows/open-file-modal-window/open-file-modal-window.component';
+import { LabelFilter } from '../classes/pipes/labelFilter';
+import { NameFilter } from '../classes/pipes/nameFilter';
+import { MySlice } from '../classes/pipes/mySlice';
+import { ToTrustHtmlPipe } from '../classes/pipes/toTrustHtml';
 import { SaveFileModalWindowComponent } from './components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
@@ -66,6 +63,7 @@ import { StampAttributesComponent } from './components/sidebar-tools/attribute-p
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
+import { OpenFileModalWindowComponent } from './components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 
 @NgModule({
     declarations: [

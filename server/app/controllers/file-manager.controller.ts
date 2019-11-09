@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { injectable } from 'inversify';
 
 import { Drawing } from '../../../common/communication/Drawing';
-import { Message } from '../../../common/communication/Message';
+import { Message } from '../../../common/communication/message';
 // tslint:disable-next-line
 const Post = require('../model/post');
 
