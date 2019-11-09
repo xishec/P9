@@ -8,7 +8,7 @@ import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ToolSelectorService } from './tool-selector.service';
 
-fdescribe('ToolSelectorService', () => {
+describe('ToolSelectorService', () => {
     let injector: TestBed;
     let service: ToolSelectorService;
 
