@@ -7,15 +7,13 @@ import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../cla
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
-const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
 const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 
-describe('RectangleToolService', () => {
+fdescribe('RectangleToolService', () => {
     let injector: TestBed;
     let rectangleTool: RectangleToolService;
     let rendererMock: Renderer2;
@@ -108,7 +106,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should be created with call to new', () => {
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         expect(spyCreateElement).toHaveBeenCalled();
         expect(newRectangleTool).toBeTruthy();
@@ -117,8 +115,8 @@ describe('RectangleToolService', () => {
     it('should not call the renderer when clicking outside of workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return false;});
 
-        rectangleTool.onMouseLeave(MOUSELEAVE_EVENT);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
 
@@ -129,13 +127,14 @@ describe('RectangleToolService', () => {
     it('should append the preview and the draw rectangle when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
-        rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
         expect(spyAppendChild).toHaveBeenCalledTimes(2);
     });
 
     it('should correctly update the draw rectangle in the workzone on random mouse position', () => {
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -157,7 +156,6 @@ describe('RectangleToolService', () => {
             },
         );
 
-        rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
 
@@ -170,6 +168,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -191,7 +190,6 @@ describe('RectangleToolService', () => {
             },
         );
 
-        rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
         rectangleTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
 
@@ -204,7 +202,6 @@ describe('RectangleToolService', () => {
     it('should be square when shift is down', () => {
         const spy = spyOn(rectangleTool, 'updatePreviewSquare');
 
-        rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
@@ -226,7 +223,6 @@ describe('RectangleToolService', () => {
     it('should cleanup correctly when creating a full rectangle', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
-        rectangleTool.onMouseEnter(MOUSEENTER_EVENT);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onMouseUp(MOUSEUP_EVENT);

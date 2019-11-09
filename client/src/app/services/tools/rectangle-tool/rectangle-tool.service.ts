@@ -14,11 +14,11 @@ export class RectangleToolService extends AbstractShapeToolService {
     drawRectangle: SVGRectElement;
     fillColor = '';
     strokeColor = '';
+    strokeWidth = 0;
     userFillColor = '';
     userStrokeColor = '';
     userStrokeWidth = 0;
     traceType = '';
-    strokeWidth = 0;
     isSquarePreview = false;
     attributesManagerService: AttributesManagerService;
     colorToolService: ColorToolService;
