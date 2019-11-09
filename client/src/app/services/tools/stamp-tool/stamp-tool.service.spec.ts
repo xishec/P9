@@ -87,7 +87,13 @@ describe('StampToolService', () => {
         spyOnStampHeight = spyOnProperty(service, 'stampHeight', 'get').and.callFake(() => {
             return mockDrawRect.height;
         });
+
+        jasmine.clock().install();
     });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
+    })
 
     it('should be created', () => {
         expect(service).toBeTruthy();
@@ -152,6 +158,7 @@ describe('StampToolService', () => {
 
     it('should call setAttribute and appendChild after a stamp is added', () => {
         service.addStamp();
+        jasmine.clock().tick(1);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnAppendChild).toHaveBeenCalled();
@@ -204,6 +211,7 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
+        spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.shouldStamp = false;
         service.onMouseDown(positiveMouseEvent);
@@ -212,6 +220,8 @@ describe('StampToolService', () => {
         service.isIn = true;
         service.shouldStamp = true;
         service.onMouseDown(positiveMouseEvent);
+        jasmine.clock().tick(1);
+
         expect(spyOnCleanUpStamp).toHaveBeenCalled();
         expect(spyOnDrawStackPush).toHaveBeenCalled();
     });
