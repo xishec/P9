@@ -39,6 +39,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     selectAll(): void {
+        this.clipBoard.restartDuplication();
         for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
