@@ -22,7 +22,6 @@ export class ColorQueueComponent implements OnInit {
         this.colorToolService.colorQueue.subscribe((colorQueue) => {
             this.colorQueue = colorQueue;
         });
-        this.colorToolService.colorQueue.next([DEFAULT_WHITE]);
     }
 
     onClickColorButton(color: string): void {
