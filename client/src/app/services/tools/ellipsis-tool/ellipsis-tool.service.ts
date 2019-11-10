@@ -240,10 +240,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
         const key = event.key;
 
         if (key === Keys.Shift) {
-            if (!this.isCirclePreview) {
-                this.isCirclePreview = true;
-                this.updateDrawing();
-            }
+            this.isCirclePreview = true;
+            this.updateDrawing();
         }
     }
 
@@ -251,10 +249,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
         const key = event.key;
 
         if (key === Keys.Shift) {
-            if (this.isCirclePreview) {
-                this.isCirclePreview = false;
-                this.updateDrawing();
-            }
+            this.isCirclePreview = false;
+            this.updateDrawing();
         }
     }
 
