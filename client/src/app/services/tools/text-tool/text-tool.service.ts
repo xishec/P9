@@ -45,7 +45,7 @@ export class TextToolService extends AbstractToolService {
     currentCursorIndex = 0;
     isWriting: boolean;
 
-    actionMap: Map<string, Function> = new Map([
+    actionMap: Map<string, (key: string) => void> = new Map([
         [Keys.Enter, this.createNewLine],
         [Keys.Backspace, this.erase],
         [Keys.ArrowLeft, this.moveCursor],
