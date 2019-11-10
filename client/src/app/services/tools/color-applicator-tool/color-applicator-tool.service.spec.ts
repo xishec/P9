@@ -62,13 +62,6 @@ describe('ColorApplicatorToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('initializeColorToolService should be primaryColor from colorService', () => {
-        const colorService: ColorToolService = new ColorToolService();
-        const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
-        service.initializeColorToolService(new ColorToolService());
-        expect(service[`primaryColor`]).toEqual('#' + primaryColorTmp.value);
-    });
-
     it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {
         const mouseEventTmp = createMouseEvent(1, 1, Mouse.LeftButton);
         service.isOnTarget = true;

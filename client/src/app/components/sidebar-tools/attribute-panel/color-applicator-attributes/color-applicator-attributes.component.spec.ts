@@ -51,9 +51,7 @@ describe('ColorApplicatorAttributesComponent', () => {
 
     it('shoud return colorApplicatorToolService when ngAfterViewInit', () => {
         const SPY1 = spyOn(toolSelectorService, 'getColorApplicatorTool').and.returnValue(colorApplicatorToolService);
-        const SPY2 = spyOn(colorApplicatorToolService, 'initializeColorToolService');
         component.ngAfterViewInit();
         expect(SPY1).toHaveBeenCalled();
-        expect(SPY2).toHaveBeenCalled();
     });
 });
