@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 interface IconStyle {
     backgroundColor: string;
@@ -22,7 +21,6 @@ export class ColorQueueComponent implements OnInit {
         this.colorToolService.colorQueue.subscribe((colorQueue) => {
             this.colorQueue = colorQueue;
         });
-        this.colorToolService.colorQueue.next([DEFAULT_WHITE]);
     }
 
     onClickColorButton(color: string): void {
