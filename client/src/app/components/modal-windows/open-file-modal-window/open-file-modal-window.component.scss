@@ -2,36 +2,25 @@
     margin: 0 !important;
 }
 
+#filters {
+    margin: 10px;
+}
+
 .mat-typography,
 .mat-typography-local {
     display: grid;
     align-self: center;
     padding: 15px 40px;
-}
-
-.mat-typography {
-    grid-template-columns: 640px;
-    grid-template-rows: 30px 10px 30px 10px auto;
+    width: 640px;
 }
 
 .tab-content {
+    min-height: 250px;
     max-height: 600px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow-x: hidden;
-}
-
-#name-filter {
-    grid-row: 1 / 2;
-}
-
-#label-filter {
-    grid-row: 3 / 4;
-}
-
-#drawing-list, #loading-div {
-    grid-row: 5 / 6;
 }
 
 #header {
@@ -119,9 +108,7 @@ mat-list-option[aria-selected='true'] {
 }
 
 .filter {
-    margin-left: 2px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    padding: 5px;
 }
 
 .hidden-info {
@@ -149,59 +136,58 @@ mat-list-option[aria-selected='true'] {
     margin-top: 10px;
 }
 
-
 #input-wrapper {
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
 
-// #destination-label {
-//     font-size: 14px;
-//     align-self: center;
-// }
+#destination-label {
+    font-size: 14px;
+    align-self: center;
+}
 
-// #destination-path {
-//     margin: 0 10px 0 0;
-//     text-align: left;
-//     padding-left: 8px;
-//     color: rgba(0, 0, 0, 0.87);
+#destination-path {
+    margin: 0 10px 0 0;
+    text-align: left;
+    padding-left: 8px;
+    color: rgba(0, 0, 0, 0.87);
 
-//     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14),
-//         0px 0px 0px 0px rgba(0, 0, 0, 0.12);
-//     border: 1px solid;
-//     border-color: rgba(0, 0, 0, 0.12);
-//     border-radius: 2px;
-//     line-height: 20px;
-//     font-size: 12px;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14),
+        0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+    border: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    line-height: 20px;
+    font-size: 12px;
 
-//     :focus {
-//         outline: 1px dotted #000;
-//     }
-// }
+    :focus {
+        outline: 1px dotted #000;
+    }
+}
 
-// .inputfile {
-//     width: 0.1px;
-//     height: 0.1px;
-//     opacity: 0;
-//     overflow: hidden;
-//     position: absolute;
-//     z-index: -1;
-// }
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
 
-// .inputfile + label {
-//     color: rgba(0, 0, 0, 0.87);
-//     cursor: pointer;
-// }
+.inputfile + label {
+    color: rgba(0, 0, 0, 0.87);
+    cursor: pointer;
+}
 
-// .inputfile:focus + label {
-//     outline: 1px dotted #000;
-// }
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+}
 
-// .inputfile:focus + label,
-// .inputfile + label:hover {
-//     color: #ff5722;
-// }
+.inputfile:focus + label,
+.inputfile + label:hover {
+    color: #ff5722;
+}
 
 ::ng-deep.mat-dialog-actions {
     margin-bottom: 0 !important;

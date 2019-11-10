@@ -95,6 +95,7 @@ export class LabelFilter implements PipeTransform {
 })
 export class OpenFileModalWindowComponent implements OnInit {
     openFileModalForm: FormGroup;
+    openLocalFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
@@ -154,6 +155,11 @@ export class OpenFileModalWindowComponent implements OnInit {
             selectedDrawing: [[this.selectedOption], Validators.required],
             confirm: false,
         });
+
+        this.openLocalFileModalForm = this.formBuilder.group({
+            filePath: ['', [Validators.required, Validators.minLength(1)]],
+            // Check filename so it only takes valid string
+        })
     }
 
     handleSelection(event: any): void {

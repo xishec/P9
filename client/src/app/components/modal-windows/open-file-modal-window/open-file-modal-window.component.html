@@ -2,8 +2,8 @@
 
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="Ouvrir un fichier dans la BD">
-        <div class="tab-content">
-            <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
+        <div class="tab-content" id="open-server">
+            <div id="filters">
                 <input
                     autocomplete="off"
                     matInput
@@ -20,6 +20,8 @@
                     placeholder="Filter par étiquettes ... (ex.: pomme, melon, etc.)"
                     id="label-filter"
                 />
+            </div>
+            <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
                 <div *ngIf="!isLoading" id="drawing-list">
                     <div id="header">
                         <mat-label id="name-title">Nom :</mat-label>
@@ -103,7 +105,7 @@
                     Je confirme que je ne veux pas sauvegarder le dessin existant.
                 </mat-checkbox>
             </div>
-            <mat-dialog-actions id="footer" align="end">
+            <mat-dialog-actions align="end">
                 <div class="submit-button-group-wrapper">
                     <div class="submit-button-group">
                         <button
@@ -134,11 +136,11 @@
         </div>
     </mat-tab>
     <mat-tab label="Ouvrir un fichier local">
-        <div class="tab-content" *ngIf="!isSaving">
-            <mat-dialog-content class="mat-typography-local" [formGroup]="openFileModalForm">
+        <div class="tab-content">
+            <mat-dialog-content class="mat-typography-local" [formGroup]="openLocalFileModalForm">
                 <mat-label id="destination-label">Choisir un fichier local:</mat-label>
                 <div id="input-wrapper">
-                    <input id="destination-path" type="text" value="/Users/noboruyoshida/Downloads/" size="74" />
+                    <input id="destination-path" type="text" value="/Users/noboruyoshida/Downloads/" size="96" />
                     <input
                         type="file"
                         accept=".txt"
@@ -153,27 +155,23 @@
                 </div>
             </mat-dialog-content>
 
-            <mat-dialog-actions id="footer" align="end">
-                <button
-                    class="actionButton"
-                    mat-stroked-button
-                    color="warn"
-                    type="button"
-                    (click)="onDelete()"
-                    *ngIf="selectedOption !== ''"
-                >
-                    Supprimer
-                </button>
-                <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-                <button
-                    class="actionButton"
-                    mat-stroked-button
-                    type="submit"
-                    [disabled]="formIsInvalid()"
-                    (click)="onSubmit()"
-                >
-                    Ouvrir
-                </button>
+            <mat-dialog-actions align="end">
+                <div class="submit-button-group-wrapper">
+                    <div class="submit-button-group">
+                        <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                            Annuler
+                        </button>
+                        <button
+                            class="actionButton"
+                            mat-stroked-button
+                            type="submit"
+                            [disabled]="formIsInvalid()"
+                            (click)="onSubmit()"
+                        >
+                            Ouvrir
+                        </button>
+                    </div>
+                </div>
             </mat-dialog-actions>
         </div>
     </mat-tab>
