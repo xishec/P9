@@ -10,15 +10,10 @@ import { Coords2D } from 'src/classes/Coords2D';
     providedIn: 'root',
 })
 export abstract class AbstractShapeToolService extends AbstractToolService {
-    currentMouseX = 0;
-    currentMouseY = 0;
     currentMouseCoords: Coords2D = {x: 0, y: 0};
-    initialMouseX = 0;
-    initialMouseY = 0;
     initialMouseCoords: Coords2D = {x: 0, y: 0};
     previewRectangle: SVGRectElement;
     isPreviewing = false;
-    isIn = true;
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
