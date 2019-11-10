@@ -6,7 +6,7 @@ import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EllipsisToolService } from './ellipsis-tool.service';
 
-describe('EllipsisToolService', () => {
+fdescribe('EllipsisToolService', () => {
     const NONE = 'none';
     const NOTNONE = 'not none';
 
@@ -16,6 +16,9 @@ describe('EllipsisToolService', () => {
     let rightMouseEvent: MouseEvent;
     let onShiftKeyDown: KeyboardEvent;
     let onOtherKeyDown: KeyboardEvent;
+    let rendererMock: Renderer2;
+    let drawStackMock: DrawStackService;
+    let elementRefMock: ElementRef<SVGElement>;
 
     let spyOnPreviewRectangleWidth: jasmine.Spy;
     let spyOnPreviewRectangleHeight: jasmine.Spy;
@@ -62,9 +65,9 @@ describe('EllipsisToolService', () => {
 
         injector = getTestBed();
         service = injector.get(EllipsisToolService);
-        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         leftMouseEvent = createMouseEvent(10, 10, 0);
@@ -117,17 +120,92 @@ describe('EllipsisToolService', () => {
         expect(spyOnDrawEllipseRadiusY).toBeDefined();
     });
 
+    it('should return the draw ellipse cx when getting draw ellipse cx', () => {
+        const CX = 10;
+        const mockEllipse = {
+            cx: {
+                baseVal: {
+                    value: CX,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newEllipsisTool = new EllipsisToolService();
+        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock)
+
+        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+
+        expect(newEllipsisTool.drawEllipseCenterX).toEqual(CX);
+    });
+
+    it('should return the draw ellipse cy when getting draw ellipse cy', () => {
+        const CY = 10;
+        const mockEllipse = {
+            cy: {
+                baseVal: {
+                    value: CY,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newEllipsisTool = new EllipsisToolService();
+        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock)
+
+        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+
+        expect(newEllipsisTool.drawEllipseCenterY).toEqual(CY);
+    });
+
+    it('should return the draw ellipse rx when getting draw ellipse rx', () => {
+        const RX = 10;
+        const mockEllipse = {
+            rx: {
+                baseVal: {
+                    value: RX,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newEllipsisTool = new EllipsisToolService();
+        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock)
+
+        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+
+        expect(newEllipsisTool.drawEllipseRadiusX).toEqual(RX);
+    });
+
+    it('should return the draw ellipse rx when getting draw ellipse rx', () => {
+        const RY = 10;
+        const mockEllipse = {
+            ry: {
+                baseVal: {
+                    value: RY,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newEllipsisTool = new EllipsisToolService();
+        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock)
+
+        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+
+        expect(newEllipsisTool.drawEllipseRadiusY).toEqual(RY);
+    });
+
     it('should return true if userStrokeWidth is positive', () => {
         service.userStrokeWidth = 2;
+        spyOnDrawEllipseRadiusX.and.callFake(() => {return 10});
 
-        expect(service.isValideEllipse()).toEqual(true);
+        expect(service.isValidEllipse()).toEqual(true);
     });
 
     it('should return false if radiusX and radiusY of elipse are equal to zero', () => {
         spyOnPreviewRectangleWidth.and.returnValue(0);
         spyOnPreviewRectangleHeight.and.returnValue(0);
+        spyOnDrawEllipseRadiusX.and.callFake(() => {return 0});
+        spyOnDrawEllipseRadiusY.and.callFake(() => {return 0});
 
-        expect(service.isValideEllipse()).toEqual(false);
+        expect(service.isValidEllipse()).toEqual(false);
     });
 
     it('should set userFillColor to none if Outline is selected', () => {
@@ -163,10 +241,10 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call renderer.setAttribute after a call to updatePreviewCircle when deltaX/Y is positive', () => {
-        service.currentMouseX = 10;
-        service.initialMouseX = 5;
-        service.currentMouseY = 10;
-        service.initialMouseY = 5;
+        service.currentMouseCoords.x = 10;
+        service.initialMouseCoords.x = 5;
+        service.currentMouseCoords.y = 10;
+        service.initialMouseCoords.y = 5;
 
         service.updatePreviewCircle();
 
@@ -174,10 +252,10 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call renderer.setAttribute after a call to updatePreviewCircle when deltaX/Y is negative', () => {
-        service.currentMouseX = 5;
-        service.initialMouseX = 10;
-        service.currentMouseY = 5;
-        service.initialMouseY = 10;
+        service.currentMouseCoords.x = 5;
+        service.initialMouseCoords.x = 10;
+        service.currentMouseCoords.y = 5;
+        service.initialMouseCoords.y = 10;
 
         service.updatePreviewCircle();
 
@@ -185,7 +263,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to userFillColor without "#" if userFillColor is none', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
         service.userFillColor = NONE;
 
         service.renderDrawEllipsis();
@@ -195,7 +273,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to userFillColor with "#" if userFillColor is different than none', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
         service.userFillColor = NOTNONE;
 
         service.renderDrawEllipsis();
@@ -204,8 +282,8 @@ describe('EllipsisToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
-    it('should call setAttribute and fill to none if ellipse in not valide', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+    it('should call setAttribute and fill to none if ellipse in not valid', () => {
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
 
         service.renderDrawEllipsis();
 
@@ -266,7 +344,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call isValideEllipse if the left button of the mouse is not clicked', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
 
         service.onMouseUp(rightMouseEvent);
 
@@ -274,7 +352,7 @@ describe('EllipsisToolService', () => {
     });
 
     it('should not call createSVG if the left button of the mouse is clicked and the ellipse is not valide', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(false);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
         const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
@@ -284,29 +362,13 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call createSVG if the left button of the mouse is clicked and the ellipse is valide', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValideEllipse').and.returnValue(true);
+        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
         const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
 
         expect(spyOnIsValideEllipse).toHaveBeenCalled();
         expect(spyOnCreateSVG).toHaveBeenCalled();
-    });
-
-    it('should set isIn to true after onMouseEnter', () => {
-        service.isIn = false;
-
-        service.onMouseEnter(leftMouseEvent);
-
-        expect(service.isIn).toBeTruthy();
-    });
-
-    it('should set isIn to false after onMouseLeave', () => {
-        service.isIn = true;
-
-        service.onMouseLeave(leftMouseEvent);
-
-        expect(service.isIn).toBeFalsy();
     });
 
     it('should set isCirclePreview to true if key shift is pressed and if isCirclePreview is false', () => {
@@ -365,9 +427,11 @@ describe('EllipsisToolService', () => {
 
     it('should set isPreviewing to false after cleanUp', () => {
         service.isPreviewing = true;
+        const spy = spyOn(service, 'makeEllipseInvalid');
 
         service.cleanUp();
 
         expect(service.isPreviewing).toBeFalsy();
+        expect(spy).toHaveBeenCalled();
     });
 });
