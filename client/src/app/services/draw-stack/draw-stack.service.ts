@@ -38,6 +38,8 @@ export class DrawStackService {
         this.idStack.splice(indexOfDeletion, 1);
 
         this.resolveDrawStackOrdering(indexOfDeletion);
+
+        if (this.drawStack.length === 0) this.drawingLoaderService.emptyDrawStack.next(true);
     }
 
     resolveDrawStackOrdering(displacementIndex: number): void {
