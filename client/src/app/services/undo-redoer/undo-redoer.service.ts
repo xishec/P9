@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface DrawingState {
     drawing: Drawing,
-    pasteOfsset?: number,
+    pasteOffset?: number,
     duplicateOffset?: number,
 }
 
@@ -73,7 +73,7 @@ export class UndoRedoerService {
 
         const currentState: DrawingState = {
             drawing: currentDrawing,
-            pasteOfsset: pasteOffset,
+            pasteOffset: pasteOffset,
         };
 
         this.saveState(currentState);
@@ -104,8 +104,11 @@ export class UndoRedoerService {
 
             if(stateToLoad.duplicateOffset !== undefined) {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
-            } else if (stateToLoad.pasteOfsset !== undefined) {
-                this.pasteOffset.next(stateToLoad.pasteOfsset);
+            } else if (stateToLoad.pasteOffset !== undefined) {
+                this.pasteOffset.next(stateToLoad.pasteOffset);
+            } else {
+                this.pasteOffset.next(0);
+                this.duplicateOffset.next(0);
             }
 
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
@@ -119,8 +122,11 @@ export class UndoRedoerService {
 
             if(stateToLoad.duplicateOffset !== undefined) {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
-            } else if (stateToLoad.pasteOfsset !== undefined) {
-                this.pasteOffset.next(stateToLoad.pasteOfsset);
+            } else if (stateToLoad.pasteOffset !== undefined) {
+                this.pasteOffset.next(stateToLoad.pasteOffset);
+            } else {
+                this.pasteOffset.next(0);
+                this.duplicateOffset.next(0);
             }
 
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
