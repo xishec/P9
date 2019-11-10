@@ -80,7 +80,6 @@ export class ToolSelectorService {
         this.dropperTool.initializeService(ref, renderer, drawStack);
 
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
-        this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
 
         this.polygonTool.initializeService(ref, renderer, drawStack);
         this.polygonTool.initializeColorToolService(this.colorToolService);
