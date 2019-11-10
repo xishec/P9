@@ -1,7 +1,15 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { BASE64_STAMPS_MAP, HTMLAttribute, NO_STAMP } from 'src/constants/tool-constants';
+import {
+    BASE64_STAMPS_MAP,
+    HTMLAttribute,
+    NO_STAMP,
+    STAMP_BASE_WIDTH,
+    STAMP_BASE_HEIGHT,
+    STAMP_BASE_ROTATION,
+    STAMP_ALTER_ROTATION,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -23,11 +31,6 @@ export class StampToolService extends AbstractToolService {
     stampIsAppended = false;
     isAlterRotation = false;
     isStampLinkValid = false;
-
-    readonly STAMP_BASE_WIDTH: number = 50;
-    readonly STAMP_BASE_HEIGHT: number = 50;
-    readonly STAMP_BASE_ROTATION: number = 15;
-    readonly STAMP_ALTER_ROTATION: number = 1;
 
     stamp: SVGImageElement;
     stampWrapper: SVGGElement;
@@ -101,12 +104,12 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.stamp,
             HTMLAttribute.width,
-            (this.STAMP_BASE_WIDTH * this.currentScaling).toString()
+            (STAMP_BASE_WIDTH * this.currentScaling).toString()
         );
         this.renderer.setAttribute(
             this.stamp,
             HTMLAttribute.height,
-            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
         );
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
@@ -131,23 +134,23 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             stamp,
             HTMLAttribute.width,
-            (this.STAMP_BASE_WIDTH * this.currentScaling).toString()
+            (STAMP_BASE_WIDTH * this.currentScaling).toString()
         );
         this.renderer.setAttribute(
             stamp,
             HTMLAttribute.height,
-            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
         );
         this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampCoords.y.toString());
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(rect, HTMLAttribute.width, (this.STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(rect, HTMLAttribute.width, (STAMP_BASE_WIDTH * this.currentScaling).toString());
         this.renderer.setAttribute(
             rect,
             HTMLAttribute.height,
-            (this.STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
         );
         this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
@@ -168,17 +171,17 @@ export class StampToolService extends AbstractToolService {
 
     rotateStamp(direction: number): void {
         if (direction < 0) {
-            this.currentAngle = (this.currentAngle - this.STAMP_BASE_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle - STAMP_BASE_ROTATION) % 360;
         } else {
-            this.currentAngle = (this.currentAngle + this.STAMP_BASE_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle + STAMP_BASE_ROTATION) % 360;
         }
     }
 
     alterRotateStamp(direction: number): void {
         if (direction < 0) {
-            this.currentAngle = (this.currentAngle - this.STAMP_ALTER_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle - STAMP_ALTER_ROTATION) % 360;
         } else {
-            this.currentAngle = (this.currentAngle + this.STAMP_ALTER_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle + STAMP_ALTER_ROTATION) % 360;
         }
     }
 
@@ -223,13 +226,11 @@ export class StampToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        // if (this.isAlterRotation) {
-        //     this.alterRotateStamp(event.deltaY);
-        // } else {
-        //     this.rotateStamp(event.deltaY);
-        // }
-
-        this.isAlterRotation ? this.alterRotateStamp(event.deltaY) : this.rotateStamp(event.deltaY);
+        if (this.isAlterRotation) {
+            this.alterRotateStamp(event.deltaY);
+        } else {
+            this.rotateStamp(event.deltaY);
+        }
 
         this.applyTransformation();
     }

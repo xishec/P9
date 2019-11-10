@@ -1,6 +1,10 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const NO_STAMP = '';
+const STAMP_BASE_WIDTH = 50;
+const STAMP_BASE_HEIGHT = 50;
+const STAMP_BASE_ROTATION = 15;
+const STAMP_ALTER_ROTATION = 1;
 
 const OFFSET_STEP = 10;
 
@@ -345,4 +349,8 @@ export {
     DEFAULT_RADIX,
     MAX_BMP_SIZE,
     SHAPE_TOOL_POSITION,
+    STAMP_BASE_HEIGHT,
+    STAMP_BASE_WIDTH,
+    STAMP_BASE_ROTATION,
+    STAMP_ALTER_ROTATION,
 };
