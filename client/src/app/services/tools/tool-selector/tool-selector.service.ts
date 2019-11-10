@@ -70,13 +70,10 @@ export class ToolSelectorService {
         this.ellipsisTool.initializeService(ref, renderer, drawStack);
 
         this.pencilTool.initializeService(ref, renderer, drawStack);
-        this.pencilTool.initializeColorToolService(this.colorToolService);
 
         this.penTool.initializeService(ref, renderer, drawStack);
-        this.penTool.initializeColorToolService(this.colorToolService);
 
         this.brushTool.initializeService(ref, renderer, drawStack);
-        this.brushTool.initializeColorToolService(this.colorToolService);
 
         this.stampTool.initializeService(ref, renderer, drawStack);
 
