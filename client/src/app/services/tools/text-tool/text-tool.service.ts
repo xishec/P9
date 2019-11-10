@@ -13,8 +13,8 @@ import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { MatSnackBar } from '@angular/material';
 import { FontInfo } from 'src/classes/FontInfos';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
@@ -220,9 +220,9 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
+
         if (tsSpanStackIsNotEmpty) {
             this.renderer.insertBefore(this.textBox, this.currentLine, this.tspanStack[refChilpos + 1]);
-
             this.tspanStack.splice(refChilpos + 1, 0, this.currentLine);
         } else {
             this.renderer.appendChild(this.textBox, this.currentLine);
@@ -241,6 +241,7 @@ export class TextToolService extends AbstractToolService {
         this.text =
             textContent === TEXT_LINEBREAK ? TEXT_CURSOR + remainingText : textContent + TEXT_CURSOR + remainingText;
     }
+
     erase(): void {
         if (this.currentCursorIndex === 0 && this.tspanStack[0] !== this.currentLine) {
             this.removeLine();
@@ -279,7 +280,7 @@ export class TextToolService extends AbstractToolService {
             this.updatePreviewBox();
             this.attributesManagerService.changeIsWriting(true);
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
-            this.currentCursorIndex = this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+            this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
             this.cleanUp();
         }
     }
@@ -292,7 +293,7 @@ export class TextToolService extends AbstractToolService {
         this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
         if (this.actionMap.has(event.key)) {
-            (this.actionMap.get(event.key) as Function).apply(this, [event.key]);
+            (this.actionMap.get(event.key) as () => void).apply(this, [event.key]);
         } else {
             event.key === Keys.Space ? this.addText(TEXT_SPACE) : this.addText(event.key);
         }
@@ -305,8 +306,7 @@ export class TextToolService extends AbstractToolService {
     cleanUp(): void {
         if (this.gWrap !== undefined && this.tspanStack.length !== 0) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
-            if (this.tspanStack.length === 1 && this.text.length === 1) {
-                // textbox is empty
+            if (this.tspanStack.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
                 this.eraseCursor();
@@ -315,7 +315,6 @@ export class TextToolService extends AbstractToolService {
             }
             this.tspanStack = new Array<SVGTSpanElement>();
             this.text = '';
-            this.gWrap;
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
@@ -335,10 +334,10 @@ export class TextToolService extends AbstractToolService {
             this.text = arr.join('').toString();
         } else {
             const nextLinePosition = this.findCurrentLinePosition() + offset;
+
             if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
                 return;
             }
-
             this.eraseCursor();
 
             if (this.text === '') {

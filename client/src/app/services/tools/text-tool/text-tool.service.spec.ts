@@ -1,6 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { MatSnackBar } from '@angular/material';
 import {
     createKeyBoardEvent,
     createMockSVGTextElement,
@@ -8,11 +9,10 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
+import { HTMLAttribute } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
-import { HTMLAttribute } from 'src/constants/tool-constants';
-import { MatSnackBar } from '@angular/material';
 
 fdescribe('TextToolService', () => {
     let injector: TestBed;
@@ -99,8 +99,8 @@ fdescribe('TextToolService', () => {
                     provide: MatSnackBar,
                     useValue: {
 
-                    }
-                }
+                    },
+                },
             ],
         });
 
@@ -390,5 +390,5 @@ fdescribe('TextToolService', () => {
         expect(spyOnmoveCursor).toHaveBeenCalled();
     });
 
-    //TO DO case event.key === ' '
+    // TO DO case event.key === ' '
 });
