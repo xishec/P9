@@ -42,7 +42,6 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.polygonToolService = this.toolSelectorService.getPolygonTool();
         this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.polygonToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {
