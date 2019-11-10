@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
 
 interface IconStyle {
     backgroundColor: string;
