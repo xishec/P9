@@ -123,6 +123,14 @@ export class ClipboardService {
         return boxLeft < parentBoxRight && boxTop < parentBoxBottom;
     }
 
+    notifyClippingsState(): void {
+        if (this.clippings.size > 0) {
+            this.isClippingsEmpty.next(false)
+        } else {
+            this.isClippingsEmpty.next(true)
+        }
+    }
+
     cut(): void {
         this.firstDuplication = true;
         this.clippings.clear();
@@ -135,11 +143,7 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
-        if (this.clippings.size > 0) {
-            this.isClippingsEmpty.next(false)
-        } else {
-            this.isClippingsEmpty.next(true)
-        }
+        this.notifyClippingsState();
     }
 
     copy(): void {
@@ -151,11 +155,7 @@ export class ClipboardService {
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
-        if (this.clippings.size > 0) {
-            this.isClippingsEmpty.next(false)
-        } else {
-            this.isClippingsEmpty.next(true)
-        }
+        this.notifyClippingsState();
     }
 
     duplicate(): void {
