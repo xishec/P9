@@ -5,15 +5,15 @@ import { BASE64_STAMPS_MAP, HTMLAttribute, NO_STAMP } from 'src/constants/tool-c
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StampToolService extends AbstractToolService {
-    currentMouseX = 0;
-    currentMouseY = 0;
-    stampX = 0;
-    stampY = 0;
+    currentMouseCoords: Coords2D = {x: 0, y: 0};
+    stampCoords: Coords2D = {x: 0, y: 0};
+
     currentAngle = 0;
     currentScaling = 1;
 
@@ -21,7 +21,6 @@ export class StampToolService extends AbstractToolService {
     transform = '';
 
     stampIsAppended = false;
-    isIn = false;
     isAlterRotation = false;
     shouldStamp = false;
 
@@ -83,13 +82,6 @@ export class StampToolService extends AbstractToolService {
         return this.stamp.height.baseVal.value;
     }
 
-    verifyPosition(event: MouseEvent): boolean {
-        return (
-            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
-            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
-        );
-    }
-
     initStamp(): void {
         if (!this.stampIsAppended) {
             this.setStamp();
@@ -121,15 +113,15 @@ export class StampToolService extends AbstractToolService {
 
     applyTransformation(): void {
         if (this.shouldStamp) {
-            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseX},
-                ${this.currentMouseY}) translate(${this.stampX}, ${this.stampY})`;
+            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseCoords.x},
+                ${this.currentMouseCoords.y}) translate(${this.stampCoords.x}, ${this.stampCoords.y})`;
             this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
         }
     }
 
     positionStamp(): void {
-        this.stampX = this.currentMouseX - this.stampWidth / 2;
-        this.stampY = this.currentMouseY - this.stampHeight / 2;
+        this.stampCoords.x = this.currentMouseCoords.x - this.stampWidth / 2;
+        this.stampCoords.y = this.currentMouseCoords.y - this.stampHeight / 2;
         this.applyTransformation();
     }
 
@@ -146,8 +138,8 @@ export class StampToolService extends AbstractToolService {
             HTMLAttribute.height,
             (this.STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
-        this.renderer.setAttribute(stamp, 'x', this.stampX.toString());
-        this.renderer.setAttribute(stamp, 'y', this.stampY.toString());
+        this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
+        this.renderer.setAttribute(stamp, 'y', this.stampCoords.y.toString());
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
@@ -157,18 +149,18 @@ export class StampToolService extends AbstractToolService {
             HTMLAttribute.height,
             (this.STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
-        this.renderer.setAttribute(rect, 'x', this.stampX.toString());
-        this.renderer.setAttribute(rect, 'y', this.stampY.toString());
+        this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
+        this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
         this.renderer.setAttribute(rect, HTMLAttribute.fill, '#ffffff00');
         this.renderer.setAttribute(rect, HTMLAttribute.stroke, 'none');
 
         this.renderer.appendChild(el, stamp);
         this.renderer.appendChild(el, rect);
-        this.renderer.setAttribute(el, 'transform', `translate(${this.stampX}, ${this.stampY})`);
+        this.renderer.setAttribute(el, 'transform', `translate(${this.stampCoords.x}, ${this.stampCoords.y})`);
         this.renderer.setAttribute(
             el,
             'transform',
-            `rotate(${this.currentAngle}, ${this.currentMouseX}, ${this.currentMouseY})`,
+            `rotate(${this.currentAngle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
         this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
@@ -191,8 +183,8 @@ export class StampToolService extends AbstractToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         this.positionStamp();
     }
@@ -200,7 +192,7 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.shouldStamp) {
             this.cleanUp();
             this.addStamp();
         }
@@ -209,22 +201,18 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.verifyPosition(event) && this.isIn && this.shouldStamp) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.shouldStamp) {
             this.initStamp();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        this.isIn = true;
-
         if (this.shouldStamp) {
             this.initStamp();
         }
     }
 
     onMouseLeave(event: MouseEvent): void {
-        this.isIn = false;
-
         if (this.shouldStamp) {
             this.cleanUp();
         }
