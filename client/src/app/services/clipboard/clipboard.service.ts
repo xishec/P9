@@ -135,7 +135,11 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
-        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
+        if (this.clippings.size > 0) {
+            this.isClippingsEmpty.next(false)
+        } else {
+            this.isClippingsEmpty.next(true)
+        }
     }
 
     copy(): void {
@@ -147,7 +151,11 @@ export class ClipboardService {
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
-        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
+        if (this.clippings.size > 0) {
+            this.isClippingsEmpty.next(false)
+        } else {
+            this.isClippingsEmpty.next(true)
+        }
     }
 
     duplicate(): void {
