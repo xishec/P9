@@ -190,6 +190,44 @@ describe('UndoRedoerService', () => {
         expect(service.redos).toEqual([]);
     });
 
+    it('undo should change the value of duplicateOffset if stateToLoad has one', () => {
+        service.undos.push(MOCK_DRAWING_STATE);
+        MOCK_DRAWING_STATE.duplicateOffset = 10;
+        service.undos.push(MOCK_DRAWING_STATE);
+
+        service.undo();
+
+        expect(service.duplicateOffset.value).toEqual(10);
+    });
+
+    it('undo should change the value of pasteOffset if stateToLoad has one', () => {
+        service.undos.push(MOCK_DRAWING_STATE);
+        MOCK_DRAWING_STATE.pasteOfsset = 10;
+        service.undos.push(MOCK_DRAWING_STATE);
+
+        service.undo();
+
+        expect(service.pasteOffset.value).toEqual(10);
+    });
+
+    it('redo should change the value of duplicateOffset if stateToLoad has one', () => {
+        MOCK_DRAWING_STATE.duplicateOffset = 10;
+        service.redos.push(MOCK_DRAWING_STATE);
+
+        service.redo();
+
+        expect(service.duplicateOffset.value).toEqual(10);
+    });
+
+    it('undo should change the value of pasteOffset if stateToLoad has one', () => {
+        MOCK_DRAWING_STATE.pasteOfsset = 10;
+        service.redos.push(MOCK_DRAWING_STATE);
+
+        service.redo();
+
+        expect(service.pasteOffset.value).toEqual(10);
+    });
+
     it('redo should pop redos and push this to undos if length > 0', () => {
         service.redos.push(MOCK_DRAWING_STATE);
 
