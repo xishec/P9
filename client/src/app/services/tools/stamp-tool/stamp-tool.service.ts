@@ -226,6 +226,10 @@ export class StampToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
+        if (!this.isStampLinkValid) {
+            return;
+        }
+
         if (this.isAlterRotation) {
             this.alterRotateStamp(event.deltaY);
         } else {

@@ -283,6 +283,7 @@ describe('StampToolService', () => {
     it('should call alterRotateStamp if isAlterRotation is true and rotateStamp if isAlterRotation is false', () => {
         const wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
         const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
+        service.isStampLinkValid = true;
 
         service.isAlterRotation = true;
         const spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
@@ -296,6 +297,27 @@ describe('StampToolService', () => {
 
         service.onWheel(wheelEvent);
         expect(spyOnRotateStamp).toHaveBeenCalled();
+        expect(spyOnApplyTransformation).toHaveBeenCalled();
+    });
+
+    it('should not call any rotation methods if stamp link is invalid', () => {
+        const wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
+        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
+        service.isStampLinkValid = false;
+
+        service.isAlterRotation = true;
+        const spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
+
+        service.onWheel(wheelEvent);
+        expect(spyOnAlterRotateStamp).not.toHaveBeenCalled();
+        expect(spyOnApplyTransformation).not.toHaveBeenCalled();
+
+        service.isAlterRotation = false;
+        const spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
+
+        service.onWheel(wheelEvent);
+        expect(spyOnRotateStamp).not.toHaveBeenCalled();
+        expect(spyOnApplyTransformation).not.toHaveBeenCalled();
     });
 
     it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
