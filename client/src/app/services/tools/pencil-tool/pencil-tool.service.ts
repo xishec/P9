@@ -8,7 +8,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PencilToolService extends TracingToolService {
-    constructor(private colorToolService : ColorToolService) {
+    constructor(private colorToolService: ColorToolService) {
         super();
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;

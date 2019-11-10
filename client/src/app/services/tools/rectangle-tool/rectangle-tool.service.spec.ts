@@ -78,7 +78,7 @@ describe('RectangleToolService', () => {
         rectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
-        
+
         spyPreviewRectWidth = spyOnProperty(rectangleTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
         });
