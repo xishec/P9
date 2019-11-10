@@ -68,7 +68,6 @@ export class ToolSelectorService {
         this.rectangleTool.initializeService(ref, renderer, drawStack);
 
         this.ellipsisTool.initializeService(ref, renderer, drawStack);
-        this.ellipsisTool.initializeColorToolService(this.colorToolService);
 
         this.pencilTool.initializeService(ref, renderer, drawStack);
         this.pencilTool.initializeColorToolService(this.colorToolService);
