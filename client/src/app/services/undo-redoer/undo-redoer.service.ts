@@ -4,13 +4,13 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 interface DrawingState {
     drawing: Drawing,
     pasteOfsset?: number,
     duplicateOffset?: number,
 }
-
 
 @Injectable({
     providedIn: 'root',
@@ -24,6 +24,12 @@ export class UndoRedoerService {
     currentDrawingInfos: DrawingInfo;
 
     fromLoader = false;
+
+    pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+
+    currentPasteOffset: Observable<number> = this.pasteOffset.asObservable();
+    currentDuplicateOffset: Observable<number> = this.duplicateOffset.asObservable();
 
     constructor(private drawingLoaderService: DrawingLoaderService, private drawingModalWindowService: DrawingModalWindowService) {
     }
@@ -95,6 +101,13 @@ export class UndoRedoerService {
             const currentState = this.undos.pop();
             this.redos.push(currentState as DrawingState);
             const stateToLoad = this.undos[this.undos.length - 1];
+
+            if(stateToLoad.duplicateOffset !== undefined) {
+                this.duplicateOffset.next(stateToLoad.duplicateOffset);
+            } else if (stateToLoad.pasteOfsset !== undefined) {
+                this.pasteOffset.next(stateToLoad.pasteOfsset);
+            }
+
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
         }
     }
@@ -103,6 +116,13 @@ export class UndoRedoerService {
         if (this.redos.length > 0) {
             const stateToLoad = this.redos.pop() as DrawingState;
             this.undos.push(stateToLoad as DrawingState);
+
+            if(stateToLoad.duplicateOffset !== undefined) {
+                this.duplicateOffset.next(stateToLoad.duplicateOffset);
+            } else if (stateToLoad.pasteOfsset !== undefined) {
+                this.pasteOffset.next(stateToLoad.pasteOfsset);
+            }
+
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
         }
     }

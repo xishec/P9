@@ -28,7 +28,15 @@ export class ClipboardService {
 
     clippingsBound: DOMRect;
 
-    constructor(public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {}
+    constructor(public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
+        this.undoRedoerService.currentDuplicateOffset.subscribe((value) => {
+            this.duplicateOffsetValue = value;
+        });
+
+        this.undoRedoerService.currentPasteOffset.subscribe((value) => {
+            this.pasteOffsetValue = value;
+        });
+    }
 
     initializeService(
         elementRef: ElementRef<SVGElement>,
@@ -178,7 +186,7 @@ export class ClipboardService {
             this.selection.removeFullSelectionBox();
         }, 0);
         setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+            this.undoRedoerService.saveStateAndDuplicateOffset(this.drawStack.idStack, this.duplicateOffsetValue);
         }, 0);
         setTimeout(() => {
             this.selection.appendFullSelectionBox();
@@ -198,7 +206,7 @@ export class ClipboardService {
             this.selection.removeFullSelectionBox();
         }, 0);
         setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+            this.undoRedoerService.saveStateAndPasteOffset(this.drawStack.idStack, this.pasteOffsetValue);
         }, 0);
         setTimeout(() => {
             this.selection.appendFullSelectionBox();
