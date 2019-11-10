@@ -106,9 +106,6 @@ export class UndoRedoerService {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
             } else if (stateToLoad.pasteOffset !== undefined) {
                 this.pasteOffset.next(stateToLoad.pasteOffset);
-            } else {
-                this.pasteOffset.next(0);
-                this.duplicateOffset.next(0);
             }
 
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
@@ -124,9 +121,6 @@ export class UndoRedoerService {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
             } else if (stateToLoad.pasteOffset !== undefined) {
                 this.pasteOffset.next(stateToLoad.pasteOffset);
-            } else {
-                this.pasteOffset.next(0);
-                this.duplicateOffset.next(0);
             }
 
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
