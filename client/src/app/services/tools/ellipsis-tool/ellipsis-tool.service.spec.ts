@@ -6,7 +6,7 @@ import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EllipsisToolService } from './ellipsis-tool.service';
 
-fdescribe('EllipsisToolService', () => {
+describe('EllipsisToolService', () => {
     const NONE = 'none';
     const NOTNONE = 'not none';
 

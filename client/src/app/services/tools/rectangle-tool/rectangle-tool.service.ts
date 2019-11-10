@@ -121,10 +121,10 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.isPreviewing = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
-        this.disableDrawRectangle();
+        this.makeDrawRectangleInvalid();
     }
 
-    disableDrawRectangle(): void {
+    makeDrawRectangleInvalid(): void {
         this.renderer.setAttribute(this.drawRectangle, 'width', '0');
         this.renderer.setAttribute(this.drawRectangle, 'height', '0');
     }
