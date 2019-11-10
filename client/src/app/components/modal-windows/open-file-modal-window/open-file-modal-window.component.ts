@@ -231,28 +231,29 @@ export class OpenFileModalWindowComponent implements OnInit {
         return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
     }
 
-    getViewBox(drawingName: string): string {
+    getDimensions(drawingName: string): number[] {
         const i: number = this.findIndexByName(drawingName);
         const height: number = this.drawingsFromServer[i].drawingInfo.height;
         const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
-        return `0 0 ${width} ${height}`;
+        return [width, height];
+    }
+
+    getViewBox(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+        return `0 0 ${dimensions[0]} ${dimensions[1]}`;
     }
 
     getWidth(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-        const height: number = this.drawingsFromServer[i].drawingInfo.height;
-        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const dimensions = this.getDimensions(drawingName);
 
-        return width > height ? '100%' : '60px';
+        return dimensions[0] > dimensions[1] ? '100%' : '60px';
     }
 
     getHeight(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-        const height: number = this.drawingsFromServer[i].drawingInfo.height;
-        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const dimensions = this.getDimensions(drawingName);
 
-        return width < height ? '100%' : '60px';
+        return dimensions[0] < dimensions[1] ? '100%' : '60px';
     }
 
     getSVG(drawingName: string): string {
