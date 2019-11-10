@@ -19,4 +19,8 @@ jobs:
         working-directory: ./client
 
       - run: npm run lint
+        working-directory: ./client      
+        
+      - run: npm run test
         working-directory: ./client
+
