@@ -24,7 +24,7 @@ const MOCK_DRAWING_STATE: DrawingState = {
     drawing: MOCK_DRAWING,
 };
 
-fdescribe('UndoRedoerService', () => {
+describe('UndoRedoerService', () => {
     let injector: TestBed;
     let service: UndoRedoerService;
     let mockElementRef: ElementRef<SVGElement>;
