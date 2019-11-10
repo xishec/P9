@@ -75,6 +75,7 @@ describe('DropperToolService', () => {
                     useValue: {
                         changePrimaryColor: () => null,
                         changeSecondaryColor: () => null,
+                        translateRGBToHex: () => null,
                     },
                 },
             ],

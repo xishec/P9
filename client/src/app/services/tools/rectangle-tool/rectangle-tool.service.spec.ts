@@ -21,7 +21,6 @@ describe('RectangleToolService', () => {
     let rendererMock: Renderer2;
     let elementRefMock: ElementRef;
     let drawStackMock: DrawStackService;
-    let spyCreateElement: jasmine.Spy;
     const mockPreviewRect: MockRect = new MockRect();
     const mockDrawRect: MockRect = new MockRect();
     let spyPreviewRectWidth: jasmine.Spy;
@@ -36,6 +35,7 @@ describe('RectangleToolService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
+                RectangleToolService,
                 {
                     provide: DrawStackService,
                     useValue: {
@@ -74,13 +74,11 @@ describe('RectangleToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        rectangleTool = new RectangleToolService();
+        rectangleTool = injector.get(RectangleToolService);
         rectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
-        spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
-            return new MockRect();
-        });
+        
         spyPreviewRectWidth = spyOnProperty(rectangleTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
         });
@@ -105,13 +103,6 @@ describe('RectangleToolService', () => {
         spyDrawRectY = spyOnProperty(rectangleTool, 'drawRectangleY', 'get').and.callFake(() => {
             return mockDrawRect.y;
         });
-    });
-
-    it('should be created with call to new', () => {
-        const newRectangleTool = new RectangleToolService();
-        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        expect(spyCreateElement).toHaveBeenCalled();
-        expect(newRectangleTool).toBeTruthy();
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
