@@ -13,7 +13,6 @@ import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
@@ -40,7 +39,6 @@ export class ToolSelectorService {
     WORKZONE_TOOLS_MAP: Map<ToolName, () => void>;
 
     constructor(
-        private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private modalManagerService: ModalManagerService,
         private selectionTool: SelectionToolService,

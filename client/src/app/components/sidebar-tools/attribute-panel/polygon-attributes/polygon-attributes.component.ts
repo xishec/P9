@@ -4,7 +4,6 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { predicate } from 'src/constants/constants';
@@ -28,7 +27,6 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
