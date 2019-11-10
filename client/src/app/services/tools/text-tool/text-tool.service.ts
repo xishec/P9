@@ -163,10 +163,6 @@ export class TextToolService extends AbstractToolService {
         );
     }
 
-    onMouseMove(event: MouseEvent): void {
-        // nothing
-    }
-
     updatePreviewBox(): void {
         // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
@@ -389,4 +385,6 @@ export class TextToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseMove(event: MouseEvent): void {}
 }
