@@ -38,19 +38,19 @@ export class ClipboardService {
         });
 
         this.undoRedoerService.currentClipping.subscribe((value) => {
-            if(!this.compareClipings(value, this.clippings)) {
+            if (!this.compareClipings(value, this.clippings)) {
                 this.pasteOffsetValue = 0;
                 this.duplicateOffsetValue = 0;
             }
-        })
+        });
     }
 
     compareClipings(clip1: Set<SVGElement>, clip2: Set<SVGElement>): boolean {
         if (clip1.size !== clip2.size) {
             return false;
         }
-        for (let elem of clip1) {
-            if (!clip2.has(elem)){
+        for (const elem of clip1) {
+            if (!clip2.has(elem)) {
                 return false;
             }
         }

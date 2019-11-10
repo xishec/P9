@@ -106,7 +106,7 @@ describe('EllipsisToolService', () => {
 
     afterEach(() => {
         jasmine.clock().uninstall();
-    })
+    });
 
     it('should be created', () => {
         expect(service).toBeTruthy();

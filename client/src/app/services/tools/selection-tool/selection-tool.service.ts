@@ -266,7 +266,7 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
 
-            // FOR UNDO REDOER SERVICE 
+            // FOR UNDO REDOER SERVICE
             setTimeout(() => {
                 this.selection.removeFullSelectionBox();
             }, 1);

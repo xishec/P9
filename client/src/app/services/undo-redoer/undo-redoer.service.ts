@@ -1,16 +1,16 @@
 import { ElementRef, Injectable } from '@angular/core';
 
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface DrawingState {
-    drawing: Drawing,
-    pasteOffset?: number,
-    duplicateOffset?: number,
-    clippings?: Set<SVGElement>,
+    drawing: Drawing;
+    pasteOffset?: number;
+    duplicateOffset?: number;
+    clippings?: Set<SVGElement>;
 }
 
 @Injectable({
@@ -56,7 +56,7 @@ export class UndoRedoerService {
             svg: this.workzoneRef.nativeElement.innerHTML,
             idStack: idStackArray,
             drawingInfo: this.currentDrawingInfos,
-        }
+        };
         return drawing;
     }
 
@@ -65,7 +65,7 @@ export class UndoRedoerService {
 
         const currentState: DrawingState = {
             drawing: currentDrawing,
-            duplicateOffset: duplicateOffset,
+            duplicateOffset,
         };
 
         this.saveState(currentState);
@@ -76,11 +76,9 @@ export class UndoRedoerService {
 
         const currentState: DrawingState = {
             drawing: currentDrawing,
-            pasteOffset: pasteOffset,
+            pasteOffset,
             clippings: new Set<SVGElement>(clippingState),
         };
-
-        console.log(currentState);
 
         this.saveState(currentState);
     }
@@ -90,7 +88,7 @@ export class UndoRedoerService {
 
         const currentState: DrawingState = {
             drawing: currentDrawing,
-        }
+        };
 
         this.saveState(currentState);
     }
@@ -108,7 +106,7 @@ export class UndoRedoerService {
             this.redos.push(currentState as DrawingState);
             const stateToLoad = this.undos[this.undos.length - 1];
 
-            if(stateToLoad.duplicateOffset !== undefined) {
+            if (stateToLoad.duplicateOffset !== undefined) {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
             } else if (stateToLoad.pasteOffset !== undefined && stateToLoad.clippings !== undefined) {
                 this.pasteOffset.next(stateToLoad.pasteOffset);
@@ -124,7 +122,7 @@ export class UndoRedoerService {
             const stateToLoad = this.redos.pop() as DrawingState;
             this.undos.push(stateToLoad as DrawingState);
 
-            if(stateToLoad.duplicateOffset !== undefined) {
+            if (stateToLoad.duplicateOffset !== undefined) {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
             } else if (stateToLoad.pasteOffset !== undefined) {
                 this.pasteOffset.next(stateToLoad.pasteOffset);

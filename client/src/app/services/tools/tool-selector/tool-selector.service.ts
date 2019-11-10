@@ -158,7 +158,7 @@ export class ToolSelectorService {
                     if (!this.modalIsDisplayed) {
                         this.undoRedoerService.undo();
                     }
-                }
+                },
             ],
             [
                 ToolName.Redo,
@@ -166,8 +166,8 @@ export class ToolSelectorService {
                     if (!this.modalIsDisplayed) {
                         this.undoRedoerService.redo();
                     }
-                }
-            ]
+                },
+            ],
         ]);
     }
 

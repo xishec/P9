@@ -7,7 +7,7 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
-import { UndoRedoerService, DrawingState } from './undo-redoer.service';
+import { DrawingState, UndoRedoerService } from './undo-redoer.service';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
 const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
@@ -102,23 +102,23 @@ describe('UndoRedoerService', () => {
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveStateAndDuplicateOffset([], 10);
-        
+
         expect(spyOnSaveState).toHaveBeenCalled();
         const state = service.undos.pop() as DrawingState;
         expect(state.duplicateOffset).toEqual(10);
     });
 
-    it('saveStateAndPasteOffset should create a DrawingState with the pasteOffset and saveState', () => {
+    it('saveStateFromPaste should create a DrawingState with the pasteOffset and saveState', () => {
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveStateFromPaste([], 10, new Set<SVGElement>());
-        
+
         expect(spyOnSaveState).toHaveBeenCalled();
         const state = service.undos.pop() as DrawingState;
         expect(state.pasteOffset).toEqual(10);
-    })
+    });
 
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
@@ -138,7 +138,7 @@ describe('UndoRedoerService', () => {
 
         const resDrawingState = service.undos.pop() as DrawingState;
         expect(resDrawingState).toEqual(MOCK_DRAWING_STATE);
-    })
+    });
 
     it('saveState should reset redos if redos.length > 0', () => {
         service.redos.push(MOCK_DRAWING_STATE);
@@ -167,7 +167,7 @@ describe('UndoRedoerService', () => {
 
         const mockState1: DrawingState = {
             drawing: initDrawing,
-        }
+        };
         const mockState2: DrawingState = {
             drawing: mockDrawing,
         };
@@ -210,7 +210,7 @@ describe('UndoRedoerService', () => {
             pasteOffset: 10,
             clippings: new Set<SVGElement>(),
         };
-        
+
         service.undos.push(mockDrawingState);
         service.undos.push(MOCK_DRAWING_STATE);
 

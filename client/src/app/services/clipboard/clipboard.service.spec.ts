@@ -6,8 +6,8 @@ import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../manipulator/manipulator.service';
-import { ClipboardService } from './clipboard.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
+import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardService', () => {
     let injector: TestBed;
@@ -58,9 +58,9 @@ describe('ClipboardService', () => {
                         },
                         currentClipping : {
                             subscribe: () => null,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             ],
         });
 
@@ -80,9 +80,9 @@ describe('ClipboardService', () => {
         jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(() => {
         jasmine.clock().uninstall();
-    })
+    });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
