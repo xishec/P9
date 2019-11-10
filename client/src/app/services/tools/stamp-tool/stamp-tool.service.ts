@@ -223,11 +223,13 @@ export class StampToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        if (this.isAlterRotation) {
-            this.alterRotateStamp(event.deltaY);
-        } else {
-            this.rotateStamp(event.deltaY);
-        }
+        // if (this.isAlterRotation) {
+        //     this.alterRotateStamp(event.deltaY);
+        // } else {
+        //     this.rotateStamp(event.deltaY);
+        // }
+
+        this.isAlterRotation ? this.alterRotateStamp(event.deltaY) : this.rotateStamp(event.deltaY);
 
         this.applyTransformation();
     }
@@ -237,9 +239,7 @@ export class StampToolService extends AbstractToolService {
 
         if (key === Keys.Alt) {
             event.preventDefault();
-            if (!this.isAlterRotation) {
-                this.isAlterRotation = true;
-            }
+            this.isAlterRotation = true;
         }
     }
 
@@ -248,9 +248,7 @@ export class StampToolService extends AbstractToolService {
 
         if (key === Keys.Alt) {
             event.preventDefault();
-            if (this.isAlterRotation) {
-                this.isAlterRotation = false;
-            }
+            this.isAlterRotation = false;
         }
     }
 }
