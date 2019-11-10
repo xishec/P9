@@ -78,7 +78,6 @@ export class ToolSelectorService {
         this.stampTool.initializeService(ref, renderer, drawStack);
 
         this.dropperTool.initializeService(ref, renderer, drawStack);
-        this.dropperTool.initializeColorToolService(this.colorToolService);
 
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
         this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
