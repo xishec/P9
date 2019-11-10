@@ -117,7 +117,7 @@ describe('UndoRedoerService', () => {
         
         expect(spyOnSaveState).toHaveBeenCalled();
         const state = service.undos.pop() as DrawingState;
-        expect(state.pasteOfsset).toEqual(10);
+        expect(state.pasteOffset).toEqual(10);
     })
 
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
@@ -129,7 +129,7 @@ describe('UndoRedoerService', () => {
 
         expect(spyOnSaveState).toHaveBeenCalled();
         const state = service.undos.pop() as DrawingState;
-        expect(state.pasteOfsset).toBeUndefined();
+        expect(state.pasteOffset).toBeUndefined();
         expect(state.duplicateOffset).toBeUndefined();
     });
 
@@ -191,8 +191,12 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should change the value of duplicateOffset if stateToLoad has one', () => {
-        service.undos.push(MOCK_DRAWING_STATE);
-        MOCK_DRAWING_STATE.duplicateOffset = 10;
+
+        const mockDrawingState: DrawingState = {
+            drawing: MOCK_DRAWING,
+            duplicateOffset: 10,
+        };
+        service.undos.push(mockDrawingState);
         service.undos.push(MOCK_DRAWING_STATE);
 
         service.undo();
@@ -201,8 +205,12 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should change the value of pasteOffset if stateToLoad has one', () => {
-        service.undos.push(MOCK_DRAWING_STATE);
-        MOCK_DRAWING_STATE.pasteOfsset = 10;
+        const mockDrawingState: DrawingState = {
+            drawing: MOCK_DRAWING,
+            pasteOffset: 10,
+        };
+        
+        service.undos.push(mockDrawingState);
         service.undos.push(MOCK_DRAWING_STATE);
 
         service.undo();
@@ -211,17 +219,23 @@ describe('UndoRedoerService', () => {
     });
 
     it('redo should change the value of duplicateOffset if stateToLoad has one', () => {
-        MOCK_DRAWING_STATE.duplicateOffset = 10;
-        service.redos.push(MOCK_DRAWING_STATE);
+        const mockDrawingState: DrawingState = {
+            drawing: MOCK_DRAWING,
+            duplicateOffset: 10,
+        };
+        service.redos.push(mockDrawingState);
 
         service.redo();
 
         expect(service.duplicateOffset.value).toEqual(10);
     });
 
-    it('undo should change the value of pasteOffset if stateToLoad has one', () => {
-        MOCK_DRAWING_STATE.pasteOfsset = 10;
-        service.redos.push(MOCK_DRAWING_STATE);
+    it('redo should change the value of pasteOffset if stateToLoad has one', () => {
+        const mockDrawingState: DrawingState = {
+            drawing: MOCK_DRAWING,
+            pasteOffset: 10,
+        };
+        service.redos.push(mockDrawingState);
 
         service.redo();
 
