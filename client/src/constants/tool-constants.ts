@@ -1,5 +1,7 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
+const CONTROL_POINTS_AMOUNT = 8;
+
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
@@ -354,4 +356,5 @@ export {
     STAMP_BASE_WIDTH,
     STAMP_BASE_ROTATION,
     STAMP_ALTER_ROTATION,
+    CONTROL_POINTS_AMOUNT,
 };
