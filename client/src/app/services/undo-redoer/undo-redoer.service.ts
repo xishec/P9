@@ -5,13 +5,20 @@ import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
+interface DrawingState {
+    drawing: Drawing,
+    pasteOfsset?: number,
+    duplicateOffset?: number,
+}
+
+
 @Injectable({
     providedIn: 'root',
 })
 export class UndoRedoerService {
 
-    undos = new Array<Drawing>();
-    redos = new Array<Drawing>();
+    undos = new Array<DrawingState>();
+    redos = new Array<DrawingState>();
 
     workzoneRef: ElementRef<SVGElement>;
     currentDrawingInfos: DrawingInfo;
@@ -33,17 +40,51 @@ export class UndoRedoerService {
         this.redos = [];
     }
 
-    saveCurrentState(idStackArray: string[]): void {
-        const currentState: Drawing = {
+    createDrawing(idStackArray: string[]): Drawing {
+        const drawing: Drawing = {
             name: '',
             labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
-            idStack: idStackArray.slice(0),
+            idStack: idStackArray,
             drawingInfo: this.currentDrawingInfos,
+        }
+        return drawing;
+    }
+
+    saveStateAndDuplicateOffset(idStackArray: string[], duplicateOffset: number) {
+        const currentDrawing = this.createDrawing(idStackArray.slice(0));
+
+        const currentState: DrawingState = {
+            drawing: currentDrawing,
+            duplicateOffset: duplicateOffset,
         };
 
-        this.undos.push(currentState);
+        this.saveState(currentState);
+    }
 
+    saveStateAndPasteOffset(idStackArray: string[], pasteOffset: number) {
+        const currentDrawing = this.createDrawing(idStackArray.slice(0));
+
+        const currentState: DrawingState = {
+            drawing: currentDrawing,
+            pasteOfsset: pasteOffset,
+        };
+
+        this.saveState(currentState);
+    }
+
+    saveCurrentState(idStackArray: string[]): void {
+        const currentDrawing = this.createDrawing(idStackArray.slice(0));
+
+        const currentState: DrawingState = {
+            drawing: currentDrawing,
+        }
+
+        this.saveState(currentState);
+    }
+
+    saveState(state: DrawingState) {
+        this.undos.push(state);
         if (this.redos.length > 0) {
             this.redos = [];
         }
@@ -52,17 +93,17 @@ export class UndoRedoerService {
     undo(): void {
         if (this.undos.length > 1) {
             const currentState = this.undos.pop();
-            this.redos.push(currentState as Drawing);
+            this.redos.push(currentState as DrawingState);
             const stateToLoad = this.undos[this.undos.length - 1];
-            this.drawingLoaderService.currentDrawing.next(stateToLoad);
+            this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
         }
     }
 
     redo(): void {
         if (this.redos.length > 0) {
-            const stateToLoad = this.redos.pop() as Drawing;
-            this.undos.push(stateToLoad as Drawing);
-            this.drawingLoaderService.currentDrawing.next(stateToLoad);
+            const stateToLoad = this.redos.pop() as DrawingState;
+            this.undos.push(stateToLoad as DrawingState);
+            this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
         }
     }
 
