@@ -1,20 +1,19 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
-import { SVG_NS, Mouse, Keys } from 'src/constants/constants';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
-    TEXT_CURSOR,
-    TEXT_SPACE,
-    TEXT_LINEBREAK,
     SNACKBAR_DURATION,
+    TEXT_CURSOR,
+    TEXT_LINEBREAK,
+    TEXT_SPACE,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { FontInfo } from 'src/classes/FontInfos';
-import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
@@ -25,8 +24,6 @@ export class TextToolService extends AbstractToolService {
     drawStack: DrawStackService;
 
     attributesManagerService: AttributesManagerService;
-
-    fontInfo: FontInfo = new FontInfo();
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
