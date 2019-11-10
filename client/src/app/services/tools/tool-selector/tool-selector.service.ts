@@ -152,6 +152,22 @@ export class ToolSelectorService {
                     }
                 },
             ],
+            [
+                ToolName.Undo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.undo();
+                    }
+                }
+            ],
+            [
+                ToolName.Redo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.redo();
+                    }
+                }
+            ]
         ]);
     }
 
