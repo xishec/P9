@@ -51,8 +51,6 @@ export class PenToolService extends TracingToolService {
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
-            this.svgPreviewCircle = this.createSVGCircle(x, y);
-            this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
             this.createSVGPath();
         }
         this.oldSpeedX = this.speedX;
