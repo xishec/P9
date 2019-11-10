@@ -157,12 +157,12 @@ describe('StampToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
-    it('should call applyTransformation if shouldStamp is true', () => {
-        service.shouldStamp = false;
+    it('should call applyTransformation if isStampLinkValid is true', () => {
+        service.isStampLinkValid = false;
         service.applyTransformation();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(0);
 
-        service.shouldStamp = true;
+        service.isStampLinkValid = true;
         service.applyTransformation();
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
@@ -227,55 +227,55 @@ describe('StampToolService', () => {
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
-    it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
+    it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
 
-        service.shouldStamp = false;
+        service.isStampLinkValid = false;
         service.onMouseDown(positiveMouseEvent);
-        expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
+        expect(spyOnCleanUpStamp).not.toHaveBeenCalled();
 
         spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
-        service.shouldStamp = true;
+        service.isStampLinkValid = true;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalled();
         expect(spyOnDrawStackPush).toHaveBeenCalled();
     });
 
-    it('should call initStamp if event is left click, shouldStamp is true and the position is correct', () => {
+    it('should call initStamp if event is left click, isStampLinkValid is true and the position is correct', () => {
         const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
 
-        service.shouldStamp = false;
+        service.isStampLinkValid = false;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
         spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
-        service.shouldStamp = true;
+        service.isStampLinkValid = true;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalled();
     });
 
-    it('should call initStamp if shouldStamp is true and it should set isIn to true', () => {
+    it('should call initStamp if isStampLinkValid is true and it should set isIn to true', () => {
         const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => {return false;});
-        service.shouldStamp = false;
+        service.isStampLinkValid = false;
 
         service.onMouseEnter(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
-        service.shouldStamp = true;
+        service.isStampLinkValid = true;
         service.onMouseEnter(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(1);
     });
 
-    it('should call cleanUpStamp if shouldStamp is true and it should set isIn to false', () => {
+    it('should call cleanUpStamp if isStampLinkValid is true and it should set isIn to false', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
-        service.shouldStamp = false;
+        service.isStampLinkValid = false;
 
         service.onMouseLeave(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
 
-        service.shouldStamp = true;
+        service.isStampLinkValid = true;
         service.onMouseLeave(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(1);
     });
@@ -326,5 +326,25 @@ describe('StampToolService', () => {
 
         expect(service.isAlterRotation).toBeFalsy();
         expect(spyOnPreventDefault).toHaveBeenCalled();
+    });
+
+    it('should return true when calling isAbleToStamp, is in workzone and stamp link is valid', () => {
+        spyOn(service, 'isMouseInRef').and.callFake(() => {
+            return true;
+        });
+
+        service.isStampLinkValid = true;
+
+        expect(service.isAbleToStamp(createMouseEvent(0, 0, 0))).toBeTruthy();
+    });
+
+    it('should return false when calling isAbleToStamp, is not in workzone and stamp link is not valid', () => {
+        spyOn(service, 'isMouseInRef').and.callFake(() => {
+            return false;
+        });
+
+        service.isStampLinkValid = false;
+
+        expect(service.isAbleToStamp(createMouseEvent(0, 0, 0))).toBeFalsy();
     });
 });
