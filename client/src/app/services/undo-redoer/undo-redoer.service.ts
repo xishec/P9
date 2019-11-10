@@ -10,6 +10,7 @@ export interface DrawingState {
     drawing: Drawing,
     pasteOffset?: number,
     duplicateOffset?: number,
+    clippings?: Set<SVGElement>,
 }
 
 @Injectable({
@@ -27,9 +28,11 @@ export class UndoRedoerService {
 
     pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
     duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    clipping: BehaviorSubject<Set<SVGElement>> = new BehaviorSubject(new Set<SVGElement>());
 
     currentPasteOffset: Observable<number> = this.pasteOffset.asObservable();
     currentDuplicateOffset: Observable<number> = this.duplicateOffset.asObservable();
+    currentClipping: Observable<Set<SVGElement>> = this.clipping.asObservable();
 
     constructor(private drawingLoaderService: DrawingLoaderService, private drawingModalWindowService: DrawingModalWindowService) {
     }
@@ -68,13 +71,16 @@ export class UndoRedoerService {
         this.saveState(currentState);
     }
 
-    saveStateAndPasteOffset(idStackArray: string[], pasteOffset: number) {
+    saveStateFromPaste(idStackArray: string[], pasteOffset: number, clippingState: Set<SVGElement>) {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
         const currentState: DrawingState = {
             drawing: currentDrawing,
             pasteOffset: pasteOffset,
+            clippings: new Set<SVGElement>(clippingState),
         };
+
+        console.log(currentState);
 
         this.saveState(currentState);
     }
@@ -104,8 +110,9 @@ export class UndoRedoerService {
 
             if(stateToLoad.duplicateOffset !== undefined) {
                 this.duplicateOffset.next(stateToLoad.duplicateOffset);
-            } else if (stateToLoad.pasteOffset !== undefined) {
+            } else if (stateToLoad.pasteOffset !== undefined && stateToLoad.clippings !== undefined) {
                 this.pasteOffset.next(stateToLoad.pasteOffset);
+                this.clipping.next(stateToLoad.clippings);
             }
 
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);

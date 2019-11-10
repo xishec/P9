@@ -48,7 +48,7 @@ describe('ClipboardService', () => {
                     provide: UndoRedoerService,
                     useValue: {
                         saveStateAndDuplicateOffset: () => null,
-                        saveStateAndPasteOffset: () => null,
+                        saveStateFromPaste: () => null,
                         saveCurrentState: () => null,
                         currentDuplicateOffset: {
                             subscribe: () => null,
@@ -56,6 +56,9 @@ describe('ClipboardService', () => {
                         currentPasteOffset: {
                             subscribe: () => null,
                         },
+                        currentClipping : {
+                            subscribe: () => null,
+                        }
                     }
                 }
             ],

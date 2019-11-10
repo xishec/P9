@@ -36,6 +36,25 @@ export class ClipboardService {
         this.undoRedoerService.currentPasteOffset.subscribe((value) => {
             this.pasteOffsetValue = value;
         });
+
+        this.undoRedoerService.currentClipping.subscribe((value) => {
+            if(!this.compareClipings(value, this.clippings)) {
+                this.pasteOffsetValue = 0;
+                this.duplicateOffsetValue = 0;
+            }
+        })
+    }
+
+    compareClipings(clip1: Set<SVGElement>, clip2: Set<SVGElement>): boolean {
+        if (clip1.size !== clip2.size) {
+            return false;
+        }
+        for (let elem of clip1) {
+            if (!clip2.has(elem)){
+                return false;
+            }
+        }
+        return true;
     }
 
     initializeService(
@@ -206,7 +225,7 @@ export class ClipboardService {
             this.selection.removeFullSelectionBox();
         }, 0);
         setTimeout(() => {
-            this.undoRedoerService.saveStateAndPasteOffset(this.drawStack.idStack, this.pasteOffsetValue);
+            this.undoRedoerService.saveStateFromPaste(this.drawStack.idStack, this.pasteOffsetValue, this.clippings);
         }, 0);
         setTimeout(() => {
             this.selection.appendFullSelectionBox();

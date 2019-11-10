@@ -113,7 +113,7 @@ describe('UndoRedoerService', () => {
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
-        service.saveStateAndPasteOffset([], 10);
+        service.saveStateFromPaste([], 10, new Set<SVGElement>());
         
         expect(spyOnSaveState).toHaveBeenCalled();
         const state = service.undos.pop() as DrawingState;
@@ -208,6 +208,7 @@ describe('UndoRedoerService', () => {
         const mockDrawingState: DrawingState = {
             drawing: MOCK_DRAWING,
             pasteOffset: 10,
+            clippings: new Set<SVGElement>(),
         };
         
         service.undos.push(mockDrawingState);
