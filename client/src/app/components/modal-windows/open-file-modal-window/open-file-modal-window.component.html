@@ -95,7 +95,7 @@
                     </div>
                 </div>
             </mat-dialog-content>
-            <div id="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
+            <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
                 <mat-error class="center">
                     <i class="fas fa-exclamation-triangle"></i>
                     Un dessin existe déja dans votre zone de travail!
@@ -125,8 +125,8 @@
                             class="actionButton"
                             mat-stroked-button
                             type="submit"
-                            [disabled]="formIsInvalid()"
-                            (click)="onSubmit()"
+                            [disabled]="serverFormIsInvalid()"
+                            (click)="loadServerFile()"
                         >
                             Ouvrir
                         </button>
@@ -140,21 +140,30 @@
             <mat-dialog-content class="mat-typography-local" [formGroup]="openLocalFileModalForm">
                 <mat-label id="destination-label">Choisir un fichier local:</mat-label>
                 <div id="input-wrapper">
-                    <input id="destination-path" type="text" value="/Users/noboruyoshida/Downloads/" size="96" />
+                    <input id="destination-path" readonly type="text" [value]="localFileName" size="96" />
                     <input
                         type="file"
                         accept=".txt"
                         name="file"
                         id="file"
                         class="inputfile"
-                        (change)="loadLocalFile($event)"
+                        (change)="getFileToLoad($event)"
                     />
                     <label for="file">
                         <i class="fas fa-folder"></i>
                     </label>
                 </div>
             </mat-dialog-content>
-
+            <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openLocalFileModalForm">
+                    <mat-error class="center">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Un dessin existe déja dans votre zone de travail!
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </mat-error>
+                    <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+                        Je confirme que je ne veux pas sauvegarder le dessin existant.
+                    </mat-checkbox>
+                </div>
             <mat-dialog-actions align="end">
                 <div class="submit-button-group-wrapper">
                     <div class="submit-button-group">
@@ -165,8 +174,8 @@
                             class="actionButton"
                             mat-stroked-button
                             type="submit"
-                            [disabled]="formIsInvalid()"
-                            (click)="onSubmit()"
+                            [disabled]="localFormIsInvalid()"
+                            (click)="loadLocalFile()"
                         >
                             Ouvrir
                         </button>

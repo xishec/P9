@@ -106,7 +106,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     emptyDrawStack = true;
     isLoading: boolean;
     randomGifIndex: number;
-    localFileContent: string | null = '';
+    localFileName: string = '';
+    fileToLoad: Drawing;
 
     constructor(
         formBuilder: FormBuilder,
@@ -122,6 +123,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.initializeForm();
 
         this.isLoading = true;
+        this.localFileName = '';
         this.fileManagerService
             .getAllDrawings()
             .pipe(
@@ -157,9 +159,10 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.openLocalFileModalForm = this.formBuilder.group({
-            filePath: ['', [Validators.required, Validators.minLength(1)]],
+            filePath: [[this.localFileName], Validators.required],
+            confirm: false,
             // Check filename so it only takes valid string
-        })
+        });
     }
 
     handleSelection(event: any): void {
@@ -172,51 +175,60 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
-    onSubmit(): void {
+    loadServerFile(): void {
         if (this.drawingOpenSuccess) {
             const selectedDrawing: Drawing = this.drawingsFromServer.find(
                 (drawing) => drawing.name === this.selectedOption
             ) as Drawing;
 
             this.drawingLoaderService.currentDrawing.next(selectedDrawing);
-
             this.dialogRef.close();
             this.modalManagerService.setModalIsDisplayed(false);
         }
     }
 
     loadLocalFile(e: Event): void {
+        this.drawingLoaderService.currentDrawing.next(this.fileToLoad);
+        this.dialogRef.close();
+        this.modalManagerService.setModalIsDisplayed(false);
+    }
+
+    getFileToLoad(e: Event): void {
         var reader = new FileReader();
         const target = e.target as HTMLInputElement;
-        const files = target.files;
-        if (target !== null && files !== null) {
+        const files = target.files as FileList;
+        if (files.length !== 0) {
             reader.readAsText(files[0]);
             reader.onload = () => {
                 if (typeof reader.result === 'string') {
                     const localFileContent = JSON.parse(reader.result);
-                    const selectedDrawing: Drawing = {
+                    this.fileToLoad = {
                         name: files[0].name,
                         labels: [],
                         svg: localFileContent.svg,
                         idStack: localFileContent.idStack,
                         drawingInfo: localFileContent.drawingInfo,
                     };
-                    console.log(selectedDrawing);
-                    console.log(e);
-
-                    this.drawingLoaderService.currentDrawing.next(selectedDrawing);
-                    this.dialogRef.close();
-                    this.modalManagerService.setModalIsDisplayed(false);
+                    this.localFileName = this.fileToLoad.name;
                 }
             };
         }
     }
 
-    formIsInvalid(): boolean {
+    serverFormIsInvalid(): boolean {
+        console.log(
+            (!this.emptyDrawStack)
+ 
+         );
         return (
             this.openFileModalForm.value.selectedDrawing[0] === '' ||
             (!this.emptyDrawStack && this.openFileModalForm.invalid)
         );
+    }
+
+    localFormIsInvalid(): boolean {
+        
+        return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
     }
 
     getViewBox(drawingName: string): string {
