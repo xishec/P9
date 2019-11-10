@@ -13,7 +13,7 @@ const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 
-describe('RectangleToolService', () => {
+fdescribe('RectangleToolService', () => {
     let injector: TestBed;
     let rectangleTool: RectangleToolService;
     let rendererMock: Renderer2;
@@ -378,7 +378,7 @@ describe('RectangleToolService', () => {
         expect(rectangleTool.isSquarePreview).toBeFalsy();
     });
 
-    it('should cleanup correctly when creating a full rectangle', () => {
+    fit('should cleanup correctly when creating a full rectangle', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);

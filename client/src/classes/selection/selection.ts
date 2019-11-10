@@ -1,8 +1,8 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
+import { Coords2D } from '../Coords2D';
 
 export class Selection {
     renderer: Renderer2;
@@ -88,7 +88,7 @@ export class Selection {
         return 0;
     }
 
-    mouseIsInSelectionBox(currentMouseCoords: MouseCoords): boolean {
+    mouseIsInSelectionBox(currentMouseCoords: Coords2D): boolean {
         const selectionBoxLeft = this.getDOMRect(this.selectionBox).x + window.scrollX - SIDEBAR_WIDTH;
         const selectionBoxRight =
             this.getDOMRect(this.selectionBox).x +
@@ -107,7 +107,7 @@ export class Selection {
         );
     }
 
-    mouseIsInControlPoint(currentMouseCoords: MouseCoords): boolean {
+    mouseIsInControlPoint(currentMouseCoords: Coords2D): boolean {
         for (const ctrlPt of this.controlPoints) {
             const cx = this.getControlPointCx(ctrlPt);
             const cy = this.getControlPointCy(ctrlPt);

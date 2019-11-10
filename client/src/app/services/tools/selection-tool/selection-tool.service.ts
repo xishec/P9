@@ -6,15 +6,16 @@ import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
-import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: MouseCoords = { x: 0, y: 0 };
-    lastMouseCoords: MouseCoords = { x: 0, y: 0 };
-    initialMouseCoords: MouseCoords = { x: 0, y: 0 };
+    currentMouseCoords: Coords2D = { x: 0, y: 0 };
+    lastMouseCoords: Coords2D = { x: 0, y: 0 };
+    initialMouseCoords: Coords2D = { x: 0, y: 0 };
     currentTarget = 0;
 
     isTheCurrentTool = false;
