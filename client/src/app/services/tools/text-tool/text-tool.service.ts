@@ -4,8 +4,8 @@ import { MatSnackBar } from '@angular/material';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
-    SNACKBAR_DURATION,
     TEXT_CURSOR,
+    SNACKBAR_DURATION,
     TEXT_LINEBREAK,
     TEXT_SPACE,
 } from 'src/constants/tool-constants';
@@ -14,6 +14,8 @@ import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { FontInfo } from 'src/classes/FontInfos';
+import { TextCursor } from 'src/classes/textStyle/textCursor';
 
 @Injectable({
     providedIn: 'root',
@@ -25,12 +27,15 @@ export class TextToolService extends AbstractToolService {
 
     attributesManagerService: AttributesManagerService;
 
+    fontInfo: FontInfo = new FontInfo();
+
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
     tspanStack: SVGTSpanElement[] = new Array<SVGTSpanElement>();
     text = '';
+    textCursor = new TextCursor();
 
     bBoxAnchorLeft: number;
     bBoxWidth: number;
@@ -283,7 +288,7 @@ export class TextToolService extends AbstractToolService {
             return;
         }
         event.preventDefault();
-        this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+        this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
         if (this.actionMap.has(event.key)) {
             (this.actionMap.get(event.key) as () => void).apply(this, [event.key]);
@@ -302,7 +307,7 @@ export class TextToolService extends AbstractToolService {
             if (this.tspanStack.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.eraseCursor();
+                this.text = this.textCursor.eraseCursor(this.text);
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
@@ -331,7 +336,7 @@ export class TextToolService extends AbstractToolService {
             if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
                 return;
             }
-            this.eraseCursor();
+            this.text = this.textCursor.eraseCursor(this.text);
 
             if (this.text === '') {
                 this.text += TEXT_LINEBREAK;
@@ -361,12 +366,6 @@ export class TextToolService extends AbstractToolService {
         return this.tspanStack.findIndex((el: SVGTSpanElement) => {
             return el === this.currentLine;
         });
-    }
-
-    eraseCursor(): void {
-        const buffer = this.text.split('');
-        buffer.splice(this.currentCursorIndex, 1);
-        this.text = buffer.join('').toString();
     }
 
     openSnackBar(): void {
