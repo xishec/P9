@@ -272,7 +272,7 @@ export class ToolSelectorService {
             workzoneTool();
             return;
         }
-        if (this.currentTool instanceof SelectionToolService) this.selectionTool.isTheCurrentTool = true;
+        if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
     }
 
     changeCurrentToolName(toolName: ToolName): void {
