@@ -22,7 +22,7 @@ export class ColorToolService {
 
     selectedColorType: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
     showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([DEFAULT_WHITE]);
 
     addColorToQueue(color: string): void {
         if (this.colorQueue.value.length < MAX_NUMBER_OF_LAST_COLORS) {
