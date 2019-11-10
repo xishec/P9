@@ -47,7 +47,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
+                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
                         this.isLoading = false;
                         return false;
                     } else {
