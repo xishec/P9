@@ -6,7 +6,7 @@ import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { MockRect } from '../../../../../classes/test-helpers.spec';
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
 
-fdescribe('AbstractShapeToolService', () => {
+describe('AbstractShapeToolService', () => {
     let injector: TestBed;
     let service: AbstractShapeToolService;
     let mockRect: MockRect;
