@@ -282,32 +282,22 @@ export class RectangleToolService extends AbstractShapeToolService {
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
-        switch (key) {
-            case Keys.Shift:
-                if (!this.isSquarePreview) {
-                    this.isSquarePreview = true;
-                    this.updateDrawing();
-                }
-                break;
-
-            default:
-                break;
+        if (key === Keys.Shift) {
+            if (!this.isSquarePreview) {
+                this.isSquarePreview = true;
+                this.updateDrawing();
+            }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
         const key = event.key;
 
-        switch (key) {
-            case Keys.Shift:
-                if (this.isSquarePreview) {
-                    this.isSquarePreview = false;
-                    this.updateDrawing();
-                }
-                break;
-
-            default:
-                break;
+        if (key === Keys.Shift) {
+            if (this.isSquarePreview) {
+                this.isSquarePreview = false;
+                this.updateDrawing();
+            }
         }
     }
 }

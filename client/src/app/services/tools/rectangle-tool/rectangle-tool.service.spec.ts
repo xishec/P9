@@ -112,6 +112,78 @@ describe('RectangleToolService', () => {
         expect(newRectangleTool).toBeTruthy();
     });
 
+    it('should return the draw rectangle height when getting draw rectangle height', () => {
+        const HEIGHT = 10;
+        const mockRect = {
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+
+        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+
+        expect(newRectangleTool.drawRectangleHeight).toEqual(HEIGHT);
+    });
+
+    it('should return the draw rectangle width when getting draw rectangle width', () => {
+        const WIDTH = 10;
+        const mockRect = {
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+
+        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+
+        expect(newRectangleTool.drawRectangleWidth).toEqual(WIDTH);
+    });
+
+    it('should return the draw rectangle x when getting draw rectangle x', () => {
+        const X = 10;
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: X,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+
+        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+
+        expect(newRectangleTool.drawRectangleX).toEqual(X);
+    });
+
+    it('should return the draw rectangle x when getting draw rectangle x', () => {
+        const Y = 10;
+        const mockRect = {
+            y: {
+                baseVal: {
+                    value: Y,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+
+        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+
+        expect(newRectangleTool.drawRectangleY).toEqual(Y);
+    });
+
     it('should not call the renderer when clicking outside of workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
@@ -213,6 +285,92 @@ describe('RectangleToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it('should update drawRectangle as square when calling updatePreviewSquare with positive deltas', () => {
+        const Y = 10;
+        const X = 10;
+        const WIDTH = 5;
+        const HEIGHT = 10;
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: X,
+                },
+            },
+            y: {
+                baseVal: {
+                    value: Y,
+                },
+            },
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newRectangleTool.drawRectangle = mockRect;
+        newRectangleTool.currentMouseCoords.x = X;
+        newRectangleTool.currentMouseCoords.y = Y;
+        newRectangleTool.initialMouseCoords.x = 0;
+        newRectangleTool.initialMouseCoords.y = 0;
+
+        const spy = spyOn(rendererMock, 'setAttribute');
+
+        newRectangleTool.updatePreviewSquare();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should update drawRectangle as square when calling updatePreviewSquare with positive deltas', () => {
+        const Y = 10;
+        const X = 10;
+        const WIDTH = 5;
+        const HEIGHT = 10;
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: X,
+                },
+            },
+            y: {
+                baseVal: {
+                    value: Y,
+                },
+            },
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newRectangleTool.drawRectangle = mockRect;
+        newRectangleTool.currentMouseCoords.x = 0;
+        newRectangleTool.currentMouseCoords.y = 0;
+        newRectangleTool.initialMouseCoords.x = X;
+        newRectangleTool.initialMouseCoords.y = Y;
+
+        const spy = spyOn(rendererMock, 'setAttribute');
+
+        newRectangleTool.updatePreviewSquare();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
     it('should not be square when pressing and releasing shift', () => {
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
         rectangleTool.onKeyUp(KEYUP_EVENT_SHIFT_KEY);
@@ -252,5 +410,135 @@ describe('RectangleToolService', () => {
 
         rectangleTool.updateTraceType(TraceType.Outline);
         expect(rectangleTool.traceType).toEqual(TraceType.Outline);
+    });
+
+    it('should create SVGRect and cleanUp when left mouse up in work zone with a valid rectangle', () => {
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => {return true;});
+        const spyOnCreate = spyOn(rectangleTool, 'createSVG');
+        const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
+
+        rectangleTool.onMouseUp(MOUSEUP_EVENT);
+
+        expect(spyOnCreate).toHaveBeenCalled();
+        expect(spyOnCleanUp).toHaveBeenCalled();
+    });
+
+    it('should only cleanUp when left mouse up out of work zone with a invalid rectangle', () => {
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => {return false;});
+        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => {return false;});
+        const spyOnCreate = spyOn(rectangleTool, 'createSVG');
+        const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
+
+        rectangleTool.onMouseUp(MOUSEUP_EVENT);
+
+        expect(spyOnCreate).not.toHaveBeenCalled();
+        expect(spyOnCleanUp).toHaveBeenCalled();
+    });
+
+    it('should copy all 4 preview ractngle attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke < width', () => {
+        const Y = 10;
+        const X = 10;
+        const WIDTH = 10;
+        const HEIGHT = 10;
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: X,
+                },
+            },
+            y: {
+                baseVal: {
+                    value: Y,
+                },
+            },
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newRectangleTool.previewRectangle = mockRect;
+        newRectangleTool.userStrokeWidth = 0;
+
+        const spy = spyOn(rendererMock, 'setAttribute');
+        rectangleTool.copyPreviewRectangleAttributes();
+        expect(spy).toHaveBeenCalledTimes(4);
+    })
+
+    it('should copy all 4 preview ractngle attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke < width', () => {
+        const Y = 10;
+        const X = 10;
+        const WIDTH = 10;
+        const HEIGHT = 10;
+        const mockRect = {
+            x: {
+                baseVal: {
+                    value: X,
+                },
+            },
+            y: {
+                baseVal: {
+                    value: Y,
+                },
+            },
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        } as unknown as SVGRectElement;
+
+        const newRectangleTool = new RectangleToolService();
+        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newRectangleTool.previewRectangle = mockRect;
+        newRectangleTool.userStrokeWidth = 20;
+
+        const spy = spyOn(rendererMock, 'setAttribute');
+        rectangleTool.copyPreviewRectangleAttributes();
+        expect(spy).toHaveBeenCalledTimes(4);
+    })
+
+    it('should create g tag with drawRectangle copy as child with a fill color and push it when calling createSVG', () => {
+        const RED_COLOR = 'red';
+        const spyOnAppend = spyOn(rendererMock, 'appendChild');
+        const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyOnPush = spyOn(drawStackMock, 'push');
+
+        rectangleTool.userFillColor = RED_COLOR;
+        rectangleTool.createSVG();
+
+        expect(spyOnAppend).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnPush).toHaveBeenCalled();
+        expect(spyCreateElement).toHaveBeenCalled();
+    });
+
+    it('should create g tag with drawRectangle copy as child with no color and push it when calling createSVG', () => {
+        const NONE_COLOR = 'none';
+        const spyOnAppend = spyOn(rendererMock, 'appendChild');
+        const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyOnPush = spyOn(drawStackMock, 'push');
+
+        rectangleTool.userFillColor = NONE_COLOR;
+        rectangleTool.createSVG();
+
+        expect(spyOnAppend).toHaveBeenCalled();
+        expect(spyOnSetAttribute).toHaveBeenCalled();
+        expect(spyOnPush).toHaveBeenCalled();
+        expect(spyCreateElement).toHaveBeenCalled();
     });
 });
