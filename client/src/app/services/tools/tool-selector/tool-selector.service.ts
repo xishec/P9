@@ -262,6 +262,7 @@ export class ToolSelectorService {
         if (tool !== undefined) {
             this.currentTool = tool;
             this.changeCurrentToolName(tooltipName);
+            if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
             return;
         }
 
@@ -270,7 +271,6 @@ export class ToolSelectorService {
             workzoneTool();
             return;
         }
-        if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
     }
 
     changeCurrentToolName(toolName: ToolName): void {
