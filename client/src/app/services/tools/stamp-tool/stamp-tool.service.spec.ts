@@ -16,6 +16,9 @@ describe('StampToolService', () => {
     let negativeMouseEvent: MouseEvent;
     let onAltKeyDown: KeyboardEvent;
     let onOtherKeyDown: KeyboardEvent;
+    let rendererMock: Renderer2;
+    let drawStackMock: DrawStackService;
+    let elementRefMock: ElementRef<SVGElement>;
 
     let spyOnStampWidth: jasmine.Spy;
     let spyOnStampHeight: jasmine.Spy;
@@ -64,9 +67,9 @@ describe('StampToolService', () => {
         injector = getTestBed();
         service = injector.get(StampToolService);
 
-        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         positiveMouseEvent = createMouseEvent(10, 10, 0);
@@ -98,12 +101,34 @@ describe('StampToolService', () => {
         expect(spyOnStampHeight).toBeDefined();
     });
 
-    it('should return true if the mouseEvent is inside the window', () => {
-        expect(service.verifyPosition(positiveMouseEvent)).toBeTruthy();
+    it('should return the stamp width with property stampWidth', () => {
+        const WIDTH = 10;
+        const mockImageElement = {
+            width: {
+                baseVal: {
+                    value: WIDTH,
+                },
+            },
+        };
+        let newStampTool = new StampToolService();
+        newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        expect(newStampTool.stampWidth).toEqual(WIDTH);
     });
 
-    it('should return false if the mouseEvent is outside the window', () => {
-        expect(service.verifyPosition(negativeMouseEvent)).toBeFalsy();
+    it('should return the stamp height with property stampHeight', () => {
+        const HEIGHT = 10;
+        const mockImageElement = {
+            height: {
+                baseVal: {
+                    value: HEIGHT,
+                },
+            },
+        };
+        let newStampTool = new StampToolService();
+        newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        expect(newStampTool.stampHeight).toEqual(HEIGHT);
     });
 
     it('should call initStamp appendChild if stampIsAppended is false', () => {
@@ -181,24 +206,24 @@ describe('StampToolService', () => {
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {
         const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
 
-        const currentMouseX = service.currentMouseX;
-        const currentMouseY = service.currentMouseY;
+        const currentMouseCoordsX = service.currentMouseCoords.x;
+        const currentMouseCoordsY = service.currentMouseCoords.y;
         service.onMouseMove(positiveMouseEvent);
 
-        expect(service.currentMouseX).toBeGreaterThan(currentMouseX);
-        expect(service.currentMouseY).toBeGreaterThan(currentMouseY);
+        expect(service.currentMouseCoords.x).toBeGreaterThan(currentMouseCoordsX);
+        expect(service.currentMouseCoords.y).toBeGreaterThan(currentMouseCoordsY);
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
     it('should call positionStamp and decrease the current position of the mouse if the position is negative', () => {
         const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
 
-        const currentMouseX = service.currentMouseX;
-        const currentMouseY = service.currentMouseY;
+        const currentMouseCoordsX = service.currentMouseCoords.x;
+        const currentMouseCoordsY = service.currentMouseCoords.y;
         service.onMouseMove(negativeMouseEvent);
 
-        expect(service.currentMouseX).toBeLessThan(currentMouseX);
-        expect(service.currentMouseY).toBeLessThan(currentMouseY);
+        expect(service.currentMouseCoords.x).toBeLessThan(currentMouseCoordsX);
+        expect(service.currentMouseCoords.y).toBeLessThan(currentMouseCoordsY);
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
@@ -209,7 +234,7 @@ describe('StampToolService', () => {
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
 
-        service.isIn = true;
+        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
         service.shouldStamp = true;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalled();
@@ -223,7 +248,7 @@ describe('StampToolService', () => {
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
-        service.isIn = true;
+        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
         service.shouldStamp = true;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalled();
@@ -231,11 +256,10 @@ describe('StampToolService', () => {
 
     it('should call initStamp if shouldStamp is true and it should set isIn to true', () => {
         const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
-        service.isIn = false;
+        spyOn(service, 'isMouseInRef').and.callFake(() => {return false;});
         service.shouldStamp = false;
 
         service.onMouseEnter(positiveMouseEvent);
-        expect(service.isIn).toBeTruthy();
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
         service.shouldStamp = true;
@@ -245,11 +269,10 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if shouldStamp is true and it should set isIn to false', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
-        service.isIn = true;
+        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
         service.shouldStamp = false;
 
         service.onMouseLeave(positiveMouseEvent);
-        expect(service.isIn).toBeFalsy();
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
 
         service.shouldStamp = true;
