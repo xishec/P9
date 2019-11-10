@@ -1,17 +1,30 @@
 import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
+
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
-import { UndoRedoerService } from './undo-redoer.service';
+import { UndoRedoerService, DrawingState } from './undo-redoer.service';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
 const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
 
-describe('UndoRedoerService', () => {
+const MOCK_DRAWING: Drawing = {
+    idStack: [],
+    labels: [],
+    name: '',
+    svg: MOCK_INNER_HTML,
+    drawingInfo: MOCK_DRAWING_INFO,
+};
+
+const MOCK_DRAWING_STATE: DrawingState = {
+    drawing: MOCK_DRAWING,
+};
+
+fdescribe('UndoRedoerService', () => {
     let injector: TestBed;
     let service: UndoRedoerService;
     let mockElementRef: ElementRef<SVGElement>;
@@ -74,26 +87,69 @@ describe('UndoRedoerService', () => {
         expect(service.redos).toEqual([]);
     });
 
-    it('saveCurrentState should push the currentState to undos and have the same innerHTML', () => {
+    it('createDrawing should return a drawing with the innerHTML', () => {
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
 
-        service.saveCurrentState([]);
+        const resDrawing = service.createDrawing([]);
 
-        expect(service.undos[0].svg).toEqual(MOCK_INNER_HTML);
-        expect(service.undos[0].drawingInfo).toEqual(MOCK_DRAWING_INFO);
+        expect(resDrawing.svg).toEqual(MOCK_INNER_HTML);
     });
 
-    it('saveCurrentState should reset redos if redos.length > 0', () => {
-        service.redos.push({name: '', labels: [], svg: '', idStack: [], drawingInfo: MOCK_DRAWING_INFO});
+    it('saveStateAndDuplicateOffset should create a DrawingState with the duplicateOffSet and saveState', () => {
+        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
+        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
+
+        service.saveStateAndDuplicateOffset([], 10);
+        
+        expect(spyOnSaveState).toHaveBeenCalled();
+        const state = service.undos.pop() as DrawingState;
+        expect(state.duplicateOffset).toEqual(10);
+    });
+
+    it('saveStateAndPasteOffset should create a DrawingState with the pasteOffset and saveState', () => {
+        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
+        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
+
+        service.saveStateAndPasteOffset([], 10);
+        
+        expect(spyOnSaveState).toHaveBeenCalled();
+        const state = service.undos.pop() as DrawingState;
+        expect(state.pasteOfsset).toEqual(10);
+    })
+
+    it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
+        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
+        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveCurrentState([]);
+
+        expect(spyOnSaveState).toHaveBeenCalled();
+        const state = service.undos.pop() as DrawingState;
+        expect(state.pasteOfsset).toBeUndefined();
+        expect(state.duplicateOffset).toBeUndefined();
+    });
+
+    it('saveState should push DrawingState on undos', () => {
+        service.saveState(MOCK_DRAWING_STATE);
+
+        const resDrawingState = service.undos.pop() as DrawingState;
+        expect(resDrawingState).toEqual(MOCK_DRAWING_STATE);
+    })
+
+    it('saveState should reset redos if redos.length > 0', () => {
+        service.redos.push(MOCK_DRAWING_STATE);
+
+        service.saveState(MOCK_DRAWING_STATE);
 
         expect(service.redos).toEqual([]);
     });
 
     it('undo should pop undos and push this to redos if undos.length > 1', () => {
-        const initState: Drawing = {
+        const initDrawing: Drawing = {
             name: '1',
             labels: [],
             svg: '1',
@@ -101,7 +157,7 @@ describe('UndoRedoerService', () => {
             drawingInfo: MOCK_DRAWING_INFO,
         };
 
-        const mockState: Drawing = {
+        const mockDrawing: Drawing = {
             name: '2',
             labels: [],
             svg: '2',
@@ -109,12 +165,19 @@ describe('UndoRedoerService', () => {
             drawingInfo: MOCK_DRAWING_INFO,
         };
 
-        service.undos.push(initState);
-        service.undos.push(mockState);
+        const mockState1: DrawingState = {
+            drawing: initDrawing,
+        }
+        const mockState2: DrawingState = {
+            drawing: mockDrawing,
+        };
+
+        service.undos.push(mockState1);
+        service.undos.push(mockState2);
 
         service.undo();
 
-        expect(service.redos[0]).toEqual(mockState);
+        expect(service.redos[0]).toEqual(mockState2);
     });
 
     it('undo should not do anything if undos.length <= 1', () => {
@@ -128,19 +191,11 @@ describe('UndoRedoerService', () => {
     });
 
     it('redo should pop redos and push this to undos if length > 0', () => {
-        const mockState: Drawing = {
-            name: 'mockState',
-            labels: [],
-            svg: 'mockSVG',
-            idStack: [],
-            drawingInfo: MOCK_DRAWING_INFO,
-        };
-
-        service.redos.push(mockState);
+        service.redos.push(MOCK_DRAWING_STATE);
 
         service.redo();
 
-        expect(service.undos[0]).toEqual(mockState);
+        expect(service.undos[0]).toEqual(MOCK_DRAWING_STATE);
     });
 
     it('redo should not do anything if redos.length <= 0', () => {

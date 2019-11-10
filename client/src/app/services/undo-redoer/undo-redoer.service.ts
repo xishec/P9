@@ -6,7 +6,7 @@ import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-interface DrawingState {
+export interface DrawingState {
     drawing: Drawing,
     pasteOfsset?: number,
     duplicateOffset?: number,
