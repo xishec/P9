@@ -45,19 +45,11 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    verifyPosition(event: MouseEvent): boolean {
-        return (
-            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
-            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
-        );
-    }
-
     cleanUp(): void {
         this.selection.cleanUp();
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
-        this.isTheCurrentTool = false;
         this.isLeftMouseDown = false;
         this.isRightMouseDown = false;
         this.isSelecting = false;
@@ -287,7 +279,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (!this.verifyPosition(event)) {
+        if (!this.isMouseInRef(event, this.elementRef)) {
             return;
         }
         this.clipBoard.restartDuplication();

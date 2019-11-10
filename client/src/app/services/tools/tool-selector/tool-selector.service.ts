@@ -251,6 +251,7 @@ export class ToolSelectorService {
     changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
+            if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = false; }
         }
 
         if (tooltipName === ToolName.Grid) {
