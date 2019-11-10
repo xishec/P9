@@ -86,8 +86,8 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     calculateVertex(n: number): Coords2D {
         const r = this.radius;
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         let xValue;
         let yValue;
         const polygonOffsetAngles: number = PolygonOffsetAngles.get(this.nbVertices) as number;
@@ -96,9 +96,9 @@ export class PolygonToolService extends AbstractShapeToolService {
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         if (deltaX > 0) {
-            xValue = cos + this.initialMouseX + r;
+            xValue = cos + this.initialMouseCoords.x + r;
         } else {
-            xValue = cos + this.initialMouseX - r;
+            xValue = cos + this.initialMouseCoords.x - r;
         }
 
         const sin =
@@ -106,9 +106,9 @@ export class PolygonToolService extends AbstractShapeToolService {
             Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         const nbVerticesIsEven = this.nbVertices % 2 === 0;
         if (deltaY > 0) {
-            yValue = sin + this.initialMouseY + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
+            yValue = sin + this.initialMouseCoords.y + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
         } else {
-            yValue = sin + this.initialMouseY - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
+            yValue = sin + this.initialMouseCoords.y - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
         }
 
         return { x: xValue, y: yValue };
@@ -125,26 +125,26 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     updatePreviewRectangle() {
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
 
         this.radius = minLength / 2;
         this.setRadiusCorrection();
 
         if (deltaX < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, minLength.toString());
         }
 
         if (deltaY < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, minLength.toString());
         }
 
@@ -218,8 +218,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -230,8 +230,8 @@ export class PolygonToolService extends AbstractShapeToolService {
         const button = event.button;
 
         if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef)) {
-            this.initialMouseX = this.currentMouseX;
-            this.initialMouseY = this.currentMouseY;
+            this.initialMouseCoords.x = this.currentMouseCoords.x;
+            this.initialMouseCoords.y = this.currentMouseCoords.y;
             this.isPreviewing = true;
 
             this.updateDrawing();

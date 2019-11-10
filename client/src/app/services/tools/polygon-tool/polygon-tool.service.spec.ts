@@ -116,8 +116,8 @@ fdescribe('PolygonToolService', () => {
             y: number;
         }
         polygonTool.radius = 5;
-        polygonTool.currentMouseX = 10;
-        polygonTool.currentMouseY = 10;
+        polygonTool.currentMouseCoords.x = 10;
+        polygonTool.currentMouseCoords.y = 10;
 
         let vertex: Vertex;
         vertex = polygonTool.calculateVertex(5);
