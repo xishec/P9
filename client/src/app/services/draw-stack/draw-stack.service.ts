@@ -39,7 +39,9 @@ export class DrawStackService {
 
         this.resolveDrawStackOrdering(indexOfDeletion);
 
-        if (this.drawStack.length === 0) this.drawingLoaderService.emptyDrawStack.next(true);
+        if (this.drawStack.length === 0) {
+            this.drawingLoaderService.emptyDrawStack.next(true);
+        }
     }
 
     resolveDrawStackOrdering(displacementIndex: number): void {
