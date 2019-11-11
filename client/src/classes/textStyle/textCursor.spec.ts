@@ -2,8 +2,8 @@ import { Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { BehaviorSubject } from 'rxjs';
-import { TextCursor } from './textCursor';
 import { TEXT_CURSOR } from 'src/constants/tool-constants';
+import { TextCursor } from './textCursor';
 
 describe('TextCursor', () => {
     let injector: TestBed;

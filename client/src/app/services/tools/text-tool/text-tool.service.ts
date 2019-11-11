@@ -64,7 +64,7 @@ export class TextToolService extends AbstractToolService {
     constructor(
         private shortCutManagerService: ShortcutManagerService,
         private colorToolService: ColorToolService,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
