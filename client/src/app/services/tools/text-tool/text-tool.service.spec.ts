@@ -15,7 +15,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
 
-fdescribe('TextToolService', () => {
+describe('TextToolService', () => {
     let injector: TestBed;
     let service: TextToolService;
     let attServ: AttributesManagerService;
@@ -23,10 +23,9 @@ fdescribe('TextToolService', () => {
     let rightMouseEvent: MouseEvent;
     let enterKeyboardEvent: KeyboardEvent;
     let backspaceKeyboardEvent: KeyboardEvent;
-    //  let arrowRightKeyboardEvent: KeyboardEvent;
-    //   let arrowLeftKeyboardEvent: KeyboardEvent;
 
     let spyOnsetAttribute: jasmine.Spy;
+    let spyOnsetProperty: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -121,10 +120,9 @@ fdescribe('TextToolService', () => {
         rightMouseEvent = createMouseEvent(10, 10, 2);
         enterKeyboardEvent = createKeyBoardEvent(Keys.Enter);
         backspaceKeyboardEvent = createKeyBoardEvent(Keys.Backspace);
-        //  arrowRightKeyboardEvent = createKeyBoardEvent(Keys.ArrowRight);
-        //   arrowLeftKeyboardEvent = createKeyBoardEvent(Keys.ArrowLeft);
 
         spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
+        spyOnsetProperty = spyOn(service.renderer, 'setProperty');
     });
 
     it('should be created', () => {
@@ -269,7 +267,6 @@ fdescribe('TextToolService', () => {
     it('createNewLine should call setAttribute and setProperty if tspanStack.length is not zero', () => {
         service.tspans.push(createMockSVGTSpanElement());
         service.textBoxXPosition = 1;
-        const spyOnsetProperty = spyOn(service.renderer, 'setProperty');
 
         service.createNewLine();
 
@@ -290,11 +287,9 @@ fdescribe('TextToolService', () => {
         expect(spyOnfindLinePosition).toHaveBeenCalled();
     });
 
-    // no idea how to make it work
     it('erase should call removeLine', () => {
         const spyOnremoveLine = spyOn(service, 'removeLine');
         service.text = 'test';
-        // service.tspanStack.push(createMockSVGTSpanElement());
         service.currentLine = createMockSVGTSpanElement();
 
         service.erase();
@@ -348,52 +343,22 @@ fdescribe('TextToolService', () => {
         expect(service.onKeyUp(enterKeyboardEvent)).toBeUndefined();
     });
 
-    // it('onKeyDown should call createNewLine if key is enter', () => {
-    //     const spyOncreateNewLine = spyOn(service, 'createNewLine').and.returnValue();
-    //     service.isWriting = true;
+    it('onKeyDown should call createNewLine if key is enter', () => {
+        service.isWriting = true;
+        service.textBoxXPosition = 2;
 
-    //     service.onKeyDown(enterKeyboardEvent);
+        service.onKeyDown(enterKeyboardEvent);
 
-    //     expect(spyOncreateNewLine).toHaveBeenCalled();
-    // });
-
-    // it('onKeyDown should call erase if key is Backspace', () => {
-    //     const spyOnerase = spyOn(service, 'erase').and.returnValue();
-    //     service.isWriting = true;
-
-    //     service.onKeyDown(backspaceKeyboardEvent);
-
-    //     expect(spyOnerase).toHaveBeenCalled();
-    // });
+        expect(spyOnsetProperty).toHaveBeenCalled();
+    });
 
     it('onKeyDown should stop execution if isWriting is false', () => {
         service.isWriting = false;
-        const spyOnsetProperty = spyOn(service.renderer, 'setProperty').and.returnValue();
 
         service.onKeyDown(backspaceKeyboardEvent);
 
         expect(spyOnsetProperty).toHaveBeenCalledTimes(0);
     });
-
-    // it('onKeyDown should call moveCursor if key is ArrowLeft', () => {
-    //     const spyOnmoveCursor = spyOn(service, 'moveCursor').and.returnValue();
-    //     service.isWriting = true;
-
-    //     service.onKeyDown(arrowLeftKeyboardEvent);
-
-    //     expect(spyOnmoveCursor).toHaveBeenCalled();
-    // });
-
-    // it('onKeyDown should call moveCursorRight if key is ArrowRight', () => {
-    //     const spyOnmoveCursor = spyOn(service, 'moveCursor').and.returnValue();
-    //     service.isWriting = true;
-
-    //     service.onKeyDown(arrowRightKeyboardEvent);
-
-    //     expect(spyOnmoveCursor).toHaveBeenCalled();
-    // });
-
-    // TO DO case event.key === ' '
 
     it('moveCursor should call swapToAnotherLine if isAtStartOfLine is true', () => {
         const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(true);
