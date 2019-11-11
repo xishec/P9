@@ -58,4 +58,12 @@ export class TextCursor {
     rightSideText(text: string): string {
         return text.slice(this.currentCursorIndex + 1);
     }
+
+    isAtStartOfLine(): boolean {
+        return this.currentCursorIndex === 0;
+    }
+
+    isAtEndOfLine(text: string): boolean {
+        return this.currentCursorIndex === text.length - 1;
+    }
 }
