@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -57,6 +57,12 @@ describe('SaveFileModalWindowComponent', () => {
                             provide: DrawingLoaderService,
                             useValue: {},
                         },
+                        {
+                            provide: MatSnackBar,
+                            useValue: {
+                                open: () => {},
+                            },
+                        },
                     ],
                 },
             })
@@ -76,39 +82,24 @@ describe('SaveFileModalWindowComponent', () => {
     });
 
     it(`should notify the user if drawing has been successfully saved`, () => {
-        const SPY = spyOn(window, 'alert');
+        const SPY = spyOn(component[`snackBar`], 'open');
 
-        form.value.name = 'hello';
         const nameAndLabels = new NameAndLabels(form.value.name, component.selectedLabels);
         drawingSaverService.currentNameAndLabels = new BehaviorSubject(nameAndLabels);
         drawingSaverService.currentIsSaved = new BehaviorSubject(true);
 
         component.onSubmit();
 
-        expect(SPY).toHaveBeenCalledWith(`Sauvegarde réussie!`);
-    });
-
-    it(`should notify the user if drawing has been successfully saved`, () => {
-        const SPY = spyOn(window, 'alert');
-
-        form.value.name = 'hello';
-        const nameAndLabels = new NameAndLabels(form.value.name, component.selectedLabels);
-        drawingSaverService.currentNameAndLabels = new BehaviorSubject(nameAndLabels);
-        drawingSaverService.currentIsSaved = new BehaviorSubject(false);
-        component.errorMesaage = 'test error message';
-
-        component.onSubmit();
-
-        expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n ${component.errorMesaage}`);
+        expect(SPY).toHaveBeenCalled();
     });
 
     it(`should notify the user if user selects more than ${MAX_NB_LABELS} labels`, () => {
-        const SPY = spyOn(window, 'alert');
+        const SPY = spyOn(component[`snackBar`], 'open');
         component.selectedLabels = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
         component.addLabel('test-label');
 
-        expect(SPY).toHaveBeenCalledWith(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
+        expect(SPY).toHaveBeenCalled();
     });
 
     it(`should push the new label if user selects less than ${MAX_NB_LABELS} labels`, () => {

@@ -20,7 +20,7 @@ describe('WorkZoneComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WorkZoneComponent],
-            imports : [HttpClientModule],
+            imports: [HttpClientModule],
             providers: [
                 {
                     provide: AbstractToolService,
