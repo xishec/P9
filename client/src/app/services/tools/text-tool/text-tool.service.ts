@@ -289,7 +289,7 @@ export class TextToolService extends AbstractToolService {
         if (this.keyboardActions.has(event.key)) {
             (this.keyboardActions.get(event.key) as () => void).apply(this, [event.key]);
         } else {
-            this.addText(TEXT_SPACE);
+            this.addText(event.key);
         }
         this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         setTimeout(() => {
