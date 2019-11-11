@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TextCursor } from './textCursor';
 import { TEXT_CURSOR } from 'src/constants/tool-constants';
 
-fdescribe('TextCursor', () => {
+describe('TextCursor', () => {
     let injector: TestBed;
     let service: TextCursor;
     const TEXT = `te${TEXT_CURSOR}st`;
@@ -50,16 +50,9 @@ fdescribe('TextCursor', () => {
         expect(service.erase()).toEqual('test');
     });
 
-    // to do swapToAnotherLine, findLinePosition and two last functions.
-
-    // it('findLinePosition should return ', () => {
-    //     service.text = 'test';
-
-    //     expect(service.erase()).toEqual('est');
-    // });
-
     it(`leftSideText should return "te" if "${TEXT}" is passed and currentCursorIndex is 2`, () => {
         service.text = TEXT;
+
         expect(service.leftSideText()).toEqual('te');
     });
 
@@ -67,5 +60,18 @@ fdescribe('TextCursor', () => {
         service.text = TEXT;
 
         expect(service.rightSideText()).toEqual('st');
+    });
+
+    it('isAtStartOfLine should return true if text cursor is at start of line', () => {
+        service.text = TEXT_CURSOR + 'test';
+        service.currentCursorIndex = 0;
+        expect(service.isAtStartOfLine()).toBeTruthy();
+    });
+
+    it('isAtEndOfLine should return true if text cursor is at end of line', () => {
+        service.text = 'test' + TEXT_CURSOR;
+        service.currentCursorIndex = service.text.indexOf(TEXT_CURSOR);
+
+        expect(service.isAtEndOfLine()).toBeTruthy();
     });
 });
