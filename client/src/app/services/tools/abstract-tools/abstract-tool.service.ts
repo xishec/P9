@@ -10,6 +10,12 @@ export abstract class AbstractToolService {
         renderer: Renderer2,
         drawStack: DrawStackService,
     ): void;
+    isMouseInRef(event: MouseEvent, elementRef: ElementRef): boolean {
+        return (
+            event.clientX > elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
+            event.clientY > elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
+        );
+    }
     abstract onMouseMove(event: MouseEvent): void;
     abstract onMouseDown(event: MouseEvent): void;
     abstract onMouseUp(event: MouseEvent): void;
@@ -18,9 +24,4 @@ export abstract class AbstractToolService {
     abstract onKeyDown(event: KeyboardEvent): void;
     abstract onKeyUp(event: KeyboardEvent): void;
     abstract cleanUp(): void;
-}
-
-export interface MouseCoords {
-    x: number;
-    y: number;
 }

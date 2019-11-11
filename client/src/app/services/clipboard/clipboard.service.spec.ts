@@ -327,36 +327,10 @@ describe('ClipboardService', () => {
         expect(service.pasteOffsetValue).toEqual(OFFSET_STEP);
     });
 
-    it('should decrease the pasteOffsetValue by OFFSET_STEP and not let it under 0 when calling decreasePasteOffsetValue', () => {
-        service.decreasePasteOffsetValue();
-
-        expect(service.pasteOffsetValue).toEqual(0);
-    });
-
-    it('should decrease the pasteOffsetValue by OFFSET_STEP and when calling decreasePasteOffsetValue', () => {
-        service.increasePasteOffsetValue();
-        service.decreasePasteOffsetValue();
-
-        expect(service.pasteOffsetValue).toEqual(0);
-    });
-
     it('should increase the duplicateOffsetValue of OFFSET_STEP when calling increaseDuplicateOffsetValue', () => {
         service.increaseDuplicateOffsetValue();
 
         expect(service.duplicateOffsetValue).toEqual(OFFSET_STEP);
-    });
-
-    it('should decrease the duplicateOffsetValue by OFFSET_STEP and not let it under 0 when calling decreaseDuplicateOffsetValue', () => {
-        service.decreaseDuplicateOffsetValue();
-
-        expect(service.duplicateOffsetValue).toEqual(0);
-    });
-
-    it('should decrease the duplicateOffsetValue by OFFSET_STEP and when calling decreaseDuplicateOffsetValue', () => {
-        service.increaseDuplicateOffsetValue();
-        service.decreaseDuplicateOffsetValue();
-
-        expect(service.duplicateOffsetValue).toEqual(0);
     });
 
     it('should remove cut elements from workzone, clear the selection and add them to a cleared clippings when calling cut', () => {

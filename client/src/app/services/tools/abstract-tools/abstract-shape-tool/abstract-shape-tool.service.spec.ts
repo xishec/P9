@@ -94,10 +94,10 @@ describe('AbstractShapeToolService', () => {
     });
 
     it('should always give rectangle with positive dimensions', () => {
-        service.currentMouseX = -10;
-        service.initialMouseX = 0;
-        service.currentMouseY = -10;
-        service.initialMouseY = 0;
+        service.currentMouseCoords.x = -10;
+        service.initialMouseCoords.x = 0;
+        service.currentMouseCoords.y = -10;
+        service.initialMouseCoords.y = 0;
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: MockRect, name: string, value: string) => {

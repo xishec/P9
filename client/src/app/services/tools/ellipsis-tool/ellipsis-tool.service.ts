@@ -52,13 +52,16 @@ export class EllipsisToolService extends AbstractShapeToolService {
         });
     }
 
-    isValideEllipse(): boolean {
-        const radiusX = this.previewRectangleWidth;
-        const radiusY = this.previewRectangleHeight;
+    isValidEllipse(): boolean {
+        const isValidRadiusX = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
+        const isValidRadiusY = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
 
-        return (
-            radiusX >= 2 * this.userStrokeWidth && radiusY >= 2 * this.userStrokeWidth && (radiusX > 0 || radiusY > 0)
-        );
+        return isValidRadiusX && isValidRadiusY && (this.drawEllipseRadiusX > 0 || this.drawEllipseRadiusY > 0);
+    }
+
+    makeEllipseInvalid(): void {
+        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.rx, '0');
+        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.ry, '0');
     }
 
     updateTraceType(traceType: string): void {
@@ -110,8 +113,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     updatePreviewCircle(): void {
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(this.previewRectangleWidth, this.previewRectangleHeight);
 
         if (deltaX < 0) {
@@ -155,7 +158,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     renderDrawEllipsis(): void {
-        if (this.isValideEllipse()) {
+        if (this.isValidEllipse()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.fill, this.userFillColor)
                 : this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.fill, '#' + this.userFillColor);
@@ -195,8 +198,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -207,8 +210,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
         const button = event.button;
 
         if (button === Mouse.LeftButton) {
-            this.initialMouseX = this.currentMouseX;
-            this.initialMouseY = this.currentMouseY;
+            this.initialMouseCoords.x = this.currentMouseCoords.x;
+            this.initialMouseCoords.y = this.currentMouseCoords.y;
             this.isPreviewing = true;
             this.updateDrawing();
             this.renderer.appendChild(this.elementRef.nativeElement, this.drawEllipse);
@@ -218,33 +221,22 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-
-        if (button === Mouse.LeftButton) {
-            this.renderer.removeChild(this.elementRef.nativeElement, this.drawEllipse);
-            this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
-            this.isPreviewing = false;
-            if (this.isValideEllipse() && this.isIn) {
-                this.createSVG();
-            }
+        if (button === Mouse.LeftButton && this.isValidEllipse() && this.isMouseInRef(event, this.elementRef)) {
+            this.createSVG();
         }
+        this.cleanUp();
     }
-
-    onMouseEnter(event: MouseEvent): void {
-        this.isIn = true;
-    }
-
-    onMouseLeave(event: MouseEvent): void {
-        this.isIn = false;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
 
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
         if (key === Keys.Shift) {
-            if (!this.isCirclePreview) {
-                this.isCirclePreview = true;
-                this.updateDrawing();
-            }
+            this.isCirclePreview = true;
+            this.updateDrawing();
         }
     }
 
@@ -252,10 +244,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
         const key = event.key;
 
         if (key === Keys.Shift) {
-            if (this.isCirclePreview) {
-                this.isCirclePreview = false;
-                this.updateDrawing();
-            }
+            this.isCirclePreview = false;
+            this.updateDrawing();
         }
     }
 
@@ -285,5 +275,6 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.renderer.removeChild(this.elementRef, this.previewRectangle);
         this.renderer.removeChild(this.elementRef, this.drawEllipse);
         this.isPreviewing = false;
+        this.makeEllipseInvalid();
     }
 }

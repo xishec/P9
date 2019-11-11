@@ -33,7 +33,7 @@ export class AttributesManagerService {
     private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
-    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Min);
+    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
 

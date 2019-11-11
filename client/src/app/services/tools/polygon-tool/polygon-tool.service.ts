@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
@@ -12,11 +13,6 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-
-interface Vertex {
-    x: number;
-    y: number;
-}
 
 @Injectable({
     providedIn: 'root',
@@ -72,16 +68,21 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     isValidePolygon(): boolean {
-        const height = this.previewRectangleHeight;
-        const width = this.previewRectangleWidth;
+        const isValidHeight = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
+        const isValidWidth = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
 
-        return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
+        return isValidWidth && isValidHeight && (this.previewRectangleWidth > 0 || this.previewRectangleHeight > 0);
     }
 
-    calculateVertex(n: number): Vertex {
+    makeInvalidPolygon(): void {
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, '0');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, '0');
+    }
+
+    calculateVertex(n: number): Coords2D {
         const r = this.radius;
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         let xValue;
         let yValue;
         const polygonOffsetAngles: number = PolygonOffsetAngles.get(this.nbVertices) as number;
@@ -90,9 +91,9 @@ export class PolygonToolService extends AbstractShapeToolService {
             (r + this.radiusCorrection - this.strokeWidth / 2) *
             Math.cos((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         if (deltaX > 0) {
-            xValue = cos + this.initialMouseX + r;
+            xValue = cos + this.initialMouseCoords.x + r;
         } else {
-            xValue = cos + this.initialMouseX - r;
+            xValue = cos + this.initialMouseCoords.x - r;
         }
 
         const sin =
@@ -100,9 +101,9 @@ export class PolygonToolService extends AbstractShapeToolService {
             Math.sin((2 * Math.PI * n) / this.nbVertices - polygonOffsetAngles);
         const nbVerticesIsEven = this.nbVertices % 2 === 0;
         if (deltaY > 0) {
-            yValue = sin + this.initialMouseY + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
+            yValue = sin + this.initialMouseCoords.y + (r + (nbVerticesIsEven ? 0 : this.radiusCorrection));
         } else {
-            yValue = sin + this.initialMouseY - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
+            yValue = sin + this.initialMouseCoords.y - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
         }
 
         return { x: xValue, y: yValue };
@@ -111,7 +112,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     copyPreviewRectangleAttributes(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         let vertices = '';
         for (let n = 1; n <= this.nbVertices; n++) {
-            const vertex: Vertex = this.calculateVertex(n);
+            const vertex: Coords2D = this.calculateVertex(n);
             vertices += vertex.x + ',' + vertex.y + ' ';
         }
 
@@ -119,26 +120,26 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     updatePreviewRectangle() {
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
 
         this.radius = minLength / 2;
         this.setRadiusCorrection();
 
         if (deltaX < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, minLength.toString());
         }
 
         if (deltaY < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, minLength.toString());
         }
 
@@ -215,8 +216,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -226,9 +227,9 @@ export class PolygonToolService extends AbstractShapeToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
-            this.initialMouseX = this.currentMouseX;
-            this.initialMouseY = this.currentMouseY;
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef)) {
+            this.initialMouseCoords.x = this.currentMouseCoords.x;
+            this.initialMouseCoords.y = this.currentMouseCoords.y;
             this.isPreviewing = true;
 
             this.updateDrawing();
@@ -239,19 +240,17 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton && this.isIn && this.isValidePolygon()) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValidePolygon()) {
             this.createSVG();
         }
         this.cleanUp();
     }
 
-    onMouseEnter(event: MouseEvent): void {
-        this.isIn = true;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
 
-    onMouseLeave(event: MouseEvent): void {
-        this.isIn = false;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
 
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
@@ -262,5 +261,6 @@ export class PolygonToolService extends AbstractShapeToolService {
     cleanUp(): void {
         this.isPreviewing = false;
         this.renderer.removeChild(this.elementRef, this.drawPolygon);
+        this.makeInvalidPolygon();
     }
 }
