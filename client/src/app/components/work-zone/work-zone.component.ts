@@ -30,7 +30,6 @@ export class WorkZoneComponent implements OnInit {
     gridOpacity = GridOpacity.Max;
     toolName: ToolName = ToolName.Selection;
     drawStack: DrawStackService;
-    untouched = true;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -66,7 +65,7 @@ export class WorkZoneComponent implements OnInit {
                 this.drawingLoaderService.emptyDrawStack.next(false);
                 this.updateDrawingInfo(selectedDrawing.drawingInfo);
                 this.appendDrawingToView(selectedDrawing);
-                this.untouched = false;
+                this.drawingLoaderService.untouchedWorkZone.next(false);
             }
 
             if (this.undoRedoerService.fromLoader) {
@@ -78,7 +77,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width !== 0 && drawingInfo.height !== 0) {
                 this.resetWorkzone(drawingInfo);
-                this.untouched = false;
+                this.drawingLoaderService.untouchedWorkZone.next(false);
             }
 
             if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
@@ -155,7 +154,6 @@ export class WorkZoneComponent implements OnInit {
     }
 
     resetWorkzone(drawingInfo: DrawingInfo) {
-        this.drawingLoaderService.emptyDrawStack.next(false);
         this.drawingInfo = drawingInfo;
 
         this.setRectangleBackgroundStyle();
@@ -163,16 +161,17 @@ export class WorkZoneComponent implements OnInit {
         for (const el of this.drawStack.reset()) {
             this.renderer.removeChild(this.refSVG.nativeElement, el);
         }
+        this.drawingLoaderService.emptyDrawStack.next(true);
     }
 
     onClickRectangle() {
-        if (this.untouched) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             alert('Veuillez créer un nouveau dessin!');
         }
     }
 
     getCursorStyle() {
-        if (this.untouched) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
@@ -196,7 +195,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     backgroundColor(): string {
-        if (this.untouched) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             this.drawingInfo.color = DEFAULT_TRANSPARENT;
         }
         return this.drawingInfo.color;
