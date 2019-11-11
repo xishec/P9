@@ -10,7 +10,6 @@ import { Coords2D } from 'src/classes/Coords2D';
     providedIn: 'root',
 })
 export class DropperToolService extends AbstractToolService {
-    colorTool: ColorToolService;
     svg: SVGElement;
     currentMouseCoords: Coords2D = {x: 0, y: 0};
     pixelColor: string;
@@ -22,7 +21,7 @@ export class DropperToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
     }
 
@@ -34,10 +33,6 @@ export class DropperToolService extends AbstractToolService {
         this.canvas = this.renderer.createElement('canvas');
         this.SVGImg = this.renderer.createElement('img');
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService): void {
-        this.colorTool = colorToolService;
     }
 
     updateSVGCopy(): void {
@@ -67,9 +62,9 @@ export class DropperToolService extends AbstractToolService {
 
         const button = event.button;
         if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef)) {
-            this.colorTool.changePrimaryColor(colorHex);
+            this.colorToolService.changePrimaryColor(colorHex);
         } else if (button === Mouse.RightButton && this.isMouseInRef(event, this.elementRef)) {
-            this.colorTool.changeSecondaryColor(colorHex);
+            this.colorToolService.changeSecondaryColor(colorHex);
         }
     }
     onMouseEnter(event: MouseEvent): void {}
@@ -86,6 +81,6 @@ export class DropperToolService extends AbstractToolService {
         this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
         this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
         const colorRGB = this.pickColor();
-        return this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
+        return this.colorToolService.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
     }
 }

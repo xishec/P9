@@ -10,6 +10,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -50,11 +51,14 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
+        private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
     ) {}
 
     ngOnInit(): void {
-        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
+        this.undoRedoerService.initializeService(this.refSVG);
+        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
+
         this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
         this.initializeEventListeners();
 
@@ -69,11 +73,22 @@ export class WorkZoneComponent implements OnInit {
                 this.updateDrawingInfo(selectedDrawing.drawingInfo);
                 this.appendDrawingToView(selectedDrawing);
             }
+
+            if (this.undoRedoerService.fromLoader) {
+                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+                this.undoRedoerService.fromLoader = false;
+            }
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width !== 0 && drawingInfo.height !== 0) {
                 this.resetWorkzone(drawingInfo);
+            }
+
+            if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
+                setTimeout(() => {
+                    this.undoRedoerService.saveCurrentState([]);
+                }, 0);
             }
         });
 
@@ -132,7 +147,7 @@ export class WorkZoneComponent implements OnInit {
             const child: SVGElement = children.filter((filterChild) => {
                 return filterChild.getAttribute('id_element') === id;
             })[0];
-            this.drawStack.push(child as SVGAElement);
+            this.drawStack.push(child as SVGAElement, false);
         });
     }
 
@@ -144,6 +159,7 @@ export class WorkZoneComponent implements OnInit {
             this.shortCutManagerService,
             this.modalManagerService,
             this.renderer,
+            this.undoRedoerService,
             this.clipboard,
         );
         this.eventListenerService.addEventListeners();

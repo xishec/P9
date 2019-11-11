@@ -5,6 +5,7 @@ import { SVG_NS } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,8 +13,11 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 export class BrushToolService extends TracingToolService {
     private currentStyle = 1;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+            this.currentColorAndOpacity = currentColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {

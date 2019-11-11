@@ -4,6 +4,7 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -12,7 +13,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class ColorApplicatorToolService extends AbstractToolService {
     currentStackTarget: StackTargetInfo;
-    private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
     isOnTarget = false;
@@ -21,8 +21,14 @@ export class ColorApplicatorToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService, private undoRedoerService: UndoRedoerService) {
         super();
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.primaryColor = '#' + primaryColor;
+        });
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
+            this.secondaryColor = '#' + secondaryColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -46,58 +52,85 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
+    isStackTargetShape(): boolean {
+        const isRectangle = this.currentStackTarget.toolName === ToolName.Rectangle;
+        const isEllipsis = this.currentStackTarget.toolName === ToolName.Ellipsis;
+        const isPolygon = this.currentStackTarget.toolName === ToolName.Polygon;
+        return isRectangle || isEllipsis || isPolygon;
+    }
+
+    changeFillColorOnShape(): void {
+        if (
+            (this.drawStack
+                .getElementByPosition(this.currentStackTarget.targetPosition)
+                .getAttribute('fill') as string) === 'none'
+        ) {
+            return;
+        }
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.fill,
+            this.primaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnShape(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.stroke,
+            this.secondaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeColorOnTrace(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.stroke,
+            this.primaryColor,
+        );
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.fill,
+            this.primaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
         if (
-            this.isOnTarget &&
-            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined
+            !this.isOnTarget ||
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) === undefined
         ) {
-            switch (button) {
-                case Mouse.LeftButton:
-                    if (
-                        (this.drawStack
-                            .getElementByPosition(this.currentStackTarget.targetPosition)
-                            .getAttribute('fill') as string) !== 'none'
-                    ) {
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                            HTMLAttribute.fill,
-                            this.primaryColor,
-                        );
-                    }
-                    if (
-                        this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil ||
-                        this.currentStackTarget.toolName === ToolName.Line
-                    ) {
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                            HTMLAttribute.stroke,
-                            this.primaryColor,
-                        );
-                    }
-                    break;
-                case Mouse.RightButton:
-                    if (
-                        this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil ||
-                        this.currentStackTarget.toolName === ToolName.Line
-                    ) {
-                        break;
-                    }
-                    this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                        HTMLAttribute.stroke,
-                        this.secondaryColor,
-                    );
-                    break;
-                default:
-                    break;
-            }
-            this.isOnTarget = false;
+            return;
         }
+
+        switch (button) {
+            case Mouse.LeftButton:
+                if (this.isStackTargetShape()) {
+                    this.changeFillColorOnShape();
+                } else {
+                    this.changeColorOnTrace();
+                }
+                break;
+            case Mouse.RightButton:
+                if (this.isStackTargetShape()) {
+                    this.changeStrokeColorOnShape();
+                }
+                break;
+            default:
+                break;
+        }
+        this.isOnTarget = false;
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {

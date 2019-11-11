@@ -10,6 +10,7 @@ import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 describe('DropperToolService', () => {
     let injector: TestBed;
     let service: DropperToolService;
+    let colorToolService: ColorToolService;
     let positiveMouseEvent: MouseEvent;
     let negativeMouseEvent: MouseEvent;
     let onAltKeyDown: KeyboardEvent;
@@ -69,6 +70,14 @@ describe('DropperToolService', () => {
                         drawImage: () => null,
                     },
                 },
+                {
+                    provide: ColorToolService,
+                    useValue: {
+                        changePrimaryColor: () => null,
+                        changeSecondaryColor: () => null,
+                        translateRGBToHex: () => null,
+                    },
+                },
             ],
         });
 
@@ -77,6 +86,8 @@ describe('DropperToolService', () => {
         const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+
+        colorToolService = injector.get<ColorToolService>(ColorToolService as Type<ColorToolService>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         positiveMouseEvent = createMouseEvent(10, 10, 0);
@@ -130,9 +141,7 @@ describe('DropperToolService', () => {
     it('should call getColor and changePrimaryColor if left button of mouse is clicked', () => {
         const spyOnGetColor: jasmine.Spy = spyOn(service, 'getColor').and.returnValue('ffffffff');
 
-        service.initializeColorToolService(new ColorToolService());
-
-        const spyOnChangePrimaryColor: jasmine.Spy = spyOn(service.colorTool, 'changePrimaryColor')
+        const spyOnChangePrimaryColor: jasmine.Spy = spyOn(colorToolService, 'changePrimaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
@@ -146,9 +155,7 @@ describe('DropperToolService', () => {
     it('should call getColor and changeSecondaryColor if right button of mouse is clicked', () => {
         const spyOnGetColor: jasmine.Spy = spyOn(service, 'getColor').and.returnValue('ffffffff');
 
-        service.initializeColorToolService(new ColorToolService());
-
-        const spyOnChangeSecondaryColor: jasmine.Spy = spyOn(service.colorTool, 'changeSecondaryColor')
+        const spyOnChangeSecondaryColor: jasmine.Spy = spyOn(colorToolService, 'changeSecondaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
             spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
@@ -173,8 +180,8 @@ describe('DropperToolService', () => {
 
     it('should call pickColor and translateRGBToHex when function getColor is called', () => {
         const spyOnPickColor: jasmine.Spy = spyOn(service, 'pickColor').and.returnValue(new Uint8ClampedArray());
-        service.initializeColorToolService(new ColorToolService());
-        const spyOnTranslateRGBToHex: jasmine.Spy = spyOn(service.colorTool, 'translateRGBToHex')
+
+        const spyOnTranslateRGBToHex: jasmine.Spy = spyOn(colorToolService, 'translateRGBToHex')
             .withArgs(undefined, undefined, undefined)
             .and.returnValue('test');
 

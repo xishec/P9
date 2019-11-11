@@ -4,7 +4,6 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
-import { ColorToolService } from '../../color-tool/color-tool.service';
 import { AbstractToolService } from '../abstract-tool.service';
 
 @Injectable({
@@ -22,7 +21,6 @@ export abstract class TracingToolService extends AbstractToolService {
     protected svgPreviewCircle: SVGCircleElement;
 
     protected attributesManagerService: AttributesManagerService;
-    protected colorToolService: ColorToolService;
     protected elementRef: ElementRef<SVGElement>;
     protected renderer: Renderer2;
     protected drawStack: DrawStackService;
@@ -47,13 +45,6 @@ export abstract class TracingToolService extends AbstractToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentThickness.subscribe((thickness) => {
             this.currentWidth = thickness;
-        });
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService) {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColorAndOpacity = currentColor;
         });
     }
 

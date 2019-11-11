@@ -19,7 +19,6 @@ fdescribe('RectangleToolService', () => {
     let rendererMock: Renderer2;
     let elementRefMock: ElementRef;
     let drawStackMock: DrawStackService;
-    let spyCreateElement: jasmine.Spy;
     const mockPreviewRect: MockRect = new MockRect();
     const mockDrawRect: MockRect = new MockRect();
     let spyPreviewRectWidth: jasmine.Spy;
@@ -34,6 +33,7 @@ fdescribe('RectangleToolService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
+                RectangleToolService,
                 {
                     provide: DrawStackService,
                     useValue: {
@@ -72,13 +72,11 @@ fdescribe('RectangleToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        rectangleTool = new RectangleToolService();
+        rectangleTool = injector.get(RectangleToolService);
         rectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
-        spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
-            return new MockRect();
-        });
+
         spyPreviewRectWidth = spyOnProperty(rectangleTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
         });
@@ -103,13 +101,12 @@ fdescribe('RectangleToolService', () => {
         spyDrawRectY = spyOnProperty(rectangleTool, 'drawRectangleY', 'get').and.callFake(() => {
             return mockDrawRect.y;
         });
+
+        jasmine.clock().install();
     });
 
-    it('should be created with call to new', () => {
-        const newRectangleTool = injector.get(RectangleToolService);
-        newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        expect(spyCreateElement).toHaveBeenCalled();
-        expect(newRectangleTool).toBeTruthy();
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should return the draw rectangle height when getting draw rectangle height', () => {
@@ -384,6 +381,8 @@ fdescribe('RectangleToolService', () => {
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onMouseUp(MOUSEUP_EVENT);
+
+        jasmine.clock().tick(1);
 
         expect(rectangleTool.isPreviewing).toBeFalsy();
         expect(rectangleTool.isSquarePreview).toBeFalsy();

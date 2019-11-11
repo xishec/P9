@@ -1,13 +1,12 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { BehaviorSubject } from 'rxjs';
 
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
 
 describe('ColorApplicatorToolService', () => {
@@ -43,6 +42,12 @@ describe('ColorApplicatorToolService', () => {
                         },
                     },
                 },
+                {
+                    provide: UndoRedoerService,
+                    useValue : {
+                        saveCurrentState: () => null,
+                    },
+                },
                 provideAutoMock(ElementRef),
             ],
         });
@@ -62,11 +67,56 @@ describe('ColorApplicatorToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('initializeColorToolService should be primaryColor from colorService', () => {
-        const colorService: ColorToolService = new ColorToolService();
-        const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
-        service.initializeColorToolService(new ColorToolService());
-        expect(service[`primaryColor`]).toEqual('#' + primaryColorTmp.value);
+    it('should return true if tool is rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isStackTargetShape();
+        expect(res).toBeTruthy();
+    });
+
+    it('should return false if tool is not rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isStackTargetShape();
+        expect(res).toBeFalsy();
+    });
+
+    it('should change the stroke and fill color of trace stackTarget when calling changeColorOnTrace', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeColorOnTrace();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
+    });
+
+    it('should only change the stroke color of shape stackTarget when calling changeStrokeColorOnShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeStrokeColorOnShape();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('should only change the fill color of shape stackTarget when calling changeFillColorOnShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeFillColorOnShape();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
     });
 
     it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {

@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
@@ -31,6 +32,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private shortcutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -60,6 +62,9 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
+
+        this.undoRedoerService.initializeStacks();
+
         this.drawingModalWindowService.changeDrawingInfo(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,

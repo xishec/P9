@@ -11,7 +11,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class EllipsisToolService extends AbstractShapeToolService {
     attributesManagerService: AttributesManagerService;
-    colorToolService: ColorToolService;
 
     traceType = '';
     userStrokeWidth = 0;
@@ -25,8 +24,16 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     drawEllipse: SVGEllipseElement;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
+            this.fillColor = fillColor;
+            this.updateTraceType(this.traceType);
+        });
+        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
+            this.strokeColor = strokeColor;
+            this.updateTraceType(this.traceType);
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -42,18 +49,6 @@ export class EllipsisToolService extends AbstractShapeToolService {
         });
         this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
-        });
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService): void {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
-            this.fillColor = fillColor;
-            this.updateTraceType(this.traceType);
-        });
-        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
-            this.strokeColor = strokeColor;
-            this.updateTraceType(this.traceType);
         });
     }
 
@@ -269,8 +264,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Ellipsis);
 
         this.renderer.appendChild(el, drawEllipse);
-        this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
+
+        setTimeout(() => {
+            this.drawStack.push(el);
+        }, 0);
     }
 
     cleanUp(): void {

@@ -6,6 +6,7 @@ import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../manipulator/manipulator.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardService', () => {
@@ -43,6 +44,23 @@ describe('ClipboardService', () => {
                         },
                     },
                 },
+                {
+                    provide: UndoRedoerService,
+                    useValue: {
+                        saveStateAndDuplicateOffset: () => null,
+                        saveStateFromPaste: () => null,
+                        saveCurrentState: () => null,
+                        currentDuplicateOffset: {
+                            subscribe: () => null,
+                        },
+                        currentPasteOffset: {
+                            subscribe: () => null,
+                        },
+                        currentClipping : {
+                            subscribe: () => null,
+                        },
+                    },
+                },
             ],
         });
 
@@ -58,6 +76,12 @@ describe('ClipboardService', () => {
 
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -346,6 +370,7 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.cut();
+        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(service.pasteOffsetValue).toEqual(0);
@@ -407,8 +432,10 @@ describe('ClipboardService', () => {
     it('should call clone and handleOutOfBounds when calling paste', () => {
         const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
         const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+        service.clippings.add(TestHelpers.createMockSVGElement());
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+
         service.paste();
 
         expect(spyOnClone).toHaveBeenCalled();
@@ -424,6 +451,7 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.delete();
+        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
