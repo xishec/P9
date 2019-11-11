@@ -5,8 +5,6 @@ import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helper
 import { Mouse } from 'src/constants/constants';
 import { TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { PolygonToolService } from './polygon-tool.service';
 
 const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
@@ -21,11 +19,8 @@ describe('PolygonToolService', () => {
     let rendererMock: Renderer2;
     let elementRefMock: ElementRef;
     let drawStackMock: DrawStackService;
-    let spyCreateElement: jasmine.Spy;
     const mockPreviewRect: MockRect = new MockRect();
     const mockDrawPolygon: MockPolygon = new MockPolygon();
-    const mockColorTool: ColorToolService = new ColorToolService();
-    const mockAttributeManager: AttributesManagerService = new AttributesManagerService();
     let spyPreviewRectWidth: jasmine.Spy;
     let spyPreviewRectHeight: jasmine.Spy;
     let spyPreviewRectX: jasmine.Spy;
@@ -33,6 +28,7 @@ describe('PolygonToolService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
+                PolygonToolService,
                 DrawStackService,
                 {
                     provide: Renderer2,
@@ -71,14 +67,11 @@ describe('PolygonToolService', () => {
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        polygonTool = new PolygonToolService();
+        polygonTool = injector.get(PolygonToolService);
         polygonTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         polygonTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
         polygonTool.drawPolygon = (mockDrawPolygon as unknown) as SVGPolygonElement;
 
-        spyCreateElement = spyOn(rendererMock, 'createElement').and.callFake(() => {
-            return new MockPolygon();
-        });
         spyPreviewRectWidth = spyOnProperty(polygonTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
         });
@@ -91,15 +84,6 @@ describe('PolygonToolService', () => {
         spyPreviewRectY = spyOnProperty(polygonTool, 'previewRectangleY', 'get').and.callFake(() => {
             return mockPreviewRect.y;
         });
-    });
-
-    it('should be created with call to new', () => {
-        const newPolygonTool = new PolygonToolService();
-        newPolygonTool.initializeAttributesManagerService(mockAttributeManager);
-        polygonTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        polygonTool.initializeColorToolService(mockColorTool);
-        expect(spyCreateElement).toHaveBeenCalled();
-        expect(newPolygonTool).toBeTruthy();
     });
 
     it('should calculate the good vertex points', () => {

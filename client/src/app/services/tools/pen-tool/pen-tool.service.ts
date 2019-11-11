@@ -4,6 +4,7 @@ import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,8 +20,11 @@ export class PenToolService extends TracingToolService {
     maxThickness: number;
     minThickness: number;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+            this.currentColorAndOpacity = currentColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
