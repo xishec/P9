@@ -92,7 +92,7 @@ export class GridAttributesComponent implements OnInit {
     }
 
     enableSlider(): void {
-        if (this.gridToolService.workzoneIsEmpty.value === false) {
+        if (!this.gridToolService.workzoneIsEmpty.value) {
             this.gridAttributesForm.controls.state.enable();
         }
     }
