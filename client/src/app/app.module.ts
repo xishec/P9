@@ -19,6 +19,7 @@ import {
     MatSliderModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    MatSnackBarModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -102,6 +103,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
     imports: [
         MatSliderModule,
         MatCheckboxModule,
+        MatSnackBarModule,
         MatDialogModule,
         MatListModule,
         MatRadioModule,

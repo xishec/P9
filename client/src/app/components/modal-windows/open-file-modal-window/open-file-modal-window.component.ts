@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -36,8 +36,10 @@ export class OpenFileModalWindowComponent implements OnInit {
         private fileManagerService: FileManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
+        private snackBar: MatSnackBar,
     ) {
         this.formBuilder = formBuilder;
+        this.snackBar;
     }
 
     ngOnInit(): void {
@@ -49,7 +51,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -91,7 +93,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
-
             this.undoRedoerService.initializeStacks();
             this.undoRedoerService.fromLoader = true;
 
@@ -160,7 +161,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     return drawing.name !== this.selectedOption;
                 });
             } else {
-                window.alert('Erreur de suppression du côté serveur!');
+                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK');
             }
         });
     }
