@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { predicate } from 'src/constants/constants';
-import { BRUSH_STYLES, Thickness, ToolName, BRUSH_STYLE } from 'src/constants/tool-constants';
+import { BRUSH_STYLE, BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-brush-attributes',

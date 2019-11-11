@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
+    BRUSH_STYLE,
     EraserSize,
     LineJointType,
     LineStrokeType,
@@ -10,7 +11,6 @@ import {
     StampScaling,
     Thickness,
     TraceType,
-    BRUSH_STYLE,
 } from 'src/constants/tool-constants';
 
 @Injectable({
