@@ -209,7 +209,7 @@ export class ClipboardService {
         }, 0);
         setTimeout(() => {
             this.selection.appendFullSelectionBox();
-        });
+        }, 0);
     }
 
     paste(): void {
@@ -229,7 +229,7 @@ export class ClipboardService {
         }, 0);
         setTimeout(() => {
             this.selection.appendFullSelectionBox();
-        });
+        }, 0);
     }
 
     delete(): void {

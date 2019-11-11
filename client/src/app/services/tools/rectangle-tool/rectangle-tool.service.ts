@@ -141,7 +141,6 @@ export class RectangleToolService extends AbstractShapeToolService {
         setTimeout(() => {
             this.drawStack.push(el);
         }, 0);
-
     }
 
     updateDrawing(): void {
@@ -266,9 +265,9 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
         if (button === Mouse.LeftButton && this.isIn && this.isValideRectangle()) {
-            this.cleanUp();
             this.createSVG();
         }
+        this.cleanUp();
     }
 
     onMouseEnter(event: MouseEvent): void {
