@@ -1,10 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../manipulator/manipulator.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +28,34 @@ export class ClipboardService {
 
     clippingsBound: DOMRect;
 
-    constructor(public manipulator: ManipulatorService) {}
+    constructor(public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
+        this.undoRedoerService.currentDuplicateOffset.subscribe((value) => {
+            this.duplicateOffsetValue = value;
+        });
+
+        this.undoRedoerService.currentPasteOffset.subscribe((value) => {
+            this.pasteOffsetValue = value;
+        });
+
+        this.undoRedoerService.currentClipping.subscribe((value) => {
+            if (!this.compareClipings(value, this.clippings)) {
+                this.pasteOffsetValue = 0;
+                this.duplicateOffsetValue = 0;
+            }
+        });
+    }
+
+    compareClipings(clip1: Set<SVGElement>, clip2: Set<SVGElement>): boolean {
+        if (clip1.size !== clip2.size) {
+            return false;
+        }
+        for (const elem of clip1) {
+            if (!clip2.has(elem)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     initializeService(
         elementRef: ElementRef<SVGElement>,
@@ -52,7 +81,7 @@ export class ClipboardService {
         const newSelection: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of elementsToClone) {
             const deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
-            this.drawStack.push(deepCopy);
+            this.drawStack.push(deepCopy, false);
             this.manipulator.offsetSingle(offset, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             newSelection.add(deepCopy);
@@ -135,6 +164,11 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
+
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
+
         this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
     }
 
@@ -151,6 +185,10 @@ export class ClipboardService {
     }
 
     duplicate(): void {
+        if (this.selection.selectedElements.size === 0) {
+            return;
+        }
+
         if (this.firstDuplication && this.selection.selectedElements.size > 0) {
             this.duplicationBuffer.clear();
             for (const el of this.selection.selectedElements) {
@@ -162,16 +200,50 @@ export class ClipboardService {
         this.handleDuplicateOutOfBounds();
         this.increaseDuplicateOffsetValue();
         this.clone(this.duplicationBuffer, this.duplicateOffsetValue);
+
+        this.saveStateFromDuplicate();
+    }
+
+    saveStateFromDuplicate() {
+        setTimeout(() => {
+            this.selection.removeFullSelectionBox();
+        }, 0);
+        setTimeout(() => {
+            this.undoRedoerService.saveStateAndDuplicateOffset(this.drawStack.idStack, this.duplicateOffsetValue);
+        }, 0);
+        setTimeout(() => {
+            this.selection.appendFullSelectionBox();
+        }, 0);
     }
 
     paste(): void {
+        if (this.clippings.size === 0) {
+            return;
+        }
         this.firstDuplication = true;
         this.handlePasteOutOfBounds();
         this.increasePasteOffsetValue();
         this.clone(this.clippings, this.pasteOffsetValue);
+
+        this.saveStateFromPaste();
+    }
+
+    saveStateFromPaste() {
+        setTimeout(() => {
+            this.selection.removeFullSelectionBox();
+        }, 0);
+        setTimeout(() => {
+            this.undoRedoerService.saveStateFromPaste(this.drawStack.idStack, this.pasteOffsetValue, this.clippings);
+        }, 0);
+        setTimeout(() => {
+            this.selection.appendFullSelectionBox();
+        }, 0);
     }
 
     delete(): void {
+        if (this.selection.selectedElements.size === 0) {
+            return;
+        }
         this.firstDuplication = true;
         this.duplicationBuffer.clear();
         for (const el of this.selection.selectedElements) {
@@ -179,5 +251,8 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
     }
 }

@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { HTMLAttribute } from 'src/constants/tool-constants';
@@ -6,6 +7,7 @@ import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
@@ -34,7 +36,7 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService) {
+    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
         super();
     }
 
@@ -263,6 +265,7 @@ export class SelectionToolService extends AbstractToolService {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
+            this.saveState();
         } else {
             this.selection.emptySelection();
         }
@@ -305,6 +308,18 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+    }
+
+    saveState() {
+        setTimeout(() => {
+            this.selection.removeFullSelectionBox();
+        }, 0);
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
+        setTimeout(() => {
+            this.selection.appendFullSelectionBox();
+        }, 0);
     }
 
     // tslint:disable-next-line: no-empty

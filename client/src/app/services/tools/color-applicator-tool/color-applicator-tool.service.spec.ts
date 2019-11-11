@@ -1,13 +1,12 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { BehaviorSubject } from 'rxjs';
 
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Mouse } from 'src/constants/constants';
 import { ToolName } from 'src/constants/tool-constants';
 import { createMockSVGCircle, createMouseEvent } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { ColorApplicatorToolService } from './color-applicator-tool.service';
 
 describe('ColorApplicatorToolService', () => {
@@ -41,6 +40,12 @@ describe('ColorApplicatorToolService', () => {
                             };
                             return mockSVGGElement as unknown as SVGGElement;
                         },
+                    },
+                },
+                {
+                    provide: UndoRedoerService,
+                    useValue : {
+                        saveCurrentState: () => null,
                     },
                 },
                 provideAutoMock(ElementRef),
@@ -112,13 +117,6 @@ describe('ColorApplicatorToolService', () => {
         service.currentStackTarget = mockStackTargetInfo;
         service.changeFillColorOnShape();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
-    });
-
-    it('initializeColorToolService should be primaryColor from colorService', () => {
-        const colorService: ColorToolService = new ColorToolService();
-        const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
-        service.initializeColorToolService(new ColorToolService());
-        expect(service[`primaryColor`]).toEqual('#' + primaryColorTmp.value);
     });
 
     it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {

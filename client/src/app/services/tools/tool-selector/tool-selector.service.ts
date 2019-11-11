@@ -10,10 +10,10 @@ import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/s
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
@@ -40,7 +40,6 @@ export class ToolSelectorService {
     WORKZONE_TOOLS_MAP: Map<ToolName, () => void>;
 
     constructor(
-        private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private modalManagerService: ModalManagerService,
         private selectionTool: SelectionToolService,
@@ -56,6 +55,7 @@ export class ToolSelectorService {
         private lineTool: LineToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -66,33 +66,24 @@ export class ToolSelectorService {
         this.selectionTool.initializeService(ref, renderer, drawStack);
 
         this.rectangleTool.initializeService(ref, renderer, drawStack);
-        this.rectangleTool.initializeColorToolService(this.colorToolService);
 
         this.ellipsisTool.initializeService(ref, renderer, drawStack);
-        this.ellipsisTool.initializeColorToolService(this.colorToolService);
 
         this.pencilTool.initializeService(ref, renderer, drawStack);
-        this.pencilTool.initializeColorToolService(this.colorToolService);
 
         this.penTool.initializeService(ref, renderer, drawStack);
-        this.penTool.initializeColorToolService(this.colorToolService);
 
         this.brushTool.initializeService(ref, renderer, drawStack);
-        this.brushTool.initializeColorToolService(this.colorToolService);
 
         this.stampTool.initializeService(ref, renderer, drawStack);
 
         this.dropperTool.initializeService(ref, renderer, drawStack);
-        this.dropperTool.initializeColorToolService(this.colorToolService);
 
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
-        this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
 
         this.polygonTool.initializeService(ref, renderer, drawStack);
-        this.polygonTool.initializeColorToolService(this.colorToolService);
 
         this.lineTool.initializeService(ref, renderer, drawStack);
-        this.lineTool.initializeColorToolService(this.colorToolService);
 
         this.exportTool.initializeService(ref, renderer);
 
@@ -147,6 +138,22 @@ export class ToolSelectorService {
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displayExportFileModal();
+                    }
+                },
+            ],
+            [
+                ToolName.Undo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.undo();
+                    }
+                },
+            ],
+            [
+                ToolName.Redo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.redo();
                     }
                 },
             ],

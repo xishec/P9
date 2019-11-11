@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
+
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { predicate } from 'src/constants/constants';
@@ -24,7 +24,6 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
@@ -38,7 +37,6 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.ellipsisToolService = this.toolSelectorService.getEllipsisTool();
         this.ellipsisToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.ellipsisToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {

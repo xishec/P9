@@ -4,6 +4,7 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -12,7 +13,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class ColorApplicatorToolService extends AbstractToolService {
     currentStackTarget: StackTargetInfo;
-    private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
     isOnTarget = false;
@@ -21,8 +21,14 @@ export class ColorApplicatorToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService, private undoRedoerService: UndoRedoerService) {
         super();
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.primaryColor = '#' + primaryColor;
+        });
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
+            this.secondaryColor = '#' + secondaryColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -67,6 +73,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
             HTMLAttribute.fill,
             this.primaryColor,
         );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     changeStrokeColorOnShape(): void {
@@ -75,6 +83,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
             HTMLAttribute.stroke,
             this.secondaryColor,
         );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     changeColorOnTrace(): void {
@@ -89,6 +99,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
             HTMLAttribute.fill,
             this.primaryColor,
         );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty

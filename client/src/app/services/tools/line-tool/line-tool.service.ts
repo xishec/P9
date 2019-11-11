@@ -12,10 +12,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class LineToolService extends AbstractToolService {
 
-    constructor() {
-        super();
-    }
-    colorToolService: ColorToolService;
     attributesManagerService: AttributesManagerService;
 
     currentColorAndOpacity = '';
@@ -44,6 +40,13 @@ export class LineToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
+    constructor(private colorToolService: ColorToolService) {
+        super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+            this.currentColorAndOpacity = currentColor;
+        });
+    }
+
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
     getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
@@ -51,13 +54,6 @@ export class LineToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService) {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColorAndOpacity = currentColor;
-        });
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
