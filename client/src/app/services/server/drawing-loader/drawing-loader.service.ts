@@ -7,13 +7,9 @@ import { Drawing } from '../../../../../../common/communication/Drawing';
     providedIn: 'root',
 })
 export class DrawingLoaderService {
-    currentDrawing: BehaviorSubject<Drawing> = new BehaviorSubject({
-        name: '',
-        labels: [],
-        svg: '',
-        idStack: [],
-        drawingInfo: new DrawingInfo(0, 0, ''),
-    });
+    currentDrawing: BehaviorSubject<Drawing> = new BehaviorSubject(
+        new Drawing('', [], '', [], new DrawingInfo(0, 0, '')),
+    );
 
     emptyDrawStack: BehaviorSubject<boolean> = new BehaviorSubject(true);
 }
