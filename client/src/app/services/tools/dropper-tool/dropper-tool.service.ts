@@ -11,7 +11,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 })
 export class DropperToolService extends AbstractToolService {
     svg: SVGElement;
-    currentMouseCoords: Coords2D = {x: 0, y: 0};
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
     pixelColor: string;
     canvas: HTMLCanvasElement;
     context2D: CanvasRenderingContext2D;

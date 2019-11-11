@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, DEFAULT_RADIX } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -15,9 +15,9 @@ import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = { x: 0, y: 0 };
-    lastMouseCoords: Coords2D = { x: 0, y: 0 };
-    initialMouseCoords: Coords2D = { x: 0, y: 0 };
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    lastMouseCoords: Coords2D = new Coords2D(0, 0);
+    initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
     isTheCurrentTool = false;
@@ -113,7 +113,7 @@ export class SelectionToolService extends AbstractToolService {
 
     getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
         }
 
         return 0;

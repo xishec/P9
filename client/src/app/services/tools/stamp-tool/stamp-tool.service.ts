@@ -19,8 +19,8 @@ import { Coords2D } from 'src/classes/Coords2D';
     providedIn: 'root',
 })
 export class StampToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = { x: 0, y: 0 };
-    stampCoords: Coords2D = { x: 0, y: 0 };
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    stampCoords: Coords2D = new Coords2D(0, 0);
 
     currentAngle = 0;
     currentScaling = 1;

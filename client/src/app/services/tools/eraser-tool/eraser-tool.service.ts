@@ -17,6 +17,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -36,8 +37,7 @@ export class EraserToolService extends AbstractToolService {
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
 
-    currentMouseX = 0;
-    currentMouseY = 0;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -88,13 +88,13 @@ export class EraserToolService extends AbstractToolService {
     }
 
     setSquareToMouse(event: MouseEvent): void {
-        this.currentMouseX =
+        this.currentMouseCoords.x =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
-        this.currentMouseY =
+        this.currentMouseCoords.y =
             event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
 
-        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseX.toString());
-        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseY.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseCoords.y.toString());
 
         if (!this.isSquareAppended) {
             this.appendSquare();
