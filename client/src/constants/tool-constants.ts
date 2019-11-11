@@ -132,7 +132,15 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-file-export', tooltipName: ToolName.Export, shortcut: '(Ctrl-E)' },
 ];
 
-const BRUSH_STYLES = [1, 2, 3, 4, 5];
+enum BRUSH_STYLE {
+    type1 = 1,
+    type2 = 2,
+    type3 = 3,
+    type4 = 4,
+    type5 = 5,
+}
+
+const BRUSH_STYLES = [BRUSH_STYLE.type1, BRUSH_STYLE.type2, BRUSH_STYLE.type3, BRUSH_STYLE.type4, BRUSH_STYLE.type5];
 
 const PolygonRadiusCorrection: Map<number, number> = new Map([
     [3, 0.13],
@@ -292,7 +300,7 @@ const ToolNameShortcuts: Map<string, ToolName> = new Map([
     ['s', ToolName.Selection],
 ]);
 
-const ToolNameControlShortcuts: Map<string, ToolName> = new Map([
+const ControlShortcuts: Map<string, ToolName> = new Map([
     ['o', ToolName.NewDrawing],
     ['s', ToolName.Save],
     ['g', ToolName.ArtGallery],
@@ -369,13 +377,14 @@ const TEXT_LINEBREAK = '⠀';
 const SNACKBAR_DURATION = 3000;
 
 export {
-    ToolNameControlShortcuts,
+    ControlShortcuts,
     ToolNameShortcuts,
     HTMLAttribute,
     TOOLS_BUTTON_INFO,
     TRACING_BUTTON_INFO,
     SHAPE_BUTTON_INFO,
     FILES_BUTTON_INFO,
+    BRUSH_STYLE,
     BRUSH_STYLES,
     CLIPBOARD_BUTTON_INFO,
     Thickness,

@@ -10,10 +10,17 @@
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
                 [checked]="getChecked(i)"
             >
-                <img *ngIf="i === TRACING_TOOL_POSITION || i === SHAPE_TOOL_POSITION" src="../../../assets/triangle.png" />
+                <img
+                    *ngIf="i === TRACING_TOOL_POSITION || i === SHAPE_TOOL_POSITION"
+                    src="../../../assets/triangle.png"
+                />
                 <i *ngIf="i === TRACING_TOOL_POSITION" [ngClass]="getTracingToolClass()"> </i>
                 <i *ngIf="i === SHAPE_TOOL_POSITION" [ngClass]="getShapeToolClass()"> </i>
-                <i *ngIf="i !== TRACING_TOOL_POSITION && i !== SHAPE_TOOL_POSITION" class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
+                <i
+                    *ngIf="i !== TRACING_TOOL_POSITION && i !== SHAPE_TOOL_POSITION"
+                    class="{{ TOOL_BUTTON_INFO.iconName }}"
+                >
+                </i>
             </mat-button-toggle>
         </mat-button-toggle-group>
 
@@ -23,8 +30,12 @@
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
                 (click)="onChangeFileTool(FILE_BUTTON_INFO.tooltipName)"
+                [disabled]="checkIfCantUndoRedo(FILE_BUTTON_INFO.tooltipName)"
             >
-                <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
+                <i
+                    [style.color]="checkIfCantUndoRedo(FILE_BUTTON_INFO.tooltipName) ? 'silver' : 'black'"
+                    class="{{ FILE_BUTTON_INFO.iconName }}"
+                ></i>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>

@@ -21,10 +21,17 @@ export class RectangleToolService extends AbstractShapeToolService {
     strokeWidth = 0;
     isSquarePreview = false;
     attributesManagerService: AttributesManagerService;
-    colorToolService: ColorToolService;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
+            this.fillColor = fillColor;
+            this.updateTraceType(this.traceType);
+        });
+        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
+            this.strokeColor = strokeColor;
+            this.updateTraceType(this.traceType);
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -40,18 +47,6 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
         this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
-        });
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService): void {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
-            this.fillColor = fillColor;
-            this.updateTraceType(this.traceType);
-        });
-        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
-            this.strokeColor = strokeColor;
-            this.updateTraceType(this.traceType);
         });
     }
 
@@ -136,8 +131,11 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Rectangle);
         this.renderer.appendChild(el, drawRectangle);
-        this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
+
+        setTimeout(() => {
+            this.drawStack.push(el);
+        }, 0);
     }
 
     updateDrawing(): void {

@@ -4,11 +4,7 @@ export class Predicate {
     eventIsValid<T>(event: MatSliderChange, range: T): boolean {
         const value = event.value;
         // @ts-ignore
-        if (value !== null) {
-            return this.isBetween(value, range);
-        } else {
-            return false;
-        }
+        return value !== null ? this.isBetween(value, range) : false;
     }
     isBetween<T>(value: number, range: T): boolean {
         // @ts-ignore

@@ -14,6 +14,7 @@ import {
     ToolName,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
@@ -42,7 +43,7 @@ export class EraserToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private undoRedoerService: UndoRedoerService) {
         super();
     }
 
@@ -53,11 +54,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
             this.currentTarget = stackTarget.targetPosition;
-            if (this.currentTarget !== undefined) {
-                this.isOnTarget = true;
-            } else {
-                this.isOnTarget = false;
-            }
+            this.isOnTarget = this.currentTarget !== undefined;
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
@@ -314,6 +311,15 @@ export class EraserToolService extends AbstractToolService {
 
         this.isOnTarget = false;
 
+        if (this.erasedSomething) {
+            this.renderer.removeChild(this.elementRef, this.drawRectangle);
+            setTimeout(() => {
+                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+            }, 0);
+            setTimeout(() => {
+                this.appendSquare();
+            }, 0);
+        }
         this.erasedSomething = false;
     }
 

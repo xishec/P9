@@ -85,11 +85,7 @@ export const createMockSVGGElementWithAttribute = (att: string): any => {
     const attribute = att;
     const mockSVGElement = {
         getAttribute: (attToGet: string) => {
-            if (attToGet === attribute) {
-                return '10';
-            } else {
-                return false;
-            }
+            return attToGet === attribute ? '10' : false;
         },
         getBoundingClientRect: () => {
             const mockDOMRect = { x: 500, y: 500, width: 50, height: 50 };
@@ -115,7 +111,9 @@ export const createMockFilter = (): SVGFilterElement => {
 
 // tslint:disable-next-line: max-classes-per-file
 export class MockElementRef extends ElementRef {
-    nativeElement: {};
+    constructor() {
+        super(null);
+    }
 }
 
 export const createMockSVGTextElement = (): SVGTextElement => {

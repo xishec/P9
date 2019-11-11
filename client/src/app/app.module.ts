@@ -65,6 +65,7 @@ import { StampAttributesComponent } from './components/sidebar-tools/attribute-p
 import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
 
 @NgModule({
     declarations: [
@@ -134,6 +135,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WelcomeModalWindowService,
         ColorToolService,
         EventListenerService,
+        UndoRedoerService,
     ],
     bootstrap: [AppComponent],
 })

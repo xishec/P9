@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
+    BRUSH_STYLE,
     EraserSize,
     FontSize,
     LineJointType,
@@ -27,7 +28,7 @@ export class AttributesManagerService {
 
     private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
-    private style: BehaviorSubject<number> = new BehaviorSubject(1);
+    private style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);
     private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
     private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
     private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
@@ -50,7 +51,7 @@ export class AttributesManagerService {
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
-    currentStyle: Observable<number> = this.style.asObservable();
+    currentStyle: Observable<BRUSH_STYLE> = this.style.asObservable();
     currentNbVertices: Observable<number> = this.nbVertices.asObservable();
     currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
     currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
@@ -91,7 +92,7 @@ export class AttributesManagerService {
         this.traceType.next(traceType);
     }
 
-    changeStyle(style: number): void {
+    changeStyle(style: BRUSH_STYLE): void {
         this.style.next(style);
     }
 
