@@ -9,8 +9,8 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
 describe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;

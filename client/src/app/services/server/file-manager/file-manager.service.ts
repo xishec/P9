@@ -5,8 +5,8 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { Message } from '../../../../../../common/communication/message';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { Message } from '../../../../../../common/communication/Message';
 
 @Injectable({
     providedIn: 'root',

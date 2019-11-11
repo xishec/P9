@@ -9,7 +9,7 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { Message } from '../../../../../../common/communication/message';
+import { Message } from '../../../../../../common/communication/Message';
 
 @Component({
     selector: 'app-open-file-modal-window',

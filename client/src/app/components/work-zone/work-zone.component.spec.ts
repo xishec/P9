@@ -9,9 +9,9 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ToolName } from 'src/constants/tool-constants';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
-import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 
 describe('WorkZoneComponent', () => {
     let component: WorkZoneComponent;
