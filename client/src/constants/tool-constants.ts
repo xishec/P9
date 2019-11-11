@@ -339,38 +339,6 @@ enum FontSize {
     Max = 72,
 }
 
-const INVALID_KEYS: string[] = [
-    'AltGraph',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'ArrowUp',
-    'CapsLock',
-    'Dead',
-    'Delete',
-    'Escape',
-    'End',
-    'F1',
-    'F2',
-    'F3',
-    'F4',
-    'F5',
-    'F6',
-    'F7',
-    'F8',
-    'F9',
-    'F10',
-    'F11',
-    'F12',
-    'Home',
-    'Insert',
-    'Meta',
-    'PageDown',
-    'PageUp',
-    'Shift',
-    'Tab',
-];
-
 const TEXT_CURSOR = '█';
 const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
