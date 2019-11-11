@@ -120,8 +120,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     makeDrawRectangleInvalid(): void {
-        this.renderer.setAttribute(this.drawRectangle, 'width', '0');
-        this.renderer.setAttribute(this.drawRectangle, 'height', '0');
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, '0');
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, '0');
     }
 
     createSVG(): void {

@@ -60,8 +60,8 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     makeEllipseInvalid(): void {
-        this.renderer.setAttribute(this.drawEllipse, 'rx', '0');
-        this.renderer.setAttribute(this.drawEllipse, 'ry', '0');
+        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.rx, '0');
+        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.ry, '0');
     }
 
     updateTraceType(traceType: string): void {

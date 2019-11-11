@@ -75,8 +75,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     makeInvalidPolygon(): void {
-        this.renderer.setAttribute(this.previewRectangle, 'width', '0');
-        this.renderer.setAttribute(this.previewRectangle, 'height', '0');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, '0');
+        this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, '0');
     }
 
     calculateVertex(n: number): Coords2D {
