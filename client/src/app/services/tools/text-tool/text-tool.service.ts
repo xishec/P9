@@ -206,7 +206,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     createNewLine(): void {
-        const oldText = this.text;
         const remainingRightText = this.textCursor.rightSideText();
         const tsSpanStackIsNotEmpty = this.tspans.length !== 0;
         let refChilpos = 0;
@@ -216,7 +215,7 @@ export class TextToolService extends AbstractToolService {
             if (this.textCursor.currentCursorIndex === 0) {
                 this.text = TEXT_LINEBREAK;
             } else {
-                this.text = this.textCursor.leftSideText(oldText);
+                this.text = this.textCursor.leftSideText();
             }
             this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         }
@@ -252,7 +251,7 @@ export class TextToolService extends AbstractToolService {
         if (this.textCursor.isAtStartOfLine() && this.tspans[0] !== this.currentLine) {
             this.removeLine();
         } else {
-            const newLeftSideText = this.textCursor.leftSideText(this.text).slice(0, -1);
+            const newLeftSideText = this.textCursor.leftSideText().slice(0, -1);
             this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
         }
     }
@@ -337,7 +336,7 @@ export class TextToolService extends AbstractToolService {
         if (key.length > 1) {
             return;
         }
-        const newLeftSideText = (this.textCursor.leftSideText(this.text) + TEXT_CURSOR).replace(TEXT_CURSOR, key);
+        const newLeftSideText = (this.textCursor.leftSideText() + TEXT_CURSOR).replace(TEXT_CURSOR, key);
         this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
     }
 

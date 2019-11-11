@@ -59,7 +59,8 @@ fdescribe('TextCursor', () => {
     // });
 
     it(`leftSideText should return "te" if "${TEXT}" is passed and currentCursorIndex is 2`, () => {
-        expect(service.leftSideText(TEXT)).toEqual('te');
+        service.text = TEXT;
+        expect(service.leftSideText()).toEqual('te');
     });
 
     it(`rightSideText should return "st" if "${TEXT}" is passed and currentCursorIndex is 2`, () => {
