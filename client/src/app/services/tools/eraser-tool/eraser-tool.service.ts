@@ -235,6 +235,15 @@ export class EraserToolService extends AbstractToolService {
             );
         }
 
+        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+            for (let i = 1; i < childrenCount; i++) {
+                this.renderer.setAttribute(children[i], HTMLAttribute.fill, '#' + DEFAULT_RED);
+            }
+        }
+
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke,
@@ -267,6 +276,15 @@ export class EraserToolService extends AbstractToolService {
                 HTMLAttribute.fill,
                 border,
             );
+        }
+
+        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+            for (let i = 1; i < childrenCount; i++) {
+                this.renderer.setAttribute(children[i], HTMLAttribute.fill, border);
+            }
         }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);
