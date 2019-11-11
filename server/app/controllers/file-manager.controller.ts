@@ -3,8 +3,7 @@ import { injectable } from 'inversify';
 
 import { Drawing } from '../../../common/communication/Drawing';
 import { Message } from '../../../common/communication/message';
-// tslint:disable-next-line
-const Post = require('../model/post');
+import { Post } from '../model/post';
 
 @injectable()
 export class FileManagerController {
@@ -21,8 +20,8 @@ export class FileManagerController {
             const query = { title: /Add Drawing/i };
 
             Post.find(query)
-                .then((ans: Message) => {
-                    res.json(ans);
+                .then((drawings: any) => {
+                    res.json(drawings);
                 })
                 .catch((error: Error) => {
                     res.json(error);
@@ -46,8 +45,8 @@ export class FileManagerController {
             const options = { upsert: true, new: true };
 
             Post.findOneAndUpdate(query, update, options)
-                .then((ans: Message) => {
-                    res.json(ans);
+                .then((drawing: any) => {
+                    res.json(drawing);
                 })
                 .catch((error: Error) => {
                     res.json(error);
@@ -60,8 +59,8 @@ export class FileManagerController {
             const query = { title: { $regex: message.body, $options: 'i' } };
 
             Post.findOneAndDelete(query)
-                .then((ans: Message) => {
-                    res.json(ans);
+                .then((drawing: any) => {
+                    res.json(drawing);
                 })
                 .catch((error: Error) => {
                     res.json(error);
