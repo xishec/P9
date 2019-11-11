@@ -266,17 +266,15 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
 
-            // FOR UNDO REDOER SERVICE
             setTimeout(() => {
                 this.selection.removeFullSelectionBox();
-            }, 1);
+            }, 0);
             setTimeout(() => {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-            }, 1);
+            }, 0);
             setTimeout(() => {
                 this.selection.appendFullSelectionBox();
-            }, 1);
-            //
+            }, 0);
 
         } else {
             this.selection.emptySelection();

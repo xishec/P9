@@ -186,7 +186,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         setTimeout(() => {
             this.drawStack.push(el);
-        }, 1);
+        }, 0);
     }
 
     updateDrawing(): void {

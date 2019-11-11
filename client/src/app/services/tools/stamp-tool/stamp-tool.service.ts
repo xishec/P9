@@ -173,7 +173,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
             this.drawStack.push(el);
-        }, 1);
+        }, 0);
     }
 
     rotateStamp(direction: number): void {

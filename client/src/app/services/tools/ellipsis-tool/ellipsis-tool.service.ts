@@ -283,7 +283,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
         setTimeout(() => {
             this.drawStack.push(el);
-        }, 1);
+        }, 0);
     }
 
     cleanUp(): void {

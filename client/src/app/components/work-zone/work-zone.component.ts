@@ -88,7 +88,7 @@ export class WorkZoneComponent implements OnInit {
             if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
                 setTimeout(() => {
                     this.undoRedoerService.saveCurrentState([]);
-                }, 1);
+                }, 0);
             }
         });
 
