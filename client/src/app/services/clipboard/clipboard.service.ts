@@ -118,22 +118,8 @@ export class ClipboardService {
         this.pasteOffsetValue += OFFSET_STEP;
     }
 
-    decreasePasteOffsetValue(): void {
-        this.pasteOffsetValue -= OFFSET_STEP;
-        if (this.pasteOffsetValue < 0) {
-            this.pasteOffsetValue = 0;
-        }
-    }
-
     increaseDuplicateOffsetValue(): void {
         this.duplicateOffsetValue += OFFSET_STEP;
-    }
-
-    decreaseDuplicateOffsetValue(): void {
-        this.duplicateOffsetValue -= OFFSET_STEP;
-        if (this.duplicateOffsetValue < 0) {
-            this.duplicateOffsetValue = 0;
-        }
     }
 
     isInBounds(): boolean {
