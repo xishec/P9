@@ -63,37 +63,37 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(
             this.drawRectangle,
             'x',
-            (this.previewRectangleX + this.userStrokeWidth / 2).toString()
+            (this.previewRectangleX + this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawRectangle,
             'y',
-            (this.previewRectangleY + this.userStrokeWidth / 2).toString()
+            (this.previewRectangleY + this.userStrokeWidth / 2).toString(),
         );
         if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.width,
-                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString()
+                (-(this.previewRectangleWidth - this.userStrokeWidth)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.width,
-                (this.previewRectangleWidth - this.userStrokeWidth).toString()
+                (this.previewRectangleWidth - this.userStrokeWidth).toString(),
             );
         }
         if (this.previewRectangleHeight - this.userStrokeWidth < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.height,
-                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString()
+                (-(this.previewRectangleHeight - this.userStrokeWidth)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 HTMLAttribute.height,
-                (this.previewRectangleHeight - this.userStrokeWidth).toString()
+                (this.previewRectangleHeight - this.userStrokeWidth).toString(),
             );
         }
     }
@@ -165,13 +165,13 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString()
+                (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString()
+                (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString(),
             );
         }
 
@@ -179,25 +179,25 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString()
+                (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString()
+                (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString(),
             );
         }
 
         this.renderer.setAttribute(
             this.drawRectangle,
             HTMLAttribute.height,
-            Math.abs(minLength - this.userStrokeWidth).toString()
+            Math.abs(minLength - this.userStrokeWidth).toString(),
         );
         this.renderer.setAttribute(
             this.drawRectangle,
             HTMLAttribute.width,
-            Math.abs(minLength - this.userStrokeWidth).toString()
+            Math.abs(minLength - this.userStrokeWidth).toString(),
         );
     }
 
@@ -273,8 +273,9 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.cleanUp();
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
-
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
 
     onKeyDown(event: KeyboardEvent): void {

@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -17,7 +18,6 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',

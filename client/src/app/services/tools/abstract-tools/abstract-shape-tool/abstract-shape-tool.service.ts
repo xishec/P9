@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { Coords2D } from 'src/classes/Coords2D';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',

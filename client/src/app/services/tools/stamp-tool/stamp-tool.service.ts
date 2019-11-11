@@ -1,19 +1,19 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     BASE64_STAMPS_MAP,
     HTMLAttribute,
     NO_STAMP,
-    STAMP_BASE_WIDTH,
+    STAMP_ALTER_ROTATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_ROTATION,
-    STAMP_ALTER_ROTATION,
+    STAMP_BASE_WIDTH,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -104,12 +104,12 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.stamp,
             HTMLAttribute.width,
-            (STAMP_BASE_WIDTH * this.currentScaling).toString()
+            (STAMP_BASE_WIDTH * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(
             this.stamp,
             HTMLAttribute.height,
-            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
@@ -134,12 +134,12 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             stamp,
             HTMLAttribute.width,
-            (STAMP_BASE_WIDTH * this.currentScaling).toString()
+            (STAMP_BASE_WIDTH * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(
             stamp,
             HTMLAttribute.height,
-            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampCoords.y.toString());
@@ -150,7 +150,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             rect,
             HTMLAttribute.height,
-            (STAMP_BASE_HEIGHT * this.currentScaling).toString()
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
@@ -163,7 +163,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             el,
             'transform',
-            `rotate(${this.currentAngle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`
+            `rotate(${this.currentAngle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {

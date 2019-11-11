@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, CONTROL_POINTS_AMOUNT, DEFAULT_RADIX } from 'src/constants/tool-constants';
+import { CONTROL_POINTS_AMOUNT, DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
 
 export class Selection {

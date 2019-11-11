@@ -1,10 +1,10 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { Coords2D } from 'src/classes/Coords2D';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 describe('ManipulatorService', () => {
     let selection: Selection;

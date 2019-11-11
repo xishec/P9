@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { Mouse } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -67,9 +67,10 @@ export class DropperToolService extends AbstractToolService {
             this.colorToolService.changeSecondaryColor(colorHex);
         }
     }
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
-
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty

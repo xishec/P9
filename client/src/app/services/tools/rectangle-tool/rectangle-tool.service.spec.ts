@@ -188,7 +188,7 @@ describe('RectangleToolService', () => {
     it('should not call the renderer when clicking outside of workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return false;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => false);
 
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
@@ -200,14 +200,14 @@ describe('RectangleToolService', () => {
     it('should append the preview and the draw rectangle when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
         expect(spyAppendChild).toHaveBeenCalledTimes(2);
     });
 
     it('should correctly update the draw rectangle in the workzone on random mouse position', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -241,7 +241,7 @@ describe('RectangleToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>)=>{return true;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -416,8 +416,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should create SVGRect and cleanUp when left mouse up in work zone with a valid rectangle', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => {return true;});
-        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => {return true;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => true);
+        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => true);
         const spyOnCreate = spyOn(rectangleTool, 'createSVG');
         const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
 
@@ -428,8 +428,8 @@ describe('RectangleToolService', () => {
     });
 
     it('should only cleanUp when left mouse up out of work zone with a invalid rectangle', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => {return false;});
-        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => {return false;});
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => false);
+        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => false);
         const spyOnCreate = spyOn(rectangleTool, 'createSVG');
         const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
 
@@ -439,7 +439,7 @@ describe('RectangleToolService', () => {
         expect(spyOnCleanUp).toHaveBeenCalled();
     });
 
-    it('should copy all 4 preview ractngle attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke < width', () => {
+    it('should copy all 4 previewRect attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke < width', () => {
         const Y = 10;
         const X = 10;
         const WIDTH = 10;
@@ -475,9 +475,9 @@ describe('RectangleToolService', () => {
         const spy = spyOn(rendererMock, 'setAttribute');
         rectangleTool.copyPreviewRectangleAttributes();
         expect(spy).toHaveBeenCalledTimes(4);
-    })
+    });
 
-    it('should copy all 4 preview ractngle attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke < width', () => {
+    it('should copy all 4 previewRect attibutes into draw rectangle when calling copyPreviewRectangleAttributes stroke > width', () => {
         const Y = 10;
         const X = 10;
         const WIDTH = 10;
@@ -513,7 +513,7 @@ describe('RectangleToolService', () => {
         const spy = spyOn(rendererMock, 'setAttribute');
         rectangleTool.copyPreviewRectangleAttributes();
         expect(spy).toHaveBeenCalledTimes(4);
-    })
+    });
 
     it('should create g tag with drawRectangle copy as child with a fill color and push it when calling createSVG', () => {
         const RED_COLOR = 'red';

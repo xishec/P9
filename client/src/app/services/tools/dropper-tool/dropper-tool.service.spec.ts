@@ -138,7 +138,7 @@ describe('DropperToolService', () => {
         const spyOnChangePrimaryColor: jasmine.Spy = spyOn(colorToolService, 'changePrimaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(positiveMouseEvent);
 
@@ -152,7 +152,7 @@ describe('DropperToolService', () => {
         const spyOnChangeSecondaryColor: jasmine.Spy = spyOn(colorToolService, 'changeSecondaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
-            spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(createMouseEvent(10, 10, 2));
 

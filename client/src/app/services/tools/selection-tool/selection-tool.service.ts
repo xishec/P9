@@ -1,15 +1,15 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, DEFAULT_RADIX } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',

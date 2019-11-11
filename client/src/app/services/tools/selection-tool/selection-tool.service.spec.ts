@@ -380,7 +380,7 @@ describe('SelectionToolService', () => {
     it('onMouseUp should call handleLeftMouseUp and restartDuplication from clipboard if event.button is Left Button', () => {
         const spy = spyOn(service, 'handleLeftMouseUp');
         const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
 
@@ -390,7 +390,7 @@ describe('SelectionToolService', () => {
 
     it('onMouseUp should not do anything if mouse is not in workzone', () => {
         const spy = spyOn(service, 'handleLeftMouseUp');
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return false;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => false);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
 
@@ -400,7 +400,7 @@ describe('SelectionToolService', () => {
     it('onMouseUp should call handleRightMouseUp if event.button is Right Button', () => {
         const spy = spyOn(service, 'handleRightMouseUp');
         const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(MOCK_RIGHT_CLICK);
 

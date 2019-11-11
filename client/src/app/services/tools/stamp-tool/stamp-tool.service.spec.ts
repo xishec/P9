@@ -116,7 +116,7 @@ describe('StampToolService', () => {
                 },
             },
         };
-        let newStampTool = new StampToolService();
+        const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
         expect(newStampTool.stampWidth).toEqual(WIDTH);
@@ -131,7 +131,7 @@ describe('StampToolService', () => {
                 },
             },
         };
-        let newStampTool = new StampToolService();
+        const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
         expect(newStampTool.stampHeight).toEqual(HEIGHT);
@@ -236,7 +236,7 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.isStampLinkValid = false;
         service.onMouseDown(positiveMouseEvent);
@@ -257,7 +257,7 @@ describe('StampToolService', () => {
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
         service.isStampLinkValid = true;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalled();
@@ -265,7 +265,7 @@ describe('StampToolService', () => {
 
     it('should call initStamp if isStampLinkValid is true and it should set isIn to true', () => {
         const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return false;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => false);
         service.isStampLinkValid = false;
 
         service.onMouseEnter(positiveMouseEvent);
@@ -278,7 +278,7 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if isStampLinkValid is true and it should set isIn to false', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
         service.isStampLinkValid = false;
 
         service.onMouseLeave(positiveMouseEvent);

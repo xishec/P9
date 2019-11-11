@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
@@ -12,7 +13,6 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -246,8 +246,10 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.cleanUp();
     }
 
+    // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
 
+    // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
 
     // tslint:disable-next-line: no-empty

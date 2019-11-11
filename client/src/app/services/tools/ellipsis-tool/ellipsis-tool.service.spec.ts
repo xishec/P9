@@ -194,7 +194,7 @@ describe('EllipsisToolService', () => {
         } as unknown as SVGEllipseElement;
 
         const newEllipsisTool = injector.get(EllipsisToolService);
-        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock)
+        newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyOnDrawEllipseRadiusY.and.callThrough();
 
         newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
@@ -204,7 +204,7 @@ describe('EllipsisToolService', () => {
 
     it('should return true if userStrokeWidth is positive', () => {
         service.userStrokeWidth = 2;
-        spyOnDrawEllipseRadiusX.and.callFake(() => {return 10});
+        spyOnDrawEllipseRadiusX.and.callFake(() => 10);
 
         expect(service.isValidEllipse()).toEqual(true);
     });
@@ -212,8 +212,8 @@ describe('EllipsisToolService', () => {
     it('should return false if radiusX and radiusY of elipse are equal to zero', () => {
         spyOnPreviewRectangleWidth.and.returnValue(0);
         spyOnPreviewRectangleHeight.and.returnValue(0);
-        spyOnDrawEllipseRadiusX.and.callFake(() => {return 0});
-        spyOnDrawEllipseRadiusY.and.callFake(() => {return 0});
+        spyOnDrawEllipseRadiusX.and.callFake(() => 0);
+        spyOnDrawEllipseRadiusY.and.callFake(() => 0);
 
         expect(service.isValidEllipse()).toEqual(false);
     });
