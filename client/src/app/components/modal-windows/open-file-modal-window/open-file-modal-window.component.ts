@@ -107,7 +107,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     isLoading: boolean;
     randomGifIndex: number;
     localFileName: string = '';
-    fileToLoad: Drawing;
+    fileToLoad: Drawing | null = null;
 
     constructor(
         formBuilder: FormBuilder,
@@ -188,7 +188,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadLocalFile(e: Event): void {
-        this.drawingLoaderService.currentDrawing.next(this.fileToLoad);
+        this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
@@ -200,8 +200,9 @@ export class OpenFileModalWindowComponent implements OnInit {
         if (files.length !== 0) {
             reader.readAsText(files[0]);
             reader.onload = () => {
-                if (typeof reader.result === 'string') {
-                    const localFileContent = JSON.parse(reader.result);
+                try {
+                    const localFileContent = JSON.parse(reader.result as string);
+    
                     this.fileToLoad = {
                         name: files[0].name,
                         labels: [],
@@ -210,16 +211,16 @@ export class OpenFileModalWindowComponent implements OnInit {
                         drawingInfo: localFileContent.drawingInfo,
                     };
                     this.localFileName = this.fileToLoad.name;
+                } catch(e) {
+                    this.fileToLoad = null;
+                    this.localFileName = '';
+                    window.alert("Le fichier choisi n'est pas valide, veuillez réessayer.");
                 }
             };
         }
     }
 
     serverFormIsInvalid(): boolean {
-        console.log(
-            (!this.emptyDrawStack)
- 
-         );
         return (
             this.openFileModalForm.value.selectedDrawing[0] === '' ||
             (!this.emptyDrawStack && this.openFileModalForm.invalid)
@@ -227,7 +228,6 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     localFormIsInvalid(): boolean {
-        
         return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
     }
 

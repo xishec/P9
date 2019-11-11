@@ -140,13 +140,21 @@
             <mat-dialog-content class="mat-typography-local" [formGroup]="openLocalFileModalForm">
                 <mat-label id="destination-label">Choisir un fichier local:</mat-label>
                 <div id="input-wrapper">
-                    <input id="destination-path" readonly type="text" [value]="localFileName" size="96" />
+                    <input
+                        id="destination-path"
+                        readonly
+                        type="text"
+                        placeholder="Nom du fichier"
+                        [value]="localFileName"
+                        size="80"
+                    />
                     <input
                         type="file"
                         accept=".txt"
                         name="file"
                         id="file"
                         class="inputfile"
+                        onclick="this.value = null"
                         (change)="getFileToLoad($event)"
                     />
                     <label for="file">
@@ -155,15 +163,15 @@
                 </div>
             </mat-dialog-content>
             <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openLocalFileModalForm">
-                    <mat-error class="center">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Un dessin existe déja dans votre zone de travail!
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </mat-error>
-                    <mat-checkbox class="center" color="warn" formControlName="confirm" required>
-                        Je confirme que je ne veux pas sauvegarder le dessin existant.
-                    </mat-checkbox>
-                </div>
+                <mat-error class="center">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Un dessin existe déja dans votre zone de travail!
+                    <i class="fas fa-exclamation-triangle"></i>
+                </mat-error>
+                <mat-checkbox class="center" color="warn" formControlName="confirm" required>
+                    Je confirme que je ne veux pas sauvegarder le dessin existant.
+                </mat-checkbox>
+            </div>
             <mat-dialog-actions align="end">
                 <div class="submit-button-group-wrapper">
                     <div class="submit-button-group">

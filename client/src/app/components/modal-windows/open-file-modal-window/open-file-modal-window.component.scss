@@ -139,6 +139,7 @@ mat-list-option[aria-selected='true'] {
 #input-wrapper {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-top: 10px;
 }
 
@@ -160,10 +161,8 @@ mat-list-option[aria-selected='true'] {
     border-radius: 2px;
     line-height: 20px;
     font-size: 12px;
-
-    :focus {
-        outline: 1px dotted #000;
-    }
+    outline: none;
+    cursor: default;
 }
 
 .inputfile {
