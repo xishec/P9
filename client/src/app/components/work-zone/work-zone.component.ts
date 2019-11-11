@@ -30,6 +30,7 @@ export class WorkZoneComponent implements OnInit {
     gridOpacity = GridOpacity.Max;
     toolName: ToolName = ToolName.Selection;
     drawStack: DrawStackService;
+    untouched = true;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
 
@@ -65,6 +66,7 @@ export class WorkZoneComponent implements OnInit {
                 this.drawingLoaderService.emptyDrawStack.next(false);
                 this.updateDrawingInfo(selectedDrawing.drawingInfo);
                 this.appendDrawingToView(selectedDrawing);
+                this.untouched = false;
             }
 
             if (this.undoRedoerService.fromLoader) {
@@ -76,6 +78,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
             if (drawingInfo.width !== 0 && drawingInfo.height !== 0) {
                 this.resetWorkzone(drawingInfo);
+                this.untouched = false;
             }
 
             if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
@@ -163,13 +166,13 @@ export class WorkZoneComponent implements OnInit {
     }
 
     onClickRectangle() {
-        if (this.drawingLoaderService.emptyDrawStack.value) {
+        if (this.untouched) {
             alert('Veuillez créer un nouveau dessin!');
         }
     }
 
     getCursorStyle() {
-        if (this.drawingLoaderService.emptyDrawStack.value) {
+        if (this.untouched) {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
@@ -193,7 +196,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     backgroundColor(): string {
-        if (this.drawingLoaderService.emptyDrawStack.value) {
+        if (this.untouched) {
             this.drawingInfo.color = DEFAULT_TRANSPARENT;
         }
         return this.drawingInfo.color;
