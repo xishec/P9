@@ -64,7 +64,7 @@ export class TextToolService extends AbstractToolService {
     constructor(
         private shortCutManagerService: ShortcutManagerService,
         private colorToolService: ColorToolService,
-        public snackBar: MatSnackBar,
+        public snackBar: MatSnackBar
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
@@ -321,17 +321,17 @@ export class TextToolService extends AbstractToolService {
         }
     }
     moveCursor(key: string): void {
-        const textRef = { currentLine: this.currentLine, tspans: this.tspans };
+        const currentLineRef: SVGTSpanElement[] = [this.currentLine];
         if (key === 'ArrowLeft') {
             this.text = this.textCursor.isAtStartOfLine()
-                ? this.textCursor.swapToAnotherLine(-1, textRef)
+                ? this.textCursor.swapToAnotherLine(-1, currentLineRef, this.tspans)
                 : this.textCursor.swapInCurrentLine(-1);
         } else {
             this.text = this.textCursor.isAtEndOfLine()
-                ? this.textCursor.swapToAnotherLine(1, textRef)
+                ? this.textCursor.swapToAnotherLine(1, currentLineRef, this.tspans)
                 : this.textCursor.swapInCurrentLine(1);
         }
-        this.currentLine = textRef.currentLine;
+        this.currentLine = currentLineRef[0];
     }
     addText(key: string): void {
         if (key.length > 1) {

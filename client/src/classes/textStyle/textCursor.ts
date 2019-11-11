@@ -18,9 +18,9 @@ export class TextCursor {
         return buffer.join('').toString();
     }
 
-    swapToAnotherLine(offset: number, textRef: { currentLine: SVGTSpanElement; tspans: SVGTSpanElement[] }): string {
-        const nextLinePosition = this.findLinePosition(textRef.currentLine, textRef.tspans) + offset;
-        if (nextLinePosition > textRef.tspans.length - 1 || nextLinePosition < 0) {
+    swapToAnotherLine(offset: number, currentLineRef: SVGTSpanElement[], tspans: SVGTSpanElement[]): string {
+        const nextLinePosition = this.findLinePosition(currentLineRef[0], tspans) + offset;
+        if (nextLinePosition > tspans.length - 1 || nextLinePosition < 0) {
             return this.text;
         }
 
@@ -29,9 +29,9 @@ export class TextCursor {
             this.text += TEXT_LINEBREAK;
         }
 
-        this.renderer.setProperty(textRef.currentLine, HTMLAttribute.innerHTML, this.text);
-        textRef.currentLine = textRef.tspans[nextLinePosition];
-        this.text = textRef.currentLine.textContent as string;
+        this.renderer.setProperty(currentLineRef[0], HTMLAttribute.innerHTML, this.text);
+        currentLineRef[0] = tspans[nextLinePosition];
+        this.text = currentLineRef[0].textContent as string;
         if (this.text === TEXT_LINEBREAK) {
             this.text = '';
         }
