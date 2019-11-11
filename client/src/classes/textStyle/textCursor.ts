@@ -50,4 +50,12 @@ export class TextCursor {
             return el === currentLine;
         });
     }
+
+    leftSideText(text: string): string {
+        return text.slice(0, this.currentCursorIndex);
+    }
+
+    rightSideText(text: string): string {
+        return text.slice(this.currentCursorIndex + 1);
+    }
 }
