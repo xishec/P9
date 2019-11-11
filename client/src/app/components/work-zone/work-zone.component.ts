@@ -67,8 +67,7 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing: Drawing) => {
             if (selectedDrawing.svg !== '') {
-                this.drawingLoaderService.isEmpty = false;
-                this.eventListenerService.isWorkZoneEmpty = false;
+                this.drawingLoaderService.emptyDrawStack.next(false);
                 this.updateDrawingInfo(selectedDrawing.drawingInfo);
                 this.appendDrawingToView(selectedDrawing);
             }
@@ -94,10 +93,15 @@ export class WorkZoneComponent implements OnInit {
         this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            if (this.drawingLoaderService.isEmpty) {
+            console.log("HELLO", this.drawingLoaderService.emptyDrawStack.value);
+            console.log("BYE", nameAndLabels.name.length);
+            console.log("Error Message => ", this.drawingSaverService.currentErrorMesaage.value);
+            
+            
+            if (this.drawingLoaderService.emptyDrawStack.value) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-            } else if (nameAndLabels.name.length < 0) {
+            } else if (nameAndLabels.name.length > 0) {
                 this.postDrawing(nameAndLabels);
             }
         });
@@ -125,8 +129,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingInfo.height = window.innerHeight;
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
-        this.drawingLoaderService.isEmpty = true;
-        this.eventListenerService.isWorkZoneEmpty = true;
+        this.drawingLoaderService.emptyDrawStack.next(true);
         this.setRectangleBackgroundStyle();
     }
 
@@ -160,6 +163,7 @@ export class WorkZoneComponent implements OnInit {
             this.shortCutManagerService,
             this.modalManagerService,
             this.renderer,
+            this.drawingLoaderService,
             this.undoRedoerService,
             this.clipboard,
         );
@@ -178,6 +182,8 @@ export class WorkZoneComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
+                        console.log("subject => ", subject);
+                        
                         this.drawingSaverService.currentErrorMesaage.next(
                             'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                         );
@@ -189,6 +195,8 @@ export class WorkZoneComponent implements OnInit {
                 }),
             )
             .subscribe((message: Message) => {
+                console.log("message => ", message);
+                
                 if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
                     this.drawingSaverService.currentIsSaved.next(true);
                 } else {
@@ -199,8 +207,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     resetWorkzone(drawingInfo: DrawingInfo) {        
-        this.drawingLoaderService.isEmpty = false;
-        this.eventListenerService.isWorkZoneEmpty = false;
+        this.drawingLoaderService.emptyDrawStack.next(false);
         this.drawingInfo = drawingInfo;
 
         this.setRectangleBackgroundStyle();
@@ -211,13 +218,13 @@ export class WorkZoneComponent implements OnInit {
     }
 
     onClickRectangle() {
-        if (this.drawingLoaderService.isEmpty) {
+        if (this.drawingLoaderService.emptyDrawStack.value) {
             alert('Veuillez créer un nouveau dessin!');
         }
     }
 
     getCursorStyle() {
-        if (this.drawingLoaderService.isEmpty) {
+        if (this.drawingLoaderService.emptyDrawStack.value) {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
@@ -241,7 +248,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     backgroundColor(): string {
-        if (this.drawingLoaderService.isEmpty) {
+        if (this.drawingLoaderService.emptyDrawStack.value) {
             this.drawingInfo.color = DEFAULT_TRANSPARENT;
         }
         return this.drawingInfo.color;

@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { ExportToolService } from 'src/app/services/tools/export-tool/export-tool.service';
 import { FileType } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-export-file-modal-window',
@@ -14,6 +15,7 @@ import { FileType } from 'src/constants/tool-constants';
 export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
     formBuilder: FormBuilder;
+    workZoneIsEmpty: boolean = true;
 
     readonly FileType = FileType;
 
@@ -21,13 +23,17 @@ export class ExportFileModalWindowComponent implements OnInit {
         formBuilder: FormBuilder,
         private dialogRef: MatDialogRef<ExportFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
-        public exportToolService: ExportToolService,
+        private exportToolService: ExportToolService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit() {
         this.initializeForm();
+        this.drawingLoaderService.emptyDrawStack.subscribe((isEmpty) => {
+            this.workZoneIsEmpty = isEmpty;
+        });
     }
 
     initializeForm(): void {
@@ -36,13 +42,13 @@ export class ExportFileModalWindowComponent implements OnInit {
         });
     }
 
-    onCancel(): void {
+    closeDialog(): void {
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
     onSubmit(): void {
         this.exportToolService.saveFile(this.exportFileModalForm.controls.fileType.value);
-        this.onCancel();
+        this.closeDialog();
     }
 }

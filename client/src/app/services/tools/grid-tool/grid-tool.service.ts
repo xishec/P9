@@ -1,31 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GridToolService {
-    constructor(private drawingModalWindowService: DrawingModalWindowService) {
-        this.drawingModalWindowService.drawingInfo.subscribe(() => {
-            this.workzoneIsEmpty.next(false);
-        });
-        this.workzoneIsEmpty.next(true);
-    }
+    constructor(private drawingLoaderService: DrawingLoaderService) {}
 
     state: BehaviorSubject<boolean> = new BehaviorSubject(false);
     size: BehaviorSubject<number> = new BehaviorSubject(GridSize.Default);
     opacity: BehaviorSubject<number> = new BehaviorSubject(GridOpacity.Max);
-    workzoneIsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     currentState: Observable<boolean> = this.state.asObservable();
     currentSize: Observable<number> = this.size.asObservable();
     currentOpacity: Observable<number> = this.opacity.asObservable();
-    currentWorkzoneIsEmpty: Observable<boolean> = this.workzoneIsEmpty.asObservable();
 
     changeState(state: boolean): void {
-        if (!this.workzoneIsEmpty.value) {
+        if (!this.drawingLoaderService.emptyDrawStack.value) {
             this.state.next(state);
         }
     }

@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
 import { SVG_NS } from 'src/constants/constants';
 import { FileType, HTMLAttribute, MAX_BMP_SIZE } from 'src/constants/tool-constants';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,18 +11,10 @@ export class ExportToolService {
     svg: ElementRef<SVGElement>;
     anchor: HTMLAnchorElement;
     canvas: HTMLCanvasElement;
-    workzoneIsEmpty = true;
     renderer: Renderer2;
     img: HTMLImageElement;
     fileType: FileType;
     canvasToBMP: CanvasToBMP;
-
-    constructor(private drawingModalWindowService: DrawingModalWindowService) {
-        this.drawingModalWindowService.drawingInfo.subscribe(() => {
-            this.workzoneIsEmpty = false;
-        });
-        this.workzoneIsEmpty = true;
-    }
 
     launchDownload(): void {
         this.renderer.setAttribute(this.anchor, HTMLAttribute.download, 'untitled.' + this.fileType);

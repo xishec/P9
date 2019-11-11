@@ -5,6 +5,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { predicate } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -22,6 +23,7 @@ export class GridAttributesComponent implements OnInit {
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
         private gridToolService: GridToolService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -35,7 +37,7 @@ export class GridAttributesComponent implements OnInit {
         this.gridToolService.currentSize.subscribe((size: number) => {
             this.gridAttributesForm.controls.size.setValue(size);
         });
-        this.gridToolService.currentWorkzoneIsEmpty.subscribe(() => {
+        this.drawingLoaderService.emptyDrawStack.subscribe(() => {
             this.enableSlider();
         });
     }
@@ -92,7 +94,7 @@ export class GridAttributesComponent implements OnInit {
     }
 
     enableSlider(): void {
-        if (!this.gridToolService.workzoneIsEmpty.value) {
+        if (!this.drawingLoaderService.emptyDrawStack.value) {
             this.gridAttributesForm.controls.state.enable();
         }
     }

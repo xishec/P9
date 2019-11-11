@@ -86,7 +86,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    intializeUndoRedoerService(): void {
+    intializeUndoRedoStacks(): void {
         this.undoRedoerService.initializeStacks();
         this.undoRedoerService.fromLoader = true;
     }
@@ -102,7 +102,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadServerFile(): void {
-        this.intializeUndoRedoerService();
+        this.intializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
             (drawing) => drawing.name === this.selectedOption
         ) as Drawing;
@@ -111,7 +111,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadLocalFile(): void {
-        this.intializeUndoRedoerService();
+        this.intializeUndoRedoStacks();
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }

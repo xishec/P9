@@ -7,7 +7,6 @@ import { Drawing } from '../../../../../../common/communication/Drawing';
     providedIn: 'root',
 })
 export class DrawingLoaderService {
-    isEmpty = true;
     currentDrawing: BehaviorSubject<Drawing> = new BehaviorSubject({
         name: '',
         labels: [],

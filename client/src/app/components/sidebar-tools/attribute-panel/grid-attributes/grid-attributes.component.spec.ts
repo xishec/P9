@@ -7,6 +7,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { GridOpacity, GridSize } from 'src/constants/tool-constants';
 import { GridAttributesComponent } from './grid-attributes.component';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 describe('GridAttributesComponent', () => {
     let component: GridAttributesComponent;
@@ -14,6 +15,7 @@ describe('GridAttributesComponent', () => {
     let event: MatSliderChange;
     let gridAttributeService: GridToolService;
     let shortcutManagerService: ShortcutManagerService;
+    let drawingLoaderService: DrawingLoaderService;
 
     const AVERAGE_SIZE = (GridSize.Min + GridSize.Max) / 2;
     const AVERAGE_OPACITY = (GridOpacity.Min + GridOpacity.Max) / 2;
@@ -43,6 +45,7 @@ describe('GridAttributesComponent', () => {
 
         gridAttributeService = fixture.debugElement.injector.get<GridToolService>(GridToolService);
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
+        drawingLoaderService = fixture.debugElement.injector.get<DrawingLoaderService>(DrawingLoaderService);
     });
 
     it('should create', () => {
@@ -188,7 +191,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should enable the slider if workzone is not empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(false);
+        drawingLoaderService.emptyDrawStack.next(false);
 
         component.enableSlider();
 
@@ -196,7 +199,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should not enable the slider if workzone is empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(true);
+        drawingLoaderService.emptyDrawStack.next(true);
 
         component.enableSlider();
 

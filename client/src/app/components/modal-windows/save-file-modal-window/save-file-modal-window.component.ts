@@ -81,11 +81,13 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
+                console.log("Save file modal => ", drawingIsSaved);
+                
                 if (drawingIsSaved) {
                     window.alert('Sauvegarde réussie!');
                     this.closeDialog();
                 } else {
-                    window.alert(`Sauvegarde échouée...\n ${this.errorMesaage}`);
+                    window.alert(`Sauvegarde échouée...\n${this.errorMesaage}`);
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
@@ -93,7 +95,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToLocal(): boolean {
-        if (this.drawingLoaderService.isEmpty) {
+        if (this.drawingLoaderService.emptyDrawStack.value) {
             window.alert(`Sauvegarde échouée...\n Aucun dessin dans le zone de travail!`);
             return false;
         }

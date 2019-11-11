@@ -9,6 +9,7 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
+import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +18,6 @@ export class EventListenerService {
     currentTool: AbstractToolService | undefined;
     toolName = '';
     isOnInput = false;
-    isWorkZoneEmpty = true;
     isModalOpen = false;
 
     constructor(
@@ -27,8 +27,9 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
-        private undoRedoer: UndoRedoerService,
-        private clipboard: ClipboardService,
+        private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
+        private clipboardService: ClipboardService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -44,45 +45,49 @@ export class EventListenerService {
         });
     }
 
+    isToolDefined(): boolean {
+        return this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value;
+    }
+
     addEventListeners(): void {
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousemove', (event: MouseEvent) => {
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-                this.currentTool.onMouseMove(event);
+            if (this.isToolDefined()) {
+                this.currentTool!.onMouseMove(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousedown', (event: MouseEvent) => {
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-                this.currentTool.onMouseDown(event);
+            if (this.isToolDefined()) {
+                this.currentTool!.onMouseDown(event);
             }
         });
 
         this.renderer.listen(window, 'mouseup', (event: MouseEvent) => {
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-                this.currentTool.onMouseUp(event);
+            if (this.isToolDefined()) {
+                this.currentTool!.onMouseUp(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseenter', (event: MouseEvent) => {
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-                this.currentTool.onMouseEnter(event);
+            if (this.isToolDefined()) {
+                this.currentTool!.onMouseEnter(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseleave', (event: MouseEvent) => {
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
-                this.currentTool.onMouseLeave(event);
+            if (this.isToolDefined()) {
+                this.currentTool!.onMouseLeave(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'wheel', (event: WheelEvent) => {
-            if (this.currentTool instanceof StampToolService && !this.isWorkZoneEmpty) {
+            if (this.currentTool instanceof StampToolService && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool.onWheel(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'dblclick', (event: WheelEvent) => {
-            if (this.currentTool instanceof LineToolService && !this.isWorkZoneEmpty) {
+            if (this.currentTool instanceof LineToolService && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool.onDblClick(event);
             }
         });
@@ -101,19 +106,19 @@ export class EventListenerService {
                 // Undo Redo
                 if (event.key === 'z') {
                     this.currentTool.cleanUp();
-                    this.undoRedoer.undo();
+                    this.undoRedoerService.undo();
                 } else if (event.key === 'Z') {
                     this.currentTool.cleanUp();
-                    this.undoRedoer.redo();
+                    this.undoRedoerService.redo();
                 } else if (event.key === 'x') {
-                    this.clipboard.cut();
+                    this.clipboardService.cut();
                 } else if (event.key === 'v') {
                     this.toolSelectorService.changeTool(ToolName.Selection);
-                    this.clipboard.paste();
+                    this.clipboardService.paste();
                 } else if (event.key === 'c') {
-                    this.clipboard.copy();
+                    this.clipboardService.copy();
                 } else if (event.key === 'd') {
-                    this.clipboard.duplicate();
+                    this.clipboardService.duplicate();
                 } else if (event.key === 'a') {
                     this.toolSelectorService.changeTool(ToolName.Selection);
                     this.toolSelectorService.getSelectiontool().selectAll();
@@ -121,7 +126,7 @@ export class EventListenerService {
             }
 
             // Call the onKeyDown of the current tool, if the current tool doesn't do anything
-            if (this.currentTool !== undefined && !this.isWorkZoneEmpty) {
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool.onKeyDown(event);
             }
 
@@ -144,7 +149,7 @@ export class EventListenerService {
             }
 
             if (event.key === 'Delete') {
-                this.clipboard.delete();
+                this.clipboardService.delete();
             }
         });
 
