@@ -274,7 +274,6 @@ export class TextToolService extends AbstractToolService {
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
-            this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
             this.cleanUp();
         }
     }
@@ -303,6 +302,7 @@ export class TextToolService extends AbstractToolService {
             if (this.tspans.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
+                this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
                 this.text = this.textCursor.erase();
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
