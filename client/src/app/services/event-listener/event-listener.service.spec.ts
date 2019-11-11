@@ -1,11 +1,10 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { EventListenerService } from '../event-listener/event-listener.service';
 
 describe('EventListenerService', () => {
-
     let injector: TestBed;
     let service: EventListenerService;
     let rendererMock: Renderer2;
@@ -15,11 +14,10 @@ describe('EventListenerService', () => {
             providers: [
                 {
                     provide: ElementRef,
-                    useValue : {
-                        nativeElement : {
+                    useValue: {
+                        nativeElement: {
                             addEventListener: () => null,
                         },
-
                     },
                 },
                 {
@@ -33,9 +31,11 @@ describe('EventListenerService', () => {
                 },
                 {
                     provide: MatDialog,
-                    useValue: {
-
-                    },
+                    useValue: {},
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: {},
                 },
             ],
         });
@@ -43,7 +43,7 @@ describe('EventListenerService', () => {
         injector = getTestBed();
         service = TestBed.get(EventListenerService);
 
-        rendererMock = injector.get<Renderer2>(Renderer2 as (unknown) as Type<Renderer2>);
+        rendererMock = injector.get<Renderer2>((Renderer2 as (unknown)) as Type<Renderer2>);
     });
 
     it('should be created', () => {

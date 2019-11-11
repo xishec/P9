@@ -2,6 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { BehaviorSubject } from 'rxjs';
+
 import { TEXT_CURSOR } from 'src/constants/tool-constants';
 import { TextCursor } from './textCursor';
 

@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
 import { ToolName } from 'src/constants/tool-constants';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
@@ -18,6 +18,10 @@ describe('AttributePanelComponent', () => {
                 AttributePanelComponent,
                 {
                     provide: MatDialog,
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: {},
                 },
             ],
             schemas: [NO_ERRORS_SCHEMA],
@@ -54,6 +58,6 @@ describe('AttributePanelComponent', () => {
                 .then(() => {
                     expect(component.currentToolName).toEqual(ToolName.Brush);
                 });
-        }),
+        })
     ));
 });
