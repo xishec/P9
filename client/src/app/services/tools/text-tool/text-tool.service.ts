@@ -302,7 +302,7 @@ export class TextToolService extends AbstractToolService {
             if (this.tspans.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.text = this.textCursor.eraseCursor(this.text);
+                this.text = this.textCursor.erase(this.text);
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
@@ -317,13 +317,13 @@ export class TextToolService extends AbstractToolService {
         if (key === 'ArrowLeft') {
             this.text =
                 this.textCursor.currentCursorIndex !== 0
-                    ? this.textCursor.swapCursorInCurrentLine(this.text, -1)
-                    : this.textCursor.swapCursorToAnotherLine(this.text, -1, textRef);
+                    ? this.textCursor.swapInCurrentLine(this.text, -1)
+                    : this.textCursor.swapToAnotherLine(this.text, -1, textRef);
         } else {
             this.text =
                 this.textCursor.currentCursorIndex !== this.text.length - 1
-                    ? this.textCursor.swapCursorInCurrentLine(this.text, 1)
-                    : this.textCursor.swapCursorToAnotherLine(this.text, 1, textRef);
+                    ? this.textCursor.swapInCurrentLine(this.text, 1)
+                    : this.textCursor.swapToAnotherLine(this.text, 1, textRef);
         }
         this.currentLine = textRef.currentLine;
     }

@@ -6,14 +6,14 @@ export class TextCursor {
 
     constructor(private renderer: Renderer2) {}
 
-    swapCursorInCurrentLine(text: string, offset: number): string {
+    swapInCurrentLine(text: string, offset: number): string {
         const buffer = text.split('');
         buffer[this.currentCursorIndex] = buffer[this.currentCursorIndex + offset];
         buffer[this.currentCursorIndex + offset] = TEXT_CURSOR;
         return buffer.join('').toString();
     }
 
-    swapCursorToAnotherLine(
+    swapToAnotherLine(
         text: string,
         offset: number,
         textRef: { currentLine: SVGTSpanElement; tspans: SVGTSpanElement[] }
@@ -23,7 +23,7 @@ export class TextCursor {
             return text;
         }
 
-        text = this.eraseCursor(text);
+        text = this.erase(text);
         if (text === '') {
             text += TEXT_LINEBREAK;
         }
@@ -39,7 +39,7 @@ export class TextCursor {
         return text;
     }
 
-    eraseCursor(text: string): string {
+    erase(text: string): string {
         const buffer = text.split('');
         buffer.splice(this.currentCursorIndex, 1);
         return buffer.join('').toString();
