@@ -1,6 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { BehaviorSubject, from } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
