@@ -407,9 +407,6 @@ describe('ClipboardService', () => {
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
@@ -423,9 +420,6 @@ describe('ClipboardService', () => {
 
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
@@ -443,9 +437,6 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.paste();
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();

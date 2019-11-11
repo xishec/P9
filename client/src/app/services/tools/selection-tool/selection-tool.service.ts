@@ -265,17 +265,7 @@ export class SelectionToolService extends AbstractToolService {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
-
-            setTimeout(() => {
-                this.selection.removeFullSelectionBox();
-            }, 0);
-            setTimeout(() => {
-                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-            }, 0);
-            setTimeout(() => {
-                this.selection.appendFullSelectionBox();
-            }, 0);
-
+            this.saveState();
         } else {
             this.selection.emptySelection();
         }
@@ -318,6 +308,18 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+    }
+
+    saveState() {
+        setTimeout(() => {
+            this.selection.removeFullSelectionBox();
+        }, 0);
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
+        setTimeout(() => {
+            this.selection.appendFullSelectionBox();
+        }, 0);
     }
 
     // tslint:disable-next-line: no-empty

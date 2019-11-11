@@ -201,6 +201,10 @@ export class ClipboardService {
         this.increaseDuplicateOffsetValue();
         this.clone(this.duplicationBuffer, this.duplicateOffsetValue);
 
+        this.saveStateFromDuplicate();
+    }
+
+    saveStateFromDuplicate() {
         setTimeout(() => {
             this.selection.removeFullSelectionBox();
         }, 0);
@@ -220,7 +224,11 @@ export class ClipboardService {
         this.handlePasteOutOfBounds();
         this.increasePasteOffsetValue();
         this.clone(this.clippings, this.pasteOffsetValue);
+        
+        this.saveStateFromPaste();
+    }
 
+    saveStateFromPaste() {
         setTimeout(() => {
             this.selection.removeFullSelectionBox();
         }, 0);
