@@ -4,8 +4,8 @@ import { MatSnackBar } from '@angular/material';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
-    TEXT_CURSOR,
     SNACKBAR_DURATION,
+    TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
 } from 'src/constants/tool-constants';
@@ -64,7 +64,7 @@ export class TextToolService extends AbstractToolService {
     constructor(
         private shortCutManagerService: ShortcutManagerService,
         private colorToolService: ColorToolService,
-        private snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {

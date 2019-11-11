@@ -1,6 +1,6 @@
 import { Renderer2 } from '@angular/core';
-import { HTMLAttribute, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-constants';
 import { BehaviorSubject } from 'rxjs';
+import { HTMLAttribute, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-constants';
 
 export class TextCursor {
     currentCursorIndex = 0;
