@@ -46,13 +46,13 @@ export class TextToolService extends AbstractToolService {
     textCursor: TextCursor;
     isWriting: boolean;
 
-    actionMap: Map<string, (key: string) => void> = new Map([
+    keyboardActions: Map<string, (key: string) => void> = new Map([
         [Keys.Enter, this.createNewLine],
         [Keys.Backspace, this.erase],
         [Keys.ArrowLeft, this.moveCursor],
         [Keys.ArrowRight, this.moveCursor],
         [Keys.SmallerThan, this.openSnackBar],
-    ]); //Change my name plz
+    ]);
 
     constructor(
         private shortCutManagerService: ShortcutManagerService,
@@ -229,21 +229,21 @@ export class TextToolService extends AbstractToolService {
     }
 
     removeLine(): void {
-        const remainingText = this.text.slice(this.textCursor.currentCursorIndex + 1);
         this.renderer.removeChild(this.textBox, this.currentLine);
         const toRemoveChildPos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
         this.tspans.splice(toRemoveChildPos, 1);
         this.currentLine = this.tspans[toRemoveChildPos - 1];
 
         const textContent = this.currentLine.textContent as string;
+        const lastLineText = this.textCursor.rightSideText(this.text);
         this.text =
-            textContent === TEXT_LINEBREAK ? TEXT_CURSOR + remainingText : textContent + TEXT_CURSOR + remainingText;
+            textContent === TEXT_LINEBREAK ? TEXT_CURSOR + lastLineText : textContent + TEXT_CURSOR + lastLineText;
     }
 
     erase(): void {
-        if (this.textCursor.currentCursorIndex === 0 && this.tspans[0] !== this.currentLine) {
+        if (this.textCursor.isAtStartOfLine() && this.tspans[0] !== this.currentLine) {
             this.removeLine();
-        } else if (this.text.length !== 1) {
+        } else {
             const newLeftSideText = this.textCursor.leftSideText(this.text).slice(0, -1);
             this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText(this.text);
         }
@@ -284,8 +284,8 @@ export class TextToolService extends AbstractToolService {
         event.preventDefault();
         this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
 
-        if (this.actionMap.has(event.key)) {
-            (this.actionMap.get(event.key) as () => void).apply(this, [event.key]);
+        if (this.keyboardActions.has(event.key)) {
+            (this.keyboardActions.get(event.key) as () => void).apply(this, [event.key]);
         } else {
             event.key === Keys.Space ? this.addText(TEXT_SPACE) : this.addText(event.key);
         }
@@ -305,6 +305,7 @@ export class TextToolService extends AbstractToolService {
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
+
             this.tspans = new Array<SVGTSpanElement>();
             this.text = '';
             this.attributesManagerService.changeIsWriting(false);
@@ -314,15 +315,13 @@ export class TextToolService extends AbstractToolService {
     moveCursor(key: string): void {
         const textRef = { currentLine: this.currentLine, tspans: this.tspans };
         if (key === 'ArrowLeft') {
-            this.text =
-                this.textCursor.currentCursorIndex !== 0
-                    ? this.textCursor.swapInCurrentLine(this.text, -1)
-                    : this.textCursor.swapToAnotherLine(this.text, -1, textRef);
+            this.text = this.textCursor.isAtStartOfLine()
+                ? this.textCursor.swapToAnotherLine(this.text, -1, textRef)
+                : this.textCursor.swapInCurrentLine(this.text, -1);
         } else {
-            this.text =
-                this.textCursor.currentCursorIndex !== this.text.length - 1
-                    ? this.textCursor.swapInCurrentLine(this.text, 1)
-                    : this.textCursor.swapToAnotherLine(this.text, 1, textRef);
+            this.text = this.textCursor.isAtEndOfLine(this.text)
+                ? this.textCursor.swapToAnotherLine(this.text, 1, textRef)
+                : this.textCursor.swapInCurrentLine(this.text, 1);
         }
         this.currentLine = textRef.currentLine;
     }
