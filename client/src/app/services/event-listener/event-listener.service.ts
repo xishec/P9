@@ -45,37 +45,33 @@ export class EventListenerService {
         });
     }
 
-    isToolDefined(): boolean {
-        return this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value;
-    }
-
     addEventListeners(): void {
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousemove', (event: MouseEvent) => {
-            if (this.isToolDefined()) {
-                this.currentTool!.onMouseMove(event);
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
+                this.currentTool.onMouseMove(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousedown', (event: MouseEvent) => {
-            if (this.isToolDefined()) {
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool!.onMouseDown(event);
             }
         });
 
         this.renderer.listen(window, 'mouseup', (event: MouseEvent) => {
-            if (this.isToolDefined()) {
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool!.onMouseUp(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseenter', (event: MouseEvent) => {
-            if (this.isToolDefined()) {
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool!.onMouseEnter(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseleave', (event: MouseEvent) => {
-            if (this.isToolDefined()) {
+            if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
                 this.currentTool!.onMouseLeave(event);
             }
         });
