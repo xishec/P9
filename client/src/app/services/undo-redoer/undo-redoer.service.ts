@@ -5,13 +5,8 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { DrawingState } from 'src/classes/DrawingState';
 
-export interface DrawingState {
-    drawing: Drawing;
-    pasteOffset?: number;
-    duplicateOffset?: number;
-    clippings?: Set<SVGElement>;
-}
 
 @Injectable({
     providedIn: 'root',
