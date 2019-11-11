@@ -58,10 +58,8 @@ export class UndoRedoerService {
     saveStateAndDuplicateOffset(idStackArray: string[], duplicateOffset: number) {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = {
-            drawing: currentDrawing,
-            duplicateOffset,
-        };
+        let currentState: DrawingState = new DrawingState(currentDrawing);
+        currentState.duplicateOffset = duplicateOffset;
 
         this.saveState(currentState);
     }
@@ -69,11 +67,9 @@ export class UndoRedoerService {
     saveStateFromPaste(idStackArray: string[], pasteOffset: number, clippingState: Set<SVGElement>) {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = {
-            drawing: currentDrawing,
-            pasteOffset,
-            clippings: new Set<SVGElement>(clippingState),
-        };
+        let currentState: DrawingState = new DrawingState(currentDrawing);
+        currentState.pasteOffset = pasteOffset;
+        currentState.clippings = new Set<SVGElement>(clippingState);
 
         this.saveState(currentState);
     }
@@ -81,9 +77,7 @@ export class UndoRedoerService {
     saveCurrentState(idStackArray: string[]): void {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = {
-            drawing: currentDrawing,
-        };
+        let currentState: DrawingState = new DrawingState(currentDrawing);
 
         this.saveState(currentState);
     }
