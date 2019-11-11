@@ -288,7 +288,7 @@ export class TextToolService extends AbstractToolService {
         if (this.keyboardActions.has(event.key)) {
             (this.keyboardActions.get(event.key) as () => void).apply(this, [event.key]);
         } else {
-            event.key === Keys.Space ? this.addText(TEXT_SPACE) : this.addText(event.key);
+            this.addText(TEXT_SPACE);
         }
         this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         setTimeout(() => {
@@ -330,6 +330,8 @@ export class TextToolService extends AbstractToolService {
     addText(key: string): void {
         if (key.length > 1) {
             return;
+        } else if (key === Keys.Space) {
+            key = TEXT_SPACE;
         }
         const newLeftSideText = (this.textCursor.leftSideText() + TEXT_CURSOR).replace(TEXT_CURSOR, key);
         this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
