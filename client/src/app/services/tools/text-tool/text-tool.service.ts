@@ -16,6 +16,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { FontInfo } from 'src/classes/FontInfos';
 import { TextCursor } from 'src/classes/textStyle/textCursor';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -34,7 +35,13 @@ export class TextToolService extends AbstractToolService {
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
     tspans: SVGTSpanElement[] = new Array<SVGTSpanElement>();
-    text = '';
+    currentText: BehaviorSubject<string> = new BehaviorSubject('');
+    get text(): string {
+        return this.currentText.value;
+    }
+    set text(text: string) {
+        this.currentText.next(text);
+    }
 
     bBoxAnchorLeft: number;
     bBoxWidth: number;
@@ -72,7 +79,7 @@ export class TextToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
-        this.textCursor = new TextCursor(renderer);
+        this.textCursor = new TextCursor(renderer, this.currentText);
     }
 
     initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
@@ -200,6 +207,7 @@ export class TextToolService extends AbstractToolService {
 
     createNewLine(): void {
         const oldText = this.text;
+        const remainingRightText = this.textCursor.rightSideText();
         const tsSpanStackIsNotEmpty = this.tspans.length !== 0;
         let refChilpos = 0;
 
@@ -213,7 +221,7 @@ export class TextToolService extends AbstractToolService {
             this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         }
 
-        this.text = TEXT_CURSOR + this.textCursor.rightSideText(oldText);
+        this.text = TEXT_CURSOR + remainingRightText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
         this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
@@ -235,7 +243,7 @@ export class TextToolService extends AbstractToolService {
         this.currentLine = this.tspans[toRemoveChildPos - 1];
 
         const textContent = this.currentLine.textContent as string;
-        const lastLineText = this.textCursor.rightSideText(this.text);
+        const lastLineText = this.textCursor.rightSideText();
         this.text =
             textContent === TEXT_LINEBREAK ? TEXT_CURSOR + lastLineText : textContent + TEXT_CURSOR + lastLineText;
     }
@@ -245,7 +253,7 @@ export class TextToolService extends AbstractToolService {
             this.removeLine();
         } else {
             const newLeftSideText = this.textCursor.leftSideText(this.text).slice(0, -1);
-            this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText(this.text);
+            this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
         }
     }
 
@@ -301,7 +309,7 @@ export class TextToolService extends AbstractToolService {
             if (this.tspans.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
-                this.text = this.textCursor.erase(this.text);
+                this.text = this.textCursor.erase();
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
@@ -316,12 +324,12 @@ export class TextToolService extends AbstractToolService {
         const textRef = { currentLine: this.currentLine, tspans: this.tspans };
         if (key === 'ArrowLeft') {
             this.text = this.textCursor.isAtStartOfLine()
-                ? this.textCursor.swapToAnotherLine(this.text, -1, textRef)
-                : this.textCursor.swapInCurrentLine(this.text, -1);
+                ? this.textCursor.swapToAnotherLine(-1, textRef)
+                : this.textCursor.swapInCurrentLine(-1);
         } else {
-            this.text = this.textCursor.isAtEndOfLine(this.text)
-                ? this.textCursor.swapToAnotherLine(this.text, 1, textRef)
-                : this.textCursor.swapInCurrentLine(this.text, 1);
+            this.text = this.textCursor.isAtEndOfLine()
+                ? this.textCursor.swapToAnotherLine(1, textRef)
+                : this.textCursor.swapInCurrentLine(1);
         }
         this.currentLine = textRef.currentLine;
     }
@@ -330,7 +338,7 @@ export class TextToolService extends AbstractToolService {
             return;
         }
         const newLeftSideText = (this.textCursor.leftSideText(this.text) + TEXT_CURSOR).replace(TEXT_CURSOR, key);
-        this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText(this.text);
+        this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
     }
 
     openSnackBar(): void {
