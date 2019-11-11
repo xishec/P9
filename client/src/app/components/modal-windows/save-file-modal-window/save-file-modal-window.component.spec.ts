@@ -7,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
 
@@ -79,11 +78,9 @@ describe('SaveFileModalWindowComponent', () => {
         const SPY = spyOn(window, 'alert');
 
         form.value.name = 'hello';
-        const nameAndLabels = new NameAndLabels(form.value.name, component.selectedLabels);
-        drawingSaverService.currentNameAndLabels = new BehaviorSubject(nameAndLabels);
         drawingSaverService.currentIsSaved = new BehaviorSubject(true);
 
-        component.onSubmit();
+        component.closeDialog();
 
         expect(SPY).toHaveBeenCalledWith(`Sauvegarde réussie!`);
     });
@@ -92,12 +89,10 @@ describe('SaveFileModalWindowComponent', () => {
         const SPY = spyOn(window, 'alert');
 
         form.value.name = 'hello';
-        const nameAndLabels = new NameAndLabels(form.value.name, component.selectedLabels);
-        drawingSaverService.currentNameAndLabels = new BehaviorSubject(nameAndLabels);
         drawingSaverService.currentIsSaved = new BehaviorSubject(false);
         component.errorMesaage = 'test error message';
 
-        component.onSubmit();
+        component.closeDialog();
 
         expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n ${component.errorMesaage}`);
     });

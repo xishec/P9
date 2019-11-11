@@ -121,12 +121,11 @@ describe('OpenFileModalWindowComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should close modal on submit when drawing has been successfully opened', () => {
+    it('should close modal when submit button has been clicked', () => {
         const SPY = spyOn(component[`dialogRef`], 'close');
 
-        component.drawingOpenSuccess = true;
         drawingLoaderService.currentDrawing = new BehaviorSubject(TEST_DRAWING);
-        component.onSubmit();
+        component.closeDialog();
         expect(SPY).toHaveBeenCalled();
     });
 
