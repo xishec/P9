@@ -83,6 +83,12 @@ export class ColorApplicatorToolService extends AbstractToolService {
             HTMLAttribute.stroke,
             this.primaryColor
         );
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.fill,
+            this.primaryColor
+        );
     }
 
     // tslint:disable-next-line: no-empty

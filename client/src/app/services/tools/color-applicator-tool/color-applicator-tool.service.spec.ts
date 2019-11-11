@@ -62,6 +62,58 @@ describe('ColorApplicatorToolService', () => {
         expect(service).toBeTruthy();
     });
 
+    it('should return true if tool is rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isStackTargetShape();
+        expect(res).toBeTruthy();
+    });
+
+    it('should return false if tool is not rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isStackTargetShape();
+        expect(res).toBeFalsy();
+    });
+
+    it('should change the stroke and fill color of trace stackTarget when calling changeColorOnTrace', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Brush,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeColorOnTrace();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
+    });
+
+    it('should only change the stroke color of shape stackTarget when calling changeStrokeColorOnShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeStrokeColorOnShape();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('should only change the fill color of shape stackTarget when calling changeFillColorOnShape', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: ToolName.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeFillColorOnShape();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
     it('initializeColorToolService should be primaryColor from colorService', () => {
         const colorService: ColorToolService = new ColorToolService();
         const primaryColorTmp: BehaviorSubject<string> = colorService[`primaryColor`];
