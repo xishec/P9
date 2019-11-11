@@ -211,11 +211,7 @@ export class TextToolService extends AbstractToolService {
 
         if (tsSpanStackIsNotEmpty) {
             refChilpos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
-            if (this.textCursor.currentCursorIndex === 0) {
-                this.text = TEXT_LINEBREAK;
-            } else {
-                this.text = this.textCursor.leftSideText();
-            }
+            this.text = this.textCursor.isAtStartOfLine() ? TEXT_LINEBREAK : this.textCursor.leftSideText();
             this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         }
 
