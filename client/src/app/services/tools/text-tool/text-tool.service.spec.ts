@@ -394,6 +394,46 @@ fdescribe('TextToolService', () => {
 
     // TO DO case event.key === ' '
 
+    it('moveCursor should call swapToAnotherLine if isAtStartOfLine is true', () => {
+        const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(true);
+        const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
+
+        service.moveCursor(Keys.ArrowLeft);
+
+        expect(spyOnisAtStartOfLine).toHaveBeenCalled();
+        expect(spyOnswapToAnotherLine).toHaveBeenCalled();
+    });
+
+    it('moveCursor should call swapInCurrentLine if isAtStartOfLine is false', () => {
+        const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(false);
+        const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
+
+        service.moveCursor(Keys.ArrowLeft);
+
+        expect(spyOnisAtStartOfLine).toHaveBeenCalled();
+        expect(spyOnswapInCurrentLine).toHaveBeenCalled();
+    });
+
+    it('moveCursor should call swapToAnotherLine if isAtEndOfLine is true and if key is not ArrowLeft', () => {
+        const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(true);
+        const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
+
+        service.moveCursor(Keys.ArrowRight);
+
+        expect(spyOnisAtEndOfLine).toHaveBeenCalled();
+        expect(spyOnswapToAnotherLine).toHaveBeenCalled();
+    });
+
+    it('moveCursor should call swapInCurrentLine if isAtEndOfLine is false and if key is not ArrowLeft', () => {
+        const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(false);
+        const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
+
+        service.moveCursor(Keys.ArrowRight);
+
+        expect(spyOnisAtEndOfLine).toHaveBeenCalled();
+        expect(spyOnswapInCurrentLine).toHaveBeenCalled();
+    });
+
     it('addText should stop execution if the length of the key is longer than 1', () => {
         service.text = 'test';
 
