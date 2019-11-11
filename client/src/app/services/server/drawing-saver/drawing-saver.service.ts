@@ -1,11 +1,11 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
-import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingInfo } from 'src/classes/DrawingInfo';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
+import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',

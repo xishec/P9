@@ -25,7 +25,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     errorMesaage: string;
     isSaving: boolean;
     saveFileUrl: SafeResourceUrl = '';
-    filename: string = '';
+    filename = '';
 
     constructor(
         formBuilderServer: FormBuilder,
@@ -33,7 +33,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<SaveFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
-        private drawingLoaderService: DrawingLoaderService
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilderServer = formBuilderServer;
         this.formBuilderLocal = formBuilderLocal;
