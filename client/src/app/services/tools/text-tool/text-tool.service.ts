@@ -33,9 +33,8 @@ export class TextToolService extends AbstractToolService {
     previewBox: SVGRectElement;
     textBox: SVGTextElement;
     currentLine: SVGTSpanElement;
-    tspanStack: SVGTSpanElement[] = new Array<SVGTSpanElement>();
+    tspans: SVGTSpanElement[] = new Array<SVGTSpanElement>();
     text = '';
-    textCursor = new TextCursor();
 
     bBoxAnchorLeft: number;
     bBoxWidth: number;
@@ -44,7 +43,7 @@ export class TextToolService extends AbstractToolService {
     textBoxXPosition: number;
     textBoxYPosition: number;
 
-    currentCursorIndex = 0;
+    textCursor: TextCursor;
     isWriting: boolean;
 
     actionMap: Map<string, (key: string) => void> = new Map([
@@ -73,6 +72,7 @@ export class TextToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+        this.textCursor = new TextCursor(renderer);
     }
 
     initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
@@ -199,16 +199,16 @@ export class TextToolService extends AbstractToolService {
     }
 
     createNewLine(): void {
-        const rightSideText = this.text.slice(this.currentCursorIndex);
-        const tsSpanStackIsNotEmpty = this.tspanStack.length !== 0;
+        const rightSideText = this.text.slice(this.textCursor.currentCursorIndex);
+        const tsSpanStackIsNotEmpty = this.tspans.length !== 0;
         let refChilpos = 0;
 
         if (tsSpanStackIsNotEmpty) {
-            refChilpos = this.findCurrentLinePosition();
-            if (this.currentCursorIndex === 0) {
+            refChilpos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
+            if (this.textCursor.currentCursorIndex === 0) {
                 this.text = TEXT_LINEBREAK;
             } else {
-                this.text = this.text.slice(0, this.currentCursorIndex);
+                this.text = this.text.slice(0, this.textCursor.currentCursorIndex);
             }
             this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
         }
@@ -220,20 +220,20 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
 
         if (tsSpanStackIsNotEmpty) {
-            this.renderer.insertBefore(this.textBox, this.currentLine, this.tspanStack[refChilpos + 1]);
-            this.tspanStack.splice(refChilpos + 1, 0, this.currentLine);
+            this.renderer.insertBefore(this.textBox, this.currentLine, this.tspans[refChilpos + 1]);
+            this.tspans.splice(refChilpos + 1, 0, this.currentLine);
         } else {
             this.renderer.appendChild(this.textBox, this.currentLine);
-            this.tspanStack.push(this.currentLine);
+            this.tspans.push(this.currentLine);
         }
     }
 
     removeLine(): void {
-        const remainingText = this.text.slice(this.currentCursorIndex + 1);
+        const remainingText = this.text.slice(this.textCursor.currentCursorIndex + 1);
         this.renderer.removeChild(this.textBox, this.currentLine);
-        const toRemoveChildPos = this.findCurrentLinePosition();
-        this.tspanStack.splice(toRemoveChildPos, 1);
-        this.currentLine = this.tspanStack[toRemoveChildPos - 1];
+        const toRemoveChildPos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
+        this.tspans.splice(toRemoveChildPos, 1);
+        this.currentLine = this.tspans[toRemoveChildPos - 1];
 
         const textContent = this.currentLine.textContent as string;
         this.text =
@@ -241,11 +241,11 @@ export class TextToolService extends AbstractToolService {
     }
 
     erase(): void {
-        if (this.currentCursorIndex === 0 && this.tspanStack[0] !== this.currentLine) {
+        if (this.textCursor.currentCursorIndex === 0 && this.tspans[0] !== this.currentLine) {
             this.removeLine();
         } else if (this.text.length !== 1) {
-            const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).slice(0, -2);
-            const rightSideText = this.text.slice(this.currentCursorIndex + 1);
+            const leftSideText = this.text.slice(0, this.textCursor.currentCursorIndex + 1).slice(0, -2);
+            const rightSideText = this.text.slice(this.textCursor.currentCursorIndex + 1);
             this.text = leftSideText + TEXT_CURSOR + rightSideText;
         }
     }
@@ -257,28 +257,23 @@ export class TextToolService extends AbstractToolService {
 
         if (!this.isWriting && button === Mouse.LeftButton) {
             this.shortCutManagerService.changeIsOnInput(true);
+            this.attributesManagerService.changeIsWriting(true);
 
             this.textBoxXPosition = xClick;
             this.textBoxYPosition = yClick;
 
-            // init the text box with position and style
             this.createTextBox(this.textBoxXPosition, this.textBoxYPosition);
-
-            // init the preview Box with style
             this.initPreviewRect();
-
             this.createNewLine();
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);
-
             this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
             this.updatePreviewBox();
-            this.attributesManagerService.changeIsWriting(true);
         } else if (!this.ifClickInTextBox(xClick, yClick)) {
-            this.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
+            this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
             this.cleanUp();
         }
     }
@@ -302,70 +297,43 @@ export class TextToolService extends AbstractToolService {
     }
 
     cleanUp(): void {
-        if (this.gWrap !== undefined && this.tspanStack.length !== 0) {
+        if (this.gWrap !== undefined && this.tspans.length !== 0) {
             this.renderer.removeChild(this.gWrap, this.previewBox);
-            if (this.tspanStack.length === 1 && this.text === TEXT_CURSOR) {
+            if (this.tspans.length === 1 && this.text === TEXT_CURSOR) {
                 this.renderer.removeChild(this.elementRef, this.gWrap);
             } else {
                 this.text = this.textCursor.eraseCursor(this.text);
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
                 this.drawStack.push(this.gWrap);
             }
-            this.tspanStack = new Array<SVGTSpanElement>();
+            this.tspans = new Array<SVGTSpanElement>();
             this.text = '';
             this.attributesManagerService.changeIsWriting(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
     }
     moveCursor(key: string): void {
+        const textRef = { currentLine: this.currentLine, tspans: this.tspans };
         if (key === 'ArrowLeft') {
-            this.currentCursorIndex !== 0 ? this.swapCursor(-1, true) : this.swapCursor(-1, false);
+            this.text =
+                this.textCursor.currentCursorIndex !== 0
+                    ? this.textCursor.swapCursorInCurrentLine(this.text, -1)
+                    : this.textCursor.swapCursorToAnotherLine(this.text, -1, textRef);
         } else {
-            this.currentCursorIndex !== this.text.length - 1 ? this.swapCursor(1, true) : this.swapCursor(1, false);
+            this.text =
+                this.textCursor.currentCursorIndex !== this.text.length - 1
+                    ? this.textCursor.swapCursorInCurrentLine(this.text, 1)
+                    : this.textCursor.swapCursorToAnotherLine(this.text, 1, textRef);
         }
+        this.currentLine = textRef.currentLine;
     }
-    swapCursor(offset: number, swapInCurrentLine: boolean): void {
-        if (swapInCurrentLine) {
-            const arr = this.text.split('');
-            arr[this.currentCursorIndex] = arr[this.currentCursorIndex + offset];
-            arr[this.currentCursorIndex + offset] = TEXT_CURSOR;
-            this.text = arr.join('').toString();
-        } else {
-            const nextLinePosition = this.findCurrentLinePosition() + offset;
-
-            if (nextLinePosition > this.tspanStack.length - 1 || nextLinePosition < 0) {
-                return;
-            }
-            this.text = this.textCursor.eraseCursor(this.text);
-
-            if (this.text === '') {
-                this.text += TEXT_LINEBREAK;
-            }
-            this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
-
-            this.currentLine = this.tspanStack[nextLinePosition];
-            this.text = this.currentLine.textContent as string;
-
-            if (this.text === TEXT_LINEBREAK) {
-                this.text = '';
-            }
-            offset < 0 ? (this.text += TEXT_CURSOR) : (this.text = TEXT_CURSOR + this.text);
-        }
-    }
-
     addText(key: string): void {
         if (key.length > 1) {
             return;
         }
-        const leftSideText = this.text.slice(0, this.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
-        const rightSideText = this.text.slice(this.currentCursorIndex + 1);
+        const leftSideText = this.text.slice(0, this.textCursor.currentCursorIndex + 1).replace(TEXT_CURSOR, key);
+        const rightSideText = this.text.slice(this.textCursor.currentCursorIndex + 1);
         this.text = leftSideText + TEXT_CURSOR + rightSideText;
-    }
-
-    findCurrentLinePosition(): number {
-        return this.tspanStack.findIndex((el: SVGTSpanElement) => {
-            return el === this.currentLine;
-        });
     }
 
     openSnackBar(): void {
