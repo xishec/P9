@@ -45,8 +45,8 @@ export class FileManagerController {
             const options = { upsert: true, new: true };
 
             Post.findOneAndUpdate(query, update, options)
-                .then((drawing: any) => {
-                    res.json(drawing);
+                .then((drawingToUpdate: any) => {
+                    res.json(drawingToUpdate);
                 })
                 .catch((error: Error) => {
                     res.json(error);

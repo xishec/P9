@@ -54,25 +54,25 @@ export class EventListenerService {
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mousedown', (event: MouseEvent) => {
             if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
-                this.currentTool!.onMouseDown(event);
+                this.currentTool.onMouseDown(event);
             }
         });
 
         this.renderer.listen(window, 'mouseup', (event: MouseEvent) => {
             if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
-                this.currentTool!.onMouseUp(event);
+                this.currentTool.onMouseUp(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseenter', (event: MouseEvent) => {
             if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
-                this.currentTool!.onMouseEnter(event);
+                this.currentTool.onMouseEnter(event);
             }
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'mouseleave', (event: MouseEvent) => {
             if (this.currentTool !== undefined && !this.drawingLoaderService.emptyDrawStack.value) {
-                this.currentTool!.onMouseLeave(event);
+                this.currentTool.onMouseLeave(event);
             }
         });
 
