@@ -3,8 +3,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
-import { MouseCoords } from '../tools/abstract-tools/abstract-tool.service';
 import { ManipulatorService } from './manipulator.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
 describe('ManipulatorService', () => {
     let selection: Selection;
@@ -97,8 +97,8 @@ describe('ManipulatorService', () => {
         const spy = spyOn(mockSVGTransform, 'setTranslate');
         const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-        const dummyMouseCoordsInit: MouseCoords = { x: 10, y: 10 };
-        const dummyMouseCoordsCurr: MouseCoords = { x: 20, y: 20 };
+        const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
+        const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
@@ -147,8 +147,8 @@ describe('ManipulatorService', () => {
         const spy = spyOn(mockSVGTransform, 'setTranslate');
         const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-        const dummyMouseCoordsInit: MouseCoords = { x: 10, y: 10 };
-        const dummyMouseCoordsCurr: MouseCoords = { x: 20, y: 20 };
+        const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
+        const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,

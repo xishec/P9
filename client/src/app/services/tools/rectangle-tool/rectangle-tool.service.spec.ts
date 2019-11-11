@@ -13,7 +13,7 @@ const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
 
-fdescribe('RectangleToolService', () => {
+describe('RectangleToolService', () => {
     let injector: TestBed;
     let rectangleTool: RectangleToolService;
     let rendererMock: Renderer2;
@@ -119,8 +119,9 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        spyDrawRectHeight.and.callThrough();
 
         newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
 
@@ -137,8 +138,9 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        spyDrawRectWidth.and.callThrough();
 
         newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
 
@@ -155,15 +157,16 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        spyDrawRectX.and.callThrough();
 
         newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
 
         expect(newRectangleTool.drawRectangleX).toEqual(X);
     });
 
-    it('should return the draw rectangle x when getting draw rectangle x', () => {
+    it('should return the draw rectangle y when getting draw rectangle y', () => {
         const Y = 10;
         const mockRect = {
             y: {
@@ -173,8 +176,9 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
+        spyDrawRectY.and.callThrough();
 
         newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
 
@@ -310,7 +314,7 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newRectangleTool.drawRectangle = mockRect;
         newRectangleTool.currentMouseCoords.x = X;
@@ -353,7 +357,7 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newRectangleTool.drawRectangle = mockRect;
         newRectangleTool.currentMouseCoords.x = 0;
@@ -375,7 +379,7 @@ fdescribe('RectangleToolService', () => {
         expect(rectangleTool.isSquarePreview).toBeFalsy();
     });
 
-    fit('should cleanup correctly when creating a full rectangle', () => {
+    it('should cleanup correctly when creating a full rectangle', () => {
         const spyRemove = spyOn(rendererMock, 'removeChild');
 
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
@@ -463,7 +467,7 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newRectangleTool.previewRectangle = mockRect;
         newRectangleTool.userStrokeWidth = 0;
@@ -501,7 +505,7 @@ fdescribe('RectangleToolService', () => {
             },
         } as unknown as SVGRectElement;
 
-        const newRectangleTool = new RectangleToolService();
+        const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         newRectangleTool.previewRectangle = mockRect;
         newRectangleTool.userStrokeWidth = 20;
@@ -514,11 +518,16 @@ fdescribe('RectangleToolService', () => {
     it('should create g tag with drawRectangle copy as child with a fill color and push it when calling createSVG', () => {
         const RED_COLOR = 'red';
         const spyOnAppend = spyOn(rendererMock, 'appendChild');
+        const spyCreateElement = spyOn(rendererMock, 'createElement');
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyOnPush = spyOn(drawStackMock, 'push');
 
         rectangleTool.userFillColor = RED_COLOR;
         rectangleTool.createSVG();
+
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();
@@ -530,10 +539,15 @@ fdescribe('RectangleToolService', () => {
         const NONE_COLOR = 'none';
         const spyOnAppend = spyOn(rendererMock, 'appendChild');
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
+        const spyCreateElement = spyOn(rendererMock, 'createElement');
         const spyOnPush = spyOn(drawStackMock, 'push');
 
         rectangleTool.userFillColor = NONE_COLOR;
         rectangleTool.createSVG();
+
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
+        jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();

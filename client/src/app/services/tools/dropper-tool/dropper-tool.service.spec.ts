@@ -100,12 +100,6 @@ describe('DropperToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should initialize the attribute colorTool to be the colorToolService', () => {
-        service.initializeColorToolService(new ColorToolService());
-
-        expect(service.colorTool).toEqual(new ColorToolService());
-    });
-
     it('should call updateSVGCopy after color is picked', () => {
         const spyOnUpdateSVGCopy: jasmine.Spy = spyOn(service, 'updateSVGCopy').and.returnValue();
 

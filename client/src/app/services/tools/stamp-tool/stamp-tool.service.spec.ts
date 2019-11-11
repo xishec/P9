@@ -236,13 +236,12 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
-        spyOn(service, 'verifyPosition').and.returnValue(true);
+        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
 
         service.isStampLinkValid = false;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).not.toHaveBeenCalled();
 
-        spyOn(service, 'isMouseInRef').and.callFake(() => {return true;});
         service.isStampLinkValid = true;
         service.onMouseDown(positiveMouseEvent);
         jasmine.clock().tick(1);
