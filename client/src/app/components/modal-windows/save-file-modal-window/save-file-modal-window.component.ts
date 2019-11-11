@@ -67,7 +67,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         });
     }
 
-    onCancel(): void {
+    closeDialog(): void {
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
@@ -83,7 +83,7 @@ export class SaveFileModalWindowComponent implements OnInit {
             .subscribe((drawingIsSaved) => {
                 if (drawingIsSaved) {
                     window.alert('Sauvegarde réussie!');
-                    this.onCancel();
+                    this.closeDialog();
                 } else {
                     window.alert(`Sauvegarde échouée...\n ${this.errorMesaage}`);
                 }
@@ -99,6 +99,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         }
         this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
         this.filename = this.saveFileLocalModalForm.value.filename;
+        this.closeDialog();
         return true;
     }
 

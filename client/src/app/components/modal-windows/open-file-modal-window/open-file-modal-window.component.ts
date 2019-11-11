@@ -23,7 +23,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     drawingsFromServer: Drawing[] = [];
     selectedOption = '';
-    drawingOpenSuccess = true;
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
@@ -38,13 +37,13 @@ export class OpenFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
         private drawingLoaderService: DrawingLoaderService,
-        private undoRedoerService: UndoRedoerService,
+        private undoRedoerService: UndoRedoerService
     ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit(): void {
-        this.initializeForm();
+        this.initializeForms();
 
         this.isLoading = true;
         this.localFileName = '';
@@ -53,13 +52,13 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
                         this.isLoading = false;
                         return false;
                     } else {
                         return true;
                     }
-                }),
+                })
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
@@ -76,7 +75,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
     }
 
-    initializeForm(): void {
+    initializeForms(): void {
         this.openFileModalForm = this.formBuilder.group({
             selectedDrawing: [[this.selectedOption], Validators.required],
             confirm: false,
@@ -87,48 +86,45 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
+    intializeUndoRedoerService(): void {
+        this.undoRedoerService.initializeStacks();
+        this.undoRedoerService.fromLoader = true;
+    }
+
     handleSelection(event: any): void {
         this.selectedOption = event.option.selected ? event.option.value : '';
         this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
     }
 
-    onCancel(): void {
+    closeDialog(): void {
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
     loadServerFile(): void {
-        if (this.drawingOpenSuccess) {
-
-            this.undoRedoerService.initializeStacks();
-            this.undoRedoerService.fromLoader = true;
-
-            const selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name === this.selectedOption,
-            ) as Drawing;
-
-            this.drawingLoaderService.currentDrawing.next(selectedDrawing);
-            this.dialogRef.close();
-            this.modalManagerService.setModalIsDisplayed(false);
-        }
+        this.intializeUndoRedoerService();
+        const selectedDrawing: Drawing = this.drawingsFromServer.find(
+            (drawing) => drawing.name === this.selectedOption
+        ) as Drawing;
+        this.drawingLoaderService.currentDrawing.next(selectedDrawing);
+        this.closeDialog();
     }
 
-    loadLocalFile(e: Event): void {
+    loadLocalFile(): void {
+        this.intializeUndoRedoerService();
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
-        this.dialogRef.close();
-        this.modalManagerService.setModalIsDisplayed(false);
+        this.closeDialog();
     }
 
-    getFileToLoad(e: Event): void {
+    getFileToLoad(event: Event): void {
         const reader = new FileReader();
-        const target = e.target as HTMLInputElement;
+        const target = event.target as HTMLInputElement;
         const files = target.files as FileList;
         if (files.length !== 0) {
             reader.readAsText(files[0]);
             reader.onload = () => {
                 try {
                     const localFileContent = JSON.parse(reader.result as string);
-
                     this.fileToLoad = {
                         name: files[0].name,
                         labels: [],
@@ -137,10 +133,10 @@ export class OpenFileModalWindowComponent implements OnInit {
                         drawingInfo: localFileContent.drawingInfo,
                     };
                     this.localFileName = this.fileToLoad.name;
-                } catch (e) {
+                } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                    window.alert("Le fichier choisi n'est pas valide, veuillez réessayer.");
                 }
             };
         }

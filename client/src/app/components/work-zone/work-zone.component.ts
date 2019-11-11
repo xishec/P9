@@ -198,7 +198,7 @@ export class WorkZoneComponent implements OnInit {
             });
     }
 
-    resetWorkzone(drawingInfo: DrawingInfo) {
+    resetWorkzone(drawingInfo: DrawingInfo) {        
         this.drawingLoaderService.isEmpty = false;
         this.eventListenerService.isWorkZoneEmpty = false;
         this.drawingInfo = drawingInfo;

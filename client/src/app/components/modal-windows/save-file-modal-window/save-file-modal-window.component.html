@@ -15,6 +15,7 @@
                 <mat-label class="drawing-label-title">Étiquettes</mat-label>
                 <div class="drawing-labels-list">
                     <mat-button-toggle
+                        class="label"
                         *ngFor="let label of drawingLabels"
                         (click)="toggleLabel(label)"
                         [disabled]="!selectedLabels.includes(label)"
@@ -46,7 +47,7 @@
             <mat-dialog-actions align="end">
                 <div class="submit-button-group-wrapper">
                     <div class="submit-button-group">
-                        <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                        <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">
                             Annuler
                         </button>
                         <button
@@ -83,7 +84,7 @@
             <mat-dialog-actions align="end">
                 <div class="submit-button-group-wrapper">
                     <div class="submit-button-group">
-                        <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">
+                        <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">
                             Annuler
                         </button>
                         <a
