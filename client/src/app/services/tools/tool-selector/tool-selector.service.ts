@@ -57,7 +57,7 @@ export class ToolSelectorService {
         private textTool: TextToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
-        private undoRedoerService: UndoRedoerService,
+        private undoRedoerService: UndoRedoerService
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -109,7 +109,7 @@ export class ToolSelectorService {
             [ToolName.Quill, this.selectionTool as AbstractToolService],
             [ToolName.SprayCan, this.selectionTool as AbstractToolService],
             [ToolName.Fill, this.selectionTool as AbstractToolService],
-            [ToolName.Text, this.selectionTool as AbstractToolService],
+            [ToolName.Text, this.textTool as AbstractToolService],
         ]);
 
         this.WORKZONE_TOOLS_MAP = new Map([
@@ -285,7 +285,9 @@ export class ToolSelectorService {
             workzoneTool();
             return;
         }
-        if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
+        if (this.currentTool instanceof SelectionToolService) {
+            this.selectionTool.isTheCurrentTool = true;
+        }
     }
 
     changeCurrentToolName(toolName: ToolName): void {
