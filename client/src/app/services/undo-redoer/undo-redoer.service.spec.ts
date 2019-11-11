@@ -2,9 +2,9 @@ import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, from } from 'rxjs';
 
-import { DEFAULT_WHITE } from '../../../constants/color-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
+import { DEFAULT_WHITE } from '../../../constants/color-constants';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingState, UndoRedoerService } from './undo-redoer.service';
