@@ -126,7 +126,4 @@ export class UndoRedoerService {
             this.drawingLoaderService.currentDrawing.next(stateToLoad.drawing);
         }
     }
-
-    // tslint:disable-next-line: no-empty
-    reset(): void {}
 }
