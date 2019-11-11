@@ -7,9 +7,10 @@ import {
     createMockSVGTextElement,
     createMockSVGTSpanElement,
     createMouseEvent,
+    createMockSVGElement,
 } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { HTMLAttribute, TEXT_CURSOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
@@ -456,5 +457,37 @@ fdescribe('TextToolService', () => {
         service.openSnackBar();
 
         expect(spyOnopen).toHaveBeenCalled();
+    });
+
+    it('cleanUp should not "cleanup" if gWrap and tspan are defined', () => {
+        service.text = 'test';
+
+        service.cleanUp();
+
+        expect(service.text).toEqual('test');
+    });
+
+    it('cleanUp should call removeChild on gWrap twice if the last char is the cursor', () => {
+        service.text = TEXT_CURSOR;
+        service.tspans.push(createMockSVGTSpanElement());
+        service.gWrap = createMockSVGElement();
+        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+
+        service.cleanUp();
+
+        expect(service.text).toEqual('');
+        expect(spyOnremoveChild).toHaveBeenCalledTimes(2);
+    });
+
+    it('cleanUp should call removeChild on gWrap once if the last char is the cursor', () => {
+        service.text = 'test';
+        service.tspans.push(createMockSVGTSpanElement());
+        service.gWrap = createMockSVGElement();
+        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+
+        service.cleanUp();
+
+        expect(service.text).toEqual('');
+        expect(spyOnremoveChild).toHaveBeenCalledTimes(1);
     });
 });
