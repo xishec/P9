@@ -160,9 +160,14 @@ export class OpenFileModalWindowComponent implements OnInit {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.name !== this.selectedOption;
                 });
+                this.snackBar.open('Suppression réussie!', 'OK');
             } else {
                 this.snackBar.open('Erreur de suppression du côté serveur!', 'OK');
             }
         });
+    }
+
+    unmaskAll() {
+        this.nameFilter = '$tout';
     }
 }
