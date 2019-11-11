@@ -13,13 +13,7 @@ import { UndoRedoerService } from './undo-redoer.service';
 const MOCK_INNER_HTML = 'expectedInnerHtml';
 const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
 
-const MOCK_DRAWING: Drawing = {
-    idStack: [],
-    labels: [],
-    name: '',
-    svg: MOCK_INNER_HTML,
-    drawingInfo: MOCK_DRAWING_INFO,
-};
+const MOCK_DRAWING: Drawing = new Drawing('', [], MOCK_INNER_HTML, [], MOCK_DRAWING_INFO);
 
 const MOCK_DRAWING_STATE: DrawingState = {
     drawing: MOCK_DRAWING,
@@ -33,25 +27,23 @@ describe('UndoRedoerService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers : [
+            providers: [
                 UndoRedoerService,
                 {
                     provide: DrawStackService,
-                    useValue : {},
+                    useValue: {},
                 },
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
-                        drawingInfo : {},
+                        drawingInfo: {},
                     },
                 },
                 {
                     provide: ElementRef,
                     useValue: {
-                        nativeElement : {
-                            innerHTML : {
-
-                            },
+                        nativeElement: {
+                            innerHTML: {},
                         },
                     },
                 },
@@ -150,21 +142,9 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should pop undos and push this to redos if undos.length > 1', () => {
-        const initDrawing: Drawing = {
-            name: '1',
-            labels: [],
-            svg: '1',
-            idStack: [],
-            drawingInfo: MOCK_DRAWING_INFO,
-        };
+        const initDrawing: Drawing = new Drawing('1', [], '1', [], MOCK_DRAWING_INFO);
 
-        const mockDrawing: Drawing = {
-            name: '2',
-            labels: [],
-            svg: '2',
-            idStack: [],
-            drawingInfo: MOCK_DRAWING_INFO,
-        };
+        const mockDrawing: Drawing = new Drawing('2', [], '2', [], MOCK_DRAWING_INFO);
 
         const mockState1: DrawingState = {
             drawing: initDrawing,
@@ -192,7 +172,6 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should change the value of duplicateOffset if stateToLoad has one', () => {
-
         const mockDrawingState: DrawingState = {
             drawing: MOCK_DRAWING,
             duplicateOffset: 10,

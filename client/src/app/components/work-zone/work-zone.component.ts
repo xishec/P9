@@ -16,8 +16,8 @@ import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constant
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
-import { Message } from '../../../../../common/communication/message';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
+import { Message } from '../../../../../common/communication/Message';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
@@ -93,12 +93,15 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
+            if (nameAndLabels.name.length === 0) {
+                return;
+            }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-            } else if (nameAndLabels.name.length < 0) {
-                this.postDrawing(nameAndLabels);
+                return;
             }
+            this.postDrawing(nameAndLabels);
         });
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
