@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DEFAULT_GRAY_0 } from 'src/constants/color-constants';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { FileManagerService } from './file-manager.service';
 
 let service: FileManagerService;

@@ -9,6 +9,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
 describe('OpenFileModalWindowComponent', () => {
@@ -17,17 +18,13 @@ describe('OpenFileModalWindowComponent', () => {
 
     let drawingLoaderService: DrawingLoaderService;
 
-    const TEST_DRAWING: Drawing = {
-        name: 'mona lisa',
-        labels: ['Italy', 'Louvre', 'Paris'],
-        svg: 'test_svg',
-        idStack: ['work-zone', 'background', 'rect1'],
-        drawingInfo: {
-            width: 100,
-            height: 100,
-            color: 'ffffff',
-        },
-    };
+    const TEST_DRAWING: Drawing = new Drawing(
+        'mona lisa',
+        ['Italy', 'Louvre', 'Paris'],
+        'test_svg',
+        ['work-zone', 'background', 'rect1'],
+        new DrawingInfo(100, 100, 'ffffff'),
+    );
 
     const dialogMock = {
         close: () => null,
