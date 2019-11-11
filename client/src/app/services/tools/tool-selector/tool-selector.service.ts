@@ -57,7 +57,7 @@ export class ToolSelectorService {
         private textTool: TextToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
-        private undoRedoerService: UndoRedoerService
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
