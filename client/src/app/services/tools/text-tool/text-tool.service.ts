@@ -11,6 +11,7 @@ import {
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
+    FONT_ALIGN,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -127,15 +128,15 @@ export class TextToolService extends AbstractToolService {
         this.fontInfo.fontAlign = align;
         if (this.isWriting) {
             switch (align) {
-                case 'middle': {
+                case FONT_ALIGN.Middle: {
                     this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth / 2;
                     break;
                 }
-                case 'start': {
+                case FONT_ALIGN.Start: {
                     this.textBoxXPosition = this.bBoxAnchorLeft;
                     break;
                 }
-                case 'end': {
+                case FONT_ALIGN.End: {
                     this.textBoxXPosition = this.bBoxAnchorLeft + this.bBoxWidth;
                 }
             }

@@ -344,6 +344,12 @@ const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
 const SNACKBAR_DURATION = 3000;
 
+enum FONT_ALIGN {
+    Middle = 'middle',
+    Start = 'start',
+    End = 'end',
+}
+
 export {
     ControlShortcuts,
     ToolNameShortcuts,
@@ -382,7 +388,7 @@ export {
     TRACING_TOOL_POSITION,
     FONTS,
     FontSize,
-    INVALID_KEYS,
+    FONT_ALIGN,
     TEXT_CURSOR,
     TEXT_SPACE,
     TEXT_LINEBREAK,
