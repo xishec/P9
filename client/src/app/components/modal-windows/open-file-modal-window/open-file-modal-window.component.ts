@@ -159,9 +159,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.openLocalFileModalForm = this.formBuilder.group({
-            filePath: [[this.localFileName], Validators.required],
             confirm: false,
-            // Check filename so it only takes valid string
         });
     }
 
@@ -202,7 +200,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             reader.onload = () => {
                 try {
                     const localFileContent = JSON.parse(reader.result as string);
-    
+
                     this.fileToLoad = {
                         name: files[0].name,
                         labels: [],
@@ -211,7 +209,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                         drawingInfo: localFileContent.drawingInfo,
                     };
                     this.localFileName = this.fileToLoad.name;
-                } catch(e) {
+                } catch (e) {
                     this.fileToLoad = null;
                     this.localFileName = '';
                     window.alert("Le fichier choisi n'est pas valide, veuillez réessayer.");

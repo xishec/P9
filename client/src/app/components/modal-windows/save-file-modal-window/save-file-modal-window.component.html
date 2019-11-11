@@ -66,6 +66,9 @@
     <mat-tab label="Sauvegarder localement">
         <div class="tab-content" *ngIf="!isSaving">
             <mat-dialog-content class="mat-typography-local" [formGroup]="saveFileLocalModalForm">
+                <mat-label id="input-description">
+                    Le nom de fichier ne doit pas contenir de '.' ou de '-' et doit être de type .txt
+                </mat-label>
                 <mat-label class="file-name-title">Nom du fichier</mat-label>
                 <input
                     autocomplete="off"
@@ -88,7 +91,7 @@
                             mat-stroked-button
                             type="submit"
                             (click)="saveToLocal()"
-                            [href]="saveFileUrl"
+                            [href]="saveToLocal ? saveFileUrl : null"
                             [download]="filename"
                             [disabled]="saveFileLocalModalForm.controls.filename.invalid"
                         >

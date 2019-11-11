@@ -24,8 +24,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     selectedLabels: string[] = [];
     errorMesaage: string;
     isSaving: boolean;
-    saveFileUrl: SafeResourceUrl = "";
-    filename: string = "";
+    saveFileUrl: SafeResourceUrl = '';
+    filename: string = '';
 
     constructor(
         formBuilderServer: FormBuilder,
@@ -58,8 +58,10 @@ export class SaveFileModalWindowComponent implements OnInit {
             label: ['', [Validators.maxLength(15)]],
         });
         this.saveFileLocalModalForm = this.formBuilderLocal.group({
-            filename: ['', [Validators.required, Validators.minLength(1)]],
-            // Check filename so it only takes valid string
+            filename: [
+                '',
+                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:|.txt)$')],
+            ],
         });
     }
 
@@ -88,9 +90,14 @@ export class SaveFileModalWindowComponent implements OnInit {
             });
     }
 
-    saveToLocal(): void {
+    saveToLocal(): boolean {
+        if (this.drawingLoaderService.isEmpty) {
+            window.alert(`Sauvegarde échouée...\n Aucun dessin dans le zone de travail!`);
+            return false;
+        }
         this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
         this.filename = this.saveFileLocalModalForm.value.filename;
+        return true;
     }
 
     addLabel(newLabel: string): void {
