@@ -181,7 +181,7 @@ export class WorkZoneComponent implements OnInit {
                 filter((subject) => {
                     if (subject === undefined) {
                         this.drawingSaverService.currentErrorMesaage.next(
-                            "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                            'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                         );
                         this.drawingSaverService.currentIsSaved.next(false);
                         return false;
