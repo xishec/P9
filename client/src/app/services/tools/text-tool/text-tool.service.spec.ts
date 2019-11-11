@@ -394,6 +394,22 @@ fdescribe('TextToolService', () => {
 
     // TO DO case event.key === ' '
 
+    it('addText should stop execution if the length of the key is longer than 1', () => {
+        service.text = 'test';
+
+        service.addText(Keys.Enter);
+
+        expect(service.text).toEqual('test');
+    });
+
+    it('addText should change text if the length of the key is equal to 1', () => {
+        service.text = 'test';
+
+        service.addText(Keys.a);
+
+        expect(service.text.length).toBeGreaterThan('test'.length);
+    });
+
     it('openSnackBar should call open on snackBar', () => {
         const spyOnopen = spyOn(service.snackBar, 'open');
 
