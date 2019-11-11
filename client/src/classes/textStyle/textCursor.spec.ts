@@ -15,12 +15,7 @@ fdescribe('TextCursor', () => {
                 {
                     provide: Renderer2,
                     useValue: {
-                        createElement: () => null,
-                        setAttribute: () => null,
-                        appendChild: () => null,
-                        removeChild: () => null,
                         setProperty: () => null,
-                        insertBefore: () => null,
                     },
                 },
                 {
@@ -52,7 +47,8 @@ fdescribe('TextCursor', () => {
         expect(service.erase()).toEqual('est');
     });
 
-    // to do swapToAnotherLine and findLinePosition and two last functions.
+    // to do swapToAnotherLine, findLinePosition and two last functions.
+
     // it('findLinePosition should return ', () => {
     //     service.text = 'test';
 
