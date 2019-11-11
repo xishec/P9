@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -105,6 +105,12 @@ describe('OpenFileModalWindowComponent', () => {
                         {
                             provide: DrawingLoaderService,
                             useValue: {},
+                        },
+                        {
+                            provide: MatSnackBar,
+                            useValue: {
+                                open: () => null,
+                            },
                         },
                     ],
                 },

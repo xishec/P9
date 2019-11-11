@@ -93,12 +93,15 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
+            if (nameAndLabels.name.length === 0) {
+                return;
+            }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-            } else if (nameAndLabels.name.length < 0) {
-                this.postDrawing(nameAndLabels);
+                return;
             }
+            this.postDrawing(nameAndLabels);
         });
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
