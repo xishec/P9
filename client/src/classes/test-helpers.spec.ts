@@ -57,15 +57,48 @@ export const createMockSVGGElement = (): any => {
     return (mockSVGElement as unknown) as SVGGElement;
 };
 
+export const createMockSVGElement = (): any => {
+    const mockSVGElement = {
+        nativeElement: {
+            getBoundingClientRect: () => {
+                const boundleft = 0;
+                const boundtop = 0;
+                const boundRect = {
+                    left: boundleft,
+                    top: boundtop,
+                    width: boundleft * 2,
+                    height: boundtop * 2,
+                };
+                return boundRect;
+            },
+        },
+    };
+    return (mockSVGElement as unknown) as ElementRef<SVGElement>;
+};
+
+export const createMockCanvasElement = (): any => {
+    const mockCanvasElement = {};
+    return (mockCanvasElement as unknown) as HTMLCanvasElement;
+};
+
 export const createMockSVGGElementWithAttribute = (att: string): any => {
     const attribute = att;
     const mockSVGElement = {
-        getAttribute : (attToGet: string) => {
-            if (attToGet === attribute) {
-                return '10';
-            } else {
-                return false;
-            }
+        getAttribute: (attToGet: string) => {
+            return attToGet === attribute ? '10' : false;
+        },
+        getBoundingClientRect: () => {
+            const mockDOMRect = { x: 500, y: 500, width: 50, height: 50 };
+            return (mockDOMRect as unknown) as DOMRect;
+        },
+        childElementCount: 3,
+        childNodes: () => {
+            const mockGelementArray: SVGGElement[] = [
+                createMockSVGGElement(),
+                createMockSVGGElement(),
+                createMockSVGGElement(),
+            ];
+            return mockGelementArray;
         },
     };
     return (mockSVGElement as unknown) as SVGGElement;
@@ -78,5 +111,7 @@ export const createMockFilter = (): SVGFilterElement => {
 
 // tslint:disable-next-line: max-classes-per-file
 export class MockElementRef extends ElementRef {
-    nativeElement: {};
+    constructor() {
+        super(null);
+    }
 }

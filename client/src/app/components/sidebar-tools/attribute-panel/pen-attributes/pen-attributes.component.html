@@ -1,0 +1,64 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="penAttributesForm">
+        <div class="attribute">
+            <label for="maxThickness">Épaisseur du trait maximum</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="maxThickness"
+                (input)="onMaxSliderChange($event)"
+                [min]="Thickness.Min"
+                value="{{ penAttributesForm.value.maxThickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="maxThickness"
+                    (input)="onMaxThicknessChange()"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="minThickness">Épaisseur du trait minimum</label>
+            <mat-slider
+                placeholder="Hex"
+                formControlName="minThickness"
+                (input)="onMinSliderChange($event)"
+                [min]="Thickness.Min"
+                [max]="penAttributesForm.value.maxThickness"
+                value="{{ penAttributesForm.value.minThickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="minThickness"
+                    (input)="onMinThicknessChange()"
+                    [value]="penAttributesForm.value.minThickness"
+                    [min]="Thickness.Min"
+                    [max]="penAttributesForm.value.maxThickness"
+                />
+                <mat-error
+                    >La valeur inscrite doit être entre {{ Thickness.Min }} et
+                    {{ penAttributesForm.value.maxThickness }} px</mat-error
+                >
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+    </form>
+</div>

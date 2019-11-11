@@ -43,7 +43,7 @@ export class StampAttributesComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         this.onScalingChange();
-        this.stampToolService = this.toolSelectorService.getStampToolService();
+        this.stampToolService = this.toolSelectorService.getStampTool();
         this.stampToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
@@ -54,7 +54,7 @@ export class StampAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(StampScaling.Min), Validators.max(StampScaling.Max)],
             ],
             angle: [
-                StampAngleOrientation.Default,
+                StampAngleOrientation.Min,
                 [
                     Validators.required,
                     Validators.min(StampAngleOrientation.Min),

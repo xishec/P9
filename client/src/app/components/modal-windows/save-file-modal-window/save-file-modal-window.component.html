@@ -15,9 +15,9 @@
                 <mat-label class="drawing-label-title">Étiquettes</mat-label>
                 <div class="drawing-labels-list">
                     <mat-button-toggle
-                        class="label"
                         *ngFor="let label of drawingLabels"
                         (click)="toggleLabel(label)"
+                        [disabled]="!selectedLabels.includes(label)"
                         [checked]="selectedLabels.includes(label)"
                     >
                         {{ label }}
@@ -33,7 +33,7 @@
                 />
                 <button
                     *ngIf="newLabelInput.value !== ''"
-                    mat-stroked-button
+                    mat-raised-button
                     type="button"
                     class="new-label-button"
                     [disabled]="saveFileModalForm.controls.label.invalid || drawingLabels.includes(newLabelInput.value)"

@@ -43,7 +43,9 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
-            this.drawingLabels = this.drawingLabels.concat(currentDrawing.labels);
+            currentDrawing.labels.forEach((label) => {
+                if (!this.drawingLabels.includes(label)) { this.drawingLabels.push(label); }
+            });
             this.selectedLabels = Array.from(currentDrawing.labels);
         });
         this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
@@ -55,7 +57,7 @@ export class SaveFileModalWindowComponent implements OnInit {
     initializeForm(): void {
         this.saveFileModalForm = this.formBuilderServer.group({
             name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15)]],
-            label: ['', [Validators.maxLength(15)]],
+            label: ['', [Validators.maxLength(15), Validators.pattern('[A-Za-z0-9àÀéÉèÈôÔîÏçÇùÙ]*')]],
         });
         this.saveFileLocalModalForm = this.formBuilderLocal.group({
             filename: [
@@ -110,11 +112,23 @@ export class SaveFileModalWindowComponent implements OnInit {
         }
     }
 
-    toggleLabel(label: string) {
+    toggleLabel(label: string): void {
         if (this.selectedLabels.includes(label)) {
-            this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
-                return selectedLabel !== label;
-            });
+            this.deselect(label);
+        } else {
+            this.select(label);
+        }
+    }
+
+    deselect(label: string): void {
+        this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
+            return selectedLabel !== label;
+        });
+    }
+
+    select(label: string): void {
+        if (this.selectedLabels.length >= MAX_NB_LABELS) {
+            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
         } else {
             this.selectedLabels.push(label);
         }

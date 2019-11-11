@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { predicate } from 'src/constants/constants';
@@ -15,7 +14,7 @@ import { PolygonFormType, PolygonSides, Thickness, ToolName } from 'src/constant
     templateUrl: './polygon-attributes.component.html',
     styleUrls: ['./polygon-attributes.component.scss'],
 })
-export class PolygonAttributesComponent implements OnInit {
+export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonToolService: PolygonToolService;
@@ -28,7 +27,6 @@ export class PolygonAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
@@ -39,11 +37,9 @@ export class PolygonAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
-    // tslint:disable-next-line: use-lifecycle-interface
     ngAfterViewInit(): void {
         this.polygonToolService = this.toolSelectorService.getPolygonTool();
         this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.polygonToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {

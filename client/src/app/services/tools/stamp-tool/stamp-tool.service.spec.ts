@@ -1,9 +1,10 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers';
+import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { StampToolService } from './stamp-tool.service';
 
 describe('StampToolService', () => {
@@ -63,6 +64,11 @@ describe('StampToolService', () => {
         injector = getTestBed();
         service = injector.get(StampToolService);
 
+        const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
+
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
@@ -81,6 +87,12 @@ describe('StampToolService', () => {
         spyOnStampHeight = spyOnProperty(service, 'stampHeight', 'get').and.callFake(() => {
             return mockDrawRect.height;
         });
+
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -146,6 +158,7 @@ describe('StampToolService', () => {
 
     it('should call setAttribute and appendChild after a stamp is added', () => {
         service.addStamp();
+        jasmine.clock().tick(1);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnAppendChild).toHaveBeenCalled();
@@ -198,6 +211,7 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if event is left click, shouldStamp is true and the position is correct', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
+        spyOn(service, 'verifyPosition').and.returnValue(true);
 
         service.shouldStamp = false;
         service.onMouseDown(positiveMouseEvent);
@@ -206,6 +220,8 @@ describe('StampToolService', () => {
         service.isIn = true;
         service.shouldStamp = true;
         service.onMouseDown(positiveMouseEvent);
+        jasmine.clock().tick(1);
+
         expect(spyOnCleanUpStamp).toHaveBeenCalled();
         expect(spyOnDrawStackPush).toHaveBeenCalled();
     });

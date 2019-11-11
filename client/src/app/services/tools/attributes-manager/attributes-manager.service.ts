@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
+    BRUSH_STYLE,
+    EraserSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -15,28 +17,30 @@ import {
     providedIn: 'root',
 })
 export class AttributesManagerService {
-    // tslint:disable-next-line: variable-name
-    private _thickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    private thicknessValue: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     get thickness(): BehaviorSubject<number> {
-        return this._thickness;
+        return this.thicknessValue;
     }
     set thickness(value: BehaviorSubject<number>) {
-        this._thickness = value;
+        this.thicknessValue = value;
     }
 
+    private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
     private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
-    private style: BehaviorSubject<number> = new BehaviorSubject(1);
+    private style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);
     private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
     private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
     private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
     private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
     private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
-    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Min);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
+    private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
 
     currentThickness: Observable<number> = this.thickness.asObservable();
+    currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
-    currentStyle: Observable<number> = this.style.asObservable();
+    currentStyle: Observable<BRUSH_STYLE> = this.style.asObservable();
     currentNbVertices: Observable<number> = this.nbVertices.asObservable();
     currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
     currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
@@ -44,6 +48,7 @@ export class AttributesManagerService {
     currentAngle: Observable<number> = this.angle.asObservable();
     currentScaling: Observable<number> = this.scaling.asObservable();
     currentStampType: Observable<string> = this.stampType.asObservable();
+    currentEraserSize: Observable<number> = this.eraserSize.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -61,11 +66,15 @@ export class AttributesManagerService {
         this.thickness.next(thickness);
     }
 
+    changeMinThickness(thickness: number): void {
+        this.minThickness.next(thickness);
+    }
+
     changeTraceType(traceType: string): void {
         this.traceType.next(traceType);
     }
 
-    changeStyle(style: number): void {
+    changeStyle(style: BRUSH_STYLE): void {
         this.style.next(style);
     }
 
@@ -83,5 +92,9 @@ export class AttributesManagerService {
 
     changeStampType(stampType: string): void {
         this.stampType.next(stampType);
+    }
+
+    changeEraserSize(size: number): void {
+        this.eraserSize.next(size);
     }
 }

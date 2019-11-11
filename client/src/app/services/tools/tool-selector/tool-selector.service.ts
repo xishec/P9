@@ -3,18 +3,23 @@ import { MatDialog } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/drawing-modal-window/drawing-modal-window.component';
+// tslint:disable-next-line: max-line-length
+import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
+import { EraserToolService } from '../eraser-tool/eraser-tool.service';
+import { ExportToolService } from '../export-tool/export-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
@@ -26,25 +31,31 @@ import { StampToolService } from '../stamp-tool/stamp-tool.service';
 })
 export class ToolSelectorService {
     private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
-    private selectionTool: SelectionToolService;
-    private rectangleTool: RectangleToolService;
-    private ellipsisTool: EllipsisToolService;
-    private pencilTool: PencilToolService;
-    private brushTool: BrushToolService;
-    private stampTool: StampToolService;
-    private dropperTool: DropperToolService;
-    private colorApplicatorTool: ColorApplicatorToolService;
-    private polygoneTool: PolygonToolService;
-    lineToolService: LineToolService;
 
     currentToolName: Observable<ToolName> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
+    drawStack: DrawStackService;
+    TOOLS_MAP: Map<ToolName, AbstractToolService>;
+    WORKZONE_TOOLS_MAP: Map<ToolName, () => void>;
 
     constructor(
-        private colorToolService: ColorToolService,
         private dialog: MatDialog,
         private modalManagerService: ModalManagerService,
+        private selectionTool: SelectionToolService,
+        private rectangleTool: RectangleToolService,
+        private ellipsisTool: EllipsisToolService,
+        private pencilTool: PencilToolService,
+        private penTool: PenToolService,
+        private brushTool: BrushToolService,
+        private stampTool: StampToolService,
+        private dropperTool: DropperToolService,
+        private colorApplicatorTool: ColorApplicatorToolService,
+        private polygonTool: PolygonToolService,
+        private lineTool: LineToolService,
+        private exportTool: ExportToolService,
+        private eraserTool: EraserToolService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -52,33 +63,101 @@ export class ToolSelectorService {
     }
 
     initTools(drawStack: DrawStackService, ref: ElementRef<SVGElement>, renderer: Renderer2): void {
-        this.selectionTool = new SelectionToolService(drawStack, ref, renderer);
+        this.selectionTool.initializeService(ref, renderer, drawStack);
 
-        this.rectangleTool = new RectangleToolService(drawStack, ref, renderer);
-        this.rectangleTool.initializeColorToolService(this.colorToolService);
+        this.rectangleTool.initializeService(ref, renderer, drawStack);
 
-        this.ellipsisTool = new EllipsisToolService(drawStack, ref, renderer);
-        this.ellipsisTool.initializeColorToolService(this.colorToolService);
+        this.ellipsisTool.initializeService(ref, renderer, drawStack);
 
-        this.pencilTool = new PencilToolService(ref, renderer, drawStack);
-        this.pencilTool.initializeColorToolService(this.colorToolService);
+        this.pencilTool.initializeService(ref, renderer, drawStack);
 
-        this.brushTool = new BrushToolService(ref, renderer, drawStack);
-        this.brushTool.initializeColorToolService(this.colorToolService);
+        this.penTool.initializeService(ref, renderer, drawStack);
 
-        this.stampTool = new StampToolService(drawStack, ref, renderer);
+        this.brushTool.initializeService(ref, renderer, drawStack);
 
-        this.dropperTool = new DropperToolService(drawStack, ref, renderer);
-        this.dropperTool.initializeColorToolService(this.colorToolService);
+        this.stampTool.initializeService(ref, renderer, drawStack);
 
-        this.colorApplicatorTool = new ColorApplicatorToolService(drawStack, renderer);
-        this.colorApplicatorTool.initializeColorToolService(this.colorToolService);
+        this.dropperTool.initializeService(ref, renderer, drawStack);
 
-        this.polygoneTool = new PolygonToolService(drawStack, ref, renderer);
-        this.polygoneTool.initializeColorToolService(this.colorToolService);
+        this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
 
-        this.lineToolService = new LineToolService(ref, renderer, drawStack);
-        this.lineToolService.initializeColorToolService(this.colorToolService);
+        this.polygonTool.initializeService(ref, renderer, drawStack);
+
+        this.lineTool.initializeService(ref, renderer, drawStack);
+
+        this.exportTool.initializeService(ref, renderer);
+
+        this.eraserTool.initializeService(ref, renderer, drawStack);
+
+        this.TOOLS_MAP = new Map([
+            [ToolName.Selection, this.selectionTool as AbstractToolService],
+            [ToolName.Rectangle, this.rectangleTool as AbstractToolService],
+            [ToolName.Ellipsis, this.ellipsisTool as AbstractToolService],
+            [ToolName.Pencil, this.pencilTool as AbstractToolService],
+            [ToolName.Brush, this.brushTool as AbstractToolService],
+            [ToolName.Stamp, this.stampTool as AbstractToolService],
+            [ToolName.ColorApplicator, this.colorApplicatorTool as AbstractToolService],
+            [ToolName.Polygon, this.polygonTool as AbstractToolService],
+            [ToolName.Line, this.lineTool as AbstractToolService],
+            [ToolName.Dropper, this.dropperTool as AbstractToolService],
+            [ToolName.Pen, this.penTool as AbstractToolService],
+            [ToolName.Eraser, this.eraserTool as AbstractToolService],
+            [ToolName.Quill, this.selectionTool as AbstractToolService],
+            [ToolName.SprayCan, this.selectionTool as AbstractToolService],
+            [ToolName.Fill, this.selectionTool as AbstractToolService],
+            [ToolName.Text, this.selectionTool as AbstractToolService],
+        ]);
+
+        this.WORKZONE_TOOLS_MAP = new Map([
+            [
+                ToolName.NewDrawing,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.displayNewDrawingModal();
+                    }
+                },
+            ],
+            [
+                ToolName.ArtGallery,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.displayOpenFileModal();
+                    }
+                },
+            ],
+            [
+                ToolName.Save,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.displaySaveFileModal();
+                    }
+                },
+            ],
+            [
+                ToolName.Export,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.displayExportFileModal();
+                    }
+                },
+            ],
+            [
+                ToolName.Undo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.undo();
+                    }
+                },
+            ],
+            [
+                ToolName.Redo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.redo();
+                    }
+                },
+            ],
+        ]);
     }
 
     displayNewDrawingModal(): void {
@@ -116,12 +195,28 @@ export class ToolSelectorService {
         });
     }
 
+    displayExportFileModal(): void {
+        const exportFileDialogRef = this.dialog.open(ExportFileModalWindowComponent, {
+            panelClass: 'myapp-min-width-dialog',
+            disableClose: true,
+            autoFocus: false,
+        });
+        this.modalManagerService.setModalIsDisplayed(true);
+        exportFileDialogRef.afterClosed().subscribe(() => {
+            this.modalManagerService.setModalIsDisplayed(false);
+        });
+    }
+
     getSelectiontool(): SelectionToolService {
         return this.selectionTool;
     }
 
     getPencilTool(): PencilToolService {
         return this.pencilTool;
+    }
+
+    getPenTool(): PenToolService {
+        return this.penTool;
     }
 
     getRectangleTool(): RectangleToolService {
@@ -136,7 +231,7 @@ export class ToolSelectorService {
         return this.brushTool;
     }
 
-    getStampToolService(): StampToolService {
+    getStampTool(): StampToolService {
         return this.stampTool;
     }
 
@@ -149,93 +244,40 @@ export class ToolSelectorService {
     }
 
     getPolygonTool(): PolygonToolService {
-        return this.polygoneTool;
+        return this.polygonTool;
     }
 
     getLineTool(): LineToolService {
-        return this.lineToolService;
+        return this.lineTool;
     }
 
-    changeTool(tooltipName: string): void {
+    getEraserTool(): EraserToolService {
+        return this.eraserTool;
+    }
 
+    changeTool(tooltipName: ToolName): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
         }
 
-        switch (tooltipName) {
-            case ToolName.NewDrawing:
-                if (!this.modalIsDisplayed) {
-                    this.displayNewDrawingModal();
-                }
-                break;
-            case ToolName.Selection:
-                this.currentTool = this.selectionTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Rectangle:
-                this.currentTool = this.rectangleTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Ellipsis:
-                this.currentTool = this.ellipsisTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Pencil:
-                this.currentTool = this.pencilTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Brush:
-                this.currentTool = this.brushTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Stamp:
-                this.currentTool = this.stampTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.ColorApplicator:
-                this.currentTool = this.colorApplicatorTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Polygon:
-                this.currentTool = this.polygoneTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Grid:
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Line:
-                this.currentTool = this.lineToolService;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.Dropper:
-                this.currentTool = this.dropperTool;
-                this.changeCurrentToolName(tooltipName);
-                break;
-            case ToolName.ArtGallery:
-                if (!this.modalIsDisplayed) {
-                    this.displayOpenFileModal();
-                }
-                break;
-            case ToolName.Save:
-                if (!this.modalIsDisplayed) {
-                    this.displaySaveFileModal();
-                }
-                break;
-            case ToolName.Export:
-            case ToolName.Quill:
-            case ToolName.Pen:
-            case ToolName.SprayCan:
-            case ToolName.Line:
-            case ToolName.Ellipsis:
-            case ToolName.Polygon:
-            case ToolName.Fill:
-            case ToolName.Eraser:
-            case ToolName.Text:
-            default:
-                this.currentTool = undefined;
-                this.changeCurrentToolName(ToolName.Selection);
-                break;
+        if (tooltipName === ToolName.Grid) {
+            this.changeCurrentToolName(tooltipName);
+            return;
         }
+
+        const tool: AbstractToolService | undefined = this.TOOLS_MAP.get(tooltipName);
+        if (tool !== undefined) {
+            this.currentTool = tool;
+            this.changeCurrentToolName(tooltipName);
+            return;
+        }
+
+        const workzoneTool: (() => void) | undefined = this.WORKZONE_TOOLS_MAP.get(tooltipName);
+        if (workzoneTool !== undefined) {
+            workzoneTool();
+            return;
+        }
+        if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = true; }
     }
 
     changeCurrentToolName(toolName: ToolName): void {

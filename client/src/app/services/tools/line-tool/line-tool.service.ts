@@ -11,7 +11,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class LineToolService extends AbstractToolService {
-    colorToolService: ColorToolService;
+
     attributesManagerService: AttributesManagerService;
 
     currentColorAndOpacity = '';
@@ -36,22 +36,24 @@ export class LineToolService extends AbstractToolService {
     gWrap: SVGGElement;
     currentLine: SVGPolylineElement;
 
-    constructor(
-        private elementRef: ElementRef<SVGElement>,
-        private renderer: Renderer2,
-        private drawStack: DrawStackService,
-    ) {
+    elementRef: ElementRef<SVGElement>;
+    renderer: Renderer2;
+    drawStack: DrawStackService;
+
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+            this.currentColorAndOpacity = currentColor;
+        });
     }
 
     getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
     getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
-    initializeColorToolService(colorToolService: ColorToolService) {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
-            this.currentColorAndOpacity = currentColor;
-        });
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        this.elementRef = elementRef;
+        this.renderer = renderer;
+        this.drawStack = drawStack;
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
@@ -177,7 +179,11 @@ export class LineToolService extends AbstractToolService {
                 );
                 break;
             case LineStrokeType.Dotted_circle:
-                this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_dasharray, `1, ${this.currentStrokeWidth * 1.5}`);
+                this.renderer.setAttribute(
+                    this.currentLine,
+                    HTMLAttribute.stroke_dasharray,
+                    `1, ${this.currentStrokeWidth * 1.5}`,
+                );
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
                 break;
         }
