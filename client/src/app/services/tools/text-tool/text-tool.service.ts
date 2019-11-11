@@ -1,6 +1,9 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
+import { BehaviorSubject } from 'rxjs';
+import { FontInfo } from 'src/classes/FontInfos';
+import { TextCursor } from 'src/classes/textStyle/textCursor';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     HTMLAttribute,
@@ -14,9 +17,6 @@ import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { FontInfo } from 'src/classes/FontInfos';
-import { TextCursor } from 'src/classes/textStyle/textCursor';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',

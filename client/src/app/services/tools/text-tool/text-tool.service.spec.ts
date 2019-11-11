@@ -4,10 +4,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material';
 import {
     createKeyBoardEvent,
+    createMockSVGElement,
     createMockSVGTextElement,
     createMockSVGTSpanElement,
     createMouseEvent,
-    createMockSVGElement,
 } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
 import { HTMLAttribute, TEXT_CURSOR } from 'src/constants/tool-constants';
