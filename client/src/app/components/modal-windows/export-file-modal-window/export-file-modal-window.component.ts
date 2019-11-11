@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ExportToolService } from 'src/app/services/tools/export-tool/export-tool.service';
 import { FileType } from 'src/constants/tool-constants';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-export-file-modal-window',
@@ -15,7 +15,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
     formBuilder: FormBuilder;
-    workZoneIsEmpty: boolean = true;
+    workZoneIsEmpty = true;
 
     readonly FileType = FileType;
 

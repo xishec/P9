@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { predicate } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 
 @Component({
     selector: 'app-grid-attributes',

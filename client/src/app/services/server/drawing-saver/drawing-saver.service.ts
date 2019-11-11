@@ -5,11 +5,11 @@ import { filter } from 'rxjs/operators';
 
 import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { Message } from '../../../../../../common/communication/message';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
-import { FileManagerService } from '../file-manager/file-manager.service';
-import { Message } from '../../../../../../common/communication/message';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
+import { FileManagerService } from '../file-manager/file-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +26,7 @@ export class DrawingSaverService {
         private drawingModalWindowService: DrawingModalWindowService,
         private drawingLoaderService: DrawingLoaderService,
         private fileManagerService: FileManagerService,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
     ) {}
 
     initializeDrawingSaverService(ref: ElementRef<SVGElement>, drawStackService: DrawStackService) {
@@ -63,7 +63,7 @@ export class DrawingSaverService {
                 nameAndLabels.drawingLabels,
                 this.workZoneRef.nativeElement.innerHTML,
                 this.drawStackService.idStack,
-                this.currentDrawingInfo
+                this.currentDrawingInfo,
             )
             .pipe(
                 filter((subject) => {
@@ -71,11 +71,11 @@ export class DrawingSaverService {
                         return true;
                     }
                     this.currentErrorMesaage.next(
-                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert."
+                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                     );
                     this.currentIsSaved.next(false);
                     return false;
-                })
+                }),
             )
             .subscribe((message: Message) => {
                 if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {

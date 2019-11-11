@@ -33,7 +33,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<SaveFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
-        private drawingLoaderService: DrawingLoaderService
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilderServer = formBuilderServer;
         this.formBuilderLocal = formBuilderLocal;
@@ -76,7 +76,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToServer(): void {
         this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels)
+            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
         );
         this.isSaving = true;
 

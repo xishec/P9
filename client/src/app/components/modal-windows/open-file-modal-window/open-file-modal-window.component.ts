@@ -37,7 +37,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private fileManagerService: FileManagerService,
         private drawingLoaderService: DrawingLoaderService,
-        private undoRedoerService: UndoRedoerService
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -52,13 +52,13 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert("Erreur de chargement! Le serveur n'est peut-être pas ouvert.");
+                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
                         this.isLoading = false;
                         return false;
                     } else {
                         return true;
                     }
-                })
+                }),
             )
             .subscribe((ans: any) => {
                 ans.forEach((el: Message) => {
@@ -104,7 +104,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     loadServerFile(): void {
         this.intializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.name === this.selectedOption
+            (drawing) => drawing.name === this.selectedOption,
         ) as Drawing;
         this.drawingLoaderService.currentDrawing.next(selectedDrawing);
         this.closeDialog();
@@ -136,7 +136,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert("Le fichier choisi n'est pas valide, veuillez réessayer.");
+                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
                 }
             };
         }

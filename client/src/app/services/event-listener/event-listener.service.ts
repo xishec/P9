@@ -2,6 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { ControlShortcuts, ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
+import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
@@ -9,7 +10,6 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
-import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 
 @Injectable({
     providedIn: 'root',

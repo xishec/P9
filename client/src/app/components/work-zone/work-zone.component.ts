@@ -46,7 +46,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
-        private clipboard: ClipboardService
+        private clipboard: ClipboardService,
     ) {}
 
     ngOnInit(): void {
@@ -119,7 +119,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.changeDrawingInfo(
             this.drawingInfo.width,
             this.drawingInfo.height,
-            this.drawingInfo.color
+            this.drawingInfo.color,
         );
     }
 
@@ -146,7 +146,7 @@ export class WorkZoneComponent implements OnInit {
             this.renderer,
             this.drawingLoaderService,
             this.undoRedoerService,
-            this.clipboard
+            this.clipboard,
         );
         this.eventListenerService.addEventListeners();
     }
@@ -207,7 +207,7 @@ export class WorkZoneComponent implements OnInit {
             this.renderer.setAttribute(
                 this.refSVG.nativeElement.children[0],
                 'style',
-                'fill: #' + this.backgroundColor() + ';'
+                'fill: #' + this.backgroundColor() + ';',
             );
         }
     }
