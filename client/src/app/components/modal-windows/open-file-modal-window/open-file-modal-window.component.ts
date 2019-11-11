@@ -39,7 +39,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         private snackBar: MatSnackBar,
     ) {
         this.formBuilder = formBuilder;
-        this.snackBar;
     }
 
     ngOnInit(): void {
@@ -51,7 +50,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK');
+                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK');
                         this.isLoading = false;
                         return false;
                     } else {

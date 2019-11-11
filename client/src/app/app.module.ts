@@ -18,8 +18,8 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatTooltipModule,
     MatSnackBarModule,
+    MatTooltipModule,
 } from '@angular/material';
 // ************************************************
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
