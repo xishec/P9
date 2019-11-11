@@ -174,48 +174,55 @@ export class EraserToolService extends AbstractToolService {
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
         for (let i = this.drawStack.getDrawStackLength() - 1; i >= 0; i--) {
-            const el = this.drawStack.drawStack[i];
-            const elBox = this.getDOMRect(el);
+            const svgGElement = this.drawStack.drawStack[i];
+            const elBox = this.getDOMRect(svgGElement);
 
-            if (this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(el)) && topElement <= i) {
-                if (this.lastElementColoredNumber !== topElement) {
-                    if (!this.changedElements.get(el.getAttribute('id_element') as string)) {
-                        this.changedElements.set(
-                            el.getAttribute('id_element') as string,
-                            new SVGGElementInfo(
-                                el.getAttribute(HTMLAttribute.stroke) as string,
-                                el.getAttribute(HTMLAttribute.stroke_width) as string,
-                            ),
-                        );
-                    }
-
-                    this.lastToolName = el.getAttribute('title') as string;
-
-                    this.drawStack.changeTargetElement(
-                        new StackTargetInfo(
-                            parseInt(el.getAttribute('id_element') as string, DEFAULT_RADIX),
-                            this.lastToolName,
-                        ),
-                    );
-
-                    topElement = i;
-                    this.lastElementColoredNumber = topElement;
-                    this.mouseOverColorBorder(
-                        this.currentTarget,
-                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
-                        this.lastToolName,
-                    );
-                }
+            if (this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(svgGElement)) && topElement <= i) {
+                this.updateElementsToColor(topElement, svgGElement, i);
                 enteredInSelection = true;
                 this.isOnTarget = true;
             } else {
                 topElement--;
-                this.removeBorder(el.getAttribute('id_element') as string, el.getAttribute('title') as string);
+                this.removeBorder(
+                    svgGElement.getAttribute('id_element') as string,
+                    svgGElement.getAttribute('title') as string,
+                );
             }
         }
         if (!enteredInSelection) {
             this.isOnTarget = false;
             this.lastElementColoredNumber = RESET_POSITION_NUMBER;
+        }
+    }
+
+    updateElementsToColor(topElement: number, svgGElement: SVGGElement, index: number) {
+        if (this.lastElementColoredNumber !== topElement) {
+            if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
+                this.changedElements.set(
+                    svgGElement.getAttribute('id_element') as string,
+                    new SVGGElementInfo(
+                        svgGElement.getAttribute(HTMLAttribute.stroke) as string,
+                        svgGElement.getAttribute(HTMLAttribute.stroke_width) as string,
+                    ),
+                );
+            }
+
+            this.lastToolName = svgGElement.getAttribute('title') as string;
+
+            this.drawStack.changeTargetElement(
+                new StackTargetInfo(
+                    parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX),
+                    this.lastToolName,
+                ),
+            );
+
+            topElement = index;
+            this.lastElementColoredNumber = topElement;
+            this.mouseOverColorBorder(
+                this.currentTarget,
+                this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                this.lastToolName,
+            );
         }
     }
 
