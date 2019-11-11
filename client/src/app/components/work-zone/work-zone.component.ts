@@ -93,12 +93,15 @@ export class WorkZoneComponent implements OnInit {
         });
 
         this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
+            if (nameAndLabels.name.length === 0) {
+                return;
+            }
             if (this.empty) {
                 this.drawingSaverService.currentIsSaved.next(false);
                 this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-            } else if (nameAndLabels.name.length < 0) {
-                this.postDrawing(nameAndLabels);
+                return;
             }
+            this.postDrawing(nameAndLabels);
         });
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
@@ -178,7 +181,7 @@ export class WorkZoneComponent implements OnInit {
                 filter((subject) => {
                     if (subject === undefined) {
                         this.drawingSaverService.currentErrorMesaage.next(
-                            'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                            "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                         );
                         this.drawingSaverService.currentIsSaved.next(false);
                         return false;
