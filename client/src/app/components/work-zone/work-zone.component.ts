@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { filter } from 'rxjs/operators';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -11,16 +10,13 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
-import { Message } from '../../../../../common/communication/message';
 import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -40,7 +36,6 @@ export class WorkZoneComponent implements OnInit {
     private eventListenerService: EventListenerService;
 
     constructor(
-        private fileManagerService: FileManagerService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private toolSelector: ToolSelectorService,
@@ -51,7 +46,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
-        private clipboard: ClipboardService,
+        private clipboard: ClipboardService
     ) {}
 
     ngOnInit(): void {
@@ -92,20 +87,6 @@ export class WorkZoneComponent implements OnInit {
 
         this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
 
-        this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            console.log("HELLO", this.drawingLoaderService.emptyDrawStack.value);
-            console.log("BYE", nameAndLabels.name.length);
-            console.log("Error Message => ", this.drawingSaverService.currentErrorMesaage.value);
-            
-            
-            if (this.drawingLoaderService.emptyDrawStack.value) {
-                this.drawingSaverService.currentIsSaved.next(false);
-                this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-            } else if (nameAndLabels.name.length > 0) {
-                this.postDrawing(nameAndLabels);
-            }
-        });
-
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color = backgroundColor;
             this.setRectangleBackgroundStyle();
@@ -138,7 +119,7 @@ export class WorkZoneComponent implements OnInit {
         this.drawingModalWindowService.changeDrawingInfo(
             this.drawingInfo.width,
             this.drawingInfo.height,
-            this.drawingInfo.color,
+            this.drawingInfo.color
         );
     }
 
@@ -165,48 +146,12 @@ export class WorkZoneComponent implements OnInit {
             this.renderer,
             this.drawingLoaderService,
             this.undoRedoerService,
-            this.clipboard,
+            this.clipboard
         );
         this.eventListenerService.addEventListeners();
     }
 
-    postDrawing(nameAndLabels: NameAndLabels) {
-        this.fileManagerService
-            .postDrawing(
-                nameAndLabels.name,
-                nameAndLabels.drawingLabels,
-                this.refSVG.nativeElement.innerHTML,
-                this.drawStack.idStack,
-                this.drawingInfo,
-            )
-            .pipe(
-                filter((subject) => {
-                    if (subject === undefined) {
-                        console.log("subject => ", subject);
-                        
-                        this.drawingSaverService.currentErrorMesaage.next(
-                            'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
-                        );
-                        this.drawingSaverService.currentIsSaved.next(false);
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }),
-            )
-            .subscribe((message: Message) => {
-                console.log("message => ", message);
-                
-                if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
-                    this.drawingSaverService.currentIsSaved.next(true);
-                } else {
-                    this.drawingSaverService.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
-                    this.drawingSaverService.currentIsSaved.next(false);
-                }
-            });
-    }
-
-    resetWorkzone(drawingInfo: DrawingInfo) {        
+    resetWorkzone(drawingInfo: DrawingInfo) {
         this.drawingLoaderService.emptyDrawStack.next(false);
         this.drawingInfo = drawingInfo;
 
@@ -262,7 +207,7 @@ export class WorkZoneComponent implements OnInit {
             this.renderer.setAttribute(
                 this.refSVG.nativeElement.children[0],
                 'style',
-                'fill: #' + this.backgroundColor() + ';',
+                'fill: #' + this.backgroundColor() + ';'
             );
         }
     }

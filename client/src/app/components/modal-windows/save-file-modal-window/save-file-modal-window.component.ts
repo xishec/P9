@@ -33,7 +33,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private dialogRef: MatDialogRef<SaveFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
-        private drawingLoaderService: DrawingLoaderService,
+        private drawingLoaderService: DrawingLoaderService
     ) {
         this.formBuilderServer = formBuilderServer;
         this.formBuilderLocal = formBuilderLocal;
@@ -44,7 +44,9 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
             currentDrawing.labels.forEach((label) => {
-                if (!this.drawingLabels.includes(label)) { this.drawingLabels.push(label); }
+                if (!this.drawingLabels.includes(label)) {
+                    this.drawingLabels.push(label);
+                }
             });
             this.selectedLabels = Array.from(currentDrawing.labels);
         });
@@ -73,16 +75,15 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToServer(): void {
-        const nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
+        this.drawingSaverService.sendFileToServer(
+            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels)
+        );
         this.isSaving = true;
-        this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
 
         this.drawingSaverService.currentIsSaved
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
-                console.log("Save file modal => ", drawingIsSaved);
-                
                 if (drawingIsSaved) {
                     window.alert('Sauvegarde réussie!');
                     this.closeDialog();
@@ -108,19 +109,15 @@ export class SaveFileModalWindowComponent implements OnInit {
     addLabel(newLabel: string): void {
         if (this.selectedLabels.length >= MAX_NB_LABELS) {
             window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
-        } else {
-            this.drawingLabels.push(newLabel);
-            this.selectedLabels.push(newLabel);
-            this.saveFileModalForm.controls.label.setValue('');
+            return;
         }
+        this.drawingLabels.push(newLabel);
+        this.selectedLabels.push(newLabel);
+        this.saveFileModalForm.controls.label.setValue('');
     }
 
     toggleLabel(label: string): void {
-        if (this.selectedLabels.includes(label)) {
-            this.deselect(label);
-        } else {
-            this.select(label);
-        }
+        this.selectedLabels.includes(label) ? this.deselect(label) : this.select(label);
     }
 
     deselect(label: string): void {
@@ -130,10 +127,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     select(label: string): void {
-        if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
-        } else {
-            this.selectedLabels.push(label);
-        }
+        this.selectedLabels.length >= MAX_NB_LABELS
+            ? window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`)
+            : this.selectedLabels.push(label);
     }
 }
