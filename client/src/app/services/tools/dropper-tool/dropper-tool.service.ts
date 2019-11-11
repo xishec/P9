@@ -9,7 +9,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class DropperToolService extends AbstractToolService {
-    colorTool: ColorToolService;
     svg: SVGElement;
     currentMouseX = 0;
     currentMouseY = 0;
@@ -23,7 +22,7 @@ export class DropperToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
     }
 
@@ -42,10 +41,6 @@ export class DropperToolService extends AbstractToolService {
             event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left &&
             event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top
         );
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService): void {
-        this.colorTool = colorToolService;
     }
 
     updateSVGCopy(): void {
@@ -76,9 +71,9 @@ export class DropperToolService extends AbstractToolService {
 
         const button = event.button;
         if (button === Mouse.LeftButton && this.isIn) {
-            this.colorTool.changePrimaryColor(colorHex);
+            this.colorToolService.changePrimaryColor(colorHex);
         } else if (button === Mouse.RightButton && this.isIn) {
-            this.colorTool.changeSecondaryColor(colorHex);
+            this.colorToolService.changeSecondaryColor(colorHex);
         }
     }
     onMouseEnter(event: MouseEvent): void {
@@ -99,6 +94,6 @@ export class DropperToolService extends AbstractToolService {
         this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
         this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
         const colorRGB = this.pickColor();
-        return this.colorTool.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
+        return this.colorToolService.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
     }
 }

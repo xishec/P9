@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { predicate } from 'src/constants/constants';
 import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
@@ -25,7 +24,6 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
@@ -39,7 +37,6 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.rectangleToolService = this.toolSelectorService.getRectangleTool();
         this.rectangleToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.rectangleToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {

@@ -13,7 +13,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
 })
 export class ColorApplicatorToolService extends AbstractToolService {
     currentStackTarget: StackTargetInfo;
-    private colorToolService: ColorToolService;
     private primaryColor = '';
     private secondaryColor = '';
     isOnTarget = false;
@@ -22,8 +21,14 @@ export class ColorApplicatorToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(private undoRedoerService: UndoRedoerService) {
+    constructor(private colorToolService: ColorToolService, private undoRedoerService: UndoRedoerService) {
         super();
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.primaryColor = '#' + primaryColor;
+        });
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
+            this.secondaryColor = '#' + secondaryColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -34,16 +39,6 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
             this.currentStackTarget = stackTarget;
             this.isOnTarget = true;
-        });
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService): void {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((primaryColor) => {
-            this.primaryColor = '#' + primaryColor;
-        });
-        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
-            this.secondaryColor = '#' + secondaryColor;
         });
     }
 

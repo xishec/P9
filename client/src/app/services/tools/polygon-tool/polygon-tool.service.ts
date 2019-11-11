@@ -32,12 +32,19 @@ export class PolygonToolService extends AbstractShapeToolService {
     strokeWidth = 0;
     nbVertices = 3;
     attributesManagerService: AttributesManagerService;
-    colorToolService: ColorToolService;
     radius = 0;
     radiusCorrection = 0;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
+            this.fillColor = fillColor;
+            this.updateTraceType(this.traceType);
+        });
+        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
+            this.strokeColor = strokeColor;
+            this.updateTraceType(this.traceType);
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -62,18 +69,6 @@ export class PolygonToolService extends AbstractShapeToolService {
     setRadiusCorrection() {
         const correction: number = PolygonRadiusCorrection.get(this.nbVertices) as number;
         this.radiusCorrection = this.radius * correction;
-    }
-
-    initializeColorToolService(colorToolService: ColorToolService) {
-        this.colorToolService = colorToolService;
-        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
-            this.fillColor = fillColor;
-            this.updateTraceType(this.traceType);
-        });
-        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
-            this.strokeColor = strokeColor;
-            this.updateTraceType(this.traceType);
-        });
     }
 
     isValidePolygon(): boolean {
