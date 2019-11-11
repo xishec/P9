@@ -47,9 +47,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     isStackTargetShape(): boolean {
-        let isRectangle = this.currentStackTarget.toolName === ToolName.Rectangle;
-        let isEllipsis = this.currentStackTarget.toolName === ToolName.Ellipsis;
-        let isPolygon = this.currentStackTarget.toolName === ToolName.Polygon;
+        const isRectangle = this.currentStackTarget.toolName === ToolName.Rectangle;
+        const isEllipsis = this.currentStackTarget.toolName === ToolName.Ellipsis;
+        const isPolygon = this.currentStackTarget.toolName === ToolName.Polygon;
         return isRectangle || isEllipsis || isPolygon;
     }
 
@@ -65,7 +65,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTMLAttribute.fill,
-            this.primaryColor
+            this.primaryColor,
         );
     }
 
@@ -73,7 +73,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTMLAttribute.stroke,
-            this.secondaryColor
+            this.secondaryColor,
         );
     }
 
@@ -81,13 +81,13 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTMLAttribute.stroke,
-            this.primaryColor
+            this.primaryColor,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTMLAttribute.fill,
-            this.primaryColor
+            this.primaryColor,
         );
     }
 
