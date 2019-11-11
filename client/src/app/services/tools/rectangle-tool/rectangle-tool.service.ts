@@ -140,7 +140,7 @@ export class RectangleToolService extends AbstractShapeToolService {
 
         setTimeout(() => {
             this.drawStack.push(el);
-        }, 1);
+        }, 0);
 
     }
 
