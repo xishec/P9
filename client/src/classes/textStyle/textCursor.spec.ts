@@ -3,6 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { BehaviorSubject } from 'rxjs';
 import { TextCursor } from './textCursor';
+import { TEXT_CURSOR } from 'src/constants/tool-constants';
 
 fdescribe('TextCursor', () => {
     let injector: TestBed;
@@ -35,10 +36,10 @@ fdescribe('TextCursor', () => {
         expect(service).toBeTruthy();
     });
 
-    it('swapInCurrentLine should return █est is string "test" is passed and currentCursorIndex is zero', () => {
-        service.text = 'test';
-
-        expect(service.swapInCurrentLine(0)).toEqual('█est');
+    it(`swapInCurrentLine should return t${TEXT_CURSOR}est if string "${TEXT_CURSOR}test" is passed and CurrentCursorIndex is 0`, () => {
+        service.text = TEXT_CURSOR + 'test';
+        service.currentCursorIndex = 0;
+        expect(service.swapInCurrentLine(1)).toEqual(`t${TEXT_CURSOR}est`);
     });
 
     it('erase should return "est" if test is passed and currentCursorIndex is zero', () => {
