@@ -18,7 +18,6 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
     isItalic = false;
     textAttributesForm: FormGroup;
     textToolService: TextToolService;
-    attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
     readonly FONTS = FONTS;
     readonly fontSize = FontSize;
@@ -27,6 +26,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
         private shortcutManagerService: ShortcutManagerService,
+        private attributesManagerService: AttributesManagerService,
     ) {
         this.formBuilder = formBuilder;
     }

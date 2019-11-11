@@ -317,7 +317,7 @@ export class TextToolService extends AbstractToolService {
     }
     moveCursor(key: string): void {
         const currentLineRef: SVGTSpanElement[] = [this.currentLine];
-        if (key === 'ArrowLeft') {
+        if (key === Keys.ArrowLeft) {
             this.text = this.textCursor.isAtStartOfLine()
                 ? this.textCursor.swapToAnotherLine(-1, currentLineRef, this.tspans)
                 : this.textCursor.swapInCurrentLine(-1);
