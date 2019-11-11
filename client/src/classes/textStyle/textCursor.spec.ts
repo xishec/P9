@@ -8,6 +8,7 @@ import { TEXT_CURSOR } from 'src/constants/tool-constants';
 fdescribe('TextCursor', () => {
     let injector: TestBed;
     let service: TextCursor;
+    const TEXT = `te${TEXT_CURSOR}st`;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -30,22 +31,23 @@ fdescribe('TextCursor', () => {
 
         injector = getTestBed();
         service = injector.get(TextCursor);
+        service.currentCursorIndex = 2;
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
-    it(`swapInCurrentLine should return t${TEXT_CURSOR}est if string "${TEXT_CURSOR}test" is passed and CurrentCursorIndex is 0`, () => {
-        service.text = TEXT_CURSOR + 'test';
-        service.currentCursorIndex = 0;
-        expect(service.swapInCurrentLine(1)).toEqual(`t${TEXT_CURSOR}est`);
+    it(`swapInCurrentLine should return t${TEXT_CURSOR}est if string "${TEXT}" is passed,cursorindex is 2 and offset is -1`, () => {
+        service.text = TEXT;
+
+        expect(service.swapInCurrentLine(-1)).toEqual(`t${TEXT_CURSOR}est`);
     });
 
-    it('erase should return "est" if test is passed and currentCursorIndex is zero', () => {
-        service.text = 'test';
+    it(`erase should return test if string ${TEXT} is passed and currentCursorIndex is 2`, () => {
+        service.text = TEXT;
 
-        expect(service.erase()).toEqual('est');
+        expect(service.erase()).toEqual('test');
     });
 
     // to do swapToAnotherLine, findLinePosition and two last functions.
@@ -56,13 +58,13 @@ fdescribe('TextCursor', () => {
     //     expect(service.erase()).toEqual('est');
     // });
 
-    it('leftSideText should return "" if "test" is passed and currentCursorIndex is zero', () => {
-        expect(service.leftSideText('test')).toEqual('');
+    it(`leftSideText should return "te" if "${TEXT}" is passed and currentCursorIndex is 2`, () => {
+        expect(service.leftSideText(TEXT)).toEqual('te');
     });
 
-    it('rightSideText should return "est" if "test" is passed and currentCursorIndex is zero', () => {
-        service.text = 'test';
+    it(`rightSideText should return "st" if "${TEXT}" is passed and currentCursorIndex is 2`, () => {
+        service.text = TEXT;
 
-        expect(service.rightSideText()).toEqual('est');
+        expect(service.rightSideText()).toEqual('st');
     });
 });
