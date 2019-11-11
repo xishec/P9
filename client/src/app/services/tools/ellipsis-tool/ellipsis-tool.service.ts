@@ -274,8 +274,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Ellipsis);
 
         this.renderer.appendChild(el, drawEllipse);
-        this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
+
+        setTimeout(() => {
+            this.drawStack.push(el);
+        }, 0);
     }
 
     cleanUp(): void {

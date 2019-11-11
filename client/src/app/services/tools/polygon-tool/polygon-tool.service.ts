@@ -177,8 +177,11 @@ export class PolygonToolService extends AbstractShapeToolService {
             : this.renderer.setAttribute(el, HTMLAttribute.fill, '#' + this.userFillColor);
 
         this.renderer.appendChild(el, drawPolygon);
-        this.drawStack.push(el);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
+
+        setTimeout(() => {
+            this.drawStack.push(el);
+        }, 0);
     }
 
     updateDrawing(): void {

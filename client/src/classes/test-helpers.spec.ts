@@ -112,5 +112,7 @@ export const createMockFilter = (): SVGFilterElement => {
 
 // tslint:disable-next-line: max-classes-per-file
 export class MockElementRef extends ElementRef {
-    nativeElement: {};
+    constructor() {
+        super(null);
+    }
 }

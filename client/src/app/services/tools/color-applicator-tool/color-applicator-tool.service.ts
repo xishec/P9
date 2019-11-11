@@ -4,6 +4,7 @@ import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
 import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -20,7 +21,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(private colorToolService: ColorToolService) {
+    constructor(private colorToolService: ColorToolService, private undoRedoerService: UndoRedoerService) {
         super();
         this.colorToolService.primaryColor.subscribe((primaryColor) => {
             this.primaryColor = '#' + primaryColor;
@@ -73,6 +74,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                             this.primaryColor,
                         );
                     }
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                     break;
                 case Mouse.RightButton:
                     if (
@@ -87,6 +89,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                         HTMLAttribute.stroke,
                         this.secondaryColor,
                     );
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                     break;
                 default:
                     break;

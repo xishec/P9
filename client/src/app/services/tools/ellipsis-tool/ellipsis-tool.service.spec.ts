@@ -100,6 +100,12 @@ describe('EllipsisToolService', () => {
         spyOnDrawEllipseRadiusY = spyOnProperty(service, 'drawEllipseRadiusY', 'get').and.callFake(() => {
             return 30;
         });
+
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -349,6 +355,7 @@ describe('EllipsisToolService', () => {
         service.userFillColor = NONE;
 
         service.createSVG();
+        jasmine.clock().tick(1);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnDrawStackPush).toHaveBeenCalled();
@@ -358,6 +365,7 @@ describe('EllipsisToolService', () => {
         service.userFillColor = NOTNONE;
 
         service.createSVG();
+        jasmine.clock().tick(1);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnDrawStackPush).toHaveBeenCalled();

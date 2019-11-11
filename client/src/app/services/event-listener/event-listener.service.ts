@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { ToolName, ToolNameControlShortcuts, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { ControlShortcuts, ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
@@ -8,6 +8,7 @@ import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
@@ -26,6 +27,7 @@ export class EventListenerService {
         private shortCutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private renderer: Renderer2,
+        private undoRedoer: UndoRedoerService,
         private clipboard: ClipboardService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
@@ -86,15 +88,24 @@ export class EventListenerService {
         });
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-            // If control is pressed, change for ControlTools
-            if (event.ctrlKey && this.currentTool !== undefined) {
+
+            // If control is pressed
+            if (this.currentTool !== undefined && event.ctrlKey) {
                 event.preventDefault();
 
-                if (ToolNameControlShortcuts.has(event.key)) {
-                    this.toolSelectorService.changeTool(ToolNameControlShortcuts.get(event.key) as ToolName);
+                // Control tools : new drawing, save, export, open...
+                if (ControlShortcuts.has(event.key)) {
+                    this.toolSelectorService.changeTool(ControlShortcuts.get(event.key) as ToolName);
                 }
 
-                if (event.key === 'x') {
+                // Undo Redo
+                if (event.key === 'z') {
+                    this.currentTool.cleanUp();
+                    this.undoRedoer.undo();
+                } else if (event.key === 'Z') {
+                    this.currentTool.cleanUp();
+                    this.undoRedoer.redo();
+                } else if (event.key === 'x') {
                     this.clipboard.cut();
                 } else if (event.key === 'v') {
                     this.toolSelectorService.changeTool(ToolName.Selection);

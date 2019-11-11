@@ -10,6 +10,7 @@ import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/s
 import { ToolName } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BrushToolService } from '../brush-tool/brush-tool.service';
 import { ColorApplicatorToolService } from '../color-applicator-tool/color-applicator-tool.service';
@@ -54,6 +55,7 @@ export class ToolSelectorService {
         private lineTool: LineToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -136,6 +138,22 @@ export class ToolSelectorService {
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displayExportFileModal();
+                    }
+                },
+            ],
+            [
+                ToolName.Undo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.undo();
+                    }
+                },
+            ],
+            [
+                ToolName.Redo,
+                () => {
+                    if (!this.modalIsDisplayed) {
+                        this.undoRedoerService.redo();
                     }
                 },
             ],

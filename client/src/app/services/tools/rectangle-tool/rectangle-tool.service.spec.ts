@@ -103,6 +103,12 @@ describe('RectangleToolService', () => {
         spyDrawRectY = spyOnProperty(rectangleTool, 'drawRectangleY', 'get').and.callFake(() => {
             return mockDrawRect.y;
         });
+
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
@@ -221,6 +227,8 @@ describe('RectangleToolService', () => {
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onMouseUp(MOUSEUP_EVENT);
+
+        jasmine.clock().tick(1);
 
         expect(rectangleTool.isPreviewing).toBeFalsy();
         expect(rectangleTool.isSquarePreview).toBeFalsy();
