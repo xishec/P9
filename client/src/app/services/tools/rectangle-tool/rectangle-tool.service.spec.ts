@@ -111,7 +111,7 @@ describe('RectangleToolService', () => {
 
     afterEach(() => {
         jasmine.clock().uninstall();
-    })
+    });
 
     it('should be created with call to new', () => {
         const newRectangleTool = new RectangleToolService();
