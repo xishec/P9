@@ -173,7 +173,6 @@ export class TextToolService extends AbstractToolService {
     }
 
     updatePreviewBox(): void {
-        // after the text is appended, get the bounding box of the text element and update the preview rectangle
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;

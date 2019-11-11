@@ -58,6 +58,6 @@ describe('AttributePanelComponent', () => {
                 .then(() => {
                     expect(component.currentToolName).toEqual(ToolName.Brush);
                 });
-        })
+        }),
     ));
 });
