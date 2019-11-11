@@ -17,10 +17,10 @@ import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { Message } from '../../../../../common/communication/message';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 
 @Component({
     selector: 'app-work-zone',
@@ -178,7 +178,7 @@ export class WorkZoneComponent implements OnInit {
                 filter((subject) => {
                     if (subject === undefined) {
                         this.drawingSaverService.currentErrorMesaage.next(
-                            'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                            "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                         );
                         this.drawingSaverService.currentIsSaved.next(false);
                         return false;

@@ -5,13 +5,13 @@ import { MatDialogRef } from '@angular/material';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
 @Component({
     selector: 'app-drawing-modal-window',

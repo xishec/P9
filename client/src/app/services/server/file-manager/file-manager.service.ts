@@ -4,9 +4,9 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/message';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
 @Injectable({
     providedIn: 'root',
