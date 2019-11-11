@@ -1,6 +1,8 @@
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
+const CONTROL_POINT_RADIUS = 5;
+const SELECTION_COLOR = '#ff5722';
 
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
@@ -366,4 +368,6 @@ export {
     STAMP_BASE_ROTATION,
     STAMP_ALTER_ROTATION,
     CONTROL_POINTS_AMOUNT,
+    CONTROL_POINT_RADIUS,
+    SELECTION_COLOR,
 };

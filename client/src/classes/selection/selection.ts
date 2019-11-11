@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { CONTROL_POINTS_AMOUNT, DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
+import { CONTROL_POINTS_AMOUNT, SELECTION_COLOR, CONTROL_POINT_RADIUS, DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
 
 export class Selection {
@@ -32,13 +32,13 @@ export class Selection {
 
     initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, '#ff5722');
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTMLAttribute.fill, 'none');
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
-            this.renderer.setAttribute(this.controlPoints[i], 'r', '5');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, '#ff5722');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, '#ff5722');
+            this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, SELECTION_COLOR);
         }
     }
 
