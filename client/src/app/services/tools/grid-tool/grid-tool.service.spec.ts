@@ -1,9 +1,9 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
-import { GridToolService } from './grid-tool.service';
-import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { BehaviorSubject } from 'rxjs';
+import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
+import { GridToolService } from './grid-tool.service';
 
 describe('GridToolService', () => {
     let injector: TestBed;
@@ -18,7 +18,7 @@ describe('GridToolService', () => {
                 {
                     provide: DrawingLoaderService,
                     useValue: {
-                        emptyDrawstack: new BehaviorSubject<boolean>(true),
+                        emptyDrawStack: new BehaviorSubject<boolean>(true),
                     },
                 },
             ],

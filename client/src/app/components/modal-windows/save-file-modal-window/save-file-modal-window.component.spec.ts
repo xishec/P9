@@ -50,7 +50,9 @@ describe('SaveFileModalWindowComponent', () => {
                         },
                         {
                             provide: DrawingSaverService,
-                            useValue: {},
+                            useValue: {
+                                sendFileToServer: () => null,
+                            },
                         },
                         {
                             provide: DrawingLoaderService,
@@ -80,21 +82,21 @@ describe('SaveFileModalWindowComponent', () => {
         form.value.name = 'hello';
         drawingSaverService.currentIsSaved = new BehaviorSubject(true);
 
-        component.closeDialog();
+        component.saveToServer();
 
         expect(SPY).toHaveBeenCalledWith(`Sauvegarde réussie!`);
     });
 
-    it(`should notify the user if drawing has been successfully saved`, () => {
+    it(`should notify the user if drawing has not been successfully saved`, () => {
         const SPY = spyOn(window, 'alert');
 
         form.value.name = 'hello';
         drawingSaverService.currentIsSaved = new BehaviorSubject(false);
         component.errorMesaage = 'test error message';
 
-        component.closeDialog();
+        component.saveToServer();
 
-        expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n ${component.errorMesaage}`);
+        expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n${component.errorMesaage}`);
     });
 
     it(`should notify the user if user selects more than ${MAX_NB_LABELS} labels`, () => {
