@@ -224,7 +224,7 @@ export class ClipboardService {
         this.handlePasteOutOfBounds();
         this.increasePasteOffsetValue();
         this.clone(this.clippings, this.pasteOffsetValue);
-        
+
         this.saveStateFromPaste();
     }
 
