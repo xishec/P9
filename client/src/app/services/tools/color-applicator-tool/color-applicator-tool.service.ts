@@ -42,60 +42,95 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
+    initializeColorToolService(colorToolService: ColorToolService): void {
+        this.colorToolService = colorToolService;
+        this.colorToolService.primaryColor.subscribe((primaryColor) => {
+            this.primaryColor = '#' + primaryColor;
+        });
+        this.colorToolService.secondaryColor.subscribe((secondaryColor) => {
+            this.secondaryColor = '#' + secondaryColor;
+        });
+    }
+
+    isStackTargetShape(): boolean {
+        const isRectangle = this.currentStackTarget.toolName === ToolName.Rectangle;
+        const isEllipsis = this.currentStackTarget.toolName === ToolName.Ellipsis;
+        const isPolygon = this.currentStackTarget.toolName === ToolName.Polygon;
+        return isRectangle || isEllipsis || isPolygon;
+    }
+
+    changeFillColorOnShape(): void {
+        if (
+            (this.drawStack
+                .getElementByPosition(this.currentStackTarget.targetPosition)
+                .getAttribute('fill') as string) === 'none'
+        ) {
+            return;
+        }
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.fill,
+            this.primaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnShape(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.stroke,
+            this.secondaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeColorOnTrace(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.stroke,
+            this.primaryColor,
+        );
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTMLAttribute.fill,
+            this.primaryColor,
+        );
+
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
         if (
-            this.isOnTarget &&
-            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) !== undefined
+            !this.isOnTarget ||
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition) === undefined
         ) {
-            switch (button) {
-                case Mouse.LeftButton:
-                    if (
-                        (this.drawStack
-                            .getElementByPosition(this.currentStackTarget.targetPosition)
-                            .getAttribute('fill') as string) !== 'none'
-                    ) {
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                            HTMLAttribute.fill,
-                            this.primaryColor,
-                        );
-                    }
-                    if (
-                        this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil ||
-                        this.currentStackTarget.toolName === ToolName.Line
-                    ) {
-                        this.renderer.setAttribute(
-                            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                            HTMLAttribute.stroke,
-                            this.primaryColor,
-                        );
-                    }
-                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-                    break;
-                case Mouse.RightButton:
-                    if (
-                        this.currentStackTarget.toolName === ToolName.Brush ||
-                        this.currentStackTarget.toolName === ToolName.Pencil ||
-                        this.currentStackTarget.toolName === ToolName.Line
-                    ) {
-                        break;
-                    }
-                    this.renderer.setAttribute(
-                        this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-                        HTMLAttribute.stroke,
-                        this.secondaryColor,
-                    );
-                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-                    break;
-                default:
-                    break;
-            }
-            this.isOnTarget = false;
+            return;
         }
+
+        switch (button) {
+            case Mouse.LeftButton:
+                if (this.isStackTargetShape()) {
+                    this.changeFillColorOnShape();
+                } else {
+                    this.changeColorOnTrace();
+                }
+                break;
+            case Mouse.RightButton:
+                if (this.isStackTargetShape()) {
+                    this.changeStrokeColorOnShape();
+                }
+                break;
+            default:
+                break;
+        }
+        this.isOnTarget = false;
     }
     // tslint:disable-next-line: no-empty
     onMouseUp(event: MouseEvent): void {
