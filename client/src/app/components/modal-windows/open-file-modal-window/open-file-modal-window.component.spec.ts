@@ -109,7 +109,7 @@ describe('OpenFileModalWindowComponent', () => {
                         {
                             provide: MatSnackBar,
                             useValue: {
-                                open: () => {},
+                                open: () => null,
                             },
                         },
                     ],

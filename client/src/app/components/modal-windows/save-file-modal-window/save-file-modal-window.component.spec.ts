@@ -60,7 +60,7 @@ describe('SaveFileModalWindowComponent', () => {
                         {
                             provide: MatSnackBar,
                             useValue: {
-                                open: () => {},
+                                open: () => null,
                             },
                         },
                     ],
