@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { predicate } from 'src/constants/constants';
-import { Thickness, ToolName } from 'src/constants/tool-constants';
+import { PREDICATE } from 'src/constants/constants';
+import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -15,11 +15,11 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
     styleUrls: ['./rectangle-attributes.component.scss'],
 })
 export class RectangleAttributesComponent implements OnInit, AfterViewInit {
-    toolName = ToolName.Rectangle;
+    toolName = TOOL_NAME.Rectangle;
     rectangleAttributesForm: FormGroup;
     rectangleToolService: RectangleToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
-    readonly thickness = Thickness;
+    readonly thickness = THICKNESS;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -42,15 +42,15 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.rectangleAttributesForm = this.formBuilder.group({
             thickness: [
-                Thickness.Default,
-                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
+                THICKNESS.Default,
+                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
             traceType: ['Contour'],
         });
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, Thickness)) {
+        if (PREDICATE.eventIsValid(event, THICKNESS)) {
             this.rectangleAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -59,13 +59,13 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.rectangleAttributesForm.value.thickness;
         if (this.rectangleAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.rectangleAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+        this.attributesManagerService.traceType.next(tracetype);
     }
 
     onFocus(): void {

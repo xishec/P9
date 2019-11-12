@@ -2,8 +2,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
+import { MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -37,7 +37,11 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
+    constructor(
+        public clipBoard: ClipboardService,
+        public manipulator: ManipulatorService,
+        private undoRedoerService: UndoRedoerService,
+    ) {
         super();
     }
 
@@ -90,7 +94,7 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.width, deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
@@ -99,12 +103,12 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.height, deltaY.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.fill, 'white');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
         this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.stroke, 'black');
-        this.renderer.setAttribute(this.selectionRectangle, HTMLAttribute.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
     }
 
     getDOMRect(el: SVGGElement): DOMRect {
@@ -112,8 +116,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
 
         return 0;
@@ -238,11 +242,11 @@ export class SelectionToolService extends AbstractToolService {
         const button = event.button;
 
         switch (button) {
-            case Mouse.LeftButton:
+            case MOUSE.LeftButton:
                 this.handleLeftMouseDown();
                 break;
 
-            case Mouse.RightButton:
+            case MOUSE.RightButton:
                 this.handleRightMouseDown();
                 break;
 
@@ -291,11 +295,11 @@ export class SelectionToolService extends AbstractToolService {
         const button = event.button;
 
         switch (button) {
-            case Mouse.LeftButton:
+            case MOUSE.LeftButton:
                 this.handleLeftMouseUp();
                 break;
 
-            case Mouse.RightButton:
+            case MOUSE.RightButton:
                 this.handleRightMouseUp();
                 break;
 

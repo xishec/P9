@@ -6,27 +6,19 @@
         Veuillez choisir le format de l'image à exporter :
         <mat-form-field>
             <mat-select formControlName="fileType">
-                <mat-option value="{{ FileType.SVG }}">SVG</mat-option>
-                <mat-option value="{{ FileType.BMP }}">BMP</mat-option>
-                <mat-option value="{{ FileType.JPG }}">JPG</mat-option>
-                <mat-option value="{{ FileType.PNG }}">PNG</mat-option>
+                <mat-option value="{{ FILE_TYPE.SVG }}">SVG</mat-option>
+                <mat-option value="{{ FILE_TYPE.BMP }}">BMP</mat-option>
+                <mat-option value="{{ FILE_TYPE.JPG }}">JPG</mat-option>
+                <mat-option value="{{ FILE_TYPE.PNG }}">PNG</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
 </form>
-<div *ngIf="workZoneIsEmpty">
-    Vous devez tout d'abord créer un dessin pour pouvoir l'exporter ! <br />
-</div>
+<div *ngIf="workZoneIsEmpty">Vous devez tout d'abord créer un dessin pour pouvoir l'exporter ! <br /></div>
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        (click)="onSubmit()"
-        *ngIf="!workZoneIsEmpty"
-    >
+    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()" *ngIf="!workZoneIsEmpty">
         Exporter
     </button>
 </mat-dialog-actions>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ToolName } from 'src/constants/tool-constants';
+import { TOOL_NAME } from 'src/constants/tool-constants';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-selector.service';
 
@@ -10,9 +10,9 @@ import { ToolSelectorService } from '../../../services/tools/tool-selector/tool-
     styleUrls: ['./attribute-panel.component.scss'],
 })
 export class AttributePanelComponent implements OnInit {
-    readonly ToolName = ToolName;
+    readonly TOOL_NAME = TOOL_NAME;
 
-    currentToolName: ToolName;
+    currentToolName: TOOL_NAME;
     showColorPalette = false;
 
     constructor(private toolSelectorService: ToolSelectorService, private colorToolService: ColorToolService) {}

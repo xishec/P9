@@ -1,20 +1,21 @@
 <div id="container">
     <div>
-        <app-selection-attributes [hidden]="currentToolName !== ToolName.Selection"></app-selection-attributes>
-        <app-pencil-attributes [hidden]="currentToolName !== ToolName.Pencil"></app-pencil-attributes>
-        <app-rectangle-attributes [hidden]="currentToolName !== ToolName.Rectangle"></app-rectangle-attributes>
-        <app-brush-attributes [hidden]="currentToolName !== ToolName.Brush"></app-brush-attributes>
-        <app-line-attributes [hidden]="currentToolName !== ToolName.Line"></app-line-attributes>
+        <app-selection-attributes [hidden]="currentToolName !== TOOL_NAME.Selection"></app-selection-attributes>
+        <app-pencil-attributes [hidden]="currentToolName !== TOOL_NAME.Pencil"></app-pencil-attributes>
+        <app-rectangle-attributes [hidden]="currentToolName !== TOOL_NAME.Rectangle"></app-rectangle-attributes>
+        <app-brush-attributes [hidden]="currentToolName !== TOOL_NAME.Brush"></app-brush-attributes>
+        <app-line-attributes [hidden]="currentToolName !== TOOL_NAME.Line"></app-line-attributes>
         <app-color-applicator-attributes
-            [hidden]="currentToolName !== ToolName.ColorApplicator"
+            [hidden]="currentToolName !== TOOL_NAME.ColorApplicator"
         ></app-color-applicator-attributes>
-        <app-polygon-attributes [hidden]="currentToolName !== ToolName.Polygon"></app-polygon-attributes>
-        <app-grid-attributes [hidden]="currentToolName !== ToolName.Grid"></app-grid-attributes>
-        <app-stamp-attributes [hidden]="currentToolName !== ToolName.Stamp"></app-stamp-attributes>
-        <app-dropper-attributes [hidden]="currentToolName !== ToolName.Dropper"></app-dropper-attributes>
-        <app-ellipsis-attributes [hidden]="currentToolName !== ToolName.Ellipsis"></app-ellipsis-attributes>
-        <app-pen-attributes [hidden]="currentToolName !== ToolName.Pen"></app-pen-attributes>
-        <app-eraser-attributes [hidden]="currentToolName !== ToolName.Eraser"></app-eraser-attributes>
+        <app-polygon-attributes [hidden]="currentToolName !== TOOL_NAME.Polygon"></app-polygon-attributes>
+        <app-grid-attributes [hidden]="currentToolName !== TOOL_NAME.Grid"></app-grid-attributes>
+        <app-stamp-attributes [hidden]="currentToolName !== TOOL_NAME.Stamp"></app-stamp-attributes>
+        <app-dropper-attributes [hidden]="currentToolName !== TOOL_NAME.Dropper"></app-dropper-attributes>
+        <app-ellipsis-attributes [hidden]="currentToolName !== TOOL_NAME.Ellipsis"></app-ellipsis-attributes>
+        <app-pen-attributes [hidden]="currentToolName !== TOOL_NAME.Pen"></app-pen-attributes>
+        <app-text-attributes [hidden]="currentToolName !== TOOL_NAME.Text"></app-text-attributes>
+        <app-eraser-attributes [hidden]="currentToolName !== TOOL_NAME.Eraser"></app-eraser-attributes>
     </div>
     <div>
         <app-color-palette id="color-palette" [hidden]="!showColorPalette"></app-color-palette>

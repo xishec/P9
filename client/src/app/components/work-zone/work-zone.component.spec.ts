@@ -15,7 +15,7 @@ import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.serv
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
-import { ToolName } from 'src/constants/tool-constants';
+import { TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
@@ -74,18 +74,15 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: GridToolService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: ShortcutManagerService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: ModalManagerService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: DrawingLoaderService,
@@ -96,8 +93,7 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: DrawingSaverService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: UndoRedoerService,
@@ -107,10 +103,8 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: ClipboardService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
-
             ],
             schemas: [NO_ERRORS_SCHEMA],
         }).compileComponents();
@@ -152,28 +146,32 @@ describe('WorkZoneComponent', () => {
     it('should return cursor style crosshair when toolName is Brush', () => {
         drawingLoaderService.emptyDrawStack.next(false);
         drawingLoaderService.untouchedWorkZone.next(false);
-        component.toolName = ToolName.Brush;
+        component.toolName = TOOL_NAME.Brush;
+
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style crosshair when toolName is Pencil', () => {
         drawingLoaderService.emptyDrawStack.next(false);
         drawingLoaderService.untouchedWorkZone.next(false);
-        component.toolName = ToolName.Pencil;
+        component.toolName = TOOL_NAME.Pencil;
+
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style crosshair when toolName is Rectangle', () => {
         drawingLoaderService.emptyDrawStack.next(false);
         drawingLoaderService.untouchedWorkZone.next(false);
-        component.toolName = ToolName.Rectangle;
+        component.toolName = TOOL_NAME.Rectangle;
+
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style default by default', () => {
         drawingLoaderService.emptyDrawStack.next(false);
         drawingLoaderService.untouchedWorkZone.next(false);
-        component.toolName = ToolName.NewDrawing;
+        component.toolName = TOOL_NAME.NewDrawing;
+
         expect(component.getCursorStyle().cursor).toEqual('default');
     });
 });

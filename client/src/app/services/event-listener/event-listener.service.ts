@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Keys } from 'src/constants/constants';
-import { ControlShortcuts, ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
+import { KEYS } from 'src/constants/constants';
+import { CONTROL_SHORTCUTS, TOOL_NAME, TOOL_NAME_SHORTCUTS } from 'src/constants/tool-constants';
 import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
@@ -95,28 +95,28 @@ export class EventListenerService {
                 event.preventDefault();
 
                 // Control tools : new drawing, save, export, open...
-                if (ControlShortcuts.has(event.key)) {
-                    this.toolSelectorService.changeTool(ControlShortcuts.get(event.key) as ToolName);
+                if (CONTROL_SHORTCUTS.has(event.key)) {
+                    this.toolSelectorService.changeTool(CONTROL_SHORTCUTS.get(event.key) as TOOL_NAME);
                 }
 
                 // Undo Redo
-                if (event.key === Keys.z) {
+                if (event.key === KEYS.z) {
                     this.currentTool.cleanUp();
                     this.undoRedoerService.undo();
-                } else if (event.key === Keys.Z) {
+                } else if (event.key === KEYS.Z) {
                     this.currentTool.cleanUp();
                     this.undoRedoerService.redo();
-                } else if (event.key === Keys.x) {
+                } else if (event.key === KEYS.x) {
                     this.clipboardService.cut();
-                } else if (event.key === Keys.v) {
-                    this.toolSelectorService.changeTool(ToolName.Selection);
+                } else if (event.key === KEYS.v) {
+                    this.toolSelectorService.changeTool(TOOL_NAME.Selection);
                     this.clipboardService.paste();
-                } else if (event.key === Keys.c) {
+                } else if (event.key === KEYS.c) {
                     this.clipboardService.copy();
-                } else if (event.key === Keys.d) {
+                } else if (event.key === KEYS.d) {
                     this.clipboardService.duplicate();
-                } else if (event.key === Keys.a) {
-                    this.toolSelectorService.changeTool(ToolName.Selection);
+                } else if (event.key === KEYS.a) {
+                    this.toolSelectorService.changeTool(TOOL_NAME.Selection);
                     this.toolSelectorService.getSelectiontool().selectAll();
                 }
             }
@@ -127,24 +127,24 @@ export class EventListenerService {
             }
 
             // If the key is a shortcut for a tool, change current tool
-            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key) && !event.ctrlKey) {
+            if (this.shouldAllowShortcuts() && TOOL_NAME_SHORTCUTS.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
-                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key) as ToolName);
+                this.toolSelectorService.changeTool(TOOL_NAME_SHORTCUTS.get(event.key) as TOOL_NAME);
             }
 
-            if (event.key === Keys.g && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.g && this.shouldAllowShortcuts()) {
                 this.gridToolService.switchState();
             }
 
-            if (event.key === Keys.plus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.plus && this.shouldAllowShortcuts()) {
                 this.gridToolService.incrementSize();
             }
 
-            if (event.key === Keys.minus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
 
-            if (event.key === Keys.delete) {
+            if (event.key === KEYS.delete) {
                 this.clipboardService.delete();
             }
         });

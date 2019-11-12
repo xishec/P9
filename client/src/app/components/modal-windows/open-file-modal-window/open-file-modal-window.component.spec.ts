@@ -26,17 +26,13 @@ describe('OpenFileModalWindowComponent', () => {
         new DrawingInfo(100, 100, 'ffffff'),
     );
 
-    const TEST_DRAWING2: Drawing = {
-        name: 'harry potter',
-        labels: ['Englang', 'JK Rowling', 'novel'],
-        svg: 'test_svg2',
-        idStack: ['work-zone', 'background', 'ellipse'],
-        drawingInfo: {
-            width: 50,
-            height: 40,
-            color: '000000',
-        },
-    };
+    const TEST_DRAWING2: Drawing = new Drawing(
+        'harry potter',
+        ['Englang', 'JK Rowling', 'novel'],
+        'test_svg2',
+        ['work-zone', 'background', 'ellipse'],
+        new DrawingInfo(50, 40, '000000'),
+    );
 
     const dialogMock = {
         close: () => null,

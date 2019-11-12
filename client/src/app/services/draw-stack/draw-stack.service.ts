@@ -17,7 +17,11 @@ export class DrawStackService {
     currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService, private undoRedoerService: UndoRedoerService) {
+    constructor(
+        renderer: Renderer2,
+        private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
+    ) {
         this.renderer = renderer;
     }
 
@@ -85,7 +89,9 @@ export class DrawStackService {
 
     push(el: SVGGElement, byTool: boolean = true): void {
         this.drawStack.push(this.makeTargetable(el));
-        if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
+        if (this.idStack.length > 0) {
+            this.drawingLoaderService.emptyDrawStack.next(false);
+        }
 
         if (byTool) {
             this.undoRedoerService.saveCurrentState(this.idStack);

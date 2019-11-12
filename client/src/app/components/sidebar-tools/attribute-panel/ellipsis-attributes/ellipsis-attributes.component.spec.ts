@@ -2,10 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog, MatSliderChange } from '@angular/material';
+import { MatDialog, MatSliderChange, MatSnackBar } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { Thickness } from 'src/constants/tool-constants';
+import { THICKNESS } from 'src/constants/tool-constants';
 import { EllipsisAttributesComponent } from './ellipsis-attributes.component';
 
 describe('EllipsisAttributesComponent', () => {
@@ -25,6 +25,10 @@ describe('EllipsisAttributesComponent', () => {
                     provide: MatDialog,
                     useValue: {},
                 },
+                {
+                    provide: MatSnackBar,
+                    useValue: {},
+                },
             ],
         })
             .overrideComponent(EllipsisAttributesComponent, {
@@ -33,8 +37,8 @@ describe('EllipsisAttributesComponent', () => {
                         {
                             provide: AttributesManagerService,
                             useValue: {
-                                changeThickness: () => null,
-                                changeTraceType: () => null,
+                                thickness: { next: () => null },
+                                traceType: { next: () => null },
                             },
                         },
                         {
@@ -61,7 +65,7 @@ describe('EllipsisAttributesComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onSliderChange should change the value of thickness if event value [${THICKNESS.Min},${THICKNESS.Max}]`, () => {
         event.value = AVERAGE_THICKNESS;
         const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
@@ -71,12 +75,12 @@ describe('EllipsisAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onSliderChange should not change the value of thickness if event value  ]${Thickness.Min},${Thickness.Max}[`, () => {
+    it(`onSliderChange should not change the value of thickness if event value  ]${THICKNESS.Min},${THICKNESS.Max}[`, () => {
         const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
-        event.value = Thickness.Max + AVERAGE_THICKNESS;
+        event.value = THICKNESS.Max + AVERAGE_THICKNESS;
         component.onSliderChange(event);
-        event.value = Thickness.Min - AVERAGE_THICKNESS;
+        event.value = THICKNESS.Min - AVERAGE_THICKNESS;
         component.onSliderChange(event);
 
         expect(SPY).not.toHaveBeenCalled();
@@ -91,18 +95,18 @@ describe('EllipsisAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness if form thickness value is > ${Thickness.Max}`, () => {
+    it(`onThicknessChange should not call changeThickness if form thickness value is > ${THICKNESS.Max}`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(1000);
-        const SPY = spyOn(component.attributesManagerService, 'changeThickness');
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next');
 
         component.onThicknessChange();
 
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should call changeThickness if form thickness value is 50`, () => {
+    it(`onThicknessChange should call thickness.next if form thickness value is 50`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(50);
-        const SPY = spyOn(component.attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -117,8 +121,8 @@ describe('EllipsisAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('attributesManagerService shoudl call changeTraceType when onTraceTypeChage', () => {
-        const SPY = spyOn(component.attributesManagerService, 'changeTraceType');
+    it('attributesManagerService shoudl call traceType.next when onTraceTypeChage', () => {
+        const SPY = spyOn(component.attributesManagerService.traceType, 'next');
 
         component.onTraceTypeChange();
 
