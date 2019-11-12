@@ -4,7 +4,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { Mouse, SIDEBAR_WIDTH, SVG_NS, ELEMENTS_BEFORE_LAST_CIRCLE } from 'src/constants/constants';
+import { ELEMENTS_BEFORE_LAST_CIRCLE, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
@@ -232,7 +232,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    colorBorder(idElement: number, borderWidth: string | null, tool: string | null): void {
+    colorBorder(idElement: number, borderWidth: string | null, tool: string): void {
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
@@ -255,7 +255,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    checkIfPen(idElement: number, tool: string | null, borderColor: string) {
+    checkIfPen(idElement: number, tool: string, borderColor: string) {
         if (tool === ToolName.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
@@ -268,7 +268,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    checkIfLine(idElement: number, tool: string | null, borderColor: string) {
+    checkIfLine(idElement: number, tool: string, borderColor: string) {
         if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
@@ -279,12 +279,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    restoreBorder(
-        idElement: number,
-        borderColor: string | null,
-        borderWidth: string | null,
-        tool: string | null,
-    ): void {
+    restoreBorder(idElement: number, borderColor: string | null, borderWidth: string | null, tool: string): void {
         if (borderColor === null) {
             borderColor = '';
         }
@@ -305,10 +300,10 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    removeBorder(position: string, tool?: string | null): void {
+    removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(position) as SVGGElementInfo;
-            if (element !== undefined && tool !== undefined) {
+            if (element !== undefined) {
                 this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
                 this.changedElements.delete(position);
             }
