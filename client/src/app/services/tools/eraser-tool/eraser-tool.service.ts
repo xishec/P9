@@ -33,6 +33,7 @@ export class EraserToolService extends AbstractToolService {
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
     erasedSomething = false;
+    ELEMENTS_BEFORE_LAST_CIRCLE = 1;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -120,7 +121,6 @@ export class EraserToolService extends AbstractToolService {
 
             this.erasedSomething = true;
 
-            // set currentTarget in changedElements to equal the next Target
             if (this.currentTarget + 1) {
                 this.changedElements.set(this.currentTarget.toString(), this.changedElements.get(
                     (this.currentTarget + 1).toString(),
@@ -236,7 +236,9 @@ export class EraserToolService extends AbstractToolService {
         if (tool === ToolName.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
+                this.drawStack.getElementByPosition(idElement).childNodes[
+                    childrenNumber - 1 - this.ELEMENTS_BEFORE_LAST_CIRCLE
+                ],
                 HTMLAttribute.fill,
                 '#' + DEFAULT_RED,
             );
