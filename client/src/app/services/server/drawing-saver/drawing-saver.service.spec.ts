@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { ElementRef, Renderer2, Type } from '@angular/core';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ElementRef, Type, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
 import { FileManagerService } from '../file-manager/file-manager.service';
 import { DrawingSaverService } from './drawing-saver.service';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
 
 describe('DrawingSaverService', () => {
     let injector: TestBed;
@@ -97,7 +97,6 @@ describe('DrawingSaverService', () => {
 
         service.sendFileToServer(nameAndLabels);
 
-        expect(service.currentIsSaved).toBeFalsy;
         expect(service.currentErrorMesaage.value).toEqual('Aucun dessin dans le zone de travail!');
     });
 
