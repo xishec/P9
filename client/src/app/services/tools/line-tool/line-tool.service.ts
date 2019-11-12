@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, LineJointType, LineStrokeType, ToolName } from 'src/constants/tool-constants';
+import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { HTML_ATTRIBUTE, LINE_JOINT_TYPE, LINE_STROKE_TYPE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -19,8 +19,8 @@ export class LineToolService extends AbstractToolService {
     currentStrokeWidth = 0;
     circleJointDiameter = 0;
 
-    currentStrokeType = LineStrokeType.Continuous;
-    currentJointType = LineJointType.Curvy;
+    currentStrokeType = LINE_STROKE_TYPE.Continuous;
+    currentJointType = LINE_JOINT_TYPE.Curvy;
 
     pointsArray = new Array();
     jointCircles = new Array();
@@ -77,7 +77,7 @@ export class LineToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (event.button === Mouse.LeftButton) {
+        if (event.button === MOUSE.LeftButton) {
             this.getColorAndOpacity();
             const x = this.getXPos(event.clientX);
             const y = this.getYPos(event.clientY);
@@ -87,7 +87,7 @@ export class LineToolService extends AbstractToolService {
             } else {
                 this.appendLine(x, y);
             }
-            if (this.currentJointType === LineJointType.Circle) {
+            if (this.currentJointType === LINE_JOINT_TYPE.Circle) {
                 this.appendCircle(x, y);
             }
         }
@@ -105,23 +105,23 @@ export class LineToolService extends AbstractToolService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (event.key === Keys.Shift) {
+        if (event.key === KEYS.Shift) {
             this.shouldCloseLine = true;
-        } else if (event.key === Keys.Escape) {
+        } else if (event.key === KEYS.Escape) {
             this.isDrawing = false;
             this.renderer.removeChild(this.elementRef, this.gWrap);
             this.currentMousePosition = '';
             this.pointsArray = new Array();
-        } else if (event.key === Keys.Backspace) {
+        } else if (event.key === KEYS.Backspace) {
             if (this.pointsArray.length > 1) {
                 this.pointsArray.pop();
                 this.renderer.setAttribute(
                     this.currentLine,
-                    HTMLAttribute.points,
+                    HTML_ATTRIBUTE.points,
                     `${this.arrayToStringLine()} ${this.currentMousePosition}`,
                 );
 
-                if (this.currentJointType === LineJointType.Circle) {
+                if (this.currentJointType === LINE_JOINT_TYPE.Circle) {
                     const circle = this.jointCircles.pop();
                     this.renderer.removeChild(this.gWrap, circle);
                 }
@@ -130,7 +130,7 @@ export class LineToolService extends AbstractToolService {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (event.key === Keys.Shift) {
+        if (event.key === KEYS.Shift) {
             this.shouldCloseLine = false;
         }
     }
@@ -141,7 +141,7 @@ export class LineToolService extends AbstractToolService {
 
             if (this.shouldCloseLine && this.pointsArray.length > 3) {
                 this.pointsArray.push(this.pointsArray[0]);
-                this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, this.arrayToStringLine());
+                this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.points, this.arrayToStringLine());
             }
 
             this.drawStack.push(this.gWrap);
@@ -154,33 +154,33 @@ export class LineToolService extends AbstractToolService {
 
     startLine(x: number, y: number): void {
         this.gWrap = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(this.gWrap, HTMLAttribute.title, ToolName.Line);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Line);
         this.currentLine = this.renderer.createElement('polyline', SVG_NS);
 
         this.isLineInStack = false;
 
         this.pointsArray.push(`${x.toString()},${y.toString()}`);
 
-        this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, this.arrayToStringLine());
-        this.renderer.setAttribute(this.currentLine, HTMLAttribute.fill, 'none');
-        this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_width, this.currentStrokeWidth.toString());
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.points, this.arrayToStringLine());
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.stroke_width, this.currentStrokeWidth.toString());
 
-        this.renderer.setAttribute(this.gWrap, HTMLAttribute.stroke, `#${this.currentColor}`);
-        this.renderer.setAttribute(this.gWrap, HTMLAttribute.fill, `#${this.currentColor}`);
-        this.renderer.setAttribute(this.gWrap, HTMLAttribute.opacity, this.currentOpacity);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, `#${this.currentColor}`);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
 
         switch (this.currentStrokeType) {
-            case LineStrokeType.Dotted_line:
+            case LINE_STROKE_TYPE.Dotted_line:
                 this.renderer.setAttribute(
                     this.currentLine,
-                    HTMLAttribute.stroke_dasharray,
+                    HTML_ATTRIBUTE.stroke_dasharray,
                     `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`,
                 );
                 break;
-            case LineStrokeType.Dotted_circle:
+            case LINE_STROKE_TYPE.Dotted_circle:
                 this.renderer.setAttribute(
                     this.currentLine,
-                    HTMLAttribute.stroke_dasharray,
+                    HTML_ATTRIBUTE.stroke_dasharray,
                     `1, ${this.currentStrokeWidth * 1.5}`,
                 );
                 this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
@@ -188,9 +188,9 @@ export class LineToolService extends AbstractToolService {
         }
 
         switch (this.currentJointType) {
-            case LineJointType.Curvy:
-            case LineJointType.Circle:
-                this.renderer.setAttribute(this.currentLine, HTMLAttribute.stroke_linejoin, 'round');
+            case LINE_JOINT_TYPE.Curvy:
+            case LINE_JOINT_TYPE.Circle:
+                this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.stroke_linejoin, 'round');
                 break;
         }
 
@@ -202,21 +202,21 @@ export class LineToolService extends AbstractToolService {
         this.currentMousePosition = `${x.toString()},${y.toString()}`;
         this.renderer.setAttribute(
             this.currentLine,
-            HTMLAttribute.points,
+            HTML_ATTRIBUTE.points,
             `${this.arrayToStringLine()} ${this.currentMousePosition}`,
         );
     }
 
     appendLine(x: number, y: number): void {
         this.pointsArray.push(` ${x.toString()},${y.toString()}`);
-        this.renderer.setAttribute(this.currentLine, HTMLAttribute.points, `${this.arrayToStringLine()}`);
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.points, `${this.arrayToStringLine()}`);
     }
 
     appendCircle(x: number, y: number): void {
         const circle = this.renderer.createElement('circle', SVG_NS);
 
-        this.renderer.setAttribute(circle, HTMLAttribute.cx, x.toString());
-        this.renderer.setAttribute(circle, HTMLAttribute.cy, y.toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
         this.renderer.setAttribute(circle, 'r', (this.circleJointDiameter / 2).toString());
 
         this.renderer.appendChild(this.gWrap, circle);

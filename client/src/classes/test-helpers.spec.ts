@@ -1,5 +1,5 @@
 import { ElementRef } from '@angular/core';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 
 export class MockRect {
     x = 0;
@@ -32,7 +32,7 @@ export const createMouseEvent = (
     return (mouseEvent as unknown) as MouseEvent;
 };
 
-export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
+export const createKeyBoardEvent = (keyPressed: KEYS): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
         preventDefault: () => null,

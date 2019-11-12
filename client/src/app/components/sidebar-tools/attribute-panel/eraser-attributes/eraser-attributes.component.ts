@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { EraserToolService } from 'src/app/services/tools/eraser-tool/eraser-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { predicate } from 'src/constants/constants';
-import { EraserSize, ToolName } from 'src/constants/tool-constants';
+import { PREDICATE } from 'src/constants/constants';
+import { ERASER_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-eraser-attributes',
@@ -15,11 +15,11 @@ import { EraserSize, ToolName } from 'src/constants/tool-constants';
     styleUrls: ['./eraser-attributes.component.scss'],
 })
 export class EraserAttributesComponent implements OnInit {
-    toolName = ToolName.Eraser;
+    toolName = TOOL_NAME.Eraser;
 
     eraserAttributesForm: FormGroup;
     eraserToolService: EraserToolService;
-    readonly eraserSize = EraserSize;
+    readonly eraserSize = ERASER_SIZE;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -39,14 +39,14 @@ export class EraserAttributesComponent implements OnInit {
     initializeForm(): void {
         this.eraserAttributesForm = this.formBuilder.group({
             eraserSize: [
-                EraserSize.Default,
-                [Validators.required, Validators.min(EraserSize.Min), Validators.max(EraserSize.Max)],
+                ERASER_SIZE.Default,
+                [Validators.required, Validators.min(ERASER_SIZE.Min), Validators.max(ERASER_SIZE.Max)],
             ],
         });
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, EraserSize)) {
+        if (PREDICATE.eventIsValid(event, ERASER_SIZE)) {
             this.eraserAttributesForm.controls.eraserSize.setValue(event.value);
             this.onSizeChange();
         }

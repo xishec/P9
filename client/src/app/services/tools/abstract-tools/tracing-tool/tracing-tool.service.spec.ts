@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { Keys, Mouse } from 'src/constants/constants';
+import { KEYS, MOUSE } from 'src/constants/constants';
 import { createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers.spec';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
@@ -12,8 +12,8 @@ const MOCK_X = 10;
 const MOCK_Y = 10;
 const MOCK_THICKNESS = 1;
 const MOCK_COLOR = '#000000';
-const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
-const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(Keys.Shift);
+const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, MOUSE.LeftButton);
+const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(KEYS.Shift);
 
 describe('TracingToolService', () => {
     let injector: TestBed;

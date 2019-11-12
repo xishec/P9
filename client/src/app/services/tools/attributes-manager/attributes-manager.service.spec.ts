@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { TraceType } from 'src/constants/tool-constants';
+import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { AttributesManagerService } from './attributes-manager.service';
 
 describe('AttributesManagerService', () => {
@@ -26,8 +26,8 @@ describe('AttributesManagerService', () => {
 
     it('should traceType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.traceType.next(TraceType.Full);
-        expect(service[`traceType`].value).toEqual(TraceType.Full);
+        service.changeTraceType(TRACE_TYPE.Full);
+        expect(service[`traceType`].value).toEqual(TRACE_TYPE.Full);
     });
 
     it('should style.next', () => {

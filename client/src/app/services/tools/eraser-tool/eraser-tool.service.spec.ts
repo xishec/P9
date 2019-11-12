@@ -7,8 +7,8 @@ import {
     createMockSVGGElementWithAttribute,
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
-import { Keys, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
+import { KEYS, SVG_NS } from 'src/constants/constants';
+import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EraserToolService } from './eraser-tool.service';
 
@@ -260,7 +260,7 @@ describe('EraserToolService', () => {
             createMockSVGGElementWithAttribute('id_element'),
         );
 
-        service.mouseOverColorBorder(0, null, ToolName.Pen);
+        service.mouseOverColorBorder(0, null, TOOL_NAME.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
@@ -269,7 +269,7 @@ describe('EraserToolService', () => {
     it('mouseOverColorBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOverColorBorder(0, '5', ToolName.Rectangle);
+        service.mouseOverColorBorder(0, '5', TOOL_NAME.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -280,7 +280,7 @@ describe('EraserToolService', () => {
             createMockSVGGElementWithAttribute('id_element'),
         );
 
-        service.mouseOutRestoreBorder(0, null, null, ToolName.Pen);
+        service.mouseOutRestoreBorder(0, null, null, TOOL_NAME.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
@@ -289,7 +289,7 @@ describe('EraserToolService', () => {
     it('mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOutRestoreBorder(0, 'ffffff', '1', ToolName.Rectangle);
+        service.mouseOutRestoreBorder(0, 'ffffff', '1', TOOL_NAME.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -341,7 +341,7 @@ describe('EraserToolService', () => {
     });
 
     it('getStrokeWidth should return 10 if the getAttribute requested exists', () => {
-        const element = createMockSVGGElementWithAttribute(HTMLAttribute.stroke_width);
+        const element = createMockSVGGElementWithAttribute(HTML_ATTRIBUTE.stroke_width);
 
         expect(service.getStrokeWidth(element)).toEqual(10);
     });
@@ -381,11 +381,11 @@ describe('EraserToolService', () => {
     });
 
     it('onKeyDown should return undefined if onKeyDown is not implemented', () => {
-        expect(service.onKeyDown(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
+        expect(service.onKeyDown(createKeyBoardEvent(KEYS.Alt))).toBeUndefined();
     });
 
     it('onKeyUp should return undefined if onKeyUp is not implemented', () => {
-        expect(service.onKeyUp(createKeyBoardEvent(Keys.Alt))).toBeUndefined();
+        expect(service.onKeyUp(createKeyBoardEvent(KEYS.Alt))).toBeUndefined();
     });
 
     it('onMouseLeave should call removeChild', () => {
