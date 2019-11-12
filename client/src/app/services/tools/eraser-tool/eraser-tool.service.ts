@@ -240,9 +240,9 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        this.checkIfPen(idElement, tool);
+        this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
 
-        this.checkIfLine(idElement, tool);
+        this.checkIfLine(idElement, tool, '#' + DEFAULT_RED);
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
@@ -256,7 +256,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    checkIfPen(idElement: number, tool: string | null) {
+    checkIfPen(idElement: number, tool: string | null, borderColor: string) {
         if (tool === ToolName.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
@@ -264,49 +264,41 @@ export class EraserToolService extends AbstractToolService {
                     childrenNumber - 1 - this.ELEMENTS_BEFORE_LAST_CIRCLE
                 ],
                 HTMLAttribute.fill,
-                '#' + DEFAULT_RED,
+                borderColor,
             );
         }
     }
 
-    checkIfLine(idElement: number, tool: string | null) {
+    checkIfLine(idElement: number, tool: string | null, borderColor: string) {
         if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
             for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
-                this.renderer.setAttribute(children[childIndex], HTMLAttribute.fill, '#' + DEFAULT_RED);
+                this.renderer.setAttribute(children[childIndex], HTMLAttribute.fill, borderColor);
             }
         }
     }
 
-    restoreBorder(idElement: number, border: string | null, borderWidth: string | null, tool: string | null): void {
-        if (border === null) {
-            border = '';
+    restoreBorder(
+        idElement: number,
+        borderColor: string | null,
+        borderWidth: string | null,
+        tool: string | null,
+    ): void {
+        if (borderColor === null) {
+            borderColor = '';
         }
 
         if (borderWidth === null) {
             borderWidth = '0';
         }
-        if (tool === ToolName.Pen) {
-            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
-                HTMLAttribute.fill,
-                border,
-            );
-        }
 
-        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+        this.checkIfPen(idElement, tool, borderColor);
 
-            for (let i = 1; i < childrenCount; i++) {
-                this.renderer.setAttribute(children[i], HTMLAttribute.fill, border);
-            }
-        }
+        this.checkIfLine(idElement, tool, borderColor);
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, borderColor);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke_width,
