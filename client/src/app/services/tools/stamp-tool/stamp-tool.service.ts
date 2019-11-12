@@ -177,7 +177,7 @@ export class StampToolService extends AbstractToolService {
     }
 
     isAbleToStamp(event: MouseEvent): boolean {
-        return this.isMouseInRef(event, this.elementRef) && this.isStampLinkValid;
+        return this.isMouseInRef(event, this.elementRef) && this.isStampLinkValid && this.stampIsAppended;
     }
 
     onMouseDown(event: MouseEvent): void {
