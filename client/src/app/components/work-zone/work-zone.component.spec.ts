@@ -1,8 +1,8 @@
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-import { HttpClientModule } from '@angular/common/http';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -14,9 +14,9 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ToolName } from 'src/constants/tool-constants';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
 
@@ -32,7 +32,7 @@ describe('WorkZoneComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WorkZoneComponent],
-            imports : [HttpClientModule],
+            imports: [HttpClientModule],
             providers: [
                 {
                     provide: AbstractToolService,

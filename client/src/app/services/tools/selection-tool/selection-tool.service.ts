@@ -1,22 +1,23 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTMLAttribute } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
-import { AbstractToolService, MouseCoords } from '../abstract-tools/abstract-tool.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: MouseCoords = { x: 0, y: 0 };
-    lastMouseCoords: MouseCoords = { x: 0, y: 0 };
-    initialMouseCoords: MouseCoords = { x: 0, y: 0 };
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    lastMouseCoords: Coords2D = new Coords2D(0, 0);
+    initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
     isTheCurrentTool = false;
@@ -41,16 +42,10 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     selectAll(): void {
+        this.clipBoard.restartDuplication();
         for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
-    }
-
-    verifyPosition(event: MouseEvent): boolean {
-        return (
-            event.clientX > this.elementRef.nativeElement.getBoundingClientRect().left + window.scrollX &&
-            event.clientY > this.elementRef.nativeElement.getBoundingClientRect().top + window.scrollY
-        );
     }
 
     cleanUp(): void {
@@ -58,7 +53,6 @@ export class SelectionToolService extends AbstractToolService {
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
-        this.isTheCurrentTool = false;
         this.isLeftMouseDown = false;
         this.isRightMouseDown = false;
         this.isSelecting = false;
@@ -119,7 +113,7 @@ export class SelectionToolService extends AbstractToolService {
 
     getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
         }
 
         return 0;
@@ -289,7 +283,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (!this.verifyPosition(event)) {
+        if (!this.isMouseInRef(event, this.elementRef)) {
             return;
         }
         this.clipBoard.restartDuplication();

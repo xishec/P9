@@ -14,11 +14,11 @@ export class RectangleToolService extends AbstractShapeToolService {
     drawRectangle: SVGRectElement;
     fillColor = '';
     strokeColor = '';
+    strokeWidth = 0;
     userFillColor = '';
     userStrokeColor = '';
     userStrokeWidth = 0;
     traceType = '';
-    strokeWidth = 0;
     isSquarePreview = false;
     attributesManagerService: AttributesManagerService;
 
@@ -50,11 +50,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         });
     }
 
-    isValideRectangle(): boolean {
-        const height = this.previewRectangleHeight;
-        const width = this.previewRectangleWidth;
+    isValidRectangle(): boolean {
+        const isValidPreviewHeight = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
+        const isValidPreviewWidth = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
 
-        return width >= 2 * this.userStrokeWidth && height >= 2 * this.userStrokeWidth && (width > 0 || height > 0);
+        return (
+            isValidPreviewWidth && isValidPreviewHeight && (this.drawRectangleWidth > 0 || this.drawRectangleHeight > 0)
+        );
     }
 
     copyPreviewRectangleAttributes(): void {
@@ -97,7 +99,7 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     renderDrawRectangle(): void {
-        if (this.isValideRectangle()) {
+        if (this.isValidRectangle()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, this.userFillColor)
                 : this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + this.userFillColor);
@@ -114,6 +116,12 @@ export class RectangleToolService extends AbstractShapeToolService {
         this.isPreviewing = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.previewRectangle);
         this.renderer.removeChild(this.elementRef, this.drawRectangle);
+        this.makeDrawRectangleInvalid();
+    }
+
+    makeDrawRectangleInvalid(): void {
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, '0');
+        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, '0');
     }
 
     createSVG(): void {
@@ -149,21 +157,21 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     updatePreviewSquare(): void {
-        const deltaX = this.currentMouseX - this.initialMouseX;
-        const deltaY = this.currentMouseY - this.initialMouseY;
+        const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
 
         if (deltaX < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseX - minLength + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'x',
-                (this.initialMouseX + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString(),
             );
         }
 
@@ -171,13 +179,13 @@ export class RectangleToolService extends AbstractShapeToolService {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseY - minLength + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
                 'y',
-                (this.initialMouseY + this.userStrokeWidth / 2).toString(),
+                (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString(),
             );
         }
 
@@ -234,8 +242,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.currentMouseX = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseY = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
         if (this.isPreviewing) {
             this.updateDrawing();
@@ -245,9 +253,9 @@ export class RectangleToolService extends AbstractShapeToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isIn) {
-            this.initialMouseX = this.currentMouseX;
-            this.initialMouseY = this.currentMouseY;
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef)) {
+            this.initialMouseCoords.x = this.currentMouseCoords.x;
+            this.initialMouseCoords.y = this.currentMouseCoords.y;
             this.isPreviewing = true;
 
             this.updateDrawing();
@@ -259,49 +267,36 @@ export class RectangleToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton && this.isIn && this.isValideRectangle()) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValidRectangle()) {
             this.createSVG();
         }
         this.cleanUp();
     }
 
-    onMouseEnter(event: MouseEvent): void {
-        this.isIn = true;
-    }
-
-    onMouseLeave(event: MouseEvent): void {
-        this.isIn = false;
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseEnter(event: MouseEvent): void {}
+    // tslint:disable-next-line: no-empty
+    onMouseLeave(event: MouseEvent): void {}
 
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
-        switch (key) {
-            case Keys.Shift:
-                if (!this.isSquarePreview) {
-                    this.isSquarePreview = true;
-                    this.updateDrawing();
-                }
-                break;
-
-            default:
-                break;
+        if (key === Keys.Shift) {
+            if (!this.isSquarePreview) {
+                this.isSquarePreview = true;
+                this.updateDrawing();
+            }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
         const key = event.key;
 
-        switch (key) {
-            case Keys.Shift:
-                if (this.isSquarePreview) {
-                    this.isSquarePreview = false;
-                    this.updateDrawing();
-                }
-                break;
-
-            default:
-                break;
+        if (key === Keys.Shift) {
+            if (this.isSquarePreview) {
+                this.isSquarePreview = false;
+                this.updateDrawing();
+            }
         }
     }
 }

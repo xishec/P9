@@ -2,13 +2,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
 fdescribe('OpenFileModalWindowComponent', () => {
@@ -17,17 +18,13 @@ fdescribe('OpenFileModalWindowComponent', () => {
 
     let drawingLoaderService: DrawingLoaderService;
 
-    const TEST_DRAWING: Drawing = {
-        name: 'mona lisa',
-        labels: ['Italy', 'Louvre', 'Paris'],
-        svg: 'test_svg',
-        idStack: ['work-zone', 'background', 'rect1'],
-        drawingInfo: {
-            width: 100,
-            height: 100,
-            color: 'ffffff',
-        },
-    };
+    const TEST_DRAWING: Drawing = new Drawing(
+        'mona lisa',
+        ['Italy', 'Louvre', 'Paris'],
+        'test_svg',
+        ['work-zone', 'background', 'rect1'],
+        new DrawingInfo(100, 100, 'ffffff'),
+    );
 
     const TEST_DRAWING2: Drawing = {
         name: 'harry potter',
@@ -118,6 +115,12 @@ fdescribe('OpenFileModalWindowComponent', () => {
                             provide: DrawingLoaderService,
                             useValue: {
                                 currentDrawing: new BehaviorSubject<Drawing>(TEST_DRAWING),
+                            },
+                        },
+                        {
+                            provide: MatSnackBar,
+                            useValue: {
+                                open: () => null,
                             },
                         },
                     ],

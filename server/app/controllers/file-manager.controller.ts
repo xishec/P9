@@ -33,10 +33,7 @@ export class FileManagerController {
 
             const drawing: Drawing = JSON.parse(message.body);
             if (drawing.name === '' || drawing.labels.includes('') || drawing.svg === '') {
-                const error: Message = {
-                    title: 'Invalid Drawing',
-                    body: 'Invalid Drawing',
-                };
+                const error: Message = new Message('Invalid Drawing', 'Invalid Drawing');
                 res.json(error);
             }
 

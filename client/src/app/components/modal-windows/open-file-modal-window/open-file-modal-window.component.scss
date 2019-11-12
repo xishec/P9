@@ -205,4 +205,8 @@ mat-list-option[aria-selected='true'] {
 
 .submit-button-group {
     align-self: flex-end;
+    #clickable {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 }

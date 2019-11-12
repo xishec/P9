@@ -14,7 +14,7 @@ import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constant
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 

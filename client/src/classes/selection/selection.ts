@@ -1,8 +1,8 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MouseCoords } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute } from 'src/constants/tool-constants';
+import { CONTROL_POINT_RADIUS, CONTROL_POINTS_AMOUNT, DEFAULT_RADIX, HTMLAttribute, SELECTION_COLOR } from 'src/constants/tool-constants';
+import { Coords2D } from '../Coords2D';
 
 export class Selection {
     renderer: Renderer2;
@@ -11,7 +11,7 @@ export class Selection {
     selectedElements: Set<SVGGElement> = new Set();
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
-    controlPoints: SVGCircleElement[] = new Array(8);
+    controlPoints: SVGCircleElement[] = new Array(CONTROL_POINTS_AMOUNT);
 
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -32,13 +32,13 @@ export class Selection {
 
     initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, '#ff5722');
+        this.renderer.setAttribute(this.selectionBox, HTMLAttribute.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTMLAttribute.fill, 'none');
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
-            this.renderer.setAttribute(this.controlPoints[i], 'r', '5');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, '#ff5722');
-            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, '#ff5722');
+            this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.stroke, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTMLAttribute.fill, SELECTION_COLOR);
         }
     }
 
@@ -82,13 +82,13 @@ export class Selection {
 
     getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, 10);
+            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
         }
 
         return 0;
     }
 
-    mouseIsInSelectionBox(currentMouseCoords: MouseCoords): boolean {
+    mouseIsInSelectionBox(currentMouseCoords: Coords2D): boolean {
         const selectionBoxLeft = this.getDOMRect(this.selectionBox).x + window.scrollX - SIDEBAR_WIDTH;
         const selectionBoxRight =
             this.getDOMRect(this.selectionBox).x +
@@ -107,7 +107,7 @@ export class Selection {
         );
     }
 
-    mouseIsInControlPoint(currentMouseCoords: MouseCoords): boolean {
+    mouseIsInControlPoint(currentMouseCoords: Coords2D): boolean {
         for (const ctrlPt of this.controlPoints) {
             const cx = this.getControlPointCx(ctrlPt);
             const cy = this.getControlPointCy(ctrlPt);
@@ -226,7 +226,7 @@ export class Selection {
             (this.selectionBox.y.baseVal.value + this.selectionBox.height.baseVal.value / 2).toString(),
         ]);
 
-        for (let index = 0; index < this.controlPoints.length; ++index) {
+        for (let index = 0; index < CONTROL_POINTS_AMOUNT; ++index) {
             this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cx, (positionMap.get(index) as [string, string])[0]);
             this.renderer.setAttribute(this.controlPoints[index], HTMLAttribute.cy, (positionMap.get(index) as [string, string])[1]);
         }

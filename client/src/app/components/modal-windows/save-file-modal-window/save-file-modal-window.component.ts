@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
 import { SafeResourceUrl } from '@angular/platform-browser';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -34,6 +34,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
         private drawingLoaderService: DrawingLoaderService,
+        private snackBar: MatSnackBar
     ) {
         this.formBuilderServer = formBuilderServer;
         this.formBuilderLocal = formBuilderLocal;
@@ -76,7 +77,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToServer(): void {
         this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
+            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels)
         );
         this.isSaving = true;
 
@@ -85,10 +86,10 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
                 if (drawingIsSaved) {
-                    window.alert('Sauvegarde réussie!');
+                    this.snackBar.open('Sauvegarde réussie!', 'OK');
                     this.closeDialog();
                 } else {
-                    window.alert(`Sauvegarde échouée...\n${this.errorMesaage}`);
+                    this.snackBar.open(`Sauvegarde échouée...\n ${this.errorMesaage}`, 'OK');
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
@@ -108,7 +109,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     addLabel(newLabel: string): void {
         if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
+            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK');
             return;
         }
         this.drawingLabels.push(newLabel);
@@ -128,7 +129,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     select(label: string): void {
         this.selectedLabels.length >= MAX_NB_LABELS
-            ? window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`)
+            ? this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK')
             : this.selectedLabels.push(label);
     }
 }

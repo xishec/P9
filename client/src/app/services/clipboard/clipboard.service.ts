@@ -118,22 +118,8 @@ export class ClipboardService {
         this.pasteOffsetValue += OFFSET_STEP;
     }
 
-    decreasePasteOffsetValue(): void {
-        this.pasteOffsetValue -= OFFSET_STEP;
-        if (this.pasteOffsetValue < 0) {
-            this.pasteOffsetValue = 0;
-        }
-    }
-
     increaseDuplicateOffsetValue(): void {
         this.duplicateOffsetValue += OFFSET_STEP;
-    }
-
-    decreaseDuplicateOffsetValue(): void {
-        this.duplicateOffsetValue -= OFFSET_STEP;
-        if (this.duplicateOffsetValue < 0) {
-            this.duplicateOffsetValue = 0;
-        }
     }
 
     isInBounds(): boolean {
@@ -152,6 +138,14 @@ export class ClipboardService {
         return boxLeft < parentBoxRight && boxTop < parentBoxBottom;
     }
 
+    notifyClippingsState(): void {
+        if (this.clippings.size > 0) {
+            this.isClippingsEmpty.next(false);
+        } else {
+            this.isClippingsEmpty.next(true);
+        }
+    }
+
     cut(): void {
         this.firstDuplication = true;
         this.clippings.clear();
@@ -164,12 +158,11 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
+        this.notifyClippingsState();
 
         setTimeout(() => {
             this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
         }, 0);
-
-        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
     }
 
     copy(): void {
@@ -181,7 +174,7 @@ export class ClipboardService {
         for (const el of this.selection.selectedElements) {
             this.clippings.add(el);
         }
-        this.clippings.size > 0 ? this.isClippingsEmpty.next(false) : this.isClippingsEmpty.next(true);
+        this.notifyClippingsState();
     }
 
     duplicate(): void {
