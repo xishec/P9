@@ -45,7 +45,10 @@ export class GridAttributesComponent implements OnInit {
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({
             state: [{ value: false, disabled: true }],
-            size: [GRID_SIZE.Default, [Validators.required, Validators.min(GRID_SIZE.Min), Validators.max(GRID_SIZE.Max)]],
+            size: [
+                GRID_SIZE.Default,
+                [Validators.required, Validators.min(GRID_SIZE.Min), Validators.max(GRID_SIZE.Max)],
+            ],
             opacity: [
                 GRID_OPACITY.Max,
                 [Validators.required, Validators.min(GRID_OPACITY.Min), Validators.max(GRID_OPACITY.Max)],

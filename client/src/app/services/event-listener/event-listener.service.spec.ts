@@ -43,7 +43,7 @@ describe('EventListenerService', () => {
         injector = getTestBed();
         service = TestBed.get(EventListenerService);
 
-        rendererMock = injector.get<Renderer2>((Renderer2 as (unknown)) as Type<Renderer2>);
+        rendererMock = injector.get<Renderer2>((Renderer2 as unknown) as Type<Renderer2>);
     });
 
     it('should be created', () => {

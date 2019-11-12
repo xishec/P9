@@ -104,7 +104,11 @@ export class RectangleToolService extends AbstractShapeToolService {
                 ? this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.fill, this.userFillColor)
                 : this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
             this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.stroke, '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.stroke_width, this.userStrokeWidth.toString());
+            this.renderer.setAttribute(
+                this.drawRectangle,
+                HTML_ATTRIBUTE.stroke_width,
+                this.userStrokeWidth.toString(),
+            );
         } else {
             this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.fill, 'none');
             this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.stroke, 'none');

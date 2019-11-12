@@ -67,26 +67,26 @@ describe('ManipulatorService', () => {
                 e: 0,
                 f: 0,
             },
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGTranformList = ({
             numberOfItems: 0,
             getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        } as unknown) as SVGTransformList;
 
         const mockSVGGelement = ({
             transform: {
                 baseVal: mockSVGTranformList,
             },
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         selection.selectedElements = new Set<SVGGElement>();
         selection.selectedElements.add(mockSVGGelement);
 
         const mockTranslate = ({
             setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGSVGElement = {
             createSVGTransform: () => mockTranslate,
@@ -117,26 +117,26 @@ describe('ManipulatorService', () => {
                 e: 0,
                 f: 0,
             },
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGTranformList = ({
             numberOfItems: 5,
             getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        } as unknown) as SVGTransformList;
 
         const mockSVGGelement = ({
             transform: {
                 baseVal: mockSVGTranformList,
             },
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         selection.selectedElements = new Set<SVGGElement>();
         selection.selectedElements.add(mockSVGGelement);
 
         const mockTranslate = ({
             setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGSVGElement = {
             createSVGTransform: () => mockTranslate,
@@ -167,23 +167,23 @@ describe('ManipulatorService', () => {
                 e: 0,
                 f: 0,
             },
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGTranformList = ({
             numberOfItems: 0,
             getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        } as unknown) as SVGTransformList;
 
         const mockSVGGelement = ({
             transform: {
                 baseVal: mockSVGTranformList,
             },
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockTranslate = ({
             setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGSVGElement = {
             createSVGTransform: () => mockTranslate,
@@ -207,23 +207,23 @@ describe('ManipulatorService', () => {
                 e: 0,
                 f: 0,
             },
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGTranformList = ({
             numberOfItems: 5,
             getItem: () => mockSVGTransform,
             insertItemBefore: () => null,
-        } as (unknown)) as SVGTransformList;
+        } as unknown) as SVGTransformList;
 
         const mockSVGGelement = ({
             transform: {
                 baseVal: mockSVGTranformList,
             },
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockTranslate = ({
             setTranslate: () => null,
-        } as (unknown)) as SVGTransform;
+        } as unknown) as SVGTransform;
 
         const mockSVGSVGElement = {
             createSVGTransform: () => mockTranslate,

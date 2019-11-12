@@ -87,5 +87,8 @@ export class PenToolService extends TracingToolService {
         const targetWidth =
             (this.maxThickness - this.minThickness) * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
         this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
+        // if (Number.isNaN(this.currentWidth)) {
+        //     this.currentWidth = (this.maxThickness + this.minThickness) / 2;
+        // }
     }
 }

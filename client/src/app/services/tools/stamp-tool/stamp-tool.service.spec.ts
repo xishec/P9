@@ -118,7 +118,7 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampWidth).toEqual(WIDTH);
     });
 
@@ -133,7 +133,7 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampHeight).toEqual(HEIGHT);
     });
 

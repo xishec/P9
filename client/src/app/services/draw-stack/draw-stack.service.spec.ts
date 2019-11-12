@@ -30,7 +30,7 @@ describe('DrawStackService', () => {
                 },
                 {
                     provide: UndoRedoerService,
-                    useValue : {
+                    useValue: {
                         saveCurrentState: () => null,
                     },
                 },
