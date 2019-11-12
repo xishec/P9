@@ -198,17 +198,9 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    updateElementsToColor(topElement: number, svgGElement: SVGGElement, index: number) {
+    updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number) {
         if (this.lastElementColoredNumber !== topElement) {
-            if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
-                this.changedElements.set(
-                    svgGElement.getAttribute('id_element') as string,
-                    new SVGGElementInfo(
-                        svgGElement.getAttribute(HTMLAttribute.stroke) as string,
-                        svgGElement.getAttribute(HTMLAttribute.stroke_width) as string,
-                    ),
-                );
-            }
+            this.addElementToMap(svgGElement);
 
             this.lastToolName = svgGElement.getAttribute('title') as string;
 
@@ -229,7 +221,18 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    mouseOverColorBorder(idElement: number, borderWidth: string | null, tool: string | null): void {
+    addElementToMap(svgGElement: SVGGElement) {
+        if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
+            this.changedElements.set(
+                svgGElement.getAttribute('id_element') as string,
+                new SVGGElementInfo(
+                    svgGElement.getAttribute(HTMLAttribute.stroke) as string,
+                    svgGElement.getAttribute(HTMLAttribute.stroke_width) as string,
+                ),
+            );
+        }
+    }
+
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
