@@ -1,9 +1,8 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-
 import { BehaviorSubject } from 'rxjs';
-import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GRID_OPACITY, GRID_SIZE, GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from './grid-tool.service';
 
 describe('GridToolService', () => {
@@ -11,7 +10,6 @@ describe('GridToolService', () => {
     let service: GridToolService;
     const AVERAGE_SIZE = (GRID_SIZE.Min + GRID_SIZE.Max) / 2;
     let drawingLoaderService: DrawingLoaderService;
-
 
     beforeEach(() => {
         TestBed.configureTestingModule({
