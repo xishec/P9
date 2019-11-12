@@ -331,10 +331,12 @@ export class EraserToolService extends AbstractToolService {
 
         if (this.erasedSomething) {
             this.renderer.removeChild(this.elementRef, this.eraser);
+            this.restoreBorder(this.currentTarget, (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderColor, (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderWidth, this.lastToolName);
             setTimeout(() => {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
             }, 0);
             setTimeout(() => {
+                this.colorBorder(this.currentTarget, (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderWidth, this.lastToolName);
                 this.appendEraser();
             }, 0);
         }
