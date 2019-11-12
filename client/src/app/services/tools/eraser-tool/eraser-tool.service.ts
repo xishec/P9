@@ -233,6 +233,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
+    colorBorder(idElement: number, borderWidth: string | null, tool: string | null): void {
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
@@ -317,12 +318,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(position) as SVGGElementInfo;
             if (element !== undefined && tool !== undefined) {
-                this.mouseOutRestoreBorder(
-                    parseInt(position, DEFAULT_RADIX),
-                    element.borderColor,
-                    element.borderWidth,
-                    tool,
-                );
+                this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
                 this.changedElements.delete(position);
             }
         }

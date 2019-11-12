@@ -254,56 +254,56 @@ describe('EraserToolService', () => {
         expect(spyOnremoveBorder).toHaveBeenCalled();
     });
 
-    it('mouseOverColorBorder should call setAttribute if border width is null', () => {
+    it('colorBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
         const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
             createMockSVGGElementWithAttribute('id_element'),
         );
 
-        service.mouseOverColorBorder(0, null, ToolName.Pen);
+        service.colorBorder(0, null, ToolName.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
-    it('mouseOverColorBorder should call setAttribute if border width is not null', () => {
+    it('colorBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOverColorBorder(0, '5', ToolName.Rectangle);
+        service.colorBorder(0, '5', ToolName.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('mouseOutRestoreBorder should call setAttribute if border width is null', () => {
+    it('restoreBorder should call setAttribute if border width is null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
         const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
             createMockSVGGElementWithAttribute('id_element'),
         );
 
-        service.mouseOutRestoreBorder(0, null, null, ToolName.Pen);
+        service.restoreBorder(0, null, null, ToolName.Pen);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
-    it('mouseOutRestoreBorder should call setAttribute if border width is not null', () => {
+    it('restoreBorder should call setAttribute if border width is not null', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
 
-        service.mouseOutRestoreBorder(0, 'ffffff', '1', ToolName.Rectangle);
+        service.restoreBorder(0, 'ffffff', '1', ToolName.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('removeBorder should call mouseOutRestoreBorder if element is not undefined', () => {
+    it('removeBorder should call restoreBorder if element is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
         service.changedElements.set('0', new SVGGElementInfo());
-        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+        const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
         service.removeBorder('0', '');
 
-        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalled();
+        expect(spyOnrestoreBorder).toHaveBeenCalled();
         expect(spyOnget).toHaveBeenCalled();
     });
 
@@ -311,22 +311,22 @@ describe('EraserToolService', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
         service.changedElements.set('0', new SVGGElementInfo());
-        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+        const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
 
         service.removeBorder('0');
 
-        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
+        expect(spyOnrestoreBorder).toHaveBeenCalledTimes(0);
         expect(spyOnget).toHaveBeenCalled();
     });
 
-    it('removeBorder should not call spyOnmouseOutRestoreBorder if currentTraget is undefined', () => {
+    it('removeBorder should not call spyOnrestoreBorder if currentTraget is undefined', () => {
         service.currentTarget = -1;
-        const spyOnmouseOutRestoreBorder: jasmine.Spy = spyOn(service, 'mouseOutRestoreBorder');
+        const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
 
         service.removeBorder('0');
 
-        expect(spyOnmouseOutRestoreBorder).toHaveBeenCalledTimes(0);
+        expect(spyOnrestoreBorder).toHaveBeenCalledTimes(0);
     });
 
     it('getDOMRect should return a new DOMRect object', () => {
