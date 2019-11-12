@@ -96,7 +96,7 @@ describe('ColorApplicatorToolService', () => {
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeColorOnTrace();
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
     it('should only change the stroke color of shape stackTarget when calling changeStrokeColorOnShape', () => {
@@ -130,7 +130,7 @@ describe('ColorApplicatorToolService', () => {
 
         service.onMouseDown(mouseEventTmp);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
     it('onMouseDown should call setAttribute once when left button clicked if tool is Rectangle', () => {
