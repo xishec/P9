@@ -173,12 +173,15 @@ export class EraserToolService extends AbstractToolService {
 
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
-        for (let i = this.drawStack.getDrawStackLength() - 1; i >= 0; i--) {
-            const svgGElement = this.drawStack.drawStack[i];
+        for (let drawStackIndex = this.drawStack.getDrawStackLength() - 1; drawStackIndex >= 0; drawStackIndex--) {
+            const svgGElement = this.drawStack.drawStack[drawStackIndex];
             const elBox = this.getDOMRect(svgGElement);
 
-            if (this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(svgGElement)) && topElement <= i) {
-                this.updateElementsToColor(topElement, svgGElement, i);
+            if (
+                this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(svgGElement)) &&
+                topElement <= drawStackIndex
+            ) {
+                this.updateElementToColor(topElement, svgGElement, drawStackIndex);
                 enteredInSelection = true;
                 this.isOnTarget = true;
             } else {
@@ -216,9 +219,9 @@ export class EraserToolService extends AbstractToolService {
                 ),
             );
 
-            topElement = index;
-            this.lastElementColoredNumber = topElement;
-            this.mouseOverColorBorder(
+            this.lastElementColoredNumber = index;
+
+            this.colorBorder(
                 this.currentTarget,
                 this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
                 this.lastToolName,
