@@ -75,19 +75,19 @@ export class StampAttributesComponent implements OnInit {
     onScalingChange(): void {
         const stampScaling: number = this.stampAttributesForm.value.scaling;
         if (this.stampAttributesForm.controls.scaling.valid) {
-            this.attributesManagerService.changeScaling(stampScaling);
+            this.attributesManagerService.scaling.next(stampScaling);
         }
     }
 
     onStampTypeChange(): void {
         const stampType: number = this.stampAttributesForm.value.stampType;
-        this.attributesManagerService.changeStampType(STAMPS_MAP.get(stampType) as string);
+        this.attributesManagerService.stampType.next(STAMPS_MAP.get(stampType) as string);
     }
 
     onAngleChange(): void {
         const stampAngle: number = this.stampAttributesForm.value.angle;
         if (this.stampAttributesForm.controls.angle.valid) {
-            this.attributesManagerService.changeAngle(stampAngle);
+            this.attributesManagerService.angle.next(stampAngle);
         }
     }
 

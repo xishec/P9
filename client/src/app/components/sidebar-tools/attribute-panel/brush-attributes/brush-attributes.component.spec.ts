@@ -37,8 +37,8 @@ describe('BrushAttributesComponent', () => {
                         {
                             provide: AttributesManagerService,
                             useValue: {
-                                changeThickness: () => null,
-                                changeStyle: () => null,
+                                thickness: { next: () => null },
+                                style: { next: () => null },
                             },
                         },
                         {
@@ -100,25 +100,25 @@ describe('BrushAttributesComponent', () => {
 
     it(`onThicknessChange should call changeThickness if form thickness value is [${THICKNESS.Min},${THICKNESS.Max}]`, () => {
         component.brushAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttributeManagerService if form thickness > ${THICKNESS.Max}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Max + AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${THICKNESS.Min}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttributeManagerService if form thickness < ${THICKNESS.Min}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Min - AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -141,8 +141,8 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('change should call changeStyle when user select a brush style', () => {
-        const SPY = spyOn(attributesManagerService, 'changeStyle').and.returnValue();
+    it('change should call style.next when user select a brush style', () => {
+        const SPY = spyOn(attributesManagerService.style, 'next').and.returnValue();
 
         component.change(1);
 

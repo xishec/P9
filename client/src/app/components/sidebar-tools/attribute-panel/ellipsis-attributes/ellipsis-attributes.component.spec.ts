@@ -37,8 +37,8 @@ describe('EllipsisAttributesComponent', () => {
                         {
                             provide: AttributesManagerService,
                             useValue: {
-                                changeThickness: () => null,
-                                changeTraceType: () => null,
+                                thickness: { next: () => null },
+                                traceType: { next: () => null },
                             },
                         },
                         {
@@ -97,16 +97,16 @@ describe('EllipsisAttributesComponent', () => {
 
     it(`onThicknessChange should not call changeThickness if form thickness value is > ${THICKNESS.Max}`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(1000);
-        const SPY = spyOn(component.attributesManagerService, 'changeThickness');
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next');
 
         component.onThicknessChange();
 
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should call changeThickness if form thickness value is 50`, () => {
+    it(`onThicknessChange should call thickness.next if form thickness value is 50`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(50);
-        const SPY = spyOn(component.attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -121,8 +121,8 @@ describe('EllipsisAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('attributesManagerService shoudl call changeTraceType when onTraceTypeChage', () => {
-        const SPY = spyOn(component.attributesManagerService, 'changeTraceType');
+    it('attributesManagerService shoudl call traceType.next when onTraceTypeChage', () => {
+        const SPY = spyOn(component.attributesManagerService.traceType, 'next');
 
         component.onTraceTypeChange();
 

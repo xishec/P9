@@ -11,14 +11,13 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class LineToolService extends AbstractToolService {
-
     attributesManagerService: AttributesManagerService;
 
     currentColorAndOpacity = '';
     currentColor = '';
     currentOpacity = '';
     currentStrokeWidth = 0;
-    currentCircleJointDiameter = 0;
+    circleJointDiameter = 0;
 
     currentStrokeType = LINE_STROKE_TYPE.Continuous;
     currentJointType = LINE_JOINT_TYPE.Curvy;
@@ -58,17 +57,17 @@ export class LineToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+        this.attributesManagerService.thickness.subscribe((thickness) => {
             this.currentStrokeWidth = thickness;
         });
-        this.attributesManagerService.currentLineStrokeType.subscribe((strokeType) => {
+        this.attributesManagerService.lineStrokeType.subscribe((strokeType) => {
             this.currentStrokeType = strokeType;
         });
-        this.attributesManagerService.currentLineJointType.subscribe((jointType) => {
+        this.attributesManagerService.lineJointType.subscribe((jointType) => {
             this.currentJointType = jointType;
         });
-        this.attributesManagerService.currentCircleJointDiameter.subscribe((circleJointDiameter) => {
-            this.currentCircleJointDiameter = circleJointDiameter;
+        this.attributesManagerService.circleJointDiameter.subscribe((circleJointDiameter) => {
+            this.circleJointDiameter = circleJointDiameter;
         });
     }
 
@@ -218,7 +217,7 @@ export class LineToolService extends AbstractToolService {
 
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
-        this.renderer.setAttribute(circle, 'r', (this.currentCircleJointDiameter / 2).toString());
+        this.renderer.setAttribute(circle, 'r', (this.circleJointDiameter / 2).toString());
 
         this.renderer.appendChild(this.gWrap, circle);
 

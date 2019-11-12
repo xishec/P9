@@ -73,18 +73,18 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.polygonAttributesForm.value.thickness;
         if (this.polygonAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.polygonAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+        this.attributesManagerService.traceType.next(tracetype);
     }
 
     onNbVerticesChange(): void {
         const nbVertices = this.polygonAttributesForm.value.nbVertices;
-        this.attributesManagerService.changeNbVertices(nbVertices);
+        this.attributesManagerService.nbVertices.next(nbVertices);
     }
 
     onFocus(): void {
