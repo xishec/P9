@@ -54,6 +54,7 @@ describe('PolygonToolService', () => {
                                 const boundtop = 0;
                                 const boundRect = {
                                     left: boundleft,
+
                                     top: boundtop,
                                 };
                                 return boundRect;

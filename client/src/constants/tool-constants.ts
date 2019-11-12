@@ -1,3 +1,4 @@
+import { FontType } from 'src/classes/FontType';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
@@ -282,6 +283,12 @@ enum HTMLAttribute {
     href = 'href',
     src = 'src',
     viewBox = 'viewBox',
+    font_family = 'font-family',
+    font_size = 'font-size',
+    font_weight = 'font-weight',
+    font_style = 'font-style',
+    text_anchor = 'text-anchor',
+    innerHTML = 'innerHTML',
 }
 
 const ToolNameShortcuts: Map<string, ToolName> = new Map([
@@ -321,6 +328,47 @@ const MAX_BMP_SIZE = 620;
 const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
+const FONTS: FontType[] = [
+    { fontName: 'Times', fontFamily: 'Times, serif' },
+    { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
+    { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
+
+    { fontName: 'Verdana', fontFamily: 'Verdana, sans-serif' },
+    { fontName: 'Arial', fontFamily: 'Arial, sans-serif' },
+    { fontName: 'Helvetica', fontFamily: 'Helvetica, sans-serif' },
+
+    { fontName: 'Lucida', fontFamily: 'Lucida, monospace' },
+    { fontName: 'Console', fontFamily: 'Console, monospace' },
+    { fontName: 'Courier', fontFamily: 'Courier, monospace' },
+];
+
+enum FontSize {
+    Min = 10,
+    Default = 15,
+    Max = 72,
+}
+
+const TEXT_CURSOR = '█';
+const TEXT_SPACE = '\xa0';
+const TEXT_LINEBREAK = '⠀';
+const SNACKBAR_DURATION = 3000;
+
+enum FONT_ALIGN {
+    Middle = 'middle',
+    Start = 'start',
+    End = 'end',
+}
+
+enum FONT_STYLE {
+    Italic = 'italic',
+    Normal = 'normal',
+}
+
+enum FONT_WEIGHT {
+    Bold = 'bold',
+    Normal = 'normal',
+}
+
 export {
     ControlShortcuts,
     ToolNameShortcuts,
@@ -357,12 +405,21 @@ export {
     PEN_WIDTH_FACTOR,
     EraserSize,
     TRACING_TOOL_POSITION,
+    FONTS,
+    FontSize,
+    FONT_ALIGN,
+    FONT_STYLE,
+    FONT_WEIGHT,
+    TEXT_CURSOR,
+    TEXT_SPACE,
+    TEXT_LINEBREAK,
     ERASER_STROKE_WIDTH,
     ADDITIONAL_BORDER_WIDTH,
     RESET_POSITION_NUMBER,
     DEFAULT_RADIX,
     MAX_BMP_SIZE,
     SHAPE_TOOL_POSITION,
+    SNACKBAR_DURATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
     STAMP_BASE_ROTATION,

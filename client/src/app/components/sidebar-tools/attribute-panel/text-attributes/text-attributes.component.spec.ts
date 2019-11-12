@@ -1,19 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
+
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { PenAttributesComponent } from './pen-attributes.component';
+import { TextAttributesComponent } from './text-attributes.component';
 
-describe('PenAttributesComponent', () => {
-    let component: PenAttributesComponent;
-    let fixture: ComponentFixture<PenAttributesComponent>;
+describe('TextAttributesComponent', () => {
+    let component: TextAttributesComponent;
+    let fixture: ComponentFixture<TextAttributesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PenAttributesComponent],
+            declarations: [TextAttributesComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 FormBuilder,
@@ -27,7 +27,7 @@ describe('PenAttributesComponent', () => {
                 },
             ],
         })
-            .overrideComponent(PenAttributesComponent, {
+            .overrideComponent(TextAttributesComponent, {
                 set: {
                     providers: [
                         {
@@ -43,7 +43,7 @@ describe('PenAttributesComponent', () => {
             })
             .compileComponents();
 
-        fixture = TestBed.createComponent(PenAttributesComponent);
+        fixture = TestBed.createComponent(TextAttributesComponent);
         component = fixture.componentInstance;
     }));
 

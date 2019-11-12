@@ -25,6 +25,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { TextToolService } from '../text-tool/text-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -53,6 +54,7 @@ export class ToolSelectorService {
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygonTool: PolygonToolService,
         private lineTool: LineToolService,
+        private textTool: TextToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
@@ -85,6 +87,8 @@ export class ToolSelectorService {
 
         this.lineTool.initializeService(ref, renderer, drawStack);
 
+        this.textTool.initializeService(ref, renderer, drawStack);
+
         this.exportTool.initializeService(ref, renderer);
 
         this.eraserTool.initializeService(ref, renderer, drawStack);
@@ -105,7 +109,7 @@ export class ToolSelectorService {
             [ToolName.Quill, this.selectionTool as AbstractToolService],
             [ToolName.SprayCan, this.selectionTool as AbstractToolService],
             [ToolName.Fill, this.selectionTool as AbstractToolService],
-            [ToolName.Text, this.selectionTool as AbstractToolService],
+            [ToolName.Text, this.textTool as AbstractToolService],
         ]);
 
         this.WORKZONE_TOOLS_MAP = new Map([
@@ -249,6 +253,10 @@ export class ToolSelectorService {
 
     getLineTool(): LineToolService {
         return this.lineTool;
+    }
+
+    getTextTool(): TextToolService {
+        return this.textTool;
     }
 
     getEraserTool(): EraserToolService {

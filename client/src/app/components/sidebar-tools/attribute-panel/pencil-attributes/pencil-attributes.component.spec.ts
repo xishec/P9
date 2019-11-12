@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog, MatSliderChange } from '@angular/material';
+import { MatDialog, MatSliderChange, MatSnackBar } from '@angular/material';
 
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { Thickness } from '../../../../../constants/tool-constants';
@@ -24,6 +24,10 @@ describe('PencilAttributesComponent', () => {
                 FormBuilder,
                 {
                     provide: MatDialog,
+                    useValue: {},
+                },
+                {
+                    provide: MatSnackBar,
                     useValue: {},
                 },
             ],

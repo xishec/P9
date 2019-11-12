@@ -1,5 +1,5 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
@@ -30,6 +30,10 @@ describe('ToolSelectorService', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                     },
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: {},
                 },
                 provideAutoMock(ElementRef),
                 provideAutoMock(DrawStackService),

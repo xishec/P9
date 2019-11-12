@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
     BRUSH_STYLE,
     EraserSize,
+    FONT_ALIGN,
+    FontSize,
     LineJointType,
     LineStrokeType,
     STAMP_TYPES,
@@ -37,6 +39,16 @@ export class AttributesManagerService {
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
 
+    private boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
+    private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
+    private fontAlign: BehaviorSubject<FONT_ALIGN> = new BehaviorSubject(FONT_ALIGN.Start);
+    private isWritingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    get isWriting(): boolean {
+        return this.isWritingState.value;
+    }
+
     currentThickness: Observable<number> = this.thickness.asObservable();
     currentMinThickness: Observable<number> = this.minThickness.asObservable();
     currentTraceType: Observable<string> = this.traceType.asObservable();
@@ -49,6 +61,13 @@ export class AttributesManagerService {
     currentScaling: Observable<number> = this.scaling.asObservable();
     currentStampType: Observable<string> = this.stampType.asObservable();
     currentEraserSize: Observable<number> = this.eraserSize.asObservable();
+
+    currentBoldState: Observable<boolean> = this.boldState.asObservable();
+    currentItalicState: Observable<boolean> = this.italicState.asObservable();
+    currentFont: Observable<string> = this.font.asObservable();
+    currentFontSize: Observable<number> = this.fontSize.asObservable();
+    currenTfontAlign: Observable<FONT_ALIGN> = this.fontAlign.asObservable();
+    currentIsWriting: Observable<boolean> = this.isWritingState.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
         this.lineStrokeType.next(lineStrokeType);
@@ -94,6 +113,25 @@ export class AttributesManagerService {
         this.stampType.next(stampType);
     }
 
+    changeBoldState(boldState: boolean) {
+        this.boldState.next(boldState);
+    }
+    changeItalicState(italicState: boolean) {
+        this.italicState.next(italicState);
+    }
+    changeFont(font: string) {
+        this.font.next(font);
+    }
+    changeFontSize(fontSize: number) {
+        this.fontSize.next(fontSize);
+    }
+    changeFontAlign(fontAlign: FONT_ALIGN) {
+        this.fontAlign.next(fontAlign);
+    }
+
+    changeIsWriting(isWriting: boolean) {
+        this.isWritingState.next(isWriting);
+    }
     changeEraserSize(size: number): void {
         this.eraserSize.next(size);
     }

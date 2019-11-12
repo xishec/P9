@@ -23,6 +23,12 @@ enum Keys {
     y = 'y',
     Escape = 'Escape',
     Backspace = 'Backspace',
+    Enter = 'Enter',
+    ArrowLeft = 'ArrowLeft',
+    ArrowRight = 'ArrowRight',
+    Space = ' ',
+    SmallerThan = '<',
+    GreaterThan = '>',
 }
 
 enum Mouse {

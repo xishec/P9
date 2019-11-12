@@ -62,6 +62,7 @@ import { PolygonAttributesComponent } from './components/sidebar-tools/attribute
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
+import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
@@ -98,6 +99,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         SelectionAttributesComponent,
         ExportFileModalWindowComponent,
         PenAttributesComponent,
+        TextAttributesComponent,
         EraserAttributesComponent,
     ],
     imports: [
@@ -119,6 +121,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         MatSelectModule,
         MatFormFieldModule,
         MatSlideToggleModule,
+        MatSnackBarModule,
     ],
     entryComponents: [
         WelcomeModalWindowComponent,
