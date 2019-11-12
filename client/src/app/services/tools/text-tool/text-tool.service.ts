@@ -12,6 +12,8 @@ import {
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
+    FONT_STYLE,
+    FONT_WEIGHT,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -150,7 +152,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     updateItalic(isItalic: boolean): void {
-        this.fontInfo.fontStyle = isItalic ? 'italic' : 'normal';
+        this.fontInfo.fontStyle = isItalic ? FONT_STYLE.Italic : FONT_STYLE.Normal;
         if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontInfo.fontStyle);
             this.updatePreviewBox();
@@ -158,7 +160,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     updateBold(isBold: boolean): void {
-        this.fontInfo.fontWeight = isBold ? 'bold' : 'normal';
+        this.fontInfo.fontWeight = isBold ? FONT_WEIGHT.Bold : FONT_WEIGHT.Normal;
         if (this.isWriting) {
             this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontInfo.fontWeight);
             this.updatePreviewBox();

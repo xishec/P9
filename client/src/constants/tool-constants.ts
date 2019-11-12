@@ -350,6 +350,16 @@ enum FONT_ALIGN {
     End = 'end',
 }
 
+enum FONT_STYLE {
+    Italic = 'italic',
+    Normal = 'normal',
+}
+
+enum FONT_WEIGHT {
+    Bold = 'bold',
+    Normal = 'normal',
+}
+
 export {
     ControlShortcuts,
     ToolNameShortcuts,
@@ -389,6 +399,8 @@ export {
     FONTS,
     FontSize,
     FONT_ALIGN,
+    FONT_STYLE,
+    FONT_WEIGHT,
     TEXT_CURSOR,
     TEXT_SPACE,
     TEXT_LINEBREAK,
