@@ -139,11 +139,11 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    isEraserTouchingElement(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
-        const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
-        const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
-        const boxTop = selectionBox.y + window.scrollY;
-        const boxBottom = selectionBox.y + window.scrollY + selectionBox.height;
+    isEraserTouchingElement(eraserBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+        const boxLeft = eraserBox.x + window.scrollX - SIDEBAR_WIDTH;
+        const boxRight = eraserBox.x + window.scrollX - SIDEBAR_WIDTH + eraserBox.width;
+        const boxTop = eraserBox.y + window.scrollY;
+        const boxBottom = eraserBox.y + window.scrollY + eraserBox.height;
 
         let elLeft = elementBox.x + window.scrollX - SIDEBAR_WIDTH;
         let elRight = elementBox.x + window.scrollX - SIDEBAR_WIDTH + elementBox.width;
@@ -168,7 +168,7 @@ export class EraserToolService extends AbstractToolService {
     }
 
     checkElementsToErase(): void {
-        const selectionBox = this.getDOMRect(this.eraser);
+        const eraserBox = this.getDOMRect(this.eraser);
 
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
@@ -177,7 +177,7 @@ export class EraserToolService extends AbstractToolService {
             const elBox = this.getDOMRect(svgGElement);
 
             if (
-                this.isEraserTouchingElement(selectionBox, elBox, this.getStrokeWidth(svgGElement)) &&
+                this.isEraserTouchingElement(eraserBox, elBox, this.getStrokeWidth(svgGElement)) &&
                 topElement <= drawStackIndex
             ) {
                 this.updateElementToColor(topElement, svgGElement, drawStackIndex);
