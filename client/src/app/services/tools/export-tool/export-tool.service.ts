@@ -3,7 +3,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { CanvasToBMP } from 'src/classes/CanvasToBMP';
 import { SVG_NS } from 'src/constants/constants';
 import { FILE_TYPE, HTML_ATTRIBUTE, MAX_BMP_SIZE } from 'src/constants/tool-constants';
-import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 
 @Injectable({
     providedIn: 'root',

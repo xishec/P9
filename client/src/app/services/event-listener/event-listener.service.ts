@@ -132,19 +132,19 @@ export class EventListenerService {
                 this.toolSelectorService.changeTool(TOOL_NAME_SHORTCUTS.get(event.key) as TOOL_NAME);
             }
 
-            if (event.key === Keys.g && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.g && this.shouldAllowShortcuts()) {
                 this.gridToolService.switchState();
             }
 
-            if (event.key === Keys.plus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.plus && this.shouldAllowShortcuts()) {
                 this.gridToolService.incrementSize();
             }
 
-            if (event.key === Keys.minus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
 
-            if (event.key === Keys.delete) {
+            if (event.key === KEYS.delete) {
                 this.clipboardService.delete();
             }
         });
