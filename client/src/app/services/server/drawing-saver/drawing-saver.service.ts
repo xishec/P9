@@ -3,9 +3,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { NameAndLabels } from 'src/classes/NameAndLabels';
-import { Message } from '../../../../../../common/communication/message';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { Message } from '../../../../../../common/communication/Message';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';

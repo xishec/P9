@@ -12,7 +12,7 @@ import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
-fdescribe('OpenFileModalWindowComponent', () => {
+describe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
     let fixture: ComponentFixture<OpenFileModalWindowComponent>;
 

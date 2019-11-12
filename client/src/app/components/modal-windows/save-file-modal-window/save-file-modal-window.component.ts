@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SafeResourceUrl } from '@angular/platform-browser';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -34,7 +34,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
         private drawingLoaderService: DrawingLoaderService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
     ) {
         this.formBuilderServer = formBuilderServer;
         this.formBuilderLocal = formBuilderLocal;
@@ -77,7 +77,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToServer(): void {
         this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels)
+            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
         );
         this.isSaving = true;
 
@@ -89,7 +89,7 @@ export class SaveFileModalWindowComponent implements OnInit {
                     this.snackBar.open('Sauvegarde réussie!', 'OK');
                     this.closeDialog();
                 } else {
-                    this.snackBar.open(`Sauvegarde échouée...\n ${this.errorMesaage}`, 'OK');
+                    this.snackBar.open(`Sauvegarde échouée...\n${this.errorMesaage}`, 'OK');
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
@@ -98,7 +98,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToLocal(): boolean {
         if (this.drawingLoaderService.emptyDrawStack.value) {
-            window.alert(`Sauvegarde échouée...\n Aucun dessin dans le zone de travail!`);
+            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans le zone de travail!', 'OK');
             return false;
         }
         this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();

@@ -18,8 +18,8 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatTabsModule,
     MatSnackBarModule,
+    MatTabsModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************

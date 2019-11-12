@@ -1,6 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
