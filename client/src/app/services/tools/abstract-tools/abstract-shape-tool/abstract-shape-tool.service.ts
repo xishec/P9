@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
+import { Coords2D } from 'src/classes/Coords2D';
 import { HTMLAttribute } from 'src/constants/tool-constants';
 import { SVG_NS } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
@@ -9,13 +10,10 @@ import { AbstractToolService } from '../abstract-tool.service';
     providedIn: 'root',
 })
 export abstract class AbstractShapeToolService extends AbstractToolService {
-    currentMouseX = 0;
-    currentMouseY = 0;
-    initialMouseX = 0;
-    initialMouseY = 0;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    initialMouseCoords: Coords2D = new Coords2D(0, 0);
     previewRectangle: SVGRectElement;
     isPreviewing = false;
-    isIn = true;
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -59,26 +57,26 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     }
 
     updatePreviewRectangle(): void {
-        let deltaX = this.currentMouseX - this.initialMouseX;
-        let deltaY = this.currentMouseY - this.initialMouseY;
+        let deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
+        let deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
 
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseX - deltaX).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, deltaX.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseX.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.width, deltaX.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseY - deltaY).toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, deltaY.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseY.toString());
+            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
             this.renderer.setAttribute(this.previewRectangle, HTMLAttribute.height, deltaY.toString());
         }
 

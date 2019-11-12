@@ -87,14 +87,22 @@ describe('PolygonToolService', () => {
         });
     });
 
+    it('should make an invalid polygon by setting null attributes when calling makeInvalidPolygon', () => {
+        const spySetAttribute = spyOn(rendererMock, 'setAttribute');
+
+        polygonTool.makeInvalidPolygon();
+
+        expect(spySetAttribute).toHaveBeenCalled();
+    });
+
     it('should calculate the good vertex points', () => {
         interface Vertex {
             x: number;
             y: number;
         }
         polygonTool.radius = 5;
-        polygonTool.currentMouseX = 10;
-        polygonTool.currentMouseY = 10;
+        polygonTool.currentMouseCoords.x = 10;
+        polygonTool.currentMouseCoords.y = 10;
 
         let vertex: Vertex;
         vertex = polygonTool.calculateVertex(5);
@@ -102,6 +110,7 @@ describe('PolygonToolService', () => {
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
+        spyOn(polygonTool, 'isMouseInRef').and.callFake(() => false);
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
@@ -113,7 +122,7 @@ describe('PolygonToolService', () => {
         expect(spyAppendChild).not.toHaveBeenCalled();
     });
 
-    it('should appendChild when createSVG when createSVG is called', () => {
+    it('should appendChild when createSVG is called', () => {
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
         polygonTool.createSVG();
@@ -124,6 +133,7 @@ describe('PolygonToolService', () => {
     it('should append the the draw polygon when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
+        spyOn(polygonTool, 'isMouseInRef').and.callFake(() => true);
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
@@ -154,6 +164,7 @@ describe('PolygonToolService', () => {
                 }
             },
         );
+        spyOn(polygonTool, 'isMouseInRef').and.callFake(() => true);
         polygonTool.userFillColor = 'none';
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
@@ -184,6 +195,7 @@ describe('PolygonToolService', () => {
     });
 
     it('should cleanup correctly when creating a polygon', () => {
+        spyOn(polygonTool, 'isMouseInRef').and.callFake(() => true);
         const spyRemove = spyOn(rendererMock, 'removeChild');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
@@ -197,6 +209,7 @@ describe('PolygonToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
+        spyOn(polygonTool, 'isMouseInRef').and.callFake(() => true);
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {

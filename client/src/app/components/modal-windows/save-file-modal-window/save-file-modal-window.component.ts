@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -27,6 +27,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
         private drawingLoaderService: DrawingLoaderService,
+        private snackBar: MatSnackBar,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -36,7 +37,9 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
             currentDrawing.labels.forEach((label) => {
-                if (!this.drawingLabels.includes(label)) { this.drawingLabels.push(label); }
+                if (!this.drawingLabels.includes(label)) {
+                    this.drawingLabels.push(label);
+                }
             });
             this.selectedLabels = Array.from(currentDrawing.labels);
         });
@@ -68,10 +71,10 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
                 if (drawingIsSaved) {
-                    window.alert('Sauvegarde réussie!');
+                    this.snackBar.open('Sauvegarde réussie!', 'OK');
                     this.onCancel();
                 } else {
-                    window.alert(`Sauvegarde échouée...\n ${this.errorMesaage}`);
+                    this.snackBar.open(`Sauvegarde échouée...\n ${this.errorMesaage}`, 'OK');
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
@@ -80,7 +83,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     addLabel(newLabel: string): void {
         if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
+            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK');
         } else {
             this.drawingLabels.push(newLabel);
             this.selectedLabels.push(newLabel);
@@ -104,7 +107,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     select(label: string): void {
         if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
+            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK');
         } else {
             this.selectedLabels.push(label);
         }

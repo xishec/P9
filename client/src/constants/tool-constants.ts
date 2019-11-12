@@ -1,7 +1,15 @@
 import { FontType } from 'src/classes/FontType';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
+const CONTROL_POINTS_AMOUNT = 8;
+const CONTROL_POINT_RADIUS = 5;
+const SELECTION_COLOR = '#ff5722';
+
 const NO_STAMP = '';
+const STAMP_BASE_WIDTH = 50;
+const STAMP_BASE_HEIGHT = 50;
+const STAMP_BASE_ROTATION = 15;
+const STAMP_ALTER_ROTATION = 1;
 
 const OFFSET_STEP = 10;
 
@@ -175,7 +183,8 @@ enum StampScaling {
 }
 
 enum StampAngleOrientation {
-    Min = 0,
+    Min = -360,
+    Default = 0,
     Max = 360,
 }
 
@@ -411,4 +420,11 @@ export {
     MAX_BMP_SIZE,
     SHAPE_TOOL_POSITION,
     SNACKBAR_DURATION,
+    STAMP_BASE_HEIGHT,
+    STAMP_BASE_WIDTH,
+    STAMP_BASE_ROTATION,
+    STAMP_ALTER_ROTATION,
+    CONTROL_POINTS_AMOUNT,
+    CONTROL_POINT_RADIUS,
+    SELECTION_COLOR,
 };

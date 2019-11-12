@@ -100,14 +100,6 @@ describe('DropperToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should return true is the coordinates of the mouse are positive', () => {
-        expect(service.verifyPosition(positiveMouseEvent)).toBeTruthy();
-    });
-
-    it('should return false is the coordinates of the mouse are negative', () => {
-        expect(service.verifyPosition(negativeMouseEvent)).toBeFalsy();
-    });
-
     it('should call updateSVGCopy after color is picked', () => {
         const spyOnUpdateSVGCopy: jasmine.Spy = spyOn(service, 'updateSVGCopy').and.returnValue();
 
@@ -117,19 +109,19 @@ describe('DropperToolService', () => {
     });
 
     it('should change the position of the current cooridination of the mouse to be positive if the event is positive', () => {
-        service.currentMouseX = -5;
+        service.currentMouseCoords.x = -5;
 
         service.onMouseMove(positiveMouseEvent);
 
-        expect(service.currentMouseX).toBeGreaterThan(0);
+        expect(service.currentMouseCoords.x).toBeGreaterThan(0);
     });
 
     it('should change the position of the current cooridination of the mouse to be negative if the event is negative', () => {
-        service.currentMouseX = 5;
+        service.currentMouseCoords.x = 5;
 
         service.onMouseMove(negativeMouseEvent);
 
-        expect(service.currentMouseX).toBeLessThan(0);
+        expect(service.currentMouseCoords.x).toBeLessThan(0);
     });
 
     it('should call getColor', () => {
@@ -146,7 +138,7 @@ describe('DropperToolService', () => {
         const spyOnChangePrimaryColor: jasmine.Spy = spyOn(colorToolService, 'changePrimaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
-        service.isIn = true;
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(positiveMouseEvent);
 
@@ -160,28 +152,12 @@ describe('DropperToolService', () => {
         const spyOnChangeSecondaryColor: jasmine.Spy = spyOn(colorToolService, 'changeSecondaryColor')
             .withArgs('ffffffff')
             .and.returnValue();
-        service.isIn = true;
+        spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.onMouseUp(createMouseEvent(10, 10, 2));
 
         expect(spyOnChangeSecondaryColor).toHaveBeenCalled();
         expect(spyOnGetColor).toHaveBeenCalled();
-    });
-
-    it('should change attribute "isIn" to true onMouseEnter', () => {
-        service.isIn = false;
-
-        service.onMouseEnter(positiveMouseEvent);
-
-        expect(service.isIn).toEqual(true);
-    });
-
-    it('should change attribute "isIn" to false onMouseLeave', () => {
-        service.isIn = true;
-
-        service.onMouseLeave(positiveMouseEvent);
-
-        expect(service.isIn).toEqual(false);
     });
 
     it('should return undefined if onKeyDown is not implemented', () => {

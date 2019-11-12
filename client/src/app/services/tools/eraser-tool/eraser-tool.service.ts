@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -36,8 +37,7 @@ export class EraserToolService extends AbstractToolService {
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
 
-    currentMouseX = 0;
-    currentMouseY = 0;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -84,13 +84,13 @@ export class EraserToolService extends AbstractToolService {
     }
 
     setSquareToMouse(event: MouseEvent): void {
-        this.currentMouseX =
+        this.currentMouseCoords.x =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
-        this.currentMouseY =
+        this.currentMouseCoords.y =
             event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
 
-        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseX.toString());
-        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseY.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseCoords.y.toString());
 
         if (!this.isSquareAppended) {
             this.appendSquare();
@@ -235,6 +235,15 @@ export class EraserToolService extends AbstractToolService {
             );
         }
 
+        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+            for (let i = 1; i < childrenCount; i++) {
+                this.renderer.setAttribute(children[i], HTMLAttribute.fill, '#' + DEFAULT_RED);
+            }
+        }
+
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
             HTMLAttribute.stroke,
@@ -267,6 +276,15 @@ export class EraserToolService extends AbstractToolService {
                 HTMLAttribute.fill,
                 border,
             );
+        }
+
+        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+            for (let i = 1; i < childrenCount; i++) {
+                this.renderer.setAttribute(children[i], HTMLAttribute.fill, border);
+            }
         }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);

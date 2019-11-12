@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -9,7 +9,7 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { Message } from '../../../../../../common/communication/message';
+import { Message } from '../../../../../../common/communication/Message';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -36,6 +36,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private fileManagerService: FileManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
+        private snackBar: MatSnackBar,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -49,7 +50,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        window.alert('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.');
+                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -91,7 +92,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onSubmit(): void {
         if (this.drawingOpenSuccess) {
-
             this.undoRedoerService.initializeStacks();
             this.undoRedoerService.fromLoader = true;
 
@@ -159,9 +159,14 @@ export class OpenFileModalWindowComponent implements OnInit {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.name !== this.selectedOption;
                 });
+                this.snackBar.open('Suppression réussie!', 'OK');
             } else {
-                window.alert('Erreur de suppression du côté serveur!');
+                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK');
             }
         });
+    }
+
+    unmaskAll() {
+        this.nameFilter = '$tout';
     }
 }

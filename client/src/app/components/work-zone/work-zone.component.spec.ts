@@ -7,9 +7,9 @@ import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ToolName } from 'src/constants/tool-constants';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
 
@@ -20,7 +20,7 @@ describe('WorkZoneComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WorkZoneComponent],
-            imports : [HttpClientModule],
+            imports: [HttpClientModule],
             providers: [
                 {
                     provide: AbstractToolService,
