@@ -65,7 +65,9 @@ describe('ColorToolService', () => {
     });
 
     it('#changeselectedColorType should change selectedColorType to backgroundColor type', () => {
-        const selectedColorType: BehaviorSubject<COLOR_TYPE> = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.backgroundColor);
+        const selectedColorType: BehaviorSubject<COLOR_TYPE> = new BehaviorSubject<COLOR_TYPE>(
+            COLOR_TYPE.backgroundColor,
+        );
         service.changeSelectedColorType(COLOR_TYPE.backgroundColor);
         expect(service.selectedColorType).toEqual(selectedColorType);
     });

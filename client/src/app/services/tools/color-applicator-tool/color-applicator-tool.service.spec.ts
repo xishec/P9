@@ -38,13 +38,13 @@ describe('ColorApplicatorToolService', () => {
                             const mockSVGGElement = {
                                 getAttribute: () => null,
                             };
-                            return mockSVGGElement as unknown as SVGGElement;
+                            return (mockSVGGElement as unknown) as SVGGElement;
                         },
                     },
                 },
                 {
                     provide: UndoRedoerService,
-                    useValue : {
+                    useValue: {
                         saveCurrentState: () => null,
                     },
                 },

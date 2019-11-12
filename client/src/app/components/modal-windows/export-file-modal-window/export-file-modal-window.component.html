@@ -14,19 +14,11 @@
         </mat-form-field>
     </div>
 </form>
-<div *ngIf="workZoneIsEmpty">
-    Vous devez tout d'abord créer un dessin pour pouvoir l'exporter ! <br />
-</div>
+<div *ngIf="workZoneIsEmpty">Vous devez tout d'abord créer un dessin pour pouvoir l'exporter ! <br /></div>
 
 <mat-dialog-actions id="footer" align="end">
     <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">Annuler</button>
-    <button
-        class="actionButton"
-        mat-stroked-button
-        type="submit"
-        (click)="onSubmit()"
-        *ngIf="!workZoneIsEmpty"
-    >
+    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()" *ngIf="!workZoneIsEmpty">
         Exporter
     </button>
 </mat-dialog-actions>

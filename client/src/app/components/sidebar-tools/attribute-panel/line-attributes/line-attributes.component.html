@@ -50,10 +50,7 @@
                 <mat-label>
                     Style de Jointure
                 </mat-label>
-                <mat-select
-                    formControlName="lineJointType"
-                    (selectionChange)="onLineJointTypeChange($event.value)"
-                >
+                <mat-select formControlName="lineJointType" (selectionChange)="onLineJointTypeChange($event.value)">
                     <mat-option [value]="1">
                         1 - Arrondi
                     </mat-option>
@@ -68,31 +65,31 @@
 
             <div *ngIf="circleJointSelected">
                 <label for="thickness">Diamètre des cercles</label>
-                    <mat-slider
-                        placeholder="Hex"
+                <mat-slider
+                    placeholder="Hex"
+                    formControlName="circleJointDiameter"
+                    (input)="onCircleJointSliderChange($event)"
+                    [min]="THICKNESS.Min"
+                    value="{{ lineAttributesForm.value.circleJointDiameter }}"
+                ></mat-slider>
+                <mat-form-field class="small">
+                    <input
+                        autocomplete="off"
+                        (focus)="onFocus()"
+                        (focusout)="onFocusOut()"
+                        matInput
+                        type="number"
                         formControlName="circleJointDiameter"
-                        (input)="onCircleJointSliderChange($event)"
+                        (input)="onCircleJointDiameterChange()"
                         [min]="THICKNESS.Min"
-                        value="{{ lineAttributesForm.value.circleJointDiameter }}"
-                    ></mat-slider>
-                    <mat-form-field class="small">
-                        <input
-                            autocomplete="off"
-                            (focus)="onFocus()"
-                            (focusout)="onFocusOut()"
-                            matInput
-                            type="number"
-                            formControlName="circleJointDiameter"
-                            (input)="onCircleJointDiameterChange()"
-                            [min]="THICKNESS.Min"
-                            [max]="THICKNESS.Max"
-                        />
-                    <mat-error>La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error>
+                        [max]="THICKNESS.Max"
+                    />
+                    <mat-error
+                        >La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error
+                    >
                     <span matSuffix>px</span>
                 </mat-form-field>
             </div>
-
-
         </div>
     </form>
 </div>

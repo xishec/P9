@@ -37,7 +37,11 @@ export class SelectionToolService extends AbstractToolService {
     renderer: Renderer2;
     drawStack: DrawStackService;
 
-    constructor(public clipBoard: ClipboardService, public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
+    constructor(
+        public clipBoard: ClipboardService,
+        public manipulator: ManipulatorService,
+        private undoRedoerService: UndoRedoerService,
+    ) {
         super();
     }
 

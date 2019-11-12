@@ -74,18 +74,15 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: GridToolService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: ShortcutManagerService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: ModalManagerService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: DrawingLoaderService,
@@ -96,8 +93,7 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: DrawingSaverService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
                 {
                     provide: UndoRedoerService,
@@ -107,10 +103,8 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: ClipboardService,
-                    useValue: {
-                    },
+                    useValue: {},
                 },
-
             ],
             schemas: [NO_ERRORS_SCHEMA],
         }).compileComponents();
@@ -158,7 +152,6 @@ describe('WorkZoneComponent', () => {
     });
 
     it('should return cursor style crosshair when toolName is Pencil', () => {
-
         drawingLoaderService.emptyDrawStack.next(false);
         drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = TOOL_NAME.Pencil;
