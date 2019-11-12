@@ -225,12 +225,7 @@ export class EraserToolService extends AbstractToolService {
         }
 
         // Check all cases where el and box don't touch each other
-        if (
-            elRight < boxLeft ||
-            boxRight < elLeft ||
-            elBottom < boxTop ||
-            boxBottom < elTop
-        ) {
+        if (elRight < boxLeft || boxRight < elLeft || elBottom < boxTop || boxBottom < elTop) {
             return false;
         }
 
@@ -461,29 +456,16 @@ export class EraserToolService extends AbstractToolService {
 
         this.isOnTarget = false;
 
-        if (this.erasedSomething) {
+        if (this.erasedSomething && this.changedElements.get(this.currentTarget.toString()) !== undefined) {
             this.renderer.removeChild(this.elementRef, this.eraser);
-            this.restoreBorder(
-                this.currentTarget,
-                (this.changedElements.get(
-                    this.currentTarget.toString(),
-                ) as SVGGElementInfo).borderColor,
-                (this.changedElements.get(
-                    this.currentTarget.toString(),
-                ) as SVGGElementInfo).borderWidth,
-                this.lastToolName,
-            );
+            this.restoreBorder(this.currentTarget, (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderColor,
+            (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderWidth, this.lastToolName);
             setTimeout(() => {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
             }, 0);
             setTimeout(() => {
-                this.colorBorder(
-                    this.currentTarget,
-                    (this.changedElements.get(
-                        this.currentTarget.toString(),
-                    ) as SVGGElementInfo).borderWidth,
-                    this.lastToolName,
-                );
+                this.colorBorder(this.currentTarget,
+                (this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo).borderWidth, this.lastToolName);
                 this.appendEraser();
             }, 0);
         }
