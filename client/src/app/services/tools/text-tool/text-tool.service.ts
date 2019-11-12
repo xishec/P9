@@ -7,13 +7,13 @@ import { TextCursor } from 'src/classes/textStyle/textCursor';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     FONT_ALIGN,
+    FONT_STYLE,
+    FONT_WEIGHT,
     HTMLAttribute,
     SNACKBAR_DURATION,
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
-    FONT_STYLE,
-    FONT_WEIGHT,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
