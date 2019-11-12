@@ -33,6 +33,8 @@ enum Mouse {
 
 const SIDEBAR_WIDTH = 360;
 
+const ELEMENTS_BEFORE_LAST_CIRCLE = 1;
+
 const MAX_DRAWING_LENGTH = 5;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -43,4 +45,14 @@ const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/r
 
 const MAX_NB_LABELS = 6;
 
-export { MAX_NB_LABELS, GIFS, MAX_DRAWING_LENGTH, SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };
+export {
+    MAX_NB_LABELS,
+    GIFS,
+    MAX_DRAWING_LENGTH,
+    SIDEBAR_WIDTH,
+    SVG_NS,
+    Keys,
+    Mouse,
+    predicate,
+    ELEMENTS_BEFORE_LAST_CIRCLE,
+};

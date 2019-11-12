@@ -4,7 +4,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { Mouse, SIDEBAR_WIDTH, SVG_NS, ELEMENTS_BEFORE_LAST_CIRCLE } from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
@@ -33,7 +33,6 @@ export class EraserToolService extends AbstractToolService {
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
     erasedSomething = false;
-    ELEMENTS_BEFORE_LAST_CIRCLE = 1;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -261,7 +260,7 @@ export class EraserToolService extends AbstractToolService {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[
-                    childrenNumber - 1 - this.ELEMENTS_BEFORE_LAST_CIRCLE
+                    childrenNumber - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
                 ],
                 HTMLAttribute.fill,
                 borderColor,
