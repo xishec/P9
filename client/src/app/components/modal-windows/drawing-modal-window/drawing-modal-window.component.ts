@@ -62,7 +62,6 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
-
         this.undoRedoerService.initializeStacks();
 
         this.drawingModalWindowService.changeDrawingInfo(
