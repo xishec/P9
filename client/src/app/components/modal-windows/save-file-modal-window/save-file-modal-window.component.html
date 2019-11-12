@@ -1,61 +1,106 @@
 <h1 mat-dialog-title>Sauvegarder le dessin</h1>
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="Sauvegarder dans la BD">
+        <div class="tab-content" *ngIf="!isSaving">
+            <mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
+                <mat-label class="drawing-name-title">Nom du dessin</mat-label>
+                <input
+                    autocomplete="off"
+                    matInput
+                    class="drawing-name-input"
+                    formControlName="name"
+                    #input
+                    placeholder="Nom du dessin"
+                />
+                <mat-label class="drawing-label-title">Étiquettes</mat-label>
+                <div class="drawing-labels-list">
+                    <mat-button-toggle
+                        class="label"
+                        *ngFor="let label of drawingLabels"
+                        (click)="toggleLabel(label)"
+                        [disabled]="!selectedLabels.includes(label)"
+                        [checked]="selectedLabels.includes(label)"
+                    >
+                        {{ label }}
+                    </mat-button-toggle>
+                </div>
+                <input
+                    autocomplete="off"
+                    matInput
+                    class="new-label-input"
+                    formControlName="label"
+                    #newLabelInput
+                    placeholder="Nouvelle étiquette"
+                />
+                <button
+                    *ngIf="newLabelInput.value !== ''"
+                    mat-raised-button
+                    type="button"
+                    class="new-label-button"
+                    [disabled]="saveFileModalForm.controls.label.invalid || drawingLabels.includes(newLabelInput.value)"
+                    (click)="addLabel(newLabelInput.value)"
+                >
+                    Ajouter l'étiquette
+                </button>
+            </mat-dialog-content>
 
-<div *ngIf="!isSaving">
-    <mat-dialog-content class="mat-typography" [formGroup]="saveFileModalForm">
-        <mat-label id="drawing-name-title">Nom du dessin</mat-label>
-        <input
-            autocomplete="off"
-            matInput
-            id="drawing-name-input"
-            formControlName="name"
-            #input
-            placeholder="Nom du dessin"
-        />
-
-        <mat-label id="drawing-label-title">Étiquettes</mat-label>
-        <div id="drawing-labels-list">
-            <mat-button-toggle
-                id="label"
-                *ngFor="let label of drawingLabels"
-                (click)="toggleLabel(label)"
-                [disabled]="!selectedLabels.includes(label)"
-                [checked]="selectedLabels.includes(label)"
-            >
-                {{ label }}
-            </mat-button-toggle>
+            <mat-dialog-actions align="end">
+                <div class="submit-button-group-wrapper">
+                    <div class="submit-button-group">
+                        <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">
+                            Annuler
+                        </button>
+                        <button
+                            class="actionButton"
+                            mat-stroked-button
+                            type="submit"
+                            (click)="saveToServer()"
+                            [disabled]="saveFileModalForm.controls.name.invalid"
+                        >
+                            Sauvegarder
+                        </button>
+                    </div>
+                </div>
+            </mat-dialog-actions>
         </div>
-        <div id="new-label">
-            <input
-                autocomplete="off"
-                matInput
-                id="new-label-input"
-                formControlName="label"
-                #labelInput
-                placeholder="Nouvelle étiquette"
-            />
-            <button
-                *ngIf="labelInput.value !== ''"
-                mat-raised-button
-                type="button"
-                id="label-button"
-                [disabled]="saveFileModalForm.controls.label.invalid || drawingLabels.includes(labelInput.value)"
-                (click)="addLabel(labelInput.value)"
-            >
-                Ajouter l'étiquette
-            </button>
-        </div>
-    </mat-dialog-content>
+    </mat-tab>
+    <mat-tab label="Sauvegarder localement">
+        <div class="tab-content" *ngIf="!isSaving">
+            <mat-dialog-content class="mat-typography-local" [formGroup]="saveFileLocalModalForm">
+                <mat-label id="input-description">
+                    Le nom de fichier ne doit pas contenir de '.' ou de '-' et doit être de type .txt
+                </mat-label>
+                <mat-label class="file-name-title">Nom du fichier</mat-label>
+                <input
+                    autocomplete="off"
+                    matInput
+                    class="file-name-input"
+                    formControlName="filename"
+                    #input
+                    placeholder="Nom du fichier"
+                />
+            </mat-dialog-content>
 
-    <mat-dialog-actions id="footer" align="end">
-        <button class="actionButton" mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
-        <button
-            class="actionButton"
-            mat-stroked-button
-            type="submit"
-            (click)="onSubmit()"
-            [disabled]="saveFileModalForm.controls.name.invalid"
-        >
-            Sauvegarder
-        </button>
-    </mat-dialog-actions>
-</div>
+            <mat-dialog-actions align="end">
+                <div class="submit-button-group-wrapper">
+                    <div class="submit-button-group">
+                        <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">
+                            Annuler
+                        </button>
+                        <a
+                            class="actionButton"
+                            mat-stroked-button
+                            type="submit"
+                            (click)="saveToLocal()"
+                            [href]="saveToLocal ? saveFileUrl : null"
+                            [download]="filename"
+                            [disabled]="saveFileLocalModalForm.controls.filename.invalid"
+                        >
+                            Sauvegarder
+                        </a>
+                    </div>
+                </div>
+            </mat-dialog-actions>
+        </div>
+    </mat-tab>
+</mat-tab-group>

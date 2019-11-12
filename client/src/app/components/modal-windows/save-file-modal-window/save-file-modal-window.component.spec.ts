@@ -7,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
 
@@ -51,7 +50,9 @@ describe('SaveFileModalWindowComponent', () => {
                         },
                         {
                             provide: DrawingSaverService,
-                            useValue: {},
+                            useValue: {
+                                sendFileToServer: () => null,
+                            },
                         },
                         {
                             provide: DrawingLoaderService,
@@ -84,13 +85,24 @@ describe('SaveFileModalWindowComponent', () => {
     it(`should notify the user if drawing has been successfully saved`, () => {
         const SPY = spyOn(component[`snackBar`], 'open');
 
-        const nameAndLabels = new NameAndLabels(form.value.name, component.selectedLabels);
-        drawingSaverService.currentNameAndLabels = new BehaviorSubject(nameAndLabels);
+        form.value.name = 'hello';
         drawingSaverService.currentIsSaved = new BehaviorSubject(true);
 
-        component.onSubmit();
+        component.saveToServer();
 
-        expect(SPY).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalledWith(`Sauvegarde réussie!`, `OK`);
+    });
+
+    it(`should notify the user if drawing has not been successfully saved`, () => {
+        const SPY = spyOn(component[`snackBar`], 'open');
+
+        form.value.name = 'hello';
+        drawingSaverService.currentIsSaved = new BehaviorSubject(false);
+        component.errorMesaage = 'test error message';
+
+        component.saveToServer();
+
+        expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n${component.errorMesaage}`, `OK`);
     });
 
     it(`should notify the user if user selects more than ${MAX_NB_LABELS} labels`, () => {

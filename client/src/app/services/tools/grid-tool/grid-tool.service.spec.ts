@@ -1,19 +1,31 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { BehaviorSubject } from 'rxjs';
 import { GRID_OPACITY, GRID_SIZE, GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from './grid-tool.service';
 
 describe('GridToolService', () => {
     let injector: TestBed;
     let service: GridToolService;
     const AVERAGE_SIZE = (GRID_SIZE.Min + GRID_SIZE.Max) / 2;
+    let drawingLoaderService: DrawingLoaderService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [GridToolService],
+            providers: [
+                GridToolService,
+                {
+                    provide: DrawingLoaderService,
+                    useValue: {
+                        emptyDrawStack: new BehaviorSubject<boolean>(true),
+                    },
+                },
+            ],
         });
         injector = getTestBed();
         service = injector.get(GridToolService);
+        drawingLoaderService = injector.get(DrawingLoaderService);
     });
 
     it('should be created', () => {
@@ -21,16 +33,14 @@ describe('GridToolService', () => {
     });
 
     it('changeState should change the state if workzone is not empty', () => {
-        service.workzoneIsEmpty.next(false);
-
+        drawingLoaderService.emptyDrawStack.next(false);
         service.changeState(true);
 
         expect(service.state.value).toBeTruthy();
     });
 
     it('changeState should not change the state if workzone is empty', () => {
-        service.workzoneIsEmpty.next(true);
-
+        drawingLoaderService.emptyDrawStack.next(true);
         service.changeState(true);
 
         expect(service.state.value).toBeFalsy();

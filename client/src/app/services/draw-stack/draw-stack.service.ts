@@ -9,9 +9,10 @@ import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
     providedIn: 'root',
 })
 export class DrawStackService {
+    private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
+
     drawStack: SVGGElement[] = new Array<SVGGElement>();
     idStack: string[] = new Array<string>();
-    private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;

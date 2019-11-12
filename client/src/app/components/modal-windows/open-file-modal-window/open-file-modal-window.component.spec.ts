@@ -26,6 +26,14 @@ describe('OpenFileModalWindowComponent', () => {
         new DrawingInfo(100, 100, 'ffffff'),
     );
 
+    const TEST_DRAWING2: Drawing = new Drawing(
+        'harry potter',
+        ['Englang', 'JK Rowling', 'novel'],
+        'test_svg2',
+        ['work-zone', 'background', 'ellipse'],
+        new DrawingInfo(50, 40, '000000'),
+    );
+
     const dialogMock = {
         close: () => null,
     };
@@ -101,7 +109,9 @@ describe('OpenFileModalWindowComponent', () => {
                         },
                         {
                             provide: DrawingLoaderService,
-                            useValue: {},
+                            useValue: {
+                                currentDrawing: new BehaviorSubject<Drawing>(TEST_DRAWING),
+                            },
                         },
                         {
                             provide: MatSnackBar,
@@ -124,12 +134,11 @@ describe('OpenFileModalWindowComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should close modal on submit when drawing has been successfully opened', () => {
+    it('should close modal when submit button has been clicked', () => {
         const SPY = spyOn(component[`dialogRef`], 'close');
 
-        component.drawingOpenSuccess = true;
         drawingLoaderService.currentDrawing = new BehaviorSubject(TEST_DRAWING);
-        component.onSubmit();
+        component.closeDialog();
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -151,5 +160,22 @@ describe('OpenFileModalWindowComponent', () => {
         component.drawingsFromServer[i].drawingInfo.width = 10;
 
         expect(component.getHeight('mona lisa')).toEqual('100%');
+    });
+
+    it('should load the right drawing from server when loadServerFile is called', () => {
+        const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
+        component.selectedOption = TEST_DRAWING.name;
+        component.drawingsFromServer = [TEST_DRAWING2, TEST_DRAWING];
+        component.loadServerFile();
+
+        expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
+    });
+
+    it('should load the right drawing from local file when loadLocalFile is called', () => {
+        const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
+        component.fileToLoad = TEST_DRAWING;
+        component.loadLocalFile();
+
+        expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
     });
 });

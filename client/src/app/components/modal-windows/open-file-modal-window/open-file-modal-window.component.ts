@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
+
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
@@ -18,16 +19,18 @@ import { Message } from '../../../../../../common/communication/Message';
 })
 export class OpenFileModalWindowComponent implements OnInit {
     openFileModalForm: FormGroup;
+    openLocalFileModalForm: FormGroup;
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
     selectedOption = '';
-    drawingOpenSuccess = true;
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
     isLoading: boolean;
     randomGifIndex: number;
+    localFileName = '';
+    fileToLoad: Drawing | null = null;
 
     constructor(
         formBuilder: FormBuilder,
@@ -42,9 +45,10 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.initializeForm();
+        this.initializeForms();
 
         this.isLoading = true;
+        this.localFileName = '';
         this.fileManagerService
             .getAllDrawings()
             .pipe(
@@ -73,11 +77,20 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
     }
 
-    initializeForm(): void {
+    initializeForms(): void {
         this.openFileModalForm = this.formBuilder.group({
             selectedDrawing: [[this.selectedOption], Validators.required],
             confirm: false,
         });
+
+        this.openLocalFileModalForm = this.formBuilder.group({
+            confirm: false,
+        });
+    }
+
+    intializeUndoRedoStacks(): void {
+        this.undoRedoerService.initializeStacks();
+        this.undoRedoerService.fromLoader = true;
     }
 
     handleSelection(event: any): void {
@@ -85,56 +98,86 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
     }
 
-    onCancel(): void {
+    closeDialog(): void {
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
-    onSubmit(): void {
-        if (this.drawingOpenSuccess) {
-            this.undoRedoerService.initializeStacks();
-            this.undoRedoerService.fromLoader = true;
+    loadServerFile(): void {
+        this.intializeUndoRedoStacks();
+        const selectedDrawing: Drawing = this.drawingsFromServer.find(
+            (drawing) => drawing.name === this.selectedOption,
+        ) as Drawing;
+        this.drawingLoaderService.currentDrawing.next(selectedDrawing);
+        this.closeDialog();
+    }
 
-            const selectedDrawing: Drawing = this.drawingsFromServer.find(
-                (drawing) => drawing.name === this.selectedOption,
-            ) as Drawing;
+    loadLocalFile(): void {
+        this.intializeUndoRedoStacks();
+        this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
+        this.closeDialog();
+    }
 
-            this.drawingLoaderService.currentDrawing.next(selectedDrawing);
-
-            this.dialogRef.close();
-            this.modalManagerService.setModalIsDisplayed(false);
+    getFileToLoad(event: Event): void {
+        const reader = new FileReader();
+        const target = event.target as HTMLInputElement;
+        const files = target.files as FileList;
+        if (files.length !== 0) {
+            reader.readAsText(files[0]);
+            reader.onload = () => {
+                try {
+                    const localFileContent = JSON.parse(reader.result as string);
+                    this.fileToLoad = {
+                        name: files[0].name,
+                        labels: [],
+                        svg: localFileContent.svg,
+                        idStack: localFileContent.idStack,
+                        drawingInfo: localFileContent.drawingInfo,
+                    };
+                    this.localFileName = this.fileToLoad.name;
+                } catch (error) {
+                    this.fileToLoad = null;
+                    this.localFileName = '';
+                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                }
+            };
         }
     }
 
-    formIsInvalid(): boolean {
+    serverFormIsInvalid(): boolean {
         return (
             this.openFileModalForm.value.selectedDrawing[0] === '' ||
             (!this.emptyDrawStack && this.openFileModalForm.invalid)
         );
     }
 
-    getViewBox(drawingName: string): string {
+    localFormIsInvalid(): boolean {
+        return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
+    }
+
+    getDimensions(drawingName: string): number[] {
         const i: number = this.findIndexByName(drawingName);
         const height: number = this.drawingsFromServer[i].drawingInfo.height;
         const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
-        return `0 0 ${width} ${height}`;
+        return [width, height];
+    }
+
+    getViewBox(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+        return `0 0 ${dimensions[0]} ${dimensions[1]}`;
     }
 
     getWidth(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-        const height: number = this.drawingsFromServer[i].drawingInfo.height;
-        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const dimensions = this.getDimensions(drawingName);
 
-        return width > height ? '100%' : '60px';
+        return dimensions[0] > dimensions[1] ? '100%' : '60px';
     }
 
     getHeight(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-        const height: number = this.drawingsFromServer[i].drawingInfo.height;
-        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+        const dimensions = this.getDimensions(drawingName);
 
-        return width < height ? '100%' : '60px';
+        return dimensions[0] < dimensions[1] ? '100%' : '60px';
     }
 
     getSVG(drawingName: string): string {

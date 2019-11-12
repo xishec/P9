@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSliderChange } from '@angular/material';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { GRID_OPACITY, GRID_SIZE } from 'src/constants/tool-constants';
@@ -14,6 +15,7 @@ describe('GridAttributesComponent', () => {
     let event: MatSliderChange;
     let gridAttributeService: GridToolService;
     let shortcutManagerService: ShortcutManagerService;
+    let drawingLoaderService: DrawingLoaderService;
 
     const AVERAGE_SIZE = (GRID_SIZE.Min + GRID_SIZE.Max) / 2;
     const AVERAGE_OPACITY = (GRID_OPACITY.Min + GRID_OPACITY.Max) / 2;
@@ -43,6 +45,7 @@ describe('GridAttributesComponent', () => {
 
         gridAttributeService = fixture.debugElement.injector.get<GridToolService>(GridToolService);
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
+        drawingLoaderService = fixture.debugElement.injector.get<DrawingLoaderService>(DrawingLoaderService);
     });
 
     it('should create', () => {
@@ -188,7 +191,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should enable the slider if workzone is not empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(false);
+        drawingLoaderService.emptyDrawStack.next(false);
 
         component.enableSlider();
 
@@ -196,7 +199,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should not enable the slider if workzone is empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(true);
+        drawingLoaderService.emptyDrawStack.next(true);
 
         component.enableSlider();
 

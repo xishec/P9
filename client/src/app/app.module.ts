@@ -19,6 +19,7 @@ import {
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTabsModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************
@@ -65,6 +66,8 @@ import { StampAttributesComponent } from './components/sidebar-tools/attribute-p
 import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { DrawStackService } from './services/draw-stack/draw-stack.service';
+import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
 
 @NgModule({
@@ -119,6 +122,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         HttpClientModule,
         MatTooltipModule,
         MatSelectModule,
+        MatTabsModule,
         MatFormFieldModule,
         MatSlideToggleModule,
         MatSnackBarModule,
@@ -136,6 +140,8 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         WelcomeModalWindowService,
         ColorToolService,
         EventListenerService,
+        DrawStackService,
+        DrawingSaverService,
         UndoRedoerService,
     ],
     bootstrap: [AppComponent],

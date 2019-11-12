@@ -1,8 +1,8 @@
-import { model, Schema } from 'mongoose';
+import { createSchema, typedModel } from 'ts-mongoose';
 
-const postSchema = new Schema({
+const postSchema = createSchema ({
     title: { type: String, require: true },
     body: { type: String, require: true },
 });
 
-module.exports = model('Post', postSchema);
+export const Post = typedModel('Post', postSchema);
