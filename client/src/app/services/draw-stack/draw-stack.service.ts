@@ -3,18 +3,25 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DrawStackService {
+    private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
+
     drawStack: SVGGElement[] = new Array<SVGGElement>();
     idStack: string[] = new Array<string>();
-    private stackTarget: BehaviorSubject<StackTargetInfo> = new BehaviorSubject(new StackTargetInfo());
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
+    currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
-    constructor(renderer: Renderer2, private drawingLoaderService: DrawingLoaderService) {
+    constructor(
+        renderer: Renderer2,
+        private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
+    ) {
         this.renderer = renderer;
     }
 
@@ -24,6 +31,33 @@ export class DrawStackService {
 
     getElementByPosition(elementPosition: number): SVGGElement {
         return this.drawStack[elementPosition];
+    }
+
+    setElementByPosition(elementPosition: number, element: SVGGElement): void {
+        this.drawStack[elementPosition] = element;
+    }
+
+    delete(elementToDelete: SVGGElement): void {
+        const indexOfDeletion = this.drawStack.indexOf(elementToDelete);
+
+        this.drawStack.splice(indexOfDeletion, 1);
+        this.idStack.splice(indexOfDeletion, 1);
+
+        this.resolveDrawStackOrdering(indexOfDeletion);
+
+        if (this.drawStack.length === 0) {
+            this.drawingLoaderService.emptyDrawStack.next(true);
+        }
+    }
+
+    resolveDrawStackOrdering(displacementIndex: number): void {
+        for (let i = displacementIndex; i < this.drawStack.length; i++) {
+            this.renderer.setAttribute(this.drawStack[i], 'id_element', i.toString());
+        }
+
+        for (let i = displacementIndex; i < this.idStack.length; i++) {
+            this.idStack[i] = i.toString();
+        }
     }
 
     getDrawStackLength(): number {
@@ -38,23 +72,38 @@ export class DrawStackService {
 
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
+                );
             });
+
             this.renderer.listen(el.children.item(i), 'mouseup', () => {
-                this.changeTargetElement(new StackTargetInfo(position, tool as string));
+                this.changeTargetElement(
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
+                );
             });
         }
 
         return el;
     }
 
-    push(el: SVGGElement): void {
+    push(el: SVGGElement, byTool: boolean = true): void {
         this.drawStack.push(this.makeTargetable(el));
-        if (this.idStack.length > 0) { this.drawingLoaderService.emptyDrawStack.next(false); }
+        if (this.idStack.length > 0) {
+            this.drawingLoaderService.emptyDrawStack.next(false);
+        }
+
+        if (byTool) {
+            this.undoRedoerService.saveCurrentState(this.idStack);
+        }
     }
 
     pop(): SVGGElement | undefined {
-        return this.drawStack.pop();
+        const result = this.drawStack.pop();
+        if (this.idStack.length === 0) {
+            this.drawingLoaderService.emptyDrawStack.next(true);
+        }
+        return result;
     }
 
     reset(): SVGGElement[] {

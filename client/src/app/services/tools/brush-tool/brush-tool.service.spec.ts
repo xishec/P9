@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers';
+import { createMockFilter, createMockSVGCircle } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { BrushToolService } from './brush-tool.service';
@@ -46,8 +46,10 @@ describe('BrushToolService', () => {
 
         injector = getTestBed();
         service = injector.get(BrushToolService);
-
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnCreateElement = spyOn(rendererMock, 'createElement').and.returnValue(MOCK_FILTER);
@@ -68,7 +70,6 @@ describe('BrushToolService', () => {
     });
 
     it('createSVGWrapper should call createFilter', () => {
-
         const spyCreateFilter = spyOn(service, 'createFilter').and.returnValue(createMockFilter());
 
         service.createSVGWrapper();
@@ -106,7 +107,6 @@ describe('BrushToolService', () => {
     });
 
     it('when createGaussianBlurFilter renderer.setAttribute and appendChild should be called', () => {
-
         service.createGaussianBlurFilter(MOCK_FILTER);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
@@ -146,7 +146,9 @@ describe('BrushToolService', () => {
     });
 
     it('when createSVGCircle it should call super.getDrawStackLength', () => {
-        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(createMockSVGCircle());
+        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
+            createMockSVGCircle(),
+        );
 
         service.createSVGCircle(0, 0);
 
@@ -158,5 +160,4 @@ describe('BrushToolService', () => {
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
-
 });

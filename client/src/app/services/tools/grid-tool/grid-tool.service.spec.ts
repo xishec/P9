@@ -1,19 +1,31 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT, GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { BehaviorSubject } from 'rxjs';
+import { GRID_OPACITY, GRID_SIZE, GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from './grid-tool.service';
 
 describe('GridToolService', () => {
     let injector: TestBed;
     let service: GridToolService;
-    const AVERAGE_SIZE = (GridSize.Min + GridSize.Max) / 2;
+    const AVERAGE_SIZE = (GRID_SIZE.Min + GRID_SIZE.Max) / 2;
+    let drawingLoaderService: DrawingLoaderService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [GridToolService],
+            providers: [
+                GridToolService,
+                {
+                    provide: DrawingLoaderService,
+                    useValue: {
+                        emptyDrawStack: new BehaviorSubject<boolean>(true),
+                    },
+                },
+            ],
         });
         injector = getTestBed();
         service = injector.get(GridToolService);
+        drawingLoaderService = injector.get(DrawingLoaderService);
     });
 
     it('should be created', () => {
@@ -21,16 +33,14 @@ describe('GridToolService', () => {
     });
 
     it('changeState should change the state if workzone is not empty', () => {
-        service.workzoneIsEmpty.next(false);
-
+        drawingLoaderService.emptyDrawStack.next(false);
         service.changeState(true);
 
         expect(service.state.value).toBeTruthy();
     });
 
     it('changeState should not change the state if workzone is empty', () => {
-        service.workzoneIsEmpty.next(true);
-
+        drawingLoaderService.emptyDrawStack.next(true);
         service.changeState(true);
 
         expect(service.state.value).toBeFalsy();
@@ -57,7 +67,7 @@ describe('GridToolService', () => {
     });
 
     it('changeSize should change the size with value of his argument', () => {
-        const ARGUMENT = AVERAGE_SIZE === GridSize.Default ? AVERAGE_SIZE / 2 : AVERAGE_SIZE;
+        const ARGUMENT = AVERAGE_SIZE === GRID_SIZE.Default ? AVERAGE_SIZE / 2 : AVERAGE_SIZE;
         const OLD_VALUE = service.size.value;
 
         service.changeSize(ARGUMENT);
@@ -67,9 +77,9 @@ describe('GridToolService', () => {
     });
 
     // tslint:disable-next-line: max-line-length
-    it(`incrementSize should call changeSize with argument size + ${GRID_SIZE_INCREMENT} if size + ${GRID_SIZE_INCREMENT}  <= ${GridSize.Max}`, () => {
+    it(`incrementSize should call changeSize with argument size + ${GRID_SIZE_INCREMENT} if size + ${GRID_SIZE_INCREMENT}  <= ${GRID_SIZE.Max}`, () => {
         const SPY = spyOn(service, 'changeSize');
-        service.size.next(GridSize.Default);
+        service.size.next(GRID_SIZE.Default);
         const ARGUMENT = service.size.value + GRID_SIZE_INCREMENT;
 
         service.incrementSize();
@@ -77,19 +87,19 @@ describe('GridToolService', () => {
         expect(SPY).toHaveBeenCalledWith(ARGUMENT);
     });
 
-    it(`incrementSize should call changeSize with argument ${GridSize.Max} if size + ${GRID_SIZE_INCREMENT}  > ${GridSize.Max}`, () => {
+    it(`incrementSize should call changeSize with argument ${GRID_SIZE.Max} if size + ${GRID_SIZE_INCREMENT}  > ${GRID_SIZE.Max}`, () => {
         const SPY = spyOn(service, 'changeSize');
-        service.size.next(GridSize.Default + GridSize.Max);
+        service.size.next(GRID_SIZE.Default + GRID_SIZE.Max);
 
         service.incrementSize();
 
-        expect(SPY).toHaveBeenCalledWith(GridSize.Max);
+        expect(SPY).toHaveBeenCalledWith(GRID_SIZE.Max);
     });
 
     // tslint:disable-next-line: max-line-length
-    it(`decrementSize should call changeSize with argument size - ${GRID_SIZE_DECREMENT} if size - ${GRID_SIZE_DECREMENT}  >= ${GridSize.Min}`, () => {
+    it(`decrementSize should call changeSize with argument size - ${GRID_SIZE_DECREMENT} if size - ${GRID_SIZE_DECREMENT}  >= ${GRID_SIZE.Min}`, () => {
         const SPY = spyOn(service, 'changeSize');
-        service.size.next(GridSize.Default);
+        service.size.next(GRID_SIZE.Default);
         const ARGUMENT = service.size.value - GRID_SIZE_DECREMENT;
 
         service.decrementSize();
@@ -97,17 +107,17 @@ describe('GridToolService', () => {
         expect(SPY).toHaveBeenCalledWith(ARGUMENT);
     });
 
-    it(`decrementSize should call changeSize with argument ${GridSize.Min} if size - ${GRID_SIZE_DECREMENT}  < ${GridSize.Max}`, () => {
+    it(`decrementSize should call changeSize with argument ${GRID_SIZE.Min} if size - ${GRID_SIZE_DECREMENT}  < ${GRID_SIZE.Max}`, () => {
         const SPY = spyOn(service, 'changeSize');
-        service.size.next(GridSize.Default - GridSize.Min);
+        service.size.next(GRID_SIZE.Default - GRID_SIZE.Min);
 
         service.decrementSize();
 
-        expect(SPY).toHaveBeenCalledWith(GridSize.Min);
+        expect(SPY).toHaveBeenCalledWith(GRID_SIZE.Min);
     });
 
     it('changeOpacity should change the opacity with value of his argument', () => {
-        const AVERAGE_OPACITY = (GridOpacity.Min + GridOpacity.Max) / 2;
+        const AVERAGE_OPACITY = (GRID_OPACITY.Min + GRID_OPACITY.Max) / 2;
         const OLD_VALUE = service.opacity.value;
 
         service.changeOpacity(AVERAGE_OPACITY);

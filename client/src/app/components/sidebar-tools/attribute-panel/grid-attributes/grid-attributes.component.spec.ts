@@ -3,9 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSliderChange } from '@angular/material';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { GridOpacity, GridSize } from 'src/constants/tool-constants';
+import { GRID_OPACITY, GRID_SIZE } from 'src/constants/tool-constants';
 import { GridAttributesComponent } from './grid-attributes.component';
 
 describe('GridAttributesComponent', () => {
@@ -14,9 +15,10 @@ describe('GridAttributesComponent', () => {
     let event: MatSliderChange;
     let gridAttributeService: GridToolService;
     let shortcutManagerService: ShortcutManagerService;
+    let drawingLoaderService: DrawingLoaderService;
 
-    const AVERAGE_SIZE = (GridSize.Min + GridSize.Max) / 2;
-    const AVERAGE_OPACITY = (GridOpacity.Min + GridOpacity.Max) / 2;
+    const AVERAGE_SIZE = (GRID_SIZE.Min + GRID_SIZE.Max) / 2;
+    const AVERAGE_OPACITY = (GRID_OPACITY.Min + GRID_OPACITY.Max) / 2;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -43,13 +45,14 @@ describe('GridAttributesComponent', () => {
 
         gridAttributeService = fixture.debugElement.injector.get<GridToolService>(GridToolService);
         shortcutManagerService = fixture.debugElement.injector.get<ShortcutManagerService>(ShortcutManagerService);
+        drawingLoaderService = fixture.debugElement.injector.get<DrawingLoaderService>(DrawingLoaderService);
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`onSizeSliderChange should change the value of size if event value [${GridSize.Min},${GridSize.Max}]`, () => {
+    it(`onSizeSliderChange should change the value of size if event value [${GRID_SIZE.Min},${GRID_SIZE.Max}]`, () => {
         event.value = AVERAGE_SIZE;
         const SPY = spyOn(component, 'onSizeChange').and.returnValue();
 
@@ -59,12 +62,12 @@ describe('GridAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onSizeSliderChange should not change the value of size if event value  ]${GridSize.Min},${GridSize.Max}[`, () => {
+    it(`onSizeSliderChange should not change the value of size if event value  ]${GRID_SIZE.Min},${GRID_SIZE.Max}[`, () => {
         const SPY = spyOn(component, 'onSizeChange').and.returnValue();
 
-        event.value = GridSize.Max + AVERAGE_SIZE;
+        event.value = GRID_SIZE.Max + AVERAGE_SIZE;
         component.onSizeSliderChange(event);
-        event.value = GridSize.Min - AVERAGE_SIZE;
+        event.value = GRID_SIZE.Min - AVERAGE_SIZE;
         component.onSizeSliderChange(event);
 
         expect(SPY).not.toHaveBeenCalled();
@@ -79,7 +82,7 @@ describe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onSizeChange should call changeSize if form size value is [${GridSize.Min},${GridSize.Max}]`, () => {
+    it(`onSizeChange should call changeSize if form size value is [${GRID_SIZE.Min},${GRID_SIZE.Max}]`, () => {
         component.gridAttributesForm.controls.size.setValue(AVERAGE_SIZE);
         const SPY = spyOn(gridAttributeService, 'changeSize').and.returnValue();
 
@@ -88,8 +91,8 @@ describe('GridAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onSizeChange should not call changeSize of GridToolService if form size > ${GridSize.Max}`, () => {
-        component.gridAttributesForm.controls.size.setValue(GridSize.Max + AVERAGE_SIZE);
+    it(`onSizeChange should not call changeSize of GridToolService if form size > ${GRID_SIZE.Max}`, () => {
+        component.gridAttributesForm.controls.size.setValue(GRID_SIZE.Max + AVERAGE_SIZE);
         const SPY = spyOn(gridAttributeService, 'changeSize').and.returnValue();
 
         component.onSizeChange();
@@ -97,8 +100,8 @@ describe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onSizeChange should not call changeSize of GridToolService if form size < ${GridSize.Min}`, () => {
-        component.gridAttributesForm.controls.size.setValue(GridSize.Min - AVERAGE_SIZE);
+    it(`onSizeChange should not call changeSize of GridToolService if form size < ${GRID_SIZE.Min}`, () => {
+        component.gridAttributesForm.controls.size.setValue(GRID_SIZE.Min - AVERAGE_SIZE);
         const SPY = spyOn(gridAttributeService, 'changeSize').and.returnValue();
 
         component.onSizeChange();
@@ -106,7 +109,7 @@ describe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onOpacitySliderChange should change the value of opacity if event value [${GridOpacity.Min},${GridOpacity.Max}]`, () => {
+    it(`onOpacitySliderChange should change the value of opacity if event value [${GRID_OPACITY.Min},${GRID_OPACITY.Max}]`, () => {
         event.value = AVERAGE_OPACITY;
         const SPY = spyOn(component, 'onOpacityChange').and.returnValue();
 
@@ -116,12 +119,12 @@ describe('GridAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onOpacitySliderChange should not change the value of opacity if event value  ]${GridOpacity.Min},${GridOpacity.Max}[`, () => {
+    it(`onOpacitySliderChange should not change the value of opacity if event value  ]${GRID_OPACITY.Min},${GRID_OPACITY.Max}[`, () => {
         const SPY = spyOn(component, 'onOpacityChange').and.returnValue();
 
-        event.value = GridOpacity.Max + AVERAGE_OPACITY;
+        event.value = GRID_OPACITY.Max + AVERAGE_OPACITY;
         component.onOpacitySliderChange(event);
-        event.value = GridOpacity.Min - AVERAGE_OPACITY;
+        event.value = GRID_OPACITY.Min - AVERAGE_OPACITY;
         component.onOpacitySliderChange(event);
 
         expect(SPY).not.toHaveBeenCalled();
@@ -136,7 +139,7 @@ describe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onOpacityChange should call changeOpacity if form opacity value is [${GridOpacity.Min},${GridOpacity.Max}]`, () => {
+    it(`onOpacityChange should call changeOpacity if form opacity value is [${GRID_OPACITY.Min},${GRID_OPACITY.Max}]`, () => {
         component.gridAttributesForm.controls.opacity.setValue(AVERAGE_OPACITY);
         const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
 
@@ -145,8 +148,8 @@ describe('GridAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity > ${GridOpacity.Max}`, () => {
-        component.gridAttributesForm.controls.opacity.setValue(GridOpacity.Max + AVERAGE_OPACITY);
+    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity > ${GRID_OPACITY.Max}`, () => {
+        component.gridAttributesForm.controls.opacity.setValue(GRID_OPACITY.Max + AVERAGE_OPACITY);
         const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
 
         component.onOpacityChange();
@@ -154,8 +157,8 @@ describe('GridAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity < ${GridOpacity.Min}`, () => {
-        component.gridAttributesForm.controls.opacity.setValue(GridOpacity.Min - AVERAGE_OPACITY);
+    it(`onOpacityChange should not call changeOpacity of GridToolService if form opacity < ${GRID_OPACITY.Min}`, () => {
+        component.gridAttributesForm.controls.opacity.setValue(GRID_OPACITY.Min - AVERAGE_OPACITY);
         const SPY = spyOn(gridAttributeService, 'changeOpacity').and.returnValue();
 
         component.onOpacityChange();
@@ -188,7 +191,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should enable the slider if workzone is not empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(false);
+        drawingLoaderService.emptyDrawStack.next(false);
 
         component.enableSlider();
 
@@ -196,7 +199,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should not enable the slider if workzone is empty', () => {
-        gridAttributeService.workzoneIsEmpty.next(true);
+        drawingLoaderService.emptyDrawStack.next(true);
 
         component.enableSlider();
 

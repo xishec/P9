@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { SafeResourceUrl } from '@angular/platform-browser';
+
 import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -15,27 +17,38 @@ import { MAX_NB_LABELS } from 'src/constants/constants';
 })
 export class SaveFileModalWindowComponent implements OnInit {
     saveFileModalForm: FormGroup;
-    formBuilder: FormBuilder;
+    saveFileLocalModalForm: FormGroup;
+    formBuilderServer: FormBuilder;
+    formBuilderLocal: FormBuilder;
     drawingLabels: string[] = ['Art Abstrait', 'Art Contemporain', 'Expressionnisme', 'Minimalisme'];
     selectedLabels: string[] = [];
     errorMesaage: string;
     isSaving: boolean;
+    saveFileUrl: SafeResourceUrl = '';
+    filename = '';
 
     constructor(
-        formBuilder: FormBuilder,
+        formBuilderServer: FormBuilder,
+        formBuilderLocal: FormBuilder,
         private dialogRef: MatDialogRef<SaveFileModalWindowComponent>,
         private modalManagerService: ModalManagerService,
         private drawingSaverService: DrawingSaverService,
         private drawingLoaderService: DrawingLoaderService,
+        private snackBar: MatSnackBar,
     ) {
-        this.formBuilder = formBuilder;
+        this.formBuilderServer = formBuilderServer;
+        this.formBuilderLocal = formBuilderLocal;
     }
 
     ngOnInit() {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
-            this.drawingLabels = this.drawingLabels.concat(currentDrawing.labels);
+            currentDrawing.labels.forEach((label) => {
+                if (!this.drawingLabels.includes(label)) {
+                    this.drawingLabels.push(label);
+                }
+            });
             this.selectedLabels = Array.from(currentDrawing.labels);
         });
         this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
@@ -45,54 +58,78 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     initializeForm(): void {
-        this.saveFileModalForm = this.formBuilder.group({
+        this.saveFileModalForm = this.formBuilderServer.group({
             name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15)]],
-            label: ['', [Validators.maxLength(15)]],
+            label: ['', [Validators.maxLength(15), Validators.pattern('[A-Za-z0-9àÀéÉèÈôÔîÏçÇùÙ]*')]],
+        });
+        this.saveFileLocalModalForm = this.formBuilderLocal.group({
+            filename: [
+                '',
+                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:|.txt)$')],
+            ],
         });
     }
 
-    onCancel(): void {
+    closeDialog(): void {
         this.dialogRef.close();
         this.modalManagerService.setModalIsDisplayed(false);
     }
 
-    onSubmit(): void {
-        const nameAndLabels = new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels);
+    saveToServer(): void {
+        this.drawingSaverService.sendFileToServer(
+            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
+        );
         this.isSaving = true;
-        this.drawingSaverService.currentNameAndLabels.next(nameAndLabels);
 
         this.drawingSaverService.currentIsSaved
             .pipe(filter((subject) => subject !== undefined))
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
                 if (drawingIsSaved) {
-                    window.alert('Sauvegarde réussie!');
-                    this.onCancel();
+                    this.snackBar.open('Sauvegarde réussie!', 'OK');
+                    this.closeDialog();
                 } else {
-                    window.alert(`Sauvegarde échouée...\n ${this.errorMesaage}`);
+                    this.snackBar.open(`Sauvegarde échouée...\n${this.errorMesaage}`, 'OK');
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
             });
     }
 
-    addLabel(newLabel: string): void {
-        if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            window.alert(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`);
-        } else {
-            this.drawingLabels.push(newLabel);
-            this.selectedLabels.push(newLabel);
-            this.saveFileModalForm.controls.label.setValue('');
+    saveToLocal(): boolean {
+        if (this.drawingLoaderService.emptyDrawStack.value) {
+            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans le zone de travail!', 'OK');
+            return false;
         }
+        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
+        this.filename = this.saveFileLocalModalForm.value.filename;
+        this.closeDialog();
+        return true;
     }
 
-    toggleLabel(label: string) {
-        if (this.selectedLabels.includes(label)) {
-            this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
-                return selectedLabel !== label;
-            });
-        } else {
-            this.selectedLabels.push(label);
+    addLabel(newLabel: string): void {
+        if (this.selectedLabels.length >= MAX_NB_LABELS) {
+            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK');
+            return;
         }
+        this.drawingLabels.push(newLabel);
+        this.selectedLabels.push(newLabel);
+        this.saveFileModalForm.controls.label.setValue('');
+    }
+
+    toggleLabel(label: string): void {
+        this.selectedLabels.includes(label) ? this.deselect(label) : this.select(label);
+    }
+
+    deselect(label: string): void {
+        this.selectedLabels = this.selectedLabels.filter((selectedLabel) => {
+            return selectedLabel !== label;
+        });
+    }
+
+    select(label: string): void {
+        this.selectedLabels.length >= MAX_NB_LABELS
+            ? this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK')
+            : this.selectedLabels.push(label);
     }
 }

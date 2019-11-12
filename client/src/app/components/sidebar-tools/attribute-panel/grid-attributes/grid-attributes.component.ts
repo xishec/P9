@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { predicate } from 'src/constants/constants';
-import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
+import { PREDICATE } from 'src/constants/constants';
+import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -12,16 +13,17 @@ import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
     styleUrls: ['./grid-attributes.component.scss'],
 })
 export class GridAttributesComponent implements OnInit {
-    toolName = ToolName.Grid;
+    toolName = TOOL_NAME.Grid;
     gridAttributesForm: FormGroup;
 
-    readonly gridSize = GridSize;
-    readonly gridOpacity = GridOpacity;
+    readonly gridSize = GRID_SIZE;
+    readonly gridOpacity = GRID_OPACITY;
 
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
         private gridToolService: GridToolService,
+        private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -35,7 +37,7 @@ export class GridAttributesComponent implements OnInit {
         this.gridToolService.currentSize.subscribe((size: number) => {
             this.gridAttributesForm.controls.size.setValue(size);
         });
-        this.gridToolService.currentWorkzoneIsEmpty.subscribe(() => {
+        this.drawingLoaderService.emptyDrawStack.subscribe(() => {
             this.enableSlider();
         });
     }
@@ -43,23 +45,26 @@ export class GridAttributesComponent implements OnInit {
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({
             state: [{ value: false, disabled: true }],
-            size: [GridSize.Default, [Validators.required, Validators.min(GridSize.Min), Validators.max(GridSize.Max)]],
+            size: [
+                GRID_SIZE.Default,
+                [Validators.required, Validators.min(GRID_SIZE.Min), Validators.max(GRID_SIZE.Max)],
+            ],
             opacity: [
-                GridOpacity.Max,
-                [Validators.required, Validators.min(GridOpacity.Min), Validators.max(GridOpacity.Max)],
+                GRID_OPACITY.Max,
+                [Validators.required, Validators.min(GRID_OPACITY.Min), Validators.max(GRID_OPACITY.Max)],
             ],
         });
     }
 
     onSizeSliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, this.gridSize)) {
+        if (PREDICATE.eventIsValid(event, this.gridSize)) {
             this.gridAttributesForm.controls.size.setValue(event.value);
             this.onSizeChange();
         }
     }
 
     onOpacitySliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, this.gridOpacity)) {
+        if (PREDICATE.eventIsValid(event, this.gridOpacity)) {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }
@@ -92,7 +97,7 @@ export class GridAttributesComponent implements OnInit {
     }
 
     enableSlider(): void {
-        if (this.gridToolService.workzoneIsEmpty.value === false) {
+        if (!this.drawingLoaderService.emptyDrawStack.value) {
             this.gridAttributesForm.controls.state.enable();
         }
     }

@@ -11,3 +11,31 @@
         padding-top: 30px;
     }
 }
+
+#clipboard-options {
+    p {
+        padding: 0 0 5 0;
+        margin: 0 0 5 0;
+    }
+}
+
+.mat-button-toggle-checked {
+    background: #ffffff;
+    * {
+        color: black;
+    }
+}
+
+.mat-button-toggle {
+    width: 40px;
+    height: 40px;
+    border: none;
+
+    i {
+        font-size: 100%;
+    }
+}
+
+.disabled {
+    color: grey;
+}

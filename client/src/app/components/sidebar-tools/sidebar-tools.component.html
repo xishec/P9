@@ -1,28 +1,69 @@
 <div id="sidebar">
     <div id="tools-buttons">
-        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" value="Sélection">
+        <mat-button-toggle-group vertical="true" value="Sélection">
             <mat-button-toggle
-                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO"
+                *ngFor="let TOOL_BUTTON_INFO of TOOLS_BUTTON_INFO; let i = index"
                 matTooltip="{{ TOOL_BUTTON_INFO.tooltipName }} {{ TOOL_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(TOOL_BUTTON_INFO.tooltipName)"
+                (click)="onChangeTool(i)"
+                (contextmenu)="onRightClick(i)"
                 value="{{ TOOL_BUTTON_INFO.tooltipName }}"
-                [checked]="currentToolName === TOOL_BUTTON_INFO.tooltipName"
+                [checked]="getChecked(i)"
             >
-                <i class="{{ TOOL_BUTTON_INFO.iconName }}"> </i>
+                <img
+                    *ngIf="i === TRACING_TOOL_POSITION || i === SHAPE_TOOL_POSITION"
+                    src="../../../assets/triangle.png"
+                />
+                <i *ngIf="i === TRACING_TOOL_POSITION" [ngClass]="getTracingToolClass()"> </i>
+                <i *ngIf="i === SHAPE_TOOL_POSITION" [ngClass]="getShapeToolClass()"> </i>
+                <i
+                    *ngIf="i !== TRACING_TOOL_POSITION && i !== SHAPE_TOOL_POSITION"
+                    class="{{ TOOL_BUTTON_INFO.iconName }}"
+                >
+                </i>
             </mat-button-toggle>
         </mat-button-toggle-group>
 
-        <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style" id="file-buttons">
+        <mat-button-toggle-group vertical="true" id="file-buttons">
             <mat-button-toggle
                 *ngFor="let FILE_BUTTON_INFO of FILES_BUTTON_INFO"
                 matTooltip="{{ FILE_BUTTON_INFO.tooltipName }} {{ FILE_BUTTON_INFO.shortcut }}"
                 matTooltipPosition="after"
-                (click)="onChangeTool(FILE_BUTTON_INFO.tooltipName)"
+                (click)="onChangeFileTool(FILE_BUTTON_INFO.tooltipName)"
+                [disabled]="checkIfCantUndoRedo(FILE_BUTTON_INFO.tooltipName)"
             >
-                <i class="{{ FILE_BUTTON_INFO.iconName }}"></i>
+                <i
+                    [style.color]="checkIfCantUndoRedo(FILE_BUTTON_INFO.tooltipName) ? 'silver' : 'black'"
+                    class="{{ FILE_BUTTON_INFO.iconName }}"
+                ></i>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
-    <app-attribute-panel></app-attribute-panel>
+    <app-attribute-panel (click)="onClickAttributePanel()"></app-attribute-panel>
 </div>
+
+<mat-button-toggle-group *ngIf="showTracingTools" id="tracing-tools">
+    <mat-button-toggle
+        *ngFor="let buttonInfo of TRACING_BUTTON_INFO"
+        matTooltip="{{ buttonInfo.tooltipName }} {{ buttonInfo.shortcut }}"
+        matTooltipPosition="above"
+        (click)="onChangeTracingTool(buttonInfo.tooltipName)"
+        value="{{ buttonInfo.tooltipName }}"
+        [checked]="currentToolName === buttonInfo.tooltipName"
+    >
+        <i class="{{ buttonInfo.iconName }}"> </i>
+    </mat-button-toggle>
+</mat-button-toggle-group>
+
+<mat-button-toggle-group *ngIf="showShapeTools" id="shape-tools">
+    <mat-button-toggle
+        *ngFor="let buttonInfo of SHAPE_BUTTON_INFO"
+        matTooltip="{{ buttonInfo.tooltipName }} {{ buttonInfo.shortcut }}"
+        matTooltipPosition="above"
+        (click)="onChangeShapeTool(buttonInfo.tooltipName)"
+        value="{{ buttonInfo.tooltipName }}"
+        [checked]="currentToolName === buttonInfo.tooltipName"
+    >
+        <i class="{{ buttonInfo.iconName }}"> </i>
+    </mat-button-toggle>
+</mat-button-toggle-group>

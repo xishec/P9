@@ -1,6 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { DrawingInfo } from 'src/classes/DrawingInfo';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from './drawing-modal-window.service';
 
 const WIDTH = 100;

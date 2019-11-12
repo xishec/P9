@@ -1,6 +1,6 @@
 import { Predicate } from 'src/classes/Predicate';
 
-enum Keys {
+enum KEYS {
     Shift = 'Shift',
     Control = 'Control',
     Alt = 'Alt',
@@ -21,11 +21,25 @@ enum Keys {
     t = 't',
     w = 'w',
     y = 'y',
+    z = 'z',
+    Z = 'Z',
+    x = 'x',
+    v = 'v',
+    d = 'd',
+    plus = '+',
+    minus = '-',
+    delete = 'Delete',
     Escape = 'Escape',
     Backspace = 'Backspace',
+    Enter = 'Enter',
+    ArrowLeft = 'ArrowLeft',
+    ArrowRight = 'ArrowRight',
+    Space = ' ',
+    SmallerThan = '<',
+    GreaterThan = '>',
 }
 
-enum Mouse {
+enum MOUSE {
     LeftButton = 0,
     MouseWheel = 1,
     RightButton = 2,
@@ -33,14 +47,26 @@ enum Mouse {
 
 const SIDEBAR_WIDTH = 360;
 
+const ELEMENTS_BEFORE_LAST_CIRCLE = 1;
+
 const MAX_DRAWING_LENGTH = 5;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-const predicate: Predicate = new Predicate();
+const PREDICATE: Predicate = new Predicate();
 
 const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/rolling.gif'];
 
 const MAX_NB_LABELS = 6;
 
-export { MAX_NB_LABELS, GIFS, MAX_DRAWING_LENGTH, SIDEBAR_WIDTH, SVG_NS, Keys, Mouse, predicate };
+export {
+    MAX_NB_LABELS,
+    GIFS,
+    MAX_DRAWING_LENGTH,
+    SIDEBAR_WIDTH,
+    SVG_NS,
+    KEYS,
+    MOUSE,
+    PREDICATE,
+    ELEMENTS_BEFORE_LAST_CIRCLE,
+};

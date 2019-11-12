@@ -2,13 +2,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
 describe('OpenFileModalWindowComponent', () => {
@@ -17,26 +18,29 @@ describe('OpenFileModalWindowComponent', () => {
 
     let drawingLoaderService: DrawingLoaderService;
 
-    const TEST_DRAWING: Drawing = {
-        name: 'mona lisa',
-        labels: ['Italy', 'Louvre', 'Paris'],
-        svg: 'test_svg',
-        idStack: ['work-zone', 'background', 'rect1'],
-        drawingInfo: {
-            width: 100,
-            height: 100,
-            color: 'ffffff',
-        },
-    };
+    const TEST_DRAWING: Drawing = new Drawing(
+        'mona lisa',
+        ['Italy', 'Louvre', 'Paris'],
+        'test_svg',
+        ['work-zone', 'background', 'rect1'],
+        new DrawingInfo(100, 100, 'ffffff'),
+    );
+
+    const TEST_DRAWING2: Drawing = new Drawing(
+        'harry potter',
+        ['Englang', 'JK Rowling', 'novel'],
+        'test_svg2',
+        ['work-zone', 'background', 'ellipse'],
+        new DrawingInfo(50, 40, '000000'),
+    );
 
     const dialogMock = {
         close: () => null,
     };
 
     @Pipe({ name: 'mySlice' })
-    class MockMySclicePipe implements PipeTransform {
+    class MockMySlicePipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -45,7 +49,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'labelFilter' })
     class MockLabelFilterPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -54,7 +57,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'nameFilter' })
     class MockNameFilterPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -63,7 +65,6 @@ describe('OpenFileModalWindowComponent', () => {
     @Pipe({ name: 'toTrustHtml' })
     class MockToTrustHtmlPipe implements PipeTransform {
         transform(value: number): number {
-            //
             return value;
         }
     }
@@ -72,7 +73,7 @@ describe('OpenFileModalWindowComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 OpenFileModalWindowComponent,
-                MockMySclicePipe,
+                MockMySlicePipe,
                 MockLabelFilterPipe,
                 MockNameFilterPipe,
                 MockToTrustHtmlPipe,
@@ -108,7 +109,15 @@ describe('OpenFileModalWindowComponent', () => {
                         },
                         {
                             provide: DrawingLoaderService,
-                            useValue: {},
+                            useValue: {
+                                currentDrawing: new BehaviorSubject<Drawing>(TEST_DRAWING),
+                            },
+                        },
+                        {
+                            provide: MatSnackBar,
+                            useValue: {
+                                open: () => null,
+                            },
                         },
                     ],
                 },
@@ -125,12 +134,11 @@ describe('OpenFileModalWindowComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should close modal on submit when drawing has been successfully opened', () => {
+    it('should close modal when submit button has been clicked', () => {
         const SPY = spyOn(component[`dialogRef`], 'close');
 
-        component.drawingOpenSuccess = true;
         drawingLoaderService.currentDrawing = new BehaviorSubject(TEST_DRAWING);
-        component.onSubmit();
+        component.closeDialog();
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -152,5 +160,22 @@ describe('OpenFileModalWindowComponent', () => {
         component.drawingsFromServer[i].drawingInfo.width = 10;
 
         expect(component.getHeight('mona lisa')).toEqual('100%');
+    });
+
+    it('should load the right drawing from server when loadServerFile is called', () => {
+        const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
+        component.selectedOption = TEST_DRAWING.name;
+        component.drawingsFromServer = [TEST_DRAWING2, TEST_DRAWING];
+        component.loadServerFile();
+
+        expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
+    });
+
+    it('should load the right drawing from local file when loadLocalFile is called', () => {
+        const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
+        component.fileToLoad = TEST_DRAWING;
+        component.loadLocalFile();
+
+        expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
     });
 });

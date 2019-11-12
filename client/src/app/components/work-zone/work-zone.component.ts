@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { filter } from 'rxjs/operators';
+import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -9,15 +9,14 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
-import { Message } from '../../../../../common/communication/message';
-import { DrawingInfo } from '../../../classes/DrawingInfo';
+import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
+import { Drawing } from '../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { FileManagerService } from '../../services/server/file-manager/file-manager.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -27,10 +26,11 @@ import { FileManagerService } from '../../services/server/file-manager/file-mana
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     gridIsActive = false;
-    gridSize = GridSize.Default;
-    gridOpacity = GridOpacity.Max;
-    toolName: ToolName = ToolName.Selection;
-    empty = true;
+
+    gridSize = GRID_SIZE.Default;
+    gridOpacity = GRID_OPACITY.Max;
+    toolName: TOOL_NAME = TOOL_NAME.Selection;
+
     drawStack: DrawStackService;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
@@ -38,7 +38,6 @@ export class WorkZoneComponent implements OnInit {
     private eventListenerService: EventListenerService;
 
     constructor(
-        private fileManagerService: FileManagerService,
         private drawingModalWindowService: DrawingModalWindowService,
         private renderer: Renderer2,
         private toolSelector: ToolSelectorService,
@@ -48,100 +47,49 @@ export class WorkZoneComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
         private drawingSaverService: DrawingSaverService,
+        private undoRedoerService: UndoRedoerService,
+        private clipboard: ClipboardService,
     ) {}
 
     ngOnInit(): void {
-        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService);
-        this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
+        this.undoRedoerService.initializeService(this.refSVG);
+        this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 
-        this.eventListenerService = new EventListenerService(
-            this.refSVG,
-            this.toolSelector,
-            this.gridToolService,
-            this.shortCutManagerService,
-            this.modalManagerService,
-            this.renderer);
-        this.eventListenerService.addEventListeners();
+        this.toolSelector.initTools(this.drawStack, this.refSVG, this.renderer);
+        this.initializeEventListeners();
 
         this.toolSelector.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
         });
 
-        this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing) => {
-            if (selectedDrawing.svg === '') { return; }
+        this.drawingLoaderService.currentDrawing.subscribe((selectedDrawing: Drawing) => {
+            if (selectedDrawing.svg !== '') {
+                this.drawingLoaderService.emptyDrawStack.next(false);
+                this.updateDrawingInfo(selectedDrawing.drawingInfo);
+                this.appendDrawingToView(selectedDrawing);
+                this.drawingLoaderService.untouchedWorkZone.next(false);
+            }
 
-            this.drawingInfo = selectedDrawing.drawingInfo;
-            this.drawingModalWindowService.changeDrawingInfo(
-                this.drawingInfo.width,
-                this.drawingInfo.height,
-                this.drawingInfo.color,
-            );
-
-            this.empty = false;
-            this.eventListenerService.isWorkZoneEmpty = false;
-
-            this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
-
-            const idStack = Object.values(selectedDrawing.idStack);
-            idStack.forEach((id) => {
-                const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
-                const child: SVGElement = children.filter((filterChild) => {
-                    return filterChild.getAttribute('id_element') === id;
-                })[0];
-                this.drawStack.push(child as SVGAElement);
-            });
+            if (this.undoRedoerService.fromLoader) {
+                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+                this.undoRedoerService.fromLoader = false;
+            }
         });
 
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo: DrawingInfo) => {
-            if (drawingInfo.width === 0 || drawingInfo.height === 0) { return; }
-            this.empty = false;
-            this.eventListenerService.isWorkZoneEmpty = false;
-            this.drawingInfo = drawingInfo;
+            if (drawingInfo.width !== 0 && drawingInfo.height !== 0) {
+                this.resetWorkzone(drawingInfo);
+                this.drawingLoaderService.untouchedWorkZone.next(false);
+            }
 
-            this.setRectangleBackgroundStyle();
-
-            for (const el of this.drawStack.reset()) {
-                this.renderer.removeChild(this.refSVG.nativeElement, el);
+            if (this.undoRedoerService.undos.length === 0 && !this.undoRedoerService.fromLoader) {
+                setTimeout(() => {
+                    this.undoRedoerService.saveCurrentState([]);
+                }, 0);
             }
         });
 
-        this.drawingSaverService.currentNameAndLabels.subscribe((nameAndLabels: NameAndLabels) => {
-            if (nameAndLabels.name.length === 0) { return; }
-            if (this.empty) {
-                this.drawingSaverService.currentIsSaved.next(false);
-                this.drawingSaverService.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-                return;
-            }
-            this.fileManagerService
-                .postDrawing(
-                    nameAndLabels.name,
-                    nameAndLabels.drawingLabels,
-                    this.refSVG.nativeElement.innerHTML,
-                    this.drawStack.idStack,
-                    this.drawingInfo,
-                )
-                .pipe(
-                    filter((subject) => {
-                        if (subject === undefined) {
-                            this.drawingSaverService.currentErrorMesaage.next(
-                                'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
-                            );
-                            this.drawingSaverService.currentIsSaved.next(false);
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }),
-                )
-                .subscribe((message: Message) => {
-                    if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
-                        this.drawingSaverService.currentIsSaved.next(true);
-                    } else {
-                        this.drawingSaverService.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
-                        this.drawingSaverService.currentIsSaved.next(false);
-                    }
-                });
-        });
+        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color = backgroundColor;
@@ -159,29 +107,89 @@ export class WorkZoneComponent implements OnInit {
             this.gridOpacity = opacity;
         });
 
+        this.setDefaultWorkZoneProperties();
+    }
+
+    setDefaultWorkZoneProperties() {
         this.drawingInfo.height = window.innerHeight;
         this.drawingInfo.width = window.innerWidth - SIDEBAR_WIDTH;
         this.drawingInfo.color = DEFAULT_TRANSPARENT;
-        this.empty = true;
-        this.eventListenerService.isWorkZoneEmpty = true;
+        this.drawingLoaderService.emptyDrawStack.next(true);
         this.setRectangleBackgroundStyle();
     }
 
+    updateDrawingInfo(newDrawingInfo: DrawingInfo) {
+        this.drawingInfo = newDrawingInfo;
+        this.drawingModalWindowService.changeDrawingInfo(
+            this.drawingInfo.width,
+            this.drawingInfo.height,
+            this.drawingInfo.color,
+        );
+    }
+
+    appendDrawingToView(selectedDrawing: Drawing) {
+        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
+
+        const idStack = Object.values(selectedDrawing.idStack);
+        idStack.forEach((id) => {
+            const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
+            const child: SVGElement = children.filter((filterChild) => {
+                return filterChild.getAttribute('id_element') === id;
+            })[0];
+            this.drawStack.push(child as SVGAElement, false);
+        });
+    }
+
+    initializeEventListeners() {
+        this.eventListenerService = new EventListenerService(
+            this.refSVG,
+            this.toolSelector,
+            this.gridToolService,
+            this.shortCutManagerService,
+            this.modalManagerService,
+            this.renderer,
+            this.drawingLoaderService,
+            this.undoRedoerService,
+            this.clipboard,
+        );
+        this.eventListenerService.addEventListeners();
+    }
+
+    resetWorkzone(drawingInfo: DrawingInfo) {
+        this.drawingInfo = drawingInfo;
+
+        this.setRectangleBackgroundStyle();
+
+        for (const el of this.drawStack.reset()) {
+            this.renderer.removeChild(this.refSVG.nativeElement, el);
+        }
+        this.drawingLoaderService.emptyDrawStack.next(true);
+    }
+
     onClickRectangle() {
-        if (this.empty) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             alert('Veuillez créer un nouveau dessin!');
         }
     }
 
     getCursorStyle() {
-        if (this.empty) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
-            case ToolName.Brush:
-            case ToolName.Pencil:
-            case ToolName.Rectangle:
-            case ToolName.Ellipsis:
+            case TOOL_NAME.Eraser:
+                return { cursor: 'none' };
+            case TOOL_NAME.Brush:
+            case TOOL_NAME.Pencil:
+            case TOOL_NAME.Rectangle:
+            case TOOL_NAME.Ellipsis:
+            case TOOL_NAME.Pen:
+            case TOOL_NAME.Polygon:
+            case TOOL_NAME.ColorApplicator:
+            case TOOL_NAME.Line:
+            case TOOL_NAME.Quill:
+            case TOOL_NAME.SprayCan:
+            case TOOL_NAME.Fill:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };
@@ -189,7 +197,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     backgroundColor(): string {
-        if (this.empty) {
+        if (this.drawingLoaderService.untouchedWorkZone.value) {
             this.drawingInfo.color = DEFAULT_TRANSPARENT;
         }
         return this.drawingInfo.color;
