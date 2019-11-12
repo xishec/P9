@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
-import { MOUSE } from 'src/constants/constants';
+import { Mouse } from 'src/constants/constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -11,8 +11,8 @@ import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { SelectionToolService } from './selection-tool.service';
 
 describe('SelectionToolService', () => {
-    const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.LeftButton);
-    const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.RightButton);
+    const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.LeftButton);
+    const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, Mouse.RightButton);
 
     let injector: TestBed;
     let service: SelectionToolService;

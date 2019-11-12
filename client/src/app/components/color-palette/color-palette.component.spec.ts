@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { COLOR_TYPE, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorPaletteComponent } from './color-palette.component';
 
 describe('ColorPaletteComponent', () => {
@@ -131,11 +131,11 @@ describe('ColorPaletteComponent', () => {
                 .whenStable()
                 .then(() => {
                     expect(component.selectedColorType).toBeDefined();
-                    colorToolService.selectedColorType.next(COLOR_TYPE.backgroundColor);
+                    colorToolService.selectedColorType.next(ColorType.backgroundColor);
                     return fixture.whenStable();
                 })
                 .then(() => {
-                    expect(component.selectedColorType).toEqual(COLOR_TYPE.backgroundColor);
+                    expect(component.selectedColorType).toEqual(ColorType.backgroundColor);
                 });
         }),
     ));

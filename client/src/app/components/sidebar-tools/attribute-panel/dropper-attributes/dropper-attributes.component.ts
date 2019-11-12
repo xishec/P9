@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TOOL_NAME } from 'src/constants/tool-constants';
+import { ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-dropper-attributes',
@@ -8,5 +8,5 @@ import { TOOL_NAME } from 'src/constants/tool-constants';
     styleUrls: ['./dropper-attributes.component.scss'],
 })
 export class DropperAttributesComponent {
-    toolName = TOOL_NAME.Dropper;
+    toolName = ToolName.Dropper;
 }

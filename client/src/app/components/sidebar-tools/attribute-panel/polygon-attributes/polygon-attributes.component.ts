@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { PREDICATE } from 'src/constants/constants';
-import { POLYGON_SIDES, POLYGONE_FORM_TYPE, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { PolygonFormType, PolygonSides, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-polygon-attributes',
@@ -15,14 +15,14 @@ import { POLYGON_SIDES, POLYGONE_FORM_TYPE, THICKNESS, TOOL_NAME } from 'src/con
     styleUrls: ['./polygon-attributes.component.scss'],
 })
 export class PolygonAttributesComponent implements OnInit, AfterViewInit {
-    toolName = TOOL_NAME.Polygon;
+    toolName = ToolName.Polygon;
     polygonAttributesForm: FormGroup;
     polygonToolService: PolygonToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
-    readonly thickness = THICKNESS;
-    readonly polygonSides = POLYGON_SIDES;
-    readonly polygonFormType = POLYGONE_FORM_TYPE;
+    readonly thickness = Thickness;
+    readonly polygonSides = PolygonSides;
+    readonly polygonFormType = PolygonFormType;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -45,26 +45,26 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.polygonAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Default,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             traceType: ['Contour'],
             nbVertices: [
-                POLYGON_SIDES.Default,
-                [Validators.required, Validators.min(POLYGON_SIDES.Min), Validators.max(POLYGON_SIDES.Max)],
+                PolygonSides.Default,
+                [Validators.required, Validators.min(PolygonSides.Min), Validators.max(PolygonSides.Max)],
             ],
         });
     }
 
     onThicknessSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.polygonAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
 
     onNbVerticesSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, POLYGON_SIDES)) {
+        if (predicate.eventIsValid(event, PolygonSides)) {
             this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
             this.onNbVerticesChange();
         }
@@ -73,18 +73,18 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.polygonAttributesForm.value.thickness;
         if (this.polygonAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.thickness.next(thickness);
+            this.attributesManagerService.changeThickness(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.polygonAttributesForm.value.traceType;
-        this.attributesManagerService.traceType.next(tracetype);
+        this.attributesManagerService.changeTraceType(tracetype);
     }
 
     onNbVerticesChange(): void {
         const nbVertices = this.polygonAttributesForm.value.nbVertices;
-        this.attributesManagerService.nbVertices.next(nbVertices);
+        this.attributesManagerService.changeNbVertices(nbVertices);
     }
 
     onFocus(): void {

@@ -10,7 +10,7 @@
                 placeholder="Hex"
                 formControlName="maxThickness"
                 (input)="onMaxSliderChange($event)"
-                [min]="THICKNESS.Min"
+                [min]="Thickness.Min"
                 value="{{ penAttributesForm.value.maxThickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -22,10 +22,10 @@
                     type="number"
                     formControlName="maxThickness"
                     (input)="onMaxThicknessChange()"
-                    [min]="THICKNESS.Min"
-                    [max]="THICKNESS.Max"
+                    [min]="Thickness.Min"
+                    [max]="Thickness.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ Thickness.Min }} et {{ Thickness.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
@@ -36,7 +36,7 @@
                 placeholder="Hex"
                 formControlName="minThickness"
                 (input)="onMinSliderChange($event)"
-                [min]="THICKNESS.Min"
+                [min]="Thickness.Min"
                 [max]="penAttributesForm.value.maxThickness"
                 value="{{ penAttributesForm.value.minThickness }}"
             ></mat-slider>
@@ -50,11 +50,11 @@
                     formControlName="minThickness"
                     (input)="onMinThicknessChange()"
                     [value]="penAttributesForm.value.minThickness"
-                    [min]="THICKNESS.Min"
+                    [min]="Thickness.Min"
                     [max]="penAttributesForm.value.maxThickness"
                 />
                 <mat-error
-                    >La valeur inscrite doit être entre {{ THICKNESS.Min }} et
+                    >La valeur inscrite doit être entre {{ Thickness.Min }} et
                     {{ penAttributesForm.value.maxThickness }} px</mat-error
                 >
                 <span matSuffix>px</span>

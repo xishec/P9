@@ -2,7 +2,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { BehaviorSubject } from 'rxjs';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { COLOR_TYPE, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorAttributesComponent } from './color-attributes.component';
 
 describe('ColorAttributesComponent', () => {
@@ -22,7 +22,7 @@ describe('ColorAttributesComponent', () => {
                             backgroundColor: new BehaviorSubject<string>(DEFAULT_WHITE),
                             primaryColor: new BehaviorSubject<string>(DEFAULT_WHITE),
                             secondaryColor: new BehaviorSubject<string>(DEFAULT_WHITE),
-                            selectedColorType: new BehaviorSubject<COLOR_TYPE | undefined>(undefined),
+                            selectedColorType: new BehaviorSubject<ColorType | undefined>(undefined),
                             changeSelectedColorType: () => null,
                             changeShowColorPalette: () => null,
                             switchPrimarySecondary: () => null,
@@ -83,7 +83,7 @@ describe('ColorAttributesComponent', () => {
         'getBackgroundColorIcon should return background color with border and transform value' +
             'when selectedColorType is background-color',
         () => {
-            component.selectedColorType = COLOR_TYPE.backgroundColor;
+            component.selectedColorType = ColorType.backgroundColor;
             expect(component.getBackgroundColorIcon()).toEqual({
                 backgroundColor: '#' + component.backgroundColor,
                 border: 'solid 1px black',
@@ -100,7 +100,7 @@ describe('ColorAttributesComponent', () => {
     });
 
     it('getPrimaryColorIcon should return background color with border and transform value when selectedColorType is primary-color', () => {
-        component.selectedColorType = COLOR_TYPE.primaryColor;
+        component.selectedColorType = ColorType.primaryColor;
         expect(component.getPrimaryColorIcon()).toEqual({
             backgroundColor: '#' + component.primaryColor,
             border: 'solid 1px black',
@@ -119,7 +119,7 @@ describe('ColorAttributesComponent', () => {
         'getSecondaryColorIcon should return background color with border and transform value' +
             'when selectedColorType is secondary-color',
         () => {
-            component.selectedColorType = COLOR_TYPE.secondaryColor;
+            component.selectedColorType = ColorType.secondaryColor;
             expect(component.getSecondaryColorIcon()).toEqual({
                 backgroundColor: '#' + component.secondaryColor,
                 border: 'solid 1px black',

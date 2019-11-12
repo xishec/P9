@@ -3,7 +3,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { SelectionToolService } from 'src/app/services/tools/selection-tool/selection-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { CLIPBOARD_BUTTON_INFO, TOOL_NAME } from 'src/constants/tool-constants';
+import { CLIPBOARD_BUTTON_INFO, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-selection-attributes',
@@ -15,9 +15,9 @@ export class SelectionAttributesComponent implements AfterViewInit {
     readonly SELECT_ALL_BUTTON = CLIPBOARD_BUTTON_INFO[0];
     readonly PASTE_BUTTON = CLIPBOARD_BUTTON_INFO[1];
 
-    toolName = TOOL_NAME.Selection;
+    toolName = ToolName.Selection;
 
-    selectionToolCallbacks: Map<TOOL_NAME, () => void> = new Map();
+    selectionToolCallbacks: Map<ToolName, () => void> = new Map();
 
     selectionTool: SelectionToolService;
     isActiveSelection = false;
@@ -36,27 +36,27 @@ export class SelectionAttributesComponent implements AfterViewInit {
             this.isClippingsEmpty = isClippingsEmpty;
         });
 
-        this.selectionToolCallbacks.set(TOOL_NAME.SelectAll, () => {
+        this.selectionToolCallbacks.set(ToolName.SelectAll, () => {
             this.selectionTool.selectAll();
         });
-        this.selectionToolCallbacks.set(TOOL_NAME.Duplicate, () => {
+        this.selectionToolCallbacks.set(ToolName.Duplicate, () => {
             this.selectionTool.clipBoard.duplicate();
         });
-        this.selectionToolCallbacks.set(TOOL_NAME.Cut, () => {
+        this.selectionToolCallbacks.set(ToolName.Cut, () => {
             this.selectionTool.clipBoard.cut();
         });
-        this.selectionToolCallbacks.set(TOOL_NAME.Copy, () => {
+        this.selectionToolCallbacks.set(ToolName.Copy, () => {
             this.selectionTool.clipBoard.copy();
         });
-        this.selectionToolCallbacks.set(TOOL_NAME.Paste, () => {
+        this.selectionToolCallbacks.set(ToolName.Paste, () => {
             this.selectionTool.clipBoard.paste();
         });
-        this.selectionToolCallbacks.set(TOOL_NAME.Delete, () => {
+        this.selectionToolCallbacks.set(ToolName.Delete, () => {
             this.selectionTool.clipBoard.delete();
         });
     }
 
-    onButtonTrigger(tooltipName: TOOL_NAME): void {
+    onButtonTrigger(tooltipName: ToolName): void {
         (this.selectionToolCallbacks.get(tooltipName) as () => void)();
     }
 

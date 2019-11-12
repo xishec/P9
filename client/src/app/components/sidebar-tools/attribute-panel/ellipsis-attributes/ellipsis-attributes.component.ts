@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-ellipsis-attributes',
@@ -15,11 +15,11 @@ import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
     styleUrls: ['./ellipsis-attributes.component.scss'],
 })
 export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
-    toolName = TOOL_NAME.Ellipsis;
+    toolName = ToolName.Ellipsis;
     ellipsisAttributesForm: FormGroup;
     ellipsisToolService: EllipsisToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
-    readonly thickness = THICKNESS;
+    readonly thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -42,15 +42,15 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.ellipsisAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Default,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             traceType: ['Contour'],
         });
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.ellipsisAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -59,13 +59,13 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.ellipsisAttributesForm.value.thickness;
         if (this.ellipsisAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.thickness.next(thickness);
+            this.attributesManagerService.changeThickness(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.ellipsisAttributesForm.value.traceType;
-        this.attributesManagerService.traceType.next(tracetype);
+        this.attributesManagerService.changeTraceType(tracetype);
     }
 
     onFocus(): void {

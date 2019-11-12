@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { PREDICATE } from 'src/constants/constants';
-import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-grid-attributes',
@@ -12,11 +12,11 @@ import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants
     styleUrls: ['./grid-attributes.component.scss'],
 })
 export class GridAttributesComponent implements OnInit {
-    toolName = TOOL_NAME.Grid;
+    toolName = ToolName.Grid;
     gridAttributesForm: FormGroup;
 
-    readonly gridSize = GRID_SIZE;
-    readonly gridOpacity = GRID_OPACITY;
+    readonly gridSize = GridSize;
+    readonly gridOpacity = GridOpacity;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -43,23 +43,23 @@ export class GridAttributesComponent implements OnInit {
     initializeForm(): void {
         this.gridAttributesForm = this.formBuilder.group({
             state: [{ value: false, disabled: true }],
-            size: [GRID_SIZE.Default, [Validators.required, Validators.min(GRID_SIZE.Min), Validators.max(GRID_SIZE.Max)]],
+            size: [GridSize.Default, [Validators.required, Validators.min(GridSize.Min), Validators.max(GridSize.Max)]],
             opacity: [
-                GRID_OPACITY.Max,
-                [Validators.required, Validators.min(GRID_OPACITY.Min), Validators.max(GRID_OPACITY.Max)],
+                GridOpacity.Max,
+                [Validators.required, Validators.min(GridOpacity.Min), Validators.max(GridOpacity.Max)],
             ],
         });
     }
 
     onSizeSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, this.gridSize)) {
+        if (predicate.eventIsValid(event, this.gridSize)) {
             this.gridAttributesForm.controls.size.setValue(event.value);
             this.onSizeChange();
         }
     }
 
     onOpacitySliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, this.gridOpacity)) {
+        if (predicate.eventIsValid(event, this.gridOpacity)) {
             this.gridAttributesForm.controls.opacity.setValue(event.value);
             this.onOpacityChange();
         }

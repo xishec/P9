@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
-import { KEYS } from 'src/constants/constants';
+import { Keys } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { StampToolService } from './stamp-tool.service';
 
@@ -75,8 +75,8 @@ describe('StampToolService', () => {
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
-        onAltKeyDown = createKeyBoardEvent(KEYS.Alt);
-        onOtherKeyDown = createKeyBoardEvent(KEYS.Shift);
+        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
+        onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
@@ -192,22 +192,22 @@ describe('StampToolService', () => {
 
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
-        expect(service.angle).toEqual(15);
+        expect(service.currentAngle).toEqual(15);
     });
 
     it('should decrease the current angle by 15 degrees if the direction is negative', () => {
         service.rotateStamp(-1);
-        expect(service.angle).toEqual(-15);
+        expect(service.currentAngle).toEqual(-15);
     });
 
     it('should increase the current angle by 1 degree if the direction is positive', () => {
         service.alterRotateStamp(10);
-        expect(service.angle).toEqual(1);
+        expect(service.currentAngle).toEqual(1);
     });
 
     it('should decrease the current angle by 1 degree if the direction is negative', () => {
         service.alterRotateStamp(-10);
-        expect(service.angle).toEqual(-1);
+        expect(service.currentAngle).toEqual(-1);
     });
 
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {

@@ -6,7 +6,7 @@ import {
     FILES_BUTTON_INFO,
     SHAPE_BUTTON_INFO,
     SHAPE_TOOL_POSITION,
-    TOOL_NAME,
+    ToolName,
     TOOLS_BUTTON_INFO,
     TRACING_BUTTON_INFO,
     TRACING_TOOL_POSITION,
@@ -26,10 +26,10 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     readonly TRACING_TOOL_POSITION = TRACING_TOOL_POSITION;
     readonly SHAPE_TOOL_POSITION = SHAPE_TOOL_POSITION;
 
-    currentToolName: TOOL_NAME;
-    currentTracingTool: TOOL_NAME;
+    currentToolName: ToolName;
+    currentTracingTool: ToolName;
     showTracingTools = false;
-    currentShapeTool: TOOL_NAME;
+    currentShapeTool: ToolName;
     showShapeTools = false;
 
     constructor(private toolSelectorService: ToolSelectorService, private undoRedoerService: UndoRedoerService) {}
@@ -39,12 +39,12 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
             this.currentToolName = currentToolName;
             this.verifyToolChange();
         });
-        this.currentTracingTool = TOOL_NAME.Pencil;
-        this.currentShapeTool = TOOL_NAME.Rectangle;
+        this.currentTracingTool = ToolName.Pencil;
+        this.currentShapeTool = ToolName.Rectangle;
     }
 
     ngAfterViewInit(): void {
-        this.toolSelectorService.changeTool(TOOL_NAME.Selection);
+        this.toolSelectorService.changeTool(ToolName.Selection);
     }
 
     verifyToolChange(): void {
@@ -69,31 +69,31 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
 
     onChangeTool(i: number): void {
         this.showTracingTools = false;
-        let tooltipName: TOOL_NAME;
+        let tooltipName: ToolName;
         if (i === TRACING_TOOL_POSITION) {
             tooltipName = this.currentTracingTool;
         } else if (i === SHAPE_TOOL_POSITION) {
             tooltipName = this.currentShapeTool;
         } else {
-            tooltipName = this.TOOLS_BUTTON_INFO[i].tooltipName as TOOL_NAME;
+            tooltipName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
         }
         this.toolSelectorService.changeTool(tooltipName);
     }
-    onChangeFileTool(tooltipName: TOOL_NAME): void {
+    onChangeFileTool(tooltipName: ToolName): void {
         this.showTracingTools = false;
         this.showShapeTools = false;
         this.toolSelectorService.changeTool(tooltipName);
     }
-    onChangeTracingTool(tooltipName: TOOL_NAME): void {
+    onChangeTracingTool(tooltipName: ToolName): void {
         this.showTracingTools = false;
         this.currentTracingTool = tooltipName;
-        this.currentToolName = TOOL_NAME.TracingTool;
+        this.currentToolName = ToolName.TracingTool;
         this.toolSelectorService.changeTool(tooltipName);
     }
-    onChangeShapeTool(tooltipName: TOOL_NAME): void {
+    onChangeShapeTool(tooltipName: ToolName): void {
         this.showShapeTools = false;
         this.currentShapeTool = tooltipName;
-        this.currentToolName = TOOL_NAME.ShapeTool;
+        this.currentToolName = ToolName.ShapeTool;
         this.toolSelectorService.changeTool(tooltipName);
     }
 
@@ -113,7 +113,7 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
     }
 
     getChecked(i: number): boolean {
-        const tooltipName: TOOL_NAME = this.TOOLS_BUTTON_INFO[i].tooltipName as TOOL_NAME;
+        const tooltipName: ToolName = this.TOOLS_BUTTON_INFO[i].tooltipName as ToolName;
         if (i === TRACING_TOOL_POSITION) {
             return this.currentToolName === this.currentTracingTool;
         } else if (i === SHAPE_TOOL_POSITION) {
@@ -143,10 +143,10 @@ export class SidebarToolsComponent implements OnInit, AfterViewInit {
         return iconClass;
     }
 
-    checkIfCantUndoRedo(toolName: TOOL_NAME): boolean {
-        if (toolName === TOOL_NAME.Undo) {
+    checkIfCantUndoRedo(toolName: ToolName): boolean {
+        if (toolName === ToolName.Undo) {
             return this.undoRedoerService.undos.length <= 1;
-        } else if (toolName === TOOL_NAME.Redo) {
+        } else if (toolName === ToolName.Redo) {
             return this.undoRedoerService.redos.length === 0;
         }
         return false;

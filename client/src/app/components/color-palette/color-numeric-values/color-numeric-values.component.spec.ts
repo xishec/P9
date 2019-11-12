@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { COLOR_TYPE, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorNumericValuesComponent } from './color-numeric-values.component';
@@ -156,7 +156,7 @@ describe('ColorNumericValuesComponent', () => {
                         return DEFAULT_WHITE;
                     };
                     expect(component.previewColor).toBeDefined();
-                    colorToolService.selectedColorType.next(COLOR_TYPE.backgroundColor);
+                    colorToolService.selectedColorType.next(ColorType.backgroundColor);
                     return fixture.whenStable();
                 })
                 .then(() => {

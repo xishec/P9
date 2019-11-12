@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { BrushToolService } from 'src/app/services/tools/brush-tool/brush-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { PREDICATE } from 'src/constants/constants';
-import { BRUSH_STYLE, BRUSH_STYLES, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { BRUSH_STYLE, BRUSH_STYLES, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-brush-attributes',
@@ -16,13 +16,13 @@ import { BRUSH_STYLE, BRUSH_STYLES, THICKNESS, TOOL_NAME } from 'src/constants/t
     providers: [AttributesManagerService],
 })
 export class BrushAttributesComponent implements OnInit, AfterViewInit {
-    toolName = TOOL_NAME.Brush;
+    toolName = ToolName.Brush;
     brushAttributesForm: FormGroup;
     brushToolService: BrushToolService;
     styles = BRUSH_STYLES;
     selected: string;
 
-    readonly THICKNESS = THICKNESS;
+    readonly Thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -46,15 +46,15 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.brushAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Default,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             style: [1],
         });
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.brushAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -63,12 +63,12 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness = this.brushAttributesForm.value.thickness;
         if (this.brushAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.thickness.next(thickness);
+            this.attributesManagerService.changeThickness(thickness);
         }
     }
 
     change(style: BRUSH_STYLE): void {
-        this.attributesManagerService.style.next(style);
+        this.attributesManagerService.changeStyle(style);
     }
 
     onFocus(): void {

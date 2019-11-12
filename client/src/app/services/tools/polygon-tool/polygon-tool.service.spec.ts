@@ -2,16 +2,16 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers.spec';
-import { MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { Mouse } from 'src/constants/constants';
+import { TraceType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PolygonToolService } from './polygon-tool.service';
 
-const MOUSEENTER_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
-const MOUSELEAVE_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
-const MOUSEMOVE_EVENT = createMouseEvent(20, 30, MOUSE.LeftButton);
-const MOUSEDOWN_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
-const MOUSEUP_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
+const MOUSEENTER_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
+const MOUSELEAVE_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
+const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
+const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
+const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
 
 describe('PolygonToolService', () => {
     let injector: TestBed;
@@ -54,7 +54,6 @@ describe('PolygonToolService', () => {
                                 const boundtop = 0;
                                 const boundRect = {
                                     left: boundleft,
-
                                     top: boundtop,
                                 };
                                 return boundRect;
@@ -184,14 +183,14 @@ describe('PolygonToolService', () => {
     });
 
     it('should be able to update tracetype', () => {
-        polygonTool.updateTraceType(TRACE_TYPE.Both);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Both);
+        polygonTool.updateTraceType(TraceType.Both);
+        expect(polygonTool.traceType).toEqual(TraceType.Both);
 
-        polygonTool.updateTraceType(TRACE_TYPE.Full);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Full);
+        polygonTool.updateTraceType(TraceType.Full);
+        expect(polygonTool.traceType).toEqual(TraceType.Full);
 
-        polygonTool.updateTraceType(TRACE_TYPE.Outline);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Outline);
+        polygonTool.updateTraceType(TraceType.Outline);
+        expect(polygonTool.traceType).toEqual(TraceType.Outline);
     });
 
     it('should cleanup correctly when creating a polygon', () => {
@@ -231,8 +230,8 @@ describe('PolygonToolService', () => {
             },
         );
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
-        polygonTool.onMouseDown(createMouseEvent(0, 0, MOUSE.LeftButton));
-        polygonTool.onMouseMove(createMouseEvent(-30, -40, MOUSE.LeftButton));
+        polygonTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
+        polygonTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
 
         expect(polygonTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();

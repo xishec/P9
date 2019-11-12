@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { Thickness, ToolName } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { PenToolService } from '../../../../services/tools/pen-tool/pen-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -16,11 +16,11 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
     providers: [AttributesManagerService],
 })
 export class PenAttributesComponent implements OnInit, AfterViewInit {
-    toolName = TOOL_NAME.Pen;
+    toolName = ToolName.Pen;
     penAttributesForm: FormGroup;
     penToolService: PenToolService;
 
-    readonly THICKNESS = THICKNESS;
+    readonly Thickness = Thickness;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -45,18 +45,18 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.penAttributesForm = this.formBuilder.group({
             maxThickness: [
-                THICKNESS.Default,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
             minThickness: [
-                THICKNESS.Min,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Min,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
         });
     }
 
     onMaxSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.penAttributesForm.controls.maxThickness.setValue(event.value);
             this.onMaxThicknessChange();
         }
@@ -64,7 +64,7 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
     onMaxThicknessChange(): void {
         const maxThickness: number = this.penAttributesForm.value.maxThickness;
         if (this.penAttributesForm.controls.maxThickness.valid) {
-            this.attributesManagerService.thickness.next(maxThickness);
+            this.attributesManagerService.changeThickness(maxThickness);
         }
         if (this.penAttributesForm.value.minThickness > this.penAttributesForm.value.maxThickness) {
             const max = this.penAttributesForm.value.maxThickness;
@@ -76,7 +76,7 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onMinSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.penAttributesForm.controls.minThickness.setValue(event.value);
             this.onMinThicknessChange();
         }
@@ -84,7 +84,7 @@ export class PenAttributesComponent implements OnInit, AfterViewInit {
     onMinThicknessChange(): void {
         const minThickness: number = this.penAttributesForm.value.minThickness;
         if (this.penAttributesForm.controls.minThickness.valid) {
-            this.attributesManagerService.minThickness.next(minThickness);
+            this.attributesManagerService.changeMinThickness(minThickness);
         }
     }
 

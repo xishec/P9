@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { FILE_TYPE } from 'src/constants/tool-constants';
+import { FileType } from 'src/constants/tool-constants';
 import { ExportToolService } from './export-tool.service';
 
 describe('ExportToolService', () => {
@@ -103,9 +103,9 @@ describe('ExportToolService', () => {
 
     it('should launch download as svg if filetype is svg', () => {
         const spySaveAsSVG = spyOn(service, 'saveAsSVG').and.callThrough();
-        service.saveFile(FILE_TYPE.SVG);
+        service.saveFile(FileType.SVG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.SVG);
+        expect(service.fileType).toEqual(FileType.SVG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spyLaunchDownload).toHaveBeenCalled();
         expect(spySaveAsSVG).toHaveBeenCalled();
@@ -116,9 +116,9 @@ describe('ExportToolService', () => {
         const spyOnDecompressSVG = spyOn(service, 'decompressSVG').and.callThrough();
         const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
 
-        service.saveFile(FILE_TYPE.BMP);
+        service.saveFile(FileType.BMP);
 
-        expect(service.fileType).toEqual(FILE_TYPE.BMP);
+        expect(service.fileType).toEqual(FileType.BMP);
         expect(spySaveAsOther).toHaveBeenCalled();
         expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyCreateSVGBlob).toHaveBeenCalled();
@@ -128,9 +128,9 @@ describe('ExportToolService', () => {
     it('should launch download as jpeg if filetype is jpeg', () => {
         const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
 
-        service.saveFile(FILE_TYPE.JPG);
+        service.saveFile(FileType.JPG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.JPG);
+        expect(service.fileType).toEqual(FileType.JPG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
     });
@@ -138,9 +138,9 @@ describe('ExportToolService', () => {
     it('should launch download as png if filetype is png', () => {
         const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
 
-        service.saveFile(FILE_TYPE.PNG);
+        service.saveFile(FileType.PNG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.PNG);
+        expect(service.fileType).toEqual(FileType.PNG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
     });
@@ -148,16 +148,16 @@ describe('ExportToolService', () => {
     it('shoud call toDataURL from canvas is filetype is JPEG or PNG', () => {
         const spy = spyOn(service.canvas, 'toDataURL').and.returnValue('');
 
-        service.fileType = FILE_TYPE.PNG;
+        service.fileType = FileType.PNG;
         service.setUri(FAKE_URL);
-        service.fileType = FILE_TYPE.JPG;
+        service.fileType = FileType.JPG;
         service.setUri(FAKE_URL);
 
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('should call toDataURL from CanvasToBMP if filetype is BMP', () => {
-        service.saveFile(FILE_TYPE.BMP);
+        service.saveFile(FileType.BMP);
         const spy = spyOn(service.canvasToBMP, 'toDataURL').and.returnValue('');
 
         service.setUri(FAKE_URL);

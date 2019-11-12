@@ -4,7 +4,7 @@ import { StampAttributesComponent } from './stamp-attributes.component';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 describe('StampAttributesComponent', () => {
     let component: StampAttributesComponent;
@@ -18,10 +18,6 @@ describe('StampAttributesComponent', () => {
                 FormBuilder,
                 {
                     provide: MatDialog,
-                    useValue: {},
-                },
-                {
-                    provide: MatSnackBar,
                     useValue: {},
                 },
             ],

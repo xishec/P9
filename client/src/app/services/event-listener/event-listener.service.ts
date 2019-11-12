@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { CONTROL_SHORTCUTS, TOOL_NAME, TOOL_NAME_SHORTCUTS } from 'src/constants/tool-constants';
+import { ControlShortcuts, ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
 import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.service';
@@ -94,8 +94,8 @@ export class EventListenerService {
                 event.preventDefault();
 
                 // Control tools : new drawing, save, export, open...
-                if (CONTROL_SHORTCUTS.has(event.key)) {
-                    this.toolSelectorService.changeTool(CONTROL_SHORTCUTS.get(event.key) as TOOL_NAME);
+                if (ControlShortcuts.has(event.key)) {
+                    this.toolSelectorService.changeTool(ControlShortcuts.get(event.key) as ToolName);
                 }
 
                 // Undo Redo
@@ -108,14 +108,14 @@ export class EventListenerService {
                 } else if (event.key === 'x') {
                     this.clipboard.cut();
                 } else if (event.key === 'v') {
-                    this.toolSelectorService.changeTool(TOOL_NAME.Selection);
+                    this.toolSelectorService.changeTool(ToolName.Selection);
                     this.clipboard.paste();
                 } else if (event.key === 'c') {
                     this.clipboard.copy();
                 } else if (event.key === 'd') {
                     this.clipboard.duplicate();
                 } else if (event.key === 'a') {
-                    this.toolSelectorService.changeTool(TOOL_NAME.Selection);
+                    this.toolSelectorService.changeTool(ToolName.Selection);
                     this.toolSelectorService.getSelectiontool().selectAll();
                 }
             }
@@ -126,9 +126,9 @@ export class EventListenerService {
             }
 
             // If the key is a shortcut for a tool, change current tool
-            if (this.shouldAllowShortcuts() && TOOL_NAME_SHORTCUTS.has(event.key) && !event.ctrlKey) {
+            if (this.shouldAllowShortcuts() && ToolNameShortcuts.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
-                this.toolSelectorService.changeTool(TOOL_NAME_SHORTCUTS.get(event.key) as TOOL_NAME);
+                this.toolSelectorService.changeTool(ToolNameShortcuts.get(event.key) as ToolName);
             }
 
             if (event.key === 'g' && this.shouldAllowShortcuts()) {

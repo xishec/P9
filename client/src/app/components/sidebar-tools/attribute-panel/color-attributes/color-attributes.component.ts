@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { COLOR_TYPE, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { ColorType, DEFAULT_GRAY_0, DEFAULT_GRAY_1, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ColorToolService } from '../../../../services/tools/color-tool/color-tool.service';
 
 export interface ColorStyle {
@@ -17,7 +17,7 @@ export class ColorAttributesComponent implements OnInit {
     backgroundColor = DEFAULT_WHITE;
     primaryColor = DEFAULT_GRAY_0;
     secondaryColor = DEFAULT_GRAY_1;
-    selectedColorType: COLOR_TYPE | undefined = undefined;
+    selectedColorType: ColorType | undefined = undefined;
 
     constructor(private colorToolService: ColorToolService) {}
 
@@ -31,26 +31,26 @@ export class ColorAttributesComponent implements OnInit {
         this.colorToolService.secondaryColor.subscribe((secondaryColor: string) => {
             this.secondaryColor = secondaryColor;
         });
-        this.colorToolService.selectedColorType.subscribe((selectedColorType: COLOR_TYPE | undefined) => {
+        this.colorToolService.selectedColorType.subscribe((selectedColorType: ColorType | undefined) => {
             this.selectedColorType = selectedColorType;
         });
     }
 
     onClickBackgroundColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.backgroundColor);
+        this.colorToolService.changeSelectedColorType(ColorType.backgroundColor);
         this.colorToolService.changeShowColorPalette(true);
     }
     onClickPrimaryColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.primaryColor);
+        this.colorToolService.changeSelectedColorType(ColorType.primaryColor);
         this.colorToolService.changeShowColorPalette(true);
     }
     onClickSecondaryColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.secondaryColor);
+        this.colorToolService.changeSelectedColorType(ColorType.secondaryColor);
         this.colorToolService.changeShowColorPalette(true);
     }
 
     getBackgroundColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.backgroundColor) {
+        if (this.selectedColorType === ColorType.backgroundColor) {
             return {
                 backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
@@ -62,7 +62,7 @@ export class ColorAttributesComponent implements OnInit {
         };
     }
     getPrimaryColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.primaryColor) {
+        if (this.selectedColorType === ColorType.primaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
@@ -74,7 +74,7 @@ export class ColorAttributesComponent implements OnInit {
         };
     }
     getSecondaryColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.secondaryColor) {
+        if (this.selectedColorType === ColorType.secondaryColor) {
             return {
                 backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',

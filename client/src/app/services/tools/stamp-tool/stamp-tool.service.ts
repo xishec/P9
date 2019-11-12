@@ -1,17 +1,15 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
     BASE64_STAMPS_MAP,
-    HTML_ATTRIBUTE,
+    HTMLAttribute,
     NO_STAMP,
     STAMP_ALTER_ROTATION,
-    STAMP_ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,
-    STAMP_SCALING,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -24,8 +22,8 @@ export class StampToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: STAMP_ANGLE_ORIENTATION = STAMP_ANGLE_ORIENTATION.Default;
-    scaling: STAMP_SCALING = STAMP_SCALING.Default;
+    currentAngle = 0;
+    currentScaling = 1;
 
     stampLink = NO_STAMP;
     transform = '';
@@ -59,15 +57,15 @@ export class StampToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.scaling.subscribe((newScaling) => {
-            this.scaling = newScaling;
+        this.attributesManagerService.currentScaling.subscribe((newScaling) => {
+            this.currentScaling = newScaling;
             this.setStamp();
         });
-        this.attributesManagerService.angle.subscribe((newAngle) => {
-            this.angle = newAngle;
+        this.attributesManagerService.currentAngle.subscribe((newAngle) => {
+            this.currentAngle = newAngle;
             this.applyTransformation();
         });
-        this.attributesManagerService.stampType.subscribe((newStamp) => {
+        this.attributesManagerService.currentStampType.subscribe((newStamp) => {
             if (newStamp === NO_STAMP) {
                 this.cleanUp();
                 this.isStampLinkValid = false;
@@ -103,14 +101,22 @@ export class StampToolService extends AbstractToolService {
     }
 
     setStamp(): void {
-        this.renderer.setAttribute(this.stamp, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.scaling).toString());
-        this.renderer.setAttribute(this.stamp, HTML_ATTRIBUTE.height, (STAMP_BASE_HEIGHT * this.scaling).toString());
+        this.renderer.setAttribute(
+            this.stamp,
+            HTMLAttribute.width,
+            (STAMP_BASE_WIDTH * this.currentScaling).toString(),
+        );
+        this.renderer.setAttribute(
+            this.stamp,
+            HTMLAttribute.height,
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
     }
 
     applyTransformation(): void {
         if (this.isStampLinkValid) {
-            this.transform = `rotate(${this.angle}, ${this.currentMouseCoords.x},
+            this.transform = `rotate(${this.currentAngle}, ${this.currentMouseCoords.x},
                 ${this.currentMouseCoords.y}) translate(${this.stampCoords.x}, ${this.stampCoords.y})`;
             this.renderer.setAttribute(this.stampWrapper, 'transform', this.transform);
         }
@@ -125,19 +131,31 @@ export class StampToolService extends AbstractToolService {
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
-        this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.scaling).toString());
-        this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.height, (STAMP_BASE_HEIGHT * this.scaling).toString());
+        this.renderer.setAttribute(
+            stamp,
+            HTMLAttribute.width,
+            (STAMP_BASE_WIDTH * this.currentScaling).toString(),
+        );
+        this.renderer.setAttribute(
+            stamp,
+            HTMLAttribute.height,
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(stamp, 'y', this.stampCoords.y.toString());
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.scaling).toString());
-        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.height, (STAMP_BASE_HEIGHT * this.scaling).toString());
+        this.renderer.setAttribute(rect, HTMLAttribute.width, (STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(
+            rect,
+            HTMLAttribute.height,
+            (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
+        );
         this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
-        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.fill, '#ffffff00');
-        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.stroke, 'none');
+        this.renderer.setAttribute(rect, HTMLAttribute.fill, '#ffffff00');
+        this.renderer.setAttribute(rect, HTMLAttribute.stroke, 'none');
 
         this.renderer.appendChild(el, stamp);
         this.renderer.appendChild(el, rect);
@@ -145,7 +163,7 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(
             el,
             'transform',
-            `rotate(${this.angle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
+            `rotate(${this.currentAngle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
@@ -155,17 +173,17 @@ export class StampToolService extends AbstractToolService {
 
     rotateStamp(direction: number): void {
         if (direction < 0) {
-            this.angle = (this.angle - STAMP_BASE_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle - STAMP_BASE_ROTATION) % 360;
         } else {
-            this.angle = (this.angle + STAMP_BASE_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle + STAMP_BASE_ROTATION) % 360;
         }
     }
 
     alterRotateStamp(direction: number): void {
         if (direction < 0) {
-            this.angle = (this.angle - STAMP_ALTER_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle - STAMP_ALTER_ROTATION) % 360;
         } else {
-            this.angle = (this.angle + STAMP_ALTER_ROTATION) % 360;
+            this.currentAngle = (this.currentAngle + STAMP_ALTER_ROTATION) % 360;
         }
     }
 
@@ -183,7 +201,7 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === MOUSE.LeftButton && this.isAbleToStamp(event)) {
+        if (button === Mouse.LeftButton && this.isAbleToStamp(event)) {
             this.cleanUp();
             this.addStamp();
         }
@@ -192,7 +210,7 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === MOUSE.LeftButton && this.isAbleToStamp(event)) {
+        if (button === Mouse.LeftButton && this.isAbleToStamp(event)) {
             this.initStamp();
         }
     }
@@ -226,7 +244,7 @@ export class StampToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === KEYS.Alt) {
+        if (key === Keys.Alt) {
             event.preventDefault();
             this.isAlterRotation = true;
         }
@@ -235,7 +253,7 @@ export class StampToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === KEYS.Alt) {
+        if (key === Keys.Alt) {
             event.preventDefault();
             this.isAlterRotation = false;
         }

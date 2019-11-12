@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { of } from 'rxjs';
 
 import { HttpClientModule } from '@angular/common/http';
-import { TOOL_NAME } from 'src/constants/tool-constants';
+import { ToolName } from 'src/constants/tool-constants';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../services/shortcut-manager/shortcut-manager.service';
 import { ToolSelectorService } from '../../services/tools/tool-selector/tool-selector.service';
@@ -43,7 +43,7 @@ describe('AppComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        changeTool: (arg: TOOL_NAME) => null,
+                        changeTool: (arg: ToolName) => null,
                     },
                 },
                 {

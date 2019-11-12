@@ -6,8 +6,8 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { LineToolService } from 'src/app/services/tools/line-tool/line-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { PREDICATE } from 'src/constants/constants';
-import { LINE_JOINT_TYPE, LINE_STROKE_TYPE, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { predicate } from 'src/constants/constants';
+import { LineJointType, LineStrokeType, Thickness, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-line-attributes',
@@ -16,16 +16,16 @@ import { LINE_JOINT_TYPE, LINE_STROKE_TYPE, THICKNESS, TOOL_NAME } from 'src/con
     providers: [AttributesManagerService],
 })
 export class LineAttributesComponent implements OnInit, AfterViewInit {
-    toolName = TOOL_NAME.Line;
+    toolName = ToolName.Line;
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
 
-    lineStrokeType: LINE_STROKE_TYPE;
-    LineStrokeTypeChoices = [LINE_STROKE_TYPE.Continuous, LINE_STROKE_TYPE.Dotted_line, LINE_STROKE_TYPE.Dotted_circle];
+    lineStrokeType: LineStrokeType;
+    LineStrokeTypeChoices = [LineStrokeType.Continuous, LineStrokeType.Dotted_line, LineStrokeType.Dotted_circle];
 
     circleJointSelected = false;
 
-    readonly THICKNESS = THICKNESS;
+    readonly Thickness = Thickness;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -49,26 +49,26 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.lineAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Default,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                Thickness.Default,
+                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
             ],
-            lineStrokeType: [LINE_STROKE_TYPE.Continuous],
-            lineJointType: [LINE_JOINT_TYPE.Curvy],
-            circleJointDiameter: [THICKNESS.Default, [Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)]],
+            lineStrokeType: [LineStrokeType.Continuous],
+            lineJointType: [LineJointType.Curvy],
+            circleJointDiameter: [Thickness.Default, [Validators.min(Thickness.Min), Validators.max(Thickness.Max)]],
         });
     }
 
-    onLineStrokeTypeChange(lineStrokeType: LINE_STROKE_TYPE): void {
-        this.attributeManagerService.lineStrokeType.next(lineStrokeType);
+    onLineStrokeTypeChange(lineStrokeType: LineStrokeType): void {
+        this.attributeManagerService.changeLineStrokeType(lineStrokeType);
     }
 
-    onLineJointTypeChange(lineJointType: LINE_JOINT_TYPE): void {
-        this.circleJointSelected = lineJointType === LINE_JOINT_TYPE.Circle;
-        this.attributeManagerService.lineJointType.next(lineJointType);
+    onLineJointTypeChange(lineJointType: LineJointType): void {
+        this.attributeManagerService.changeLineJointType(lineJointType);
+        this.circleJointSelected = lineJointType === LineJointType.Circle;
     }
 
     onCircleJointSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.lineAttributesForm.controls.circleJointDiameter.setValue(event.value);
             this.onCircleJointDiameterChange();
         }
@@ -77,12 +77,12 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     onCircleJointDiameterChange(): void {
         const jointThickness = this.lineAttributesForm.value.circleJointDiameter;
         if (this.lineAttributesForm.valid) {
-            this.attributeManagerService.circleJointDiameter.next(jointThickness);
+            this.attributeManagerService.changeCircleJointDiameter(jointThickness);
         }
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+        if (predicate.eventIsValid(event, Thickness)) {
             this.lineAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
@@ -91,7 +91,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.lineAttributesForm.value.thickness;
         if (this.lineAttributesForm.controls.thickness.valid) {
-            this.attributeManagerService.thickness.next(thickness);
+            this.attributeManagerService.changeThickness(thickness);
         }
     }
 

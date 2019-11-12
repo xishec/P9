@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import {
-    COLOR_TYPE,
+    ColorType,
     DEFAULT_GRAY_0,
     DEFAULT_GRAY_1,
     DEFAULT_WHITE,
@@ -20,7 +20,7 @@ export class ColorToolService {
     primaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_0);
     secondaryColor: BehaviorSubject<string> = new BehaviorSubject<string>(DEFAULT_GRAY_1);
 
-    selectedColorType: BehaviorSubject<COLOR_TYPE | undefined> = new BehaviorSubject<COLOR_TYPE | undefined>(undefined);
+    selectedColorType: BehaviorSubject<ColorType | undefined> = new BehaviorSubject<ColorType | undefined>(undefined);
     showColorPalette: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     colorQueue: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([DEFAULT_WHITE]);
 
@@ -52,13 +52,13 @@ export class ColorToolService {
 
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case ColorType.backgroundColor:
                 this.backgroundColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.primaryColor:
+            case ColorType.primaryColor:
                 this.primaryColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.secondaryColor:
+            case ColorType.secondaryColor:
                 this.secondaryColor.next(colorOnFocus);
                 break;
             default:
@@ -66,7 +66,7 @@ export class ColorToolService {
         }
     }
 
-    changeSelectedColorType(selectedColorType: COLOR_TYPE | undefined) {
+    changeSelectedColorType(selectedColorType: ColorType | undefined) {
         this.selectedColorType.next(selectedColorType);
     }
 
@@ -76,11 +76,11 @@ export class ColorToolService {
 
     getColorOnFocus(): string {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case ColorType.backgroundColor:
                 return this.backgroundColor.value;
-            case COLOR_TYPE.primaryColor:
+            case ColorType.primaryColor:
                 return this.primaryColor.value;
-            case COLOR_TYPE.secondaryColor:
+            case ColorType.secondaryColor:
                 return this.secondaryColor.value;
             default:
                 return DEFAULT_WHITE;

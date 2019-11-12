@@ -5,14 +5,14 @@ import { MatSliderChange } from '@angular/material';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { PREDICATE } from 'src/constants/constants';
+import { predicate } from 'src/constants/constants';
 import {
-    STAMP_ANGLE_ORIENTATION,
     STAMP_NAMES,
-    STAMP_SCALING,
     STAMP_TYPES,
+    StampAngleOrientation,
     STAMPS_MAP,
-    TOOL_NAME,
+    StampScaling,
+    ToolName,
 } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 
@@ -22,12 +22,12 @@ import { AttributesManagerService } from '../../../../services/tools/attributes-
     styleUrls: ['./stamp-attributes.component.scss'],
 })
 export class StampAttributesComponent implements OnInit {
-    toolName = TOOL_NAME.Stamp;
+    toolName = ToolName.Stamp;
 
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;
-    readonly stampScaling = STAMP_SCALING;
-    readonly stampAngleOrientation = STAMP_ANGLE_ORIENTATION;
+    readonly stampScaling = StampScaling;
+    readonly stampAngleOrientation = StampAngleOrientation;
     readonly stampTypes = STAMP_TYPES;
     readonly stampNames = STAMP_NAMES;
 
@@ -50,15 +50,15 @@ export class StampAttributesComponent implements OnInit {
     initializeForm(): void {
         this.stampAttributesForm = this.formBuilder.group({
             scaling: [
-                STAMP_SCALING.Default,
-                [Validators.required, Validators.min(STAMP_SCALING.Min), Validators.max(STAMP_SCALING.Max)],
+                StampScaling.Default,
+                [Validators.required, Validators.min(StampScaling.Min), Validators.max(StampScaling.Max)],
             ],
             angle: [
-                STAMP_ANGLE_ORIENTATION.Default,
+                StampAngleOrientation.Default,
                 [
                     Validators.required,
-                    Validators.min(STAMP_ANGLE_ORIENTATION.Min),
-                    Validators.max(STAMP_ANGLE_ORIENTATION.Max),
+                    Validators.min(StampAngleOrientation.Min),
+                    Validators.max(StampAngleOrientation.Max),
                 ],
             ],
             stampType: [0],
@@ -66,7 +66,7 @@ export class StampAttributesComponent implements OnInit {
     }
 
     onSliderChange(event: MatSliderChange): void {
-        if (PREDICATE.eventIsValid(event, STAMP_SCALING)) {
+        if (predicate.eventIsValid(event, StampScaling)) {
             this.stampAttributesForm.controls.scaling.setValue(event.value);
             this.onScalingChange();
         }
@@ -75,19 +75,19 @@ export class StampAttributesComponent implements OnInit {
     onScalingChange(): void {
         const stampScaling: number = this.stampAttributesForm.value.scaling;
         if (this.stampAttributesForm.controls.scaling.valid) {
-            this.attributesManagerService.scaling.next(stampScaling);
+            this.attributesManagerService.changeScaling(stampScaling);
         }
     }
 
     onStampTypeChange(): void {
         const stampType: number = this.stampAttributesForm.value.stampType;
-        this.attributesManagerService.stampType.next(STAMPS_MAP.get(stampType) as string);
+        this.attributesManagerService.changeStampType(STAMPS_MAP.get(stampType) as string);
     }
 
     onAngleChange(): void {
         const stampAngle: number = this.stampAttributesForm.value.angle;
         if (this.stampAttributesForm.controls.angle.valid) {
-            this.attributesManagerService.angle.next(stampAngle);
+            this.attributesManagerService.changeAngle(stampAngle);
         }
     }
 

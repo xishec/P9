@@ -1,8 +1,8 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
-import { MOUSE } from '../../../../constants/constants';
+import { HTMLAttribute, ToolName } from 'src/constants/tool-constants';
+import { Mouse } from '../../../../constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -53,9 +53,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     isStackTargetShape(): boolean {
-        const isRectangle = this.currentStackTarget.toolName === TOOL_NAME.Rectangle;
-        const isEllipsis = this.currentStackTarget.toolName === TOOL_NAME.Ellipsis;
-        const isPolygon = this.currentStackTarget.toolName === TOOL_NAME.Polygon;
+        const isRectangle = this.currentStackTarget.toolName === ToolName.Rectangle;
+        const isEllipsis = this.currentStackTarget.toolName === ToolName.Ellipsis;
+        const isPolygon = this.currentStackTarget.toolName === ToolName.Polygon;
         return isRectangle || isEllipsis || isPolygon;
     }
 
@@ -70,7 +70,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTMLAttribute.fill,
             this.primaryColor,
         );
 
@@ -80,7 +80,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeStrokeColorOnShape(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTMLAttribute.stroke,
             this.secondaryColor,
         );
 
@@ -90,13 +90,13 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeColorOnTrace(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTMLAttribute.stroke,
             this.primaryColor,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTMLAttribute.fill,
             this.primaryColor,
         );
 
@@ -115,14 +115,14 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
 
         switch (button) {
-            case MOUSE.LeftButton:
+            case Mouse.LeftButton:
                 if (this.isStackTargetShape()) {
                     this.changeFillColorOnShape();
                 } else {
                     this.changeColorOnTrace();
                 }
                 break;
-            case MOUSE.RightButton:
+            case Mouse.RightButton:
                 if (this.isStackTargetShape()) {
                     this.changeStrokeColorOnShape();
                 }

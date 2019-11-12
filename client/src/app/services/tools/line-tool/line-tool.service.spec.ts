@@ -10,8 +10,8 @@ import {
     createMockSVGLine,
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
-import { KEYS, MOUSE } from 'src/constants/constants';
-import { LINE_JOINT_TYPE, LINE_STROKE_TYPE } from 'src/constants/tool-constants';
+import { Keys, Mouse } from 'src/constants/constants';
+import { LineJointType, LineStrokeType } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { LineToolService } from './line-tool.service';
@@ -74,7 +74,7 @@ describe('LineToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        mockLeftButton = createMouseEvent(0, 0, MOUSE.LeftButton);
+        mockLeftButton = createMouseEvent(0, 0, Mouse.LeftButton);
     });
 
     it('should be created', () => {
@@ -83,7 +83,7 @@ describe('LineToolService', () => {
 
     it('initializeAttributesManagerService should set strokeWidth, strokeType, jointType and circleJointDiameter', () => {
         const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`thickness`];
+        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`thicknessValue`];
         const strokeType: BehaviorSubject<number> = attributeManagerService[`lineStrokeType`];
         const jointType: BehaviorSubject<number> = attributeManagerService[`lineJointType`];
         const jointDiameter: BehaviorSubject<number> = attributeManagerService[`circleJointDiameter`];
@@ -93,7 +93,7 @@ describe('LineToolService', () => {
         expect(service.currentStrokeWidth).toEqual(strokeWidth.value);
         expect(service.currentStrokeType).toEqual(strokeType.value);
         expect(service.currentJointType).toEqual(jointType.value);
-        expect(service.circleJointDiameter).toEqual(jointDiameter.value);
+        expect(service.currentCircleJointDiameter).toEqual(jointDiameter.value);
     });
 
     it('getXPos should return clientX - BOUNDLEFT', () => {
@@ -112,7 +112,7 @@ describe('LineToolService', () => {
         expect(resYPos).toBe(clientY - BOUNDTOP);
     });
 
-    it('should call startLine onMouseDown if MOUSE.LeftButton and !isDrawing', () => {
+    it('should call startLine onMouseDown if Mouse.LeftButton and !isDrawing', () => {
         const spyOnStartLine = spyOn(service, 'startLine');
         service.isDrawing = false;
 
@@ -121,7 +121,7 @@ describe('LineToolService', () => {
         expect(spyOnStartLine).toHaveBeenCalled();
     });
 
-    it('should call appendLine onMouseDown if MOUSE.LeftButton and isDrawing', () => {
+    it('should call appendLine onMouseDown if Mouse.LeftButton and isDrawing', () => {
         const spyOnAppendLine = spyOn(service, 'appendLine');
         service.isDrawing = true;
 
@@ -130,9 +130,9 @@ describe('LineToolService', () => {
         expect(spyOnAppendLine).toHaveBeenCalled();
     });
 
-    it('should call appendCircle onMouseDown if MOUSE.LeftButton and currentJointType is Circle', () => {
+    it('should call appendCircle onMouseDown if Mouse.LeftButton and currentJointType is Circle', () => {
         const spyOnAppendCircle = spyOn(service, 'appendCircle');
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        service.currentJointType = LineJointType.Circle;
 
         service.onMouseDown(mockLeftButton);
 
@@ -166,7 +166,7 @@ describe('LineToolService', () => {
     });
 
     it('shouldCloseLine should be true when onKeyDown with shift', () => {
-        const mockShift = createKeyBoardEvent(KEYS.Shift);
+        const mockShift = createKeyBoardEvent(Keys.Shift);
 
         service.onKeyDown(mockShift);
 
@@ -174,7 +174,7 @@ describe('LineToolService', () => {
     });
 
     it('should call renderer.removeChild() when onKeyDown with escape', () => {
-        const mockEscape = createKeyBoardEvent(KEYS.Escape);
+        const mockEscape = createKeyBoardEvent(Keys.Escape);
         const spyOnRendererRemoveChild = spyOn(rendererMock, 'removeChild');
 
         service.onKeyDown(mockEscape);
@@ -188,7 +188,7 @@ describe('LineToolService', () => {
         service.pointsArray.push(pointToPop);
         const arrayLengthBefore = service.pointsArray.length;
 
-        const mockBackspace = createKeyBoardEvent(KEYS.Backspace);
+        const mockBackspace = createKeyBoardEvent(Keys.Backspace);
 
         service.onKeyDown(mockBackspace);
 
@@ -204,9 +204,9 @@ describe('LineToolService', () => {
         service.pointsArray.push('1,1');
         service.jointCircles.push(circle1);
         service.jointCircles.push(circle2);
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        service.currentJointType = LineJointType.Circle;
 
-        const mockBackspace = createKeyBoardEvent(KEYS.Backspace);
+        const mockBackspace = createKeyBoardEvent(Keys.Backspace);
 
         service.onKeyDown(mockBackspace);
 
@@ -214,7 +214,7 @@ describe('LineToolService', () => {
     });
 
     it('shouldCloseLine should be true when onKeyUp with shift', () => {
-        const mockShift = createKeyBoardEvent(KEYS.Shift);
+        const mockShift = createKeyBoardEvent(Keys.Shift);
         service.shouldCloseLine = true;
 
         service.onKeyUp(mockShift);
@@ -247,8 +247,8 @@ describe('LineToolService', () => {
 
     // tslint:disable-next-line: max-line-length
     it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is Dotted_line', () => {
-        service.currentStrokeType = LINE_STROKE_TYPE.Dotted_line;
-        service.currentJointType = LINE_JOINT_TYPE.Straight;
+        service.currentStrokeType = LineStrokeType.Dotted_line;
+        service.currentJointType = LineJointType.Straight;
         const mockCurrentStrokeWidth = 10;
         service.currentStrokeWidth = mockCurrentStrokeWidth;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
@@ -264,8 +264,8 @@ describe('LineToolService', () => {
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
-        service.currentStrokeType = LINE_STROKE_TYPE.Dotted_circle;
-        service.currentJointType = LINE_JOINT_TYPE.Straight;
+        service.currentStrokeType = LineStrokeType.Dotted_circle;
+        service.currentJointType = LineJointType.Straight;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
         service.startLine(0, 0);
@@ -274,7 +274,7 @@ describe('LineToolService', () => {
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linejoin, round when startLine if jointType is Circle', () => {
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        service.currentJointType = LineJointType.Circle;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
         service.startLine(0, 0);

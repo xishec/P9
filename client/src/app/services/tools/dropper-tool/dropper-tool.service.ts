@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { MOUSE } from 'src/constants/constants';
+import { Mouse } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
@@ -61,9 +61,9 @@ export class DropperToolService extends AbstractToolService {
         const colorHex = this.getColor(event);
 
         const button = event.button;
-        if (button === MOUSE.LeftButton && this.isMouseInRef(event, this.elementRef)) {
+        if (button === Mouse.LeftButton && this.isMouseInRef(event, this.elementRef)) {
             this.colorToolService.changePrimaryColor(colorHex);
-        } else if (button === MOUSE.RightButton && this.isMouseInRef(event, this.elementRef)) {
+        } else if (button === Mouse.RightButton && this.isMouseInRef(event, this.elementRef)) {
             this.colorToolService.changeSecondaryColor(colorHex);
         }
     }

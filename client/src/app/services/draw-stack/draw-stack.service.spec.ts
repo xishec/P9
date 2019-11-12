@@ -1,7 +1,7 @@
 import { Renderer2 } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { TOOL_NAME } from 'src/constants/tool-constants';
+import { ToolName } from 'src/constants/tool-constants';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 import { DrawStackService } from './draw-stack.service';
 
@@ -104,7 +104,7 @@ describe('DrawStackService', () => {
     it('should getDrawStackLength', () => {
         service[`stackTarget`].next = () => null;
         const SPY = spyOn(service[`stackTarget`], 'next');
-        const stackTarget = new StackTargetInfo(1, TOOL_NAME.ArtGallery);
+        const stackTarget = new StackTargetInfo(1, ToolName.ArtGallery);
         service.changeTargetElement(stackTarget);
         expect(SPY).toHaveBeenCalledWith(stackTarget);
     });

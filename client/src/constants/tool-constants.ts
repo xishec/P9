@@ -1,4 +1,3 @@
-import { FontType } from 'src/classes/FontType';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
@@ -13,7 +12,7 @@ const STAMP_ALTER_ROTATION = 1;
 
 const OFFSET_STEP = 10;
 
-enum TOOL_NAME {
+enum ToolName {
     TracingTool = 'Outil de traçage',
     ShapeTool = 'Outil de forme',
     Selection = 'Sélection',
@@ -47,7 +46,7 @@ enum TOOL_NAME {
     Export = 'Exporter',
 }
 
-enum THICKNESS {
+enum Thickness {
     Min = 1,
     Default = 5,
     Max = 100,
@@ -55,13 +54,13 @@ enum THICKNESS {
 
 const PEN_WIDTH_FACTOR = 5;
 
-enum TRACE_TYPE {
+enum TraceType {
     Outline = 'Contour',
     Full = 'Plein',
     Both = 'Plein avec contour',
 }
 
-const POLYGONE_FORM_TYPE: Map<number, string> = new Map([
+const PolygonFormType: Map<number, string> = new Map([
     [3, 'Triangle'],
     [4, 'Quadrilatère'],
     [5, 'Pentagone'],
@@ -74,19 +73,19 @@ const POLYGONE_FORM_TYPE: Map<number, string> = new Map([
     [12, 'Dodécagone'],
 ]);
 
-enum POLYGON_SIDES {
+enum PolygonSides {
     Min = 3,
     Default = 3,
     Max = 12,
 }
 
-enum GRID_SIZE {
+enum GridSize {
     Min = 5,
     Default = 10,
     Max = 200,
 }
 
-enum GRID_OPACITY {
+enum GridOpacity {
     Min = 0.2,
     Max = 1,
 }
@@ -95,49 +94,49 @@ const GRID_SIZE_INCREMENT = 5;
 const GRID_SIZE_DECREMENT = 5;
 
 const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'fas fa-mouse-pointer', tooltipName: TOOL_NAME.Selection, shortcut: '(S)' },
-    { iconName: 'fas fa-pencil-alt', tooltipName: TOOL_NAME.TracingTool, shortcut: '(clique droit)' },
-    { iconName: 'far fa-square', tooltipName: TOOL_NAME.ShapeTool, shortcut: '(clique droit)' },
-    { iconName: 'fas fa-slash', tooltipName: TOOL_NAME.Line, shortcut: '(L)' },
-    { iconName: 'fas fa-font', tooltipName: TOOL_NAME.Text, shortcut: '(T)' },
-    { iconName: 'fas fa-fill', tooltipName: TOOL_NAME.ColorApplicator, shortcut: '(R)' },
-    { iconName: 'fas fa-fill-drip', tooltipName: TOOL_NAME.Fill, shortcut: '(B)' },
-    { iconName: 'fas fa-eraser', tooltipName: TOOL_NAME.Eraser, shortcut: '(E)' },
-    { iconName: 'fas fa-eye-dropper', tooltipName: TOOL_NAME.Dropper, shortcut: '(I)' },
-    { iconName: 'fas fa-stamp', tooltipName: TOOL_NAME.Stamp, shortcut: '' },
-    { iconName: 'fas fa-border-all', tooltipName: TOOL_NAME.Grid, shortcut: '' },
+    { iconName: 'fas fa-mouse-pointer', tooltipName: ToolName.Selection, shortcut: '(S)' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.TracingTool, shortcut: '(clique droit)' },
+    { iconName: 'far fa-square', tooltipName: ToolName.ShapeTool, shortcut: '(clique droit)' },
+    { iconName: 'fas fa-slash', tooltipName: ToolName.Line, shortcut: '(L)' },
+    { iconName: 'fas fa-font', tooltipName: ToolName.Text, shortcut: '(T)' },
+    { iconName: 'fas fa-fill', tooltipName: ToolName.ColorApplicator, shortcut: '(R)' },
+    { iconName: 'fas fa-fill-drip', tooltipName: ToolName.Fill, shortcut: '(B)' },
+    { iconName: 'fas fa-eraser', tooltipName: ToolName.Eraser, shortcut: '(E)' },
+    { iconName: 'fas fa-eye-dropper', tooltipName: ToolName.Dropper, shortcut: '(I)' },
+    { iconName: 'fas fa-stamp', tooltipName: ToolName.Stamp, shortcut: '' },
+    { iconName: 'fas fa-border-all', tooltipName: ToolName.Grid, shortcut: '' },
 ];
 
 const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'fas fa-pencil-alt', tooltipName: TOOL_NAME.Pencil, shortcut: '(C)' },
-    { iconName: 'fas fa-paint-brush', tooltipName: TOOL_NAME.Brush, shortcut: '(W)' },
-    { iconName: 'fas fa-pen-nib', tooltipName: TOOL_NAME.Quill, shortcut: '(P)' },
-    { iconName: 'fas fa-pen-alt', tooltipName: TOOL_NAME.Pen, shortcut: '(Y)' },
-    { iconName: 'fas fa-spray-can', tooltipName: TOOL_NAME.SprayCan, shortcut: '(A)' },
+    { iconName: 'fas fa-pencil-alt', tooltipName: ToolName.Pencil, shortcut: '(C)' },
+    { iconName: 'fas fa-paint-brush', tooltipName: ToolName.Brush, shortcut: '(W)' },
+    { iconName: 'fas fa-pen-nib', tooltipName: ToolName.Quill, shortcut: '(P)' },
+    { iconName: 'fas fa-pen-alt', tooltipName: ToolName.Pen, shortcut: '(Y)' },
+    { iconName: 'fas fa-spray-can', tooltipName: ToolName.SprayCan, shortcut: '(A)' },
 ];
 
 const SHAPE_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'far fa-square', tooltipName: TOOL_NAME.Rectangle, shortcut: '(1)' },
-    { iconName: 'far fa-circle', tooltipName: TOOL_NAME.Ellipsis, shortcut: '(2)' },
-    { iconName: 'fas fa-draw-polygon', tooltipName: TOOL_NAME.Polygon, shortcut: '(3)' },
+    { iconName: 'far fa-square', tooltipName: ToolName.Rectangle, shortcut: '(1)' },
+    { iconName: 'far fa-circle', tooltipName: ToolName.Ellipsis, shortcut: '(2)' },
+    { iconName: 'fas fa-draw-polygon', tooltipName: ToolName.Polygon, shortcut: '(3)' },
 ];
 
 const CLIPBOARD_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'fas fa-object-group', tooltipName: TOOL_NAME.SelectAll, shortcut: '(Ctrl-A)' },
-    { iconName: 'fas fa-paste', tooltipName: TOOL_NAME.Paste, shortcut: '(Ctrl-V)' },
-    { iconName: 'fas fa-clone', tooltipName: TOOL_NAME.Duplicate, shortcut: '(Ctrl-D)' },
-    { iconName: 'fas fa-cut', tooltipName: TOOL_NAME.Cut, shortcut: '(Ctrl-X)' },
-    { iconName: 'fas fa-copy', tooltipName: TOOL_NAME.Copy, shortcut: '(Ctrl-C)' },
-    { iconName: 'fas fa-trash-alt', tooltipName: TOOL_NAME.Delete, shortcut: '(Supprimer)' },
+    { iconName: 'fas fa-object-group', tooltipName: ToolName.SelectAll, shortcut: '(Ctrl-A)' },
+    { iconName: 'fas fa-paste', tooltipName: ToolName.Paste, shortcut: '(Ctrl-V)' },
+    { iconName: 'fas fa-clone', tooltipName: ToolName.Duplicate, shortcut: '(Ctrl-D)' },
+    { iconName: 'fas fa-cut', tooltipName: ToolName.Cut, shortcut: '(Ctrl-X)' },
+    { iconName: 'fas fa-copy', tooltipName: ToolName.Copy, shortcut: '(Ctrl-C)' },
+    { iconName: 'fas fa-trash-alt', tooltipName: ToolName.Delete, shortcut: '(Supprimer)' },
 ];
 
 const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
-    { iconName: 'fas fa-undo-alt', tooltipName: TOOL_NAME.Undo, shortcut: '(Ctrl-Z)' },
-    { iconName: 'fas fa-redo-alt', tooltipName: TOOL_NAME.Redo, shortcut: '(Ctrl-Shift-Z)' },
-    { iconName: 'fas fa-plus', tooltipName: TOOL_NAME.NewDrawing, shortcut: '(Ctrl-O)' },
-    { iconName: 'far fa-save', tooltipName: TOOL_NAME.Save, shortcut: '(Ctrl-S)' },
-    { iconName: 'fas fa-folder-open', tooltipName: TOOL_NAME.ArtGallery, shortcut: '(Ctrl-G)' },
-    { iconName: 'fas fa-file-export', tooltipName: TOOL_NAME.Export, shortcut: '(Ctrl-E)' },
+    { iconName: 'fas fa-undo-alt', tooltipName: ToolName.Undo, shortcut: '(Ctrl-Z)' },
+    { iconName: 'fas fa-redo-alt', tooltipName: ToolName.Redo, shortcut: '(Ctrl-Shift-Z)' },
+    { iconName: 'fas fa-plus', tooltipName: ToolName.NewDrawing, shortcut: '(Ctrl-O)' },
+    { iconName: 'far fa-save', tooltipName: ToolName.Save, shortcut: '(Ctrl-S)' },
+    { iconName: 'fas fa-folder-open', tooltipName: ToolName.ArtGallery, shortcut: '(Ctrl-G)' },
+    { iconName: 'fas fa-file-export', tooltipName: ToolName.Export, shortcut: '(Ctrl-E)' },
 ];
 
 enum BRUSH_STYLE {
@@ -150,7 +149,7 @@ enum BRUSH_STYLE {
 
 const BRUSH_STYLES = [BRUSH_STYLE.type1, BRUSH_STYLE.type2, BRUSH_STYLE.type3, BRUSH_STYLE.type4, BRUSH_STYLE.type5];
 
-const POLYGON_RADIUS_CORRECTION: Map<number, number> = new Map([
+const PolygonRadiusCorrection: Map<number, number> = new Map([
     [3, 0.13],
     [4, 0.33],
     [5, 0.05],
@@ -163,7 +162,7 @@ const POLYGON_RADIUS_CORRECTION: Map<number, number> = new Map([
     [12, 0.04],
 ]);
 
-const POLYGON_OFFSET_ANGLES: Map<number, number> = new Map([
+const PolygonOffsetAngles: Map<number, number> = new Map([
     [3, 3 * (360 / 3 / 4) * (Math.PI / 180)],
     [4, Math.PI / 4],
     [5, (360 / 5 / 4) * (Math.PI / 180)],
@@ -176,19 +175,19 @@ const POLYGON_OFFSET_ANGLES: Map<number, number> = new Map([
     [12, (360 / 12 / 2) * (Math.PI / 180)],
 ]);
 
-enum STAMP_SCALING {
+enum StampScaling {
     Min = 0.1,
     Default = 1.0,
     Max = 10.0,
 }
 
-enum STAMP_ANGLE_ORIENTATION {
+enum StampAngleOrientation {
     Min = -360,
     Default = 0,
     Max = 360,
 }
 
-enum ERASER_SIZE {
+enum EraserSize {
     Min = 1,
     Default = 50,
     Max = 100,
@@ -246,19 +245,19 @@ BASE64_STAMPS_MAP.set(
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTcuOTQ0IDVjLTEuMTM4IDAtMi4zNzYuMTI5LTMuMzk0LjQ5MS0yLjI4My44MjgtMi43OTIuODM4LTUuMTAzIDAtMS4wMTUtLjM2Mi0yLjI1Ni0uNDkxLTMuMzkyLS40OTEtMS45NzEgMC00LjE3LjM4Ny02LjA1NS44Nzh2MS43ODljLjg0Ny4yNTUgMS4wNjguNjI3IDEuMjAzIDEuNDkzLjM4MSAyLjQ0MyAxLjI1NSA0Ljg0IDUuMDY4IDQuODQgMy4wMzcgMCA0LjA1MS0yLjI1OSA0LjcyMi00LjM0NS4zNDEtMS4wNiAxLjY2My0xLjA4NyAyLjAwOS0uMDE1LjY3MyAyLjA4OSAxLjY4MiA0LjM2IDQuNzI1IDQuMzYgMy44MTQgMCA0LjY4OS0yLjM5NyA1LjA2OS00Ljg0MS4xMzUtLjg2Ni4zNTYtMS4yMzcgMS4yMDQtMS40OTJ2LTEuNzg5Yy0xLjg4Ny0uNDkxLTQuMDg1LS44NzgtNi4wNTYtLjg3OHptLTcuNjgyIDMuODE0Yy0uNTE4IDIuMTc0LTEuMzYgNC4xODYtMy45OTEgNC4xODYtMy4zMDEgMC0zLjk3NC0xLjkwMy00LjI3NS00Ljk3My0uMDcyLS43NDcuMDkyLTEuMDQuMjIxLTEuMTk1Ljk0Ny0xLjEzNCA1Ljk1Mi0xLjA4OCA3LjYxMS0uMDkyLjQ3NS4yODUuNzgzLjYwMS40MzQgMi4wNzR6bTExLjc0LS43ODdjLS4zMDEgMy4wNy0uOTc1IDQuOTczLTQuMjc1IDQuOTczLTIuNjI5IDAtMy40NzItMi4wMTItMy45ODktNC4xODYtLjM1MS0xLjQ3My0uMDQyLTEuNzg5LjQzNC0yLjA3NCAxLjY2NS0xIDYuNjY3LTEuMDM4IDcuNjExLjA5Mi4xMjkuMTU2LjI5My40NDkuMjE5IDEuMTk1em0tNC44MzgtMS4xMjFjMS41MzktLjIzNCAzLjMxOC0uMDMgMy43OTEuNTM3LjEwNC4xMjQuMjM0LjM1OC4xNzYuOTU2LS4wMzEuMzE2LS4wNjcuNjE2LS4xMTIuOS0uNDEtMS40ODctMS40NTctMi4yODMtMy44NTUtMi4zOTN6bS0xNC4xODQgMi4zOTNjLS4wNDUtLjI4NC0uMDgyLS41ODQtLjExMy0uOS0uMDU4LS41OTguMDczLS44MzIuMTc3LS45NTYuNDc0LS41NjcgMi4yNTMtLjc3MSAzLjc5Mi0uNTM3LTIuMzk4LjExLTMuNDQ1LjkwNi0zLjg1NiAyLjM5M3ptMTYuMDIgNy43NjRjLTEuMTUgMi44NjktNi4wMzEgMi4xNjYtNyAuMzY5LS45NyAxLjc5Ny01Ljg1IDIuNS03LS4zNjkuNTc4LjUwNiAxLjU2NS42NjkgMi4zMTguNTU5IDIuMjItLjMyNSAyLjA0Mi0yLjQyMyAzLjU5NC0yLjQyMy40MjUgMCAuODEuMTc3IDEuMDg4LjQ2NC4yNzgtLjI4Ny42NjItLjQ2NCAxLjA4Ny0uNDY0IDEuNTUyIDAgMS4zNzUgMi4wOTkgMy41OTQgMi40MjMuNzUzLjExIDEuNzQtLjA1MyAyLjMxOS0uNTU5eiIvPjwvc3ZnPg==',
 );
 
-enum LINE_STROKE_TYPE {
+enum LineStrokeType {
     Continuous = 1,
     Dotted_line = 2,
     Dotted_circle = 3,
 }
 
-enum LINE_JOINT_TYPE {
+enum LineJointType {
     Curvy = 1,
     Straight = 2,
     Circle = 3,
 }
 
-enum HTML_ATTRIBUTE {
+enum HTMLAttribute {
     width = 'width',
     height = 'height',
     fill = 'fill',
@@ -283,40 +282,34 @@ enum HTML_ATTRIBUTE {
     href = 'href',
     src = 'src',
     viewBox = 'viewBox',
-    font_family = 'font-family',
-    font_size = 'font-size',
-    font_weight = 'font-weight',
-    font_style = 'font-style',
-    text_anchor = 'text-anchor',
-    innerHTML = 'innerHTML',
 }
 
-const TOOL_NAME_SHORTCUTS: Map<string, TOOL_NAME> = new Map([
-    ['c', TOOL_NAME.Pencil],
-    ['w', TOOL_NAME.Brush],
-    ['p', TOOL_NAME.Quill],
-    ['y', TOOL_NAME.Pen],
-    ['a', TOOL_NAME.SprayCan],
-    ['1', TOOL_NAME.Rectangle],
-    ['2', TOOL_NAME.Ellipsis],
-    ['3', TOOL_NAME.Polygon],
-    ['l', TOOL_NAME.Line],
-    ['t', TOOL_NAME.Text],
-    ['r', TOOL_NAME.ColorApplicator],
-    ['b', TOOL_NAME.Fill],
-    ['e', TOOL_NAME.Eraser],
-    ['i', TOOL_NAME.Dropper],
-    ['s', TOOL_NAME.Selection],
+const ToolNameShortcuts: Map<string, ToolName> = new Map([
+    ['c', ToolName.Pencil],
+    ['w', ToolName.Brush],
+    ['p', ToolName.Quill],
+    ['y', ToolName.Pen],
+    ['a', ToolName.SprayCan],
+    ['1', ToolName.Rectangle],
+    ['2', ToolName.Ellipsis],
+    ['3', ToolName.Polygon],
+    ['l', ToolName.Line],
+    ['t', ToolName.Text],
+    ['r', ToolName.ColorApplicator],
+    ['b', ToolName.Fill],
+    ['e', ToolName.Eraser],
+    ['i', ToolName.Dropper],
+    ['s', ToolName.Selection],
 ]);
 
-const CONTROL_SHORTCUTS: Map<string, TOOL_NAME> = new Map([
-    ['o', TOOL_NAME.NewDrawing],
-    ['s', TOOL_NAME.Save],
-    ['g', TOOL_NAME.ArtGallery],
-    ['e', TOOL_NAME.Export],
+const ControlShortcuts: Map<string, ToolName> = new Map([
+    ['o', ToolName.NewDrawing],
+    ['s', ToolName.Save],
+    ['g', ToolName.ArtGallery],
+    ['e', ToolName.Export],
 ]);
 
-enum FILE_TYPE {
+enum FileType {
     SVG = 'svg',
     PNG = 'png',
     BMP = 'bmp',
@@ -328,51 +321,10 @@ const MAX_BMP_SIZE = 620;
 const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
-const FONTS: FontType[] = [
-    { fontName: 'Times', fontFamily: 'Times, serif' },
-    { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
-    { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
-
-    { fontName: 'Verdana', fontFamily: 'Verdana, sans-serif' },
-    { fontName: 'Arial', fontFamily: 'Arial, sans-serif' },
-    { fontName: 'Helvetica', fontFamily: 'Helvetica, sans-serif' },
-
-    { fontName: 'Lucida', fontFamily: 'Lucida, monospace' },
-    { fontName: 'Console', fontFamily: 'Console, monospace' },
-    { fontName: 'Courier', fontFamily: 'Courier, monospace' },
-];
-
-enum FONT_SIZE {
-    Min = 10,
-    Default = 15,
-    Max = 72,
-}
-
-const TEXT_CURSOR = '█';
-const TEXT_SPACE = '\xa0';
-const TEXT_LINEBREAK = '⠀';
-const SNACKBAR_DURATION = 3000;
-
-enum FONT_ALIGN {
-    Middle = 'middle',
-    Start = 'start',
-    End = 'end',
-}
-
-enum FONT_STYLE {
-    Italic = 'italic',
-    Normal = 'normal',
-}
-
-enum FONT_WEIGHT {
-    Bold = 'bold',
-    Normal = 'normal',
-}
-
 export {
-    CONTROL_SHORTCUTS,
-    TOOL_NAME_SHORTCUTS,
-    HTML_ATTRIBUTE,
+    ControlShortcuts,
+    ToolNameShortcuts,
+    HTMLAttribute,
     TOOLS_BUTTON_INFO,
     TRACING_BUTTON_INFO,
     SHAPE_BUTTON_INFO,
@@ -380,46 +332,37 @@ export {
     BRUSH_STYLE,
     BRUSH_STYLES,
     CLIPBOARD_BUTTON_INFO,
-    THICKNESS,
-    TRACE_TYPE,
-    TOOL_NAME,
+    Thickness,
+    TraceType,
+    ToolName,
     OFFSET_STEP,
-    POLYGONE_FORM_TYPE,
-    POLYGON_SIDES,
-    POLYGON_RADIUS_CORRECTION,
-    POLYGON_OFFSET_ANGLES,
-    STAMP_SCALING,
-    STAMP_ANGLE_ORIENTATION,
+    PolygonFormType,
+    PolygonSides,
+    PolygonRadiusCorrection,
+    PolygonOffsetAngles,
+    StampScaling,
+    StampAngleOrientation,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
     BASE64_STAMPS_MAP,
     STAMP_NAMES,
-    LINE_STROKE_TYPE,
-    LINE_JOINT_TYPE,
-    GRID_SIZE,
-    GRID_OPACITY,
+    LineStrokeType,
+    LineJointType,
+    GridSize,
+    GridOpacity,
     GRID_SIZE_INCREMENT,
     GRID_SIZE_DECREMENT,
-    FILE_TYPE,
+    FileType,
     PEN_WIDTH_FACTOR,
-    ERASER_SIZE,
+    EraserSize,
     TRACING_TOOL_POSITION,
-    FONTS,
-    FONT_SIZE,
-    FONT_ALIGN,
-    FONT_STYLE,
-    FONT_WEIGHT,
-    TEXT_CURSOR,
-    TEXT_SPACE,
-    TEXT_LINEBREAK,
     ERASER_STROKE_WIDTH,
     ADDITIONAL_BORDER_WIDTH,
     RESET_POSITION_NUMBER,
     DEFAULT_RADIX,
     MAX_BMP_SIZE,
     SHAPE_TOOL_POSITION,
-    SNACKBAR_DURATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
     STAMP_BASE_ROTATION,
