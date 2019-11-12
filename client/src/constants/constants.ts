@@ -1,6 +1,6 @@
 import { Predicate } from 'src/classes/Predicate';
 
-enum Keys {
+enum KEYS {
     Shift = 'Shift',
     Control = 'Control',
     Alt = 'Alt',
@@ -23,9 +23,15 @@ enum Keys {
     y = 'y',
     Escape = 'Escape',
     Backspace = 'Backspace',
+    Enter = 'Enter',
+    ArrowLeft = 'ArrowLeft',
+    ArrowRight = 'ArrowRight',
+    Space = ' ',
+    SmallerThan = '<',
+    GreaterThan = '>',
 }
 
-enum Mouse {
+enum MOUSE {
     LeftButton = 0,
     MouseWheel = 1,
     RightButton = 2,
@@ -39,7 +45,7 @@ const MAX_DRAWING_LENGTH = 5;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-const predicate: Predicate = new Predicate();
+const PREDICATE: Predicate = new Predicate();
 
 const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/rolling.gif'];
 

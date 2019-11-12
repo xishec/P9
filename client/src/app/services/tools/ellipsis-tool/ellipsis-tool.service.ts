@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
-import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
-import { HTMLAttribute, ToolName, TraceType } from 'src/constants/tool-constants';
+import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractShapeToolService } from '../abstract-tools/abstract-shape-tool/abstract-shape-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -43,11 +43,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
+        this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
             this.updateTraceType(this.traceType);
         });
-        this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
+        this.attributesManagerService.traceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
         });
     }
@@ -60,26 +60,26 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     makeEllipseInvalid(): void {
-        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.rx, '0');
-        this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.ry, '0');
+        this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.rx, '0');
+        this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.ry, '0');
     }
 
     updateTraceType(traceType: string): void {
         this.traceType = traceType;
         switch (traceType) {
-            case TraceType.Outline: {
+            case TRACE_TYPE.Outline: {
                 this.userFillColor = 'none';
                 this.userStrokeColor = this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
-            case TraceType.Full: {
+            case TRACE_TYPE.Full: {
                 this.userFillColor = this.fillColor;
                 this.userStrokeColor = 'none';
                 this.userStrokeWidth = 0;
                 break;
             }
-            case TraceType.Both: {
+            case TRACE_TYPE.Both: {
                 this.userFillColor = this.fillColor;
                 this.userStrokeColor = this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
@@ -91,23 +91,23 @@ export class EllipsisToolService extends AbstractShapeToolService {
     copyRectanglePreview(): void {
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.rx,
+            HTML_ATTRIBUTE.rx,
             Math.abs(this.previewRectangleWidth / 2 - this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.ry,
+            HTML_ATTRIBUTE.ry,
             Math.abs(this.previewRectangleHeight / 2 - this.userStrokeWidth / 2).toString(),
         );
 
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.cx,
+            HTML_ATTRIBUTE.cx,
             (this.previewRectangleX + this.previewRectangleWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.cy,
+            HTML_ATTRIBUTE.cy,
             (this.previewRectangleY + this.previewRectangleHeight / 2).toString(),
         );
     }
@@ -120,13 +120,13 @@ export class EllipsisToolService extends AbstractShapeToolService {
         if (deltaX < 0) {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                HTMLAttribute.cx,
+                HTML_ATTRIBUTE.cx,
                 (this.previewRectangleX + (this.previewRectangleWidth - minLength / 2)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                HTMLAttribute.cx,
+                HTML_ATTRIBUTE.cx,
                 (this.previewRectangleX + minLength / 2).toString(),
             );
         }
@@ -134,25 +134,25 @@ export class EllipsisToolService extends AbstractShapeToolService {
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                HTMLAttribute.cy,
+                HTML_ATTRIBUTE.cy,
                 (this.previewRectangleY + (this.previewRectangleHeight - minLength / 2)).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawEllipse,
-                HTMLAttribute.cy,
+                HTML_ATTRIBUTE.cy,
                 (this.previewRectangleY + minLength / 2).toString(),
             );
         }
 
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.rx,
+            HTML_ATTRIBUTE.rx,
             Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawEllipse,
-            HTMLAttribute.ry,
+            HTML_ATTRIBUTE.ry,
             Math.abs(minLength / 2 - this.userStrokeWidth / 2).toString(),
         );
     }
@@ -160,14 +160,14 @@ export class EllipsisToolService extends AbstractShapeToolService {
     renderDrawEllipsis(): void {
         if (this.isValidEllipse()) {
             this.userFillColor === 'none'
-                ? this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.fill, this.userFillColor)
-                : this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.fill, '#' + this.userFillColor);
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.stroke, '#' + this.userStrokeColor);
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
+                ? this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, this.userFillColor)
+                : this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
+            this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.stroke, '#' + this.userStrokeColor);
+            this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.stroke_width, this.userStrokeWidth.toString());
         } else {
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.fill, 'none');
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.stroke, 'none');
-            this.renderer.setAttribute(this.drawEllipse, HTMLAttribute.stroke_width, '0');
+            this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, 'none');
+            this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.stroke, 'none');
+            this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.stroke_width, '0');
         }
     }
 
@@ -209,7 +209,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton) {
+        if (button === MOUSE.LeftButton) {
             this.initialMouseCoords.x = this.currentMouseCoords.x;
             this.initialMouseCoords.y = this.currentMouseCoords.y;
             this.isPreviewing = true;
@@ -221,7 +221,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton && this.isValidEllipse() && this.isMouseInRef(event, this.elementRef)) {
+        if (button === MOUSE.LeftButton && this.isValidEllipse() && this.isMouseInRef(event, this.elementRef)) {
             this.createSVG();
         }
         this.cleanUp();
@@ -234,7 +234,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === Keys.Shift) {
+        if (key === KEYS.Shift) {
             this.isCirclePreview = true;
             this.updateDrawing();
         }
@@ -243,7 +243,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
     onKeyUp(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === Keys.Shift) {
+        if (key === KEYS.Shift) {
             this.isCirclePreview = false;
             this.updateDrawing();
         }
@@ -252,16 +252,16 @@ export class EllipsisToolService extends AbstractShapeToolService {
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawEllipse: SVGEllipseElement = this.renderer.createElement('ellipse', SVG_NS);
-        this.renderer.setAttribute(drawEllipse, HTMLAttribute.cx, this.drawEllipseCenterX.toString());
-        this.renderer.setAttribute(drawEllipse, HTMLAttribute.cy, this.drawEllipseCenterY.toString());
-        this.renderer.setAttribute(drawEllipse, HTMLAttribute.rx, this.drawEllipseRadiusX.toString());
-        this.renderer.setAttribute(drawEllipse, HTMLAttribute.ry, this.drawEllipseRadiusY.toString());
-        this.renderer.setAttribute(el, HTMLAttribute.stroke_width, this.userStrokeWidth.toString());
+        this.renderer.setAttribute(drawEllipse, HTML_ATTRIBUTE.cx, this.drawEllipseCenterX.toString());
+        this.renderer.setAttribute(drawEllipse, HTML_ATTRIBUTE.cy, this.drawEllipseCenterY.toString());
+        this.renderer.setAttribute(drawEllipse, HTML_ATTRIBUTE.rx, this.drawEllipseRadiusX.toString());
+        this.renderer.setAttribute(drawEllipse, HTML_ATTRIBUTE.ry, this.drawEllipseRadiusY.toString());
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_width, this.userStrokeWidth.toString());
         this.userFillColor === 'none'
-            ? this.renderer.setAttribute(el, HTMLAttribute.fill, this.userFillColor)
-            : this.renderer.setAttribute(el, HTMLAttribute.fill, '#' + this.userFillColor);
-        this.renderer.setAttribute(el, HTMLAttribute.stroke, '#' + this.userStrokeColor);
-        this.renderer.setAttribute(el, HTMLAttribute.title, ToolName.Ellipsis);
+            ? this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, this.userFillColor)
+            : this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Ellipsis);
 
         this.renderer.appendChild(el, drawEllipse);
         this.renderer.appendChild(this.elementRef.nativeElement, el);

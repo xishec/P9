@@ -7,7 +7,7 @@ import { DrawingModalWindowComponent } from 'src/app/components/modal-windows/dr
 import { ExportFileModalWindowComponent } from 'src/app/components/modal-windows/export-file-modal-window/export-file-modal-window.component';
 import { OpenFileModalWindowComponent } from 'src/app/components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from 'src/app/components/modal-windows/save-file-modal-window/save-file-modal-window.component';
-import { ToolName } from 'src/constants/tool-constants';
+import { TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
@@ -25,19 +25,20 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
+import { TextToolService } from '../text-tool/text-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ToolSelectorService {
-    private toolName: BehaviorSubject<ToolName> = new BehaviorSubject(ToolName.Selection);
+    private toolName: BehaviorSubject<TOOL_NAME> = new BehaviorSubject(TOOL_NAME.Selection);
 
-    currentToolName: Observable<ToolName> = this.toolName.asObservable();
+    currentToolName: Observable<TOOL_NAME> = this.toolName.asObservable();
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
     drawStack: DrawStackService;
-    TOOLS_MAP: Map<ToolName, AbstractToolService>;
-    WORKZONE_TOOLS_MAP: Map<ToolName, () => void>;
+    TOOLS_MAP: Map<TOOL_NAME, AbstractToolService>;
+    WORKZONE_TOOLS_MAP: Map<TOOL_NAME, () => void>;
 
     constructor(
         private dialog: MatDialog,
@@ -53,6 +54,7 @@ export class ToolSelectorService {
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygonTool: PolygonToolService,
         private lineTool: LineToolService,
+        private textTool: TextToolService,
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
@@ -85,32 +87,34 @@ export class ToolSelectorService {
 
         this.lineTool.initializeService(ref, renderer, drawStack);
 
+        this.textTool.initializeService(ref, renderer, drawStack);
+
         this.exportTool.initializeService(ref, renderer);
 
         this.eraserTool.initializeService(ref, renderer, drawStack);
 
         this.TOOLS_MAP = new Map([
-            [ToolName.Selection, this.selectionTool as AbstractToolService],
-            [ToolName.Rectangle, this.rectangleTool as AbstractToolService],
-            [ToolName.Ellipsis, this.ellipsisTool as AbstractToolService],
-            [ToolName.Pencil, this.pencilTool as AbstractToolService],
-            [ToolName.Brush, this.brushTool as AbstractToolService],
-            [ToolName.Stamp, this.stampTool as AbstractToolService],
-            [ToolName.ColorApplicator, this.colorApplicatorTool as AbstractToolService],
-            [ToolName.Polygon, this.polygonTool as AbstractToolService],
-            [ToolName.Line, this.lineTool as AbstractToolService],
-            [ToolName.Dropper, this.dropperTool as AbstractToolService],
-            [ToolName.Pen, this.penTool as AbstractToolService],
-            [ToolName.Eraser, this.eraserTool as AbstractToolService],
-            [ToolName.Quill, this.selectionTool as AbstractToolService],
-            [ToolName.SprayCan, this.selectionTool as AbstractToolService],
-            [ToolName.Fill, this.selectionTool as AbstractToolService],
-            [ToolName.Text, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Selection, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Rectangle, this.rectangleTool as AbstractToolService],
+            [TOOL_NAME.Ellipsis, this.ellipsisTool as AbstractToolService],
+            [TOOL_NAME.Pencil, this.pencilTool as AbstractToolService],
+            [TOOL_NAME.Brush, this.brushTool as AbstractToolService],
+            [TOOL_NAME.Stamp, this.stampTool as AbstractToolService],
+            [TOOL_NAME.ColorApplicator, this.colorApplicatorTool as AbstractToolService],
+            [TOOL_NAME.Polygon, this.polygonTool as AbstractToolService],
+            [TOOL_NAME.Line, this.lineTool as AbstractToolService],
+            [TOOL_NAME.Dropper, this.dropperTool as AbstractToolService],
+            [TOOL_NAME.Pen, this.penTool as AbstractToolService],
+            [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
+            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.SprayCan, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Text, this.textTool as AbstractToolService],
         ]);
 
         this.WORKZONE_TOOLS_MAP = new Map([
             [
-                ToolName.NewDrawing,
+                TOOL_NAME.NewDrawing,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displayNewDrawingModal();
@@ -118,7 +122,7 @@ export class ToolSelectorService {
                 },
             ],
             [
-                ToolName.ArtGallery,
+                TOOL_NAME.ArtGallery,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displayOpenFileModal();
@@ -126,7 +130,7 @@ export class ToolSelectorService {
                 },
             ],
             [
-                ToolName.Save,
+                TOOL_NAME.Save,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displaySaveFileModal();
@@ -134,7 +138,7 @@ export class ToolSelectorService {
                 },
             ],
             [
-                ToolName.Export,
+                TOOL_NAME.Export,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.displayExportFileModal();
@@ -142,7 +146,7 @@ export class ToolSelectorService {
                 },
             ],
             [
-                ToolName.Undo,
+                TOOL_NAME.Undo,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.undoRedoerService.undo();
@@ -150,7 +154,7 @@ export class ToolSelectorService {
                 },
             ],
             [
-                ToolName.Redo,
+                TOOL_NAME.Redo,
                 () => {
                     if (!this.modalIsDisplayed) {
                         this.undoRedoerService.redo();
@@ -251,17 +255,21 @@ export class ToolSelectorService {
         return this.lineTool;
     }
 
+    getTextTool(): TextToolService {
+        return this.textTool;
+    }
+
     getEraserTool(): EraserToolService {
         return this.eraserTool;
     }
 
-    changeTool(tooltipName: ToolName): void {
+    changeTool(tooltipName: TOOL_NAME): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
             if (this.currentTool instanceof SelectionToolService) { this.selectionTool.isTheCurrentTool = false; }
         }
 
-        if (tooltipName === ToolName.Grid) {
+        if (tooltipName === TOOL_NAME.Grid) {
             this.changeCurrentToolName(tooltipName);
             return;
         }
@@ -281,7 +289,7 @@ export class ToolSelectorService {
         }
     }
 
-    changeCurrentToolName(toolName: ToolName): void {
+    changeCurrentToolName(toolName: TOOL_NAME): void {
         this.toolName.next(toolName);
     }
 }

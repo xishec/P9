@@ -8,11 +8,11 @@ import { ELEMENTS_BEFORE_LAST_CIRCLE, Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/c
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
+    ERASER_SIZE,
     ERASER_STROKE_WIDTH,
-    EraserSize,
-    HTMLAttribute,
+    HTML_ATTRIBUTE,
     RESET_POSITION_NUMBER,
-    ToolName,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
@@ -26,7 +26,7 @@ export class EraserToolService extends AbstractToolService {
     eraser: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentTarget = 0;
-    currentSize = EraserSize.Default;
+    currentSize = ERASER_SIZE.Default;
     isOnTarget = false;
     isLeftMouseDown = false;
     isEraserAppended = false;
@@ -68,7 +68,7 @@ export class EraserToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentEraserSize.subscribe((newSize) => {
+        this.attributesManagerService.eraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
             this.renderer.setAttribute(this.eraser, HTMLAttribute.width, this.currentSize.toString());
             this.renderer.setAttribute(this.eraser, HTMLAttribute.height, this.currentSize.toString());
@@ -104,7 +104,7 @@ export class EraserToolService extends AbstractToolService {
 
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton) {
+        if (button === MOUSE.LeftButton) {
             this.isLeftMouseDown = true;
         }
 
@@ -135,7 +135,7 @@ export class EraserToolService extends AbstractToolService {
         return (
             this.isOnTarget &&
             this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
-            button === Mouse.LeftButton
+            button === MOUSE.LeftButton
         );
     }
 
@@ -245,12 +245,12 @@ export class EraserToolService extends AbstractToolService {
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke,
+            HTML_ATTRIBUTE.stroke,
             '#' + DEFAULT_RED,
         );
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke_width,
+            HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
     }
@@ -295,7 +295,7 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, borderColor);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke_width,
+            HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
     }
@@ -315,15 +315,15 @@ export class EraserToolService extends AbstractToolService {
     }
 
     getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
         return 0;
     }
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton) {
+        if (button === MOUSE.LeftButton) {
             this.isLeftMouseDown = false;
         }
 
