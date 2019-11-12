@@ -239,25 +239,9 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        if (tool === ToolName.Pen) {
-            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[
-                    childrenNumber - 1 - this.ELEMENTS_BEFORE_LAST_CIRCLE
-                ],
-                HTMLAttribute.fill,
-                '#' + DEFAULT_RED,
-            );
-        }
+        this.checkIfPen(idElement, tool);
 
-        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            const children = this.drawStack.getElementByPosition(idElement).childNodes;
-
-            for (let i = 1; i < childrenCount; i++) {
-                this.renderer.setAttribute(children[i], HTMLAttribute.fill, '#' + DEFAULT_RED);
-            }
-        }
+        this.checkIfLine(idElement, tool);
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
@@ -271,12 +255,31 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    mouseOutRestoreBorder(
-        idElement: number,
-        border: string | null,
-        borderWidth: string | null,
-        tool: string | null,
-    ): void {
+    checkIfPen(idElement: number, tool: string | null) {
+        if (tool === ToolName.Pen) {
+            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(idElement).childNodes[
+                    childrenNumber - 1 - this.ELEMENTS_BEFORE_LAST_CIRCLE
+                ],
+                HTMLAttribute.fill,
+                '#' + DEFAULT_RED,
+            );
+        }
+    }
+
+    checkIfLine(idElement: number, tool: string | null) {
+        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+            for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
+                this.renderer.setAttribute(children[childIndex], HTMLAttribute.fill, '#' + DEFAULT_RED);
+            }
+        }
+    }
+
+    restoreBorder(idElement: number, border: string | null, borderWidth: string | null, tool: string | null): void {
         if (border === null) {
             border = '';
         }
