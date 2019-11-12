@@ -128,7 +128,6 @@ export class TextToolService extends AbstractToolService {
 
     updateAlign(align: FONT_ALIGN): void {
         this.fontInfo.fontAlign = align;
-        console.log(align);
         if (this.isWriting) {
             switch (align) {
                 case FONT_ALIGN.Middle: {
