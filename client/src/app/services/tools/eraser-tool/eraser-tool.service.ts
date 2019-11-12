@@ -356,7 +356,7 @@ export class EraserToolService extends AbstractToolService {
     onMouseOver(event: MouseEvent): void {}
 
     onMouseLeave(event: MouseEvent): void {
-        this.renderer.removeChild(this.elementRef, this.drawRectangle);
+        this.cleanUp();
     }
 
     // tslint:disable-next-line: no-empty
