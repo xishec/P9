@@ -7,7 +7,7 @@ import { HTMLAttribute, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-c
 import { createMockSVGTSpanElement } from '../test-helpers.spec';
 import { TextCursor } from './textCursor';
 
-fdescribe('TextCursor', () => {
+describe('TextCursor', () => {
     let injector: TestBed;
     let service: TextCursor;
     let currentLine: SVGTSpanElement;
