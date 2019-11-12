@@ -55,7 +55,7 @@ export class EraserAttributesComponent implements OnInit {
     onSizeChange(): void {
         const eraserSize: number = this.eraserAttributesForm.value.eraserSize;
         if (this.eraserAttributesForm.controls.eraserSize.valid) {
-            this.attributesManagerService.changeEraserSize(eraserSize);
+            this.attributesManagerService.eraserSize.next(eraserSize);
         }
     }
 

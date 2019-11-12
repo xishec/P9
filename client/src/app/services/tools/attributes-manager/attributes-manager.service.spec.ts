@@ -18,45 +18,45 @@ describe('AttributesManagerService', () => {
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeThickness', () => {
+    it('should thickness.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeThickness(3);
+        service.thickness.next(3);
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeTraceType', () => {
+    it('should traceType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeTraceType(TRACE_TYPE.Full);
+        service.traceType.next(TRACE_TYPE.Full);
         expect(service[`traceType`].value).toEqual(TRACE_TYPE.Full);
     });
 
-    it('should changeStyle', () => {
+    it('should style.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeStyle(2);
+        service.style.next(2);
         expect(service[`style`].value).toEqual(2);
     });
 
-    it('should changeNbVertices', () => {
+    it('should nbVertices.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeNbVertices(3);
+        service.nbVertices.next(3);
         expect(service[`nbVertices`].value).toEqual(3);
     });
 
-    it('should changeScaling', () => {
+    it('should scaling.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeScaling(3);
+        service.scaling.next(3);
         expect(service[`scaling`].value).toEqual(3);
     });
 
-    it('should changeAngle', () => {
+    it('should angle.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeAngle(3);
+        service.angle.next(3);
         expect(service[`angle`].value).toEqual(3);
     });
 
-    it('should changeStampType', () => {
+    it('should stampType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeStampType('1');
+        service.stampType.next('1');
         expect(service[`stampType`].value).toEqual('1');
     });
 });

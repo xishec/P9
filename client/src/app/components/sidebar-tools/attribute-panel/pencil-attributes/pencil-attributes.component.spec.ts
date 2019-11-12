@@ -37,7 +37,7 @@ describe('PencilAttributesComponent', () => {
                     {
                         provide: AttributesManagerService,
                         useValue: {
-                            changeThickness: () => null,
+                            thickness: { next: () => null },
                         },
                     },
                     {
@@ -94,7 +94,7 @@ describe('PencilAttributesComponent', () => {
 
     it(`onThicknessChange should call changeThickness if form thickness value is [${THICKNESS.Min},${THICKNESS.Max}]`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -102,8 +102,8 @@ describe('PencilAttributesComponent', () => {
     });
 
     it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
         component.pencilAttributesForm.controls.thickness.setValue(THICKNESS.Max + AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
 
@@ -112,7 +112,7 @@ describe('PencilAttributesComponent', () => {
 
     it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${THICKNESS.Min}`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(THICKNESS.Min - AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 

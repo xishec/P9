@@ -63,12 +63,12 @@ export class BrushAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness = this.brushAttributesForm.value.thickness;
         if (this.brushAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     change(style: BRUSH_STYLE): void {
-        this.attributesManagerService.changeStyle(style);
+        this.attributesManagerService.style.next(style);
     }
 
     onFocus(): void {
