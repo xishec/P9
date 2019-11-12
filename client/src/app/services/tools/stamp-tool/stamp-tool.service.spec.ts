@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { StampToolService } from './stamp-tool.service';
 
@@ -75,8 +75,8 @@ describe('StampToolService', () => {
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
-        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
-        onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
+        onAltKeyDown = createKeyBoardEvent(KEYS.Alt);
+        onOtherKeyDown = createKeyBoardEvent(KEYS.Shift);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
