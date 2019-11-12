@@ -30,9 +30,9 @@ describe('AttributesManagerService', () => {
         expect(service[`traceType`].value).toEqual(TraceType.Full);
     });
 
-    it('should changeStyle', () => {
+    it('should style.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeStyle(2);
+        service.style.next(2);
         expect(service[`style`].value).toEqual(2);
     });
 
@@ -42,21 +42,21 @@ describe('AttributesManagerService', () => {
         expect(service[`nbVertices`].value).toEqual(3);
     });
 
-    it('should changeScaling', () => {
+    it('should scaling.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeScaling(3);
+        service.scaling.next(3);
         expect(service[`scaling`].value).toEqual(3);
     });
 
-    it('should changeAngle', () => {
+    it('should angle.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeAngle(3);
+        service.angle.next(3);
         expect(service[`angle`].value).toEqual(3);
     });
 
-    it('should changeStampType', () => {
+    it('should stampType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeStampType('1');
+        service.stampType.next('1');
         expect(service[`stampType`].value).toEqual('1');
     });
 });

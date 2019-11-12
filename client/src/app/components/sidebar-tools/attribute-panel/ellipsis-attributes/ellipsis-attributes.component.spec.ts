@@ -37,8 +37,8 @@ describe('EllipsisAttributesComponent', () => {
                         {
                             provide: AttributesManagerService,
                             useValue: {
-                                thickness.next: () => null,
-                                traceType.next: () => null,
+                                thickness: { next: () => null },
+                                traceType: { next: () => null },
                             },
                         },
                         {
@@ -97,7 +97,7 @@ describe('EllipsisAttributesComponent', () => {
 
     it(`onThicknessChange should not call thickness.next if form thickness value is > ${Thickness.Max}`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(1000);
-        const SPY = spyOn(component.attributesManagerService, 'thickness.next');
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next');
 
         component.onThicknessChange();
 
@@ -106,7 +106,7 @@ describe('EllipsisAttributesComponent', () => {
 
     it(`onThicknessChange should call thickness.next if form thickness value is 50`, () => {
         component.ellipsisAttributesForm.controls.thickness.setValue(50);
-        const SPY = spyOn(component.attributesManagerService, 'thickness.next').and.returnValue();
+        const SPY = spyOn(component.attributesManagerService.thickness, 'next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -122,7 +122,7 @@ describe('EllipsisAttributesComponent', () => {
     });
 
     it('attributesManagerService shoudl call traceType.next when onTraceTypeChage', () => {
-        const SPY = spyOn(component.attributesManagerService, 'traceType.next');
+        const SPY = spyOn(component.attributesManagerService.traceType, 'next');
 
         component.onTraceTypeChange();
 

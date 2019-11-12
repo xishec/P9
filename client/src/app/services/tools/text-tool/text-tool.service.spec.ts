@@ -90,9 +90,7 @@ describe('TextToolService', () => {
                 {
                     provide: AttributesManagerService,
                     useValue: {
-                        changeIsWriting: () => null,
-                        changeIsOnInput: () => null,
-                        isWriting: false,
+                        isWritingState: { next: () => null },
                     },
                 },
                 {
