@@ -314,7 +314,7 @@ describe('EraserToolService', () => {
         const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
 
-        service.removeBorder('0');
+        service.removeBorder('0', ToolName.Rectangle);
 
         expect(spyOnrestoreBorder).toHaveBeenCalledTimes(0);
         expect(spyOnget).toHaveBeenCalled();
@@ -324,7 +324,7 @@ describe('EraserToolService', () => {
         service.currentTarget = -1;
         const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
 
-        service.removeBorder('0');
+        service.removeBorder('0', ToolName.Pen);
 
         expect(spyOnrestoreBorder).toHaveBeenCalledTimes(0);
     });
