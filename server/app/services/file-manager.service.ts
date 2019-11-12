@@ -25,7 +25,7 @@ export class FileManagerService {
             if (!this.isDrawingValid(drawing)) {
               throw new Error('Invalid Drawing');
             }
-        } catch(error) {
+        } catch (error) {
             return error;
         }
 
