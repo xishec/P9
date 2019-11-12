@@ -23,13 +23,13 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class EraserToolService extends AbstractToolService {
-    drawRectangle: SVGRectElement;
+    eraser: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentTarget = 0;
     currentSize = EraserSize.Default;
     isOnTarget = false;
     isLeftMouseDown = false;
-    isSquareAppended = false;
+    isEraserAppended = false;
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
     erasedSomething = false;
@@ -57,21 +57,21 @@ export class EraserToolService extends AbstractToolService {
             this.isOnTarget = this.currentTarget !== undefined;
         });
 
-        this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
+        this.eraser = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.eraser, HTMLAttribute.width, this.currentSize.toString());
+        this.renderer.setAttribute(this.eraser, HTMLAttribute.height, this.currentSize.toString());
 
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, ERASER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.eraser, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
+        this.renderer.setAttribute(this.eraser, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
+        this.renderer.setAttribute(this.eraser, HTMLAttribute.stroke_width, ERASER_STROKE_WIDTH);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.currentEraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
+            this.renderer.setAttribute(this.eraser, HTMLAttribute.width, this.currentSize.toString());
+            this.renderer.setAttribute(this.eraser, HTMLAttribute.height, this.currentSize.toString());
         });
     }
 
@@ -80,26 +80,26 @@ export class EraserToolService extends AbstractToolService {
             this.onMouseDown(event);
         }
         this.checkElementsToErase();
-        this.setSquareToMouse(event);
+        this.setEraserToMouse(event);
     }
 
-    setSquareToMouse(event: MouseEvent): void {
+    setEraserToMouse(event: MouseEvent): void {
         this.currentMouseCoords.x =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
         this.currentMouseCoords.y =
             event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
 
-        this.renderer.setAttribute(this.drawRectangle, 'x', this.currentMouseCoords.x.toString());
-        this.renderer.setAttribute(this.drawRectangle, 'y', this.currentMouseCoords.y.toString());
+        this.renderer.setAttribute(this.eraser, 'x', this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.eraser, 'y', this.currentMouseCoords.y.toString());
 
-        if (!this.isSquareAppended) {
-            this.appendSquare();
+        if (!this.isEraserAppended) {
+            this.appendEraser();
         }
     }
 
-    appendSquare(): void {
-        this.renderer.appendChild(this.elementRef.nativeElement, this.drawRectangle);
-        this.isSquareAppended = true;
+    appendEraser(): void {
+        this.renderer.appendChild(this.elementRef.nativeElement, this.eraser);
+        this.isEraserAppended = true;
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -139,7 +139,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    isTouchingElementBox(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    isEraserTouchingElement(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
         const boxTop = selectionBox.y + window.scrollY;
@@ -168,7 +168,7 @@ export class EraserToolService extends AbstractToolService {
     }
 
     checkElementsToErase(): void {
-        const selectionBox = this.getDOMRect(this.drawRectangle);
+        const selectionBox = this.getDOMRect(this.eraser);
 
         let enteredInSelection = false;
         let topElement = this.drawStack.getDrawStackLength() - 1;
@@ -177,7 +177,7 @@ export class EraserToolService extends AbstractToolService {
             const elBox = this.getDOMRect(svgGElement);
 
             if (
-                this.isTouchingElementBox(selectionBox, elBox, this.getStrokeWidth(svgGElement)) &&
+                this.isEraserTouchingElement(selectionBox, elBox, this.getStrokeWidth(svgGElement)) &&
                 topElement <= drawStackIndex
             ) {
                 this.updateElementToColor(topElement, svgGElement, drawStackIndex);
@@ -335,19 +335,19 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
 
         if (this.erasedSomething) {
-            this.renderer.removeChild(this.elementRef, this.drawRectangle);
+            this.renderer.removeChild(this.elementRef, this.eraser);
             setTimeout(() => {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
             }, 0);
             setTimeout(() => {
-                this.appendSquare();
+                this.appendEraser();
             }, 0);
         }
         this.erasedSomething = false;
     }
 
     onMouseEnter(event: MouseEvent): void {
-        this.appendSquare();
+        this.appendEraser();
     }
 
     // tslint:disable-next-line: no-empty
@@ -364,8 +364,8 @@ export class EraserToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {}
 
     cleanUp(): void {
-        this.renderer.removeChild(this.elementRef, this.drawRectangle);
-        this.isSquareAppended = false;
+        this.renderer.removeChild(this.elementRef, this.eraser);
+        this.isEraserAppended = false;
         if (this.lastElementColoredNumber !== -1) {
             this.removeBorder(this.lastElementColoredNumber.toString(), this.lastToolName as string);
         }
