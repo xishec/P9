@@ -1,15 +1,17 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 import { Drawing } from '../../../common/communication/Drawing';
 import { Message } from '../../../common/communication/message';
 import { Post } from '../model/post';
+import { FileManagerService } from '../services/file-manager.service';
+import Types from "../types";
 
 @injectable()
 export class FileManagerController {
     router: Router;
 
-    constructor() {
+    constructor(@inject(Types.FileManagerService) private fileManagerService: FileManagerService) {
         this.configureRouter();
     }
 
