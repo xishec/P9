@@ -26,7 +26,7 @@ describe('AttributesManagerService', () => {
 
     it('should traceType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeTraceType(TRACE_TYPE.Full);
+        service.traceType.next(TRACE_TYPE.Full);
         expect(service[`traceType`].value).toEqual(TRACE_TYPE.Full);
     });
 

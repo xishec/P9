@@ -100,13 +100,13 @@ export class BrushToolService extends TracingToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.filter, `url(#${this.currentStyle.toString()})`);
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.filter, `url(#${this.style.toString()})`);
         return circle;
     }
 
     createSVGPath(): void {
         super.createSVGPath();
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.filter, `url(#${this.currentStyle})`);
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.filter, `url(#${this.style})`);
     }
 
     // tslint:disable-next-line: no-empty

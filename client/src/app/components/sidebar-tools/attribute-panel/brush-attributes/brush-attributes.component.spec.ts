@@ -107,7 +107,7 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttributeManagerService if form thickness > ${THICKNESS.Max}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Max + AVERAGE_THICKNESS);
         const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 
@@ -116,7 +116,7 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${THICKNESS.Min}`, () => {
+    it(`onThicknessChange should not call changeThickness of AttributeManagerService if form thickness < ${THICKNESS.Min}`, () => {
         component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Min - AVERAGE_THICKNESS);
         const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
 

@@ -88,11 +88,11 @@ export class TextToolService extends AbstractToolService {
     initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributeManagerService;
 
-            this.updateStyle(HTML_ATTRIBUTE.font_family, font);
         this.attributesManagerService.font.subscribe((font) => {
+            this.updateStyle(HTML_ATTRIBUTE.font_family, font);
         });
-            this.updateStyle(HTML_ATTRIBUTE.font_size, size.toString());
         this.attributesManagerService.fontSize.subscribe((size) => {
+            this.updateStyle(HTML_ATTRIBUTE.font_size, size.toString());
         });
         this.attributesManagerService.fontAlign.subscribe((align) => {
             this.updateAlign(align);

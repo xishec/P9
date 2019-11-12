@@ -101,9 +101,9 @@ describe('PencilAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
+    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
         const SPY = spyOn(attributesManagerService.thickness, 'next').and.returnValue();
         component.pencilAttributesForm.controls.thickness.setValue(THICKNESS.Max + AVERAGE_THICKNESS);
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
 
         component.onThicknessChange();
 
