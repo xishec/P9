@@ -2,7 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 
 import { ColorApplicatorToolService } from 'src/app/services/tools/color-applicator-tool/color-applicator-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { ToolName } from 'src/constants/tool-constants';
+import { TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-color-applicator-attributes',
@@ -10,7 +10,7 @@ import { ToolName } from 'src/constants/tool-constants';
     styleUrls: ['./color-applicator-attributes.component.scss'],
 })
 export class ColorApplicatorAttributesComponent implements AfterViewInit {
-    toolName = ToolName.ColorApplicator;
+    toolName = TOOL_NAME.ColorApplicator;
     colorApplicatorToolService: ColorApplicatorToolService;
 
     constructor(private toolSelectorService: ToolSelectorService) {}

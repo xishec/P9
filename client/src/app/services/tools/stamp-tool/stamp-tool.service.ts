@@ -1,10 +1,10 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
     BASE64_STAMPS_MAP,
-    HTMLAttribute,
+    HTML_ATTRIBUTE,
     NO_STAMP,
     STAMP_ALTER_ROTATION,
     STAMP_BASE_HEIGHT,
@@ -103,12 +103,12 @@ export class StampToolService extends AbstractToolService {
     setStamp(): void {
         this.renderer.setAttribute(
             this.stamp,
-            HTMLAttribute.width,
+            HTML_ATTRIBUTE.width,
             (STAMP_BASE_WIDTH * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(
             this.stamp,
-            HTMLAttribute.height,
+            HTML_ATTRIBUTE.height,
             (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(this.stamp, 'href', this.stampLink);
@@ -133,12 +133,12 @@ export class StampToolService extends AbstractToolService {
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(
             stamp,
-            HTMLAttribute.width,
+            HTML_ATTRIBUTE.width,
             (STAMP_BASE_WIDTH * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(
             stamp,
-            HTMLAttribute.height,
+            HTML_ATTRIBUTE.height,
             (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
@@ -146,16 +146,16 @@ export class StampToolService extends AbstractToolService {
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(rect, HTMLAttribute.width, (STAMP_BASE_WIDTH * this.currentScaling).toString());
+        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.currentScaling).toString());
         this.renderer.setAttribute(
             rect,
-            HTMLAttribute.height,
+            HTML_ATTRIBUTE.height,
             (STAMP_BASE_HEIGHT * this.currentScaling).toString(),
         );
         this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
         this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
-        this.renderer.setAttribute(rect, HTMLAttribute.fill, '#ffffff00');
-        this.renderer.setAttribute(rect, HTMLAttribute.stroke, 'none');
+        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.fill, '#ffffff00');
+        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.stroke, 'none');
 
         this.renderer.appendChild(el, stamp);
         this.renderer.appendChild(el, rect);
@@ -201,7 +201,7 @@ export class StampToolService extends AbstractToolService {
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isAbleToStamp(event)) {
+        if (button === MOUSE.LeftButton && this.isAbleToStamp(event)) {
             this.cleanUp();
             this.addStamp();
         }
@@ -210,7 +210,7 @@ export class StampToolService extends AbstractToolService {
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
 
-        if (button === Mouse.LeftButton && this.isAbleToStamp(event)) {
+        if (button === MOUSE.LeftButton && this.isAbleToStamp(event)) {
             this.initStamp();
         }
     }
@@ -244,7 +244,7 @@ export class StampToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === Keys.Alt) {
+        if (key === KEYS.Alt) {
             event.preventDefault();
             this.isAlterRotation = true;
         }
@@ -253,7 +253,7 @@ export class StampToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {
         const key = event.key;
 
-        if (key === Keys.Alt) {
+        if (key === KEYS.Alt) {
             event.preventDefault();
             this.isAlterRotation = false;
         }

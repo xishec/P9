@@ -9,8 +9,8 @@ import {
     createMockSVGTSpanElement,
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
-import { FONT_ALIGN, HTMLAttribute, TEXT_CURSOR } from 'src/constants/tool-constants';
+import { KEYS } from 'src/constants/constants';
+import { FONT_ALIGN, HTML_ATTRIBUTE, TEXT_CURSOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
@@ -118,8 +118,8 @@ describe('TextToolService', () => {
         service.textBox = createMockSVGTextElement();
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
-        enterKeyboardEvent = createKeyBoardEvent(Keys.Enter);
-        backspaceKeyboardEvent = createKeyBoardEvent(Keys.Backspace);
+        enterKeyboardEvent = createKeyBoardEvent(KEYS.Enter);
+        backspaceKeyboardEvent = createKeyBoardEvent(KEYS.Backspace);
 
         spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnsetProperty = spyOn(service.renderer, 'setProperty');
@@ -139,19 +139,19 @@ describe('TextToolService', () => {
     });
 
     it('updateStyle with fill should change the fontColor of fontInfo', () => {
-        service.updateStyle(HTMLAttribute.fill, '#' + 'ffffff');
+        service.updateStyle(HTML_ATTRIBUTE.fill, '#' + 'ffffff');
 
         expect(service.fontInfo.fontColor).toEqual('#ffffff');
     });
 
     it('updateStyle with font_family should change the fontType', () => {
-        service.updateStyle(HTMLAttribute.font_family, 'Times');
+        service.updateStyle(HTML_ATTRIBUTE.font_family, 'Times');
 
         expect(service.fontInfo.fontFamily).toEqual('Times');
     });
 
     it('updateStyle with font_size should change the fontSize', () => {
-        service.updateStyle(HTMLAttribute.font_size, '15');
+        service.updateStyle(HTML_ATTRIBUTE.font_size, '15');
 
         expect(service.fontInfo.fontSize).toEqual('15');
     });
@@ -160,7 +160,7 @@ describe('TextToolService', () => {
         const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
         service.isWriting = true;
 
-        service.updateStyle(HTMLAttribute.font_family, 'Times');
+        service.updateStyle(HTML_ATTRIBUTE.font_family, 'Times');
 
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
@@ -364,7 +364,7 @@ describe('TextToolService', () => {
         const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(true);
         const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
 
-        service.moveCursor(Keys.ArrowLeft);
+        service.moveCursor(KEYS.ArrowLeft);
 
         expect(spyOnisAtStartOfLine).toHaveBeenCalled();
         expect(spyOnswapToAnotherLine).toHaveBeenCalled();
@@ -374,7 +374,7 @@ describe('TextToolService', () => {
         const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(false);
         const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
 
-        service.moveCursor(Keys.ArrowLeft);
+        service.moveCursor(KEYS.ArrowLeft);
 
         expect(spyOnisAtStartOfLine).toHaveBeenCalled();
         expect(spyOnswapInCurrentLine).toHaveBeenCalled();
@@ -384,7 +384,7 @@ describe('TextToolService', () => {
         const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(true);
         const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
 
-        service.moveCursor(Keys.ArrowRight);
+        service.moveCursor(KEYS.ArrowRight);
 
         expect(spyOnisAtEndOfLine).toHaveBeenCalled();
         expect(spyOnswapToAnotherLine).toHaveBeenCalled();
@@ -394,7 +394,7 @@ describe('TextToolService', () => {
         const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(false);
         const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
 
-        service.moveCursor(Keys.ArrowRight);
+        service.moveCursor(KEYS.ArrowRight);
 
         expect(spyOnisAtEndOfLine).toHaveBeenCalled();
         expect(spyOnswapInCurrentLine).toHaveBeenCalled();
@@ -403,7 +403,7 @@ describe('TextToolService', () => {
     it('addText should stop execution if the length of the key is longer than 1', () => {
         service.text = 'test';
 
-        service.addText(Keys.Enter);
+        service.addText(KEYS.Enter);
 
         expect(service.text).toEqual('test');
     });
@@ -411,7 +411,7 @@ describe('TextToolService', () => {
     it('addText should change text if the length of the key is equal to 1', () => {
         service.text = 'test';
 
-        service.addText(Keys.a);
+        service.addText(KEYS.a);
 
         expect(service.text.length).toBeGreaterThan('test'.length);
     });

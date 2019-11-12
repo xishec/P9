@@ -5,7 +5,7 @@ import { MatDialog, MatSliderChange, MatSnackBar } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { Thickness } from 'src/constants/tool-constants';
+import { THICKNESS } from 'src/constants/tool-constants';
 import { BrushAttributesComponent } from './brush-attributes.component';
 
 describe('BrushAttributesComponent', () => {
@@ -14,7 +14,7 @@ describe('BrushAttributesComponent', () => {
     let event: MatSliderChange;
     let attributesManagerService: AttributesManagerService;
     let shortcutManagerService: ShortcutManagerService;
-    const AVERAGE_THICKNESS = (Thickness.Min + Thickness.Max) / 2;
+    const AVERAGE_THICKNESS = (THICKNESS.Min + THICKNESS.Max) / 2;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [BrushAttributesComponent],
@@ -68,7 +68,7 @@ describe('BrushAttributesComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`onSliderChange should change the value of thickness if event value [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onSliderChange should change the value of thickness if event value [${THICKNESS.Min},${THICKNESS.Max}]`, () => {
         event.value = AVERAGE_THICKNESS;
         const SPY = spyOn(component, 'onThicknessChange').and.returnValue();
 
@@ -78,12 +78,12 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onSliderChange should not change the value of thickness if event value  ]${Thickness.Min},${Thickness.Max}[`, () => {
+    it(`onSliderChange should not change the value of thickness if event value  ]${THICKNESS.Min},${THICKNESS.Max}[`, () => {
         const SPY = spyOn(component, 'onThicknessChange');
 
-        event.value = Thickness.Max + AVERAGE_THICKNESS;
+        event.value = THICKNESS.Max + AVERAGE_THICKNESS;
         component.onSliderChange(event);
-        event.value = Thickness.Min - AVERAGE_THICKNESS;
+        event.value = THICKNESS.Min - AVERAGE_THICKNESS;
         component.onSliderChange(event);
 
         expect(SPY).not.toHaveBeenCalled();
@@ -98,7 +98,7 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onThicknessChange should call changeThickness if form thickness value is [${THICKNESS.Min},${THICKNESS.Max}]`, () => {
         component.brushAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
         const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
@@ -107,8 +107,8 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
-        component.brushAttributesForm.controls.thickness.setValue(Thickness.Max + AVERAGE_THICKNESS);
+    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${THICKNESS.Max}`, () => {
+        component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Max + AVERAGE_THICKNESS);
         const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();
@@ -116,8 +116,8 @@ describe('BrushAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
-        component.brushAttributesForm.controls.thickness.setValue(Thickness.Min - AVERAGE_THICKNESS);
+    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${THICKNESS.Min}`, () => {
+        component.brushAttributesForm.controls.thickness.setValue(THICKNESS.Min - AVERAGE_THICKNESS);
         const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
 
         component.onThicknessChange();

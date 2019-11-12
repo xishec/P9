@@ -3,23 +3,23 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import {
     BRUSH_STYLE,
-    EraserSize,
+    ERASER_SIZE,
     FONT_ALIGN,
-    FontSize,
-    LineJointType,
-    LineStrokeType,
+    FONT_SIZE,
+    LINE_JOINT_TYPE,
+    LINE_STROKE_TYPE,
+    STAMP_ANGLE_ORIENTATION,
+    STAMP_SCALING,
     STAMP_TYPES,
-    StampAngleOrientation,
-    StampScaling,
-    Thickness,
-    TraceType,
+    THICKNESS,
+    TRACE_TYPE,
 } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AttributesManagerService {
-    private thicknessValue: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
+    private thicknessValue: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
     get thickness(): BehaviorSubject<number> {
         return this.thicknessValue;
     }
@@ -28,21 +28,21 @@ export class AttributesManagerService {
     }
 
     private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
-    private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
+    private traceType: BehaviorSubject<string> = new BehaviorSubject(TRACE_TYPE.Outline);
     private style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);
     private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
-    private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
-    private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
-    private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
-    private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
-    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
+    private lineStrokeType: BehaviorSubject<LINE_STROKE_TYPE> = new BehaviorSubject(LINE_STROKE_TYPE.Continuous);
+    private lineJointType: BehaviorSubject<LINE_JOINT_TYPE> = new BehaviorSubject(LINE_JOINT_TYPE.Curvy);
+    private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
+    private scaling: BehaviorSubject<number> = new BehaviorSubject(STAMP_SCALING.Default);
+    private angle: BehaviorSubject<number> = new BehaviorSubject(STAMP_ANGLE_ORIENTATION.Default);
     private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
-    private eraserSize: BehaviorSubject<number> = new BehaviorSubject(EraserSize.Default);
+    private eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
 
     private boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
-    private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
+    private fontSize: BehaviorSubject<number> = new BehaviorSubject(FONT_SIZE.Default);
     private fontAlign: BehaviorSubject<FONT_ALIGN> = new BehaviorSubject(FONT_ALIGN.Start);
     private isWritingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     get isWriting(): boolean {
@@ -54,8 +54,8 @@ export class AttributesManagerService {
     currentTraceType: Observable<string> = this.traceType.asObservable();
     currentStyle: Observable<BRUSH_STYLE> = this.style.asObservable();
     currentNbVertices: Observable<number> = this.nbVertices.asObservable();
-    currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
-    currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
+    currentLineStrokeType: Observable<LINE_STROKE_TYPE> = this.lineStrokeType.asObservable();
+    currentLineJointType: Observable<LINE_JOINT_TYPE> = this.lineJointType.asObservable();
     currentCircleJointDiameter: Observable<number> = this.circleJointDiameter.asObservable();
     currentAngle: Observable<number> = this.angle.asObservable();
     currentScaling: Observable<number> = this.scaling.asObservable();
@@ -69,11 +69,11 @@ export class AttributesManagerService {
     currenTfontAlign: Observable<FONT_ALIGN> = this.fontAlign.asObservable();
     currentIsWriting: Observable<boolean> = this.isWritingState.asObservable();
 
-    changeLineStrokeType(lineStrokeType: LineStrokeType): void {
+    changeLineStrokeType(lineStrokeType: LINE_STROKE_TYPE): void {
         this.lineStrokeType.next(lineStrokeType);
     }
 
-    changeLineJointType(lineJointType: LineJointType): void {
+    changeLineJointType(lineJointType: LINE_JOINT_TYPE): void {
         this.lineJointType.next(lineJointType);
     }
 

@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EllipsisToolService } from './ellipsis-tool.service';
 
@@ -73,8 +73,8 @@ describe('EllipsisToolService', () => {
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        onShiftKeyDown = createKeyBoardEvent(Keys.Shift);
-        onOtherKeyDown = createKeyBoardEvent(Keys.Alt);
+        onShiftKeyDown = createKeyBoardEvent(KEYS.Shift);
+        onOtherKeyDown = createKeyBoardEvent(KEYS.Alt);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
