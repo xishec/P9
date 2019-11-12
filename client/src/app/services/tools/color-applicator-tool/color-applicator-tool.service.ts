@@ -88,16 +88,24 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     changeColorOnTrace(): void {
+        const color = this.primaryColor.slice(0, 6);
+        const opacity = (parseInt(this.primaryColor.slice(6, 8), 16) / 255).toFixed(1);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTML_ATTRIBUTE.stroke,
-            this.primaryColor,
+            color,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
             HTML_ATTRIBUTE.fill,
-            this.primaryColor,
+            color,
+        );
+
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.opacity,
+            opacity,
         );
 
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
