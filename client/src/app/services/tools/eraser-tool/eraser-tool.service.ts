@@ -257,10 +257,10 @@ export class EraserToolService extends AbstractToolService {
 
     checkIfPen(idElement: number, tool: string, borderColor: string) {
         if (tool === ToolName.Pen) {
-            const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[
-                    childrenNumber - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
+                    childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
                 ],
                 HTMLAttribute.fill,
                 borderColor,
