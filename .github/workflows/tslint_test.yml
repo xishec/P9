@@ -1,11 +1,11 @@
-name: Run tslint and test on Pull Requests
+name: Run checks on Pull Requests
 
 on:
   - pull_request
 
 jobs:
   build:
-    name: Run tslint and test
+    name: Run tslint and test on client and dev
     runs-on: ubuntu-latest
     steps:
       
