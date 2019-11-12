@@ -1,17 +1,17 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { Keys, Mouse } from 'src/constants/constants';
-import { TraceType } from 'src/constants/tool-constants';
+import { KEYS, MOUSE } from 'src/constants/constants';
+import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
-const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
-const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
-const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
+const MOUSEMOVE_EVENT = createMouseEvent(20, 30, MOUSE.LeftButton);
+const MOUSEDOWN_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
+const MOUSEUP_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
+const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(KEYS.Shift);
+const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(KEYS.Shift);
 
 describe('RectangleToolService', () => {
     let injector: TestBed;
@@ -263,8 +263,8 @@ describe('RectangleToolService', () => {
             },
         );
 
-        rectangleTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
-        rectangleTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
+        rectangleTool.onMouseDown(createMouseEvent(0, 0, MOUSE.LeftButton));
+        rectangleTool.onMouseMove(createMouseEvent(-30, -40, MOUSE.LeftButton));
 
         expect(rectangleTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();
@@ -405,14 +405,14 @@ describe('RectangleToolService', () => {
     });
 
     it('should be able to update tracetype', () => {
-        rectangleTool.updateTraceType(TraceType.Both);
-        expect(rectangleTool.traceType).toEqual(TraceType.Both);
+        rectangleTool.updateTraceType(TRACE_TYPE.Both);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Both);
 
-        rectangleTool.updateTraceType(TraceType.Full);
-        expect(rectangleTool.traceType).toEqual(TraceType.Full);
+        rectangleTool.updateTraceType(TRACE_TYPE.Full);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Full);
 
-        rectangleTool.updateTraceType(TraceType.Outline);
-        expect(rectangleTool.traceType).toEqual(TraceType.Outline);
+        rectangleTool.updateTraceType(TRACE_TYPE.Outline);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Outline);
     });
 
     it('should create SVGRect and cleanUp when left mouse up in work zone with a valid rectangle', () => {

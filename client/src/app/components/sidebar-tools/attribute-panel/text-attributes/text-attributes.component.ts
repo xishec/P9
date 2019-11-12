@@ -5,7 +5,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { FONT_ALIGN, FONTS, FontSize, ToolName } from 'src/constants/tool-constants';
+import { FONT_ALIGN, FONT_SIZE, FONTS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-text-attributes',
@@ -13,14 +13,14 @@ import { FONT_ALIGN, FONTS, FontSize, ToolName } from 'src/constants/tool-consta
     styleUrls: ['./text-attributes.component.scss'],
 })
 export class TextAttributesComponent implements OnInit, AfterViewInit {
-    toolName = ToolName.Text;
+    toolName = TOOL_NAME.Text;
     isBold = false;
     isItalic = false;
     textAttributesForm: FormGroup;
     textToolService: TextToolService;
 
     readonly FONTS = FONTS;
-    readonly fontSize = FontSize;
+    readonly fontSize = FONT_SIZE;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -44,8 +44,8 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
         this.textAttributesForm = this.formBuilder.group({
             font: ['Times New Roman, serif'],
             fontSize: [
-                FontSize.Default,
-                [Validators.required, Validators.min(FontSize.Min), Validators.max(FontSize.Max)],
+                FONT_SIZE.Default,
+                [Validators.required, Validators.min(FONT_SIZE.Min), Validators.max(FONT_SIZE.Max)],
             ],
             align: [FONT_ALIGN.Start],
         });
@@ -53,36 +53,36 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
 
     onFontChange(): void {
         const align = this.textAttributesForm.controls.font.value;
-        this.attributesManagerService.changeFont(align);
+        this.attributesManagerService.font.next(align);
     }
 
     onFontSizeChange(): void {
         const fontSize = this.textAttributesForm.controls.fontSize.value;
         if (this.textAttributesForm.controls.fontSize.valid) {
-            this.attributesManagerService.changeFontSize(fontSize);
+            this.attributesManagerService.fontSize.next(fontSize);
         }
     }
 
     onAlignChange(): void {
         const align = this.textAttributesForm.controls.align.value;
-        this.attributesManagerService.changeFontAlign(align);
+        this.attributesManagerService.fontAlign.next(align);
     }
 
     onBoldChange(): void {
         this.isBold = !this.isBold;
-        this.attributesManagerService.changeBoldState(this.isBold);
+        this.attributesManagerService.boldState.next(this.isBold);
     }
 
     onItalicChange(): void {
         this.isItalic = !this.isItalic;
-        this.attributesManagerService.changeItalicState(this.isItalic);
+        this.attributesManagerService.italicState.next(this.isItalic);
     }
 
     onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
     onFocusOut(): void {
-        if (!this.attributesManagerService.isWriting) {
+        if (!this.attributesManagerService.isWritingState.value) {
             this.shortcutManagerService.changeIsOnInput(false);
         }
     }

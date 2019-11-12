@@ -1,6 +1,6 @@
 import { Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { HTMLAttribute, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-constants';
 
 export class TextCursor {
     currentCursorIndex = 0;
@@ -29,7 +29,7 @@ export class TextCursor {
             this.text += TEXT_LINEBREAK;
         }
 
-        this.renderer.setProperty(currentLineRef[0], HTMLAttribute.innerHTML, this.text);
+        this.renderer.setProperty(currentLineRef[0], HTML_ATTRIBUTE.innerHTML, this.text);
         currentLineRef[0] = tspans[nextLinePosition];
         this.text = currentLineRef[0].textContent as string;
         if (this.text === TEXT_LINEBREAK) {

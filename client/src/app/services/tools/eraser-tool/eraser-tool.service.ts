@@ -4,15 +4,15 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { Mouse, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
+    ERASER_SIZE,
     ERASER_STROKE_WIDTH,
-    EraserSize,
-    HTMLAttribute,
+    HTML_ATTRIBUTE,
     RESET_POSITION_NUMBER,
-    ToolName,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
@@ -26,7 +26,7 @@ export class EraserToolService extends AbstractToolService {
     drawRectangle: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentTarget = 0;
-    currentSize = EraserSize.Default;
+    currentSize = ERASER_SIZE.Default;
     isOnTarget = false;
     isLeftMouseDown = false;
     isSquareAppended = false;
@@ -58,20 +58,20 @@ export class EraserToolService extends AbstractToolService {
         });
 
         this.drawRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
+        this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.width, this.currentSize.toString());
+        this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.height, this.currentSize.toString());
 
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.fill, '#' + DEFAULT_WHITE);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke, '#' + DEFAULT_GRAY_0);
-        this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.stroke_width, ERASER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.fill, '#' + DEFAULT_WHITE);
+        this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.stroke, '#' + DEFAULT_GRAY_0);
+        this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.stroke_width, ERASER_STROKE_WIDTH);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentEraserSize.subscribe((newSize) => {
+        this.attributesManagerService.eraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
-            this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());
+            this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.width, this.currentSize.toString());
+            this.renderer.setAttribute(this.drawRectangle, HTML_ATTRIBUTE.height, this.currentSize.toString());
         });
     }
 
@@ -104,7 +104,7 @@ export class EraserToolService extends AbstractToolService {
 
     onMouseDown(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton) {
+        if (button === MOUSE.LeftButton) {
             this.isLeftMouseDown = true;
         }
 
@@ -136,7 +136,7 @@ export class EraserToolService extends AbstractToolService {
         return (
             this.isOnTarget &&
             this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
-            button === Mouse.LeftButton
+            button === MOUSE.LeftButton
         );
     }
 
@@ -183,8 +183,8 @@ export class EraserToolService extends AbstractToolService {
                         this.changedElements.set(
                             el.getAttribute('id_element') as string,
                             new SVGGElementInfo(
-                                el.getAttribute(HTMLAttribute.stroke) as string,
-                                el.getAttribute(HTMLAttribute.stroke_width) as string,
+                                el.getAttribute(HTML_ATTRIBUTE.stroke) as string,
+                                el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
                             ),
                         );
                     }
@@ -202,7 +202,7 @@ export class EraserToolService extends AbstractToolService {
                     this.lastElementColoredNumber = topElement;
                     this.mouseOverColorBorder(
                         this.currentTarget,
-                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTMLAttribute.stroke_width),
+                        this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.stroke_width),
                         this.lastToolName,
                     );
                 }
@@ -226,32 +226,32 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        if (tool === ToolName.Pen) {
+        if (tool === TOOL_NAME.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
-                HTMLAttribute.fill,
+                HTML_ATTRIBUTE.fill,
                 '#' + DEFAULT_RED,
             );
         }
 
-        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+        if (tool === TOOL_NAME.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
             for (let i = 1; i < childrenCount; i++) {
-                this.renderer.setAttribute(children[i], HTMLAttribute.fill, '#' + DEFAULT_RED);
+                this.renderer.setAttribute(children[i], HTML_ATTRIBUTE.fill, '#' + DEFAULT_RED);
             }
         }
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke,
+            HTML_ATTRIBUTE.stroke,
             '#' + DEFAULT_RED,
         );
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke_width,
+            HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
     }
@@ -269,28 +269,28 @@ export class EraserToolService extends AbstractToolService {
         if (borderWidth === null) {
             borderWidth = '0';
         }
-        if (tool === ToolName.Pen) {
+        if (tool === TOOL_NAME.Pen) {
             const childrenNumber = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[childrenNumber - 2],
-                HTMLAttribute.fill,
+                HTML_ATTRIBUTE.fill,
                 border,
             );
         }
 
-        if (tool === ToolName.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+        if (tool === TOOL_NAME.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
             for (let i = 1; i < childrenCount; i++) {
-                this.renderer.setAttribute(children[i], HTMLAttribute.fill, border);
+                this.renderer.setAttribute(children[i], HTML_ATTRIBUTE.fill, border);
             }
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTMLAttribute.stroke, border);
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, border);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTMLAttribute.stroke_width,
+            HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
     }
@@ -315,15 +315,15 @@ export class EraserToolService extends AbstractToolService {
     }
 
     getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTMLAttribute.stroke_width)) {
-            return parseInt(el.getAttribute(HTMLAttribute.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
         return 0;
     }
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === Mouse.LeftButton) {
+        if (button === MOUSE.LeftButton) {
             this.isLeftMouseDown = false;
         }
 
