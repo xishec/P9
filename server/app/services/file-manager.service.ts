@@ -22,7 +22,7 @@ export class FileManagerService {
         const drawing: Drawing = JSON.parse(message.body);
 
         if (!this.checkDrawingValidity(drawing)) {
-          throw new Error('Invalid Drawing');
+            throw new Error('Invalid Drawing');
         }
 
         const query = { title: message.title };
@@ -51,6 +51,6 @@ export class FileManagerService {
     }
 
     checkDrawingValidity(drawing: Drawing): boolean {
-      return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
+        return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
     }
 }
