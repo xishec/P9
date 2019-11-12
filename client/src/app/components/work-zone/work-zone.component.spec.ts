@@ -25,9 +25,6 @@ describe('WorkZoneComponent', () => {
     let fixture: ComponentFixture<WorkZoneComponent>;
 
     let drawingLoaderService: DrawingLoaderService;
-    // let colorToolService: ColorToolService;
-    // let gridToolService: GridToolService;
-    // let undoRedoerService: UndoRedoerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -94,6 +91,7 @@ describe('WorkZoneComponent', () => {
                     provide: DrawingLoaderService,
                     useValue: {
                         emptyDrawStack: new BehaviorSubject<boolean>(true),
+                        untouchedWorkZone: new BehaviorSubject<boolean>(true),
                     },
                 },
                 {
@@ -131,7 +129,7 @@ describe('WorkZoneComponent', () => {
 
     it('should call window.alert with Veuillez créer un nouveau dessin!', () => {
         spyOn(window, 'alert');
-        drawingLoaderService.emptyDrawStack.next(true);
+        drawingLoaderService.untouchedWorkZone.next(true);
 
         component.onClickRectangle();
         expect(window.alert).toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
@@ -139,7 +137,7 @@ describe('WorkZoneComponent', () => {
 
     it('should not call window.alert with Veuillez créer un nouveau dessin!', () => {
         spyOn(window, 'alert');
-        drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
 
         component.onClickRectangle();
         expect(window.alert).not.toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
@@ -147,29 +145,34 @@ describe('WorkZoneComponent', () => {
 
     it('should return cursor style not-allowed when isEmpty', () => {
         drawingLoaderService.emptyDrawStack.next(true);
+        drawingLoaderService.untouchedWorkZone.next(true);
         expect(component.getCursorStyle().cursor).toEqual('not-allowed');
     });
 
     it('should return cursor style crosshair when toolName is Brush', () => {
         drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = ToolName.Brush;
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style crosshair when toolName is Pencil', () => {
         drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = ToolName.Pencil;
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style crosshair when toolName is Rectangle', () => {
         drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = ToolName.Rectangle;
         expect(component.getCursorStyle().cursor).toEqual('crosshair');
     });
 
     it('should return cursor style default by default', () => {
         drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = ToolName.NewDrawing;
         expect(component.getCursorStyle().cursor).toEqual('default');
     });

@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { Keys } from 'src/constants/constants';
 import { ControlShortcuts, ToolName, ToolNameShortcuts } from 'src/constants/tool-constants';
 import { ClipboardService } from '../clipboard/clipboard.service';
 import { ModalManagerService } from '../modal-manager/modal-manager.service';
@@ -10,7 +11,6 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
-import { Keys } from 'src/constants/constants';
 
 @Injectable({
     providedIn: 'root',
