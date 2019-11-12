@@ -68,7 +68,7 @@ export class EraserToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentEraserSize.subscribe((newSize) => {
+        this.attributesManagerService.eraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
             this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.width, this.currentSize.toString());
             this.renderer.setAttribute(this.drawRectangle, HTMLAttribute.height, this.currentSize.toString());

@@ -53,36 +53,36 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
 
     onFontChange(): void {
         const align = this.textAttributesForm.controls.font.value;
-        this.attributesManagerService.changeFont(align);
+        this.attributesManagerService.font.next(align);
     }
 
     onFontSizeChange(): void {
         const fontSize = this.textAttributesForm.controls.fontSize.value;
         if (this.textAttributesForm.controls.fontSize.valid) {
-            this.attributesManagerService.changeFontSize(fontSize);
+            this.attributesManagerService.fontSize.next(fontSize);
         }
     }
 
     onAlignChange(): void {
         const align = this.textAttributesForm.controls.align.value;
-        this.attributesManagerService.changeFontAlign(align);
+        this.attributesManagerService.fontAlign.next(align);
     }
 
     onBoldChange(): void {
         this.isBold = !this.isBold;
-        this.attributesManagerService.changeBoldState(this.isBold);
+        this.attributesManagerService.boldState.next(this.isBold);
     }
 
     onItalicChange(): void {
         this.isItalic = !this.isItalic;
-        this.attributesManagerService.changeItalicState(this.isItalic);
+        this.attributesManagerService.italicState.next(this.isItalic);
     }
 
     onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);
     }
     onFocusOut(): void {
-        if (!this.attributesManagerService.isWriting) {
+        if (!this.attributesManagerService.isWritingState.value) {
             this.shortcutManagerService.changeIsOnInput(false);
         }
     }

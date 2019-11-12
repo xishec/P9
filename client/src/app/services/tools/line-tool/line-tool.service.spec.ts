@@ -83,7 +83,7 @@ describe('LineToolService', () => {
 
     it('initializeAttributesManagerService should set strokeWidth, strokeType, jointType and circleJointDiameter', () => {
         const attributeManagerService: AttributesManagerService = new AttributesManagerService();
-        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`thicknessValue`];
+        const strokeWidth: BehaviorSubject<number> = attributeManagerService[`thickness`];
         const strokeType: BehaviorSubject<number> = attributeManagerService[`lineStrokeType`];
         const jointType: BehaviorSubject<number> = attributeManagerService[`lineJointType`];
         const jointDiameter: BehaviorSubject<number> = attributeManagerService[`circleJointDiameter`];
@@ -93,7 +93,7 @@ describe('LineToolService', () => {
         expect(service.currentStrokeWidth).toEqual(strokeWidth.value);
         expect(service.currentStrokeType).toEqual(strokeType.value);
         expect(service.currentJointType).toEqual(jointType.value);
-        expect(service.currentCircleJointDiameter).toEqual(jointDiameter.value);
+        expect(service.circleJointDiameter).toEqual(jointDiameter.value);
     });
 
     it('getXPos should return clientX - BOUNDLEFT', () => {

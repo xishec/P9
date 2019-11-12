@@ -88,22 +88,22 @@ export class TextToolService extends AbstractToolService {
     initializeAttributesManagerService(attributeManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributeManagerService;
 
-        this.attributesManagerService.currentFont.subscribe((font) => {
+        this.attributesManagerService.font.subscribe((font) => {
             this.updateStyle(HTMLAttribute.font_family, font);
         });
-        this.attributesManagerService.currentFontSize.subscribe((size) => {
+        this.attributesManagerService.fontSize.subscribe((size) => {
             this.updateStyle(HTMLAttribute.font_size, size.toString());
         });
-        this.attributesManagerService.currenTfontAlign.subscribe((align) => {
+        this.attributesManagerService.fontAlign.subscribe((align) => {
             this.updateAlign(align);
         });
-        this.attributesManagerService.currentItalicState.subscribe((italic) => {
+        this.attributesManagerService.italicState.subscribe((italic) => {
             this.updateItalic(italic);
         });
-        this.attributesManagerService.currentBoldState.subscribe((bold) => {
+        this.attributesManagerService.boldState.subscribe((bold) => {
             this.updateBold(bold);
         });
-        this.attributesManagerService.currentIsWriting.subscribe((isWriting) => {
+        this.attributesManagerService.isWritingState.subscribe((isWriting) => {
             this.isWriting = isWriting;
         });
     }
@@ -261,7 +261,7 @@ export class TextToolService extends AbstractToolService {
 
         if (!this.isWriting && button === Mouse.LeftButton) {
             this.shortCutManagerService.changeIsOnInput(true);
-            this.attributesManagerService.changeIsWriting(true);
+            this.attributesManagerService.isWritingState.next(true);
 
             this.textBoxXPosition = xClick;
             this.textBoxYPosition = yClick;
@@ -315,7 +315,7 @@ export class TextToolService extends AbstractToolService {
 
             this.tspans = new Array<SVGTSpanElement>();
             this.text = '';
-            this.attributesManagerService.changeIsWriting(false);
+            this.attributesManagerService.isWritingState.next(false);
             this.shortCutManagerService.changeIsOnInput(false);
         }
     }

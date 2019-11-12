@@ -192,22 +192,22 @@ describe('StampToolService', () => {
 
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
-        expect(service.currentAngle).toEqual(15);
+        expect(service.angle).toEqual(15);
     });
 
     it('should decrease the current angle by 15 degrees if the direction is negative', () => {
         service.rotateStamp(-1);
-        expect(service.currentAngle).toEqual(-15);
+        expect(service.angle).toEqual(-15);
     });
 
     it('should increase the current angle by 1 degree if the direction is positive', () => {
         service.alterRotateStamp(10);
-        expect(service.currentAngle).toEqual(1);
+        expect(service.angle).toEqual(1);
     });
 
     it('should decrease the current angle by 1 degree if the direction is negative', () => {
         service.alterRotateStamp(-10);
-        expect(service.currentAngle).toEqual(-1);
+        expect(service.angle).toEqual(-1);
     });
 
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {

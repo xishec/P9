@@ -59,13 +59,13 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.ellipsisAttributesForm.value.thickness;
         if (this.ellipsisAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.ellipsisAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+        this.attributesManagerService.traceType.next(tracetype);
     }
 
     onFocus(): void {

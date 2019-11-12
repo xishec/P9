@@ -37,8 +37,8 @@ describe('RectangleAttributesComponent', () => {
                     {
                         provide: AttributesManagerService,
                         useValue: {
-                            changeThickness: () => null,
-                            changeTraceType: () => null,
+                            thickness.next: () => null,
+                            traceType.next: () => null,
                         },
                     },
                     {
@@ -97,8 +97,8 @@ describe('RectangleAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
-        const SPY = spyOn(component.attributesManagerService, 'changeThickness').and.returnValue();
+    it(`onThicknessChange should call thickness.next if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+        const SPY = spyOn(component.attributesManagerService, 'thickness.next').and.returnValue();
         component.rectangleAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
 
         component.onThicknessChange();
@@ -106,18 +106,18 @@ describe('RectangleAttributesComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
+    it(`onThicknessChange should not call thickness.next of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.rectangleAttributesForm.controls.thickness.setValue(Thickness.Max + AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'thickness.next').and.returnValue();
 
         component.onThicknessChange();
 
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
+    it(`onThicknessChange should not call thickness.next of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.rectangleAttributesForm.controls.thickness.setValue(Thickness.Min - AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'thickness.next').and.returnValue();
 
         component.onThicknessChange();
 
@@ -141,7 +141,7 @@ describe('RectangleAttributesComponent', () => {
     });
 
     it('change should call changeStyle when user select a trace type', () => {
-        const SPY = spyOn(component.attributesManagerService, 'changeTraceType').and.returnValue();
+        const SPY = spyOn(component.attributesManagerService, 'traceType.next').and.returnValue();
 
         component.onTraceTypeChange();
 

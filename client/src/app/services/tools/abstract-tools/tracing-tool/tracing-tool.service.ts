@@ -43,7 +43,7 @@ export abstract class TracingToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+        this.attributesManagerService.thickness.subscribe((thickness) => {
             this.currentWidth = thickness;
         });
     }

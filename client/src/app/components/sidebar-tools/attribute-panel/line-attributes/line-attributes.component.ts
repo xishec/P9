@@ -59,11 +59,11 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onLineStrokeTypeChange(lineStrokeType: LineStrokeType): void {
-        this.attributeManagerService.changeLineStrokeType(lineStrokeType);
+        this.attributeManagerService.lineStrokeType.next(lineStrokeType);
     }
 
     onLineJointTypeChange(lineJointType: LineJointType): void {
-        this.attributeManagerService.changeLineJointType(lineJointType);
+        this.attributeManagerService.lineJointType.next(lineJointType);
         this.circleJointSelected = lineJointType === LineJointType.Circle;
     }
 
@@ -77,7 +77,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     onCircleJointDiameterChange(): void {
         const jointThickness = this.lineAttributesForm.value.circleJointDiameter;
         if (this.lineAttributesForm.valid) {
-            this.attributeManagerService.changeCircleJointDiameter(jointThickness);
+            this.attributeManagerService.circleJointDiameter.next(jointThickness);
         }
     }
 
@@ -91,7 +91,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.lineAttributesForm.value.thickness;
         if (this.lineAttributesForm.controls.thickness.valid) {
-            this.attributeManagerService.changeThickness(thickness);
+            this.attributeManagerService.thickness.next(thickness);
         }
     }
 

@@ -37,7 +37,7 @@ describe('PencilAttributesComponent', () => {
                     {
                         provide: AttributesManagerService,
                         useValue: {
-                            changeThickness: () => null,
+                            thickness.next: () => null,
                         },
                     },
                     {
@@ -92,27 +92,27 @@ describe('PencilAttributesComponent', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should call changeThickness if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
+    it(`onThicknessChange should call thickness.next if form thickness value is [${Thickness.Min},${Thickness.Max}]`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'thickness.next').and.returnValue();
 
         component.onThicknessChange();
 
         expect(SPY).toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
+    it(`onThicknessChange should not call thickness.next of AttibuteManagerService if form thickness > ${Thickness.Max}`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(Thickness.Max + AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'thickness.next').and.returnValue();
 
         component.onThicknessChange();
 
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it(`onThicknessChange should not call changeThickness of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
+    it(`onThicknessChange should not call thickness.next of AttibuteManagerService if form thickness < ${Thickness.Min}`, () => {
         component.pencilAttributesForm.controls.thickness.setValue(Thickness.Min - AVERAGE_THICKNESS);
-        const SPY = spyOn(attributesManagerService, 'changeThickness').and.returnValue();
+        const SPY = spyOn(attributesManagerService, 'thickness.next').and.returnValue();
 
         component.onThicknessChange();
 

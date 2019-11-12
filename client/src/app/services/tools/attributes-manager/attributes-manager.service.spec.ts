@@ -18,15 +18,15 @@ describe('AttributesManagerService', () => {
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeThickness', () => {
+    it('should thickness.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeThickness(3);
+        service.thickness.next(3);
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeTraceType', () => {
+    it('should traceType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeTraceType(TraceType.Full);
+        service.traceType.next(TraceType.Full);
         expect(service[`traceType`].value).toEqual(TraceType.Full);
     });
 
@@ -36,9 +36,9 @@ describe('AttributesManagerService', () => {
         expect(service[`style`].value).toEqual(2);
     });
 
-    it('should changeNbVertices', () => {
+    it('should nbVertices.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeNbVertices(3);
+        service.nbVertices.next(3);
         expect(service[`nbVertices`].value).toEqual(3);
     });
 

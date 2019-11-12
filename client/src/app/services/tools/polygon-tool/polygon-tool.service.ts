@@ -50,14 +50,14 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
+        this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
             this.updateTraceType(this.traceType);
         });
-        this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
+        this.attributesManagerService.traceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
         });
-        this.attributesManagerService.currentNbVertices.subscribe((nbVertices: number) => {
+        this.attributesManagerService.nbVertices.subscribe((nbVertices: number) => {
             this.nbVertices = nbVertices;
         });
     }

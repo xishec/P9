@@ -43,11 +43,11 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness: number) => {
+        this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
             this.updateTraceType(this.traceType);
         });
-        this.attributesManagerService.currentTraceType.subscribe((traceType: string) => {
+        this.attributesManagerService.traceType.subscribe((traceType: string) => {
             this.updateTraceType(traceType);
         });
     }

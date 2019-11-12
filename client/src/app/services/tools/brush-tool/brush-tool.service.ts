@@ -11,7 +11,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class BrushToolService extends TracingToolService {
-    private currentStyle: BRUSH_STYLE = BRUSH_STYLE.type1;
+    private style: BRUSH_STYLE = BRUSH_STYLE.type1;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -26,21 +26,21 @@ export class BrushToolService extends TracingToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         super.initializeAttributesManagerService(attributesManagerService);
-        this.attributesManagerService.currentStyle.subscribe((style: BRUSH_STYLE) => {
-            this.currentStyle = style;
+        this.attributesManagerService.style.subscribe((style: BRUSH_STYLE) => {
+            this.style = style;
         });
     }
 
     createSVGWrapper(): void {
         super.createSVGWrapper();
-        const filter: SVGFilterElement = this.createFilter(this.currentStyle);
+        const filter: SVGFilterElement = this.createFilter(this.style);
         this.renderer.appendChild(this.svgWrap, filter);
     }
 
     createFilter(patternId: BRUSH_STYLE): SVGFilterElement {
         const filter = this.renderer.createElement('filter', SVG_NS);
 
-        this.renderer.setAttribute(filter, 'id', this.currentStyle.toString());
+        this.renderer.setAttribute(filter, 'id', this.style.toString());
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
         this.renderer.setAttribute(filter, HTMLAttribute.height, '100px');
         this.renderer.setAttribute(filter, HTMLAttribute.width, '100px');
@@ -100,13 +100,13 @@ export class BrushToolService extends TracingToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
-        this.renderer.setAttribute(circle, HTMLAttribute.filter, `url(#${this.currentStyle.toString()})`);
+        this.renderer.setAttribute(circle, HTMLAttribute.filter, `url(#${this.style.toString()})`);
         return circle;
     }
 
     createSVGPath(): void {
         super.createSVGPath();
-        this.renderer.setAttribute(this.svgPath, HTMLAttribute.filter, `url(#${this.currentStyle})`);
+        this.renderer.setAttribute(this.svgPath, HTMLAttribute.filter, `url(#${this.style})`);
     }
 
     // tslint:disable-next-line: no-empty

@@ -59,13 +59,13 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
     onThicknessChange(): void {
         const thickness: number = this.rectangleAttributesForm.value.thickness;
         if (this.rectangleAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.rectangleAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+        this.attributesManagerService.traceType.next(tracetype);
     }
 
     onFocus(): void {
