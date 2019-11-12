@@ -18,16 +18,9 @@ export class FileManagerController {
     private configureRouter(): void {
         this.router = Router();
 
-        this.router.get('/get-all-drawing', async (req: Request, res: Response, next: NextFunction) => {
-            const query = { title: /Add Drawing/i };
-
-            Post.find(query)
-                .then((drawings: any) => {
-                    res.json(drawings);
-                })
-                .catch((error: Error) => {
-                    res.json(error);
-                });
+        this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+            const drawings = await this.fileManagerService.getAllDrawings();
+            res.json(drawings);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
@@ -52,10 +45,8 @@ export class FileManagerController {
                 });
         });
 
-        this.router.post('/delete', async (req: Request, res: Response, next: NextFunction) => {
-            const message: Message = req.body;
-
-            const query = { title: { $regex: message.body, $options: 'i' } };
+        this.router.post('/:id', async (req: Request, res: Response, next: NextFunction) => {
+            this.fileManagerService
 
             Post.findOneAndDelete(query)
                 .then((drawing: any) => {
@@ -65,5 +56,13 @@ export class FileManagerController {
                     res.json(error);
                 });
         });
+
+        this.router.delete("/:username", async (req: Request, res: Response, nex: NextFunction) => {
+            this.databaseService.deleteEntry("username", req.params.username, "users");
+            res.json({title: "Delete",
+                      body: "Success",
+            });
+        },
+    );
     }
 }

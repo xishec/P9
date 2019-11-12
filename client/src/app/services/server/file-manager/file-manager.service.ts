@@ -14,10 +14,10 @@ import { Message } from '../../../../../../common/communication/Message';
 export class FileManagerService {
     constructor(private http: HttpClient) {}
 
-    getAllDrawings(): Observable<Message[] | Message> {
+    getAllDrawings(): Observable<Drawing[]> {
         return this.http
-            .get<Message[]>(environment.BASE_URL + '/api/file-manager/get-all-drawing')
-            .pipe(catchError(this.handleError<Message>('getAllDrawings')));
+            .get<Drawing[]>(environment.BASE_URL + '/')
+            .pipe(catchError(this.handleError<Drawing[]>('getAllDrawings')));
     }
 
     postDrawing(

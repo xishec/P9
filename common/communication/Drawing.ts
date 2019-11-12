@@ -1,6 +1,14 @@
 import { DrawingInfo } from './DrawingInfo';
 
-export class Drawing {
+export interface IDrawing {
+    name: string;
+    labels: string[];
+    svg: string;
+    idStack: string[];
+    drawingInfo: DrawingInfo;
+}
+
+export class Drawing implements IDrawing {
     name: string;
     labels: string[];
     svg: string;
