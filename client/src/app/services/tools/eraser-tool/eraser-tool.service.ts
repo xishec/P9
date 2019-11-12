@@ -330,7 +330,8 @@ export class EraserToolService extends AbstractToolService {
 
         this.isOnTarget = false;
 
-        if (this.erasedSomething && this.changedElements.get(this.currentTarget.toString()) !== undefined) {
+        const currentTargetIsValid = (this.changedElements.get(this.currentTarget.toString()) !== undefined);
+        if (this.erasedSomething && currentTargetIsValid) {
             this.renderer.removeChild(this.elementRef, this.eraser);
             this.restoreBorder(
                 this.currentTarget,
