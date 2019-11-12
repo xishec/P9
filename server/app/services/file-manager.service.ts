@@ -21,8 +21,12 @@ export class FileManagerService {
     async addDrawing(message: Message): Promise<any> {
         const drawing: Drawing = JSON.parse(message.body);
 
-        if (!this.checkDrawingValidity(drawing)) {
-          throw new Error('Invalid Drawing');
+        try {
+            if (!this.isDrawingValid(drawing)) {
+              throw new Error('Invalid Drawing');
+            }
+        } catch(error) {
+            return error;
         }
 
         const query = { title: message.title };
@@ -50,7 +54,7 @@ export class FileManagerService {
             });
     }
 
-    checkDrawingValidity(drawing: Drawing): boolean {
+    isDrawingValid(drawing: Drawing): boolean {
       return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
     }
 }
