@@ -6,12 +6,12 @@ import { FontInfo } from 'src/classes/FontInfos';
 import { TextCursor } from 'src/classes/textStyle/textCursor';
 import { Keys, Mouse, SVG_NS } from 'src/constants/constants';
 import {
+    FONT_ALIGN,
     HTMLAttribute,
     SNACKBAR_DURATION,
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
-    FONT_ALIGN,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -112,7 +112,7 @@ export class TextToolService extends AbstractToolService {
                 this.fontInfo.fontColor = value;
                 break;
             case HTMLAttribute.font_family:
-                this.fontInfo.fontType = value;
+                this.fontInfo.fontFamily = value;
                 break;
             case HTMLAttribute.font_size:
                 this.fontInfo.fontSize = value;
@@ -124,8 +124,9 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    updateAlign(align: string): void {
+    updateAlign(align: FONT_ALIGN): void {
         this.fontInfo.fontAlign = align;
+        console.log(align);
         if (this.isWriting) {
             switch (align) {
                 case FONT_ALIGN.Middle: {
@@ -159,7 +160,7 @@ export class TextToolService extends AbstractToolService {
     updateBold(isBold: boolean): void {
         this.fontInfo.fontWeight = isBold ? 'bold' : 'normal';
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, 'font-weight', this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontInfo.fontWeight);
             this.updatePreviewBox();
         }
     }
@@ -197,7 +198,7 @@ export class TextToolService extends AbstractToolService {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_family, this.fontInfo.fontType);
+        this.renderer.setAttribute(this.textBox, HTMLAttribute.font_family, this.fontInfo.fontFamily);
         this.renderer.setAttribute(this.textBox, HTMLAttribute.font_size, this.fontInfo.fontSize);
         this.renderer.setAttribute(this.textBox, HTMLAttribute.font_style, this.fontInfo.fontStyle);
         this.renderer.setAttribute(this.textBox, HTMLAttribute.font_weight, this.fontInfo.fontWeight);
@@ -306,7 +307,9 @@ export class TextToolService extends AbstractToolService {
                 this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
                 this.text = this.textCursor.erase();
                 this.renderer.setProperty(this.currentLine, HTMLAttribute.innerHTML, this.text);
-                this.drawStack.push(this.gWrap);
+                setTimeout(() => {
+                    this.drawStack.push(this.gWrap);
+                }, 0);
             }
 
             this.tspans = new Array<SVGTSpanElement>();

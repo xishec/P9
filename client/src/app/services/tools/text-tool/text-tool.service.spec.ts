@@ -10,7 +10,7 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { Keys } from 'src/constants/constants';
-import { HTMLAttribute, TEXT_CURSOR } from 'src/constants/tool-constants';
+import { FONT_ALIGN, HTMLAttribute, TEXT_CURSOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { TextToolService } from './text-tool.service';
@@ -147,7 +147,7 @@ describe('TextToolService', () => {
     it('updateStyle with font_family should change the fontType', () => {
         service.updateStyle(HTMLAttribute.font_family, 'Times');
 
-        expect(service.fontInfo.fontType).toEqual('Times');
+        expect(service.fontInfo.fontFamily).toEqual('Times');
     });
 
     it('updateStyle with font_size should change the fontSize', () => {
@@ -170,7 +170,7 @@ describe('TextToolService', () => {
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
 
-        service.updateAlign('middle');
+        service.updateAlign(FONT_ALIGN.Middle);
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
         expect(spyOnsetAttribute).toHaveBeenCalled();
@@ -180,7 +180,7 @@ describe('TextToolService', () => {
         service.isWriting = true;
         service.bBoxAnchorLeft = 2;
 
-        service.updateAlign('start');
+        service.updateAlign(FONT_ALIGN.Start);
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
         expect(spyOnsetAttribute).toHaveBeenCalled();
@@ -191,7 +191,7 @@ describe('TextToolService', () => {
         service.bBoxAnchorLeft = 2;
         service.bBoxWidth = 2;
 
-        service.updateAlign('end');
+        service.updateAlign(FONT_ALIGN.End);
 
         expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth);
         expect(spyOnsetAttribute).toHaveBeenCalled();

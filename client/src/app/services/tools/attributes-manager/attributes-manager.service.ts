@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
     BRUSH_STYLE,
     EraserSize,
+    FONT_ALIGN,
     FontSize,
     LineJointType,
     LineStrokeType,
@@ -42,7 +43,7 @@ export class AttributesManagerService {
     private italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
     private fontSize: BehaviorSubject<number> = new BehaviorSubject(FontSize.Default);
-    private fontAlign: BehaviorSubject<string> = new BehaviorSubject('left');
+    private fontAlign: BehaviorSubject<FONT_ALIGN> = new BehaviorSubject(FONT_ALIGN.Start);
     private isWritingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     get isWriting(): boolean {
         return this.isWritingState.value;
@@ -65,7 +66,7 @@ export class AttributesManagerService {
     currentItalicState: Observable<boolean> = this.italicState.asObservable();
     currentFont: Observable<string> = this.font.asObservable();
     currentFontSize: Observable<number> = this.fontSize.asObservable();
-    currenTfontAlign: Observable<string> = this.fontAlign.asObservable();
+    currenTfontAlign: Observable<FONT_ALIGN> = this.fontAlign.asObservable();
     currentIsWriting: Observable<boolean> = this.isWritingState.asObservable();
 
     changeLineStrokeType(lineStrokeType: LineStrokeType): void {
@@ -124,7 +125,7 @@ export class AttributesManagerService {
     changeFontSize(fontSize: number) {
         this.fontSize.next(fontSize);
     }
-    changeFontAlign(fontAlign: string) {
+    changeFontAlign(fontAlign: FONT_ALIGN) {
         this.fontAlign.next(fontAlign);
     }
 

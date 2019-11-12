@@ -5,7 +5,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { TextToolService } from 'src/app/services/tools/text-tool/text-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { FONTS, FontSize, ToolName } from 'src/constants/tool-constants';
+import { FONT_ALIGN, FONTS, FontSize, ToolName } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-text-attributes',
@@ -47,7 +47,7 @@ export class TextAttributesComponent implements OnInit, AfterViewInit {
                 FontSize.Default,
                 [Validators.required, Validators.min(FontSize.Min), Validators.max(FontSize.Max)],
             ],
-            align: ['start'],
+            align: [FONT_ALIGN.Start],
         });
     }
 
