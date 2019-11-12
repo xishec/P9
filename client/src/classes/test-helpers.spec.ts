@@ -1,5 +1,5 @@
 import { ElementRef } from '@angular/core';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 
 export class MockRect {
     x = 0;
@@ -32,7 +32,7 @@ export const createMouseEvent = (
     return (mouseEvent as unknown) as MouseEvent;
 };
 
-export const createKeyBoardEvent = (keyPressed: Keys): KeyboardEvent => {
+export const createKeyBoardEvent = (keyPressed: KEYS): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
         preventDefault: () => null,
@@ -115,3 +115,19 @@ export class MockElementRef extends ElementRef {
         super(null);
     }
 }
+
+export const createMockSVGTextElement = (): SVGTextElement => {
+    const mockSVGTextElement = {
+        childNodes: [createMockSVGElement(), createMockSVGElement()] as SVGTSpanElement[],
+        getBBox: () => {
+            const mockDOMRect = { x: 500, y: 500, width: 50, height: 50 };
+            return (mockDOMRect as unknown) as DOMRect;
+        },
+    };
+    return (mockSVGTextElement as unknown) as SVGTextElement;
+};
+
+export const createMockSVGTSpanElement = (): SVGTSpanElement => {
+    const mockTSpanElement = { textcontent: '' };
+    return (mockTSpanElement as unknown) as SVGTSpanElement;
+};

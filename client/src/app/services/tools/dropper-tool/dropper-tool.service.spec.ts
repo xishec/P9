@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
@@ -93,7 +93,7 @@ describe('DropperToolService', () => {
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
-        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
+        onAltKeyDown = createKeyBoardEvent(KEYS.Alt);
     });
 
     it('should be created', () => {

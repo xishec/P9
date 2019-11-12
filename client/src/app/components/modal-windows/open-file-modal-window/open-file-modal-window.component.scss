@@ -16,7 +16,7 @@
 
 .tab-content {
     min-height: 250px;
-    max-height: 600px;
+    max-height: 700px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -209,4 +209,9 @@ mat-list-option[aria-selected='true'] {
         cursor: pointer;
         text-decoration: underline;
     }
+}
+
+#clickable {
+    cursor: pointer;
+    text-decoration: underline;
 }

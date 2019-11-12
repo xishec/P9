@@ -77,7 +77,7 @@ describe('Selection', () => {
             getBoundingClientRect: () => mockDOMRect,
         };
 
-        const res = proxy.getDOMRect(mockSVGGElement as unknown as SVGGElement);
+        const res = proxy.getDOMRect((mockSVGGElement as unknown) as SVGGElement);
 
         expect(res).toEqual(mockDOMRect as DOMRect);
     });
@@ -135,7 +135,7 @@ describe('Selection', () => {
                 },
             },
         };
-        const res = proxy.getControlPointR(mockCircle as unknown as SVGCircleElement);
+        const res = proxy.getControlPointR((mockCircle as unknown) as SVGCircleElement);
         expect(res).toEqual(RADIUS);
     });
 
@@ -148,7 +148,7 @@ describe('Selection', () => {
                 },
             },
         };
-        const res = proxy.getControlPointCx(mockCircle as unknown as SVGCircleElement);
+        const res = proxy.getControlPointCx((mockCircle as unknown) as SVGCircleElement);
         expect(res).toEqual(CX);
     });
 
@@ -161,7 +161,7 @@ describe('Selection', () => {
                 },
             },
         };
-        const res = proxy.getControlPointCy(mockCircle as unknown as SVGCircleElement);
+        const res = proxy.getControlPointCy((mockCircle as unknown) as SVGCircleElement);
         expect(res).toEqual(CY);
     });
 
@@ -281,7 +281,7 @@ describe('Selection', () => {
             },
         };
 
-        proxy.selectionBox = mockRect as unknown as SVGRectElement;
+        proxy.selectionBox = (mockRect as unknown) as SVGRectElement;
         proxy.updateControlPoints();
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(16);
@@ -299,11 +299,11 @@ describe('Selection', () => {
         const smallestX = 1000;
         const mockSVG1 = ({
             clientLeft: smallestX,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockSVG2 = ({
             clientLeft: 1360,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         proxy.selectedElements = new Set();
         proxy.selectedElements.add(mockSVG1);
@@ -330,11 +330,11 @@ describe('Selection', () => {
         const largestX = 1360;
         const mockSVG1 = ({
             clientLeft: 1000,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockSVG2 = ({
             clientLeft: largestX,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         proxy.selectedElements = new Set();
         proxy.selectedElements.add(mockSVG1);
@@ -361,11 +361,11 @@ describe('Selection', () => {
         const largestY = 1000;
         const mockSVG1 = ({
             clientTop: 1000,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockSVG2 = ({
             clientTop: largestY,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         proxy.selectedElements = new Set();
         proxy.selectedElements.add(mockSVG1);
@@ -392,11 +392,11 @@ describe('Selection', () => {
         const largestY = 1000;
         const mockSVG1 = ({
             clientTop: 1000,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         const mockSVG2 = ({
             clientTop: largestY,
-        } as (unknown)) as SVGGElement;
+        } as unknown) as SVGGElement;
 
         proxy.selectedElements = new Set();
         proxy.selectedElements.add(mockSVG1);

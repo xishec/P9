@@ -56,7 +56,7 @@ describe('ClipboardService', () => {
                         currentPasteOffset: {
                             subscribe: () => null,
                         },
-                        currentClipping : {
+                        currentClipping: {
                             subscribe: () => null,
                         },
                     },
