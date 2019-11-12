@@ -16,4 +16,5 @@ export class DrawingLoaderService {
     });
 
     emptyDrawStack: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    untouchedWorkZone: BehaviorSubject<boolean> = new BehaviorSubject(true);
 }
