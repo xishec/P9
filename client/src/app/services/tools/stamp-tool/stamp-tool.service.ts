@@ -10,8 +10,8 @@ import {
     STAMP_BASE_HEIGHT,
     STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,
-    StampScaling,
     StampAngleOrientation,
+    StampScaling,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
