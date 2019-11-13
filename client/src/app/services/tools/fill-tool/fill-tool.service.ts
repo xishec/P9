@@ -1,10 +1,12 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { MOUSE } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
+import { BFSHelper } from '../../../../classes/BFSHelper';
+import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
+import { SVG_NS } from 'src/constants/constants';
+import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -20,8 +22,10 @@ export class FillToolService extends AbstractToolService {
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
+    bfsHelper: BFSHelper;
+    svgWrap: SVGGElement;
 
-    constructor(private colorToolService: ColorToolService) {
+    constructor(private modalManagerService: ModalManagerService) {
         super();
     }
 
@@ -35,6 +39,26 @@ export class FillToolService extends AbstractToolService {
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
+    onMouseDown(event: MouseEvent): void {
+        this.updateSVGCopy();
+    }
+    onMouseUp(event: MouseEvent): void {
+        if (this.modalManagerService.modalIsDisplayed.value) {
+            return;
+        }
+        this.updateSVGCopy();
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+
+        this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
+        this.bfsHelper.computeBFS(this.currentMouseCoords);
+        this.createSVGWrapper();
+        this.bfsHelper.toFill.forEach((pixel: Coords2D) => {
+            this.renderer.appendChild(this.svgWrap, this.createSVGDot(pixel.x, pixel.y));
+        });
+        this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
+    }
+
     updateSVGCopy(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);
@@ -45,28 +69,26 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    pickColor(): Uint8ClampedArray {
-        this.updateSVGCopy();
-        return this.context2D.getImageData(this.currentMouseCoords.x, this.currentMouseCoords.y, 1, 1).data;
+    createSVGWrapper(): void {
+        const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + '32a852');
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, '1');
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.fill, '#' + '32a852');
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Pen);
+        this.svgWrap = wrap;
     }
 
-    onMouseMove(event: MouseEvent): void {
-        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    createSVGDot(x: number, y: number): SVGCircleElement {
+        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
+        this.renderer.setAttribute(circle, 'r', '1');
+        return circle;
     }
-    onMouseDown(event: MouseEvent): void {
-        this.getColor(event);
-    }
-    onMouseUp(event: MouseEvent): void {
-        const colorHex = this.getColor(event);
 
-        const button = event.button;
-        if (button === MOUSE.LeftButton && this.isMouseInRef(event, this.elementRef)) {
-            this.colorToolService.changePrimaryColor(colorHex);
-        } else if (button === MOUSE.RightButton && this.isMouseInRef(event, this.elementRef)) {
-            this.colorToolService.changeSecondaryColor(colorHex);
-        }
-    }
+    // tslint:disable-next-line: no-empty
+    onMouseMove(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
@@ -77,11 +99,4 @@ export class FillToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     cleanUp(): void {}
-
-    getColor(event: MouseEvent): string {
-        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
-        const colorRGB = this.pickColor();
-        return this.colorToolService.translateRGBToHex(colorRGB[0], colorRGB[1], colorRGB[2]);
-    }
 }
