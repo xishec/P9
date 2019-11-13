@@ -1,4 +1,5 @@
 import { Coords2D } from './Coords2D';
+import { PREDICATE } from 'src/constants/constants';
 
 export class BFSHelper {
     maxX: number;
@@ -7,6 +8,7 @@ export class BFSHelper {
     visited: Set<string>;
     queue: Array<Coords2D>;
     toFill: Array<Coords2D>;
+    stokes: Array<Coords2D>;
 
     constructor(maxX: number, maxY: number, context2D: CanvasRenderingContext2D) {
         this.maxX = maxX;
@@ -15,6 +17,7 @@ export class BFSHelper {
         this.visited = new Set([]);
         this.queue = [];
         this.toFill = [];
+        this.stokes = [];
     }
 
     computeBFS(clickPosition: Coords2D): void {
@@ -28,6 +31,8 @@ export class BFSHelper {
 
             if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
                 this.toFill.push(pixel);
+            } else {
+                continue;
             }
 
             let neighborPixels = [
@@ -42,19 +47,34 @@ export class BFSHelper {
                     continue;
                 }
                 let neighborPixelColor = this.getPixelColor(neighborPixel);
-                // console.log(this.isValidPosition(neighborPixel), this.isSameColor(neighborPixelColor, targetColor));
                 if (this.isValidPosition(neighborPixel) && this.isSameColor(neighborPixelColor, targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(JSON.stringify(neighborPixel));
+                } else {
+                    this.stokes.push(pixel);
                 }
             }
         }
-
-        // console.log(this.toFill);
     }
 
     isSameColor(color1: Uint8ClampedArray, color2: Uint8ClampedArray): boolean {
         return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
+    }
+
+    isStroke(pixel: Coords2D, targetColor: Uint8ClampedArray): boolean {
+        let neighborPixels = [
+            new Coords2D(pixel.x - 1, pixel.y),
+            new Coords2D(pixel.x + 1, pixel.y),
+            new Coords2D(pixel.x, pixel.y - 1),
+            new Coords2D(pixel.x, pixel.y + 1),
+        ];
+        neighborPixels.forEach((neighborPixel: Coords2D) => {
+            if (!this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
+                return true;
+            }
+        });
+
+        return false;
     }
 
     isValidPosition(pixel: Coords2D): boolean {

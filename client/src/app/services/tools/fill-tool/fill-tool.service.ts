@@ -52,10 +52,15 @@ export class FillToolService extends AbstractToolService {
 
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
+        console.log(this.bfsHelper.toFill);
+        console.log(this.bfsHelper.stokes);
         this.createSVGWrapper();
-        this.bfsHelper.toFill.forEach((pixel: Coords2D) => {
+        let hi = '';
+        this.bfsHelper.stokes.forEach((pixel: Coords2D) => {
             this.renderer.appendChild(this.svgWrap, this.createSVGDot(pixel.x, pixel.y));
+            hi += `${pixel.x},${pixel.y} `;
         });
+        console.log(hi);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
