@@ -7,6 +7,7 @@ import { BFSHelper } from '../../../../classes/BFSHelper';
 import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
+import { FillStructure } from 'src/classes/FillStructure';
 
 @Injectable({
     providedIn: 'root',
@@ -52,16 +53,89 @@ export class FillToolService extends AbstractToolService {
 
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
-        console.log(this.bfsHelper.toFill);
-        console.log(this.bfsHelper.stokes);
-        this.createSVGWrapper();
-        let hi = '';
-        this.bfsHelper.stokes.forEach((pixel: Coords2D) => {
-            this.renderer.appendChild(this.svgWrap, this.createSVGDot(pixel.x, pixel.y));
-            hi += `${pixel.x},${pixel.y} `;
+        this.coloration();
+    }
+
+    coloration() {
+        let columns: Array<FillStructure> = [];
+
+        // seperation
+        this.bfsHelper.toFill.forEach((column, x) => {
+            let fillStructure = new FillStructure();
+            fillStructure.leftBottum = new Coords2D(x, column[0]);
+            fillStructure.rightBottum = new Coords2D(x, column[0]);
+            for (let y = 1; y < column.length; y++) {
+                if (column[y] !== column[y - 1] + 1) {
+                    fillStructure.leftTop = new Coords2D(x, column[y - 1]);
+                    fillStructure.rightTop = new Coords2D(x, column[y - 1]);
+                    console.log(fillStructure);
+                    columns.push(fillStructure);
+                    fillStructure = new FillStructure();
+                    fillStructure.leftBottum = new Coords2D(x, column[y]);
+                    fillStructure.rightBottum = new Coords2D(x, column[y]);
+                }
+            }
+            fillStructure.leftTop = new Coords2D(x, column[column.length - 1]);
+            fillStructure.rightTop = new Coords2D(x, column[column.length - 1]);
+            columns.push(fillStructure);
         });
-        console.log(hi);
+
+        console.log(columns[0], columns[columns.length - 1]);
+
+        // optimisation
+        columns.sort((a, b) => {
+            return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
+        });
+        for (let i = 1; i < columns.length; i++) {
+            const thisfillStructure = columns[i];
+            const lastfillStructure = columns[i - 1];
+            if (
+                thisfillStructure.leftBottum.y === lastfillStructure.leftBottum.y &&
+                thisfillStructure.leftTop.y === lastfillStructure.leftTop.y
+            ) {
+                if (lastfillStructure.leftTop.x < thisfillStructure.leftBottum.x) {
+                    lastfillStructure.rightBottum = thisfillStructure.leftBottum;
+                    lastfillStructure.rightTop = thisfillStructure.leftTop;
+                } else {
+                    lastfillStructure.leftBottum = thisfillStructure.rightBottum;
+                    lastfillStructure.leftTop = thisfillStructure.rightTop;
+                }
+
+                columns.splice(i, 1);
+                i--;
+            }
+        }
+
+        console.log(columns);
+
+        // coloration
+        this.createSVGWrapper();
+
+        columns.forEach((fillStructure: FillStructure) => {
+            const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+            const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, this.getPoints(fillStructure));
+            this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_width, '1');
+            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke, '#' + '32a852');
+            // this.userFillColor === 'none'
+            //     ? this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, this.userFillColor)
+            //     : this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
+
+            this.renderer.appendChild(el, drawPolygon);
+            this.renderer.appendChild(this.svgWrap, el);
+        });
+
+        this.bfsHelper.stokes.forEach((element) => {
+            this.renderer.appendChild(this.svgWrap, this.createSVGDot(element.x, element.y));
+        });
+
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
+    }
+
+    getPoints(fillStructure: FillStructure): string {
+        return `${fillStructure.leftBottum.x},${fillStructure.leftBottum.y} ${fillStructure.leftTop.x},${fillStructure.leftTop.y} ${fillStructure.rightTop.x},${fillStructure.rightTop.y} ${fillStructure.rightBottum.x},${fillStructure.rightBottum.y}`;
     }
 
     updateSVGCopy(): void {
@@ -88,7 +162,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
-        this.renderer.setAttribute(circle, 'r', '1');
+        this.renderer.setAttribute(circle, 'r', '2');
         return circle;
     }
 
