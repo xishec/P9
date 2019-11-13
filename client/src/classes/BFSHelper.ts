@@ -1,5 +1,4 @@
 import { Coords2D } from './Coords2D';
-import { PREDICATE } from 'src/constants/constants';
 
 export class BFSHelper {
     maxX: number;
@@ -7,7 +6,7 @@ export class BFSHelper {
     context2D: CanvasRenderingContext2D;
     visited: Set<string>;
     queue: Array<Coords2D>;
-    toFill: Array<Coords2D>;
+    toFill: Map<number, Array<number>>;
     stokes: Array<Coords2D>;
 
     constructor(maxX: number, maxY: number, context2D: CanvasRenderingContext2D) {
@@ -16,7 +15,7 @@ export class BFSHelper {
         this.context2D = context2D;
         this.visited = new Set([]);
         this.queue = [];
-        this.toFill = [];
+        this.toFill = new Map([]);
         this.stokes = [];
     }
 
@@ -27,10 +26,15 @@ export class BFSHelper {
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
-            let pixel: Coords2D = this.queue.shift()!;
+            let pixel: Coords2D = this.queue.pop()!;
 
             if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
-                this.toFill.push(pixel);
+                if (this.toFill.has(pixel.x)) {
+                    this.toFill.get(pixel.x)!.push(pixel.y);
+                    this.toFill.get(pixel.x)!.sort();
+                } else {
+                    this.toFill.set(pixel.x, [pixel.y]);
+                }
             } else {
                 continue;
             }
@@ -68,13 +72,14 @@ export class BFSHelper {
             new Coords2D(pixel.x, pixel.y - 1),
             new Coords2D(pixel.x, pixel.y + 1),
         ];
+        let isStroke = false;
         neighborPixels.forEach((neighborPixel: Coords2D) => {
             if (!this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
-                return true;
+                isStroke = true;
             }
         });
 
-        return false;
+        return isStroke;
     }
 
     isValidPosition(pixel: Coords2D): boolean {
