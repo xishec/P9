@@ -29,12 +29,7 @@ export class BFSHelper {
             let pixel: Coords2D = this.queue.shift()!;
 
             if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
-                if (this.toFill.has(pixel.x)) {
-                    this.toFill.get(pixel.x)!.push(pixel.y);
-                    this.toFill.get(pixel.x)!.sort();
-                } else {
-                    this.toFill.set(pixel.x, [pixel.y]);
-                }
+                this.addPixelToMap(pixel);
             } else {
                 continue;
             }
@@ -45,19 +40,29 @@ export class BFSHelper {
                 new Coords2D(pixel.x, pixel.y - 1),
                 new Coords2D(pixel.x, pixel.y + 1),
             ];
+
             for (let i = 0; i < neighborPixels.length; ++i) {
                 let neighborPixel: Coords2D = neighborPixels[i];
-                if (this.visited.has(JSON.stringify(neighborPixel))) {
+                if (this.visited.has(JSON.stringify(neighborPixel)) && !this.isValidPosition(neighborPixel)) {
                     continue;
                 }
                 let neighborPixelColor = this.getPixelColor(neighborPixel);
-                if (this.isValidPosition(neighborPixel) && this.isSameColor(neighborPixelColor, targetColor)) {
+                if (this.isSameColor(neighborPixelColor, targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(JSON.stringify(neighborPixel));
                 } else {
                     this.stokes.push(pixel);
                 }
             }
+        }
+    }
+
+    addPixelToMap(pixel: Coords2D): void {
+        if (this.toFill.has(pixel.x)) {
+            this.toFill.get(pixel.x)!.push(pixel.y);
+            this.toFill.get(pixel.x)!.sort();
+        } else {
+            this.toFill.set(pixel.x, [pixel.y]);
         }
     }
 
