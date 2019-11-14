@@ -4,10 +4,12 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BFSHelper } from '../../../../classes/BFSHelper';
-import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { FillStructure } from 'src/classes/FillStructure';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,15 +21,30 @@ export class FillToolService extends AbstractToolService {
     canvas: HTMLCanvasElement;
     context2D: CanvasRenderingContext2D;
     SVGImg: HTMLImageElement;
-
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
     bfsHelper: BFSHelper;
     svgWrap: SVGGElement;
+    traceType = TRACE_TYPE.Full;
+    attributesManagerService: AttributesManagerService;
+    userFillColor: string;
+    userStrokeColor: any;
+    userStrokeWidth: any;
+    strokeWidth: any;
+    strokeColor: any;
+    fillColor: string;
 
-    constructor(private modalManagerService: ModalManagerService) {
+    constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((fillColor: string) => {
+            this.fillColor = fillColor;
+            this.updateTraceType(this.traceType);
+        });
+        this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
+            this.strokeColor = strokeColor;
+            this.updateTraceType(this.traceType);
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
@@ -38,6 +55,17 @@ export class FillToolService extends AbstractToolService {
         this.canvas = this.renderer.createElement('canvas');
         this.SVGImg = this.renderer.createElement('img');
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
+        this.attributesManagerService = attributesManagerService;
+        // this.attributesManagerService.thickness.subscribe((thickness: number) => {
+        //     this.strokeWidth = thickness;
+        //     this.updateTraceType(this.traceType);
+        // });
+        this.attributesManagerService.traceType.subscribe((traceType: TRACE_TYPE) => {
+            this.updateTraceType(traceType);
+        });
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -176,8 +204,32 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
-        this.renderer.setAttribute(circle, 'r', '2');
+        this.renderer.setAttribute(circle, 'r', this.userStrokeWidth);
         return circle;
+    }
+
+    updateTraceType(traceType: TRACE_TYPE) {
+        this.traceType = traceType;
+        switch (traceType) {
+            case TRACE_TYPE.Outline: {
+                this.userFillColor = 'none';
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+            case TRACE_TYPE.Full: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = 'none';
+                this.userStrokeWidth = 0;
+                break;
+            }
+            case TRACE_TYPE.Both: {
+                this.userFillColor = this.fillColor;
+                this.userStrokeColor = this.strokeColor;
+                this.userStrokeWidth = this.strokeWidth;
+                break;
+            }
+        }
     }
 
     // tslint:disable-next-line: no-empty
