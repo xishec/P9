@@ -81,9 +81,24 @@ export class FillToolService extends AbstractToolService {
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
 
+        this.expandPixels();
         let segmentsToDraw: Array<FillStructure> = this.divideLinesToSegments();
         // this.groupSegmentsToRectangle(segmentsToDraw);
         this.fill(segmentsToDraw);
+    }
+
+    expandPixels(): void {
+        this.bfsHelper.bodyGrid.forEach((column: number[], key: number) => {
+            let top: number = column[column.length - 1] + 1;
+            let buttom: number = column[0] - 1;
+
+            if (top <= this.canvas.height) {
+                column.push(top);
+            }
+            if (buttom >= 0) {
+                column.unshift(buttom);
+            }
+        });
     }
 
     updateMousePosition(event: MouseEvent): void {
@@ -180,8 +195,8 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_width, '1');
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke, '#' + '32a852');
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.fill, '#' + '32a852');
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke, '#' + this.userFillColor);
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
 
         return bodyWrap.cloneNode(true) as SVGGElement;
@@ -198,7 +213,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(mask, bodyWrap);
 
         this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.bfsHelper.stokes.forEach((element) => {
+        this.bfsHelper.stroke.forEach((element) => {
             this.renderer.appendChild(strokeWrap, this.createSVGDot(element.x, element.y));
         });
 
@@ -217,8 +232,8 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, (x + FILL_PIXEL_SHIFT).toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, (y + FILL_PIXEL_SHIFT).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + 'eb4034');
-        this.renderer.setAttribute(circle, 'r', (this.userStrokeWidth * 2).toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(circle, 'r', this.userStrokeWidth.toString());
         return circle;
     }
 

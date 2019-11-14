@@ -7,7 +7,7 @@ export class BFSHelper {
     visited: Set<string>;
     queue: Array<Coords2D>;
     bodyGrid: Map<number, Array<number>>;
-    stokes: Array<Coords2D>;
+    stroke: Array<Coords2D>;
 
     constructor(maxX: number, maxY: number, context2D: CanvasRenderingContext2D) {
         this.maxX = maxX;
@@ -16,7 +16,7 @@ export class BFSHelper {
         this.visited = new Set([]);
         this.queue = [];
         this.bodyGrid = new Map([]);
-        this.stokes = [];
+        this.stroke = [];
     }
 
     computeBFS(clickPosition: Coords2D): void {
@@ -43,7 +43,11 @@ export class BFSHelper {
 
             for (let i = 0; i < neighborPixels.length; ++i) {
                 let neighborPixel: Coords2D = neighborPixels[i];
-                if (this.visited.has(JSON.stringify(neighborPixel)) || !this.isValidPosition(neighborPixel)) {
+                if (this.visited.has(JSON.stringify(neighborPixel))) {
+                    continue;
+                }
+                if (!this.isValidPosition(neighborPixel)) {
+                    this.stroke.push(neighborPixel);
                     continue;
                 }
                 let neighborPixelColor = this.getPixelColor(neighborPixel);
@@ -51,7 +55,7 @@ export class BFSHelper {
                     this.queue.push(neighborPixel);
                     this.visited.add(JSON.stringify(neighborPixel));
                 } else {
-                    this.stokes.push(pixel);
+                    this.stroke.push(pixel);
                 }
             }
         }
