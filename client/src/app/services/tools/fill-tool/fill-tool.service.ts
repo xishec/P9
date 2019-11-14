@@ -50,7 +50,6 @@ export class FillToolService extends AbstractToolService {
         this.updateSVGCopy();
         this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
         this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
-
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
         this.coloration();
@@ -68,7 +67,6 @@ export class FillToolService extends AbstractToolService {
                 if (column[y] !== column[y - 1] + 1) {
                     fillStructure.leftTop = new Coords2D(x, column[y - 1]);
                     fillStructure.rightTop = new Coords2D(x, column[y - 1]);
-                    console.log(fillStructure);
                     columns.push(fillStructure);
                     fillStructure = new FillStructure();
                     fillStructure.leftBottum = new Coords2D(x, column[y]);
@@ -80,7 +78,7 @@ export class FillToolService extends AbstractToolService {
             columns.push(fillStructure);
         });
 
-        console.log(columns[0], columns[columns.length - 1]);
+        // console.log(columns[0], columns[columns.length - 1]);
 
         // optimisation
         columns.sort((a, b) => {
@@ -91,7 +89,8 @@ export class FillToolService extends AbstractToolService {
             const lastfillStructure = columns[i - 1];
             if (
                 thisfillStructure.leftBottum.y === lastfillStructure.leftBottum.y &&
-                thisfillStructure.leftTop.y === lastfillStructure.leftTop.y
+                thisfillStructure.leftTop.y === lastfillStructure.leftTop.y &&
+                Math.abs(thisfillStructure.leftTop.x - lastfillStructure.leftTop.x) === 1
             ) {
                 if (lastfillStructure.leftTop.x < thisfillStructure.leftBottum.x) {
                     lastfillStructure.rightBottum = thisfillStructure.leftBottum;
@@ -106,7 +105,7 @@ export class FillToolService extends AbstractToolService {
             }
         }
 
-        console.log(columns);
+        // console.log(columns);
 
         // coloration
         this.createSVGWrapper();

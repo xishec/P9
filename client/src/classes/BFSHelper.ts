@@ -26,7 +26,7 @@ export class BFSHelper {
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
-            let pixel: Coords2D = this.queue.pop()!;
+            let pixel: Coords2D = this.queue.shift()!;
 
             if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
                 if (this.toFill.has(pixel.x)) {
