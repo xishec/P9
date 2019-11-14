@@ -60,7 +60,9 @@ export class BFSHelper {
     addPixelToMap(pixel: Coords2D): void {
         if (this.bodyGrid.has(pixel.x)) {
             this.bodyGrid.get(pixel.x)!.push(pixel.y);
-            this.bodyGrid.get(pixel.x)!.sort();
+            this.bodyGrid.get(pixel.x)!.sort((a: number, b: number) => {
+                return a < b ? -1 : 1;
+            });
         } else {
             this.bodyGrid.set(pixel.x, [pixel.y]);
         }
@@ -88,7 +90,7 @@ export class BFSHelper {
     }
 
     isValidPosition(pixel: Coords2D): boolean {
-        return pixel.x > 0 && pixel.x < this.maxX && pixel.y > 0 && pixel.y < this.maxY;
+        return pixel.x >= 0 && pixel.x < this.maxX && pixel.y >= 0 && pixel.y < this.maxY;
     }
 
     getPixelColor(clickPosition: Coords2D): Uint8ClampedArray {
