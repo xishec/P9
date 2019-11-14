@@ -4,7 +4,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BFSHelper } from '../../../../classes/BFSHelper';
-import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE, FILL_PIXEL_SHIFT } from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { FillStructure } from 'src/classes/FillStructure';
@@ -29,10 +29,10 @@ export class FillToolService extends AbstractToolService {
     traceType = TRACE_TYPE.Full;
     attributesManagerService: AttributesManagerService;
     userFillColor: string;
-    userStrokeColor: any;
-    userStrokeWidth: any;
-    strokeWidth: any;
-    strokeColor: any;
+    userStrokeColor: string;
+    userStrokeWidth: number;
+    strokeWidth: number;
+    strokeColor: string;
     fillColor: string;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
@@ -93,8 +93,8 @@ export class FillToolService extends AbstractToolService {
 
     fill(segmentsToDraw: Array<FillStructure>) {
         this.createSVGWrapper();
-        this.fillBody(segmentsToDraw);
-        this.fillStroke();
+        let bodyWrap: SVGGElement = this.fillBody(segmentsToDraw);
+        this.fillStroke(bodyWrap);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
@@ -153,9 +153,11 @@ export class FillToolService extends AbstractToolService {
     }
 
     getPointsPosition(fillStructure: FillStructure): string {
-        return `${fillStructure.leftBottum.x + 0.5},${fillStructure.leftBottum.y + 0.5} ${fillStructure.leftTop.x +
-            0.5},${fillStructure.leftTop.y + 0.5} ${fillStructure.rightTop.x + 0.5},${fillStructure.rightTop.y +
-            0.5} ${fillStructure.rightBottum.x + 0.5},${fillStructure.rightBottum.y + 0.5}`;
+        return `${fillStructure.leftBottum.x + FILL_PIXEL_SHIFT},${fillStructure.leftBottum.y +
+            FILL_PIXEL_SHIFT} ${fillStructure.leftTop.x + FILL_PIXEL_SHIFT},${fillStructure.leftTop.y +
+            FILL_PIXEL_SHIFT} ${fillStructure.rightTop.x + FILL_PIXEL_SHIFT},${fillStructure.rightTop.y +
+            FILL_PIXEL_SHIFT} ${fillStructure.rightBottum.x + FILL_PIXEL_SHIFT},${fillStructure.rightBottum.y +
+            FILL_PIXEL_SHIFT}`;
     }
 
     updateCanvas(): void {
@@ -168,29 +170,39 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    fillBody(segmentsToDraw: Array<FillStructure>) {
+    fillBody(segmentsToDraw: Array<FillStructure>): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         segmentsToDraw.forEach((fillStructure: FillStructure) => {
-            const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
             const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
             this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, this.getPointsPosition(fillStructure));
-            this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
-            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_width, '1');
-            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-            this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke, '#' + '32a852');
-            this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, '#' + '32a852');
-
-            this.renderer.appendChild(el, drawPolygon);
-            this.renderer.appendChild(bodyWrap, el);
+            this.renderer.appendChild(bodyWrap, drawPolygon);
         });
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_width, '1');
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke, '#' + '32a852');
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.fill, '#' + '32a852');
         this.renderer.appendChild(this.svgWrap, bodyWrap);
+
+        return bodyWrap.cloneNode(true) as SVGGElement;
     }
 
-    fillStroke() {
+    fillStroke(bodyWrap: SVGGElement) {
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+
+        const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
+        let id: string = Date.now().toString();
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(mask, 'id', id);
+        this.renderer.appendChild(mask, bodyWrap);
+
+        this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
         this.bfsHelper.stokes.forEach((element) => {
             this.renderer.appendChild(strokeWrap, this.createSVGDot(element.x, element.y));
         });
+
+        this.renderer.appendChild(this.svgWrap, mask);
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
 
@@ -203,11 +215,10 @@ export class FillToolService extends AbstractToolService {
     createSVGDot(x: number, y: number): SVGCircleElement {
         const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, (x + 0.5).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, (y + 0.5).toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, (x + FILL_PIXEL_SHIFT).toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, (y + FILL_PIXEL_SHIFT).toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + 'eb4034');
-        this.renderer.setAttribute(circle, 'r', '10');
-        // this.renderer.setAttribute(circle, 'r', this.userStrokeWidth);
+        this.renderer.setAttribute(circle, 'r', (this.userStrokeWidth * 2).toString());
         return circle;
     }
 

@@ -369,7 +369,10 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+const FILL_PIXEL_SHIFT = 0.5;
+
 export {
+    FILL_PIXEL_SHIFT,
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
     HTML_ATTRIBUTE,
