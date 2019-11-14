@@ -6,7 +6,7 @@ export class BFSHelper {
     context2D: CanvasRenderingContext2D;
     visited: Set<string>;
     queue: Array<Coords2D>;
-    toFill: Map<number, Array<number>>;
+    bodyGrid: Map<number, Array<number>>;
     stokes: Array<Coords2D>;
 
     constructor(maxX: number, maxY: number, context2D: CanvasRenderingContext2D) {
@@ -15,7 +15,7 @@ export class BFSHelper {
         this.context2D = context2D;
         this.visited = new Set([]);
         this.queue = [];
-        this.toFill = new Map([]);
+        this.bodyGrid = new Map([]);
         this.stokes = [];
     }
 
@@ -43,7 +43,7 @@ export class BFSHelper {
 
             for (let i = 0; i < neighborPixels.length; ++i) {
                 let neighborPixel: Coords2D = neighborPixels[i];
-                if (this.visited.has(JSON.stringify(neighborPixel)) && !this.isValidPosition(neighborPixel)) {
+                if (this.visited.has(JSON.stringify(neighborPixel)) || !this.isValidPosition(neighborPixel)) {
                     continue;
                 }
                 let neighborPixelColor = this.getPixelColor(neighborPixel);
@@ -58,11 +58,11 @@ export class BFSHelper {
     }
 
     addPixelToMap(pixel: Coords2D): void {
-        if (this.toFill.has(pixel.x)) {
-            this.toFill.get(pixel.x)!.push(pixel.y);
-            this.toFill.get(pixel.x)!.sort();
+        if (this.bodyGrid.has(pixel.x)) {
+            this.bodyGrid.get(pixel.x)!.push(pixel.y);
+            this.bodyGrid.get(pixel.x)!.sort();
         } else {
-            this.toFill.set(pixel.x, [pixel.y]);
+            this.bodyGrid.set(pixel.x, [pixel.y]);
         }
     }
 

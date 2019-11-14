@@ -41,79 +41,40 @@ export class FillToolService extends AbstractToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.updateSVGCopy();
+        this.updateCanvas();
     }
     onMouseUp(event: MouseEvent): void {
         if (this.modalManagerService.modalIsDisplayed.value) {
             return;
         }
-        this.updateSVGCopy();
-        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+        this.updateCanvas();
+        this.updateMousePosition(event);
+
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
-        this.coloration();
+
+        let segmentsToDraw: Array<FillStructure> = this.divideLinesToSegments();
+        this.groupSegmentsToRectangle(segmentsToDraw);
+        this.fill(segmentsToDraw);
     }
 
-    coloration() {
-        let columns: Array<FillStructure> = [];
+    updateMousePosition(event: MouseEvent): void {
+        this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+        this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    }
 
-        // seperation
-        this.bfsHelper.toFill.forEach((column, x) => {
-            let fillStructure = new FillStructure();
-            fillStructure.leftBottum = new Coords2D(x, column[0]);
-            fillStructure.rightBottum = new Coords2D(x, column[0]);
-            for (let y = 1; y < column.length; y++) {
-                if (column[y] !== column[y - 1] + 1) {
-                    fillStructure.leftTop = new Coords2D(x, column[y - 1]);
-                    fillStructure.rightTop = new Coords2D(x, column[y - 1]);
-                    columns.push(fillStructure);
-                    fillStructure = new FillStructure();
-                    fillStructure.leftBottum = new Coords2D(x, column[y]);
-                    fillStructure.rightBottum = new Coords2D(x, column[y]);
-                }
-            }
-            fillStructure.leftTop = new Coords2D(x, column[column.length - 1]);
-            fillStructure.rightTop = new Coords2D(x, column[column.length - 1]);
-            columns.push(fillStructure);
-        });
-
-        // console.log(columns[0], columns[columns.length - 1]);
-
-        // optimisation
-        columns.sort((a, b) => {
-            return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
-        });
-        for (let i = 1; i < columns.length; i++) {
-            const thisfillStructure = columns[i];
-            const lastfillStructure = columns[i - 1];
-            if (
-                thisfillStructure.leftBottum.y === lastfillStructure.leftBottum.y &&
-                thisfillStructure.leftTop.y === lastfillStructure.leftTop.y &&
-                Math.abs(thisfillStructure.leftTop.x - lastfillStructure.leftTop.x) === 1
-            ) {
-                if (lastfillStructure.leftTop.x < thisfillStructure.leftBottum.x) {
-                    lastfillStructure.rightBottum = thisfillStructure.leftBottum;
-                    lastfillStructure.rightTop = thisfillStructure.leftTop;
-                } else {
-                    lastfillStructure.leftBottum = thisfillStructure.rightBottum;
-                    lastfillStructure.leftTop = thisfillStructure.rightTop;
-                }
-
-                columns.splice(i, 1);
-                i--;
-            }
-        }
-
-        // console.log(columns);
-
-        // coloration
+    fill(segmentsToDraw: Array<FillStructure>) {
         this.createSVGWrapper();
+        this.fillBody(segmentsToDraw);
+        this.fillStroke();
+        this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
+    }
 
-        columns.forEach((fillStructure: FillStructure) => {
+    fillBody(segmentsToDraw: Array<FillStructure>) {
+        segmentsToDraw.forEach((fillStructure: FillStructure) => {
             const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
             const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, this.getPoints(fillStructure));
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, this.getPointsPosition(fillStructure));
             this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
             this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_width, '1');
             this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_linejoin, 'round');
@@ -125,19 +86,73 @@ export class FillToolService extends AbstractToolService {
             this.renderer.appendChild(el, drawPolygon);
             this.renderer.appendChild(this.svgWrap, el);
         });
+    }
 
+    fillStroke() {
         this.bfsHelper.stokes.forEach((element) => {
             this.renderer.appendChild(this.svgWrap, this.createSVGDot(element.x, element.y));
         });
-
-        this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    getPoints(fillStructure: FillStructure): string {
+    groupSegmentsToRectangle(segmentsToDraw: Array<FillStructure>) {
+        segmentsToDraw.sort((a, b) => {
+            return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
+        });
+        for (let i = 1; i < segmentsToDraw.length; i++) {
+            const thisFillStructure: FillStructure = segmentsToDraw[i];
+            const lastFillStructure: FillStructure = segmentsToDraw[i - 1];
+            if (this.canBeGroupedToRectangle(thisFillStructure, lastFillStructure)) {
+                if (lastFillStructure.leftTop.x < thisFillStructure.leftBottum.x) {
+                    lastFillStructure.rightBottum = thisFillStructure.leftBottum;
+                    lastFillStructure.rightTop = thisFillStructure.leftTop;
+                } else {
+                    lastFillStructure.leftBottum = thisFillStructure.rightBottum;
+                    lastFillStructure.leftTop = thisFillStructure.rightTop;
+                }
+                segmentsToDraw.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+    canBeGroupedToRectangle(thisFillStructure: FillStructure, lastFillStructure: FillStructure): boolean {
+        return (
+            thisFillStructure.leftBottum.y === lastFillStructure.leftBottum.y &&
+            thisFillStructure.leftTop.y === lastFillStructure.leftTop.y &&
+            Math.abs(thisFillStructure.leftTop.x - lastFillStructure.leftTop.x) === 1
+        );
+    }
+
+    divideLinesToSegments() {
+        let segmentsToDraw: Array<FillStructure> = [];
+
+        this.bfsHelper.bodyGrid.forEach((column, x) => {
+            let fillStructure = new FillStructure();
+            fillStructure.leftBottum = new Coords2D(x, column[0]);
+            fillStructure.rightBottum = new Coords2D(x, column[0]);
+            for (let y = 1; y < column.length; y++) {
+                if (column[y] !== column[y - 1] + 1) {
+                    fillStructure.leftTop = new Coords2D(x, column[y - 1]);
+                    fillStructure.rightTop = new Coords2D(x, column[y - 1]);
+                    segmentsToDraw.push(fillStructure);
+                    fillStructure = new FillStructure();
+                    fillStructure.leftBottum = new Coords2D(x, column[y]);
+                    fillStructure.rightBottum = new Coords2D(x, column[y]);
+                }
+            }
+            fillStructure.leftTop = new Coords2D(x, column[column.length - 1]);
+            fillStructure.rightTop = new Coords2D(x, column[column.length - 1]);
+            segmentsToDraw.push(fillStructure);
+        });
+
+        return segmentsToDraw;
+    }
+
+    getPointsPosition(fillStructure: FillStructure): string {
         return `${fillStructure.leftBottum.x},${fillStructure.leftBottum.y} ${fillStructure.leftTop.x},${fillStructure.leftTop.y} ${fillStructure.rightTop.x},${fillStructure.rightTop.y} ${fillStructure.rightBottum.x},${fillStructure.rightBottum.y}`;
     }
 
-    updateSVGCopy(): void {
+    updateCanvas(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
