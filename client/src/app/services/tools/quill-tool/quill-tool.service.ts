@@ -7,6 +7,7 @@ import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -22,11 +23,13 @@ export class QuillToolService extends TracingToolService {
     currentCoords: Coords2D[] = new Array<Coords2D>(2);
 
     thickness: number = 80;
-    angle: number = 45;
+    angle: number = 80;
 
     offsets: Offset[] = [ {x: 0, y: 0}, {x: 0, y: 0} ];
 
     isDrawing: boolean;
+
+    attributesManagerService: AttributesManagerService;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -39,6 +42,17 @@ export class QuillToolService extends TracingToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+    }
+
+    initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
+        this.attributesManagerService = attributeManagerService;
+        this.attributesManagerService.thickness.subscribe((value) => {
+            this.thickness = value;
+        });
+
+        this.attributesManagerService.angle.subscribe((value) => {
+            this.angle = value;
+        });
     }
 
     onMouseDown(event: MouseEvent): void {

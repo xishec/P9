@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { THICKNESS, TOOL_NAME, ANGLE_ORIENTATION } from 'src/constants/tool-constants';
@@ -12,7 +12,7 @@ import { QuillToolService } from 'src/app/services/tools/quill-tool/quill-tool.s
     templateUrl: './quill-attributes.component.html',
     styleUrls: ['./quill-attributes.component.scss'],
 })
-export class QuillAttributesComponent implements OnInit, AfterViewInit {
+export class QuillAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Quill;
     quillAttributesForm: FormGroup;
     quillToolService: QuillToolService;
@@ -31,14 +31,10 @@ export class QuillAttributesComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.initializeForm();
+        this.onAngleChange();
         this.quillToolService = this.toolSelectorService.getQuillTool();
+        this.quillToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
-
-    ngAfterViewInit() {
-      this.quillToolService = this.toolSelectorService.getQuillTool();
-      this.quillToolService.initializeAttributesManagerService(this.attributesManagerService);
-    }
-
     initializeForm(): void {
       this.quillAttributesForm = this.formBuilder.group({
         thickness: [
@@ -60,6 +56,7 @@ export class QuillAttributesComponent implements OnInit, AfterViewInit {
         const thickness: number = this.quillAttributesForm.value.thickness;
         if (this.quillAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.thickness.next(thickness);
+            console.log(thickness);
         }
     }
 
