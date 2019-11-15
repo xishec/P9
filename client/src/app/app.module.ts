@@ -69,6 +69,7 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { DrawStackService } from './services/draw-stack/draw-stack.service';
 import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
+import { QuillAttributesComponent } from './components/sidebar-tools/attribute-panel/quill-attributes/quill-attributes.component';
 
 @NgModule({
     declarations: [
@@ -104,6 +105,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         PenAttributesComponent,
         TextAttributesComponent,
         EraserAttributesComponent,
+        QuillAttributesComponent,
     ],
     imports: [
         MatSliderModule,
