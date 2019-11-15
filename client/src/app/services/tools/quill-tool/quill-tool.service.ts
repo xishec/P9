@@ -17,16 +17,17 @@ export class QuillToolService extends TracingToolService {
 
     previousCoords: Coords2D[] = new Array<Coords2D>(2);
     currentCoords: Coords2D[] = new Array<Coords2D>(2);
-    
-    thickness: number = 50;
+
+    thickness: number = 80;
     angle: number = 45;
 
-    offsetX: number = 0;
-    offsetY: number = 0;
+    offsetXA: number;
+    offsetYA: number;
+
+    offsetXB: number;
+    offsetYB: number;
 
     isDrawing: boolean;
-
-    renderCnt = 0;
 
     constructor() {
         super();
@@ -44,10 +45,13 @@ export class QuillToolService extends TracingToolService {
 
         this.computeOffset();
 
-        this.previousCoords[0] = new Coords2D(this.getXPos(event.clientX), this.getYPos(event.clientY));
+        this.previousCoords[0] = new Coords2D(
+          this.getXPos(event.clientX) + this.offsetXA,
+          this.getYPos(event.clientY) + this.offsetYA);
+
         this.previousCoords[1] = new Coords2D(
-            this.getXPos(event.clientX) + this.offsetX,
-            this.getYPos(event.clientY) + this.offsetY,
+            this.getXPos(event.clientX) + this.offsetXB,
+            this.getYPos(event.clientY) + this.offsetYB,
         );
 
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, '1');
@@ -56,24 +60,21 @@ export class QuillToolService extends TracingToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-      if(this.isDrawing) {
-        this.renderCnt++;
+      if (this.isDrawing) {
 
-        if(this.renderCnt % 2 !== 0) {
-          return;
-        }
+        this.currentCoords[0] = new Coords2D(
+          this.getXPos(event.clientX) + this.offsetXA,
+          this.getYPos(event.clientY) + this.offsetYA);
 
-        this.currentCoords[0] = new Coords2D(this.getXPos(event.clientX), this.getYPos(event.clientY));
         this.currentCoords[1] = new Coords2D(
-            this.getXPos(event.clientX) + this.offsetX,
-            this.getYPos(event.clientY) + this.offsetY,
+            this.getXPos(event.clientX) + this.offsetXB,
+            this.getYPos(event.clientY) + this.offsetYB,
         );
 
         this.tracePolygon();
 
         this.previousCoords = this.currentCoords.slice(0);
       }
-        
     }
 
     onMouseUp() {
@@ -82,11 +83,7 @@ export class QuillToolService extends TracingToolService {
 
     tracePolygon(): void {
         const polygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
-        const points: string = `
-          ${this.previousCoords[0].x},${this.previousCoords[0].y} 
-          ${this.previousCoords[1].x},${this.previousCoords[1].y} 
-          ${this.currentCoords[1].x},${this.currentCoords[1].y} 
-          ${this.currentCoords[0].x},${this.currentCoords[0].y}`;
+        const points: string = `${this.previousCoords[0].x},${this.previousCoords[0].y} ${this.previousCoords[1].x},${this.previousCoords[1].y} ${this.currentCoords[1].x},${this.currentCoords[1].y} ${this.currentCoords[0].x},${this.currentCoords[0].y}`;
 
         this.renderer.setAttribute(polygon, HTML_ATTRIBUTE.points, points);
 
@@ -94,11 +91,20 @@ export class QuillToolService extends TracingToolService {
     }
 
     computeOffset(): void {
-      this.offsetX = this.thickness * Math.sin(this.degreesToRadians(this.angle));
-      this.offsetY = this.thickness * Math.cos(this.degreesToRadians(this.angle));
+      this.offsetXA = (this.thickness / 2) * Math.sin(this.degreesToRadians(this.angle));
+      this.offsetYA = (this.thickness / 2) * Math.cos(this.degreesToRadians(this.angle));
+
+      console.log(this.offsetXA);
+      console.log(this.offsetYA);
+
+      this.offsetXB = this.offsetXA === 0 ? 0 : -this.offsetXA;
+      this.offsetYB = this.offsetYA === 0 ? 0 : -this.offsetYA;
+
+      console.log(this.offsetXB);
+      console.log(this.offsetYB);
     }
 
     degreesToRadians(degrees: number): number {
-      return degrees * (Math.PI / 180); 
+      return degrees * (Math.PI / 180);
     }
 }
