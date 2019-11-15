@@ -17,12 +17,16 @@ export class QuillToolService extends TracingToolService {
 
     previousCoords: Coords2D[] = new Array<Coords2D>(2);
     currentCoords: Coords2D[] = new Array<Coords2D>(2);
-    thickness: number = 10;
+    
+    thickness: number = 50;
+    angle: number = 45;
 
     offsetX: number = 0;
     offsetY: number = 0;
 
     isDrawing: boolean;
+
+    renderCnt = 0;
 
     constructor() {
         super();
@@ -36,13 +40,14 @@ export class QuillToolService extends TracingToolService {
 
     onMouseDown(event: MouseEvent): void {
         this.isDrawing = true;
-
         this.gWrap = this.renderer.createElement('g', SVG_NS);
+
+        this.computeOffset();
 
         this.previousCoords[0] = new Coords2D(this.getXPos(event.clientX), this.getYPos(event.clientY));
         this.previousCoords[1] = new Coords2D(
-            this.getXPos(event.clientX),
-            this.getYPos(event.clientY) + this.thickness,
+            this.getXPos(event.clientX) + this.offsetX,
+            this.getYPos(event.clientY) + this.offsetY,
         );
 
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, '1');
@@ -52,10 +57,16 @@ export class QuillToolService extends TracingToolService {
 
     onMouseMove(event: MouseEvent): void {
       if(this.isDrawing) {
+        this.renderCnt++;
+
+        if(this.renderCnt % 2 !== 0) {
+          return;
+        }
+
         this.currentCoords[0] = new Coords2D(this.getXPos(event.clientX), this.getYPos(event.clientY));
         this.currentCoords[1] = new Coords2D(
-            this.getXPos(event.clientX),
-            this.getYPos(event.clientY) + this.thickness,
+            this.getXPos(event.clientX) + this.offsetX,
+            this.getYPos(event.clientY) + this.offsetY,
         );
 
         this.tracePolygon();
@@ -82,6 +93,12 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.gWrap, polygon);
     }
 
+    computeOffset(): void {
+      this.offsetX = this.thickness * Math.sin(this.degreesToRadians(this.angle));
+      this.offsetY = this.thickness * Math.cos(this.degreesToRadians(this.angle));
+    }
 
-
+    degreesToRadians(degrees: number): number {
+      return degrees * (Math.PI / 180); 
+    }
 }
