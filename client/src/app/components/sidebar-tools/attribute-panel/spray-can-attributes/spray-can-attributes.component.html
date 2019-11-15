@@ -3,15 +3,14 @@
         {{ toolName }}
     </div>
 
-    <form [formGroup]="ellipsisAttributesForm">
+    <form [formGroup]="sprayCanAttributesForm">
         <div class="attribute">
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="thickness"
-                (input)="onSliderChange($event)"
+                (input)="onThicknessSliderChange($event)"
                 [min]="thickness.Min"
-                value="{{ ellipsisAttributesForm.value.thickness }}"
+                value="{{ sprayCanAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input

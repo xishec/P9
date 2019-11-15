@@ -15,10 +15,11 @@ import { THICKNESS, TOOL_NAME, SPRAY_DIAMETER } from 'src/constants/tool-constan
 })
 export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     toolName = TOOL_NAME.SprayCan;
-    ellipsisAttributesForm: FormGroup;
+    sprayCanAttributesForm: FormGroup;
     sprayCanToolService: SprayCanToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = THICKNESS;
+    readonly diameter = SPRAY_DIAMETER;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -39,7 +40,7 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     }
 
     initializeForm(): void {
-        this.ellipsisAttributesForm = this.formBuilder.group({
+        this.sprayCanAttributesForm = this.formBuilder.group({
             thickness: [
                 THICKNESS.Min,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
