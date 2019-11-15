@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
-import { MOUSE, SVG_NS } from 'src/constants/constants';
+import { MOUSE, SVG_NS, KEYS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
@@ -29,6 +29,8 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
         { x: 0, y: 0 },
     ];
+
+    isAlterRotation: boolean;
 
     isDrawing: boolean;
 
@@ -105,6 +107,27 @@ export class QuillToolService extends TracingToolService {
         this.tracePolygon();
 
         this.previousCoords = this.currentCoords.slice(0);
+    }
+
+    onWheel(event: WheelEvent): void {
+
+        console.log('wheel');
+
+        let val = this.isAlterRotation ? 1 : 15;
+        val = (event.deltaY < 0 ? -val : val) % 360;
+        this.angle += val;
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === KEYS.Alt) {
+            this.isAlterRotation = true;
+        };
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        if( event.key === KEYS.Alt) {
+            this.isAlterRotation = false;
+        }
     }
 
     onMouseUp() {

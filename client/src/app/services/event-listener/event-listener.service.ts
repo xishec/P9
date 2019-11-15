@@ -8,6 +8,7 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { QuillToolService } from '../tools/quill-tool/quill-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
@@ -78,7 +79,7 @@ export class EventListenerService {
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'wheel', (event: WheelEvent) => {
-            if (this.currentTool instanceof StampToolService && this.shouldAllowEvent()) {
+            if ((this.currentTool instanceof StampToolService || this.currentTool instanceof QuillToolService) && this.shouldAllowEvent()) {
                 this.currentTool.onWheel(event);
             }
         });
