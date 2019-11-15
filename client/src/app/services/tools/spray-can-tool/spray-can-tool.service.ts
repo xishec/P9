@@ -5,6 +5,7 @@ import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,9 +14,11 @@ export class SprayCanToolService extends TracingToolService {
     radius = 30;
     event: MouseEvent;
     interval: NodeJS.Timer;
+    intervalTime = 0;
 
     constructor(private colorToolService: ColorToolService) {
         super();
+        console.log(this.attributesManagerService);
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
         });
@@ -57,7 +60,7 @@ export class SprayCanToolService extends TracingToolService {
                 this.svgPreviewCircle = this.createSVGCircle(x, y);
                 this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
             }
-        }, 20);
+        }, this.intervalTime);
     }
 
     onMouseUp(e: MouseEvent) {
@@ -77,5 +80,12 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.SprayCan);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        super.initializeAttributesManagerService(attributesManagerService);
+        this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
+            this.radius = sprayDiameter / 2;
+        });
     }
 }
