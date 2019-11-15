@@ -30,6 +30,8 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
     ];
 
+    cnter = 0;
+
     isAlterRotation: boolean;
 
     isDrawing: boolean;
@@ -68,8 +70,6 @@ export class QuillToolService extends TracingToolService {
         this.isDrawing = true;
         this.gWrap = this.renderer.createElement('g', SVG_NS);
 
-        this.computeOffset();
-
         this.previousCoords[0] = new Coords2D(
             this.getXPos(event.clientX) + this.offsets[0].x,
             this.getYPos(event.clientY) + this.offsets[0].y,
@@ -94,6 +94,12 @@ export class QuillToolService extends TracingToolService {
             return;
         }
 
+        if (this.cnter++ % 2 !== 0) {
+            return;
+        }
+
+        this.computeOffset();
+
         this.currentCoords[0] = new Coords2D(
             this.getXPos(event.clientX) + this.offsets[0].x,
             this.getYPos(event.clientY) + this.offsets[0].y,
@@ -114,8 +120,8 @@ export class QuillToolService extends TracingToolService {
         console.log('wheel');
 
         let val = this.isAlterRotation ? 1 : 15;
-        val = (event.deltaY < 0 ? -val : val) % 360;
-        this.angle += val;
+        val = (event.deltaY < 0 ? -val : val);
+        this.angle = ( this.angle + val ) % 360;
     }
 
     onKeyDown(event: KeyboardEvent): void {
