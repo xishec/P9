@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TOOL_NAME, SPRAY_INTERVAL, SPRAY_DIAMETER } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -11,10 +11,10 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class SprayCanToolService extends TracingToolService {
-    radius = 30;
+    radius = SPRAY_DIAMETER.Default;
     event: MouseEvent;
     interval: NodeJS.Timer;
-    intervalTime = 0;
+    intervalTime = SPRAY_INTERVAL.Default;
 
     constructor(private colorToolService: ColorToolService) {
         super();

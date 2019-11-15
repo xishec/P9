@@ -6,7 +6,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { SprayCanToolService } from 'src/app/services/tools/spray-can-tool/spray-can-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { SPRAY_DIAMETER, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { SPRAY_DIAMETER, THICKNESS, TOOL_NAME, SPRAY_INTERVAL } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-spray-can-attributes',
@@ -20,6 +20,7 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = THICKNESS;
     readonly diameter = SPRAY_DIAMETER;
+    readonly interval = SPRAY_INTERVAL;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -50,6 +51,10 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
                 SPRAY_DIAMETER.Default,
                 [Validators.required, Validators.min(SPRAY_DIAMETER.Min), Validators.max(SPRAY_DIAMETER.Max)],
             ],
+            interval: [
+                SPRAY_INTERVAL.Default,
+                [Validators.required, Validators.min(SPRAY_INTERVAL.Min), Validators.max(SPRAY_INTERVAL.Max)],
+            ],
         });
     }
 
@@ -67,6 +72,13 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
         }
     }
 
+    onIntervalSliderChange(event: MatSliderChange): void {
+        if (PREDICATE.eventIsValid(event, SPRAY_INTERVAL)) {
+            this.sprayCanAttributesForm.controls.interval.setValue(event.value);
+            this.onIntervalChange();
+        }
+    }
+
     onThicknessChange(): void {
         const thickness: number = this.sprayCanAttributesForm.value.thickness;
         if (this.sprayCanAttributesForm.controls.thickness.valid) {
@@ -78,6 +90,13 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
         const diameter: number = this.sprayCanAttributesForm.value.diameter;
         if (this.sprayCanAttributesForm.controls.diameter.valid) {
             this.attributesManagerService.sprayDiameter.next(diameter);
+        }
+    }
+
+    onIntervalChange(): void {
+        const interval: number = this.sprayCanAttributesForm.value.interval;
+        if (this.sprayCanAttributesForm.controls.interval.valid) {
+            this.attributesManagerService.sprayInterval.next(interval);
         }
     }
 

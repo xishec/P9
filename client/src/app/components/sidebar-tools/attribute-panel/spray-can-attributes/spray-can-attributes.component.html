@@ -10,6 +10,7 @@
                 formControlName="thickness"
                 (input)="onThicknessSliderChange($event)"
                 [min]="thickness.Min"
+                [max]="thickness.Max"
                 value="{{ sprayCanAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -28,12 +29,14 @@
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
+
         <div class="attribute">
             <label for="diameter">Diamètre de l'émission</label>
             <mat-slider
                 formControlName="diameter"
                 (input)="onDiameterSliderChange($event)"
                 [min]="diameter.Min"
+                [max]="diameter.Max"
                 value="{{ sprayCanAttributesForm.value.diameter }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -50,6 +53,32 @@
                 />
                 <mat-error>La valeur inscrite doit être entre {{ diameter.Min }} et {{ diameter.Max }} px</mat-error>
                 <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="diameter">Émission par miliseconde</label>
+            <mat-slider
+                formControlName="interval"
+                (input)="onIntervalSliderChange($event)"
+                [min]="interval.Min"
+                [max]="interval.Max"
+                value="{{ sprayCanAttributesForm.value.interval }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="interval"
+                    (input)="onIntervalChange()"
+                    [min]="interval.Min"
+                    [max]="interval.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ interval.Min }} et {{ interval.Max }} ms</mat-error>
+                <span matSuffix>ms</span>
             </mat-form-field>
         </div>
     </form>
