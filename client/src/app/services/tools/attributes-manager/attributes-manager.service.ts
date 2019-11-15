@@ -8,7 +8,7 @@ import {
     FONT_SIZE,
     LINE_JOINT_TYPE,
     LINE_STROKE_TYPE,
-    STAMP_ANGLE_ORIENTATION,
+    ANGLE_ORIENTATION,
     STAMP_SCALING,
     STAMP_TYPES,
     THICKNESS,
@@ -28,7 +28,7 @@ export class AttributesManagerService {
     lineJointType: BehaviorSubject<LINE_JOINT_TYPE> = new BehaviorSubject(LINE_JOINT_TYPE.Curvy);
     circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
     scaling: BehaviorSubject<number> = new BehaviorSubject(STAMP_SCALING.Default);
-    angle: BehaviorSubject<number> = new BehaviorSubject(STAMP_ANGLE_ORIENTATION.Default);
+    angle: BehaviorSubject<number> = new BehaviorSubject(ANGLE_ORIENTATION.Default);
     stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
 

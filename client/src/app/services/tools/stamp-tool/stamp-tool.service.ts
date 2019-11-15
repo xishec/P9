@@ -7,7 +7,7 @@ import {
     HTML_ATTRIBUTE,
     NO_STAMP,
     STAMP_ALTER_ROTATION,
-    STAMP_ANGLE_ORIENTATION,
+    ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,
@@ -24,7 +24,7 @@ export class StampToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: STAMP_ANGLE_ORIENTATION = STAMP_ANGLE_ORIENTATION.Default;
+    angle: ANGLE_ORIENTATION = ANGLE_ORIENTATION.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
 
     stampLink = NO_STAMP;
