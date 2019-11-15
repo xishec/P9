@@ -267,6 +267,10 @@ export class ToolSelectorService {
         return this.eraserTool;
     }
 
+    getSprayCanTool(): SprayCanToolService {
+        return this.sprayCanTool;
+    }
+
     changeTool(tooltipName: TOOL_NAME): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
