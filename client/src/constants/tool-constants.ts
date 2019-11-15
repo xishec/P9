@@ -375,6 +375,12 @@ enum SPRAY_DIAMETER {
     Max = 100,
 }
 
+enum SPRAY_INTERVAL {
+    Min = 0,
+    Default = 20,
+    Max = 2000,
+}
+
 export {
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
@@ -434,4 +440,5 @@ export {
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
     SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
 };

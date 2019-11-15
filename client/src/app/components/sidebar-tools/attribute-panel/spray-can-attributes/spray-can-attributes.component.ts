@@ -6,7 +6,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { SprayCanToolService } from 'src/app/services/tools/spray-can-tool/spray-can-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME, SPRAY_DIAMETER } from 'src/constants/tool-constants';
+import { SPRAY_DIAMETER, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-spray-can-attributes',

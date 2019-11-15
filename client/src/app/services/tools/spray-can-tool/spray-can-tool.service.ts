@@ -4,8 +4,8 @@ import { MOUSE, SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -86,6 +86,9 @@ export class SprayCanToolService extends TracingToolService {
         super.initializeAttributesManagerService(attributesManagerService);
         this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
             this.radius = sprayDiameter / 2;
+        });
+        this.attributesManagerService.sprayInterval.subscribe((intervalTime: number) => {
+            this.intervalTime = intervalTime;
         });
     }
 }
