@@ -39,6 +39,18 @@ export class SprayCanToolService extends TracingToolService {
             this.event = e;
             this.isDrawing = true;
             this.createSVGWrapper();
+            this.appendSpray();
+            this.createSVGPath();
+        }
+
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.appendSpray();
+        }, this.intervalTime);
+    }
+
+    appendSpray(): void {
+        for (let i = 0; i < 20; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
             const x = this.getXPos(this.event.clientX) + radius * Math.cos(angle);
@@ -46,21 +58,7 @@ export class SprayCanToolService extends TracingToolService {
             this.currentPath = `M${x} ${y}`;
             this.svgPreviewCircle = this.createSVGCircle(x, y);
             this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
-            this.createSVGPath();
         }
-
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
-            for (let i = 0; i < 20; ++i) {
-                const angle = Math.random() * (2 * Math.PI);
-                const radius = Math.random() * this.radius;
-                const x = this.getXPos(this.event.clientX) + radius * Math.cos(angle);
-                const y = this.getYPos(this.event.clientY) + radius * Math.sin(angle);
-                this.currentPath = `M${x} ${y}`;
-                this.svgPreviewCircle = this.createSVGCircle(x, y);
-                this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
-            }
-        }, this.intervalTime);
     }
 
     onMouseUp(e: MouseEvent) {
