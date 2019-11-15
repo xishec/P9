@@ -41,12 +41,12 @@ export class SprayCanToolService extends TracingToolService {
             this.createSVGWrapper();
             this.appendSpray();
             this.createSVGPath();
-        }
 
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
-            this.appendSpray();
-        }, this.intervalTime);
+            clearInterval(this.interval);
+            this.interval = setInterval(() => {
+                this.appendSpray();
+            }, this.intervalTime);
+        }
     }
 
     appendSpray(): void {
