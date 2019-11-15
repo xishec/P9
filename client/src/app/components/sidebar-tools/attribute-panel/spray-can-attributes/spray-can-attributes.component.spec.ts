@@ -8,7 +8,7 @@ describe('SprayCanAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SprayCanAttributesComponent ]
+      declarations: [ SprayCanAttributesComponent ],
     })
     .compileComponents();
   }));

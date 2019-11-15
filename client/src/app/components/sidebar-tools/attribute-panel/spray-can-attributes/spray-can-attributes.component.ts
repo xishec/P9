@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { TOOL_NAME, THICKNESS } from 'src/constants/tool-constants';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SprayCanToolService } from 'src/app/services/tools/spray-can-tool/spray-can-tool.service';
-import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
+import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
+import { SprayCanToolService } from 'src/app/services/tools/spray-can-tool/spray-can-tool.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
+import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-spray-can-attributes',
     templateUrl: './spray-can-attributes.component.html',
     styleUrls: ['./spray-can-attributes.component.scss'],
 })
-export class SprayCanAttributesComponent implements OnInit {
+export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     toolName = TOOL_NAME.SprayCan;
     ellipsisAttributesForm: FormGroup;
     sprayCanToolService: SprayCanToolService;
@@ -41,10 +41,9 @@ export class SprayCanAttributesComponent implements OnInit {
     initializeForm(): void {
         this.ellipsisAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Default,
+                THICKNESS.Min,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
-            traceType: ['Contour'],
         });
     }
 

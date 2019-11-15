@@ -62,6 +62,7 @@ import { PenAttributesComponent } from './components/sidebar-tools/attribute-pan
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
+import { SprayCanAttributesComponent } from './components/sidebar-tools/attribute-panel/spray-can-attributes/spray-can-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
@@ -69,7 +70,6 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { DrawStackService } from './services/draw-stack/draw-stack.service';
 import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
-import { SprayCanAttributesComponent } from './components/sidebar-tools/attribute-panel/spray-can-attributes/spray-can-attributes.component';
 
 @NgModule({
     declarations: [

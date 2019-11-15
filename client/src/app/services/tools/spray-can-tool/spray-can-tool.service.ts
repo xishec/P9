@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
-import { MOUSE } from 'src/constants/constants';
+import { MOUSE, SVG_NS } from 'src/constants/constants';
+import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
@@ -66,5 +67,15 @@ export class SprayCanToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent) {
         this.event = e;
+    }
+
+    createSVGWrapper(): void {
+        const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.SprayCan);
+        this.svgWrap = wrap;
+        this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 }
