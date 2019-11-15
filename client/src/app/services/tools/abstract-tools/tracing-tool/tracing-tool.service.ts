@@ -52,7 +52,6 @@ export abstract class TracingToolService extends AbstractToolService {
     getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     onMouseDown(e: MouseEvent): void {
-        console.log('parent mouse down');
         this.getColorAndOpacity();
         if (e.button === MOUSE.LeftButton) {
             this.isDrawing = true;
