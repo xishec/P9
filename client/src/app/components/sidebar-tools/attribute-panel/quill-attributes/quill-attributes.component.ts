@@ -1,7 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatSliderChange } from '@angular/material';
 
 import { THICKNESS, TOOL_NAME, ANGLE_ORIENTATION } from 'src/constants/tool-constants';
+import { PREDICATE } from 'src/constants/constants';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
@@ -31,29 +33,33 @@ export class QuillAttributesComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.initializeForm();
+        this.onThicknessChange();
         this.quillToolService = this.toolSelectorService.getQuillTool();
     }
 
     ngAfterViewInit() {
-      this.quillToolService = this.toolSelectorService.getQuillTool();
-      this.quillToolService.initializeAttributesManagerService(this.attributesManagerService);
+        this.quillToolService = this.toolSelectorService.getQuillTool();
+        this.quillToolService.initializeAttributesManagerService(this.attributesManagerService);
     }
 
     initializeForm(): void {
-      this.quillAttributesForm = this.formBuilder.group({
-        thickness: [
-            THICKNESS.Default,
-            [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
-        ],
-        angle: [
-          ANGLE_ORIENTATION.Default,
-          [
-              Validators.required,
-              Validators.min(ANGLE_ORIENTATION.Min),
-              Validators.max(ANGLE_ORIENTATION.Max),
-          ],
-      ],
-    });
+        this.quillAttributesForm = this.formBuilder.group({
+            thickness: [
+                THICKNESS.Default,
+                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+            ],
+            angle: [
+                ANGLE_ORIENTATION.Default,
+                [Validators.required, Validators.min(ANGLE_ORIENTATION.Min), Validators.max(ANGLE_ORIENTATION.Max)],
+            ],
+        });
+    }
+
+    onSliderChange(event: MatSliderChange): void {
+        if (PREDICATE.eventIsValid(event, THICKNESS)) {
+            this.quillAttributesForm.controls.thickness.setValue(event.value);
+            this.onThicknessChange();
+        }
     }
 
     onThicknessChange(): void {
@@ -64,11 +70,11 @@ export class QuillAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onAngleChange(): void {
-      const quillAngle: number = this.quillAttributesForm.value.angle;
-      if (this.quillAttributesForm.controls.angle.valid) {
-          this.attributesManagerService.angle.next(quillAngle);
-      }
-  }
+        const quillAngle: number = this.quillAttributesForm.value.angle;
+        if (this.quillAttributesForm.controls.angle.valid) {
+            this.attributesManagerService.angle.next(quillAngle);
+        }
+    }
 
     onFocus(): void {
         this.shortcutManagerService.changeIsOnInput(true);

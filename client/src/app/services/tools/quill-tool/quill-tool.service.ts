@@ -24,7 +24,10 @@ export class QuillToolService extends TracingToolService {
     thickness: number = 80;
     angle: number = 45;
 
-    offsets: Offset[] = [ {x: 0, y: 0}, {x: 0, y: 0} ];
+    offsets: Offset[] = [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ];
 
     isDrawing: boolean;
 
@@ -42,7 +45,6 @@ export class QuillToolService extends TracingToolService {
     }
 
     onMouseDown(event: MouseEvent): void {
-
         if (event.button !== MOUSE.LeftButton) {
             return;
         }
@@ -72,7 +74,6 @@ export class QuillToolService extends TracingToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-
         if (!this.isDrawing) {
             return;
         }
@@ -105,10 +106,10 @@ export class QuillToolService extends TracingToolService {
         const polygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
 
         const points: string =
-        `${this.previousCoords[0].x},${this.previousCoords[0].y} ` +
-        `${this.previousCoords[1].x},${this.previousCoords[1].y} ` +
-        `${this.currentCoords[1].x},${this.currentCoords[1].y} ` +
-        `${this.currentCoords[0].x},${this.currentCoords[0].y} `;
+            `${this.previousCoords[0].x},${this.previousCoords[0].y} ` +
+            `${this.previousCoords[1].x},${this.previousCoords[1].y} ` +
+            `${this.currentCoords[1].x},${this.currentCoords[1].y} ` +
+            `${this.currentCoords[0].x},${this.currentCoords[0].y} `;
 
         this.renderer.setAttribute(polygon, HTML_ATTRIBUTE.points, points);
 
@@ -116,7 +117,6 @@ export class QuillToolService extends TracingToolService {
     }
 
     computeOffset(): void {
-
         this.offsets[0].x = (this.thickness / 2) * Math.sin(this.degreesToRadians(this.angle));
         this.offsets[0].y = (this.thickness / 2) * Math.cos(this.degreesToRadians(this.angle));
 
