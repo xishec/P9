@@ -4,7 +4,13 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { BFSHelper } from '../../../../classes/BFSHelper';
-import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE, FILL_PIXEL_SHIFT } from 'src/constants/tool-constants';
+import {
+    HTML_ATTRIBUTE,
+    TOOL_NAME,
+    TRACE_TYPE,
+    FILL_PIXEL_SHIFT,
+    FILL_STROKE_WIDTH,
+} from 'src/constants/tool-constants';
 import { SVG_NS } from 'src/constants/constants';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { FillStructure } from 'src/classes/FillStructure';
@@ -81,7 +87,7 @@ export class FillToolService extends AbstractToolService {
         this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
         this.bfsHelper.computeBFS(this.currentMouseCoords);
 
-        this.expandPixels();
+        // this.expandPixels();
         let segmentsToDraw: Array<FillStructure> = this.divideLinesToSegments();
         // this.groupSegmentsToRectangle(segmentsToDraw);
         this.fill(segmentsToDraw);
@@ -179,8 +185,16 @@ export class FillToolService extends AbstractToolService {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
-        this.renderer.setProperty(this.canvas, 'width', this.elementRef.nativeElement.getBoundingClientRect().width);
-        this.renderer.setProperty(this.canvas, 'height', this.elementRef.nativeElement.getBoundingClientRect().height);
+        this.renderer.setProperty(
+            this.canvas,
+            HTML_ATTRIBUTE.width,
+            this.elementRef.nativeElement.getBoundingClientRect().width,
+        );
+        this.renderer.setProperty(
+            this.canvas,
+            HTML_ATTRIBUTE.height,
+            this.elementRef.nativeElement.getBoundingClientRect().height,
+        );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
@@ -193,7 +207,7 @@ export class FillToolService extends AbstractToolService {
             this.renderer.appendChild(bodyWrap, drawPolygon);
         });
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_width, '1');
+        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke, '#' + this.userFillColor);
         this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
