@@ -26,6 +26,7 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
+import { QuillToolService } from '../quill-tool/quill-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -48,6 +49,7 @@ export class ToolSelectorService {
         private ellipsisTool: EllipsisToolService,
         private pencilTool: PencilToolService,
         private penTool: PenToolService,
+        private quillTool: QuillToolService,
         private brushTool: BrushToolService,
         private stampTool: StampToolService,
         private dropperTool: DropperToolService,
@@ -74,6 +76,8 @@ export class ToolSelectorService {
         this.pencilTool.initializeService(ref, renderer, drawStack);
 
         this.penTool.initializeService(ref, renderer, drawStack);
+
+        this.quillTool.initializeService(ref, renderer, drawStack);
 
         this.brushTool.initializeService(ref, renderer, drawStack);
 
@@ -105,8 +109,8 @@ export class ToolSelectorService {
             [TOOL_NAME.Line, this.lineTool as AbstractToolService],
             [TOOL_NAME.Dropper, this.dropperTool as AbstractToolService],
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
+            [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
-            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.SprayCan, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
@@ -221,6 +225,10 @@ export class ToolSelectorService {
 
     getPenTool(): PenToolService {
         return this.penTool;
+    }
+
+    getQuillTool(): QuillToolService {
+        return this.quillTool;
     }
 
     getRectangleTool(): RectangleToolService {
