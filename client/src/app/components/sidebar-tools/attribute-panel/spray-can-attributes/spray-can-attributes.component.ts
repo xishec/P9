@@ -32,6 +32,7 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.initializeForm();
         this.onThicknessChange();
+        this.onDiameterChange();
     }
 
     ngAfterViewInit(): void {
@@ -59,10 +60,24 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
         }
     }
 
+    onDiameterSliderChange(event: MatSliderChange): void {
+        if (PREDICATE.eventIsValid(event, SPRAY_DIAMETER)) {
+            this.sprayCanAttributesForm.controls.diameter.setValue(event.value);
+            this.onDiameterChange();
+        }
+    }
+
     onThicknessChange(): void {
         const thickness: number = this.ellipsisAttributesForm.value.thickness;
         if (this.ellipsisAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.thickness.next(thickness);
+        }
+    }
+
+    onDiameterChange(): void {
+        const diameter: number = this.sprayCanAttributesForm.value.diameter;
+        if (this.sprayCanAttributesForm.controls.diameter.valid) {
+            this.attributesManagerService.sprayDiameter.next(diameter);
         }
     }
 
