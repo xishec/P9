@@ -34,8 +34,8 @@ export class SprayCanToolService extends TracingToolService {
     }
 
     onMouseDown(e: MouseEvent) {
-        this.getColorAndOpacity();
         if (e.button === MOUSE.LeftButton) {
+            this.setColorAndOpacity();
             this.event = e;
             this.isDrawing = true;
             this.createSVGWrapper();

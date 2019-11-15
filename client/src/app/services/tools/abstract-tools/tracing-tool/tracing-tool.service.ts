@@ -52,7 +52,7 @@ export abstract class TracingToolService extends AbstractToolService {
     getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     onMouseDown(e: MouseEvent): void {
-        this.getColorAndOpacity();
+        this.setColorAndOpacity();
         if (e.button === MOUSE.LeftButton) {
             this.isDrawing = true;
             this.createSVGWrapper();
@@ -65,7 +65,7 @@ export abstract class TracingToolService extends AbstractToolService {
         }
     }
 
-    getColorAndOpacity(): void {
+    setColorAndOpacity(): void {
         this.currentColor = this.currentColorAndOpacity.slice(0, 6);
         this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
     }
