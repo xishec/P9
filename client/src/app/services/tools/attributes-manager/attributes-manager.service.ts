@@ -13,6 +13,7 @@ import {
     STAMP_TYPES,
     THICKNESS,
     TRACE_TYPE,
+    SPRAY_DIAMETER,
 } from 'src/constants/tool-constants';
 
 @Injectable({
@@ -31,6 +32,7 @@ export class AttributesManagerService {
     angle: BehaviorSubject<number> = new BehaviorSubject(STAMP_ANGLE_ORIENTATION.Default);
     stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
+    sprayDiameter: BehaviorSubject<number> = new BehaviorSubject(SPRAY_DIAMETER.Default);
 
     boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);

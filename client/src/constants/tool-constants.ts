@@ -369,6 +369,12 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+enum SPRAY_DIAMETER {
+    Min = 1,
+    Default = 30,
+    Max = 100,
+}
+
 export {
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
@@ -427,4 +433,5 @@ export {
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    SPRAY_DIAMETER,
 };
