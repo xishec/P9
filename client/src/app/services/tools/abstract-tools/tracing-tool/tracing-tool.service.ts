@@ -114,6 +114,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         return circle;
     }
 

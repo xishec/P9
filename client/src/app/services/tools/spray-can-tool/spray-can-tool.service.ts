@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, TOOL_NAME, SPRAY_INTERVAL, SPRAY_DIAMETER } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, SPRAY_DIAMETER, SPRAY_INTERVAL, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -18,7 +18,6 @@ export class SprayCanToolService extends TracingToolService {
 
     constructor(private colorToolService: ColorToolService) {
         super();
-        console.log(this.attributesManagerService);
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
         });
