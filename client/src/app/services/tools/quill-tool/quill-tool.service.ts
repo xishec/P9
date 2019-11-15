@@ -4,6 +4,7 @@ import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.
 import { Coords2D } from 'src/classes/Coords2D';
 import { SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -29,8 +30,11 @@ export class QuillToolService extends TracingToolService {
 
     isDrawing: boolean;
 
-    constructor() {
+    constructor(private colorToolService: ColorToolService) {
         super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+          this.currentColorAndOpacity = currentColor;
+        });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
@@ -54,8 +58,13 @@ export class QuillToolService extends TracingToolService {
             this.getYPos(event.clientY) + this.offsetYB,
         );
 
+        this.getColorAndOpacity();
+        console.log(this.currentColor);
+
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, '1');
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, 'black');
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
