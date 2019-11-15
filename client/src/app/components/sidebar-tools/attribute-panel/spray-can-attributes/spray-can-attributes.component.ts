@@ -53,9 +53,9 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onSliderChange(event: MatSliderChange): void {
+    onThicknessSliderChange(event: MatSliderChange): void {
         if (PREDICATE.eventIsValid(event, THICKNESS)) {
-            this.ellipsisAttributesForm.controls.thickness.setValue(event.value);
+            this.sprayCanAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
@@ -68,8 +68,8 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     }
 
     onThicknessChange(): void {
-        const thickness: number = this.ellipsisAttributesForm.value.thickness;
-        if (this.ellipsisAttributesForm.controls.thickness.valid) {
+        const thickness: number = this.sprayCanAttributesForm.value.thickness;
+        if (this.sprayCanAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.thickness.next(thickness);
         }
     }
