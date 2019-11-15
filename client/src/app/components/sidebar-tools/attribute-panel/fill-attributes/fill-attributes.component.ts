@@ -4,7 +4,7 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { THICKNESS, TOLERANCE, TOOL_NAME } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { FillToolService } from '../../../../services/tools/fill-tool/fill-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -20,6 +20,7 @@ export class FillAttributesComponent implements OnInit, AfterViewInit {
     fillToolService: FillToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
     readonly thickness = THICKNESS;
+    readonly tolerance = TOLERANCE;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -45,14 +46,25 @@ export class FillAttributesComponent implements OnInit, AfterViewInit {
                 THICKNESS.Default,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
+            tolerance: [
+                TOLERANCE.Default,
+                [Validators.required, Validators.min(TOLERANCE.Min), Validators.max(TOLERANCE.Max)],
+            ],
             traceType: ['Contour'],
         });
     }
 
-    onSliderChange(event: MatSliderChange): void {
+    onThicknessSliderChange(event: MatSliderChange): void {
         if (PREDICATE.eventIsValid(event, THICKNESS)) {
             this.fillAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
+        }
+    }
+
+    onToleranceSliderChange(event: MatSliderChange): void {
+        if (PREDICATE.eventIsValid(event, TOLERANCE)) {
+            this.fillAttributesForm.controls.tolerance.setValue(event.value);
+            this.onToleranceChange();
         }
     }
 
@@ -60,6 +72,13 @@ export class FillAttributesComponent implements OnInit, AfterViewInit {
         const thickness: number = this.fillAttributesForm.value.thickness;
         if (this.fillAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.thickness.next(thickness);
+        }
+    }
+
+    onToleranceChange(): void {
+        const tolerance: number = this.fillAttributesForm.value.tolerance;
+        if (this.fillAttributesForm.controls.tolerance.valid) {
+            this.attributesManagerService.tolerance.next(tolerance);
         }
     }
 

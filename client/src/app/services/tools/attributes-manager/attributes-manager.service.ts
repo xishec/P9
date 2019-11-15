@@ -13,6 +13,7 @@ import {
     STAMP_TYPES,
     THICKNESS,
     TRACE_TYPE,
+    TOLERANCE,
 } from 'src/constants/tool-constants';
 
 @Injectable({
@@ -20,6 +21,7 @@ import {
 })
 export class AttributesManagerService {
     thickness: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
+    tolerance: BehaviorSubject<number> = new BehaviorSubject(TOLERANCE.Default);
     minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
     traceType: BehaviorSubject<string> = new BehaviorSubject(TRACE_TYPE.Outline);
     style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);

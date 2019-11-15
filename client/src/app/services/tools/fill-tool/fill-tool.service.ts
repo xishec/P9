@@ -40,6 +40,7 @@ export class FillToolService extends AbstractToolService {
     strokeWidth: number;
     strokeColor: string;
     fillColor: string;
+    tolerance: number;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
@@ -84,13 +85,27 @@ export class FillToolService extends AbstractToolService {
         this.updateCanvas();
         this.updateMousePosition(event);
 
-        this.bfsHelper = new BFSHelper(this.canvas.width, this.canvas.height, this.context2D);
+        console.time('bfs');
+        this.bfsHelper = new BFSHelper(
+            this.canvas.width,
+            this.canvas.height,
+            this.context2D,
+            this.attributesManagerService,
+        );
         this.bfsHelper.computeBFS(this.currentMouseCoords);
+        this.bfsHelper.bodyGrid.forEach((el) => {
+            el.sort((a: number, b: number) => {
+                return a < b ? -1 : 1;
+            });
+        });
+        console.timeEnd('bfs');
 
         // this.expandPixels();
         let segmentsToDraw: Array<FillStructure> = this.divideLinesToSegments();
         // this.groupSegmentsToRectangle(segmentsToDraw);
+        console.time('fill');
         this.fill(segmentsToDraw);
+        console.timeEnd('fill');
     }
 
     expandPixels(): void {

@@ -53,6 +53,12 @@ enum THICKNESS {
     Max = 100,
 }
 
+enum TOLERANCE {
+    Min = 0,
+    Default = 0,
+    Max = 100,
+}
+
 const PEN_WIDTH_FACTOR = 5;
 
 enum TRACE_TYPE {
@@ -373,6 +379,7 @@ const FILL_PIXEL_SHIFT = 0.5;
 const FILL_STROKE_WIDTH = '3';
 
 export {
+    TOLERANCE,
     FILL_STROKE_WIDTH,
     FILL_PIXEL_SHIFT,
     CONTROL_SHORTCUTS,

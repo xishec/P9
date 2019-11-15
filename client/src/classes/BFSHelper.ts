@@ -1,4 +1,5 @@
 import { Coords2D } from './Coords2D';
+import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 
 export class BFSHelper {
     maxX: number;
@@ -8,8 +9,14 @@ export class BFSHelper {
     queue: Array<Coords2D>;
     bodyGrid: Map<number, Array<number>>;
     stroke: Array<Coords2D>;
+    tolerance: number;
 
-    constructor(maxX: number, maxY: number, context2D: CanvasRenderingContext2D) {
+    constructor(
+        maxX: number,
+        maxY: number,
+        context2D: CanvasRenderingContext2D,
+        attributesManagerService: AttributesManagerService,
+    ) {
         this.maxX = maxX;
         this.maxY = maxY;
         this.context2D = context2D;
@@ -17,6 +24,10 @@ export class BFSHelper {
         this.queue = [];
         this.bodyGrid = new Map([]);
         this.stroke = [];
+
+        attributesManagerService.tolerance.subscribe((tolerance: number) => {
+            this.tolerance = tolerance;
+        });
     }
 
     computeBFS(clickPosition: Coords2D): void {
@@ -43,15 +54,11 @@ export class BFSHelper {
 
             for (let i = 0; i < neighborPixels.length; ++i) {
                 let neighborPixel: Coords2D = neighborPixels[i];
-                if (this.visited.has(JSON.stringify(neighborPixel))) {
+
+                if (this.visited.has(JSON.stringify(neighborPixel)) || !this.isValidPosition(neighborPixel)) {
                     continue;
                 }
-                if (!this.isValidPosition(neighborPixel)) {
-                    this.stroke.push(neighborPixel);
-                    continue;
-                }
-                let neighborPixelColor = this.getPixelColor(neighborPixel);
-                if (this.isSameColor(neighborPixelColor, targetColor)) {
+                if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(JSON.stringify(neighborPixel));
                 } else {
@@ -64,16 +71,23 @@ export class BFSHelper {
     addPixelToMap(pixel: Coords2D): void {
         if (this.bodyGrid.has(pixel.x)) {
             this.bodyGrid.get(pixel.x)!.push(pixel.y);
-            this.bodyGrid.get(pixel.x)!.sort((a: number, b: number) => {
-                return a < b ? -1 : 1;
-            });
         } else {
             this.bodyGrid.set(pixel.x, [pixel.y]);
         }
     }
 
     isSameColor(color1: Uint8ClampedArray, color2: Uint8ClampedArray): boolean {
-        return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
+        if (this.tolerance === 0) {
+            return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
+        } else {
+            let difference = Math.sqrt(
+                (Math.abs(color1[0] - color2[0]) ^ 2) +
+                    (Math.abs(color1[1] - color2[1]) ^ 2) +
+                    (Math.abs(color1[2] - color2[2]) ^ 2),
+            );
+            let sommum = 255 * 3;
+            return difference <= (this.tolerance / 100) * sommum;
+        }
     }
 
     isStroke(pixel: Coords2D, targetColor: Uint8ClampedArray): boolean {
