@@ -2,8 +2,8 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
-import { Keys, Mouse } from 'src/constants/constants';
-import {  createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers.spec';
+import { KEYS, MOUSE } from 'src/constants/constants';
+import { createKeyBoardEvent, createMouseEvent } from '../../../../../classes/test-helpers.spec';
 import { AttributesManagerService } from '../../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../../color-tool/color-tool.service';
 import { TracingToolService } from './tracing-tool.service';
@@ -12,8 +12,8 @@ const MOCK_X = 10;
 const MOCK_Y = 10;
 const MOCK_THICKNESS = 1;
 const MOCK_COLOR = '#000000';
-const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, Mouse.LeftButton);
-const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(Keys.Shift);
+const MOCK_LEFT_MOUSE_BUTTON_CLICK = createMouseEvent(MOCK_X, MOCK_Y, MOUSE.LeftButton);
+const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(KEYS.Shift);
 
 describe('TracingToolService', () => {
     let injector: TestBed;
@@ -25,37 +25,43 @@ describe('TracingToolService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [TracingToolService,
-            {
-                provide: Renderer2,
-                useValue: {
-                    createElement: () => null,
-                    setAttribute: () => null,
-                    appendChild: () => null,
-                    removeChild: () => null,
+            providers: [
+                TracingToolService,
+                {
+                    provide: Renderer2,
+                    useValue: {
+                        createElement: () => null,
+                        setAttribute: () => null,
+                        appendChild: () => null,
+                        removeChild: () => null,
+                    },
                 },
-            }, {
-                provide: ElementRef,
-                useValue: {
-                    nativeElement : {},
+                {
+                    provide: ElementRef,
+                    useValue: {
+                        nativeElement: {},
+                    },
                 },
-            }, {
-                provide: DrawStackService,
-                useValue: {
-                    push: () => null,
-                    getDrawStackLength: () => 0,
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        push: () => null,
+                        getDrawStackLength: () => 0,
+                    },
                 },
-            }, {
-                provide: AttributesManagerService,
-                useValue: {
-                    currentThickness: () => MOCK_THICKNESS,
+                {
+                    provide: AttributesManagerService,
+                    useValue: {
+                        currentThickness: () => MOCK_THICKNESS,
+                    },
                 },
-            }, {
-                provide: ColorToolService,
-                useValue: {
-                    primaryColor: () => MOCK_COLOR,
+                {
+                    provide: ColorToolService,
+                    useValue: {
+                        primaryColor: () => MOCK_COLOR,
+                    },
                 },
-            }],
+            ],
         });
 
         injector = getTestBed();
@@ -65,6 +71,9 @@ describe('TracingToolService', () => {
         spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(rendererMock, 'appendChild').and.returnValue();
@@ -76,7 +85,7 @@ describe('TracingToolService', () => {
 
     it('when onMouseDown isDrawing should be true', () => {
         spyOn(service, 'createSVGWrapper').and.returnValue();
-        spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
+        spyOn(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
 
         service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
@@ -86,7 +95,7 @@ describe('TracingToolService', () => {
 
     it('when onMouseDown currentPath contain M and mouse position', () => {
         spyOn(service, 'createSVGWrapper').and.returnValue();
-        spyOn(service, 'createSVGCircle').and.returnValue(null as unknown as SVGCircleElement);
+        spyOn(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
         spyOn(service, 'createSVGPath').and.returnValue();
 
         service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
@@ -125,7 +134,7 @@ describe('TracingToolService', () => {
 
         service.onMouseLeave(MOCK_LEFT_MOUSE_BUTTON_CLICK);
 
-        expect(spyMouseUp).toHaveBeenCalled ();
+        expect(spyMouseUp).toHaveBeenCalled();
     });
 
     it('when createSVGWrapper is called renderer.setAttribute is called before appendChild', () => {
@@ -134,7 +143,7 @@ describe('TracingToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
     });
 
-    it('when updatePreviewCirlce then renderer.setAttribute is called twice', () => {
+    it('when updatePreviewCircle then renderer.setAttribute is called twice', () => {
         service.updatePreviewCircle(MOCK_X, MOCK_Y);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { TraceType } from 'src/constants/tool-constants';
+import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { AttributesManagerService } from './attributes-manager.service';
 
 describe('AttributesManagerService', () => {
@@ -18,21 +18,45 @@ describe('AttributesManagerService', () => {
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeThickness', () => {
+    it('should thickness.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeThickness(3);
+        service.thickness.next(3);
         expect(service[`thickness`].value).toEqual(3);
     });
 
-    it('should changeTraceType', () => {
+    it('should traceType.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeTraceType(TraceType.Full);
-        expect(service[`traceType`].value).toEqual(TraceType.Full);
+        service.traceType.next(TRACE_TYPE.Full);
+        expect(service[`traceType`].value).toEqual(TRACE_TYPE.Full);
     });
 
-    it('should changeStyle', () => {
+    it('should style.next', () => {
         const service: AttributesManagerService = TestBed.get(AttributesManagerService);
-        service.changeStyle(2);
+        service.style.next(2);
         expect(service[`style`].value).toEqual(2);
+    });
+
+    it('should nbVertices.next', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.nbVertices.next(3);
+        expect(service[`nbVertices`].value).toEqual(3);
+    });
+
+    it('should scaling.next', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.scaling.next(3);
+        expect(service[`scaling`].value).toEqual(3);
+    });
+
+    it('should angle.next', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.angle.next(3);
+        expect(service[`angle`].value).toEqual(3);
+    });
+
+    it('should stampType.next', () => {
+        const service: AttributesManagerService = TestBed.get(AttributesManagerService);
+        service.stampType.next('1');
+        expect(service[`stampType`].value).toEqual('1');
     });
 });

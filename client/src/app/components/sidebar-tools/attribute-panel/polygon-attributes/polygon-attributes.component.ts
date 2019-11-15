@@ -1,34 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { predicate } from 'src/constants/constants';
-import { PolygonFormType, PolygonSides, Thickness, ToolName } from 'src/constants/tool-constants';
+import { PREDICATE } from 'src/constants/constants';
+import { POLYGON_SIDES, POLYGONE_FORM_TYPE, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-polygon-attributes',
     templateUrl: './polygon-attributes.component.html',
     styleUrls: ['./polygon-attributes.component.scss'],
 })
-export class PolygonAttributesComponent implements OnInit {
-    toolName = ToolName.Polygon;
+export class PolygonAttributesComponent implements OnInit, AfterViewInit {
+    toolName = TOOL_NAME.Polygon;
     polygonAttributesForm: FormGroup;
     polygonToolService: PolygonToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
 
-    readonly thickness = Thickness;
-    readonly polygonSides = PolygonSides;
-    readonly polygonFormType = PolygonFormType;
+    readonly thickness = THICKNESS;
+    readonly polygonSides = POLYGON_SIDES;
+    readonly polygonFormType = POLYGONE_FORM_TYPE;
 
     constructor(
         private formBuilder: FormBuilder,
         private toolSelectorService: ToolSelectorService,
-        private colorToolService: ColorToolService,
         private shortcutManagerService: ShortcutManagerService,
     ) {
         this.formBuilder = formBuilder;
@@ -39,36 +37,34 @@ export class PolygonAttributesComponent implements OnInit {
         this.onThicknessChange();
     }
 
-    // tslint:disable-next-line: use-lifecycle-interface
     ngAfterViewInit(): void {
         this.polygonToolService = this.toolSelectorService.getPolygonTool();
         this.polygonToolService.initializeAttributesManagerService(this.attributesManagerService);
-        this.polygonToolService.initializeColorToolService(this.colorToolService);
     }
 
     initializeForm(): void {
         this.polygonAttributesForm = this.formBuilder.group({
             thickness: [
-                Thickness.Default,
-                [Validators.required, Validators.min(Thickness.Min), Validators.max(Thickness.Max)],
+                THICKNESS.Default,
+                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
             traceType: ['Contour'],
             nbVertices: [
-                PolygonSides.Default,
-                [Validators.required, Validators.min(PolygonSides.Min), Validators.max(PolygonSides.Max)],
+                POLYGON_SIDES.Default,
+                [Validators.required, Validators.min(POLYGON_SIDES.Min), Validators.max(POLYGON_SIDES.Max)],
             ],
         });
     }
 
     onThicknessSliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, Thickness)) {
+        if (PREDICATE.eventIsValid(event, THICKNESS)) {
             this.polygonAttributesForm.controls.thickness.setValue(event.value);
             this.onThicknessChange();
         }
     }
 
     onNbVerticesSliderChange(event: MatSliderChange): void {
-        if (predicate.eventIsValid(event, PolygonSides)) {
+        if (PREDICATE.eventIsValid(event, POLYGON_SIDES)) {
             this.polygonAttributesForm.controls.nbVertices.setValue(event.value);
             this.onNbVerticesChange();
         }
@@ -77,18 +73,18 @@ export class PolygonAttributesComponent implements OnInit {
     onThicknessChange(): void {
         const thickness: number = this.polygonAttributesForm.value.thickness;
         if (this.polygonAttributesForm.controls.thickness.valid) {
-            this.attributesManagerService.changeThickness(thickness);
+            this.attributesManagerService.thickness.next(thickness);
         }
     }
 
     onTraceTypeChange(): void {
         const tracetype: string = this.polygonAttributesForm.value.traceType;
-        this.attributesManagerService.changeTraceType(tracetype);
+        this.attributesManagerService.traceType.next(tracetype);
     }
 
     onNbVerticesChange(): void {
         const nbVertices = this.polygonAttributesForm.value.nbVertices;
-        this.attributesManagerService.changeNbVertices(nbVertices);
+        this.attributesManagerService.nbVertices.next(nbVertices);
     }
 
     onFocus(): void {

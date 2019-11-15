@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { COLOR_TYPE, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
 import { ColorNumericValuesComponent } from './color-numeric-values.component';
@@ -55,14 +55,10 @@ describe('ColorNumericValuesComponent', () => {
     });
 
     it('by default RGB are 0 and A is 1', () => {
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['R'].value).toEqual(0);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['G'].value).toEqual(0);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['B'].value).toEqual(0);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['A'].value).toEqual(1);
+        expect(form.controls.R.value).toEqual(0);
+        expect(form.controls.G.value).toEqual(0);
+        expect(form.controls.B.value).toEqual(0);
+        expect(form.controls.A.value).toEqual(1);
     });
 
     it('setColorNumericValues should call setHexValues before setRGBValues', () => {
@@ -78,28 +74,22 @@ describe('ColorNumericValuesComponent', () => {
         component.previewColor = MOCK_COLOR;
 
         component.setHexValues();
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['hex'].value).toEqual('012345');
+        expect(form.controls.hex.value).toEqual('012345');
     });
 
     it(`when setRGBValues with ${MOCK_COLOR} then R=01, G=23, B=45 A=0.2`, () => {
         component.previewColor = MOCK_COLOR;
 
         component.setRGBValues();
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['R'].value).toEqual(1);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['G'].value).toEqual(35);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['B'].value).toEqual(69);
-        // tslint:disable-next-line: no-string-literal
-        expect(form.controls['A'].value).toEqual('0.4');
+        expect(form.controls.R.value).toEqual(1);
+        expect(form.controls.G.value).toEqual(35);
+        expect(form.controls.B.value).toEqual(69);
+        expect(form.controls.A.value).toEqual('0.4');
     });
 
     it('when onUserHexInput previewColor is colorNumericValuesForm.hex + opacity', () => {
         const hexColor = '112233';
-        // tslint:disable-next-line: no-string-literal
-        form.controls['hex'].setValue(hexColor);
+        form.controls.hex.setValue(hexColor);
 
         component.onUserHexInput();
 
@@ -166,7 +156,7 @@ describe('ColorNumericValuesComponent', () => {
                         return DEFAULT_WHITE;
                     };
                     expect(component.previewColor).toBeDefined();
-                    colorToolService.selectedColorType.next(ColorType.backgroundColor);
+                    colorToolService.selectedColorType.next(COLOR_TYPE.backgroundColor);
                     return fixture.whenStable();
                 })
                 .then(() => {

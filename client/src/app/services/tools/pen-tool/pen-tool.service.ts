@@ -4,6 +4,7 @@ import { PEN_WIDTH_FACTOR } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,8 +20,15 @@ export class PenToolService extends TracingToolService {
     maxThickness: number;
     minThickness: number;
 
-    constructor(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
-        super(elementRef, renderer, drawStack);
+    constructor(private colorToolService: ColorToolService) {
+        super();
+        this.colorToolService.primaryColor.subscribe((currentColor: string) => {
+            this.currentColorAndOpacity = currentColor;
+        });
+    }
+
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+        super.initializeService(elementRef, renderer, drawStack);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
@@ -30,10 +38,11 @@ export class PenToolService extends TracingToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.currentThickness.subscribe((thickness) => {
+        this.attributesManagerService.thickness.subscribe((thickness) => {
             this.maxThickness = thickness;
+            this.currentWidth = thickness;
         });
-        this.attributesManagerService.currentMinThickness.subscribe((thickness) => {
+        this.attributesManagerService.minThickness.subscribe((thickness) => {
             this.minThickness = thickness;
         });
     }
@@ -46,8 +55,6 @@ export class PenToolService extends TracingToolService {
             const x = this.getXPos(e.clientX);
             const y = this.getYPos(e.clientY);
             this.currentPath = `M${x} ${y}`;
-            this.svgPreviewCircle = this.createSVGCircle(x, y);
-            this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
             this.createSVGPath();
         }
         this.oldSpeedX = this.speedX;
@@ -77,7 +84,11 @@ export class PenToolService extends TracingToolService {
         this.lastMouseY = e.screenY;
 
         const totalSpeed = this.speedX + this.speedY > PEN_WIDTH_FACTOR ? PEN_WIDTH_FACTOR : this.speedX + this.speedY;
-        const targetWidth = this.maxThickness * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
+        const targetWidth =
+            (this.maxThickness - this.minThickness) * (1 - totalSpeed / PEN_WIDTH_FACTOR) + this.minThickness;
         this.currentWidth += (targetWidth - this.currentWidth) / (2 * PEN_WIDTH_FACTOR);
+        if (Number.isNaN(this.currentWidth)) {
+            this.currentWidth = (this.maxThickness + this.minThickness) / 2;
+        }
     }
 }

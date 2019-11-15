@@ -4,8 +4,11 @@ import { MatDialogRef } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
-import { DrawingInfo } from 'src/classes/DrawingInfo';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
+import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import { Drawing } from '../../../../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
@@ -30,6 +33,7 @@ export class DrawingModalWindowComponent implements OnInit {
         private shortcutManagerService: ShortcutManagerService,
         private modalManagerService: ModalManagerService,
         private drawingLoaderService: DrawingLoaderService,
+        private undoRedoerService: UndoRedoerService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -43,6 +47,10 @@ export class DrawingModalWindowComponent implements OnInit {
             this.emptyDrawStack = emptyDrawStack;
         });
 
+        this.previewColor =
+            this.colorToolService.backgroundColor === undefined
+                ? DEFAULT_WHITE
+                : this.colorToolService.backgroundColor.value;
         this.initializeForm();
     }
 
@@ -55,18 +63,14 @@ export class DrawingModalWindowComponent implements OnInit {
     }
 
     onSubmit() {
+        this.undoRedoerService.initializeStacks();
+
         this.drawingModalWindowService.changeDrawingInfo(
             this.drawingModalForm.value.width,
             this.drawingModalForm.value.height,
             this.previewColor,
         );
-        this.drawingLoaderService.currentDrawing.next({
-            name: '',
-            labels: [],
-            svg: '',
-            idStack: [],
-            drawingInfo: new DrawingInfo(0, 0, ''),
-        });
+        this.drawingLoaderService.currentDrawing.next(new Drawing('', [], '', [], new DrawingInfo(0, 0, '')));
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);

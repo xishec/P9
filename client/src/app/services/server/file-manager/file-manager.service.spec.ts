@@ -1,16 +1,36 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+import { DEFAULT_GRAY_0 } from 'src/constants/color-constants';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { FileManagerService } from './file-manager.service';
 
+let service: FileManagerService;
+
 describe('FileManagerService', () => {
-    beforeEach(() =>
+    beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule],
-        }));
+        });
+        service = TestBed.get(FileManagerService);
+    });
 
     it('should be created', () => {
-        const service: FileManagerService = TestBed.get(FileManagerService);
         expect(service).toBeTruthy();
+    });
+
+    it('should return a observable on deleteDrawing', () => {
+        const answer = service.deleteDrawing('name');
+        expect(answer).toBeTruthy();
+    });
+
+    it('should return a observable on postDrawing', () => {
+        const answer = service.postDrawing('name', [], 'svg', [], new DrawingInfo(0, 0, DEFAULT_GRAY_0));
+        expect(answer).toBeTruthy();
+    });
+
+    it('should return a observable on getAllDrawings', () => {
+        const answer = service.getAllDrawings();
+        expect(answer).toBeTruthy();
     });
 });

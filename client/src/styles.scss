@@ -47,8 +47,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 }
 
 .mat-button-toggle:hover {
-    background-color: mat-color($candy-app-accent);
-    color: white;
+    background-color: #eeeeee;
     transition: 0.3s;
 }
 
@@ -58,6 +57,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
 .myapp-min-width-dialog .mat-dialog-container {
     min-width: 650px;
+    min-height: 400px;
 }
 
 body {

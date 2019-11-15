@@ -1,93 +1,41 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import {
-    LineJointType,
-    LineStrokeType,
+    BRUSH_STYLE,
+    ERASER_SIZE,
+    FONT_ALIGN,
+    FONT_SIZE,
+    LINE_JOINT_TYPE,
+    LINE_STROKE_TYPE,
+    STAMP_ANGLE_ORIENTATION,
+    STAMP_SCALING,
     STAMP_TYPES,
-    StampAngleOrientation,
-    StampScaling,
-    Thickness,
-    TraceType,
+    THICKNESS,
+    TRACE_TYPE,
 } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AttributesManagerService {
-    // tslint:disable-next-line: variable-name
-    private _thickness: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
-    get thickness(): BehaviorSubject<number> {
-        return this._thickness;
-    }
-    set thickness(value: BehaviorSubject<number>) {
-        this._thickness = value;
-    }
+    thickness: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
+    minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
+    traceType: BehaviorSubject<string> = new BehaviorSubject(TRACE_TYPE.Outline);
+    style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);
+    nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
+    lineStrokeType: BehaviorSubject<LINE_STROKE_TYPE> = new BehaviorSubject(LINE_STROKE_TYPE.Continuous);
+    lineJointType: BehaviorSubject<LINE_JOINT_TYPE> = new BehaviorSubject(LINE_JOINT_TYPE.Curvy);
+    circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
+    scaling: BehaviorSubject<number> = new BehaviorSubject(STAMP_SCALING.Default);
+    angle: BehaviorSubject<number> = new BehaviorSubject(STAMP_ANGLE_ORIENTATION.Default);
+    stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
+    eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
 
-    private minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
-    private traceType: BehaviorSubject<string> = new BehaviorSubject(TraceType.Outline);
-    private style: BehaviorSubject<number> = new BehaviorSubject(1);
-    private nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
-    private lineStrokeType: BehaviorSubject<LineStrokeType> = new BehaviorSubject(LineStrokeType.Continuous);
-    private lineJointType: BehaviorSubject<LineJointType> = new BehaviorSubject(LineJointType.Curvy);
-    private circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(Thickness.Default);
-    private scaling: BehaviorSubject<number> = new BehaviorSubject(StampScaling.Default);
-    private angle: BehaviorSubject<number> = new BehaviorSubject(StampAngleOrientation.Default);
-    private stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
-
-    currentThickness: Observable<number> = this.thickness.asObservable();
-    currentMinThickness: Observable<number> = this.minThickness.asObservable();
-    currentTraceType: Observable<string> = this.traceType.asObservable();
-    currentStyle: Observable<number> = this.style.asObservable();
-    currentNbVertices: Observable<number> = this.nbVertices.asObservable();
-    currentLineStrokeType: Observable<LineStrokeType> = this.lineStrokeType.asObservable();
-    currentLineJointType: Observable<LineJointType> = this.lineJointType.asObservable();
-    currentCircleJointDiameter: Observable<number> = this.circleJointDiameter.asObservable();
-    currentAngle: Observable<number> = this.angle.asObservable();
-    currentScaling: Observable<number> = this.scaling.asObservable();
-    currentStampType: Observable<string> = this.stampType.asObservable();
-
-    changeLineStrokeType(lineStrokeType: LineStrokeType): void {
-        this.lineStrokeType.next(lineStrokeType);
-    }
-
-    changeLineJointType(lineJointType: LineJointType): void {
-        this.lineJointType.next(lineJointType);
-    }
-
-    changeCircleJointDiameter(circleJointDiameter: number): void {
-        this.circleJointDiameter.next(circleJointDiameter);
-    }
-
-    changeThickness(thickness: number): void {
-        this.thickness.next(thickness);
-    }
-
-    changeMinThickness(thickness: number): void {
-        this.minThickness.next(thickness);
-    }
-
-    changeTraceType(traceType: string): void {
-        this.traceType.next(traceType);
-    }
-
-    changeStyle(style: number): void {
-        this.style.next(style);
-    }
-
-    changeNbVertices(sideNum: number): void {
-        this.nbVertices.next(sideNum);
-    }
-
-    changeScaling(scaling: number): void {
-        this.scaling.next(scaling);
-    }
-
-    changeAngle(angle: number): void {
-        this.angle.next(angle);
-    }
-
-    changeStampType(stampType: string): void {
-        this.stampType.next(stampType);
-    }
+    boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    font: BehaviorSubject<string> = new BehaviorSubject('Times New Roman, serif');
+    fontSize: BehaviorSubject<number> = new BehaviorSubject(FONT_SIZE.Default);
+    fontAlign: BehaviorSubject<FONT_ALIGN> = new BehaviorSubject(FONT_ALIGN.Start);
+    isWritingState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 }

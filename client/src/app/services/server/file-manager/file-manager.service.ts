@@ -4,22 +4,19 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { DrawingInfo } from 'src/classes/DrawingInfo';
 import { Drawing } from '../../../../../../common/communication/Drawing';
-import { Message } from '../../../../../../common/communication/message';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { Message } from '../../../../../../common/communication/Message';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FileManagerService {
-    pipe(arg0: any) {
-        throw new Error('Method not implemented.');
-    }
     constructor(private http: HttpClient) {}
 
     getAllDrawings(): Observable<Message[] | Message> {
         return this.http
-            .get<Message[]>(environment.BASE_URL + '/api/file-manager/get-all-drawing')
+            .get<Message[]>(environment.BASE_URL + '/api/file-manager/')
             .pipe(catchError(this.handleError<Message>('getAllDrawings')));
     }
 

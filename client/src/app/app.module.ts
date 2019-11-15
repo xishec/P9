@@ -18,6 +18,8 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
+    MatTabsModule,
     MatTooltipModule,
 } from '@angular/material';
 // ************************************************
@@ -37,6 +39,10 @@ import { ColorApplicatorAttributesComponent } from '@attribute-panel/color-appli
 import { ColorAttributesComponent } from '@attribute-panel/color-attributes/color-attributes.component';
 import { PencilAttributesComponent } from '@attribute-panel/pencil-attributes/pencil-attributes.component';
 import { RectangleAttributesComponent } from '@attribute-panel/rectangle-attributes/rectangle-attributes.component';
+import { LabelFilter } from '../classes/pipes/labelFilter';
+import { MySlice } from '../classes/pipes/mySlice';
+import { NameFilter } from '../classes/pipes/nameFilter';
+import { ToTrustHtmlPipe } from '../classes/pipes/toTrustHtml';
 import { ColorNumericValuesComponent } from './components/color-palette/color-numeric-values/color-numeric-values.component';
 import { ColorPaletteComponent } from './components/color-palette/color-palette.component';
 import { ColorPickerComponent } from './components/color-palette/color-picker/color-picker.component';
@@ -44,17 +50,12 @@ import { ColorQueueComponent } from './components/color-palette/color-queue/colo
 import { DrawingModalWindowComponent } from './components/modal-windows/drawing-modal-window/drawing-modal-window.component';
 // tslint:disable-next-line: max-line-length
 import { ExportFileModalWindowComponent } from './components/modal-windows/export-file-modal-window/export-file-modal-window.component';
-import {
-    LabelFilter,
-    MySlice,
-    NameFilter,
-    OpenFileModalWindowComponent,
-    ToTrustHtmlPipe,
-} from './components/modal-windows/open-file-modal-window/open-file-modal-window.component';
+import { OpenFileModalWindowComponent } from './components/modal-windows/open-file-modal-window/open-file-modal-window.component';
 import { SaveFileModalWindowComponent } from './components/modal-windows/save-file-modal-window/save-file-modal-window.component';
 import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-modal-window/welcome-modal-window.component';
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
+import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
 import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
@@ -62,8 +63,12 @@ import { PolygonAttributesComponent } from './components/sidebar-tools/attribute
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
+import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
 import { WorkZoneComponent } from './components/work-zone/work-zone.component';
+import { DrawStackService } from './services/draw-stack/draw-stack.service';
+import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
+import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
 
 @NgModule({
     declarations: [
@@ -97,10 +102,13 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         SelectionAttributesComponent,
         ExportFileModalWindowComponent,
         PenAttributesComponent,
+        TextAttributesComponent,
+        EraserAttributesComponent,
     ],
     imports: [
         MatSliderModule,
         MatCheckboxModule,
+        MatSnackBarModule,
         MatDialogModule,
         MatListModule,
         MatRadioModule,
@@ -114,8 +122,10 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         HttpClientModule,
         MatTooltipModule,
         MatSelectModule,
+        MatTabsModule,
         MatFormFieldModule,
         MatSlideToggleModule,
+        MatSnackBarModule,
     ],
     entryComponents: [
         WelcomeModalWindowComponent,
@@ -130,6 +140,9 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
         WelcomeModalWindowService,
         ColorToolService,
         EventListenerService,
+        DrawStackService,
+        DrawingSaverService,
+        UndoRedoerService,
     ],
     bootstrap: [AppComponent],
 })
