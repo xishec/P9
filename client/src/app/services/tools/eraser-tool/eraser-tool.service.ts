@@ -345,23 +345,26 @@ export class EraserToolService extends AbstractToolService {
 
         this.isOnTarget = false;
 
-        const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget.toString()) !== undefined;
-        if (this.erasedSomething && currentChangedTargetIsValid) {
-            const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
-            this.renderer.removeChild(this.elementRef, this.eraser);
-            this.restoreBorder(
-                this.currentTarget,
-                currentChangedTarget.borderColor,
-                currentChangedTarget.borderWidth,
-                this.lastToolName,
-            );
-            setTimeout(() => {
-                this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-            }, 0);
-            setTimeout(() => {
-                this.colorBorder(this.currentTarget, currentChangedTarget.borderWidth, this.lastToolName);
-                this.appendEraser();
-            }, 0);
+        if (this.currentTarget !== undefined) {
+            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget.toString()) !== undefined;
+
+            if (this.erasedSomething && currentChangedTargetIsValid) {
+                const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
+                this.renderer.removeChild(this.elementRef, this.eraser);
+                this.restoreBorder(
+                    this.currentTarget,
+                    currentChangedTarget.borderColor,
+                    currentChangedTarget.borderWidth,
+                    this.lastToolName,
+                );
+                setTimeout(() => {
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+                }, 0);
+                setTimeout(() => {
+                    this.colorBorder(this.currentTarget, currentChangedTarget.borderWidth, this.lastToolName);
+                    this.appendEraser();
+                }, 0);
+            }
         }
         this.erasedSomething = false;
     }
