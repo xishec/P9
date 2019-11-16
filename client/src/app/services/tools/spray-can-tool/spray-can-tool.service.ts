@@ -1,5 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE, SVG_NS } from 'src/constants/constants';
 import {
     HTML_ATTRIBUTE,
@@ -22,6 +23,8 @@ export class SprayCanToolService extends TracingToolService {
     interval: NodeJS.Timer;
     intervalTime = SPRAY_INTERVAL.Default;
     sprayer: SVGCircleElement;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    isSprayerAppended = false;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -68,11 +71,13 @@ export class SprayCanToolService extends TracingToolService {
             this.isDrawing = true;
             this.createSVGWrapper();
             this.appendSpray();
+            this.appendSprayer();
             this.createSVGPath();
 
             clearInterval(this.interval);
             this.interval = setInterval(() => {
                 this.appendSpray();
+                this.appendSprayer();
             }, this.intervalTime);
         }
     }
@@ -136,15 +141,5 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.SprayCan);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
-    }
-
-    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
-        super.initializeAttributesManagerService(attributesManagerService);
-        this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
-            this.radius = sprayDiameter / 2;
-        });
-        this.attributesManagerService.sprayInterval.subscribe((intervalTime: number) => {
-            this.intervalTime = intervalTime;
-        });
     }
 }
