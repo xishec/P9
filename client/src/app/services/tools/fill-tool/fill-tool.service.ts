@@ -21,7 +21,6 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class FillToolService extends AbstractToolService {
-    svg: SVGElement;
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     pixelColor: string;
     canvas: HTMLCanvasElement;
@@ -41,6 +40,7 @@ export class FillToolService extends AbstractToolService {
     strokeColor: string;
     fillColor: string;
     tolerance: number;
+    dsStrokes: Array<string>;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
@@ -101,7 +101,7 @@ export class FillToolService extends AbstractToolService {
         console.timeEnd('bfs');
 
         // this.expandPixels();
-        let segmentsToDraw: Array<FillStructure> = this.divideLinesToSegments();
+        let segmentsToDraw: Map<number, Array<FillStructure>> = this.divideLinesToSegments();
         // this.groupSegmentsToRectangle(segmentsToDraw);
         console.time('fill');
         this.fill(segmentsToDraw);
@@ -127,74 +127,78 @@ export class FillToolService extends AbstractToolService {
         this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
     }
 
-    fill(segmentsToDraw: Array<FillStructure>) {
+    fill(segmentsToDraw: Map<number, Array<FillStructure>>) {
         this.createSVGWrapper();
         let bodyWrap: SVGGElement = this.fillBody(segmentsToDraw);
         this.fillStroke(bodyWrap);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    groupSegmentsToRectangle(segmentsToDraw: Array<FillStructure>) {
-        segmentsToDraw.sort((a, b) => {
-            return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
-        });
-        for (let i = 1; i < segmentsToDraw.length; i++) {
-            const thisFillStructure: FillStructure = segmentsToDraw[i];
-            const lastFillStructure: FillStructure = segmentsToDraw[i - 1];
-            if (this.canBeGroupedToRectangle(thisFillStructure, lastFillStructure)) {
-                if (lastFillStructure.leftTop.x < thisFillStructure.leftBottum.x) {
-                    lastFillStructure.rightBottum = thisFillStructure.leftBottum;
-                    lastFillStructure.rightTop = thisFillStructure.leftTop;
-                } else {
-                    lastFillStructure.leftBottum = thisFillStructure.rightBottum;
-                    lastFillStructure.leftTop = thisFillStructure.rightTop;
-                }
-                segmentsToDraw.splice(i, 1);
-                i--;
-            }
-        }
-    }
+    // groupSegmentsToRectangle(segmentsToDraw: Array<FillStructure>) {
+    //     segmentsToDraw.sort((a, b) => {
+    //         return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
+    //     });
+    //     for (let i = 1; i < segmentsToDraw.length; i++) {
+    //         const thisFillStructure: FillStructure = segmentsToDraw[i];
+    //         const lastFillStructure: FillStructure = segmentsToDraw[i - 1];
+    //         if (this.canBeGroupedToRectangle(thisFillStructure, lastFillStructure)) {
+    //             if (lastFillStructure.leftTop.x < thisFillStructure.leftBottum.x) {
+    //                 lastFillStructure.rightBottum = thisFillStructure.leftBottum;
+    //                 lastFillStructure.rightTop = thisFillStructure.leftTop;
+    //             } else {
+    //                 lastFillStructure.leftBottum = thisFillStructure.rightBottum;
+    //                 lastFillStructure.leftTop = thisFillStructure.rightTop;
+    //             }
+    //             segmentsToDraw.splice(i, 1);
+    //             i--;
+    //         }
+    //     }
+    // }
 
-    canBeGroupedToRectangle(thisFillStructure: FillStructure, lastFillStructure: FillStructure): boolean {
-        return (
-            thisFillStructure.leftBottum.y === lastFillStructure.leftBottum.y &&
-            thisFillStructure.leftTop.y === lastFillStructure.leftTop.y &&
-            Math.abs(thisFillStructure.leftTop.x - lastFillStructure.leftTop.x) === 1
-        );
-    }
+    // canBeGroupedToRectangle(thisFillStructure: FillStructure, lastFillStructure: FillStructure): boolean {
+    //     return (
+    //         thisFillStructure.leftBottum.y === lastFillStructure.leftBottum.y &&
+    //         thisFillStructure.leftTop.y === lastFillStructure.leftTop.y &&
+    //         Math.abs(thisFillStructure.leftTop.x - lastFillStructure.leftTop.x) === 1
+    //     );
+    // }
 
     divideLinesToSegments() {
-        let segmentsToDraw: Array<FillStructure> = [];
+        let segmentsToDraw: Map<number, Array<FillStructure>> = new Map([]);
 
         this.bfsHelper.bodyGrid.forEach((column, x) => {
             let fillStructure = new FillStructure();
-            fillStructure.leftBottum = new Coords2D(x, column[0]);
-            fillStructure.rightBottum = new Coords2D(x, column[0]);
+            fillStructure.bottum = new Coords2D(x, column[0]);
             for (let y = 1; y < column.length; y++) {
                 if (column[y] !== column[y - 1] + 1) {
-                    fillStructure.leftTop = new Coords2D(x, column[y - 1]);
-                    fillStructure.rightTop = new Coords2D(x, column[y - 1]);
-                    segmentsToDraw.push(fillStructure);
+                    fillStructure.top = new Coords2D(x, column[y - 1]);
+                    this.addToMap(x, fillStructure, segmentsToDraw);
                     fillStructure = new FillStructure();
-                    fillStructure.leftBottum = new Coords2D(x, column[y]);
-                    fillStructure.rightBottum = new Coords2D(x, column[y]);
+                    fillStructure.bottum = new Coords2D(x, column[y]);
                 }
             }
-            fillStructure.leftTop = new Coords2D(x, column[column.length - 1]);
-            fillStructure.rightTop = new Coords2D(x, column[column.length - 1]);
-            segmentsToDraw.push(fillStructure);
+            fillStructure.top = new Coords2D(x, column[column.length - 1]);
+            this.addToMap(x, fillStructure, segmentsToDraw);
         });
 
         return segmentsToDraw;
     }
 
-    getPointsPosition(fillStructure: FillStructure): string {
-        return `${fillStructure.leftBottum.x + FILL_PIXEL_SHIFT},${fillStructure.leftBottum.y +
-            FILL_PIXEL_SHIFT} ${fillStructure.leftTop.x + FILL_PIXEL_SHIFT},${fillStructure.leftTop.y +
-            FILL_PIXEL_SHIFT} ${fillStructure.rightTop.x + FILL_PIXEL_SHIFT},${fillStructure.rightTop.y +
-            FILL_PIXEL_SHIFT} ${fillStructure.rightBottum.x + FILL_PIXEL_SHIFT},${fillStructure.rightBottum.y +
-            FILL_PIXEL_SHIFT}`;
+    addToMap(x: number, fillStructure: FillStructure, map: Map<number, Array<FillStructure>>): void {
+        if (map.has(x)) {
+            map.get(x)!.push(fillStructure);
+        } else {
+            map.set(x, [fillStructure]);
+        }
     }
+
+    // getPointsPosition(fillStructure: FillStructure): string {
+    //     return `${fillStructure.leftBottum.x + FILL_PIXEL_SHIFT},${fillStructure.leftBottum.y +
+    //         FILL_PIXEL_SHIFT} ${fillStructure.leftTop.x + FILL_PIXEL_SHIFT},${fillStructure.leftTop.y +
+    //         FILL_PIXEL_SHIFT} ${fillStructure.rightTop.x + FILL_PIXEL_SHIFT},${fillStructure.rightTop.y +
+    //         FILL_PIXEL_SHIFT} ${fillStructure.rightBottum.x + FILL_PIXEL_SHIFT},${fillStructure.rightBottum.y +
+    //         FILL_PIXEL_SHIFT}`;
+    // }
 
     updateCanvas(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
@@ -214,18 +218,77 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    fillBody(segmentsToDraw: Array<FillStructure>): SVGGElement {
+    fillBody(segmentsToDraw: Map<number, Array<FillStructure>>): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        segmentsToDraw.forEach((fillStructure: FillStructure) => {
-            const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, this.getPointsPosition(fillStructure));
-            this.renderer.appendChild(bodyWrap, drawPolygon);
+
+        // console.log(segmentsToDraw);
+        let ds: Array<string> = [];
+        this.dsStrokes = [];
+        let dsStrokeTop: Array<string> = [];
+        let dsStrokeBottum: Array<string> = [];
+        let lastFillStructuresLength = -1;
+        for (let x = this.bfsHelper.mostLeft; x <= this.bfsHelper.mostRight; x++) {
+            const fillStructures: Array<FillStructure> = segmentsToDraw.get(x)!;
+
+            // console.log(fillStructures.length, lastFillStructuresLength);
+            if (fillStructures.length !== lastFillStructuresLength) {
+                ds.forEach((d) => {
+                    let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+                    this.renderer.setAttribute(path, 'd', d);
+                    this.renderer.appendChild(bodyWrap, path);
+                });
+                ds = [];
+                this.dsStrokes.push(...dsStrokeTop);
+                this.dsStrokes.push(...dsStrokeBottum);
+                dsStrokeTop = [];
+                dsStrokeBottum = [];
+
+                fillStructures.forEach((fillStructure: FillStructure) => {
+                    // console.log(fillStructure);
+                    ds.push(
+                        `M${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
+                    );
+                    dsStrokeTop.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
+                    dsStrokeBottum.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
+                });
+            } else {
+                fillStructures.forEach((fillStructure: FillStructure, i: number) => {
+                    ds[
+                        i
+                    ] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`;
+
+                    let lastTop = segmentsToDraw.get(x - 1)![i].top;
+                    let lastBottum = segmentsToDraw.get(x - 1)![i].bottum;
+                    if (fillStructure.top.distanceTo(lastTop) > 5) {
+                        dsStrokeTop[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
+                    } else {
+                        dsStrokeTop[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
+                    }
+                    if (fillStructure.bottum.distanceTo(lastBottum) > 5) {
+                        dsStrokeBottum[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+                    } else {
+                        dsStrokeBottum[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+                    }
+                });
+            }
+            lastFillStructuresLength = fillStructures.length;
+        }
+
+        this.dsStrokes.push(...dsStrokeTop);
+        this.dsStrokes.push(...dsStrokeBottum);
+
+        ds.forEach((d) => {
+            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            this.renderer.setAttribute(path, 'd', d);
+            this.renderer.appendChild(bodyWrap, path);
         });
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.stroke, '#' + this.userFillColor);
-        this.renderer.setAttribute(this.svgWrap, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
+
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(bodyWrap, 'stroke-linecap', 'round');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.userFillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.userFillColor);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
 
         return bodyWrap.cloneNode(true) as SVGGElement;
@@ -240,13 +303,22 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
         this.renderer.setAttribute(mask, 'id', id);
         this.renderer.appendChild(mask, bodyWrap);
+        this.renderer.appendChild(this.svgWrap, mask);
 
-        this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.bfsHelper.stroke.forEach((element) => {
-            this.renderer.appendChild(strokeWrap, this.createSVGDot(element.x, element.y));
+        this.dsStrokes.forEach((d) => {
+            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            this.renderer.setAttribute(path, 'd', d);
+            this.renderer.appendChild(strokeWrap, path);
         });
 
-        this.renderer.appendChild(this.svgWrap, mask);
+        this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.userStrokeWidth * 2).toString());
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(strokeWrap, 'stroke-linecap', 'round');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.userStrokeColor);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
+
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
 
@@ -261,7 +333,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, (x + FILL_PIXEL_SHIFT).toString());
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, (y + FILL_PIXEL_SHIFT).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, this.userStrokeColor);
         this.renderer.setAttribute(circle, 'r', this.userStrokeWidth.toString());
         return circle;
     }
@@ -271,19 +343,19 @@ export class FillToolService extends AbstractToolService {
         switch (traceType) {
             case TRACE_TYPE.Outline: {
                 this.userFillColor = 'none';
-                this.userStrokeColor = this.strokeColor;
+                this.userStrokeColor = '#' + this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
             case TRACE_TYPE.Full: {
-                this.userFillColor = this.fillColor;
+                this.userFillColor = '#' + this.fillColor;
                 this.userStrokeColor = 'none';
                 this.userStrokeWidth = 0;
                 break;
             }
             case TRACE_TYPE.Both: {
-                this.userFillColor = this.fillColor;
-                this.userStrokeColor = this.strokeColor;
+                this.userFillColor = '#' + this.fillColor;
+                this.userStrokeColor = '#' + this.strokeColor;
                 this.userStrokeWidth = this.strokeWidth;
                 break;
             }
