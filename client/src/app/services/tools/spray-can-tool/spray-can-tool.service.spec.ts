@@ -124,4 +124,21 @@ fdescribe('SprayCanToolService', () => {
         expect(spyOnsetSprayerToMouse).toHaveBeenCalled();
     });
 
+    it('setSprayerToMouse should call appendSprayer if isSprayerAppended is false', () => {
+        service.isSprayerAppended = false;
+        const spyOnsappendSprayer = spyOn(service, 'appendSprayer');
+
+        service.setSprayerToMouse(leftMouseEvent);
+
+        expect(spyOnsappendSprayer).toHaveBeenCalled();
+    });
+
+    it('setSprayerToMouse should not call appendSprayer if isSprayerAppended is true', () => {
+        service.isSprayerAppended = true;
+        const spyOnsappendSprayer = spyOn(service, 'appendSprayer');
+
+        service.setSprayerToMouse(leftMouseEvent);
+
+        expect(spyOnsappendSprayer).not.toHaveBeenCalled();
+    });
 });
