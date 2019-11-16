@@ -116,6 +116,18 @@ export class SprayCanToolService extends TracingToolService {
         this.isSprayerAppended = true;
     }
 
+    cleanUp() {
+        super.cleanUp();
+        this.renderer.removeChild(this.elementRef, this.sprayer);
+        this.isSprayerAppended = false;
+    }
+
+    onMouseLeave(event: MouseEvent) {
+        super.onMouseLeave(event);
+        this.renderer.removeChild(this.elementRef, this.sprayer);
+        this.isSprayerAppended = false;
+    }
+
     createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
