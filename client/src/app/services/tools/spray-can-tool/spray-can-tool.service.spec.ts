@@ -141,4 +141,20 @@ fdescribe('SprayCanToolService', () => {
 
         expect(spyOnsappendSprayer).not.toHaveBeenCalled();
     });
+
+    it('cleanUp should set isSprayerAppended to false', () => {
+        service.isSprayerAppended = true;
+
+        service.cleanUp();
+
+        expect(service.isSprayerAppended).toEqual(false);
+    });
+
+    it('onMouseLeave should set isSprayerAppended to false', () => {
+        service.isSprayerAppended = true;
+
+        service.onMouseLeave(leftMouseEvent);
+
+        expect(service.isSprayerAppended).toEqual(false);
+    });
 });
