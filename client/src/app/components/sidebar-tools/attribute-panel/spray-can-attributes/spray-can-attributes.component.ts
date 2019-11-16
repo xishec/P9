@@ -6,7 +6,13 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { SprayCanToolService } from 'src/app/services/tools/spray-can-tool/spray-can-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { SPRAY_DIAMETER, SPRAY_INTERVAL, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import {
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
+    THICKNESS,
+    TOOL_NAME,
+    SPRAY_PARTICLE_THICKNESS,
+} from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-spray-can-attributes',
@@ -18,7 +24,7 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     sprayCanAttributesForm: FormGroup;
     sprayCanToolService: SprayCanToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
-    readonly thickness = THICKNESS;
+    readonly thickness = SPRAY_PARTICLE_THICKNESS;
     readonly diameter = SPRAY_DIAMETER;
     readonly interval = SPRAY_INTERVAL;
 
@@ -44,8 +50,12 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     initializeForm(): void {
         this.sprayCanAttributesForm = this.formBuilder.group({
             thickness: [
-                THICKNESS.Min,
-                [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
+                SPRAY_PARTICLE_THICKNESS.Default,
+                [
+                    Validators.required,
+                    Validators.min(SPRAY_PARTICLE_THICKNESS.Min),
+                    Validators.max(SPRAY_PARTICLE_THICKNESS.Max),
+                ],
             ],
             diameter: [
                 SPRAY_DIAMETER.Default,

@@ -370,7 +370,7 @@ enum FONT_WEIGHT {
 }
 
 enum SPRAY_DIAMETER {
-    Min = 1,
+    Min = 20,
     Default = 30,
     Max = 100,
 }
@@ -379,6 +379,12 @@ enum SPRAY_INTERVAL {
     Min = 0,
     Default = 20,
     Max = 1000,
+}
+
+enum SPRAY_PARTICLE_THICKNESS {
+    Min = 1,
+    Default = 2.5,
+    Max = 5,
 }
 
 const SPRAYER_STROKE_WIDTH = '3';
@@ -444,4 +450,5 @@ export {
     SPRAY_DIAMETER,
     SPRAY_INTERVAL,
     SPRAYER_STROKE_WIDTH,
+    SPRAY_PARTICLE_THICKNESS,
 };
