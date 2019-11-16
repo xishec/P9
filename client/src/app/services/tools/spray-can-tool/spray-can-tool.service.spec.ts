@@ -3,12 +3,13 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SprayCanToolService } from './spray-can-tool.service';
+import { createMouseEvent } from 'src/classes/test-helpers.spec';
 
 fdescribe('SprayCanToolService', () => {
     let injector: TestBed;
     let service: SprayCanToolService;
-    // let leftMouseEvent: MouseEvent;
-    // let rightMouseEvent: MouseEvent;
+    let leftMouseEvent: MouseEvent;
+    let rightMouseEvent: MouseEvent;
 
     // let spyOnremoveChild: jasmine.Spy;
 
@@ -81,13 +82,29 @@ fdescribe('SprayCanToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        // leftMouseEvent = createMouseEvent(10, 10, 0);
-        // rightMouseEvent = createMouseEvent(10, 10, 2);
+        leftMouseEvent = createMouseEvent(10, 10, 0);
+        rightMouseEvent = createMouseEvent(10, 10, 2);
 
         // spyOnremoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('onMouseDown should set the event to be a left click if the event is left click', () => {
+        service.event = rightMouseEvent;
+
+        service.onMouseDown(leftMouseEvent);
+
+        expect(service.event).toEqual(leftMouseEvent);
+    });
+
+    it('onMouseDown should not set the event to be a right click if the event is right click', () => {
+        service.event = leftMouseEvent;
+
+        service.onMouseDown(rightMouseEvent);
+
+        expect(service.event).not.toEqual(rightMouseEvent);
     });
 });
