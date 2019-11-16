@@ -1,7 +1,14 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
+import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, SPRAY_DIAMETER, SPRAY_INTERVAL, TOOL_NAME } from 'src/constants/tool-constants';
+import {
+    HTML_ATTRIBUTE,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
+    SPRAYER_STROKE_WIDTH,
+    TOOL_NAME,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -15,16 +22,41 @@ export class SprayCanToolService extends TracingToolService {
     event: MouseEvent;
     interval: NodeJS.Timer;
     intervalTime = SPRAY_INTERVAL.Default;
+    sprayer: SVGCircleElement;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    isSprayerAppended = false;
 
     constructor(private colorToolService: ColorToolService) {
         super();
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
+
+            if (this.sprayer) {
+                this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
+            }
         });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super.initializeService(elementRef, renderer, drawStack);
+
+        this.sprayer = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
+        // change "'#' + this.currentColorAndOpacity" to "black" to debuge easier
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke_width, SPRAYER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.fill, 'none');
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        super.initializeAttributesManagerService(attributesManagerService);
+        this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
+            this.radius = sprayDiameter / 2;
+            this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
+        });
+        this.attributesManagerService.sprayInterval.subscribe((intervalTime: number) => {
+            this.intervalTime = intervalTime;
+        });
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
@@ -39,11 +71,13 @@ export class SprayCanToolService extends TracingToolService {
             this.isDrawing = true;
             this.createSVGWrapper();
             this.appendSpray();
+            this.appendSprayer();
             this.createSVGPath();
 
             clearInterval(this.interval);
             this.interval = setInterval(() => {
                 this.appendSpray();
+                this.appendSprayer();
             }, this.intervalTime);
         }
     }
@@ -67,6 +101,36 @@ export class SprayCanToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent) {
         this.event = e;
+        this.setSprayerToMouse(e);
+    }
+
+    setSprayerToMouse(event: MouseEvent): void {
+        this.currentMouseCoords.x = this.getXPos(event.clientX);
+        this.currentMouseCoords.y = this.getYPos(event.clientY);
+
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cx, this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cy, this.currentMouseCoords.y.toString());
+
+        if (!this.isSprayerAppended) {
+            this.appendSprayer();
+        }
+    }
+
+    appendSprayer(): void {
+        this.renderer.appendChild(this.elementRef.nativeElement, this.sprayer);
+        this.isSprayerAppended = true;
+    }
+
+    cleanUp() {
+        super.cleanUp();
+        this.renderer.removeChild(this.elementRef, this.sprayer);
+        this.isSprayerAppended = false;
+    }
+
+    onMouseLeave(event: MouseEvent) {
+        super.onMouseLeave(event);
+        this.renderer.removeChild(this.elementRef, this.sprayer);
+        this.isSprayerAppended = false;
     }
 
     createSVGWrapper(): void {
@@ -77,15 +141,5 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.SprayCan);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
-    }
-
-    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
-        super.initializeAttributesManagerService(attributesManagerService);
-        this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
-            this.radius = sprayDiameter / 2;
-        });
-        this.attributesManagerService.sprayInterval.subscribe((intervalTime: number) => {
-            this.intervalTime = intervalTime;
-        });
     }
 }
