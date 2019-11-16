@@ -1,9 +1,9 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SprayCanToolService } from './spray-can-tool.service';
-import { createMouseEvent } from 'src/classes/test-helpers.spec';
 
 fdescribe('SprayCanToolService', () => {
     let injector: TestBed;
@@ -107,4 +107,21 @@ fdescribe('SprayCanToolService', () => {
 
         expect(service.event).not.toEqual(rightMouseEvent);
     });
+
+    // it('onMouseUp should call clearInterval', () => {
+    //     const spy = spyOn(this, 'clearInterval');
+
+    //     service.onMouseUp(leftMouseEvent);
+
+    //     expect(service.event).not.toEqual(rightMouseEvent);
+    // });
+
+    it('onMouseMove should call setSprayerToMouse', () => {
+        const spyOnsetSprayerToMouse = spyOn(service, 'setSprayerToMouse');
+
+        service.onMouseMove(leftMouseEvent);
+
+        expect(spyOnsetSprayerToMouse).toHaveBeenCalled();
+    });
+
 });
