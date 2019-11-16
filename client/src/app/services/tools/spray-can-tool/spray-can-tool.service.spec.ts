@@ -108,13 +108,13 @@ fdescribe('SprayCanToolService', () => {
         expect(service.event).not.toEqual(rightMouseEvent);
     });
 
-    // it('onMouseUp should call clearInterval', () => {
-    //     const spy = spyOn(this, 'clearInterval');
+    it('onMouseUp should call clearInterval', () => {
+        const spyOnclearInterval = spyOn(global, 'clearInterval');
 
-    //     service.onMouseUp(leftMouseEvent);
+        service.onMouseUp(rightMouseEvent);
 
-    //     expect(service.event).not.toEqual(rightMouseEvent);
-    // });
+        expect(spyOnclearInterval).not.toHaveBeenCalled();
+    });
 
     it('onMouseMove should call setSprayerToMouse', () => {
         const spyOnsetSprayerToMouse = spyOn(service, 'setSprayerToMouse');
