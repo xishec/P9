@@ -1,7 +1,13 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, SPRAY_DIAMETER, SPRAY_INTERVAL, TOOL_NAME } from 'src/constants/tool-constants';
+import {
+    HTML_ATTRIBUTE,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
+    SPRAYER_STROKE_WIDTH,
+    TOOL_NAME,
+} from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -25,6 +31,7 @@ export class SprayCanToolService extends TracingToolService {
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super.initializeService(elementRef, renderer, drawStack);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke_width, SPRAYER_STROKE_WIDTH);
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
