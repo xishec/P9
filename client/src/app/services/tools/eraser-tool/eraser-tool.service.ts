@@ -244,7 +244,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
 
-        this.checkIfSprayCan(idElement, tool, '#' + DEFAULT_RED);
+        this.checkIfLineOrSprayCan(idElement, tool, '#' + DEFAULT_RED);
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
@@ -256,17 +256,6 @@ export class EraserToolService extends AbstractToolService {
             HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
-    }
-
-    checkIfSprayCan(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.SprayCan && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            const children = this.drawStack.getElementByPosition(idElement).childNodes;
-
-            for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
-                this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.stroke, borderColor);
-            }
-        }
     }
 
     checkIfPen(idElement: number, tool: string, borderColor: string) {
@@ -295,6 +284,11 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
+    checkIfLineOrSprayCan(idElement: number, tool: string, borderColor: string) {
+        if (
+            (tool === TOOL_NAME.Line || tool === TOOL_NAME.SprayCan) &&
+            this.drawStack.getElementByPosition(idElement).childElementCount > 1
+        ) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
@@ -315,9 +309,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkIfPen(idElement, tool, borderColor);
 
-        this.checkIfLine(idElement, tool, borderColor);
-
-        this.checkIfSprayCan(idElement, tool, borderColor);
+        this.checkIfLineOrSprayCan(idElement, tool, borderColor);
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
         this.renderer.setAttribute(
