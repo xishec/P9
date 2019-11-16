@@ -64,10 +64,10 @@ export class SprayCanToolService extends TracingToolService {
         return circle;
     }
 
-    onMouseDown(e: MouseEvent) {
-        if (e.button === MOUSE.LeftButton) {
+    onMouseDown(event: MouseEvent) {
+        if (event.button === MOUSE.LeftButton) {
             this.setColorAndOpacity();
-            this.event = e;
+            this.event = event;
             this.isDrawing = true;
             this.createSVGWrapper();
             this.appendSpray();
@@ -94,14 +94,16 @@ export class SprayCanToolService extends TracingToolService {
         }
     }
 
-    onMouseUp(e: MouseEvent) {
-        super.onMouseUp(e);
-        clearInterval(this.interval);
+    onMouseUp(event: MouseEvent) {
+        super.onMouseUp(event);
+        if (event.button === MOUSE.LeftButton) {
+            clearInterval(this.interval);
+        }
     }
 
-    onMouseMove(e: MouseEvent) {
-        this.event = e;
-        this.setSprayerToMouse(e);
+    onMouseMove(event: MouseEvent) {
+        this.event = event;
+        this.setSprayerToMouse(event);
     }
 
     setSprayerToMouse(event: MouseEvent): void {
