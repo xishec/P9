@@ -96,6 +96,24 @@ export class SprayCanToolService extends TracingToolService {
 
     onMouseMove(e: MouseEvent) {
         this.event = e;
+        this.setSprayerToMouse(e);
+    }
+
+    setSprayerToMouse(event: MouseEvent): void {
+        this.currentMouseCoords.x = this.getXPos(event.clientX);
+        this.currentMouseCoords.y = this.getYPos(event.clientY);
+
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cx, this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cy, this.currentMouseCoords.y.toString());
+
+        if (!this.isSprayerAppended) {
+            this.appendSprayer();
+        }
+    }
+
+    appendSprayer(): void {
+        this.renderer.appendChild(this.elementRef.nativeElement, this.sprayer);
+        this.isSprayerAppended = true;
     }
 
     createSVGWrapper(): void {
