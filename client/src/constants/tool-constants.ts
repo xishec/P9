@@ -378,7 +378,7 @@ enum SPRAY_DIAMETER {
 enum SPRAY_INTERVAL {
     Min = 0,
     Default = 20,
-    Max = 2000,
+    Max = 1000,
 }
 
 export {
