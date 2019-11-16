@@ -9,9 +9,9 @@ import { PREDICATE } from 'src/constants/constants';
 import {
     SPRAY_DIAMETER,
     SPRAY_INTERVAL,
+    SPRAY_PARTICLE_THICKNESS,
     THICKNESS,
     TOOL_NAME,
-    SPRAY_PARTICLE_THICKNESS,
 } from 'src/constants/tool-constants';
 
 @Component({
