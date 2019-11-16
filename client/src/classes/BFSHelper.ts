@@ -8,8 +8,10 @@ export class BFSHelper {
     visited: Set<string>;
     queue: Array<Coords2D>;
     bodyGrid: Map<number, Array<number>>;
-    stroke: Array<Coords2D>;
+    strokeGrid: Map<number, Array<number>>;
     tolerance: number;
+    mostLeft: number;
+    mostRight: number;
 
     constructor(
         maxX: number,
@@ -23,7 +25,9 @@ export class BFSHelper {
         this.visited = new Set([]);
         this.queue = [];
         this.bodyGrid = new Map([]);
-        this.stroke = [];
+        this.strokeGrid = new Map([]);
+        this.mostLeft = this.maxX;
+        this.mostRight = 0;
 
         attributesManagerService.tolerance.subscribe((tolerance: number) => {
             this.tolerance = tolerance;
@@ -39,8 +43,11 @@ export class BFSHelper {
         while (this.queue.length > 0) {
             let pixel: Coords2D = this.queue.shift()!;
 
+            this.mostLeft = pixel.x < this.mostLeft ? pixel.x : this.mostLeft;
+            this.mostRight = pixel.x > this.mostRight ? pixel.x : this.mostRight;
+
             if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
-                this.addPixelToMap(pixel);
+                this.addPixelToMap(pixel, this.bodyGrid);
             } else {
                 continue;
             }
@@ -54,25 +61,28 @@ export class BFSHelper {
 
             for (let i = 0; i < neighborPixels.length; ++i) {
                 let neighborPixel: Coords2D = neighborPixels[i];
-
-                if (this.visited.has(JSON.stringify(neighborPixel)) || !this.isValidPosition(neighborPixel)) {
+                if (this.visited.has(JSON.stringify(neighborPixel))) {
+                    continue;
+                }
+                if (!this.isValidPosition(neighborPixel)) {
+                    this.addPixelToMap(neighborPixel, this.strokeGrid);
                     continue;
                 }
                 if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(JSON.stringify(neighborPixel));
                 } else {
-                    this.stroke.push(pixel);
+                    this.addPixelToMap(neighborPixel, this.strokeGrid);
                 }
             }
         }
     }
 
-    addPixelToMap(pixel: Coords2D): void {
-        if (this.bodyGrid.has(pixel.x)) {
-            this.bodyGrid.get(pixel.x)!.push(pixel.y);
+    addPixelToMap(pixel: Coords2D, map: Map<number, Array<number>>): void {
+        if (map.has(pixel.x)) {
+            map.get(pixel.x)!.push(pixel.y);
         } else {
-            this.bodyGrid.set(pixel.x, [pixel.y]);
+            map.set(pixel.x, [pixel.y]);
         }
     }
 
