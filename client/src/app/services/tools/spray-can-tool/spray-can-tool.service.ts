@@ -31,7 +31,7 @@ export class SprayCanToolService extends TracingToolService {
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
 
-            if (this.sprayer) {
+            if (this.sprayer !== undefined) {
                 this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
             }
         });

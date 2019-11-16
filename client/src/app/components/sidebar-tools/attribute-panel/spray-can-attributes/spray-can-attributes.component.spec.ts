@@ -30,7 +30,6 @@ describe('SprayCanAttributesComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SprayCanAttributesComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
     it('should create', () => {
