@@ -21,17 +21,39 @@ export class SprayCanToolService extends TracingToolService {
     event: MouseEvent;
     interval: NodeJS.Timer;
     intervalTime = SPRAY_INTERVAL.Default;
+    sprayer: SVGCircleElement;
 
     constructor(private colorToolService: ColorToolService) {
         super();
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
+
+            if (this.sprayer) {
+                this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
+            }
         });
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         super.initializeService(elementRef, renderer, drawStack);
+
+        this.sprayer = this.renderer.createElement('circle', SVG_NS);
+        this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
+        // change "'#' + this.currentColorAndOpacity" to "black" to debuge easier
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke_width, SPRAYER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.fill, 'none');
+    }
+
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+        super.initializeAttributesManagerService(attributesManagerService);
+        this.attributesManagerService.sprayDiameter.subscribe((sprayDiameter: number) => {
+            this.radius = sprayDiameter / 2;
+            this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
+        });
+        this.attributesManagerService.sprayInterval.subscribe((intervalTime: number) => {
+            this.intervalTime = intervalTime;
+        });
     }
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
