@@ -5,7 +5,7 @@
 
     <form [formGroup]="sprayCanAttributesForm">
         <div class="attribute">
-            <label for="thickness">Épaisseur du trait</label>
+            <label for="thickness">Épaisseur des particules</label>
             <mat-slider
                 formControlName="thickness"
                 (input)="onThicknessSliderChange($event)"
@@ -57,7 +57,7 @@
         </div>
 
         <div class="attribute">
-            <label for="diameter">Émission par miliseconde</label>
+            <label for="diameter">Intervalle des émissions</label>
             <mat-slider
                 formControlName="interval"
                 (input)="onIntervalSliderChange($event)"
@@ -65,7 +65,7 @@
                 [max]="interval.Max"
                 value="{{ sprayCanAttributesForm.value.interval }}"
             ></mat-slider>
-            <mat-form-field class="small">
+            <mat-form-field id="intervalInput">
                 <input
                     autocomplete="off"
                     (focus)="onFocus()"
