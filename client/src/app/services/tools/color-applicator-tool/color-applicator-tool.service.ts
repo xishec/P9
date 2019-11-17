@@ -92,7 +92,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     changeFillColorOnFilledShape(): void {
-        let filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
         if (filledShapeWrap.children[0] && filledShapeWrap.children[0].getAttribute('title') === 'body') {
             this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.stroke, this.primaryColor);
         }
@@ -100,7 +100,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     changeStrokeColorOnFilledShape(): void {
-        let filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
         if (filledShapeWrap.children[2] && filledShapeWrap.children[2].getAttribute('title') === 'stroke') {
             this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.stroke, this.secondaryColor);
         }

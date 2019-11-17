@@ -97,8 +97,8 @@ describe('ManipulatorService', () => {
         const spy = spyOn(mockSVGTransform, 'setTranslate');
         const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-        const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
-        const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
+        const dummyMouseCoordsInit: Coords2D = new Coords2D(10, 10);
+        const dummyMouseCoordsCurr: Coords2D = new Coords2D(20, 20);
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
@@ -147,8 +147,8 @@ describe('ManipulatorService', () => {
         const spy = spyOn(mockSVGTransform, 'setTranslate');
         const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-        const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
-        const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
+        const dummyMouseCoordsInit: Coords2D = new Coords2D(10, 10);
+        const dummyMouseCoordsCurr: Coords2D = new Coords2D(20, 20);
         service.translateSelection(
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
             dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,

@@ -106,7 +106,7 @@ export class PolygonToolService extends AbstractShapeToolService {
             yValue = sin + this.initialMouseCoords.y - (r - (nbVerticesIsEven ? 0 : this.radiusCorrection));
         }
 
-        return { x: xValue, y: yValue };
+        return new Coords2D(xValue, yValue);
     }
 
     copyPreviewRectangleAttributes(drawPolygon: SVGPolygonElement = this.drawPolygon): void {

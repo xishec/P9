@@ -6,9 +6,9 @@ import { SVG_NS } from 'src/constants/constants';
 import {
     FILL_STROKE_WIDTH,
     HTML_ATTRIBUTE,
+    MAX_NORMAL_LENGTH,
     TOOL_NAME,
     TRACE_TYPE,
-    MAX_NORMAL_LENGTH,
 } from 'src/constants/tool-constants';
 import { BFSHelper } from '../../../../classes/BFSHelper';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -40,7 +40,6 @@ export class FillToolService extends AbstractToolService {
     strokeWidth: number;
     strokeColor: string;
     fillColor: string;
-    tolerance: number;
     mouseDown: boolean;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
