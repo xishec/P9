@@ -1,14 +1,14 @@
-import { Coords2D } from './Coords2D';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
+import { Coords2D } from './Coords2D';
 
 export class BFSHelper {
     maxX: number;
     maxY: number;
     context2D: CanvasRenderingContext2D;
     visited: Set<string>;
-    queue: Array<Coords2D>;
-    bodyGrid: Map<number, Array<number>>;
-    strokeGrid: Map<number, Array<number>>;
+    queue: Coords2D[];
+    bodyGrid: Map<number, number[]>;
+    strokeGrid: Map<number, number[]>;
     tolerance: number;
     mostLeft: number;
     mostRight: number;
@@ -35,13 +35,13 @@ export class BFSHelper {
     }
 
     computeBFS(clickPosition: Coords2D): void {
-        let targetColor: Uint8ClampedArray = this.getPixelColor(clickPosition);
+        const targetColor: Uint8ClampedArray = this.getPixelColor(clickPosition);
 
         this.visited.add(JSON.stringify(clickPosition));
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
-            let pixel: Coords2D = this.queue.shift()!;
+            const pixel: Coords2D = this.queue.shift()!;
 
             this.mostLeft = pixel.x < this.mostLeft ? pixel.x : this.mostLeft;
             this.mostRight = pixel.x > this.mostRight ? pixel.x : this.mostRight;
@@ -52,7 +52,7 @@ export class BFSHelper {
                 continue;
             }
 
-            let neighborPixels = [
+            const neighborPixels = [
                 new Coords2D(pixel.x - 1, pixel.y),
                 new Coords2D(pixel.x + 1, pixel.y),
                 new Coords2D(pixel.x, pixel.y - 1),
@@ -60,7 +60,7 @@ export class BFSHelper {
             ];
 
             for (let i = 0; i < neighborPixels.length; ++i) {
-                let neighborPixel: Coords2D = neighborPixels[i];
+                const neighborPixel: Coords2D = neighborPixels[i];
                 if (this.visited.has(JSON.stringify(neighborPixel))) {
                     continue;
                 }
@@ -87,7 +87,7 @@ export class BFSHelper {
         });
     }
 
-    addPixelToMap(pixel: Coords2D, map: Map<number, Array<number>>): void {
+    addPixelToMap(pixel: Coords2D, map: Map<number, number[]>): void {
         if (map.has(pixel.x)) {
             map.get(pixel.x)!.push(pixel.y);
         } else {
@@ -99,18 +99,18 @@ export class BFSHelper {
         if (this.tolerance === 0) {
             return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
         } else {
-            let difference = Math.sqrt(
+            const difference = Math.sqrt(
                 (Math.abs(color1[0] - color2[0]) ^ 2) +
                     (Math.abs(color1[1] - color2[1]) ^ 2) +
                     (Math.abs(color1[2] - color2[2]) ^ 2),
             );
-            let sommum = 255 * 3;
+            const sommum = 255 * 3;
             return difference <= (this.tolerance / 100) * sommum;
         }
     }
 
     isStroke(pixel: Coords2D, targetColor: Uint8ClampedArray): boolean {
-        let neighborPixels = [
+        const neighborPixels = [
             new Coords2D(pixel.x - 1, pixel.y),
             new Coords2D(pixel.x + 1, pixel.y),
             new Coords2D(pixel.x, pixel.y - 1),

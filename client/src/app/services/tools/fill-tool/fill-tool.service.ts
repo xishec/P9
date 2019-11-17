@@ -1,19 +1,13 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
-import { BFSHelper } from '../../../../classes/BFSHelper';
-import {
-    HTML_ATTRIBUTE,
-    TOOL_NAME,
-    TRACE_TYPE,
-    FILL_PIXEL_SHIFT,
-    FILL_STROKE_WIDTH,
-} from 'src/constants/tool-constants';
-import { SVG_NS } from 'src/constants/constants';
-import { ModalManagerService } from '../../modal-manager/modal-manager.service';
 import { FillStructure } from 'src/classes/FillStructure';
+import { SVG_NS } from 'src/constants/constants';
+import { FILL_STROKE_WIDTH, HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
+import { BFSHelper } from '../../../../classes/BFSHelper';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ModalManagerService } from '../../modal-manager/modal-manager.service';
+import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -40,9 +34,9 @@ export class FillToolService extends AbstractToolService {
     strokeColor: string;
     fillColor: string;
     tolerance: number;
-    strokePaths: Array<string>;
+    strokePaths: string[];
     mouseDown: boolean;
-    segmentsToDraw: Map<number, Array<FillStructure>>;
+    segmentsToDraw: Map<number, FillStructure[]>;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
@@ -123,7 +117,7 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
-        let bodyWrap: SVGGElement = this.fillBody();
+        const bodyWrap: SVGGElement = this.fillBody();
         this.fillStroke(bodyWrap);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
@@ -147,7 +141,7 @@ export class FillToolService extends AbstractToolService {
         });
     }
 
-    addToMap(x: number, fillStructure: FillStructure, map: Map<number, Array<FillStructure>>): void {
+    addToMap(x: number, fillStructure: FillStructure, map: Map<number, FillStructure[]>): void {
         if (map.has(x)) {
             map.get(x)!.push(fillStructure);
         } else {
@@ -179,7 +173,7 @@ export class FillToolService extends AbstractToolService {
         });
 
         let d = `M${x} ${column[0]}`;
-        let lines = [];
+        const lines = [];
         for (let y = 1; y < column.length; y++) {
             if (column[y] !== column[y - 1] + 1) {
                 lines.push(d);
@@ -196,20 +190,20 @@ export class FillToolService extends AbstractToolService {
         });
     }
 
-    appendBodyPaths(bodyWrap: SVGGElement, bodyPaths: Array<string>): void {
+    appendBodyPaths(bodyWrap: SVGGElement, bodyPaths: string[]): void {
         bodyPaths.forEach((d) => {
-            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(bodyWrap, path);
         });
     }
-    updateBodyPaths(bodyPaths: Array<string>, fillStructure: FillStructure, i: number): void {
+    updateBodyPaths(bodyPaths: string[], fillStructure: FillStructure, i: number): void {
         bodyPaths[
             i
         ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
     }
 
-    appendStrokePaths(topStrokePaths: Array<string>, bottumStrokePaths: Array<string>): void {
+    appendStrokePaths(topStrokePaths: string[], bottumStrokePaths: string[]): void {
         this.strokePaths.push(...topStrokePaths);
         this.strokePaths.push(...bottumStrokePaths);
     }
@@ -217,11 +211,11 @@ export class FillToolService extends AbstractToolService {
         fillStructure: FillStructure,
         x: number,
         i: number,
-        topStrokePaths: Array<string>,
-        bottumStrokePaths: Array<string>,
+        topStrokePaths: string[],
+        bottumStrokePaths: string[],
     ): void {
-        let lastTop = this.segmentsToDraw.get(x - 1)![i].top;
-        let lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
+        const lastTop = this.segmentsToDraw.get(x - 1)![i].top;
+        const lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
         if (fillStructure.top.distanceTo(lastTop) > 5) {
             topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
         } else {
@@ -235,10 +229,10 @@ export class FillToolService extends AbstractToolService {
     }
 
     resetBodyAndStrokePaths(
-        fillStructures: Array<FillStructure>,
-        bodyPaths: Array<string>,
-        topStrokePaths: Array<string>,
-        bottumStrokePaths: Array<string>,
+        fillStructures: FillStructure[],
+        bodyPaths: string[],
+        topStrokePaths: string[],
+        bottumStrokePaths: string[],
     ) {
         bodyPaths.length = 0;
         topStrokePaths.length = 0;
@@ -257,9 +251,9 @@ export class FillToolService extends AbstractToolService {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
         this.strokePaths = [];
-        let bodyPaths: Array<string> = [];
-        let topStrokePaths: Array<string> = [];
-        let bottumStrokePaths: Array<string> = [];
+        const bodyPaths: string[] = [];
+        const topStrokePaths: string[] = [];
+        const bottumStrokePaths: string[] = [];
         let lastFillStructuresLength = -1;
         for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
             this.updateVerticalStrokePaths(x);
@@ -267,7 +261,7 @@ export class FillToolService extends AbstractToolService {
             if (this.segmentsToDraw.get(x) === undefined) {
                 continue;
             }
-            const fillStructures: Array<FillStructure> = this.segmentsToDraw.get(x)!;
+            const fillStructures: FillStructure[] = this.segmentsToDraw.get(x)!;
 
             // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {
@@ -290,9 +284,9 @@ export class FillToolService extends AbstractToolService {
         return bodyWrap.cloneNode(true) as SVGGElement;
     }
 
-    appendBody(bodyPaths: Array<string>, bodyWrap: SVGGElement) {
+    appendBody(bodyPaths: string[], bodyWrap: SVGGElement) {
         bodyPaths.forEach((d) => {
-            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(bodyWrap, path);
         });
@@ -305,7 +299,7 @@ export class FillToolService extends AbstractToolService {
     }
 
     fillStroke(bodyWrap: SVGGElement) {
-        let id: string = Date.now().toString();
+        const id: string = Date.now().toString();
         this.appendMask(bodyWrap, id);
         this.appendStroke(id);
     }
@@ -322,7 +316,7 @@ export class FillToolService extends AbstractToolService {
     appendStroke(id: string): void {
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.strokePaths.forEach((d) => {
-            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(strokeWrap, path);
         });

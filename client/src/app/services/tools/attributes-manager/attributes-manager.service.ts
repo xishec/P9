@@ -12,8 +12,8 @@ import {
     STAMP_SCALING,
     STAMP_TYPES,
     THICKNESS,
-    TRACE_TYPE,
     TOLERANCE,
+    TRACE_TYPE,
 } from 'src/constants/tool-constants';
 
 @Injectable({

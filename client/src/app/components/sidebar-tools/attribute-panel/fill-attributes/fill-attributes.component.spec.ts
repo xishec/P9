@@ -8,7 +8,7 @@ describe('FillAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FillAttributesComponent ]
+      declarations: [ FillAttributesComponent ],
     })
     .compileComponents();
   }));
