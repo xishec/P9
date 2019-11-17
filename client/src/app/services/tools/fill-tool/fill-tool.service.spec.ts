@@ -12,7 +12,7 @@ import { BFSHelper } from 'src/classes/BFSHelper';
 import { FillStructure } from 'src/classes/FillStructure';
 import { Coords2D } from 'src/classes/Coords2D';
 
-fdescribe('FillToolService', () => {
+describe('FillToolService', () => {
     let service: FillToolService;
     let injector: TestBed;
     let mockRenderer: Renderer2;
@@ -46,6 +46,7 @@ fdescribe('FillToolService', () => {
                         setAttribute: () => true,
                         appendChild: () => null,
                         removeChild: () => null,
+                        setProperty: () => {},
                     },
                 },
                 {
@@ -337,5 +338,73 @@ fdescribe('FillToolService', () => {
         expect(bodyPaths.length).toEqual(2);
         expect(topStrokePaths.length).toEqual(2);
         expect(bottumStrokePaths.length).toEqual(2);
+    });
+
+    it('should append Body on call appendBody', () => {
+        let bodyPaths: string[] = ['1', '2'];
+        let spy = spyOn(service.renderer, 'appendChild');
+        service.appendBody(bodyPaths, {} as SVGGElement);
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should fill stroke on call fillStroke', () => {
+        service.appendMask = () => null;
+        service.appendStroke = () => null;
+        let spy1 = spyOn(service, 'appendMask');
+        let spy2 = spyOn(service, 'appendStroke');
+        service.fillStroke(({ cloneNode: () => null } as unknown) as SVGGElement);
+        expect(spy1).toHaveBeenCalled();
+        expect(spy2).toHaveBeenCalled();
+    });
+
+    it('should append Mask on call appendMask', () => {
+        let spy = spyOn(service.renderer, 'appendChild');
+        service.appendMask({} as SVGGElement, '123');
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should append Stroke on call appendStroke', () => {
+        service.strokePaths = ['1', '2'];
+        let spy = spyOn(service.renderer, 'appendChild');
+        service.appendStroke('123');
+        expect(spy).toHaveBeenCalledTimes(3);
+    });
+
+    it('should create SVGWrapper on call createSVGWrapper', () => {
+        let spy = spyOn(service.renderer, 'createElement');
+        service.createSVGWrapper();
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should update Canvas on call updateCanvas', () => {
+        XMLSerializer.prototype.serializeToString = () => 'null';
+        service.elementRef.nativeElement = {
+            getBoundingClientRect: () => {
+                return { width: 1, height: 1 } as ClientRect;
+            },
+        } as SVGElement;
+        let spy = spyOn(service.renderer, 'setProperty');
+        service.updateCanvas();
+        expect(spy).toHaveBeenCalledTimes(3);
+    });
+
+    it('should fill Body on call fillBody', () => {
+        service.bfsHelper = {} as BFSHelper;
+        service.bfsHelper.mostLeft = 1;
+        service.bfsHelper.mostRight = 1;
+        service.updateVerticalStrokePaths = () => null;
+        service.appendBodyPaths = () => null;
+        service.appendStrokePaths = () => null;
+        service.resetBodyAndStrokePaths = () => null;
+        service.updateBodyPaths = () => null;
+        service.updateStrokePaths = () => null;
+        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        service.segmentsToDraw = new Map([]);
+        service.segmentsToDraw.set(1, [fillStructure1]);
+        service.segmentsToDraw.set(2, [fillStructure1]);
+
+        let spy = spyOn(service.renderer, 'appendChild');
+        service.fillBody();
+        expect(spy).toHaveBeenCalled();
     });
 });

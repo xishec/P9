@@ -169,7 +169,7 @@ export class FillToolService extends AbstractToolService {
     }
 
     updateCanvas(): void {
-        const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement as Node);
+        const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
         this.renderer.setProperty(
