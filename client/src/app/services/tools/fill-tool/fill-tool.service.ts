@@ -196,11 +196,68 @@ export class FillToolService extends AbstractToolService {
         });
     }
 
+    appendBodyPaths(bodyWrap: SVGGElement, bodyPaths: Array<string>): void {
+        bodyPaths.forEach((d) => {
+            let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+            this.renderer.setAttribute(path, 'd', d);
+            this.renderer.appendChild(bodyWrap, path);
+        });
+    }
+    updateBodyPaths(bodyPaths: Array<string>, fillStructure: FillStructure, i: number): void {
+        bodyPaths[
+            i
+        ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+    }
+
+    appendStrokePaths(topStrokePaths: Array<string>, bottumStrokePaths: Array<string>): void {
+        this.strokePaths.push(...topStrokePaths);
+        this.strokePaths.push(...bottumStrokePaths);
+    }
+    updateStrokePaths(
+        fillStructure: FillStructure,
+        x: number,
+        i: number,
+        topStrokePaths: Array<string>,
+        bottumStrokePaths: Array<string>,
+    ): void {
+        let lastTop = this.segmentsToDraw.get(x - 1)![i].top;
+        let lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
+        if (fillStructure.top.distanceTo(lastTop) > 5) {
+            topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
+        } else {
+            topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
+        }
+        if (fillStructure.bottum.distanceTo(lastBottum) > 5) {
+            bottumStrokePaths[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+        } else {
+            bottumStrokePaths[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+        }
+    }
+
+    resetBodyAndStrokePaths(
+        fillStructures: Array<FillStructure>,
+        bodyPaths: Array<string>,
+        topStrokePaths: Array<string>,
+        bottumStrokePaths: Array<string>,
+    ) {
+        bodyPaths.length = 0;
+        topStrokePaths.length = 0;
+        bottumStrokePaths.length = 0;
+        fillStructures.forEach((fillStructure: FillStructure) => {
+            bodyPaths.push(
+                `M${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
+            );
+
+            topStrokePaths.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
+            bottumStrokePaths.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
+        });
+    }
+
     fillBody(): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
-        let bodyPaths: Array<string> = [];
         this.strokePaths = [];
+        let bodyPaths: Array<string> = [];
         let topStrokePaths: Array<string> = [];
         let bottumStrokePaths: Array<string> = [];
         let lastFillStructuresLength = -1;
@@ -214,67 +271,37 @@ export class FillToolService extends AbstractToolService {
 
             // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {
-                bodyPaths.forEach((d) => {
-                    let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-                    this.renderer.setAttribute(path, 'd', d);
-                    this.renderer.appendChild(bodyWrap, path);
-                });
-                bodyPaths = [];
-
-                this.strokePaths.push(...topStrokePaths);
-                this.strokePaths.push(...bottumStrokePaths);
-                topStrokePaths = [];
-                bottumStrokePaths = [];
-
-                fillStructures.forEach((fillStructure: FillStructure) => {
-                    bodyPaths.push(
-                        `M${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
-                    );
-
-                    topStrokePaths.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
-                    bottumStrokePaths.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
-                });
+                this.appendBodyPaths(bodyWrap, bodyPaths);
+                this.appendStrokePaths(topStrokePaths, bottumStrokePaths);
+                this.resetBodyAndStrokePaths(fillStructures, bodyPaths, topStrokePaths, bottumStrokePaths);
             } else {
                 fillStructures.forEach((fillStructure: FillStructure, i: number) => {
-                    bodyPaths[
-                        i
-                    ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
-
-                    let lastTop = this.segmentsToDraw.get(x - 1)![i].top;
-                    let lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
-                    if (fillStructure.top.distanceTo(lastTop) > 5) {
-                        topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
-                    } else {
-                        topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
-                    }
-                    if (fillStructure.bottum.distanceTo(lastBottum) > 5) {
-                        bottumStrokePaths[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
-                    } else {
-                        bottumStrokePaths[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
-                    }
+                    this.updateBodyPaths(bodyPaths, fillStructure, i);
+                    this.updateStrokePaths(fillStructure, x, i, topStrokePaths, bottumStrokePaths);
                 });
             }
             lastFillStructuresLength = fillStructures.length;
         }
-
         this.strokePaths.push(...topStrokePaths);
         this.strokePaths.push(...bottumStrokePaths);
 
+        this.setBodyFillAttributes(bodyPaths, bodyWrap);
+        this.renderer.appendChild(this.svgWrap, bodyWrap);
+        return bodyWrap.cloneNode(true) as SVGGElement;
+    }
+
+    setBodyFillAttributes(bodyPaths: Array<string>, bodyWrap: SVGGElement) {
         bodyPaths.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(bodyWrap, path);
         });
-
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(bodyWrap, 'stroke-linecap', 'round');
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.userFillColor);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.userFillColor);
-        this.renderer.appendChild(this.svgWrap, bodyWrap);
-
-        return bodyWrap.cloneNode(true) as SVGGElement;
     }
 
     fillStroke(bodyWrap: SVGGElement) {
@@ -289,6 +316,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
         this.renderer.setAttribute(mask, 'id', id);
         this.renderer.appendChild(mask, bodyWrap);
+        this.renderer.appendChild(this.svgWrap, mask);
     }
 
     setupStroke(id: string): void {
