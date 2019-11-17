@@ -90,11 +90,9 @@ export class FillToolService extends AbstractToolService {
             return;
         }
         this.mouseDown = false;
-
         this.updateCanvas();
         this.updateMousePosition(event);
 
-        console.time('bfs');
         this.bfsHelper = new BFSHelper(
             this.canvas.width,
             this.canvas.height,
@@ -102,12 +100,9 @@ export class FillToolService extends AbstractToolService {
             this.attributesManagerService,
         );
         this.bfsHelper.computeBFS(this.currentMouseCoords);
-        console.timeEnd('bfs');
 
         this.divideLinesToSegments();
-        console.time('fill');
         this.fill();
-        console.timeEnd('fill');
     }
 
     updateMousePosition(event: MouseEvent): void {
@@ -143,7 +138,7 @@ export class FillToolService extends AbstractToolService {
 
     addToMap(x: number, fillStructure: FillStructure, map: Map<number, FillStructure[]>): void {
         if (map.has(x)) {
-            map.get(x)!.push(fillStructure);
+            (map.get(x) as FillStructure[]).push(fillStructure);
         } else {
             map.set(x, [fillStructure]);
         }
@@ -168,7 +163,8 @@ export class FillToolService extends AbstractToolService {
     }
 
     updateVerticalStrokePaths(x: number): void {
-        const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort((a: number, b: number) => {
+        const column: number[] = this.bfsHelper.strokeGrid.get(x) as number[];
+        column.sort((a: number, b: number) => {
             return a < b ? -1 : 1;
         });
 
@@ -214,8 +210,9 @@ export class FillToolService extends AbstractToolService {
         topStrokePaths: string[],
         bottumStrokePaths: string[],
     ): void {
-        const lastTop = this.segmentsToDraw.get(x - 1)![i].top;
-        const lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
+        const lastFillStructures: FillStructure[] = this.segmentsToDraw.get(x - 1) as FillStructure[];
+        const lastTop = lastFillStructures[i].top;
+        const lastBottum = lastFillStructures[i].bottum;
         if (fillStructure.top.distanceTo(lastTop) > 5) {
             topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
         } else {
@@ -261,7 +258,7 @@ export class FillToolService extends AbstractToolService {
             if (this.segmentsToDraw.get(x) === undefined) {
                 continue;
             }
-            const fillStructures: FillStructure[] = this.segmentsToDraw.get(x)!;
+            const fillStructures: FillStructure[] = this.segmentsToDraw.get(x) as FillStructure[];
 
             // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {

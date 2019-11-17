@@ -41,7 +41,7 @@ export class BFSHelper {
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
-            const pixel: Coords2D = this.queue.shift()!;
+            const pixel: Coords2D = this.queue.shift() as Coords2D;
 
             this.mostLeft = pixel.x < this.mostLeft ? pixel.x : this.mostLeft;
             this.mostRight = pixel.x > this.mostRight ? pixel.x : this.mostRight;
@@ -59,8 +59,7 @@ export class BFSHelper {
                 new Coords2D(pixel.x, pixel.y + 1),
             ];
 
-            for (let i = 0; i < neighborPixels.length; ++i) {
-                const neighborPixel: Coords2D = neighborPixels[i];
+            for (const neighborPixel of neighborPixels) {
                 if (this.visited.has(JSON.stringify(neighborPixel))) {
                     continue;
                 }
@@ -89,7 +88,7 @@ export class BFSHelper {
 
     addPixelToMap(pixel: Coords2D, map: Map<number, number[]>): void {
         if (map.has(pixel.x)) {
-            map.get(pixel.x)!.push(pixel.y);
+            (map.get(pixel.x) as number[]).push(pixel.y);
         } else {
             map.set(pixel.x, [pixel.y]);
         }
@@ -100,9 +99,9 @@ export class BFSHelper {
             return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
         } else {
             const difference = Math.sqrt(
-                (Math.abs(color1[0] - color2[0]) ^ 2) +
-                    (Math.abs(color1[1] - color2[1]) ^ 2) +
-                    (Math.abs(color1[2] - color2[2]) ^ 2),
+                Math.pow(color1[0] - color2[0], 2) +
+                    Math.pow(color1[1] - color2[1], 2) +
+                    Math.pow(color1[2] - color2[2], 2),
             );
             const sommum = 255 * 3;
             return difference <= (this.tolerance / 100) * sommum;
