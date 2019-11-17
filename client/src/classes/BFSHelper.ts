@@ -76,6 +76,15 @@ export class BFSHelper {
                 }
             }
         }
+        this.sortBodyGrid();
+    }
+
+    sortBodyGrid(): void {
+        this.bodyGrid.forEach((el) => {
+            el.sort((a: number, b: number) => {
+                return a < b ? -1 : 1;
+            });
+        });
     }
 
     addPixelToMap(pixel: Coords2D, map: Map<number, Array<number>>): void {

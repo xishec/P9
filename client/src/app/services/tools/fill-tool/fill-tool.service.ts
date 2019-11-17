@@ -40,7 +40,7 @@ export class FillToolService extends AbstractToolService {
     strokeColor: string;
     fillColor: string;
     tolerance: number;
-    dsStrokes: Array<string>;
+    strokePaths: Array<string>;
     mouseDown: boolean;
     segmentsToDraw: Map<number, Array<FillStructure>>;
 
@@ -129,12 +129,6 @@ export class FillToolService extends AbstractToolService {
     }
 
     divideLinesToSegments(): void {
-        this.bfsHelper.bodyGrid.forEach((el) => {
-            el.sort((a: number, b: number) => {
-                return a < b ? -1 : 1;
-            });
-        });
-
         this.segmentsToDraw = new Map([]);
 
         this.bfsHelper.bodyGrid.forEach((column, x) => {
@@ -142,15 +136,19 @@ export class FillToolService extends AbstractToolService {
             fillStructure.bottum = new Coords2D(x, column[0]);
             for (let y = 1; y < column.length; y++) {
                 if (column[y] !== column[y - 1] + 1) {
-                    fillStructure.top = new Coords2D(x, column[y - 1]);
-                    this.addToMap(x, fillStructure, this.segmentsToDraw);
-                    fillStructure = new FillStructure();
-                    fillStructure.bottum = new Coords2D(x, column[y]);
+                    this.addNewSegment(fillStructure, x, y, column);
                 }
             }
             fillStructure.top = new Coords2D(x, column[column.length - 1]);
             this.addToMap(x, fillStructure, this.segmentsToDraw);
         });
+    }
+
+    addNewSegment(fillStructure: FillStructure, x: number, y: number, column: Array<number>) {
+        fillStructure.top = new Coords2D(x, column[y - 1]);
+        this.addToMap(x, fillStructure, this.segmentsToDraw);
+        fillStructure = new FillStructure();
+        fillStructure.bottum = new Coords2D(x, column[y]);
     }
 
     addToMap(x: number, fillStructure: FillStructure, map: Map<number, Array<FillStructure>>): void {
@@ -179,41 +177,45 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
+    updateVerticalStrokePaths(x: number): void {
+        const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort((a: number, b: number) => {
+            return a < b ? -1 : 1;
+        });
+
+        let d = `M${x} ${column[0]}`;
+        let lines = [];
+        for (let y = 1; y < column.length; y++) {
+            if (column[y] !== column[y - 1] + 1) {
+                lines.push(d);
+                d = `M${x} ${column[y]}`;
+            } else {
+                d += ` L${x} ${column[y]}`;
+            }
+        }
+        lines.push(d);
+        lines.forEach((element) => {
+            if (element.includes('L')) {
+                this.strokePaths.push(element);
+            }
+        });
+    }
+
     fillBody(): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
-        // console.log(this.segmentsToDraw);
         let ds: Array<string> = [];
-        this.dsStrokes = [];
+        this.strokePaths = [];
         let dsStrokeTop: Array<string> = [];
         let dsStrokeBottum: Array<string> = [];
         let lastFillStructuresLength = -1;
         for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
-            const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort((a: number, b: number) => {
-                return a < b ? -1 : 1;
-            });
+            this.updateVerticalStrokePaths(x);
 
-            let d = `M${x} ${column[0]}`;
-            let lines = [];
-            for (let y = 1; y < column.length; y++) {
-                if (column[y] !== column[y - 1] + 1) {
-                    lines.push(d);
-                    d = `M${x} ${column[y]}`;
-                } else {
-                    d += ` L${x} ${column[y]}`;
-                }
+            if (this.segmentsToDraw.get(x) === undefined) {
+                continue;
             }
-            lines.push(d);
-            lines.forEach((element) => {
-                if (this.countOccurrence(element, 'L') > 2) {
-                    this.dsStrokes.push(element);
-                }
-            });
-
-            if (this.segmentsToDraw.get(x) === undefined) continue;
             const fillStructures: Array<FillStructure> = this.segmentsToDraw.get(x)!;
 
-            // console.log(fillStructures.length, lastFillStructuresLength);
             if (fillStructures.length !== lastFillStructuresLength) {
                 ds.forEach((d) => {
                     let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
@@ -221,8 +223,8 @@ export class FillToolService extends AbstractToolService {
                     this.renderer.appendChild(bodyWrap, path);
                 });
                 ds = [];
-                this.dsStrokes.push(...dsStrokeTop);
-                this.dsStrokes.push(...dsStrokeBottum);
+                this.strokePaths.push(...dsStrokeTop);
+                this.strokePaths.push(...dsStrokeBottum);
                 dsStrokeTop = [];
                 dsStrokeBottum = [];
 
@@ -257,8 +259,8 @@ export class FillToolService extends AbstractToolService {
             lastFillStructuresLength = fillStructures.length;
         }
 
-        this.dsStrokes.push(...dsStrokeTop);
-        this.dsStrokes.push(...dsStrokeBottum);
+        this.strokePaths.push(...dsStrokeTop);
+        this.strokePaths.push(...dsStrokeBottum);
 
         ds.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
@@ -277,16 +279,6 @@ export class FillToolService extends AbstractToolService {
         return bodyWrap.cloneNode(true) as SVGGElement;
     }
 
-    countOccurrence(s: string, c: string): number {
-        var result = 0;
-        for (let i = 0; i < s.length; i++) {
-            if (s[i] == c) {
-                result++;
-            }
-        }
-        return result;
-    }
-
     fillStroke(bodyWrap: SVGGElement) {
         let id: string = Date.now().toString();
         this.setupMask(bodyWrap, id);
@@ -303,7 +295,7 @@ export class FillToolService extends AbstractToolService {
 
     setupStroke(id: string): void {
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.dsStrokes.forEach((d) => {
+        this.strokePaths.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(strokeWrap, path);
