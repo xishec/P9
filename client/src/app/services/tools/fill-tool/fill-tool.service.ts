@@ -285,12 +285,12 @@ export class FillToolService extends AbstractToolService {
         this.strokePaths.push(...topStrokePaths);
         this.strokePaths.push(...bottumStrokePaths);
 
-        this.setBodyFillAttributes(bodyPaths, bodyWrap);
+        this.appendBody(bodyPaths, bodyWrap);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
         return bodyWrap.cloneNode(true) as SVGGElement;
     }
 
-    setBodyFillAttributes(bodyPaths: Array<string>, bodyWrap: SVGGElement) {
+    appendBody(bodyPaths: Array<string>, bodyWrap: SVGGElement) {
         bodyPaths.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
@@ -306,11 +306,11 @@ export class FillToolService extends AbstractToolService {
 
     fillStroke(bodyWrap: SVGGElement) {
         let id: string = Date.now().toString();
-        this.setupMask(bodyWrap, id);
-        this.setupStroke(id);
+        this.appendMask(bodyWrap, id);
+        this.appendStroke(id);
     }
 
-    setupMask(bodyWrap: SVGGElement, id: string): void {
+    appendMask(bodyWrap: SVGGElement, id: string): void {
         const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
@@ -319,7 +319,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgWrap, mask);
     }
 
-    setupStroke(id: string): void {
+    appendStroke(id: string): void {
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.strokePaths.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);

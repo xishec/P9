@@ -376,7 +376,7 @@ enum FONT_WEIGHT {
 }
 
 const FILL_PIXEL_SHIFT = 0.5;
-const FILL_STROKE_WIDTH = '3';
+const FILL_STROKE_WIDTH = '4';
 
 export {
     TOLERANCE,
