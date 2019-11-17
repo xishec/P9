@@ -3,7 +3,13 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { FillStructure } from 'src/classes/FillStructure';
 import { SVG_NS } from 'src/constants/constants';
-import { FILL_STROKE_WIDTH, HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
+import {
+    FILL_STROKE_WIDTH,
+    HTML_ATTRIBUTE,
+    TOOL_NAME,
+    TRACE_TYPE,
+    MAX_NORMAL_LENGTH,
+} from 'src/constants/tool-constants';
 import { BFSHelper } from '../../../../classes/BFSHelper';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
@@ -15,38 +21,35 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class FillToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    pixelColor: string;
+    attributesManagerService: AttributesManagerService;
     canvas: HTMLCanvasElement;
     context2D: CanvasRenderingContext2D;
     SVGImg: HTMLImageElement;
+
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
     drawStack: DrawStackService;
+
     bfsHelper: BFSHelper;
+    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    segmentsToDraw: Map<number, FillStructure[]>;
+    strokePaths: string[];
     svgWrap: SVGGElement;
+
     traceType = TRACE_TYPE.Full;
-    attributesManagerService: AttributesManagerService;
-    userFillColor: string;
-    userStrokeColor: string;
-    userStrokeWidth: number;
     strokeWidth: number;
     strokeColor: string;
     fillColor: string;
     tolerance: number;
-    strokePaths: string[];
     mouseDown: boolean;
-    segmentsToDraw: Map<number, FillStructure[]>;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
         this.colorToolService.primaryColor.subscribe((fillColor: string) => {
-            this.fillColor = fillColor;
-            this.updateTraceType(this.traceType);
+            this.fillColor = '#' + fillColor;
         });
         this.colorToolService.secondaryColor.subscribe((strokeColor: string) => {
-            this.strokeColor = strokeColor;
-            this.updateTraceType(this.traceType);
+            this.strokeColor = '#' + strokeColor;
         });
     }
 
@@ -64,10 +67,9 @@ export class FillToolService extends AbstractToolService {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
-            this.updateTraceType(this.traceType);
         });
         this.attributesManagerService.traceType.subscribe((traceType: TRACE_TYPE) => {
-            this.updateTraceType(traceType);
+            this.traceType = traceType;
         });
     }
 
@@ -103,6 +105,8 @@ export class FillToolService extends AbstractToolService {
 
         this.divideLinesToSegments();
         this.fill();
+
+        this.drawStack.push(this.svgWrap);
     }
 
     updateMousePosition(event: MouseEvent): void {
@@ -112,8 +116,23 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
-        const bodyWrap: SVGGElement = this.fillBody();
-        this.fillStroke(bodyWrap);
+        switch (this.traceType) {
+            case TRACE_TYPE.Outline: {
+                const bodyWrap: SVGGElement = this.fillBody();
+                this.renderer.removeChild(this.svgWrap, bodyWrap);
+                this.fillStroke(bodyWrap);
+                break;
+            }
+            case TRACE_TYPE.Full: {
+                this.fillBody();
+                break;
+            }
+            case TRACE_TYPE.Both: {
+                const bodyWrap: SVGGElement = this.fillBody();
+                this.fillStroke(bodyWrap);
+                break;
+            }
+        }
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
@@ -213,12 +232,12 @@ export class FillToolService extends AbstractToolService {
         const lastFillStructures: FillStructure[] = this.segmentsToDraw.get(x - 1) as FillStructure[];
         const lastTop = lastFillStructures[i].top;
         const lastBottum = lastFillStructures[i].bottum;
-        if (fillStructure.top.distanceTo(lastTop) > 5) {
+        if (fillStructure.top.distanceTo(lastTop) > MAX_NORMAL_LENGTH) {
             topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
         } else {
             topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
         }
-        if (fillStructure.bottum.distanceTo(lastBottum) > 5) {
+        if (fillStructure.bottum.distanceTo(lastBottum) > MAX_NORMAL_LENGTH) {
             bottumStrokePaths[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
         } else {
             bottumStrokePaths[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
@@ -278,7 +297,7 @@ export class FillToolService extends AbstractToolService {
 
         this.appendBody(bodyPaths, bodyWrap);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
-        return bodyWrap.cloneNode(true) as SVGGElement;
+        return bodyWrap;
     }
 
     appendBody(bodyPaths: string[], bodyWrap: SVGGElement) {
@@ -291,13 +310,13 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(bodyWrap, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.userFillColor);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.userFillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
     }
 
     fillStroke(bodyWrap: SVGGElement) {
         const id: string = Date.now().toString();
-        this.appendMask(bodyWrap, id);
+        this.appendMask(bodyWrap.cloneNode(true) as SVGGElement, id);
         this.appendStroke(id);
     }
 
@@ -320,10 +339,10 @@ export class FillToolService extends AbstractToolService {
 
         this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.userStrokeWidth * 2).toString());
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.strokeWidth * 2).toString());
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(strokeWrap, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.userStrokeColor);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.strokeColor);
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
@@ -332,30 +351,6 @@ export class FillToolService extends AbstractToolService {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Fill);
         this.svgWrap = wrap;
-    }
-
-    updateTraceType(traceType: TRACE_TYPE) {
-        this.traceType = traceType;
-        switch (traceType) {
-            case TRACE_TYPE.Outline: {
-                this.userFillColor = 'none';
-                this.userStrokeColor = '#' + this.strokeColor;
-                this.userStrokeWidth = this.strokeWidth;
-                break;
-            }
-            case TRACE_TYPE.Full: {
-                this.userFillColor = '#' + this.fillColor;
-                this.userStrokeColor = 'none';
-                this.userStrokeWidth = 0;
-                break;
-            }
-            case TRACE_TYPE.Both: {
-                this.userFillColor = '#' + this.fillColor;
-                this.userStrokeColor = '#' + this.strokeColor;
-                this.userStrokeWidth = this.strokeWidth;
-                break;
-            }
-        }
     }
 
     // tslint:disable-next-line: no-empty
