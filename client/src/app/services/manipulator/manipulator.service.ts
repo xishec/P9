@@ -1,6 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,70 @@ export class ManipulatorService {
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
+    }
+
+    scaleSelection(currentMouseCoords: Coords2D, initialMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
+        switch(fromControlPoint.getAttribute('controlPointId') as string) {
+            case '0':
+                break;
+            case '1':
+                this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
+                break;
+            case '2':
+                break;
+            case '3':
+                break;
+            case '4':
+                break;
+            case '5':
+                break;
+            case '6':
+                break;
+            case '7':
+                break;
+            default:
+                console.log('what');
+                break;
+        }
+    }
+
+    applyTopScale(currentMouse: Coords2D, initialMouse: Coords2D, selection: Selection): void {
+        for (const el of selection.selectedElements) {
+            const transformsList = el.transform.baseVal;
+            if (
+                transformsList.numberOfItems === 0 ||
+                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_SCALE
+            ) {
+                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+                const nullTranslate = svg.createSVGTransform();
+                nullTranslate.setTranslate(0, 0);
+                el.transform.baseVal.insertItemBefore(nullTranslate, 0);
+                const nullScale = svg.createSVGTransform();
+                nullScale.setScale(1, 1);
+                el.transform.baseVal.insertItemBefore(nullScale, 0);
+            }
+            let newScaleFactor = 0;
+
+            newScaleFactor = initialMouse.y / currentMouse.y;
+
+            //console.log(newScaleFactor);
+
+            if (newScaleFactor === 0) {
+                console.log('returned');
+                return;
+            }
+
+            const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y + (selection.selectionBox.getBoundingClientRect() as DOMRect).height;
+            // const previousTranslate = -transformsList.getItem(1).matrix.f;
+            const deltaY = (currentY - (currentY * newScaleFactor)) / newScaleFactor;
+
+            console.log(deltaY);
+
+            el.transform.baseVal.getItem(0).setScale(1, newScaleFactor);
+            el.transform.baseVal.getItem(1).setTranslate(0, deltaY);
+        }
+        selection.updateFullSelectionBox();
+
     }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {

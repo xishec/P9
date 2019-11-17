@@ -20,6 +20,10 @@ export class SelectionToolService extends AbstractToolService {
     initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
+    // REMOVE
+    offset: number = 0;
+    // REMOVE
+
     isTheCurrentTool = false;
     isSelecting = false;
     isOnTarget = false;
@@ -27,6 +31,7 @@ export class SelectionToolService extends AbstractToolService {
     isRightMouseDown = false;
     isLeftMouseDragging = false;
     isTranslatingSelection = false;
+    isScalingSelection = false;
     isRightMouseDragging = false;
 
     selection: Selection;
@@ -63,6 +68,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
+        this.isScalingSelection = false;
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
@@ -189,9 +195,12 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
+        } else if ((this.isScalingSelection) || (this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection)) {
+            this.isScalingSelection = true;
+            this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
         } else if (
-            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting) ||
-            this.isTranslatingSelection
+            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting && !this.isScalingSelection) ||
+            (this.isTranslatingSelection)
         ) {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
@@ -259,11 +268,14 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
-        } else if (this.isOnTarget && !this.isTranslatingSelection) {
+        } else if (this.isOnTarget && (!this.isTranslatingSelection && !this.isScalingSelection)) {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
             this.saveState();
+        } else if (this.isScalingSelection) {
+            console.log('eum what');
+            this.isScalingSelection = false;
         } else {
             this.selection.emptySelection();
         }

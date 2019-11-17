@@ -2,7 +2,7 @@ import { FontType } from 'src/classes/FontType';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
-const CONTROL_POINT_RADIUS = 5;
+const CONTROL_POINT_RADIUS = 10;
 const SELECTION_COLOR = '#ff5722';
 
 const NO_STAMP = '';

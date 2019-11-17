@@ -18,6 +18,7 @@ export class Selection {
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(CONTROL_POINTS_AMOUNT);
+    activeControlPoint: SVGCircleElement;
 
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -45,6 +46,7 @@ export class Selection {
             this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
         }
     }
 
@@ -123,6 +125,7 @@ export class Selection {
             const distY = currentMouseCoords.y - cy;
 
             if (Math.abs(distX) <= r && Math.abs(distY) <= r && this.isAppended) {
+                this.activeControlPoint = ctrlPt;
                 return true;
             }
         }
