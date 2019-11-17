@@ -41,6 +41,8 @@ export class FillToolService extends AbstractToolService {
     fillColor: string;
     tolerance: number;
     dsStrokes: Array<string>;
+    mouseDown: boolean;
+    segmentsToDraw: Map<number, Array<FillStructure>>;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
@@ -75,13 +77,26 @@ export class FillToolService extends AbstractToolService {
         });
     }
 
+    shouldNotFill(event: MouseEvent): boolean {
+        return (
+            !this.isMouseInRef(event, this.elementRef) ||
+            this.modalManagerService.modalIsDisplayed.value ||
+            !this.mouseDown
+        );
+    }
+
     onMouseDown(event: MouseEvent): void {
-        this.updateCanvas();
+        if (this.isMouseInRef(event, this.elementRef)) {
+            this.updateCanvas();
+            this.mouseDown = true;
+        }
     }
     onMouseUp(event: MouseEvent): void {
-        if (this.modalManagerService.modalIsDisplayed.value) {
+        if (this.shouldNotFill(event)) {
             return;
         }
+        this.mouseDown = false;
+
         this.updateCanvas();
         this.updateMousePosition(event);
 
@@ -93,33 +108,12 @@ export class FillToolService extends AbstractToolService {
             this.attributesManagerService,
         );
         this.bfsHelper.computeBFS(this.currentMouseCoords);
-        this.bfsHelper.bodyGrid.forEach((el) => {
-            el.sort((a: number, b: number) => {
-                return a < b ? -1 : 1;
-            });
-        });
         console.timeEnd('bfs');
 
-        // this.expandPixels();
-        let segmentsToDraw: Map<number, Array<FillStructure>> = this.divideLinesToSegments();
-        // this.groupSegmentsToRectangle(segmentsToDraw);
+        this.divideLinesToSegments();
         console.time('fill');
-        this.fill(segmentsToDraw);
+        this.fill();
         console.timeEnd('fill');
-    }
-
-    expandPixels(): void {
-        this.bfsHelper.bodyGrid.forEach((column: number[], key: number) => {
-            let top: number = column[column.length - 1] + 1;
-            let buttom: number = column[0] - 1;
-
-            if (top <= this.canvas.height) {
-                column.push(top);
-            }
-            if (buttom >= 0) {
-                column.unshift(buttom);
-            }
-        });
     }
 
     updateMousePosition(event: MouseEvent): void {
@@ -127,44 +121,21 @@ export class FillToolService extends AbstractToolService {
         this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
     }
 
-    fill(segmentsToDraw: Map<number, Array<FillStructure>>) {
+    fill(): void {
         this.createSVGWrapper();
-        let bodyWrap: SVGGElement = this.fillBody(segmentsToDraw);
+        let bodyWrap: SVGGElement = this.fillBody();
         this.fillStroke(bodyWrap);
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    // groupSegmentsToRectangle(segmentsToDraw: Array<FillStructure>) {
-    //     segmentsToDraw.sort((a, b) => {
-    //         return a.leftBottum.y < b.leftBottum.y ? -1 : 0;
-    //     });
-    //     for (let i = 1; i < segmentsToDraw.length; i++) {
-    //         const thisFillStructure: FillStructure = segmentsToDraw[i];
-    //         const lastFillStructure: FillStructure = segmentsToDraw[i - 1];
-    //         if (this.canBeGroupedToRectangle(thisFillStructure, lastFillStructure)) {
-    //             if (lastFillStructure.leftTop.x < thisFillStructure.leftBottum.x) {
-    //                 lastFillStructure.rightBottum = thisFillStructure.leftBottum;
-    //                 lastFillStructure.rightTop = thisFillStructure.leftTop;
-    //             } else {
-    //                 lastFillStructure.leftBottum = thisFillStructure.rightBottum;
-    //                 lastFillStructure.leftTop = thisFillStructure.rightTop;
-    //             }
-    //             segmentsToDraw.splice(i, 1);
-    //             i--;
-    //         }
-    //     }
-    // }
+    divideLinesToSegments(): void {
+        this.bfsHelper.bodyGrid.forEach((el) => {
+            el.sort((a: number, b: number) => {
+                return a < b ? -1 : 1;
+            });
+        });
 
-    // canBeGroupedToRectangle(thisFillStructure: FillStructure, lastFillStructure: FillStructure): boolean {
-    //     return (
-    //         thisFillStructure.leftBottum.y === lastFillStructure.leftBottum.y &&
-    //         thisFillStructure.leftTop.y === lastFillStructure.leftTop.y &&
-    //         Math.abs(thisFillStructure.leftTop.x - lastFillStructure.leftTop.x) === 1
-    //     );
-    // }
-
-    divideLinesToSegments() {
-        let segmentsToDraw: Map<number, Array<FillStructure>> = new Map([]);
+        this.segmentsToDraw = new Map([]);
 
         this.bfsHelper.bodyGrid.forEach((column, x) => {
             let fillStructure = new FillStructure();
@@ -172,16 +143,14 @@ export class FillToolService extends AbstractToolService {
             for (let y = 1; y < column.length; y++) {
                 if (column[y] !== column[y - 1] + 1) {
                     fillStructure.top = new Coords2D(x, column[y - 1]);
-                    this.addToMap(x, fillStructure, segmentsToDraw);
+                    this.addToMap(x, fillStructure, this.segmentsToDraw);
                     fillStructure = new FillStructure();
                     fillStructure.bottum = new Coords2D(x, column[y]);
                 }
             }
             fillStructure.top = new Coords2D(x, column[column.length - 1]);
-            this.addToMap(x, fillStructure, segmentsToDraw);
+            this.addToMap(x, fillStructure, this.segmentsToDraw);
         });
-
-        return segmentsToDraw;
     }
 
     addToMap(x: number, fillStructure: FillStructure, map: Map<number, Array<FillStructure>>): void {
@@ -191,14 +160,6 @@ export class FillToolService extends AbstractToolService {
             map.set(x, [fillStructure]);
         }
     }
-
-    // getPointsPosition(fillStructure: FillStructure): string {
-    //     return `${fillStructure.leftBottum.x + FILL_PIXEL_SHIFT},${fillStructure.leftBottum.y +
-    //         FILL_PIXEL_SHIFT} ${fillStructure.leftTop.x + FILL_PIXEL_SHIFT},${fillStructure.leftTop.y +
-    //         FILL_PIXEL_SHIFT} ${fillStructure.rightTop.x + FILL_PIXEL_SHIFT},${fillStructure.rightTop.y +
-    //         FILL_PIXEL_SHIFT} ${fillStructure.rightBottum.x + FILL_PIXEL_SHIFT},${fillStructure.rightBottum.y +
-    //         FILL_PIXEL_SHIFT}`;
-    // }
 
     updateCanvas(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
@@ -218,17 +179,19 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    fillBody(segmentsToDraw: Map<number, Array<FillStructure>>): SVGGElement {
+    fillBody(): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
-        // console.log(segmentsToDraw);
+        // console.log(this.segmentsToDraw);
         let ds: Array<string> = [];
         this.dsStrokes = [];
         let dsStrokeTop: Array<string> = [];
         let dsStrokeBottum: Array<string> = [];
         let lastFillStructuresLength = -1;
         for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
-            const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort();
+            const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort((a: number, b: number) => {
+                return a < b ? -1 : 1;
+            });
 
             let d = `M${x} ${column[0]}`;
             let lines = [];
@@ -247,8 +210,8 @@ export class FillToolService extends AbstractToolService {
                 }
             });
 
-            if (segmentsToDraw.get(x) === undefined) continue;
-            const fillStructures: Array<FillStructure> = segmentsToDraw.get(x)!;
+            if (this.segmentsToDraw.get(x) === undefined) continue;
+            const fillStructures: Array<FillStructure> = this.segmentsToDraw.get(x)!;
 
             // console.log(fillStructures.length, lastFillStructuresLength);
             if (fillStructures.length !== lastFillStructuresLength) {
@@ -277,8 +240,8 @@ export class FillToolService extends AbstractToolService {
                         i
                     ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
 
-                    let lastTop = segmentsToDraw.get(x - 1)![i].top;
-                    let lastBottum = segmentsToDraw.get(x - 1)![i].bottum;
+                    let lastTop = this.segmentsToDraw.get(x - 1)![i].top;
+                    let lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
                     if (fillStructure.top.distanceTo(lastTop) > 5) {
                         dsStrokeTop[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
                     } else {
@@ -325,16 +288,21 @@ export class FillToolService extends AbstractToolService {
     }
 
     fillStroke(bodyWrap: SVGGElement) {
-        const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-
-        const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
         let id: string = Date.now().toString();
+        this.setupMask(bodyWrap, id);
+        this.setupStroke(id);
+    }
+
+    setupMask(bodyWrap: SVGGElement, id: string): void {
+        const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
         this.renderer.setAttribute(mask, 'id', id);
         this.renderer.appendChild(mask, bodyWrap);
-        this.renderer.appendChild(this.svgWrap, mask);
+    }
 
+    setupStroke(id: string): void {
+        const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.dsStrokes.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
@@ -348,7 +316,6 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(strokeWrap, 'stroke-linecap', 'round');
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.userStrokeColor);
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
-
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
 
@@ -356,16 +323,6 @@ export class FillToolService extends AbstractToolService {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Fill);
         this.svgWrap = wrap;
-    }
-
-    createSVGDot(x: number, y: number): SVGCircleElement {
-        const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, (x + FILL_PIXEL_SHIFT).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, (y + FILL_PIXEL_SHIFT).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, this.userStrokeColor);
-        this.renderer.setAttribute(circle, 'r', this.userStrokeWidth.toString());
-        return circle;
     }
 
     updateTraceType(traceType: TRACE_TYPE) {
