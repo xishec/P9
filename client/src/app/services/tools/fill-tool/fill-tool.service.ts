@@ -136,19 +136,15 @@ export class FillToolService extends AbstractToolService {
             fillStructure.bottum = new Coords2D(x, column[0]);
             for (let y = 1; y < column.length; y++) {
                 if (column[y] !== column[y - 1] + 1) {
-                    this.addNewSegment(fillStructure, x, y, column);
+                    fillStructure.top = new Coords2D(x, column[y - 1]);
+                    this.addToMap(x, fillStructure, this.segmentsToDraw);
+                    fillStructure = new FillStructure();
+                    fillStructure.bottum = new Coords2D(x, column[y]);
                 }
             }
             fillStructure.top = new Coords2D(x, column[column.length - 1]);
             this.addToMap(x, fillStructure, this.segmentsToDraw);
         });
-    }
-
-    addNewSegment(fillStructure: FillStructure, x: number, y: number, column: Array<number>) {
-        fillStructure.top = new Coords2D(x, column[y - 1]);
-        this.addToMap(x, fillStructure, this.segmentsToDraw);
-        fillStructure = new FillStructure();
-        fillStructure.bottum = new Coords2D(x, column[y]);
     }
 
     addToMap(x: number, fillStructure: FillStructure, map: Map<number, Array<FillStructure>>): void {
