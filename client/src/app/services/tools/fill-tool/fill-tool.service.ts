@@ -199,10 +199,10 @@ export class FillToolService extends AbstractToolService {
     fillBody(): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
 
-        let ds: Array<string> = [];
+        let bodyPaths: Array<string> = [];
         this.strokePaths = [];
-        let dsStrokeTop: Array<string> = [];
-        let dsStrokeBottum: Array<string> = [];
+        let topStrokePaths: Array<string> = [];
+        let bottumStrokePaths: Array<string> = [];
         let lastFillStructuresLength = -1;
         for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
             this.updateVerticalStrokePaths(x);
@@ -212,53 +212,55 @@ export class FillToolService extends AbstractToolService {
             }
             const fillStructures: Array<FillStructure> = this.segmentsToDraw.get(x)!;
 
+            // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {
-                ds.forEach((d) => {
+                bodyPaths.forEach((d) => {
                     let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
                     this.renderer.setAttribute(path, 'd', d);
                     this.renderer.appendChild(bodyWrap, path);
                 });
-                ds = [];
-                this.strokePaths.push(...dsStrokeTop);
-                this.strokePaths.push(...dsStrokeBottum);
-                dsStrokeTop = [];
-                dsStrokeBottum = [];
+                bodyPaths = [];
+
+                this.strokePaths.push(...topStrokePaths);
+                this.strokePaths.push(...bottumStrokePaths);
+                topStrokePaths = [];
+                bottumStrokePaths = [];
 
                 fillStructures.forEach((fillStructure: FillStructure) => {
-                    // console.log(fillStructure);
-                    ds.push(
+                    bodyPaths.push(
                         `M${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
                     );
-                    dsStrokeTop.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
-                    dsStrokeBottum.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
+
+                    topStrokePaths.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
+                    bottumStrokePaths.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
                 });
             } else {
                 fillStructures.forEach((fillStructure: FillStructure, i: number) => {
-                    ds[
+                    bodyPaths[
                         i
                     ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
 
                     let lastTop = this.segmentsToDraw.get(x - 1)![i].top;
                     let lastBottum = this.segmentsToDraw.get(x - 1)![i].bottum;
                     if (fillStructure.top.distanceTo(lastTop) > 5) {
-                        dsStrokeTop[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
+                        topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
                     } else {
-                        dsStrokeTop[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
+                        topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
                     }
                     if (fillStructure.bottum.distanceTo(lastBottum) > 5) {
-                        dsStrokeBottum[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+                        bottumStrokePaths[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
                     } else {
-                        dsStrokeBottum[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+                        bottumStrokePaths[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
                     }
                 });
             }
             lastFillStructuresLength = fillStructures.length;
         }
 
-        this.strokePaths.push(...dsStrokeTop);
-        this.strokePaths.push(...dsStrokeBottum);
+        this.strokePaths.push(...topStrokePaths);
+        this.strokePaths.push(...bottumStrokePaths);
 
-        ds.forEach((d) => {
+        bodyPaths.forEach((d) => {
             let path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(bodyWrap, path);
