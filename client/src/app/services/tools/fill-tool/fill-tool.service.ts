@@ -308,7 +308,7 @@ export class FillToolService extends AbstractToolService {
             this.renderer.setAttribute(path, 'd', d);
             this.renderer.appendChild(bodyWrap, path);
         });
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, 'body');
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(bodyWrap, 'stroke-linecap', 'round');
@@ -340,7 +340,7 @@ export class FillToolService extends AbstractToolService {
         });
 
         this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, 'stroke');
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.strokeWidth * 2).toString());
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
         this.renderer.setAttribute(strokeWrap, 'stroke-linecap', 'round');

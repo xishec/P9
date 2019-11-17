@@ -59,6 +59,10 @@ export class ColorApplicatorToolService extends AbstractToolService {
         return isRectangle || isEllipsis || isPolygon;
     }
 
+    isFilledShape(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Fill;
+    }
+
     changeFillColorOnShape(): void {
         if (
             (this.drawStack
@@ -84,6 +88,22 @@ export class ColorApplicatorToolService extends AbstractToolService {
             this.secondaryColor,
         );
 
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeFillColorOnFilledShape(): void {
+        let filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
+        if (filledShapeWrap.children[0] && filledShapeWrap.children[0].getAttribute('title') === 'body') {
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.stroke, this.primaryColor);
+        }
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnFilledShape(): void {
+        let filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition);
+        if (filledShapeWrap.children[2] && filledShapeWrap.children[2].getAttribute('title') === 'stroke') {
+            this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.stroke, this.secondaryColor);
+        }
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
@@ -125,14 +145,18 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                if (this.isStackTargetShape()) {
+                if (this.isFilledShape()) {
+                    this.changeFillColorOnFilledShape();
+                } else if (this.isStackTargetShape()) {
                     this.changeFillColorOnShape();
                 } else {
                     this.changeColorOnTrace();
                 }
                 break;
             case MOUSE.RightButton:
-                if (this.isStackTargetShape()) {
+                if (this.isFilledShape()) {
+                    this.changeStrokeColorOnFilledShape();
+                } else if (this.isStackTargetShape()) {
                     this.changeStrokeColorOnShape();
                 }
                 break;
