@@ -227,7 +227,27 @@ export class FillToolService extends AbstractToolService {
         let dsStrokeTop: Array<string> = [];
         let dsStrokeBottum: Array<string> = [];
         let lastFillStructuresLength = -1;
-        for (let x = this.bfsHelper.mostLeft; x <= this.bfsHelper.mostRight; x++) {
+        for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
+            const column: number[] = this.bfsHelper.strokeGrid.get(x)!.sort();
+
+            let d = `M${x} ${column[0]}`;
+            let lines = [];
+            for (let y = 1; y < column.length; y++) {
+                if (column[y] !== column[y - 1] + 1) {
+                    lines.push(d);
+                    d = `M${x} ${column[y]}`;
+                } else {
+                    d += ` L${x} ${column[y]}`;
+                }
+            }
+            lines.push(d);
+            lines.forEach((element) => {
+                if (this.countOccurrence(element, 'L') > 2) {
+                    this.dsStrokes.push(element);
+                }
+            });
+
+            if (segmentsToDraw.get(x) === undefined) continue;
             const fillStructures: Array<FillStructure> = segmentsToDraw.get(x)!;
 
             // console.log(fillStructures.length, lastFillStructuresLength);
@@ -255,7 +275,7 @@ export class FillToolService extends AbstractToolService {
                 fillStructures.forEach((fillStructure: FillStructure, i: number) => {
                     ds[
                         i
-                    ] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`;
+                    ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
 
                     let lastTop = segmentsToDraw.get(x - 1)![i].top;
                     let lastBottum = segmentsToDraw.get(x - 1)![i].bottum;
@@ -292,6 +312,16 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgWrap, bodyWrap);
 
         return bodyWrap.cloneNode(true) as SVGGElement;
+    }
+
+    countOccurrence(s: string, c: string): number {
+        var result = 0;
+        for (let i = 0; i < s.length; i++) {
+            if (s[i] == c) {
+                result++;
+            }
+        }
+        return result;
     }
 
     fillStroke(bodyWrap: SVGGElement) {
