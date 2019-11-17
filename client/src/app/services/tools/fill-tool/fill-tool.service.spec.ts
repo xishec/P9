@@ -9,6 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { BFSHelper } from 'src/classes/BFSHelper';
+import { FillStructure } from 'src/classes/FillStructure';
+import { Coords2D } from 'src/classes/Coords2D';
 
 fdescribe('FillToolService', () => {
     let service: FillToolService;
@@ -26,6 +28,7 @@ fdescribe('FillToolService', () => {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {
+                                            drawImage: () => null,
                                             getImageData: (x: number, y: number, sw: number, sh: number) => {
                                                 const mockImageData = {};
                                                 return (mockImageData as unknown) as ImageData;
@@ -212,5 +215,127 @@ fdescribe('FillToolService', () => {
 
         expect(spy1).toHaveBeenCalled();
         expect(spy2).toHaveBeenCalled();
+    });
+
+    it('should fill segmentsToDraw on call divideLinesToSegments', () => {
+        service.bfsHelper = {} as BFSHelper;
+        service.bfsHelper.bodyGrid = new Map([
+            [1, [1, 2, 3]],
+            [2, [1, 2, 3]],
+            [3, [1, 2, 3, 1000]],
+        ]);
+        service.divideLinesToSegments();
+        expect(service.segmentsToDraw.size).toBeGreaterThan(0);
+    });
+
+    it('should addToMap on call addToMap with an absent key', () => {
+        let map: Map<number, FillStructure[]> = new Map([]);
+        service.addToMap(1, { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure, map);
+        expect(map.size).toEqual(1);
+        expect((map.get(1) as FillStructure[])[0].top.x).toEqual(0);
+        expect((map.get(1) as FillStructure[])[0].top.y).toEqual(1);
+        expect((map.get(1) as FillStructure[])[0].bottum.x).toEqual(0);
+        expect((map.get(1) as FillStructure[])[0].bottum.y).toEqual(10);
+    });
+    it('should addToMap on call addToMap with an existing key', () => {
+        let map: Map<number, FillStructure[]> = new Map([
+            [1, [{ top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure]],
+        ]);
+        service.addToMap(1, { top: new Coords2D(3, 1), bottum: new Coords2D(3, 10) } as FillStructure, map);
+        expect(map.size).toEqual(1);
+        expect((map.get(1) as FillStructure[])[1].top.x).toEqual(3);
+        expect((map.get(1) as FillStructure[])[1].top.y).toEqual(1);
+        expect((map.get(1) as FillStructure[])[1].bottum.x).toEqual(3);
+        expect((map.get(1) as FillStructure[])[1].bottum.y).toEqual(10);
+    });
+
+    it('should push to strokePaths on call updateVerticalStrokePaths', () => {
+        service.strokePaths = [];
+        service.bfsHelper = {} as BFSHelper;
+        service.bfsHelper.strokeGrid = new Map([
+            [1, [1, 2, 3]],
+            [2, [1, 2, 30]],
+            [3, [1, 2, 3, 1000]],
+        ]);
+
+        service.updateVerticalStrokePaths(1);
+        expect(service.strokePaths.length).toEqual(1);
+    });
+    it('should not push to strokePaths on call updateVerticalStrokePaths with invalid stroke path', () => {
+        service.strokePaths = [];
+        service.bfsHelper = {} as BFSHelper;
+        service.bfsHelper.strokeGrid = new Map([
+            [1, [1, 7, 3]],
+            [2, [1, 2, 30]],
+            [3, [1, 2, 3, 1000]],
+        ]);
+
+        service.updateVerticalStrokePaths(1);
+        expect(service.strokePaths.length).not.toEqual(1);
+    });
+
+    it('should append BodyPaths to bodyPaths on call appendBodyPaths', () => {
+        let spy = spyOn(service.renderer, 'appendChild');
+        service.appendBodyPaths({} as SVGGElement, ['1', '2']);
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+    it('should add to bodyPaths on call updateBodyPaths', () => {
+        let bodyPaths = ['1', '2'];
+        service.updateBodyPaths(
+            bodyPaths,
+            { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure,
+            0,
+        );
+
+        expect(bodyPaths.length).toEqual(2);
+    });
+
+    it('should append StrokePaths to bodyPaths on call appendStrokePaths', () => {
+        service.strokePaths = [];
+        service.appendStrokePaths(['3', '4'], ['1', '2']);
+        expect(service.strokePaths.length).toEqual(4);
+    });
+    it('should add L to bodyPaths on call updateStrokePaths', () => {
+        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        let fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        service.segmentsToDraw = new Map([]);
+        service.segmentsToDraw.set(1, [fillStructure1]);
+        let topStrokePaths = ['1', '2'];
+        let bottumStrokePaths = ['3', '4'];
+        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
+
+        expect(topStrokePaths[0].includes('L')).toEqual(true);
+        expect(bottumStrokePaths[0].includes('L')).toEqual(true);
+    });
+    it('should add M to bodyPaths on call updateStrokePaths', () => {
+        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        let fillStructure2: FillStructure = {
+            top: new Coords2D(1110, 1111),
+            bottum: new Coords2D(1110, 11110),
+        } as FillStructure;
+        service.segmentsToDraw = new Map([]);
+        service.segmentsToDraw.set(1, [fillStructure1]);
+        let topStrokePaths = ['1', '2'];
+        let bottumStrokePaths = ['3', '4'];
+        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
+
+        expect(topStrokePaths[0].includes('M')).toEqual(true);
+        expect(bottumStrokePaths[0].includes('M')).toEqual(true);
+    });
+
+    it('should reset BodyAndStrokePaths on call resetBodyAndStrokePaths', () => {
+        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        let fillStructure2: FillStructure = {
+            top: new Coords2D(1110, 1111),
+            bottum: new Coords2D(1110, 11110),
+        } as FillStructure;
+        let topStrokePaths = ['1'];
+        let bottumStrokePaths = ['3'];
+        let bodyPaths: string[] = ['123'];
+        service.resetBodyAndStrokePaths([fillStructure1, fillStructure2], bodyPaths, topStrokePaths, bottumStrokePaths);
+
+        expect(bodyPaths.length).toEqual(2);
+        expect(topStrokePaths.length).toEqual(2);
+        expect(bottumStrokePaths.length).toEqual(2);
     });
 });

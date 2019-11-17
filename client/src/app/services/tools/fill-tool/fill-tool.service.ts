@@ -169,7 +169,7 @@ export class FillToolService extends AbstractToolService {
     }
 
     updateCanvas(): void {
-        const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
+        const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement as Node);
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
         this.renderer.setProperty(
@@ -276,13 +276,16 @@ export class FillToolService extends AbstractToolService {
         const topStrokePaths: string[] = [];
         const bottumStrokePaths: string[] = [];
         let lastFillStructuresLength = -1;
+
         for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
             this.updateVerticalStrokePaths(x);
 
+            let fillStructures: FillStructure[];
             if (this.segmentsToDraw.get(x) === undefined) {
                 continue;
+            } else {
+                fillStructures = this.segmentsToDraw.get(x) as FillStructure[];
             }
-            const fillStructures: FillStructure[] = this.segmentsToDraw.get(x) as FillStructure[];
 
             // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {
