@@ -94,12 +94,7 @@ export class FillToolService extends AbstractToolService {
         this.updateCanvas();
         this.updateMousePosition(event);
 
-        this.bfsHelper = new BFSHelper(
-            this.canvas.width,
-            this.canvas.height,
-            this.context2D,
-            this.attributesManagerService,
-        );
+        this.createBFSHelper();
         this.bfsHelper.computeBFS(this.currentMouseCoords);
 
         this.divideLinesToSegments();
@@ -108,6 +103,15 @@ export class FillToolService extends AbstractToolService {
         setTimeout(() => {
             this.drawStack.push(this.svgWrap);
         }, 0);
+    }
+
+    createBFSHelper(): void {
+        this.bfsHelper = new BFSHelper(
+            this.canvas.width,
+            this.canvas.height,
+            this.context2D,
+            this.attributesManagerService,
+        );
     }
 
     updateMousePosition(event: MouseEvent): void {
