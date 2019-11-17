@@ -106,7 +106,9 @@ export class FillToolService extends AbstractToolService {
         this.divideLinesToSegments();
         this.fill();
 
-        this.drawStack.push(this.svgWrap);
+        setTimeout(() => {
+            this.drawStack.push(this.svgWrap);
+        }, 0);
     }
 
     updateMousePosition(event: MouseEvent): void {
