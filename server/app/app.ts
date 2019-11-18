@@ -24,8 +24,8 @@ export class Application {
     private config(): void {
         // Middlewares configuration
         this.app.use(logger('dev'));
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json({ limit: '1000mb' }));
+        this.app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
         this.app.use(cookieParser());
         this.app.use(cors());
     }
