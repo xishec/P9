@@ -11,6 +11,7 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
+import { SelectionToolService } from '../tools/selection-tool/selection-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -78,7 +79,7 @@ export class EventListenerService {
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'wheel', (event: WheelEvent) => {
-            if (this.currentTool instanceof StampToolService && this.shouldAllowEvent()) {
+            if ((this.currentTool instanceof StampToolService || this.currentTool instanceof SelectionToolService) && this.shouldAllowEvent()) {
                 this.currentTool.onWheel(event);
             }
         });

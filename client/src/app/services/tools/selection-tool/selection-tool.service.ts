@@ -328,4 +328,8 @@ export class SelectionToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
+
+    onWheel(event: WheelEvent): void {
+
+    }
 }
