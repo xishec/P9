@@ -18,7 +18,7 @@ export class ManipulatorService {
             case '0':
                 break;
             case '1':
-                this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
+                //this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
                 break;
             case '2':
                 break;
@@ -27,6 +27,7 @@ export class ManipulatorService {
             case '4':
                 break;
             case '5':
+                this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
                 break;
             case '6':
                 break;
@@ -53,22 +54,10 @@ export class ManipulatorService {
                 nullScale.setScale(1, 1);
                 el.transform.baseVal.insertItemBefore(nullScale, 0);
             }
-            let newScaleFactor = 0;
+            let newScaleFactor = currentMouse.y / initialMouse.y;
 
-            newScaleFactor = initialMouse.y / currentMouse.y;
-
-            //console.log(newScaleFactor);
-
-            if (newScaleFactor === 0) {
-                console.log('returned');
-                return;
-            }
-
-            const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y + (selection.selectionBox.getBoundingClientRect() as DOMRect).height;
-            // const previousTranslate = -transformsList.getItem(1).matrix.f;
+            const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y;
             const deltaY = (currentY - (currentY * newScaleFactor)) / newScaleFactor;
-
-            console.log(deltaY);
 
             el.transform.baseVal.getItem(0).setScale(1, newScaleFactor);
             el.transform.baseVal.getItem(1).setTranslate(0, deltaY);
