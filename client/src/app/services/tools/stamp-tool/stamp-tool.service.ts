@@ -6,10 +6,10 @@ import {
     BASE64_STAMPS_MAP,
     HTML_ATTRIBUTE,
     NO_STAMP,
-    STAMP_ALTER_ROTATION,
+    ALTER_ROTATION,
     STAMP_ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
-    STAMP_BASE_ROTATION,
+    BASE_ROTATION,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
 } from 'src/constants/tool-constants';
@@ -155,17 +155,17 @@ export class StampToolService extends AbstractToolService {
 
     rotateStamp(direction: number): void {
         if (direction < 0) {
-            this.angle = (this.angle - STAMP_BASE_ROTATION) % 360;
+            this.angle = (this.angle - BASE_ROTATION) % 360;
         } else {
-            this.angle = (this.angle + STAMP_BASE_ROTATION) % 360;
+            this.angle = (this.angle + BASE_ROTATION) % 360;
         }
     }
 
     alterRotateStamp(direction: number): void {
         if (direction < 0) {
-            this.angle = (this.angle - STAMP_ALTER_ROTATION) % 360;
+            this.angle = (this.angle - ALTER_ROTATION) % 360;
         } else {
-            this.angle = (this.angle + STAMP_ALTER_ROTATION) % 360;
+            this.angle = (this.angle + ALTER_ROTATION) % 360;
         }
     }
 
