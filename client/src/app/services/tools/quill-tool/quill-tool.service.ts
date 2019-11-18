@@ -22,6 +22,8 @@ export class QuillToolService extends TracingToolService {
     previousCoords: Coords2D[] = new Array<Coords2D>(2);
     currentCoords: Coords2D[] = new Array<Coords2D>(2);
 
+    preview: SVGLineElement;
+
     thickness: number = 80;
     angle: number = 80;
 
@@ -49,6 +51,10 @@ export class QuillToolService extends TracingToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.drawStack = drawStack;
+
+        this.preview = this.renderer.createElement('line', SVG_NS);
+        this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
+
     }
 
     initializeAttributesManagerService(attributeManagerService: AttributesManagerService) {
@@ -89,25 +95,44 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
+    updatePreview(x: number, y: number) {
+
+        this.getColorAndOpacity();
+
+        this.renderer.setAttribute(this.preview, 'x1', `${x + this.offsets[0].x}`);
+        this.renderer.setAttribute(this.preview, 'y1', `${y + this.offsets[0].y}`);
+        this.renderer.setAttribute(this.preview, 'x2', `${x + this.offsets[1].x}`);
+        this.renderer.setAttribute(this.preview, 'y2', `${y + this.offsets[1].y}`);
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, '2');
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
+    }
+
     onMouseMove(event: MouseEvent): void {
+
+        this.computeOffset();
+
+        const xPos = this.getXPos(event.clientX);
+        const yPos = this.getYPos(event.clientY);
+
+        this.updatePreview(xPos, yPos);
+
         if (!this.isDrawing) {
             return;
         }
 
+        // to keep only one point out of two....
         if (this.cnter++ % 2 !== 0) {
             return;
         }
 
-        this.computeOffset();
-
         this.currentCoords[0] = new Coords2D(
-            this.getXPos(event.clientX) + this.offsets[0].x,
-            this.getYPos(event.clientY) + this.offsets[0].y,
+            xPos + this.offsets[0].x,
+            yPos + this.offsets[0].y,
         );
 
         this.currentCoords[1] = new Coords2D(
-            this.getXPos(event.clientX) + this.offsets[1].x,
-            this.getYPos(event.clientY) + this.offsets[1].y,
+            xPos + this.offsets[1].x,
+            yPos + this.offsets[1].y,
         );
 
         this.tracePolygon();
