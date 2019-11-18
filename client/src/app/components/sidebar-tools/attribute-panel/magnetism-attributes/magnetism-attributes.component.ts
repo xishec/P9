@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSliderChange } from '@angular/material';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { PREDICATE } from 'src/constants/constants';
 import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 
@@ -32,7 +30,6 @@ export class MagnetismAttributesComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.onSizeChange();
         this.gridToolService.currentState.subscribe((state: boolean) => {
             this.magnetismAttributesForm.controls.state.setValue(state);
         });
@@ -50,21 +47,8 @@ export class MagnetismAttributesComponent implements OnInit {
     onStateChange(): void {
         const state = this.magnetismAttributesForm.value.state;
         // TODO : Change value for magnetism
+        this.magnetismService;
         this.gridToolService.changeState(state);
-    }
-
-    onSizeChange(): void {
-        const size = this.magnetismAttributesForm.value.size;
-        if (this.magnetismAttributesForm.controls.size.valid) {
-            this.gridToolService.changeSize(size);
-        }
-    }
-
-    onOpacityChange(): void {
-        const opacity = this.magnetismAttributesForm.value.opacity;
-        if (this.magnetismAttributesForm.controls.opacity.valid) {
-            this.gridToolService.changeOpacity(opacity);
-        }
     }
 
     onFocus(): void {

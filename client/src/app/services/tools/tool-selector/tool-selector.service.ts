@@ -26,6 +26,7 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -58,6 +59,7 @@ export class ToolSelectorService {
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
+        private magnetismTool: MagnetismToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -272,6 +274,11 @@ export class ToolSelectorService {
         }
 
         if (tooltipName === TOOL_NAME.Grid) {
+            this.changeCurrentToolName(tooltipName);
+            return;
+        }
+
+        if (tooltipName === TOOL_NAME.Magnetism) {
             this.changeCurrentToolName(tooltipName);
             return;
         }
