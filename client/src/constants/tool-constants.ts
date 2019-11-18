@@ -1,4 +1,5 @@
 import { FontType } from 'src/classes/FontType';
+import { MagnetismPoint } from 'src/classes/MagnetismPoint';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
@@ -371,6 +372,36 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+enum SELECTION_POINTS {
+    TopLeft = 'TopLeft',
+    TopMiddle = 'TopMiddle',
+    TopRight = 'TopRight',
+    CenterLeft = 'CenterLeft',
+    CenterMiddle = 'CenterMiddle',
+    CenterRight = 'CenterRight',
+    BottomLeft = 'BottomLeft',
+    BottomMiddle = 'BottomMiddle',
+    BottomRight = 'BottomRight',
+}
+
+const TOP_MAGNETISM_POINTS: MagnetismPoint[] = [
+    { point: SELECTION_POINTS.TopLeft, svg_icon: '1' },
+    { point: SELECTION_POINTS.TopMiddle, svg_icon: '2' },
+    { point: SELECTION_POINTS.TopRight, svg_icon: '3' },
+];
+
+const CENTER_MAGNETISM_POINTS: MagnetismPoint[] = [
+    { point: SELECTION_POINTS.CenterLeft, svg_icon: '4' },
+    { point: SELECTION_POINTS.CenterMiddle, svg_icon: '5' },
+    { point: SELECTION_POINTS.CenterRight, svg_icon: '6' },
+];
+
+const BOTTOM_MAGNETISM_POINTS: MagnetismPoint[] = [
+    { point: SELECTION_POINTS.BottomLeft, svg_icon: '7' },
+    { point: SELECTION_POINTS.BottomMiddle, svg_icon: '8' },
+    { point: SELECTION_POINTS.BottomRight, svg_icon: '9' },
+];
+
 export {
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
@@ -429,4 +460,8 @@ export {
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    SELECTION_POINTS,
+    TOP_MAGNETISM_POINTS,
+    CENTER_MAGNETISM_POINTS,
+    BOTTOM_MAGNETISM_POINTS,
 };
