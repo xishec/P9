@@ -1,16 +1,16 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { FillToolService } from './fill-tool.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
-import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
-import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { BFSHelper } from 'src/classes/BFSHelper';
-import { FillStructure } from 'src/classes/FillStructure';
 import { Coords2D } from 'src/classes/Coords2D';
+import { FillStructure } from 'src/classes/FillStructure';
+import { createMouseEvent } from 'src/classes/test-helpers.spec';
+import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
+import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { FillToolService } from './fill-tool.service';
 
 describe('FillToolService', () => {
     let service: FillToolService;
@@ -46,7 +46,7 @@ describe('FillToolService', () => {
                         setAttribute: () => true,
                         appendChild: () => null,
                         removeChild: () => null,
-                        setProperty: () => {},
+                        setProperty: () => null,
                     },
                 },
                 {
@@ -95,7 +95,7 @@ describe('FillToolService', () => {
         };
         service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(true);
         service.mouseDown = false;
-        let bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
+        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
         expect(bool).toEqual(true);
     });
     it('should return false on call shouldNotFill', () => {
@@ -104,7 +104,7 @@ describe('FillToolService', () => {
         };
         service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(false);
         service.mouseDown = true;
-        let bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
+        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
         expect(bool).toEqual(false);
     });
 
@@ -112,7 +112,7 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return true;
         };
-        let spy = spyOn(service, 'updateCanvas');
+        const spy = spyOn(service, 'updateCanvas');
         service.onMouseDown(createMouseEvent(0, 0, 21));
 
         expect(spy).toHaveBeenCalled();
@@ -121,7 +121,7 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return false;
         };
-        let spy = spyOn(service, 'updateCanvas');
+        const spy = spyOn(service, 'updateCanvas');
         service.onMouseDown(createMouseEvent(0, 0, 21));
 
         expect(spy).not.toHaveBeenCalled();
@@ -131,7 +131,7 @@ describe('FillToolService', () => {
         service.shouldNotFill = (event: MouseEvent): boolean => {
             return true;
         };
-        let spy = spyOn(service, 'fill');
+        const spy = spyOn(service, 'fill');
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).not.toHaveBeenCalled();
@@ -149,7 +149,7 @@ describe('FillToolService', () => {
         service.divideLinesToSegments = () => null;
         service.fill = () => null;
 
-        let spy = spyOn(service, 'fill');
+        const spy = spyOn(service, 'fill');
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).toHaveBeenCalled();
@@ -184,7 +184,7 @@ describe('FillToolService', () => {
         service.fillBody = () => {
             return {} as SVGGElement;
         };
-        let spy = spyOn(service, 'fillStroke');
+        const spy = spyOn(service, 'fillStroke');
 
         service.traceType = TRACE_TYPE.Outline;
         service.fill();
@@ -196,7 +196,7 @@ describe('FillToolService', () => {
         service.fillBody = () => {
             return {} as SVGGElement;
         };
-        let spy = spyOn(service, 'fillBody');
+        const spy = spyOn(service, 'fillBody');
 
         service.traceType = TRACE_TYPE.Full;
         service.fill();
@@ -208,8 +208,8 @@ describe('FillToolService', () => {
         service.fillBody = () => {
             return {} as SVGGElement;
         };
-        let spy1 = spyOn(service, 'fillBody');
-        let spy2 = spyOn(service, 'fillStroke');
+        const spy1 = spyOn(service, 'fillBody');
+        const spy2 = spyOn(service, 'fillStroke');
 
         service.traceType = TRACE_TYPE.Both;
         service.fill();
@@ -230,7 +230,7 @@ describe('FillToolService', () => {
     });
 
     it('should addToMap on call addToMap with an absent key', () => {
-        let map: Map<number, FillStructure[]> = new Map([]);
+        const map: Map<number, FillStructure[]> = new Map([]);
         service.addToMap(1, { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure, map);
         expect(map.size).toEqual(1);
         expect((map.get(1) as FillStructure[])[0].top.x).toEqual(0);
@@ -239,7 +239,7 @@ describe('FillToolService', () => {
         expect((map.get(1) as FillStructure[])[0].bottum.y).toEqual(10);
     });
     it('should addToMap on call addToMap with an existing key', () => {
-        let map: Map<number, FillStructure[]> = new Map([
+        const map: Map<number, FillStructure[]> = new Map([
             [1, [{ top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure]],
         ]);
         service.addToMap(1, { top: new Coords2D(3, 1), bottum: new Coords2D(3, 10) } as FillStructure, map);
@@ -276,12 +276,12 @@ describe('FillToolService', () => {
     });
 
     it('should append BodyPaths to bodyPaths on call appendBodyPaths', () => {
-        let spy = spyOn(service.renderer, 'appendChild');
+        const spy = spyOn(service.renderer, 'appendChild');
         service.appendBodyPaths({} as SVGGElement, ['1', '2']);
         expect(spy).toHaveBeenCalledTimes(2);
     });
     it('should add to bodyPaths on call updateBodyPaths', () => {
-        let bodyPaths = ['1', '2'];
+        const bodyPaths = ['1', '2'];
         service.updateBodyPaths(
             bodyPaths,
             { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure,
@@ -297,27 +297,27 @@ describe('FillToolService', () => {
         expect(service.strokePaths.length).toEqual(4);
     });
     it('should add L to bodyPaths on call updateStrokePaths', () => {
-        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
-        let fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
-        let topStrokePaths = ['1', '2'];
-        let bottumStrokePaths = ['3', '4'];
+        const topStrokePaths = ['1', '2'];
+        const bottumStrokePaths = ['3', '4'];
         service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
 
         expect(topStrokePaths[0].includes('L')).toEqual(true);
         expect(bottumStrokePaths[0].includes('L')).toEqual(true);
     });
     it('should add M to bodyPaths on call updateStrokePaths', () => {
-        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
-        let fillStructure2: FillStructure = {
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure2: FillStructure = {
             top: new Coords2D(1110, 1111),
             bottum: new Coords2D(1110, 11110),
         } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
-        let topStrokePaths = ['1', '2'];
-        let bottumStrokePaths = ['3', '4'];
+        const topStrokePaths = ['1', '2'];
+        const bottumStrokePaths = ['3', '4'];
         service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
 
         expect(topStrokePaths[0].includes('M')).toEqual(true);
@@ -325,14 +325,14 @@ describe('FillToolService', () => {
     });
 
     it('should reset BodyAndStrokePaths on call resetBodyAndStrokePaths', () => {
-        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
-        let fillStructure2: FillStructure = {
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure2: FillStructure = {
             top: new Coords2D(1110, 1111),
             bottum: new Coords2D(1110, 11110),
         } as FillStructure;
-        let topStrokePaths = ['1'];
-        let bottumStrokePaths = ['3'];
-        let bodyPaths: string[] = ['123'];
+        const topStrokePaths = ['1'];
+        const bottumStrokePaths = ['3'];
+        const bodyPaths: string[] = ['123'];
         service.resetBodyAndStrokePaths([fillStructure1, fillStructure2], bodyPaths, topStrokePaths, bottumStrokePaths);
 
         expect(bodyPaths.length).toEqual(2);
@@ -341,8 +341,8 @@ describe('FillToolService', () => {
     });
 
     it('should append Body on call appendBody', () => {
-        let bodyPaths: string[] = ['1', '2'];
-        let spy = spyOn(service.renderer, 'appendChild');
+        const bodyPaths: string[] = ['1', '2'];
+        const spy = spyOn(service.renderer, 'appendChild');
         service.appendBody(bodyPaths, {} as SVGGElement);
         expect(spy).toHaveBeenCalledTimes(2);
     });
@@ -350,28 +350,28 @@ describe('FillToolService', () => {
     it('should fill stroke on call fillStroke', () => {
         service.appendMask = () => null;
         service.appendStroke = () => null;
-        let spy1 = spyOn(service, 'appendMask');
-        let spy2 = spyOn(service, 'appendStroke');
+        const spy1 = spyOn(service, 'appendMask');
+        const spy2 = spyOn(service, 'appendStroke');
         service.fillStroke(({ cloneNode: () => null } as unknown) as SVGGElement);
         expect(spy1).toHaveBeenCalled();
         expect(spy2).toHaveBeenCalled();
     });
 
     it('should append Mask on call appendMask', () => {
-        let spy = spyOn(service.renderer, 'appendChild');
+        const spy = spyOn(service.renderer, 'appendChild');
         service.appendMask({} as SVGGElement, '123');
         expect(spy).toHaveBeenCalled();
     });
 
     it('should append Stroke on call appendStroke', () => {
         service.strokePaths = ['1', '2'];
-        let spy = spyOn(service.renderer, 'appendChild');
+        const spy = spyOn(service.renderer, 'appendChild');
         service.appendStroke('123');
         expect(spy).toHaveBeenCalledTimes(3);
     });
 
     it('should create SVGWrapper on call createSVGWrapper', () => {
-        let spy = spyOn(service.renderer, 'createElement');
+        const spy = spyOn(service.renderer, 'createElement');
         service.createSVGWrapper();
         expect(spy).toHaveBeenCalledTimes(1);
     });
@@ -383,7 +383,7 @@ describe('FillToolService', () => {
                 return { width: 1, height: 1 } as ClientRect;
             },
         } as SVGElement;
-        let spy = spyOn(service.renderer, 'setProperty');
+        const spy = spyOn(service.renderer, 'setProperty');
         service.updateCanvas();
         expect(spy).toHaveBeenCalledTimes(3);
     });
@@ -398,12 +398,12 @@ describe('FillToolService', () => {
         service.resetBodyAndStrokePaths = () => null;
         service.updateBodyPaths = () => null;
         service.updateStrokePaths = () => null;
-        let fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
         service.segmentsToDraw.set(2, [fillStructure1]);
 
-        let spy = spyOn(service.renderer, 'appendChild');
+        const spy = spyOn(service.renderer, 'appendChild');
         service.fillBody();
         expect(spy).toHaveBeenCalled();
     });
