@@ -8,7 +8,7 @@ describe('MagnetismAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MagnetismAttributesComponent ]
+      declarations: [ MagnetismAttributesComponent ],
     })
     .compileComponents();
   }));
