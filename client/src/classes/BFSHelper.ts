@@ -12,6 +12,7 @@ export class BFSHelper {
     tolerance: number;
     mostLeft: number;
     mostRight: number;
+    data: Uint8ClampedArray;
 
     constructor(
         maxX: number,
@@ -35,9 +36,10 @@ export class BFSHelper {
     }
 
     computeBFS(clickPosition: Coords2D): void {
-        const targetColor: Uint8ClampedArray = this.getPixelColor(clickPosition);
+        let imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
+        this.data = imageData.data;
 
-        this.visited.add(JSON.stringify(clickPosition));
+        const targetColor: number[] = this.getPixelColor(clickPosition);
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
@@ -94,7 +96,7 @@ export class BFSHelper {
         }
     }
 
-    isSameColor(color1: Uint8ClampedArray, color2: Uint8ClampedArray): boolean {
+    isSameColor(color1: number[], color2: number[]): boolean {
         if (this.tolerance === 0) {
             return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
         } else {
@@ -108,28 +110,16 @@ export class BFSHelper {
         }
     }
 
-    isStroke(pixel: Coords2D, targetColor: Uint8ClampedArray): boolean {
-        const neighborPixels = [
-            new Coords2D(pixel.x - 1, pixel.y),
-            new Coords2D(pixel.x + 1, pixel.y),
-            new Coords2D(pixel.x, pixel.y - 1),
-            new Coords2D(pixel.x, pixel.y + 1),
-        ];
-        let isStroke = false;
-        neighborPixels.forEach((neighborPixel: Coords2D) => {
-            if (!this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
-                isStroke = true;
-            }
-        });
-
-        return isStroke;
-    }
-
     isValidPosition(pixel: Coords2D): boolean {
         return pixel.x >= 0 && pixel.x < this.maxX && pixel.y >= 0 && pixel.y < this.maxY;
     }
 
-    getPixelColor(clickPosition: Coords2D): Uint8ClampedArray {
-        return this.context2D.getImageData(clickPosition.x, clickPosition.y, 1, 1).data;
+    getPixelColor(pixel: Coords2D): number[] {
+        let index: number = 4 * (pixel.x + pixel.y * this.maxX);
+        let r: number = this.data[index++];
+        let g: number = this.data[index++];
+        let b: number = this.data[index];
+
+        return [r, g, b];
     }
 }
