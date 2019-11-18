@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { MOUSE, SIDEBAR_WIDTH, SVG_NS, KEYS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE, BASE_ROTATION, ALTER_ROTATION } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -259,13 +259,16 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
+            this.manipulator.angle = 0;
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
+            this.manipulator.angle = 0;
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
             this.saveState();
         } else {
             this.selection.emptySelection();
+            this.manipulator.angle = 0;
         }
 
         this.isLeftMouseDown = false;
@@ -301,6 +304,7 @@ export class SelectionToolService extends AbstractToolService {
 
             case MOUSE.RightButton:
                 this.handleRightMouseUp();
+                this.manipulator.angle = 0;
                 break;
 
             default:
@@ -326,20 +330,26 @@ export class SelectionToolService extends AbstractToolService {
     onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {
+        event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            this.manipulator.isAlterRotate = true;
+            this.manipulator.isRotateOnSelf = true;
+        } else if (key === KEYS.Alt) {
+            this.manipulator.rotationStep = ALTER_ROTATION;
         }
     }
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {
+        event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            this.manipulator.isAlterRotate = false;
+            this.manipulator.isRotateOnSelf = false;
+        } else if (key === KEYS.Alt) {
+            this.manipulator.rotationStep = BASE_ROTATION;
         }
     }
 
     onWheel(event: WheelEvent): void {
-        this.manipulator.rotateSelection(event);
+        this.manipulator.rotateSelection(event, this.selection);
     }
 }

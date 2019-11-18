@@ -1,31 +1,57 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
+import { BASE_ROTATION } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ManipulatorService {
     renderer: Renderer2;
-    isAlterRotate = false;
+    isRotateOnSelf = false;
+    rotationStep = BASE_ROTATION;
+    angle = 0;
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
     }
 
-    rotateSelection(wheelEvent: WheelEvent): void {
-        if (this.isAlterRotate) {
-            this.rotateOnSelf();
+    rotateSelection(event: WheelEvent, selection: Selection): void {
+        const deltaY = event.deltaY;
+        if (deltaY < 0) {
+            this.angle -= this.rotationStep;
         } else {
-            this.rotateOnBoxCenter();
+            this.angle += this.rotationStep;
+        }
+        if (this.isRotateOnSelf) {
+            this.rotateOnSelf(selection);
+        } else {
+            this.rotateOnBoxCenter(selection);
         }
     }
 
-    rotateOnBoxCenter(): void {
+    rotateOnBoxCenter(selection: Selection): void {
+        for (const el of selection.selectedElements) {
+            const transformsList = el.transform.baseVal;
+            if (
+                transformsList.numberOfItems === 0 ||
+                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
+            ) {
+                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+                const rotateToZero = svg.createSVGTransform();
+                rotateToZero.setRotate(0, 0, 0);
+                el.transform.baseVal.insertItemBefore(rotateToZero, 0);
+            }
+            //const initialTransform = transformsList.getItem(0);
+            const centerBoxX = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
+            const centerBoxY = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
+            el.transform.baseVal.getItem(0).setRotate(this.angle, centerBoxX, centerBoxY);
+        }
 
+        selection.updateFullSelectionBox();
     }
 
-    rotateOnSelf(): void {
+    rotateOnSelf(selection: Selection): void {
 
     }
 
