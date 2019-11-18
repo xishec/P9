@@ -7,9 +7,26 @@ import { Selection } from '../../../classes/selection/selection';
 })
 export class ManipulatorService {
     renderer: Renderer2;
+    isAlterRotate = false;
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
+    }
+
+    rotateSelection(wheelEvent: WheelEvent): void {
+        if (this.isAlterRotate) {
+            this.rotateOnSelf();
+        } else {
+            this.rotateOnBoxCenter();
+        }
+    }
+
+    rotateOnBoxCenter(): void {
+
+    }
+
+    rotateOnSelf(): void {
+
     }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
