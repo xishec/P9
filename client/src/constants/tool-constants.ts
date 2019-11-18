@@ -45,6 +45,7 @@ enum TOOL_NAME {
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
     Export = 'Exporter',
+    Magnetism = 'Magnétisme',
 }
 
 enum THICKNESS {
@@ -106,6 +107,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eye-dropper', tooltipName: TOOL_NAME.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: TOOL_NAME.Stamp, shortcut: '' },
     { iconName: 'fas fa-border-all', tooltipName: TOOL_NAME.Grid, shortcut: '' },
+    { iconName: 'fas fa-magnet', tooltipName: TOOL_NAME.Magnetism, shortcut: '(M)' },
 ];
 
 const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
