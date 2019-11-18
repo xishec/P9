@@ -19,21 +19,33 @@
 
         <div class="attribute">
             <mat-button-toggle-group>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
+                <mat-button-toggle
+                    *ngFor="let TOP_MAGNETISM_POINT of TOP_MAGNETISM_POINTS"
+                    [value]="TOP_MAGNETISM_POINT.point"
+                    [checked]="currentMagnetismPoint === TOP_MAGNETISM_POINT.point"
+                    (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
+                    >{{ TOP_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                >
             </mat-button-toggle-group>
 
             <mat-button-toggle-group>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
+                <mat-button-toggle
+                    *ngFor="let CENTER_MAGNETISM_POINT of CENTER_MAGNETISM_POINTS"
+                    [value]="CENTER_MAGNETISM_POINT.point"
+                    [checked]="currentMagnetismPoint === CENTER_MAGNETISM_POINT.point"
+                    (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
+                    >{{ CENTER_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                >
             </mat-button-toggle-group>
 
             <mat-button-toggle-group>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
-                <mat-button-toggle></mat-button-toggle>
+                <mat-button-toggle
+                    *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_MAGNETISM_POINTS"
+                    [value]="BOTTOM_MAGNETISM_POINT.point"
+                    [checked]="currentMagnetismPoint === BOTTOM_MAGNETISM_POINT.point"
+                    (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
+                    >{{ BOTTOM_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                >
             </mat-button-toggle-group>
         </div>
     </form>

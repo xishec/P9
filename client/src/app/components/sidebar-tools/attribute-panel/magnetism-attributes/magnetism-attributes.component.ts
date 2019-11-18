@@ -3,8 +3,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
-import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
+import {
+    BOTTOM_MAGNETISM_POINTS,
+    CENTER_MAGNETISM_POINTS,
+    SELECTION_POINTS,
+    TOOL_NAME,
+    TOP_MAGNETISM_POINTS,
+} from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-magnetism-attributes',
@@ -14,9 +20,12 @@ import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magn
 export class MagnetismAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Magnetism;
     magnetismAttributesForm: FormGroup;
+    currentMagnetismPoint: string = SELECTION_POINTS.TopLeft;
 
-    readonly gridSize = GRID_SIZE;
-    readonly gridOpacity = GRID_OPACITY;
+    readonly SELECTION_POINTS = SELECTION_POINTS;
+    readonly TOP_MAGNETISM_POINTS = TOP_MAGNETISM_POINTS;
+    readonly CENTER_MAGNETISM_POINTS = CENTER_MAGNETISM_POINTS;
+    readonly BOTTOM_MAGNETISM_POINTS = BOTTOM_MAGNETISM_POINTS;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -62,5 +71,9 @@ export class MagnetismAttributesComponent implements OnInit {
         if (!this.drawingLoaderService.untouchedWorkZone.value) {
             this.magnetismAttributesForm.controls.state.enable();
         }
+    }
+
+    setMagnetismPoint(value: string) {
+        this.currentMagnetismPoint = value;
     }
 }
