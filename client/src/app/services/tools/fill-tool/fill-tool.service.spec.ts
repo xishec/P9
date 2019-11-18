@@ -5,13 +5,13 @@ import { BehaviorSubject } from 'rxjs';
 import { BFSHelper } from 'src/classes/BFSHelper';
 import { Coords2D } from 'src/classes/Coords2D';
 import { FillStructure } from 'src/classes/FillStructure';
-import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers.spec';
+import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
+import { KEYS } from 'src/constants/constants';
 import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { FillToolService } from './fill-tool.service';
-import { KEYS } from 'src/constants/constants';
 
 describe('FillToolService', () => {
     let service: FillToolService;
