@@ -5,12 +5,13 @@ import { BehaviorSubject } from 'rxjs';
 import { BFSHelper } from 'src/classes/BFSHelper';
 import { Coords2D } from 'src/classes/Coords2D';
 import { FillStructure } from 'src/classes/FillStructure';
-import { createMouseEvent } from 'src/classes/test-helpers.spec';
+import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { FillToolService } from './fill-tool.service';
+import { KEYS } from 'src/constants/constants';
 
 describe('FillToolService', () => {
     let service: FillToolService;
@@ -102,6 +103,13 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return true;
         };
+        service.onMouseMove(createMouseEvent(0, 0, 21));
+        service.onMouseEnter(createMouseEvent(0, 0, 21));
+        service.onMouseLeave(createMouseEvent(0, 0, 21));
+        service.onKeyDown(createKeyBoardEvent(KEYS.Alt));
+        service.onKeyUp(createKeyBoardEvent(KEYS.Alt));
+        service.cleanUp();
+
         service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(false);
         service.mouseDown = true;
         const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
