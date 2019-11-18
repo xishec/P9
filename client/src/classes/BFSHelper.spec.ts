@@ -4,7 +4,7 @@ import { BFSHelper } from './BFSHelper';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { Coords2D } from './Coords2D';
 
-fdescribe('Selection', () => {
+describe('Selection', () => {
     let bfsHelper: BFSHelper;
 
     beforeEach(() => {
