@@ -1,1 +1,20 @@
-<p>magnetism-attributes works!</p>
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="magnetismAttributesForm">
+        <div class="attribute">
+            <label for="activateGrid">
+                Activer la grille
+                <i
+                    class="fas fa-info-circle"
+                    matTooltip="Appuyez sur 'G' comme raccourci"
+                    matTooltipPosition="after"
+                ></i>
+            </label>
+            <br />
+            <mat-slide-toggle formControlName="state" [checked]="onStateChange()" color="primary"></mat-slide-toggle>
+        </div>
+    </form>
+</div>
