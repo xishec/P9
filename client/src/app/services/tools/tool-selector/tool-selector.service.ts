@@ -19,6 +19,7 @@ import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 import { ExportToolService } from '../export-tool/export-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
@@ -26,7 +27,6 @@ import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
-import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -263,6 +263,10 @@ export class ToolSelectorService {
 
     getEraserTool(): EraserToolService {
         return this.eraserTool;
+    }
+
+    getMagnetismTool(): MagnetismToolService {
+        return this.magnetismTool;
     }
 
     changeTool(tooltipName: TOOL_NAME): void {
