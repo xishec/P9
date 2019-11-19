@@ -8,7 +8,7 @@ describe('QuillAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuillAttributesComponent ]
+      declarations: [ QuillAttributesComponent ],
     })
     .compileComponents();
   }));

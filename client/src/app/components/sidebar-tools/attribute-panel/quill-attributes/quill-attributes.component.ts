@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSliderChange } from '@angular/material';
 
-import { THICKNESS, TOOL_NAME, ANGLE_ORIENTATION } from 'src/constants/tool-constants';
-import { PREDICATE } from 'src/constants/constants';
-import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
-import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
+import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { QuillToolService } from 'src/app/services/tools/quill-tool/quill-tool.service';
+import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
+import { PREDICATE } from 'src/constants/constants';
+import { ANGLE_ORIENTATION, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-quill-attributes',
@@ -63,7 +63,6 @@ export class QuillAttributesComponent implements OnInit {
         const thickness: number = this.quillAttributesForm.value.thickness;
         if (this.quillAttributesForm.controls.thickness.valid) {
             this.attributesManagerService.thickness.next(thickness);
-            console.log(thickness);
         }
     }
 

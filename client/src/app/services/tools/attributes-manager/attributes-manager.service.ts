@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import {
+    ANGLE_ORIENTATION,
     BRUSH_STYLE,
     ERASER_SIZE,
     FONT_ALIGN,
     FONT_SIZE,
     LINE_JOINT_TYPE,
     LINE_STROKE_TYPE,
-    ANGLE_ORIENTATION,
     STAMP_SCALING,
     STAMP_TYPES,
     THICKNESS,

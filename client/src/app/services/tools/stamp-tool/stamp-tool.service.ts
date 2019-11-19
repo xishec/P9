@@ -3,11 +3,11 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
+    ANGLE_ORIENTATION,
     BASE64_STAMPS_MAP,
     HTML_ATTRIBUTE,
     NO_STAMP,
     STAMP_ALTER_ROTATION,
-    ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,

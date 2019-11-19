@@ -2,12 +2,12 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
-import { MOUSE, SVG_NS, KEYS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
-import { ColorToolService } from '../color-tool/color-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
+import { ColorToolService } from '../color-tool/color-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,15 +25,15 @@ export class QuillToolService extends TracingToolService {
     preview: SVGLineElement;
     isPreviewIn = false;
 
-    thickness: number = 80;
-    angle: number = 80;
+    thickness = 80;
+    angle = 80;
 
     offsets: Offset[] = [
         { x: 0, y: 0 },
         { x: 0, y: 0 },
     ];
 
-    cnter = 0;
+    counter = 0;
 
     isAlterRotation: boolean;
 
@@ -116,7 +116,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
     }
 
-    updatePreview(x: number, y: number) {
+    updatePreview(x: number, y: number): void {
         this.renderer.setAttribute(this.preview, 'x1', `${x + this.offsets[0].x}`);
         this.renderer.setAttribute(this.preview, 'y1', `${y + this.offsets[0].y}`);
         this.renderer.setAttribute(this.preview, 'x2', `${x + this.offsets[1].x}`);
@@ -124,7 +124,6 @@ export class QuillToolService extends TracingToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-
         if (!this.isPreviewIn) {
             this.appendPreview();
         }
@@ -139,7 +138,7 @@ export class QuillToolService extends TracingToolService {
         }
 
         // to keep only one point out of two....
-        if (this.cnter++ % 2 !== 0) {
+        if (this.counter++ % 2 !== 0) {
             return;
         }
 
@@ -169,11 +168,11 @@ export class QuillToolService extends TracingToolService {
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === KEYS.Alt) {
             this.isAlterRotation = true;
-        };
+        }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if( event.key === KEYS.Alt) {
+        if ( event.key === KEYS.Alt) {
             this.isAlterRotation = false;
         }
     }

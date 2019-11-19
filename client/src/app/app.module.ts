@@ -60,6 +60,7 @@ import { GridAttributesComponent } from './components/sidebar-tools/attribute-pa
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
 import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
+import { QuillAttributesComponent } from './components/sidebar-tools/attribute-panel/quill-attributes/quill-attributes.component';
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
@@ -69,7 +70,6 @@ import { WorkZoneComponent } from './components/work-zone/work-zone.component';
 import { DrawStackService } from './services/draw-stack/draw-stack.service';
 import { DrawingSaverService } from './services/server/drawing-saver/drawing-saver.service';
 import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
-import { QuillAttributesComponent } from './components/sidebar-tools/attribute-panel/quill-attributes/quill-attributes.component';
 
 @NgModule({
     declarations: [

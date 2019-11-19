@@ -22,11 +22,11 @@ import { LineToolService } from '../line-tool/line-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
+import { QuillToolService } from '../quill-tool/quill-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
-import { QuillToolService } from '../quill-tool/quill-tool.service';
 
 @Injectable({
     providedIn: 'root',
