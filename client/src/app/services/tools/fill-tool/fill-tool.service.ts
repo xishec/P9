@@ -90,7 +90,6 @@ export class FillToolService extends AbstractToolService {
         if (this.shouldNotFill(event)) {
             return;
         }
-        this.mouseDown = false;
         this.updateCanvas();
         this.updateMousePosition(event);
 
@@ -100,9 +99,8 @@ export class FillToolService extends AbstractToolService {
         this.divideLinesToSegments();
         this.fill();
 
-        setTimeout(() => {
-            this.drawStack.push(this.svgWrap);
-        }, 0);
+        this.drawStack.push(this.svgWrap);
+        this.mouseDown = false;
     }
 
     createBFSHelper(): void {

@@ -43,7 +43,7 @@ export class BFSHelper {
         this.queue.push(clickPosition);
 
         while (this.queue.length > 0) {
-            const pixel: Coords2D = this.queue.shift() as Coords2D;
+            const pixel: Coords2D = this.queue.pop() as Coords2D;
 
             this.mostLeft = pixel.x < this.mostLeft ? pixel.x : this.mostLeft;
             this.mostRight = pixel.x > this.mostRight ? pixel.x : this.mostRight;
@@ -62,7 +62,7 @@ export class BFSHelper {
             ];
 
             for (const neighborPixel of neighborPixels) {
-                if (this.visited.has(JSON.stringify(neighborPixel))) {
+                if (this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)) {
                     continue;
                 }
                 if (!this.isValidPosition(neighborPixel)) {
@@ -71,7 +71,7 @@ export class BFSHelper {
                 }
                 if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
                     this.queue.push(neighborPixel);
-                    this.visited.add(JSON.stringify(neighborPixel));
+                    this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
                 } else {
                     this.addPixelToMap(neighborPixel, this.strokeGrid);
                 }
