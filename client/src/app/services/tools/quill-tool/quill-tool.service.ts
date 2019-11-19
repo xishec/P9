@@ -33,6 +33,9 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
     ];
 
+    currentX: number;
+    currentY: number;
+
     cnter = 0;
 
     isAlterRotation: boolean;
@@ -116,11 +119,11 @@ export class QuillToolService extends TracingToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
     }
 
-    updatePreview(x: number, y: number) {
-        this.renderer.setAttribute(this.preview, 'x1', `${x + this.offsets[0].x}`);
-        this.renderer.setAttribute(this.preview, 'y1', `${y + this.offsets[0].y}`);
-        this.renderer.setAttribute(this.preview, 'x2', `${x + this.offsets[1].x}`);
-        this.renderer.setAttribute(this.preview, 'y2', `${y + this.offsets[1].y}`);
+    updatePreview() {
+        this.renderer.setAttribute(this.preview, 'x1', `${this.currentX + this.offsets[0].x}`);
+        this.renderer.setAttribute(this.preview, 'y1', `${this.currentY + this.offsets[0].y}`);
+        this.renderer.setAttribute(this.preview, 'x2', `${this.currentX + this.offsets[1].x}`);
+        this.renderer.setAttribute(this.preview, 'y2', `${this.currentY + this.offsets[1].y}`);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -129,10 +132,10 @@ export class QuillToolService extends TracingToolService {
             this.appendPreview();
         }
 
-        const xPos = this.getXPos(event.clientX);
-        const yPos = this.getYPos(event.clientY);
+        this.currentX = this.getXPos(event.clientX);
+        this.currentY = this.getYPos(event.clientY);
 
-        this.updatePreview(xPos, yPos);
+        this.updatePreview();
 
         if (!this.isDrawing) {
             return;
@@ -144,13 +147,13 @@ export class QuillToolService extends TracingToolService {
         }
 
         this.currentCoords[0] = new Coords2D(
-            xPos + this.offsets[0].x,
-            yPos + this.offsets[0].y,
+            this.currentX + this.offsets[0].x,
+            this.currentY + this.offsets[0].y,
         );
 
         this.currentCoords[1] = new Coords2D(
-            xPos + this.offsets[1].x,
-            yPos + this.offsets[1].y,
+            this.currentX + this.offsets[1].x,
+            this.currentY + this.offsets[1].y,
         );
 
         this.tracePolygon();
@@ -164,6 +167,7 @@ export class QuillToolService extends TracingToolService {
         this.angle = ( this.angle + val ) % 360;
 
         this.computeOffset();
+        this.updatePreview();
     }
 
     onKeyDown(event: KeyboardEvent): void {
