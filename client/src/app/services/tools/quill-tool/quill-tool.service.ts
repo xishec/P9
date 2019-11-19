@@ -23,7 +23,7 @@ export class QuillToolService extends TracingToolService {
     currentCoords: Coords2D[] = new Array<Coords2D>(2);
 
     preview: SVGLineElement;
-    isPreviewIn = false;
+    previewEnabled = false;
 
     thickness = 80;
     angle = 80;
@@ -107,7 +107,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     appendPreview(): void {
-        this.isPreviewIn = true;
+        this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, '2');
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
@@ -115,7 +115,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     removePreview(): void {
-        this.isPreviewIn = false;
+        this.previewEnabled = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
     }
 
@@ -127,7 +127,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (!this.isPreviewIn) {
+        if (!this.previewEnabled) {
             this.appendPreview();
         }
 
