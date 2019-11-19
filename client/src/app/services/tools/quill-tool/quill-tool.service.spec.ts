@@ -7,7 +7,7 @@ import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { MOUSE } from 'src/constants/constants';
 import { Coords2D } from 'src/classes/Coords2D';
 
-fdescribe('QuillToolService', () => {
+describe('QuillToolService', () => {
     let injector: TestBed;
     let service: QuillToolService;
     let rendererMock: Renderer2;
