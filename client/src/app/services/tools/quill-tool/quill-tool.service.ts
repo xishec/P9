@@ -184,7 +184,16 @@ export class QuillToolService extends TracingToolService {
         }
 
         this.isDrawing = false;
-        this.drawStack.push(this.gWrap);
+
+        setTimeout(() => {
+            this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
+        }, 0);
+        setTimeout(() => {
+            this.drawStack.push(this.gWrap);
+        }, 0);
+        setTimeout(() => {
+            this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
+        }, 0);
     }
 
     tracePolygon(): void {
