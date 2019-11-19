@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -33,8 +33,7 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
     ];
 
-    currentX: number;
-    currentY: number;
+    currentMousePosition: Coords2D;
 
     counter = 0;
 
@@ -120,10 +119,10 @@ export class QuillToolService extends TracingToolService {
     }
 
     updatePreview() {
-        this.renderer.setAttribute(this.preview, 'x1', `${this.currentX + this.offsets[0].x}`);
-        this.renderer.setAttribute(this.preview, 'y1', `${this.currentY + this.offsets[0].y}`);
-        this.renderer.setAttribute(this.preview, 'x2', `${this.currentX + this.offsets[1].x}`);
-        this.renderer.setAttribute(this.preview, 'y2', `${this.currentY + this.offsets[1].y}`);
+        this.renderer.setAttribute(this.preview, 'x1', `${this.currentMousePosition.x + this.offsets[0].x}`);
+        this.renderer.setAttribute(this.preview, 'y1', `${this.currentMousePosition.y + this.offsets[0].y}`);
+        this.renderer.setAttribute(this.preview, 'x2', `${this.currentMousePosition.x + this.offsets[1].x}`);
+        this.renderer.setAttribute(this.preview, 'y2', `${this.currentMousePosition.y + this.offsets[1].y}`);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -131,8 +130,8 @@ export class QuillToolService extends TracingToolService {
             this.appendPreview();
         }
 
-        this.currentX = this.getXPos(event.clientX);
-        this.currentY = this.getYPos(event.clientY);
+        this.currentMousePosition.x = this.getXPos(event.clientX);
+        this.currentMousePosition.y = this.getYPos(event.clientY);
 
         this.updatePreview();
 
@@ -146,13 +145,13 @@ export class QuillToolService extends TracingToolService {
         }
 
         this.currentCoords[0] = new Coords2D(
-            this.currentX + this.offsets[0].x,
-            this.currentY + this.offsets[0].y,
+            this.currentMousePosition.x + this.offsets[0].x,
+            this.currentMousePosition.y + this.offsets[0].y,
         );
 
         this.currentCoords[1] = new Coords2D(
-            this.currentX + this.offsets[1].x,
-            this.currentY + this.offsets[1].y,
+            this.currentMousePosition.x + this.offsets[1].x,
+            this.currentMousePosition.y + this.offsets[1].y,
         );
 
         this.tracePolygon();
@@ -161,7 +160,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        let val = this.isAlterRotation ? 1 : 15;
+        let val = this.isAlterRotation ? ROTATION_ANGLE.Base : ROTATION_ANGLE.Alter;
         val = (event.deltaY < 0 ? -val : val);
         this.angle = ( this.angle + val ) % 360;
 
