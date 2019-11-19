@@ -33,8 +33,7 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
     ];
 
-    currentX: number;
-    currentY: number;
+    currentMousePosition: Coords2D;
 
     counter = 0;
 
@@ -120,10 +119,10 @@ export class QuillToolService extends TracingToolService {
     }
 
     updatePreview() {
-        this.renderer.setAttribute(this.preview, 'x1', `${this.currentX + this.offsets[0].x}`);
-        this.renderer.setAttribute(this.preview, 'y1', `${this.currentY + this.offsets[0].y}`);
-        this.renderer.setAttribute(this.preview, 'x2', `${this.currentX + this.offsets[1].x}`);
-        this.renderer.setAttribute(this.preview, 'y2', `${this.currentY + this.offsets[1].y}`);
+        this.renderer.setAttribute(this.preview, 'x1', `${this.currentMousePosition.x + this.offsets[0].x}`);
+        this.renderer.setAttribute(this.preview, 'y1', `${this.currentMousePosition.y + this.offsets[0].y}`);
+        this.renderer.setAttribute(this.preview, 'x2', `${this.currentMousePosition.x + this.offsets[1].x}`);
+        this.renderer.setAttribute(this.preview, 'y2', `${this.currentMousePosition.y + this.offsets[1].y}`);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -131,8 +130,8 @@ export class QuillToolService extends TracingToolService {
             this.appendPreview();
         }
 
-        this.currentX = this.getXPos(event.clientX);
-        this.currentY = this.getYPos(event.clientY);
+        this.currentMousePosition.x = this.getXPos(event.clientX);
+        this.currentMousePosition.y = this.getYPos(event.clientY);
 
         this.updatePreview();
 
@@ -146,13 +145,13 @@ export class QuillToolService extends TracingToolService {
         }
 
         this.currentCoords[0] = new Coords2D(
-            this.currentX + this.offsets[0].x,
-            this.currentY + this.offsets[0].y,
+            this.currentMousePosition.x + this.offsets[0].x,
+            this.currentMousePosition.y + this.offsets[0].y,
         );
 
         this.currentCoords[1] = new Coords2D(
-            this.currentX + this.offsets[1].x,
-            this.currentY + this.offsets[1].y,
+            this.currentMousePosition.x + this.offsets[1].x,
+            this.currentMousePosition.y + this.offsets[1].y,
         );
 
         this.tracePolygon();
