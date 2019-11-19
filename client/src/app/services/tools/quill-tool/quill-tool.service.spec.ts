@@ -23,6 +23,7 @@ fdescribe('QuillToolService', () => {
                         createElement: () => null,
                         setAttribute: () => null,
                         appendChild: () => null,
+                        removeChild: () => null,
                     },
                 },
                 {
@@ -96,5 +97,15 @@ fdescribe('QuillToolService', () => {
         expect(spyCreateElement).toHaveBeenCalled();
         expect(spySetAttribute).toHaveBeenCalled();
         expect(service.previewEnabled).toBeTruthy();
+    });
+
+    it('removePreview should set previewEnabled to false and call renderer.Removechild', () => {
+        const spy = spyOn(service.renderer, 'removeChild');
+        service.previewEnabled = true;
+
+        service.removePreview();
+
+        expect(spy).toHaveBeenCalled();
+        expect(service.previewEnabled).toBeFalsy();
     });
 });
