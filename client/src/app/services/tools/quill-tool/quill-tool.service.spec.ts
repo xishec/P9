@@ -5,6 +5,7 @@ import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { MOUSE } from 'src/constants/constants';
+import { Coords2D } from 'src/classes/Coords2D';
 
 fdescribe('QuillToolService', () => {
     let injector: TestBed;
@@ -45,6 +46,10 @@ fdescribe('QuillToolService', () => {
         const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
+        
+        service.currentMousePosition = new Coords2D(0,0);
+        spyOn(service, 'getXPos').and.returnValue(0);
+        spyOn(service, 'getYPos').and.returnValue(0);
     });
 
     it('should be created', () => {
@@ -77,8 +82,6 @@ fdescribe('QuillToolService', () => {
     });
 
     it('onMouseDown should set isDrawing to true and call getColorAndOpacity if LeftMouseDown', () => {
-        spyOn(service, 'getXPos').and.returnValue(0);
-        spyOn(service, 'getYPos').and.returnValue(0);
         const spy = spyOn(service, 'getColorAndOpacity').and.returnValue();
 
         service.onMouseDown(MOCK_MOUSE_EVENT);
@@ -108,4 +111,42 @@ fdescribe('QuillToolService', () => {
         expect(spy).toHaveBeenCalled();
         expect(service.previewEnabled).toBeFalsy();
     });
+
+    it('updatePreview should call setAttribute 4 times', () => {
+        const spy = spyOn(service.renderer, 'setAttribute');
+
+        service.updatePreview();
+
+        expect(spy).toHaveBeenCalledTimes(4);
+    });
+
+    it('onMouseMove should call updatePreview', () => {
+        const spy = spyOn(service, 'updatePreview').and.returnValue();
+        spyOn(service, 'tracePolygon').and.returnValue();
+        
+
+        service.onMouseMove(MOCK_MOUSE_EVENT);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('onMouseMove should not call tracePolygon if !isDrawing', () => {
+        service.isDrawing = false;
+        spyOn(service, 'updatePreview').and.returnValue();
+        const spy = spyOn(service, 'tracePolygon');
+
+        service.onMouseDown(MOCK_MOUSE_EVENT);
+
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('onMouseMove should call tracePolygon if isDrawing', () => {
+        service.isDrawing = true;
+        const spy = spyOn(service, 'tracePolygon').and.returnValue();
+
+        service.onMouseMove(MOCK_MOUSE_EVENT);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
 });
