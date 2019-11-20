@@ -259,17 +259,16 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
-            this.manipulator.angle = 0;
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
-            this.manipulator.angle = 0;
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
             this.saveState();
         } else {
             this.selection.emptySelection();
-            this.manipulator.angle = 0;
         }
+
+        this.manipulator.angle = 0;
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
@@ -284,6 +283,7 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isOnTarget) {
             this.singlySelectInvert(this.currentTarget);
         }
+        this.manipulator.angle = 0;
         this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
         this.isOnTarget = false;
