@@ -3,16 +3,19 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { QuillToolService } from './quill-tool.service';
 import { Renderer2, ElementRef, Type } from '@angular/core';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { createMouseEvent } from 'src/classes/test-helpers.spec';
-import { MOUSE } from 'src/constants/constants';
+import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers.spec';
+import { MOUSE, KEYS } from 'src/constants/constants';
 import { Coords2D } from 'src/classes/Coords2D';
 
-describe('QuillToolService', () => {
+fdescribe('QuillToolService', () => {
     let injector: TestBed;
     let service: QuillToolService;
     let rendererMock: Renderer2;
 
-    let MOCK_MOUSE_EVENT = createMouseEvent(10,10,MOUSE.LeftButton);
+    const MOCK_MOUSE_EVENT = createMouseEvent(10, 10, MOUSE.LeftButton);
+    const MOCK_WHEEL_EVENT = new WheelEvent('wheelEvent');
+    const MOCK_KEYBOARD_ALT = createKeyBoardEvent(KEYS.Alt);
+    const MOCK_KEYBOARD_SHIFT = createKeyBoardEvent(KEYS.Shift);
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -46,8 +49,8 @@ describe('QuillToolService', () => {
         const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
-        
-        service.currentMousePosition = new Coords2D(0,0);
+
+        service.currentMousePosition = new Coords2D(0, 0);
         spyOn(service, 'getXPos').and.returnValue(0);
         spyOn(service, 'getYPos').and.returnValue(0);
     });
@@ -73,7 +76,7 @@ describe('QuillToolService', () => {
     });
 
     it('onMouseDown should not set isDrawing to true if RightMouseDown', () => {
-        const mockRightMouseDown = createMouseEvent(0,0,MOUSE.RightButton);
+        const mockRightMouseDown = createMouseEvent(0, 0, MOUSE.RightButton);
         service.isDrawing = false;
 
         service.onMouseDown(mockRightMouseDown);
@@ -123,7 +126,6 @@ describe('QuillToolService', () => {
     it('onMouseMove should call updatePreview', () => {
         const spy = spyOn(service, 'updatePreview').and.returnValue();
         spyOn(service, 'tracePolygon').and.returnValue();
-        
 
         service.onMouseMove(MOCK_MOUSE_EVENT);
 
@@ -140,13 +142,95 @@ describe('QuillToolService', () => {
         expect(spy).not.toHaveBeenCalled();
     });
 
-    it('onMouseMove should call tracePolygon if isDrawing', () => {
-        service.isDrawing = true;
-        const spy = spyOn(service, 'tracePolygon').and.returnValue();
+    it('onWheel should call computeOffset', () => {
+        const spy = spyOn(service, 'computeOffset').and.returnValue();
 
-        service.onMouseMove(MOCK_MOUSE_EVENT);
+        service.onWheel(MOCK_WHEEL_EVENT);
 
         expect(spy).toHaveBeenCalled();
     });
 
+    it('onWheel should call updatePreview', () => {
+        const spy = spyOn(service, 'updatePreview').and.returnValue();
+
+        service.onWheel(MOCK_WHEEL_EVENT);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('angle should increase by 1 degree if Alt is pressed and wheel is scrolled upwards when onWheel is called', () => {
+        service.angle = 0;
+        service.isAlterRotation = true;
+
+        const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: 1 });
+
+        service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
+
+        expect(service.angle).toEqual(1);
+    });
+
+    it('angle should increase by 15 degree if Alt is not pressed and wheel is scrolled upwards when onWheel is called', () => {
+        service.angle = 0;
+        service.isAlterRotation = false;
+
+        const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: 1 });
+
+        service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
+
+        expect(service.angle).toEqual(15);
+    });
+
+    it('angle should decrease by 1 degree if Alt is pressed and wheel is scrolled downwards when onWheel is called', () => {
+        service.angle = 0;
+        service.isAlterRotation = true;
+
+        const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: -1 });
+
+        service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
+
+        expect(service.angle).toEqual(-1);
+    });
+
+    it('angle should decrease by 15 degree if Alt is not pressed and wheel is scrolled downwards when onWheel is called', () => {
+        service.angle = 0;
+        service.isAlterRotation = false;
+
+        const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: -1 });
+
+        service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
+
+        expect(service.angle).toEqual(-15);
+    });
+
+    it('isAlterRotation should be set to true when Alt key is pressed', () => {
+        service.isAlterRotation = false;
+
+        service.onKeyDown(MOCK_KEYBOARD_ALT);
+
+        expect(service.isAlterRotation).toEqual(true);
+    });
+
+    it('isAlterRotation should not do anything when any key other than Alt is pressed', () => {
+        service.isAlterRotation = false;
+
+        service.onKeyDown(MOCK_KEYBOARD_SHIFT);
+
+        expect(service.isAlterRotation).toEqual(false);
+    });
+
+    it('isAlterRotation should be set to false when Alt key is unpressed', () => {
+        service.isAlterRotation = true;
+
+        service.onKeyUp(MOCK_KEYBOARD_ALT);
+
+        expect(service.isAlterRotation).toEqual(false);
+    });
+
+    it('isAlterRotation should not do anything when any key other than Alt is unpressed', () => {
+        service.isAlterRotation = true;
+
+        service.onKeyUp(MOCK_KEYBOARD_SHIFT);
+
+        expect(service.isAlterRotation).toEqual(true);
+    });
 });
