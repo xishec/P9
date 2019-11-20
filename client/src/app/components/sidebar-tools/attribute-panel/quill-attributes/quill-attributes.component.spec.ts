@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuillAttributesComponent } from './quill-attributes.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
+import { QuillAttributesComponent } from './quill-attributes.component';
 
 describe('QuillAttributesComponent', () => {
     let component: QuillAttributesComponent;
@@ -23,7 +23,7 @@ describe('QuillAttributesComponent', () => {
                     provide: MatSnackBar,
                     useValue: {},
                 },
-            ]
+            ],
         })
         .compileComponents();
     }));

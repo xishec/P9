@@ -1,11 +1,11 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { QuillToolService } from './quill-tool.service';
-import { Renderer2, ElementRef, Type } from '@angular/core';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
-import { createMouseEvent, createKeyBoardEvent } from 'src/classes/test-helpers.spec';
-import { MOUSE, KEYS } from 'src/constants/constants';
+import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
+import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
+import { KEYS, MOUSE } from 'src/constants/constants';
+import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { QuillToolService } from './quill-tool.service';
 
 fdescribe('QuillToolService', () => {
     let injector: TestBed;
@@ -38,7 +38,9 @@ fdescribe('QuillToolService', () => {
                 },
                 {
                     provide: DrawStackService,
-                    useValue: {},
+                    useValue: {
+                      push: () => null,
+                    },
                 },
             ],
         });
@@ -143,7 +145,7 @@ fdescribe('QuillToolService', () => {
     });
 
     it('onWheel should call computeOffset', () => {
-        const spy = spyOn(service, 'computeOffset').and.returnValue();
+        const spy = spyOn(service, 'computeOffset');
 
         service.onWheel(MOCK_WHEEL_EVENT);
 
@@ -151,7 +153,7 @@ fdescribe('QuillToolService', () => {
     });
 
     it('onWheel should call updatePreview', () => {
-        const spy = spyOn(service, 'updatePreview').and.returnValue();
+        const spy = spyOn(service, 'updatePreview');
 
         service.onWheel(MOCK_WHEEL_EVENT);
 
@@ -232,5 +234,92 @@ fdescribe('QuillToolService', () => {
         service.onKeyUp(MOCK_KEYBOARD_SHIFT);
 
         expect(service.isAlterRotation).toEqual(true);
+    });
+
+    it('onMouseUp should set isDrawing to false if true', () => {
+        service.isDrawing = true;
+        spyOn(service, 'saveState').and.returnValue();
+
+        service.onMouseUp();
+
+        expect(service.isDrawing).toBeFalsy();
+    });
+
+    it('onMouseUp should call saveState if isDrawing is true', () => {
+        const spy = spyOn(service, 'saveState').and.returnValue();
+        service.isDrawing = true;
+
+        service.onMouseUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('tracePolygon should call render setAttributes and appendChild', () => {
+        const setAttributeSpy = spyOn(service.renderer, 'setAttribute');
+        const appendChildSpy = spyOn(service.renderer, 'appendChild');
+        service.previousCoords = [
+            { x: 0, y: 0 },
+            { x: 1, y: 1 },
+        ];
+        service.currentCoords = [
+            { x: 2, y: 2 },
+            { x: 3, y: 3 },
+        ];
+
+        service.tracePolygon();
+
+        expect(setAttributeSpy).toHaveBeenCalled();
+        expect(appendChildSpy).toHaveBeenCalled();
+    });
+
+    it('computeOffset sets the right values to offsets when angle is equal to 0 degrees', () => {
+        service.thickness = 2;
+        service.angle = 0;
+
+        service.computeOffset();
+
+        expect(service.offsets[0].x).toEqual(0);
+        expect(service.offsets[0].y).toEqual(1);
+        expect(service.offsets[1].x).toEqual(0);
+        expect(service.offsets[1].y).toEqual(-1);
+    });
+
+    it('computeOffset sets the right values to offsets when angle is equal to 90 degrees', () => {
+        service.thickness = 2;
+        service.angle = 90;
+
+        service.computeOffset();
+
+        expect(service.offsets[0].x).toEqual(1);
+        expect(service.offsets[0].y).toBeCloseTo(0); // y = 6.123233995736766e-17
+        expect(service.offsets[1].x).toEqual(-1);
+        expect(service.offsets[1].y).toBeCloseTo(0);
+    });
+
+    it('degreesToRadians converts degree values to proper radian values', () => {
+        expect(service.degreesToRadians(0)).toEqual(0);
+        expect(service.degreesToRadians(30)).toEqual(Math.PI / 6);
+        expect(service.degreesToRadians(45)).toEqual(Math.PI / 4);
+        expect(service.degreesToRadians(60)).toEqual(Math.PI / 3);
+        expect(service.degreesToRadians(90)).toEqual(Math.PI / 2);
+        expect(service.degreesToRadians(180)).toEqual(Math.PI);
+        expect(service.degreesToRadians(270)).toEqual(Math.PI * (3 / 2));
+    });
+
+    it('cleanUp calls removePreview', () => {
+        const spy = spyOn(service, 'removePreview');
+
+        service.cleanUp();
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('cleanUp calls removeChild if isDrawing is equal to true', () => {
+        const spy = spyOn(service.renderer, 'removeChild');
+        service.isDrawing = true;
+
+        service.cleanUp();
+
+        expect(spy).toHaveBeenCalled();
     });
 });

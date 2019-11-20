@@ -12,7 +12,7 @@ const STAMP_BASE_HEIGHT = 50;
 enum ROTATION_ANGLE {
     Base = 15,
     Alter = 1,
-};
+}
 
 const OFFSET_STEP = 10;
 
