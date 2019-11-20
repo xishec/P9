@@ -2,6 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
 import { BASE_ROTATION } from 'src/constants/tool-constants';
+import { Coords2D } from 'src/classes/Coords2D';
 
 @Injectable({
     providedIn: 'root',
@@ -9,6 +10,8 @@ import { BASE_ROTATION } from 'src/constants/tool-constants';
 export class ManipulatorService {
     renderer: Renderer2;
     isRotateOnSelf = false;
+    boxOrigin: Coords2D = {x: 0, y: 0};
+    selectedElementsOrigin: Coords2D[] = new Array();
     rotationStep = BASE_ROTATION;
     angle = 0;
 
@@ -43,10 +46,10 @@ export class ManipulatorService {
                 rotateToZero.setRotate(0, 0, 0);
                 el.transform.baseVal.insertItemBefore(rotateToZero, 0);
             }
-            const centerBoxX = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
-            const centerBoxY = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
-            console.log(centerBoxX + " " + centerBoxY);
-            el.transform.baseVal.getItem(0).setRotate(this.angle, centerBoxX, centerBoxY);
+            //const centerBoxX = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
+            //const centerBoxY = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
+            console.log(this.boxOrigin.x + " " + this.boxOrigin.y);
+            el.transform.baseVal.getItem(0).setRotate(this.angle, this.boxOrigin.x, this.boxOrigin.y);
             // console.log(el.transform.baseVal.getItem(0).matrix);
         }
 
@@ -61,6 +64,7 @@ export class ManipulatorService {
     }
 
     rotateOnSelf(selection: Selection): void {
+        let index = 0;
         for (const el of selection.selectedElements) {
             const transformsList = el.transform.baseVal;
             if (
@@ -79,7 +83,8 @@ export class ManipulatorService {
             const centerBoxY = (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2);
             console.log(centerBoxX + " " + centerBoxY);
             console.log(cx + " " + cy);
-            el.transform.baseVal.getItem(0).setRotate(this.angle, centerBoxX, centerBoxY);
+            el.transform.baseVal.getItem(0).setRotate(this.angle, this.selectedElementsOrigin[index].x, this.selectedElementsOrigin[index].y);
+            index++;
         }
 
         selection.updateFullSelectionBox();

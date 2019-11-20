@@ -259,16 +259,30 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
+            this.manipulator.selectedElementsOrigin.splice(0, this.manipulator.selectedElementsOrigin.length);
+            for (const el of this.selection.selectedElements) {
+                const origin: Coords2D = {x: (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), y: (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2)};
+                this.manipulator.selectedElementsOrigin.push(origin);
+            }
+            this.manipulator.boxOrigin.y = this.selection.selectionBox.y.baseVal.value + (this.selection.selectionBox.height.baseVal.value / 2);
+            this.manipulator.boxOrigin.x = this.selection.selectionBox.x.baseVal.value + (this.selection.selectionBox.width.baseVal.value / 2);
         } else if (this.isOnTarget && !this.isTranslatingSelection) {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
+            this.manipulator.selectedElementsOrigin.splice(0, this.manipulator.selectedElementsOrigin.length);
+            for (const el of this.selection.selectedElements) {
+                const origin: Coords2D = {x: (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), y: (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2)};
+                this.manipulator.selectedElementsOrigin.push(origin);
+            }
+            this.manipulator.boxOrigin.y = this.selection.selectionBox.y.baseVal.value + (this.selection.selectionBox.height.baseVal.value / 2);
+            this.manipulator.boxOrigin.x = this.selection.selectionBox.x.baseVal.value + (this.selection.selectionBox.width.baseVal.value / 2);
             this.isTranslatingSelection = false;
             this.saveState();
         } else {
             this.selection.emptySelection();
         }
 
-        this.manipulator.angle = 0;
+        //this.manipulator.angle = 0;
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
@@ -283,7 +297,14 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isOnTarget) {
             this.singlySelectInvert(this.currentTarget);
         }
-        this.manipulator.angle = 0;
+        this.manipulator.selectedElementsOrigin.splice(0, this.manipulator.selectedElementsOrigin.length);
+            for (const el of this.selection.selectedElements) {
+                const origin: Coords2D = {x: (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), y: (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2)};
+                this.manipulator.selectedElementsOrigin.push(origin);
+            }
+            this.manipulator.boxOrigin.y = this.selection.selectionBox.y.baseVal.value + (this.selection.selectionBox.height.baseVal.value / 2);
+            this.manipulator.boxOrigin.x = this.selection.selectionBox.x.baseVal.value + (this.selection.selectionBox.width.baseVal.value / 2);
+        //this.manipulator.angle = 0;
         this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
         this.isOnTarget = false;
@@ -343,6 +364,7 @@ export class SelectionToolService extends AbstractToolService {
         event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
+            //this.manipulator.angle = 0;
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = BASE_ROTATION;
