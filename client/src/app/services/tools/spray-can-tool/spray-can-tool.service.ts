@@ -64,9 +64,9 @@ export class SprayCanToolService extends TracingToolService {
             this.event = event;
             this.isDrawing = true;
             this.createSVGWrapper();
+            this.createSVGPath();
             this.appendSpray();
             this.appendSprayer();
-            this.createSVGPath();
 
             clearInterval(this.interval);
             this.interval = setInterval(() => {
@@ -150,4 +150,11 @@ export class SprayCanToolService extends TracingToolService {
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
+
+    createSVGPath(): void {
+        this.svgPath = this.renderer.createElement('path', SVG_NS);
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
+        this.renderer.appendChild(this.svgWrap, this.svgPath);
+    }
+
 }
