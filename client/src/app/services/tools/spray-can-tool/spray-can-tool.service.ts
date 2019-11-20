@@ -42,7 +42,6 @@ export class SprayCanToolService extends TracingToolService {
 
         this.sprayer = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
-        // change "'#' + this.currentColorAndOpacity" to "black" to debuge easier
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke_width, SPRAYER_STROKE_WIDTH);
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.fill, 'none');
@@ -95,9 +94,21 @@ export class SprayCanToolService extends TracingToolService {
     }
 
     onMouseUp(event: MouseEvent) {
-        super.onMouseUp(event);
-        if (event.button === MOUSE.LeftButton) {
+        if (event.button === MOUSE.LeftButton && this.getIsDrawing()) {
+            this.isDrawing = false;
+            this.currentPath = '';
+
             clearInterval(this.interval);
+
+            setTimeout(() => {
+                this.drawStack.push(this.svgWrap);
+            }, 0);
+
+            this.renderer.removeChild(this.elementRef, this.sprayer);
+
+            setTimeout(() => {
+                this.appendSprayer();
+            }, 0);
         }
     }
 
