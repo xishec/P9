@@ -58,11 +58,6 @@ export class SprayCanToolService extends TracingToolService {
         });
     }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
-        const circle = super.createSVGCircle(x, y);
-        return circle;
-    }
-
     onMouseDown(event: MouseEvent) {
         if (event.button === MOUSE.LeftButton) {
             this.setColorAndOpacity();
