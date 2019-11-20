@@ -12,6 +12,9 @@ describe('QuillToolService', () => {
     let service: QuillToolService;
     let rendererMock: Renderer2;
 
+    let elementRefMock: ElementRef;
+    let drawStackMock: DrawStackService;
+
     const MOCK_MOUSE_EVENT = createMouseEvent(10, 10, MOUSE.LeftButton);
     const MOCK_WHEEL_EVENT = new WheelEvent('wheelEvent');
     const MOCK_KEYBOARD_ALT = createKeyBoardEvent(KEYS.Alt);
@@ -48,8 +51,8 @@ describe('QuillToolService', () => {
         service = injector.get(QuillToolService);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
-        const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
         service.currentMousePosition = new Coords2D(0, 0);
@@ -59,6 +62,14 @@ describe('QuillToolService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
+    });
+
+    it('initializeService should set the corresponding values', () => {
+        service.initializeService(elementRefMock, rendererMock, drawStackMock);
+
+        expect(service.elementRef).toBe(elementRefMock);
+        expect(service.renderer).toBe(rendererMock);
+        expect(service.drawStack).toBe(drawStackMock);
     });
 
     it('onMouseEnter should call appendPreview()', () => {
