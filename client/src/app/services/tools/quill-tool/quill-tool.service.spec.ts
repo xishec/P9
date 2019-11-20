@@ -7,7 +7,7 @@ import { KEYS, MOUSE } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { QuillToolService } from './quill-tool.service';
 
-fdescribe('QuillToolService', () => {
+describe('QuillToolService', () => {
     let injector: TestBed;
     let service: QuillToolService;
     let rendererMock: Renderer2;
