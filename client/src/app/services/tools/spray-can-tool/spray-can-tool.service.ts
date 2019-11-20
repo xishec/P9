@@ -80,12 +80,14 @@ export class SprayCanToolService extends TracingToolService {
         for (let i = 0; i < 20; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
-            const x = this.getXPos(this.event.clientX) + radius * Math.cos(angle);
+            const x = this.getXPos(this.event.clientX) + radius * Math.cos(angle) - this.currentWidth;
             const y = this.getYPos(this.event.clientY) + radius * Math.sin(angle);
-            this.currentPath = `M${x} ${y}`;
-            this.svgPreviewCircle = this.createSVGCircle(x, y);
-            this.renderer.appendChild(this.svgWrap, this.svgPreviewCircle);
+            const upperArc = ` a 1 1 0 0 1 ${this.currentWidth} 0 `;
+            const lowerArc = ` a 1 1 0 0 1 -${this.currentWidth} 0 `;
+
+            this.currentPath += ` M${x} ${y}` + upperArc + lowerArc;
         }
+        this.updateSVGPath();
     }
 
     onMouseUp(event: MouseEvent) {
@@ -157,4 +159,12 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
+    updateSVGPath(): void {
+        if (this.currentPath.length > 100000) {
+            this.currentPath = '';
+            this.createSVGPath();
+        } else {
+            super.updateSVGPath();
+        }
+    }
 }
