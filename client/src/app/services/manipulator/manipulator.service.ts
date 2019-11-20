@@ -1,5 +1,5 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { SVG_NS } from 'src/constants/constants';
+import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
 import { BASE_ROTATION } from 'src/constants/tool-constants';
 
@@ -75,14 +75,14 @@ export class ManipulatorService {
             //const initialTransform = transformsList.getItem(0);
             const cx = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
             const cy = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
-            const centerBoxX = (el.getBoundingClientRect() as DOMRect).x - 360.0 + ((el.getBoundingClientRect() as DOMRect).width / 2);
+            const centerBoxX = (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2);
             const centerBoxY = (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2);
             console.log(centerBoxX + " " + centerBoxY);
             console.log(cx + " " + cy);
             el.transform.baseVal.getItem(0).setRotate(this.angle, centerBoxX, centerBoxY);
         }
 
-        //selection.updateFullSelectionBox();
+        selection.updateFullSelectionBox();
     }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
