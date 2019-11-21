@@ -90,7 +90,7 @@ describe('SaveFileModalWindowComponent', () => {
 
         component.saveToServer();
 
-        expect(SPY).toHaveBeenCalledWith(`Sauvegarde réussie!`, `OK`);
+        expect(SPY).toHaveBeenCalled();
     });
 
     it(`should notify the user if drawing has not been successfully saved`, () => {
@@ -102,7 +102,7 @@ describe('SaveFileModalWindowComponent', () => {
 
         component.saveToServer();
 
-        expect(SPY).toHaveBeenCalledWith(`Sauvegarde échouée...\n${component.errorMesaage}`, `OK`);
+        expect(SPY).toHaveBeenCalled();
     });
 
     it(`should notify the user if user selects more than ${MAX_NB_LABELS} labels`, () => {

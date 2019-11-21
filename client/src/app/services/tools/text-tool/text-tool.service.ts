@@ -343,7 +343,7 @@ export class TextToolService extends AbstractToolService {
     }
 
     openSnackBar(): void {
-        this.snackBar.open(`Le carractères ${KEYS.SmallerThan}  n'est malheureusement pas disponible`, '', {
+        this.snackBar.open(`Le caractères ${KEYS.SmallerThan}  n'est malheureusement pas disponible`, '', {
             duration: SNACKBAR_DURATION,
         });
     }
