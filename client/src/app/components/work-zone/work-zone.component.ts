@@ -25,7 +25,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+    drawingInfo: DrawingInfo = { width: 0, height: 0, color: DEFAULT_WHITE } as DrawingInfo;
     gridIsActive = false;
 
     gridSize = GRID_SIZE.Default;

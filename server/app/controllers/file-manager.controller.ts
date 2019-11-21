@@ -35,24 +35,15 @@ export class FileManagerController {
                 });
         });
 
-        this.router.post('/:id', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.delete('/:name', async (req: Request, res: Response, nex: NextFunction) => {
             this.fileManagerService
-
-            Post.findOneAndDelete(query)
+                .deleteDrawing(name)
                 .then((drawing: any) => {
-                    res.json(drawing);
+                    res.json({ title: 'Delete', body: 'Success' });
                 })
                 .catch((error: MongoError) => {
-                    res.json(error);
+                    throw error;
                 });
         });
-
-        this.router.delete("/:username", async (req: Request, res: Response, nex: NextFunction) => {
-            this.databaseService.deleteEntry("username", req.params.username, "users");
-            res.json({title: "Delete",
-                      body: "Success",
-            });
-        },
-    );
     }
 }

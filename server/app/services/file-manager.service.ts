@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { Drawing } from '../../../common/communication/Drawing';
-import { Message } from '../../../common/communication/Message';
 import { Post } from '../model/post';
 
 @injectable()
@@ -18,19 +17,17 @@ export class FileManagerService {
             });
     }
 
-    async addDrawing(message: Message): Promise<any> {
-        const drawing: Drawing = JSON.parse(message.body);
-
+    async addDrawing(drawing: Drawing): Promise<any> {
         try {
             if (!this.isDrawingValid(drawing)) {
-              throw new Error('Invalid Drawing');
+                throw new Error('Invalid Drawing');
             }
         } catch (error) {
             return error;
         }
 
-        const query = { title: message.title };
-        const update = { body: message.body };
+        const query = { name: drawing.name };
+        const update = { body: drawing };
         const options = { upsert: true, new: true };
 
         return Post.findOneAndUpdate(query, update, options)
@@ -42,8 +39,8 @@ export class FileManagerService {
             });
     }
 
-    async deleteDrawing(message: Message): Promise<any> {
-        const query = { title: { $regex: message.body, $options: 'i' } };
+    async deleteDrawing(name: string): Promise<any> {
+        const query = { name: { $regex: name, $options: 'i' } };
 
         return Post.findOneAndDelete(query)
             .then((drawing: any) => {
@@ -55,6 +52,6 @@ export class FileManagerService {
     }
 
     isDrawingValid(drawing: Drawing): boolean {
-      return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
+        return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
     }
 }

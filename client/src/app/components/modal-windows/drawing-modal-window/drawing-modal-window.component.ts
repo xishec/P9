@@ -70,7 +70,14 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.height,
             this.previewColor,
         );
-        this.drawingLoaderService.currentDrawing.next(new Drawing('', [], '', [], new DrawingInfo(0, 0, '')));
+        this.drawingLoaderService.currentDrawing.next({
+            name: '',
+            labels: [],
+            svg: '',
+            idStack: [],
+            drawingInfo: { width: 0, height: 0, color: '' } as DrawingInfo,
+            timeStamp: 0,
+        } as Drawing);
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);

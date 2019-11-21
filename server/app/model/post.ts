@@ -1,5 +1,4 @@
 import { createSchema, Type, typedModel } from 'ts-mongoose';
-import { IDrawing } from '../../../common/communication/Drawing';
 
 const drawingSchema = createSchema({
     name: Type.string({ required: true }),
@@ -13,4 +12,4 @@ const drawingSchema = createSchema({
     }),
 });
 
-export const Drawing = typedModel('Drawing', drawingSchema);
+export const Post = typedModel('Drawing', drawingSchema);
