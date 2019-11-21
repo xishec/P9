@@ -26,12 +26,12 @@ export class FileManagerService {
         svg: string,
         idStack: string[],
         drawingInfo: DrawingInfo,
-    ): Observable<Message> {
+    ): Observable<Drawing> {
         let timeStamp: number = Date.now();
         const drawing: Drawing = { name, labels, svg, idStack, drawingInfo, timeStamp };
         return this.http
             .post<Drawing>(environment.BASE_URL + '/api/file-manager/save', drawing)
-            .pipe(catchError(this.handleError<Message>('postDrawing')));
+            .pipe(catchError(this.handleError<Drawing>('postDrawing')));
     }
 
     deleteDrawing(name: string): Observable<Message[] | Message> {

@@ -5,11 +5,11 @@ import { filter } from 'rxjs/operators';
 
 import { NameAndLabels } from 'src/classes/NameAndLabels';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { Message } from '../../../../../../common/communication/Message';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
 import { FileManagerService } from '../file-manager/file-manager.service';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 
 @Injectable({
     providedIn: 'root',
@@ -71,14 +71,14 @@ export class DrawingSaverService {
                         return true;
                     }
                     this.currentErrorMesaage.next(
-                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                     );
                     this.currentIsSaved.next(false);
                     return false;
                 }),
             )
-            .subscribe((message: Message) => {
-                if (message.body || JSON.parse(message.body).name === nameAndLabels.name) {
+            .subscribe((drawing: Drawing) => {
+                if (drawing || JSON.parse(drawing).name === nameAndLabels.name) {
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
