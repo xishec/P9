@@ -17,6 +17,7 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { CloudService } from 'src/app/services/cloud/cloud.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -49,9 +50,11 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private cloudService: CloudService,
     ) {}
 
     ngOnInit(): void {
+        this.cloudService.initializeApp();
         this.undoRedoerService.initializeService(this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 
