@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
-import { ColorType, DEFAULT_WHITE } from 'src/constants/color-constants';
+import { COLOR_TYPE, DEFAULT_WHITE } from 'src/constants/color-constants';
 
 interface IconStyle {
     backgroundColor: string;
@@ -13,7 +13,7 @@ interface IconStyle {
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements OnInit {
-    selectedColorType: ColorType = ColorType.primaryColor;
+    selectedColorType: COLOR_TYPE = COLOR_TYPE.primaryColor;
     previewColor = DEFAULT_WHITE;
 
     constructor(private colorToolService: ColorToolService) {}

@@ -1,17 +1,18 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
+import { MongoError } from 'mongodb';
 
-import { Drawing } from '../../../common/communication/Drawing';
-import { Message } from '../../../common/communication/message';
-import { Post } from '../model/post';
 import { FileManagerService } from '../services/file-manager.service';
-import Types from "../types";
+import Types from '../types';
 
 @injectable()
 export class FileManagerController {
     router: Router;
 
-    constructor(@inject(Types.FileManagerService) private fileManagerService: FileManagerService) {
+    constructor(
+        @inject(Types.FileManagerService)
+        private fileManagerService: FileManagerService,
+    ) {
         this.configureRouter();
     }
 
@@ -24,24 +25,13 @@ export class FileManagerController {
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
-            const message: Message = req.body;
-
-            const drawing: Drawing = JSON.parse(message.body);
-            if (drawing.name === '' || drawing.labels.includes('') || drawing.svg === '') {
-                const error: Message = new Message('Invalid Drawing', 'Invalid Drawing');
-                res.json(error);
-            }
-
-            const query = { title: message.title };
-            const update = { body: message.body };
-            const options = { upsert: true, new: true };
-
-            Post.findOneAndUpdate(query, update, options)
-                .then((drawingToUpdate: any) => {
-                    res.json(drawingToUpdate);
+            this.fileManagerService
+                .addDrawing(req.body)
+                .then((drawing: any) => {
+                    res.json(drawing);
                 })
-                .catch((error: Error) => {
-                    res.json(error);
+                .catch((error: MongoError) => {
+                    throw error;
                 });
         });
 
@@ -52,7 +42,7 @@ export class FileManagerController {
                 .then((drawing: any) => {
                     res.json(drawing);
                 })
-                .catch((error: Error) => {
+                .catch((error: MongoError) => {
                     res.json(error);
                 });
         });

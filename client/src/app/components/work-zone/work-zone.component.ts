@@ -12,7 +12,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GridOpacity, GridSize, ToolName } from 'src/constants/tool-constants';
+import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
@@ -26,9 +26,11 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     gridIsActive = false;
-    gridSize = GridSize.Default;
-    gridOpacity = GridOpacity.Max;
-    toolName: ToolName = ToolName.Selection;
+
+    gridSize = GRID_SIZE.Default;
+    gridOpacity = GRID_OPACITY.Max;
+    toolName: TOOL_NAME = TOOL_NAME.Selection;
+
     drawStack: DrawStackService;
 
     @ViewChild('svgpad', { static: true }) refSVG: ElementRef<SVGElement>;
@@ -175,19 +177,19 @@ export class WorkZoneComponent implements OnInit {
             return { cursor: 'not-allowed' };
         }
         switch (this.toolName) {
-            case ToolName.Eraser:
+            case TOOL_NAME.Eraser:
                 return { cursor: 'none' };
-            case ToolName.Brush:
-            case ToolName.Pencil:
-            case ToolName.Rectangle:
-            case ToolName.Ellipsis:
-            case ToolName.Pen:
-            case ToolName.Polygon:
-            case ToolName.ColorApplicator:
-            case ToolName.Line:
-            case ToolName.Quill:
-            case ToolName.SprayCan:
-            case ToolName.Fill:
+            case TOOL_NAME.Brush:
+            case TOOL_NAME.Pencil:
+            case TOOL_NAME.Rectangle:
+            case TOOL_NAME.Ellipsis:
+            case TOOL_NAME.Pen:
+            case TOOL_NAME.Polygon:
+            case TOOL_NAME.ColorApplicator:
+            case TOOL_NAME.Line:
+            case TOOL_NAME.Quill:
+            case TOOL_NAME.SprayCan:
+            case TOOL_NAME.Fill:
                 return { cursor: 'crosshair' };
             default:
                 return { cursor: 'default' };

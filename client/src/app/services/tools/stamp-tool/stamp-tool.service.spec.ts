@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { StampToolService } from './stamp-tool.service';
 
@@ -75,8 +75,8 @@ describe('StampToolService', () => {
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);
 
-        onAltKeyDown = createKeyBoardEvent(Keys.Alt);
-        onOtherKeyDown = createKeyBoardEvent(Keys.Shift);
+        onAltKeyDown = createKeyBoardEvent(KEYS.Alt);
+        onOtherKeyDown = createKeyBoardEvent(KEYS.Shift);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
@@ -118,7 +118,7 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampWidth).toEqual(WIDTH);
     });
 
@@ -133,7 +133,7 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = mockImageElement as unknown as SVGImageElement;
+        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampHeight).toEqual(HEIGHT);
     });
 
@@ -192,22 +192,22 @@ describe('StampToolService', () => {
 
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
         service.rotateStamp(1);
-        expect(service.currentAngle).toEqual(15);
+        expect(service.angle).toEqual(15);
     });
 
     it('should decrease the current angle by 15 degrees if the direction is negative', () => {
         service.rotateStamp(-1);
-        expect(service.currentAngle).toEqual(-15);
+        expect(service.angle).toEqual(-15);
     });
 
     it('should increase the current angle by 1 degree if the direction is positive', () => {
         service.alterRotateStamp(10);
-        expect(service.currentAngle).toEqual(1);
+        expect(service.angle).toEqual(1);
     });
 
     it('should decrease the current angle by 1 degree if the direction is negative', () => {
         service.alterRotateStamp(-10);
-        expect(service.currentAngle).toEqual(-1);
+        expect(service.angle).toEqual(-1);
     });
 
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {
@@ -239,6 +239,7 @@ describe('StampToolService', () => {
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
         service.isStampLinkValid = false;
+        service.stampIsAppended = true;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).not.toHaveBeenCalled();
 
@@ -259,11 +260,12 @@ describe('StampToolService', () => {
 
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
         service.isStampLinkValid = true;
+        service.stampIsAppended = true;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalled();
     });
 
-    it('should call initStamp if isStampLinkValid is true and it should set isIn to true', () => {
+    it('should call initStamp if isStampLinkValid is true', () => {
         const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => false);
         service.isStampLinkValid = false;
@@ -272,11 +274,12 @@ describe('StampToolService', () => {
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
         service.isStampLinkValid = true;
+        service.stampIsAppended = true;
         service.onMouseEnter(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(1);
     });
 
-    it('should call cleanUpStamp if isStampLinkValid is true and it should set isIn to false', () => {
+    it('should call cleanUpStamp if isStampLinkValid is true', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
         service.isStampLinkValid = false;
@@ -365,6 +368,7 @@ describe('StampToolService', () => {
         });
 
         service.isStampLinkValid = true;
+        service.stampIsAppended = true;
 
         expect(service.isAbleToStamp(createMouseEvent(0, 0, 0))).toBeTruthy();
     });

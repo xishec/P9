@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -61,5 +61,4 @@ export class AppComponent implements OnInit {
     @HostListener('window:contextmenu', ['$event']) onRightClick(event: MouseEvent) {
         event.preventDefault();
     }
-
 }

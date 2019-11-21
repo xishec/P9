@@ -1,17 +1,17 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { Keys, Mouse } from 'src/constants/constants';
-import { TraceType } from 'src/constants/tool-constants';
+import { KEYS, MOUSE } from 'src/constants/constants';
+import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
 
-const MOUSEMOVE_EVENT = createMouseEvent(20, 30, Mouse.LeftButton);
-const MOUSEDOWN_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const MOUSEUP_EVENT = createMouseEvent(0, 0, Mouse.LeftButton);
-const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
-const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(Keys.Shift);
+const MOUSEMOVE_EVENT = createMouseEvent(20, 30, MOUSE.LeftButton);
+const MOUSEDOWN_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
+const MOUSEUP_EVENT = createMouseEvent(0, 0, MOUSE.LeftButton);
+const KEYDOWN_EVENT_SHIFT_KEY = createKeyBoardEvent(KEYS.Shift);
+const KEYUP_EVENT_SHIFT_KEY = createKeyBoardEvent(KEYS.Shift);
 
 describe('RectangleToolService', () => {
     let injector: TestBed;
@@ -111,76 +111,76 @@ describe('RectangleToolService', () => {
 
     it('should return the draw rectangle height when getting draw rectangle height', () => {
         const HEIGHT = 10;
-        const mockRect = {
+        const mockRect = ({
             height: {
                 baseVal: {
                     value: HEIGHT,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyDrawRectHeight.and.callThrough();
 
-        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+        newRectangleTool.drawRectangle = (mockRect as unknown) as SVGRectElement;
 
         expect(newRectangleTool.drawRectangleHeight).toEqual(HEIGHT);
     });
 
     it('should return the draw rectangle width when getting draw rectangle width', () => {
         const WIDTH = 10;
-        const mockRect = {
+        const mockRect = ({
             width: {
                 baseVal: {
                     value: WIDTH,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyDrawRectWidth.and.callThrough();
 
-        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+        newRectangleTool.drawRectangle = (mockRect as unknown) as SVGRectElement;
 
         expect(newRectangleTool.drawRectangleWidth).toEqual(WIDTH);
     });
 
     it('should return the draw rectangle x when getting draw rectangle x', () => {
         const X = 10;
-        const mockRect = {
+        const mockRect = ({
             x: {
                 baseVal: {
                     value: X,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyDrawRectX.and.callThrough();
 
-        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+        newRectangleTool.drawRectangle = (mockRect as unknown) as SVGRectElement;
 
         expect(newRectangleTool.drawRectangleX).toEqual(X);
     });
 
     it('should return the draw rectangle y when getting draw rectangle y', () => {
         const Y = 10;
-        const mockRect = {
+        const mockRect = ({
             y: {
                 baseVal: {
                     value: Y,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyDrawRectY.and.callThrough();
 
-        newRectangleTool.drawRectangle = mockRect as unknown as SVGRectElement;
+        newRectangleTool.drawRectangle = (mockRect as unknown) as SVGRectElement;
 
         expect(newRectangleTool.drawRectangleY).toEqual(Y);
     });
@@ -188,7 +188,9 @@ describe('RectangleToolService', () => {
     it('should not call the renderer when clicking outside of workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => false);
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(
+            (event: MouseEvent, elementRef: ElementRef<SVGElement>) => false,
+        );
 
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
@@ -200,14 +202,18 @@ describe('RectangleToolService', () => {
     it('should append the preview and the draw rectangle when left click in workzone', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(
+            (event: MouseEvent, elementRef: ElementRef<SVGElement>) => true,
+        );
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         expect(spySetAttribute).toHaveBeenCalledBefore(spyAppendChild);
         expect(spyAppendChild).toHaveBeenCalledTimes(2);
     });
 
     it('should correctly update the draw rectangle in the workzone on random mouse position', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(
+            (event: MouseEvent, elementRef: ElementRef<SVGElement>) => true,
+        );
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -241,7 +247,9 @@ describe('RectangleToolService', () => {
     });
 
     it('should give positive dimensions on negative input', () => {
-        spyOn(rectangleTool, 'isMouseInRef').and.callFake((event: MouseEvent, elementRef: ElementRef<SVGElement>) => true);
+        spyOn(rectangleTool, 'isMouseInRef').and.callFake(
+            (event: MouseEvent, elementRef: ElementRef<SVGElement>) => true,
+        );
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
@@ -263,8 +271,8 @@ describe('RectangleToolService', () => {
             },
         );
 
-        rectangleTool.onMouseDown(createMouseEvent(0, 0, Mouse.LeftButton));
-        rectangleTool.onMouseMove(createMouseEvent(-30, -40, Mouse.LeftButton));
+        rectangleTool.onMouseDown(createMouseEvent(0, 0, MOUSE.LeftButton));
+        rectangleTool.onMouseMove(createMouseEvent(-30, -40, MOUSE.LeftButton));
 
         expect(rectangleTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();
@@ -291,7 +299,7 @@ describe('RectangleToolService', () => {
         const X = 10;
         const WIDTH = 5;
         const HEIGHT = 10;
-        const mockRect = {
+        const mockRect = ({
             x: {
                 baseVal: {
                     value: X,
@@ -312,7 +320,7 @@ describe('RectangleToolService', () => {
                     value: HEIGHT,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
@@ -334,7 +342,7 @@ describe('RectangleToolService', () => {
         const X = 10;
         const WIDTH = 5;
         const HEIGHT = 10;
-        const mockRect = {
+        const mockRect = ({
             x: {
                 baseVal: {
                     value: X,
@@ -355,7 +363,7 @@ describe('RectangleToolService', () => {
                     value: HEIGHT,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
@@ -405,14 +413,14 @@ describe('RectangleToolService', () => {
     });
 
     it('should be able to update tracetype', () => {
-        rectangleTool.updateTraceType(TraceType.Both);
-        expect(rectangleTool.traceType).toEqual(TraceType.Both);
+        rectangleTool.updateTraceType(TRACE_TYPE.Both);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Both);
 
-        rectangleTool.updateTraceType(TraceType.Full);
-        expect(rectangleTool.traceType).toEqual(TraceType.Full);
+        rectangleTool.updateTraceType(TRACE_TYPE.Full);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Full);
 
-        rectangleTool.updateTraceType(TraceType.Outline);
-        expect(rectangleTool.traceType).toEqual(TraceType.Outline);
+        rectangleTool.updateTraceType(TRACE_TYPE.Outline);
+        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Outline);
     });
 
     it('should create SVGRect and cleanUp when left mouse up in work zone with a valid rectangle', () => {
@@ -444,7 +452,7 @@ describe('RectangleToolService', () => {
         const X = 10;
         const WIDTH = 10;
         const HEIGHT = 10;
-        const mockRect = {
+        const mockRect = ({
             x: {
                 baseVal: {
                     value: X,
@@ -465,7 +473,7 @@ describe('RectangleToolService', () => {
                     value: HEIGHT,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
@@ -482,7 +490,7 @@ describe('RectangleToolService', () => {
         const X = 10;
         const WIDTH = 10;
         const HEIGHT = 10;
-        const mockRect = {
+        const mockRect = ({
             x: {
                 baseVal: {
                     value: X,
@@ -503,7 +511,7 @@ describe('RectangleToolService', () => {
                     value: HEIGHT,
                 },
             },
-        } as unknown as SVGRectElement;
+        } as unknown) as SVGRectElement;
 
         const newRectangleTool = injector.get(RectangleToolService);
         newRectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);

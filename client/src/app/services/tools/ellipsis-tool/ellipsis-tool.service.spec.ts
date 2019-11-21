@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
-import { Keys } from 'src/constants/constants';
+import { KEYS } from 'src/constants/constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { EllipsisToolService } from './ellipsis-tool.service';
 
@@ -73,8 +73,8 @@ describe('EllipsisToolService', () => {
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
 
-        onShiftKeyDown = createKeyBoardEvent(Keys.Shift);
-        onOtherKeyDown = createKeyBoardEvent(Keys.Alt);
+        onShiftKeyDown = createKeyBoardEvent(KEYS.Shift);
+        onOtherKeyDown = createKeyBoardEvent(KEYS.Alt);
 
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
@@ -128,76 +128,76 @@ describe('EllipsisToolService', () => {
 
     it('should return the draw ellipse cx when getting draw ellipse cx', () => {
         const CX = 10;
-        const mockEllipse = {
+        const mockEllipse = ({
             cx: {
                 baseVal: {
                     value: CX,
                 },
             },
-        } as unknown as SVGEllipseElement;
+        } as unknown) as SVGEllipseElement;
 
         const newEllipsisTool = injector.get(EllipsisToolService);
         newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyOnDrawEllipseCenterX.and.callThrough();
 
-        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+        newEllipsisTool.drawEllipse = (mockEllipse as unknown) as SVGEllipseElement;
 
         expect(newEllipsisTool.drawEllipseCenterX).toEqual(CX);
     });
 
     it('should return the draw ellipse cy when getting draw ellipse cy', () => {
         const CY = 10;
-        const mockEllipse = {
+        const mockEllipse = ({
             cy: {
                 baseVal: {
                     value: CY,
                 },
             },
-        } as unknown as SVGEllipseElement;
+        } as unknown) as SVGEllipseElement;
 
         const newEllipsisTool = injector.get(EllipsisToolService);
         newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyOnDrawEllipseCenterY.and.callThrough();
 
-        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+        newEllipsisTool.drawEllipse = (mockEllipse as unknown) as SVGEllipseElement;
 
         expect(newEllipsisTool.drawEllipseCenterY).toEqual(CY);
     });
 
     it('should return the draw ellipse rx when getting draw ellipse rx', () => {
         const RX = 10;
-        const mockEllipse = {
+        const mockEllipse = ({
             rx: {
                 baseVal: {
                     value: RX,
                 },
             },
-        } as unknown as SVGEllipseElement;
+        } as unknown) as SVGEllipseElement;
 
         const newEllipsisTool = injector.get(EllipsisToolService);
         newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyOnDrawEllipseRadiusX.and.callThrough();
 
-        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+        newEllipsisTool.drawEllipse = (mockEllipse as unknown) as SVGEllipseElement;
 
         expect(newEllipsisTool.drawEllipseRadiusX).toEqual(RX);
     });
 
     it('should return the draw ellipse ry when getting draw ellipse ry', () => {
         const RY = 10;
-        const mockEllipse = {
+        const mockEllipse = ({
             ry: {
                 baseVal: {
                     value: RY,
                 },
             },
-        } as unknown as SVGEllipseElement;
+        } as unknown) as SVGEllipseElement;
 
         const newEllipsisTool = injector.get(EllipsisToolService);
         newEllipsisTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         spyOnDrawEllipseRadiusY.and.callThrough();
 
-        newEllipsisTool.drawEllipse = mockEllipse as unknown as SVGEllipseElement;
+        newEllipsisTool.drawEllipse = (mockEllipse as unknown) as SVGEllipseElement;
 
         expect(newEllipsisTool.drawEllipseRadiusY).toEqual(RY);
     });

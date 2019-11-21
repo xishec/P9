@@ -23,7 +23,9 @@
                         [min]="thickness.Min"
                         [max]="thickness.Max"
                     />
-                    <mat-error>La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error>
+                    <mat-error
+                        >La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error
+                    >
                     <span matSuffix>px</span>
                 </mat-form-field>
             </div>
@@ -59,7 +61,8 @@
                         [max]="polygonSides.Max"
                     />
                     <mat-error>
-                        La valeur inscrite doit être entre {{ polygonSides.Min }} et {{ polygonSides.Max }} côtés</mat-error
+                        La valeur inscrite doit être entre {{ polygonSides.Min }} et
+                        {{ polygonSides.Max }} côtés</mat-error
                     >
                     <span matSuffix>côtés</span>
                 </mat-form-field>
