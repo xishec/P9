@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
 import { FileManagerService } from '../services/file-manager.service';
+import { Message } from '../../../common/communication/Message';
 import Types from '../types';
 
 @injectable()
@@ -20,14 +21,8 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            this.fileManagerService
-                .getAllDrawings()
-                .then(async (drawings: any) => {
-                    res.json(drawings);
-                })
-                .catch((error: MongoError) => {
-                    throw error;
-                });
+            const drawings = await this.fileManagerService.getAllDrawings();
+            res.json(drawings);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
@@ -41,14 +36,15 @@ export class FileManagerController {
                 });
         });
 
-        this.router.post('/delete', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.delete('/:name', async (req: Request, res: Response, nex: NextFunction) => {
+            let name = req.param.name;
             this.fileManagerService
-                .deleteDrawing(req.body)
+                .deleteDrawing(name)
                 .then((drawing: any) => {
-                    res.json(drawing);
+                    res.json({ title: 'Delete', body: 'Success' } as Message);
                 })
                 .catch((error: MongoError) => {
-                    res.json(error);
+                    throw error;
                 });
         });
     }

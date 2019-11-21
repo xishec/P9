@@ -54,7 +54,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK');
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -63,8 +63,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((ans: any) => {
-                ans.forEach((el: Message) => {
-                    const drawing: Drawing = JSON.parse(el.body);
+                ans.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -88,7 +87,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    intializeUndoRedoStacks(): void {
+    initializeUndoRedoStacks(): void {
         this.undoRedoerService.initializeStacks();
         this.undoRedoerService.fromLoader = true;
     }
@@ -104,7 +103,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadServerFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
             (drawing) => drawing.name === this.selectedOption,
         ) as Drawing;
@@ -113,7 +112,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadLocalFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }
@@ -133,12 +132,13 @@ export class OpenFileModalWindowComponent implements OnInit {
                         svg: localFileContent.svg,
                         idStack: localFileContent.idStack,
                         drawingInfo: localFileContent.drawingInfo,
+                        timeStamp: localFileContent.timeStamp,
                     };
                     this.localFileName = this.fileToLoad.name;
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK');
                 }
             };
         }
@@ -198,7 +198,8 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onDelete() {
         this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
-            if (message.title || message.title === 'Add Drawing' + this.selectedOption) {
+            console.log(message);
+            if (message.title && message.title === 'Delete' && message.body && message.body === 'Success') {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.name !== this.selectedOption;
                 });

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -25,7 +26,7 @@ import { CloudService } from 'src/app/services/cloud/cloud.service';
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+    drawingInfo: DrawingInfo = { width: 0, height: 0, color: DEFAULT_WHITE } as DrawingInfo;
     gridIsActive = false;
 
     gridSize = GRID_SIZE.Default;
@@ -50,6 +51,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private snackBar: MatSnackBar,
         private cloudService: CloudService,
     ) {}
 
@@ -171,7 +173,7 @@ export class WorkZoneComponent implements OnInit {
 
     onClickRectangle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            alert('Veuillez créer un nouveau dessin!');
+            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK');
         }
     }
 

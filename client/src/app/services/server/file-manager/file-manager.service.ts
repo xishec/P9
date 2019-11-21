@@ -14,10 +14,10 @@ import { Message } from '../../../../../../common/communication/Message';
 export class FileManagerService {
     constructor(private http: HttpClient) {}
 
-    getAllDrawings(): Observable<Message[] | Message> {
+    getAllDrawings(): Observable<Drawing[]> {
         return this.http
-            .get<Message[]>(environment.BASE_URL + '/api/file-manager/')
-            .pipe(catchError(this.handleError<Message>('getAllDrawings')));
+            .get<Drawing[]>(environment.BASE_URL + '/api/file-manager/')
+            .pipe(catchError(this.handleError<Drawing[]>('getAllDrawings')));
     }
 
     postDrawing(
@@ -26,18 +26,17 @@ export class FileManagerService {
         svg: string,
         idStack: string[],
         drawingInfo: DrawingInfo,
-    ): Observable<Message> {
-        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo };
-        const message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
+    ): Observable<Drawing> {
+        let timeStamp: number = Date.now();
+        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo, timeStamp };
         return this.http
-            .post<Message>(environment.BASE_URL + '/api/file-manager/save', message)
-            .pipe(catchError(this.handleError<Message>('postDrawing')));
+            .post<Drawing>(environment.BASE_URL + '/api/file-manager/save', drawing)
+            .pipe(catchError(this.handleError<Drawing>('postDrawing')));
     }
 
     deleteDrawing(name: string): Observable<Message[] | Message> {
-        const message: Message = { title: 'Delete Drawing ' + name, body: name };
         return this.http
-            .post<Message[]>(environment.BASE_URL + '/api/file-manager/delete', message)
+            .delete<Message[]>(environment.BASE_URL + `/api/file-manager/${name}`)
             .pipe(catchError(this.handleError<Message>('deleteDrawing')));
     }
 

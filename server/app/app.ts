@@ -36,7 +36,7 @@ export class Application {
         this.errorHandling();
 
         mongoose
-            .connect('mongodb+srv://P9_client:p9123@p9-mgkks.gcp.mongodb.net/test?retryWrites=true&w=majority', {
+            .connect('mongodb+srv://P9_client:p9123@p9-mgkks.gcp.mongodb.net/dev?retryWrites=true&w=majority', {
                 useUnifiedTopology: true,
                 useNewUrlParser: true,
                 useFindAndModify: false,

@@ -45,13 +45,14 @@ export class UndoRedoerService {
     }
 
     createDrawing(idStackArray: string[]): Drawing {
-        const drawing: Drawing = new Drawing(
-            '',
-            [],
-            this.workzoneRef.nativeElement.innerHTML,
-            idStackArray,
-            this.currentDrawingInfos,
-        );
+        const drawing: Drawing = {
+            name: '',
+            labels: [],
+            svg: this.workzoneRef.nativeElement.innerHTML,
+            idStack: idStackArray,
+            drawingInfo: this.currentDrawingInfos,
+            timeStamp: 0,
+        } as Drawing;
         return drawing;
     }
 
