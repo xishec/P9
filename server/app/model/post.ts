@@ -12,4 +12,4 @@ const drawingSchema = createSchema({
     }),
 });
 
-export const Post = typedModel('Drawing', drawingSchema);
+export const DrawingModel = typedModel('Drawing', drawingSchema);

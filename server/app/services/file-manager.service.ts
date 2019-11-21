@@ -1,14 +1,14 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { Drawing } from '../../../common/communication/Drawing';
-import { Post } from '../model/post';
+import { DrawingModel } from '../model/post';
 
 @injectable()
 export class FileManagerService {
     async getAllDrawings(): Promise<any> {
         const query = {};
 
-        return Post.find(query)
+        return DrawingModel.find(query)
             .then((drawings: any) => {
                 return drawings;
             })
@@ -30,7 +30,7 @@ export class FileManagerService {
         const update = drawing;
         const options = { upsert: true, new: true };
 
-        return Post.findOneAndUpdate(query, update, options)
+        return DrawingModel.findOneAndUpdate(query, update, options)
             .then((drawingToUpdate: any) => {
                 return drawingToUpdate;
             })
@@ -42,7 +42,7 @@ export class FileManagerService {
     async deleteDrawing(nameToDelete: string): Promise<any> {
         const query = { name: nameToDelete };
 
-        return Post.findOneAndDelete(query)
+        return DrawingModel.findOneAndDelete(query)
             .then((drawing: any) => {
                 return drawing;
             })
