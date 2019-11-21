@@ -239,23 +239,23 @@ describe('FillToolService', () => {
 
     it('should addToMap on call addToMap with an absent key', () => {
         const map: Map<number, FillStructure[]> = new Map([]);
-        service.addToMap(1, { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure, map);
+        service.addToMap(1, { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure, map);
         expect(map.size).toEqual(1);
         expect((map.get(1) as FillStructure[])[0].top.x).toEqual(0);
         expect((map.get(1) as FillStructure[])[0].top.y).toEqual(1);
-        expect((map.get(1) as FillStructure[])[0].bottum.x).toEqual(0);
-        expect((map.get(1) as FillStructure[])[0].bottum.y).toEqual(10);
+        expect((map.get(1) as FillStructure[])[0].bottom.x).toEqual(0);
+        expect((map.get(1) as FillStructure[])[0].bottom.y).toEqual(10);
     });
     it('should addToMap on call addToMap with an existing key', () => {
         const map: Map<number, FillStructure[]> = new Map([
-            [1, [{ top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure]],
+            [1, [{ top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure]],
         ]);
-        service.addToMap(1, { top: new Coords2D(3, 1), bottum: new Coords2D(3, 10) } as FillStructure, map);
+        service.addToMap(1, { top: new Coords2D(3, 1), bottom: new Coords2D(3, 10) } as FillStructure, map);
         expect(map.size).toEqual(1);
         expect((map.get(1) as FillStructure[])[1].top.x).toEqual(3);
         expect((map.get(1) as FillStructure[])[1].top.y).toEqual(1);
-        expect((map.get(1) as FillStructure[])[1].bottum.x).toEqual(3);
-        expect((map.get(1) as FillStructure[])[1].bottum.y).toEqual(10);
+        expect((map.get(1) as FillStructure[])[1].bottom.x).toEqual(3);
+        expect((map.get(1) as FillStructure[])[1].bottom.y).toEqual(10);
     });
 
     it('should push to strokePaths on call updateVerticalStrokePaths', () => {
@@ -292,7 +292,7 @@ describe('FillToolService', () => {
         const bodyPaths = ['1', '2'];
         service.updateBodyPaths(
             bodyPaths,
-            { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure,
+            { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure,
             0,
         );
 
@@ -305,47 +305,47 @@ describe('FillToolService', () => {
         expect(service.strokePaths.length).toEqual(4);
     });
     it('should add L to bodyPaths on call updateStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
-        const fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
         const topStrokePaths = ['1', '2'];
-        const bottumStrokePaths = ['3', '4'];
-        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
+        const bottomStrokePaths = ['3', '4'];
+        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottomStrokePaths);
 
         expect(topStrokePaths[0].includes('L')).toEqual(true);
-        expect(bottumStrokePaths[0].includes('L')).toEqual(true);
+        expect(bottomStrokePaths[0].includes('L')).toEqual(true);
     });
     it('should add M to bodyPaths on call updateStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
         const fillStructure2: FillStructure = {
             top: new Coords2D(1110, 1111),
-            bottum: new Coords2D(1110, 11110),
+            bottom: new Coords2D(1110, 11110),
         } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
         const topStrokePaths = ['1', '2'];
-        const bottumStrokePaths = ['3', '4'];
-        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottumStrokePaths);
+        const bottomStrokePaths = ['3', '4'];
+        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottomStrokePaths);
 
         expect(topStrokePaths[0].includes('M')).toEqual(true);
-        expect(bottumStrokePaths[0].includes('M')).toEqual(true);
+        expect(bottomStrokePaths[0].includes('M')).toEqual(true);
     });
 
     it('should reset BodyAndStrokePaths on call resetBodyAndStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
         const fillStructure2: FillStructure = {
             top: new Coords2D(1110, 1111),
-            bottum: new Coords2D(1110, 11110),
+            bottom: new Coords2D(1110, 11110),
         } as FillStructure;
         const topStrokePaths = ['1'];
-        const bottumStrokePaths = ['3'];
+        const bottomStrokePaths = ['3'];
         const bodyPaths: string[] = ['123'];
-        service.resetBodyAndStrokePaths([fillStructure1, fillStructure2], bodyPaths, topStrokePaths, bottumStrokePaths);
+        service.resetBodyAndStrokePaths([fillStructure1, fillStructure2], bodyPaths, topStrokePaths, bottomStrokePaths);
 
         expect(bodyPaths.length).toEqual(2);
         expect(topStrokePaths.length).toEqual(2);
-        expect(bottumStrokePaths.length).toEqual(2);
+        expect(bottomStrokePaths.length).toEqual(2);
     });
 
     it('should append Body on call appendBody', () => {
@@ -406,7 +406,7 @@ describe('FillToolService', () => {
         service.resetBodyAndStrokePaths = () => null;
         service.updateBodyPaths = () => null;
         service.updateStrokePaths = () => null;
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottum: new Coords2D(0, 10) } as FillStructure;
+        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
         service.segmentsToDraw = new Map([]);
         service.segmentsToDraw.set(1, [fillStructure1]);
         service.segmentsToDraw.set(2, [fillStructure1]);

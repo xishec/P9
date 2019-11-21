@@ -144,13 +144,13 @@ export class FillToolService extends AbstractToolService {
 
         this.bfsHelper.bodyGrid.forEach((column, x) => {
             let fillStructure = new FillStructure();
-            fillStructure.bottum = new Coords2D(x, column[0]);
+            fillStructure.bottom = new Coords2D(x, column[0]);
             for (let y = 1; y < column.length; y++) {
                 if (column[y] !== column[y - 1] + 1) {
                     fillStructure.top = new Coords2D(x, column[y - 1]);
                     this.addToMap(x, fillStructure, this.segmentsToDraw);
                     fillStructure = new FillStructure();
-                    fillStructure.bottum = new Coords2D(x, column[y]);
+                    fillStructure.bottom = new Coords2D(x, column[y]);
                 }
             }
             fillStructure.top = new Coords2D(x, column[column.length - 1]);
@@ -218,32 +218,32 @@ export class FillToolService extends AbstractToolService {
     updateBodyPaths(bodyPaths: string[], fillStructure: FillStructure, i: number): void {
         bodyPaths[
             i
-        ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+        ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
     }
 
-    appendStrokePaths(topStrokePaths: string[], bottumStrokePaths: string[]): void {
+    appendStrokePaths(topStrokePaths: string[], bottomStrokePaths: string[]): void {
         this.strokePaths.push(...topStrokePaths);
-        this.strokePaths.push(...bottumStrokePaths);
+        this.strokePaths.push(...bottomStrokePaths);
     }
     updateStrokePaths(
         fillStructure: FillStructure,
         x: number,
         i: number,
         topStrokePaths: string[],
-        bottumStrokePaths: string[],
+        bottomStrokePaths: string[],
     ): void {
         const lastFillStructures: FillStructure[] = this.segmentsToDraw.get(x - 1) as FillStructure[];
         const lastTop = lastFillStructures[i].top;
-        const lastBottum = lastFillStructures[i].bottum;
+        const lastbottom = lastFillStructures[i].bottom;
         if (fillStructure.top.distanceTo(lastTop) > MAX_NORMAL_LENGTH) {
             topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
         } else {
             topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
         }
-        if (fillStructure.bottum.distanceTo(lastBottum) > MAX_NORMAL_LENGTH) {
-            bottumStrokePaths[i] += ` M${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+        if (fillStructure.bottom.distanceTo(lastbottom) > MAX_NORMAL_LENGTH) {
+            bottomStrokePaths[i] += ` M${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
         } else {
-            bottumStrokePaths[i] += ` L${fillStructure.bottum.x} ${fillStructure.bottum.y}`;
+            bottomStrokePaths[i] += ` L${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
         }
     }
 
@@ -251,18 +251,18 @@ export class FillToolService extends AbstractToolService {
         fillStructures: FillStructure[],
         bodyPaths: string[],
         topStrokePaths: string[],
-        bottumStrokePaths: string[],
+        bottomStrokePaths: string[],
     ) {
         bodyPaths.length = 0;
         topStrokePaths.length = 0;
-        bottumStrokePaths.length = 0;
+        bottomStrokePaths.length = 0;
         fillStructures.forEach((fillStructure: FillStructure) => {
             bodyPaths.push(
-                `M${fillStructure.bottum.x} ${fillStructure.bottum.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
+                `M${fillStructure.bottom.x} ${fillStructure.bottom.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
             );
 
             topStrokePaths.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
-            bottumStrokePaths.push(`M${fillStructure.bottum.x} ${fillStructure.bottum.y}`);
+            bottomStrokePaths.push(`M${fillStructure.bottom.x} ${fillStructure.bottom.y}`);
         });
     }
 
@@ -272,7 +272,7 @@ export class FillToolService extends AbstractToolService {
         this.strokePaths = [];
         const bodyPaths: string[] = [];
         const topStrokePaths: string[] = [];
-        const bottumStrokePaths: string[] = [];
+        const bottomStrokePaths: string[] = [];
         let lastFillStructuresLength = -1;
 
         for (let x = this.bfsHelper.mostLeft; x <= this.bfsHelper.mostRight; x++) {
@@ -288,18 +288,18 @@ export class FillToolService extends AbstractToolService {
             // if current column has a different structure than the last column
             if (fillStructures.length !== lastFillStructuresLength) {
                 this.appendBodyPaths(bodyWrap, bodyPaths);
-                this.appendStrokePaths(topStrokePaths, bottumStrokePaths);
-                this.resetBodyAndStrokePaths(fillStructures, bodyPaths, topStrokePaths, bottumStrokePaths);
+                this.appendStrokePaths(topStrokePaths, bottomStrokePaths);
+                this.resetBodyAndStrokePaths(fillStructures, bodyPaths, topStrokePaths, bottomStrokePaths);
             } else {
                 fillStructures.forEach((fillStructure: FillStructure, i: number) => {
                     this.updateBodyPaths(bodyPaths, fillStructure, i);
-                    this.updateStrokePaths(fillStructure, x, i, topStrokePaths, bottumStrokePaths);
+                    this.updateStrokePaths(fillStructure, x, i, topStrokePaths, bottomStrokePaths);
                 });
             }
             lastFillStructuresLength = fillStructures.length;
         }
         this.strokePaths.push(...topStrokePaths);
-        this.strokePaths.push(...bottumStrokePaths);
+        this.strokePaths.push(...bottomStrokePaths);
 
         this.appendBody(bodyPaths, bodyWrap);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
