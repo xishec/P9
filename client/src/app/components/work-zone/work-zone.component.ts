@@ -18,16 +18,6 @@ import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 
-// *********** Firebase ***************
-
-// Firebase App (the core Firebase SDK) is always required and must be listed first
-import * as firebase from 'firebase/app';
-
-import 'firebase/firestore';
-import 'firebase/storage';
-
-// ************************************
-
 @Component({
     selector: 'app-work-zone',
     templateUrl: './work-zone.component.html',
@@ -62,35 +52,6 @@ export class WorkZoneComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // Your web app's Firebase configuration
-        let firebaseConfig = {
-            apiKey: 'AIzaSyDLUNTqEdILpLnw-SruhmkglA2x0t8e-bk',
-            authDomain: 'p9-cloud.firebaseapp.com',
-            databaseURL: 'https://p9-cloud.firebaseio.com',
-            projectId: 'p9-cloud',
-            storageBucket: 'p9-cloud.appspot.com',
-            messagingSenderId: '258132417445',
-            appId: '1:258132417445:web:cc70534b51e946e786e64c',
-            measurementId: 'G-969V4CLRGR',
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Get a reference to the storage service, which is used to create references in your storage bucket
-        let storage = firebase.storage();
-        let pathReference = storage.ref('Hx_logo_lightRed.png');
-        console.log(pathReference);
-
-        pathReference
-            .getDownloadURL()
-            .then(function(url) {
-                console.log(url);
-                document.getElementById('hi')!.setAttribute('src', url);
-            })
-            .catch(function(error) {
-                // Handle any errors
-            });
-
         this.undoRedoerService.initializeService(this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 
@@ -128,7 +89,7 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
+        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack, this.renderer);
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color = backgroundColor;
