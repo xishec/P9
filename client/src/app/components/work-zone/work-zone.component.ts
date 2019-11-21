@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -49,6 +50,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private snackBar: MatSnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -168,7 +170,7 @@ export class WorkZoneComponent implements OnInit {
 
     onClickRectangle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            alert('Veuillez créer un nouveau dessin!');
+            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK');
         }
     }
 

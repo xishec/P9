@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -41,6 +42,12 @@ describe('WorkZoneComponent', () => {
                         onKeyUp: () => null,
                         onMouseEnter: () => null,
                         onMouseLeave: () => null,
+                    },
+                },
+                {
+                    provide: MatSnackBar,
+                    useValue: {
+                        open: () => null,
                     },
                 },
                 {
@@ -121,20 +128,20 @@ describe('WorkZoneComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should call window.alert with Veuillez créer un nouveau dessin!', () => {
-        spyOn(window, 'alert');
+    it('should call alert with Veuillez créer un nouveau dessin!', () => {
+        const spy = spyOn(component[`snackBar`], 'open');
         drawingLoaderService.untouchedWorkZone.next(true);
 
         component.onClickRectangle();
-        expect(window.alert).toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('should not call window.alert with Veuillez créer un nouveau dessin!', () => {
-        spyOn(window, 'alert');
+    it('should not call alert with Veuillez créer un nouveau dessin!', () => {
+        const spy = spyOn(component[`snackBar`], 'open');
         drawingLoaderService.untouchedWorkZone.next(false);
 
         component.onClickRectangle();
-        expect(window.alert).not.toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
+        expect(spy).not.toHaveBeenCalled();
     });
 
     it('should return cursor style not-allowed when isEmpty', () => {
