@@ -138,7 +138,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK');
                 }
             };
         }

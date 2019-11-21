@@ -37,7 +37,7 @@ export class GridAttributesComponent implements OnInit {
         this.gridToolService.currentSize.subscribe((size: number) => {
             this.gridAttributesForm.controls.size.setValue(size);
         });
-        this.drawingLoaderService.emptyDrawStack.subscribe(() => {
+        this.drawingLoaderService.untouchedWorkZone.subscribe(() => {
             this.enableSlider();
         });
     }
@@ -97,7 +97,7 @@ export class GridAttributesComponent implements OnInit {
     }
 
     enableSlider(): void {
-        if (!this.drawingLoaderService.emptyDrawStack.value) {
+        if (!this.drawingLoaderService.untouchedWorkZone.value) {
             this.gridAttributesForm.controls.state.enable();
         }
     }

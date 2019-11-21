@@ -18,7 +18,7 @@ describe('GridToolService', () => {
                 {
                     provide: DrawingLoaderService,
                     useValue: {
-                        emptyDrawStack: new BehaviorSubject<boolean>(true),
+                        untouchedWorkZone: new BehaviorSubject<boolean>(true),
                     },
                 },
             ],
@@ -33,14 +33,14 @@ describe('GridToolService', () => {
     });
 
     it('changeState should change the state if workzone is not empty', () => {
-        drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
         service.changeState(true);
 
         expect(service.state.value).toBeTruthy();
     });
 
     it('changeState should not change the state if workzone is empty', () => {
-        drawingLoaderService.emptyDrawStack.next(true);
+        drawingLoaderService.untouchedWorkZone.next(true);
         service.changeState(true);
 
         expect(service.state.value).toBeFalsy();
