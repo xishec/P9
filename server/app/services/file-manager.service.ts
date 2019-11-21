@@ -29,7 +29,6 @@ export class FileManagerService {
         const query = { name: drawing.name };
         const update = drawing;
         const options = { upsert: true, new: true };
-        console.log(update);
 
         return Post.findOneAndUpdate(query, update, options)
             .then((drawingToUpdate: any) => {
@@ -40,8 +39,8 @@ export class FileManagerService {
             });
     }
 
-    async deleteDrawing(name: string): Promise<any> {
-        const query = { name: { $regex: name, $options: 'i' } };
+    async deleteDrawing(nameToDelete: string): Promise<any> {
+        const query = { name: nameToDelete };
 
         return Post.findOneAndDelete(query)
             .then((drawing: any) => {

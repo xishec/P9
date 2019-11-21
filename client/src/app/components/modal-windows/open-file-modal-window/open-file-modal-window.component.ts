@@ -198,7 +198,8 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onDelete() {
         this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
-            if (message.title || message.title === 'Add Drawing' + this.selectedOption) {
+            console.log(message);
+            if (message.title && message.title === 'Delete' && message.body && message.body === 'Success') {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.name !== this.selectedOption;
                 });

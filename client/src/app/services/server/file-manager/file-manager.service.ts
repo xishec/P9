@@ -35,9 +35,8 @@ export class FileManagerService {
     }
 
     deleteDrawing(name: string): Observable<Message[] | Message> {
-        const message: Message = { title: 'Delete Drawing ' + name, body: name };
         return this.http
-            .post<Message[]>(environment.BASE_URL + '/api/file-manager/delete', message)
+            .delete<Message[]>(environment.BASE_URL + `/api/file-manager/${name}`)
             .pipe(catchError(this.handleError<Message>('deleteDrawing')));
     }
 
