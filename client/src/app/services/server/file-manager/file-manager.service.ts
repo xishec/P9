@@ -27,10 +27,10 @@ export class FileManagerService {
         idStack: string[],
         drawingInfo: DrawingInfo,
     ): Observable<Message> {
-        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo };
-        const message: Message = { title: 'Add Drawing ' + name, body: JSON.stringify(drawing) };
+        let timeStamp: number = Date.now();
+        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo, timeStamp };
         return this.http
-            .post<Message>(environment.BASE_URL + '/api/file-manager/save', message)
+            .post<Drawing>(environment.BASE_URL + '/api/file-manager/save', drawing)
             .pipe(catchError(this.handleError<Message>('postDrawing')));
     }
 

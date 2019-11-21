@@ -8,18 +8,11 @@ export interface IDrawing {
     drawingInfo: DrawingInfo;
 }
 
-export class Drawing implements IDrawing {
+export interface Drawing {
     name: string;
     labels: string[];
     svg: string;
     idStack: string[];
     drawingInfo: DrawingInfo;
-
-    constructor(name: string, labels: string[], svg: string, idStack: string[], drawingInfo: DrawingInfo) {
-        this.name = name;
-        this.labels = labels;
-        this.svg = svg;
-        this.idStack = idStack;
-        this.drawingInfo = drawingInfo;
-    }
+    timeStamp: number;
 }
