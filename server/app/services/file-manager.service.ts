@@ -6,7 +6,7 @@ import { Post } from '../model/post';
 @injectable()
 export class FileManagerService {
     async getAllDrawings(): Promise<any> {
-        const query = { title: /Add Drawing/i };
+        const query = {};
 
         return Post.find(query)
             .then((drawings: any) => {
@@ -27,8 +27,9 @@ export class FileManagerService {
         }
 
         const query = { name: drawing.name };
-        const update = { body: drawing };
+        const update = drawing;
         const options = { upsert: true, new: true };
+        console.log(update);
 
         return Post.findOneAndUpdate(query, update, options)
             .then((drawingToUpdate: any) => {

@@ -63,8 +63,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((ans: any) => {
-                ans.forEach((el: Message) => {
-                    const drawing: Drawing = JSON.parse(el.body);
+                ans.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -139,7 +138,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK');
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK');
                 }
             };
         }

@@ -16,7 +16,7 @@ export class FileManagerService {
 
     getAllDrawings(): Observable<Drawing[]> {
         return this.http
-            .get<Drawing[]>(environment.BASE_URL + '/')
+            .get<Drawing[]>(environment.BASE_URL + '/api/file-manager/')
             .pipe(catchError(this.handleError<Drawing[]>('getAllDrawings')));
     }
 
