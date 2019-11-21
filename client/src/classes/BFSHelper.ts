@@ -106,8 +106,8 @@ export class BFSHelper {
                 Math.pow(color1[1] - color2[1], 2) +
                 Math.pow(color1[2] - color2[2], 2),
         );
-        const sommum = 255 * 3;
-        return difference <= (this.tolerance / 100) * sommum;
+        const sum = 255 * 3;
+        return difference <= (this.tolerance / 100) * sum;
     }
 
     isValidPosition(pixel: Coords2D): boolean {

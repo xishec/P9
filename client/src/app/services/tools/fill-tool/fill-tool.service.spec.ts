@@ -103,17 +103,20 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return true;
         };
+        service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(false);
+        service.mouseDown = true;
+        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
+        expect(bool).toEqual(false);
+    });
+
+    it('should do nothing on call non-implemented method', () => {
         service.onMouseMove(createMouseEvent(0, 0, 21));
         service.onMouseEnter(createMouseEvent(0, 0, 21));
         service.onMouseLeave(createMouseEvent(0, 0, 21));
         service.onKeyDown(createKeyBoardEvent(KEYS.Alt));
         service.onKeyUp(createKeyBoardEvent(KEYS.Alt));
         service.cleanUp();
-
-        service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(false);
-        service.mouseDown = true;
-        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
-        expect(bool).toEqual(false);
+        expect(service).toBeTruthy();
     });
 
     it('should call updateCanvas onMouseDown', () => {
