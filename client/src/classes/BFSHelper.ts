@@ -36,7 +36,7 @@ export class BFSHelper {
     }
 
     computeBFS(clickPosition: Coords2D): void {
-        let imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
+        const imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
         this.data = imageData.data;
 
         const targetColor: number[] = this.getPixelColor(clickPosition);
@@ -116,9 +116,9 @@ export class BFSHelper {
 
     getPixelColor(pixel: Coords2D): number[] {
         let index: number = 4 * (pixel.x + pixel.y * this.maxX);
-        let r: number = this.data[index++];
-        let g: number = this.data[index++];
-        let b: number = this.data[index];
+        const r: number = this.data[index++];
+        const g: number = this.data[index++];
+        const b: number = this.data[index];
 
         return [r, g, b];
     }

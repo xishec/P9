@@ -45,44 +45,21 @@ describe('Selection', () => {
     });
 
     it('should return false on call isSameColor with tolerance 0', () => {
-        const color1 = ([0, 0, 0] as unknown) as Uint8ClampedArray;
-        const color2 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
         bfsHelper.tolerance = 0;
-        expect(bfsHelper.isSameColor(color1, color2)).toEqual(false);
+        expect(bfsHelper.isSameColor([0, 0, 0], [10, 110, 11])).toEqual(false);
     });
     it('should return true on call isSameColor with tolerance 0', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        const color2 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
         bfsHelper.tolerance = 0;
-        expect(bfsHelper.isSameColor(color1, color2)).toEqual(true);
+        expect(bfsHelper.isSameColor([10, 110, 11], [10, 110, 11])).toEqual(true);
     });
 
     it('should return false on call isSameColor with tolerance 20', () => {
-        const color1 = ([0, 0, 0] as unknown) as Uint8ClampedArray;
-        const color2 = ([200, 200, 200] as unknown) as Uint8ClampedArray;
         bfsHelper.tolerance = 20;
-        expect(bfsHelper.isSameColor(color1, color2)).toEqual(false);
+        expect(bfsHelper.isSameColor([0, 0, 0], [200, 200, 200])).toEqual(false);
     });
     it('should return true on call isSameColor with tolerance 20', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        const color2 = ([10, 110, 12] as unknown) as Uint8ClampedArray;
         bfsHelper.tolerance = 20;
-        expect(bfsHelper.isSameColor(color1, color2)).toEqual(true);
-    });
-
-    it('should return false on call isStroke', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.getPixelColor = () => color1;
-        bfsHelper.isSameColor = () => true;
-        bfsHelper.isStroke(new Coords2D(0, 0), color1);
-        expect(bfsHelper.isStroke(new Coords2D(0, 0), color1)).toEqual(false);
-    });
-    it('should return true on call isStroke', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.getPixelColor = () => color1;
-        bfsHelper.isSameColor = () => false;
-        bfsHelper.isStroke(new Coords2D(0, 0), color1);
-        expect(bfsHelper.isStroke(new Coords2D(0, 0), color1)).toEqual(true);
+        expect(bfsHelper.isSameColor([10, 110, 11], [10, 110, 12])).toEqual(true);
     });
 
     it('should return true on call isValidPosition', () => {
@@ -97,19 +74,16 @@ describe('Selection', () => {
     });
 
     it('should return color on call getPixelColor', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.context2D.getImageData = () => {
-            return { data: color1 } as ImageData;
-        };
+        bfsHelper.data = ([0, 1, 2] as unknown) as Uint8ClampedArray;
+        bfsHelper.maxX = 0;
         const data = bfsHelper.getPixelColor(new Coords2D(0, 0));
-        expect(data[0]).toEqual(10);
-        expect(data[1]).toEqual(110);
-        expect(data[2]).toEqual(11);
+        expect(data[0]).toEqual(0);
+        expect(data[1]).toEqual(1);
+        expect(data[2]).toEqual(2);
     });
 
     it('should compute BFS on call computeBFS', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.getPixelColor = () => color1;
+        bfsHelper.getPixelColor = () => [10, 110, 11];
         let counter = 0;
         bfsHelper.isSameColor = () => {
             return counter++ < 2;
@@ -124,8 +98,7 @@ describe('Selection', () => {
     });
 
     it('should compute BFS on call computeBFS and call continue', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.getPixelColor = () => color1;
+        bfsHelper.getPixelColor = () => [10, 110, 11];
         bfsHelper.isSameColor = () => false;
 
         const spy = spyOn(bfsHelper, 'sortBodyGrid');
@@ -134,8 +107,7 @@ describe('Selection', () => {
     });
 
     it('should compute BFS on call computeBFS having a visited node', () => {
-        const color1 = ([10, 110, 11] as unknown) as Uint8ClampedArray;
-        bfsHelper.getPixelColor = () => color1;
+        bfsHelper.getPixelColor = () => [10, 110, 11];
         bfsHelper.isSameColor = () => true;
         const point: Coords2D = new Coords2D(1111, 1110);
         bfsHelper.visited.add(JSON.stringify(point));
