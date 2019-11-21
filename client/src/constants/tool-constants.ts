@@ -376,7 +376,7 @@ enum FONT_WEIGHT {
 }
 
 const MAX_NORMAL_LENGTH = 5;
-const FILL_STROKE_WIDTH = '3.5';
+const FILL_STROKE_WIDTH = '4';
 
 export {
     TOLERANCE,

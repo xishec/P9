@@ -66,14 +66,15 @@ export class BFSHelper {
                     continue;
                 }
                 if (!this.isValidPosition(neighborPixel)) {
-                    this.addPixelToMap(neighborPixel, this.strokeGrid);
-                    continue;
+                    this.addPixelToMap(pixel, this.strokeGrid);
+                    break;
                 }
                 if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
                 } else {
-                    this.addPixelToMap(neighborPixel, this.strokeGrid);
+                    this.addPixelToMap(pixel, this.strokeGrid);
+                    break;
                 }
             }
         }
@@ -98,16 +99,15 @@ export class BFSHelper {
 
     isSameColor(color1: number[], color2: number[]): boolean {
         if (this.tolerance === 0) {
-            return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
-        } else {
-            const difference = Math.sqrt(
-                Math.pow(color1[0] - color2[0], 2) +
-                    Math.pow(color1[1] - color2[1], 2) +
-                    Math.pow(color1[2] - color2[2], 2),
-            );
-            const sommum = 255 * 3;
-            return difference <= (this.tolerance / 100) * sommum;
+            this.tolerance = 0.5;
         }
+        const difference = Math.sqrt(
+            Math.pow(color1[0] - color2[0], 2) +
+                Math.pow(color1[1] - color2[1], 2) +
+                Math.pow(color1[2] - color2[2], 2),
+        );
+        const sommum = 255 * 3;
+        return difference <= (this.tolerance / 100) * sommum;
     }
 
     isValidPosition(pixel: Coords2D): boolean {

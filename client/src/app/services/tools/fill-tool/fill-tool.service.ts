@@ -275,7 +275,7 @@ export class FillToolService extends AbstractToolService {
         const bottumStrokePaths: string[] = [];
         let lastFillStructuresLength = -1;
 
-        for (let x = this.bfsHelper.mostLeft - 1; x <= this.bfsHelper.mostRight + 1; x++) {
+        for (let x = this.bfsHelper.mostLeft; x <= this.bfsHelper.mostRight; x++) {
             this.updateVerticalStrokePaths(x);
 
             let fillStructures: FillStructure[];
