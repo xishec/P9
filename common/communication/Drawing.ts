@@ -14,5 +14,5 @@ export interface Drawing {
     svg: string;
     idStack: string[];
     drawingInfo: DrawingInfo;
-    timeStamp: number;
+    timeStamp: number
 }

@@ -54,7 +54,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK');
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK');
                         this.isLoading = false;
                         return false;
                     } else {
@@ -88,7 +88,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    intializeUndoRedoStacks(): void {
+    initializeUndoRedoStacks(): void {
         this.undoRedoerService.initializeStacks();
         this.undoRedoerService.fromLoader = true;
     }
@@ -104,7 +104,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadServerFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
             (drawing) => drawing.name === this.selectedOption,
         ) as Drawing;
@@ -113,7 +113,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadLocalFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }
@@ -133,12 +133,13 @@ export class OpenFileModalWindowComponent implements OnInit {
                         svg: localFileContent.svg,
                         idStack: localFileContent.idStack,
                         drawingInfo: localFileContent.drawingInfo,
+                        timeStamp: localFileContent.timeStamp,
                     };
                     this.localFileName = this.fileToLoad.name;
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                    window.alert("Le fichier choisi n'est pas valide, veuillez réessayer.");
                 }
             };
         }
