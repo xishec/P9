@@ -5,11 +5,11 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import {
-    BOTTOM_MAGNETISM_POINTS,
-    CENTER_MAGNETISM_POINTS,
-    SELECTION_POINTS,
+    BOTTOM_CONTROL_POINTS,
+    CENTER_CONTROL_POINTS,
+    CONTROL_POINTS,
     TOOL_NAME,
-    TOP_MAGNETISM_POINTS,
+    TOP_CONTROL_POINTS,
 } from 'src/constants/tool-constants';
 
 @Component({
@@ -20,12 +20,12 @@ import {
 export class MagnetismAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Magnetism;
     magnetismAttributesForm: FormGroup;
-    currentMagnetismPoint: string = SELECTION_POINTS.TopLeft;
+    currentMagnetismPoint: string = CONTROL_POINTS.TopLeft;
 
-    readonly SELECTION_POINTS = SELECTION_POINTS;
-    readonly TOP_MAGNETISM_POINTS = TOP_MAGNETISM_POINTS;
-    readonly CENTER_MAGNETISM_POINTS = CENTER_MAGNETISM_POINTS;
-    readonly BOTTOM_MAGNETISM_POINTS = BOTTOM_MAGNETISM_POINTS;
+    readonly CONTROL_POINTS = CONTROL_POINTS;
+    readonly TOP_CONTROL_POINTS = TOP_CONTROL_POINTS;
+    readonly CENTER_CONTROL_POINTS = CENTER_CONTROL_POINTS;
+    readonly BOTTOM_CONTROL_POINTS = BOTTOM_CONTROL_POINTS;
 
     constructor(
         private formBuilder: FormBuilder,

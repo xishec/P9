@@ -1,6 +1,6 @@
-import { SELECTION_POINTS } from 'src/constants/tool-constants';
+import { CONTROL_POINTS } from 'src/constants/tool-constants';
 
 export interface MagnetismPoint {
-    point: string;
+    point: number;
     svg_icon: string;
 }

@@ -20,7 +20,7 @@
         <div class="attribute">
             <mat-button-toggle-group>
                 <mat-button-toggle
-                    *ngFor="let TOP_MAGNETISM_POINT of TOP_MAGNETISM_POINTS"
+                    *ngFor="let TOP_MAGNETISM_POINT of TOP_CONTROL_POINTS"
                     [value]="TOP_MAGNETISM_POINT.point"
                     [checked]="currentMagnetismPoint === TOP_MAGNETISM_POINT.point"
                     (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
@@ -30,7 +30,7 @@
 
             <mat-button-toggle-group>
                 <mat-button-toggle
-                    *ngFor="let CENTER_MAGNETISM_POINT of CENTER_MAGNETISM_POINTS"
+                    *ngFor="let CENTER_MAGNETISM_POINT of CENTER_CONTROL_POINTS"
                     [value]="CENTER_MAGNETISM_POINT.point"
                     [checked]="currentMagnetismPoint === CENTER_MAGNETISM_POINT.point"
                     (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
@@ -40,7 +40,7 @@
 
             <mat-button-toggle-group>
                 <mat-button-toggle
-                    *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_MAGNETISM_POINTS"
+                    *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_CONTROL_POINTS"
                     [value]="BOTTOM_MAGNETISM_POINT.point"
                     [checked]="currentMagnetismPoint === BOTTOM_MAGNETISM_POINT.point"
                     (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
