@@ -58,6 +58,7 @@ export class EraserToolService extends AbstractToolService {
         });
 
         this.eraser = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.title, 'element-to-remove');
         this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.width, this.currentSize.toString());
         this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.height, this.currentSize.toString());
 
@@ -331,17 +332,20 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
 
         const currentChangedTargetIsValid = (this.changedElements.get(this.currentTarget.toString()) !== undefined);
-        if (this.erasedSomething && currentChangedTargetIsValid) {
-            const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
-            this.renderer.removeChild(this.elementRef, this.eraser);
-            this.restoreBorder(this.currentTarget, currentChangedTarget.borderColor, currentChangedTarget.borderWidth, this.lastToolName);
-            setTimeout(() => {
+        if (this.erasedSomething) {
+
+            if (currentChangedTargetIsValid) {
+                const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
+                this.restoreBorder(this.currentTarget, currentChangedTarget.borderColor, currentChangedTarget.borderWidth, this.lastToolName);
+                setTimeout(() => {
+                    this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+                }, 0);
+                setTimeout(() => {
+                    this.colorBorder(this.currentTarget, currentChangedTarget.borderWidth, this.lastToolName);
+                }, 0);
+            } else {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-            }, 0);
-            setTimeout(() => {
-                this.colorBorder(this.currentTarget, currentChangedTarget.borderWidth, this.lastToolName);
-                this.appendEraser();
-            }, 0);
+            }
         }
         this.erasedSomething = false;
     }
