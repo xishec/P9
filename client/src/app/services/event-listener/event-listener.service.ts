@@ -11,6 +11,7 @@ import { LineToolService } from '../tools/line-tool/line-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
+import { MagnetismToolService } from '../tools/magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -31,6 +32,7 @@ export class EventListenerService {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private clipboardService: ClipboardService,
+        private magnetismToolService: MagnetismToolService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -142,6 +144,10 @@ export class EventListenerService {
 
             if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
+            }
+
+            if (event.key === KEYS.m && this.shouldAllowShortcuts()) {
+                this.magnetismToolService.switchState();
             }
 
             if (event.key === KEYS.delete) {
