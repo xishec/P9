@@ -85,6 +85,8 @@ export class DrawingSaverService {
                 this.workZoneRef.nativeElement.innerHTML,
                 this.drawStackService.idStack,
                 this.currentDrawingInfo,
+                nameAndLabels.createdOn,
+                nameAndLabels.lastModified,
             )
             .pipe(
                 filter((subject) => {
@@ -100,6 +102,7 @@ export class DrawingSaverService {
             )
             .subscribe((drawing: Drawing) => {
                 if (drawing || JSON.parse(drawing).name === nameAndLabels.name) {
+                    this.drawingLoaderService.currentDrawing.next(drawing);
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');

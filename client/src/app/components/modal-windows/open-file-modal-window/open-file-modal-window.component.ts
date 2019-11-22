@@ -132,7 +132,8 @@ export class OpenFileModalWindowComponent implements OnInit {
                         svg: localFileContent.svg,
                         idStack: localFileContent.idStack,
                         drawingInfo: localFileContent.drawingInfo,
-                        timeStamp: localFileContent.timeStamp,
+                        createdOn: localFileContent.createdOn,
+                        lastModified: localFileContent.timeStamp,
                     };
                     this.localFileName = this.fileToLoad.name;
                 } catch (error) {

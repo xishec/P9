@@ -26,6 +26,8 @@ export class SaveFileModalWindowComponent implements OnInit {
     isSaving: boolean;
     saveFileUrl: SafeResourceUrl = '';
     filename = '';
+    createdOn = 0;
+    lastModified = 0;
 
     constructor(
         formBuilderServer: FormBuilder,
@@ -50,6 +52,8 @@ export class SaveFileModalWindowComponent implements OnInit {
                 }
             });
             this.selectedLabels = Array.from(currentDrawing.labels);
+            this.createdOn = (currentDrawing.createdOn === null) ? 0 : currentDrawing.createdOn;
+            this.lastModified = currentDrawing.lastModified;
         });
         this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
             this.errorMesaage = errorMesaage;
@@ -76,9 +80,13 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToServer(): void {
-        this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
-        );
+        const newDrawing: NameAndLabels = {
+            name: this.saveFileModalForm.value.name,
+            drawingLabels: this.selectedLabels,
+            createdOn: this.createdOn,
+            lastModified: this.lastModified,
+        }
+        this.drawingSaverService.sendFileToServer(newDrawing);
         this.isSaving = true;
 
         this.drawingSaverService.currentIsSaved

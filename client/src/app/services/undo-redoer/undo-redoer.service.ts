@@ -51,7 +51,8 @@ export class UndoRedoerService {
             svg: this.workzoneRef.nativeElement.innerHTML,
             idStack: idStackArray,
             drawingInfo: this.currentDrawingInfos,
-            timeStamp: 0,
+            createdOn: 0,
+            lastModified: 0,
         } as Drawing;
         return drawing;
     }

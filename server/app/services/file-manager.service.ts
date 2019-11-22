@@ -1,14 +1,14 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { Drawing } from '../../../common/communication/Drawing';
-import { Post } from '../model/post';
+import { DrawingModel } from '../model/post';
 
 @injectable()
 export class FileManagerService {
     async getAllDrawings(): Promise<any> {
         const query = {};
 
-        return Post.find(query)
+        return DrawingModel.find(query)
             .then((drawings: any) => {
                 return drawings;
             })
@@ -17,34 +17,37 @@ export class FileManagerService {
             });
     }
 
-    async addDrawing(drawing: Drawing): Promise<any> {
-        try {
+    async addDrawing(drawing: Drawing){
             if (!this.isDrawingValid(drawing)) {
                 throw new Error('Invalid Drawing');
             }
-        } catch (error) {
-            return error;
-        }
 
-        const query = { name: drawing.name };
-        const update = drawing;
+        const currentTimestamp = Date.now();
+        const newCreatedOn = (drawing.createdOn === 0) ? currentTimestamp : drawing.createdOn;
+
+        const query = { createdOn: drawing.createdOn, name: drawing.name };
+        const newDrawing = {
+            name: drawing.name,
+            labels: drawing.labels,
+            svg: drawing.svg,
+            idStack: drawing.idStack,
+            drawingInfo: drawing.drawingInfo,
+            createdOn: newCreatedOn,
+            lastModified: currentTimestamp,
+        };
         const options = { upsert: true, new: true };
 
-        return Post.findOneAndUpdate(query, update, options)
-            .then((drawingToUpdate: any) => {
-                return drawingToUpdate;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+        return DrawingModel.findOneAndUpdate(query, newDrawing, options).then(() => {
+            return newDrawing as Drawing;
+        });
     }
 
-    async deleteDrawing(nameToDelete: string): Promise<any> {
-        const query = { name: nameToDelete };
+    async deleteDrawing(id: string): Promise<any> {
+        const query = { id: id };
 
-        return Post.findOneAndDelete(query)
-            .then((drawing: any) => {
-                return drawing;
+        return DrawingModel.findOneAndDelete(query)
+            .then((deletedDrawing: any) => {
+                return deletedDrawing;
             })
             .catch((error: Error) => {
                 throw error;
