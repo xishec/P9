@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
-import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+//import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import {
     BOTTOM_CONTROL_POINTS,
@@ -29,8 +29,8 @@ export class MagnetismAttributesComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private shortcutManagerService: ShortcutManagerService,
-        private gridToolService: GridToolService,
-        private magnetismService: MagnetismToolService,
+        //private gridToolService: GridToolService,
+        public magnetismService: MagnetismToolService,
         private drawingLoaderService: DrawingLoaderService,
     ) {
         this.formBuilder = formBuilder;

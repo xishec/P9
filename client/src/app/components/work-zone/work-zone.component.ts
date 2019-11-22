@@ -17,6 +17,7 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 
 @Component({
     selector: 'app-work-zone',
@@ -49,6 +50,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private magnetismToolService: MagnetismToolService,
     ) {}
 
     ngOnInit(): void {
@@ -151,6 +153,7 @@ export class WorkZoneComponent implements OnInit {
             this.drawingLoaderService,
             this.undoRedoerService,
             this.clipboard,
+            this.magnetismToolService,
         );
         this.eventListenerService.addEventListeners();
     }

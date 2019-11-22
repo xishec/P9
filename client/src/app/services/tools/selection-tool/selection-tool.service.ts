@@ -10,6 +10,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -41,6 +42,7 @@ export class SelectionToolService extends AbstractToolService {
         public clipBoard: ClipboardService,
         public manipulator: ManipulatorService,
         private undoRedoerService: UndoRedoerService,
+        public magnetismService: MagnetismToolService,
     ) {
         super();
     }
@@ -73,6 +75,7 @@ export class SelectionToolService extends AbstractToolService {
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
+        this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
                 this.currentTarget = stackTarget.targetPosition;
@@ -194,8 +197,12 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection
         ) {
             this.isTranslatingSelection = true;
-            const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
-            const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
+            let deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
+            let deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
+            if (this.magnetismService.state.value) {
+                deltaX = this.magnetismService.magnetizeX(deltaX);
+                deltaY = this.magnetismService.magnetizeY(deltaY);
+            }
             this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
