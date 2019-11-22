@@ -108,6 +108,7 @@ export class QuillToolService extends TracingToolService {
     appendPreview(): void {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.title, 'element-to-remove');
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, '2');
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
@@ -217,15 +218,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     saveState(): void {
-        setTimeout(() => {
-            this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
-        }, 0);
-        setTimeout(() => {
-            this.drawStack.push(this.gWrap);
-        }, 0);
-        setTimeout(() => {
-            this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
-        }, 0);
+        this.drawStack.push(this.gWrap);
     }
 
     cleanUp(): void {
