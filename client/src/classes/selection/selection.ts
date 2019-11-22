@@ -38,10 +38,12 @@ export class Selection {
 
     initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, 'element-to-remove');
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, 'none');
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.title, 'element-to-remove');
             this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);

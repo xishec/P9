@@ -48,10 +48,16 @@ export class UndoRedoerService {
 
         const cloneWorkzone = this.workzoneRef.nativeElement.cloneNode(true);
 
+        const elToRemove = new Array<SVGElement>();
+
         cloneWorkzone.childNodes.forEach((childNode: ChildNode) => {
-            if ((childNode as SVGGElement).getAttribute('title') === 'element-to-remove') {
-                cloneWorkzone.removeChild(childNode);
+            if ((childNode as SVGElement).getAttribute('title') === 'element-to-remove') {
+                elToRemove.push(childNode as SVGElement);
             }
+        });
+
+        elToRemove.forEach((el: SVGElement) => {
+            cloneWorkzone.removeChild(el);
         });
 
         const drawing: Drawing = new Drawing(

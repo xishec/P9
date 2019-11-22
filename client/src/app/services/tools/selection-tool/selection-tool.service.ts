@@ -309,15 +309,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     saveState() {
-        setTimeout(() => {
-            this.selection.removeFullSelectionBox();
-        }, 0);
-        setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        }, 0);
-        setTimeout(() => {
-            this.selection.appendFullSelectionBox();
-        }, 0);
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty
