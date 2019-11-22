@@ -117,7 +117,9 @@ export class FillToolService extends AbstractToolService {
         switch (this.traceType) {
             case TRACE_TYPE.Outline: {
                 const bodyWrap: SVGGElement = this.fillBody(d);
-                this.renderer.removeChild(this.svgWrap, bodyWrap);
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'none');
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'none');
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, '');
                 this.fillStroke(d, bodyWrap);
                 break;
             }
