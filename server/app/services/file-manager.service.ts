@@ -17,23 +17,16 @@ export class FileManagerService {
             });
     }
 
-    async addDrawing(drawing: Drawing): Promise<any> {
-        try {
+    async addDrawing(drawing: Drawing){
             if (!this.isDrawingValid(drawing)) {
                 throw new Error('Invalid Drawing');
             }
-        } catch (error) {
-            return error;
-        }
 
-        console.log(drawing);
-        
-        
         const currentTimestamp = Date.now();
         const newCreatedOn = (drawing.createdOn === 0) ? currentTimestamp : drawing.createdOn;
 
-        const query = drawing;
-        const update = {
+        const query = { createdOn: drawing.createdOn, name: drawing.name };
+        const newDrawing = {
             name: drawing.name,
             labels: drawing.labels,
             svg: drawing.svg,
@@ -44,13 +37,9 @@ export class FileManagerService {
         };
         const options = { upsert: true, new: true };
 
-        return DrawingModel.findOneAndUpdate(query, update, options)
-            .then((drawingToUpdate: any) => {
-                return drawingToUpdate;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+        return DrawingModel.findOneAndUpdate(query, newDrawing, options).then(() => {
+            return newDrawing as Drawing;
+        });
     }
 
     async deleteDrawing(id: string): Promise<any> {
