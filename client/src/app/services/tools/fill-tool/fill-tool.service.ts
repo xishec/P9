@@ -119,23 +119,42 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
-        switch (this.traceType) {
-            case TRACE_TYPE.Outline: {
-                const bodyWrap: SVGGElement = this.fillBody();
-                this.renderer.removeChild(this.svgWrap, bodyWrap);
-                this.fillStroke(bodyWrap);
-                break;
-            }
-            case TRACE_TYPE.Full: {
-                this.fillBody();
-                break;
-            }
-            case TRACE_TYPE.Both: {
-                const bodyWrap: SVGGElement = this.fillBody();
-                this.fillStroke(bodyWrap);
-                break;
-            }
-        }
+        // switch (this.traceType) {
+        //     case TRACE_TYPE.Outline: {
+        //         const bodyWrap: SVGGElement = this.fillBody();
+        //         this.renderer.removeChild(this.svgWrap, bodyWrap);
+        //         this.fillStroke(bodyWrap);
+        //         break;
+        //     }
+        //     case TRACE_TYPE.Full: {
+        //         this.fillBody();
+        //         break;
+        //     }
+        //     case TRACE_TYPE.Both: {
+        //         const bodyWrap: SVGGElement = this.fillBody();
+        //         this.fillStroke(bodyWrap);
+        //         break;
+        //     }
+        // }
+
+        const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+        let d = '';
+        this.bfsHelper.a.forEach((el) => {
+            el.forEach((pixel: Coords2D, i: number) => {
+                if (i === 0) {
+                    d += ` M${pixel.x + 0.5} ${pixel.y + 0.5}`;
+                } else {
+                    d += ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
+                }
+            });
+            console.log('hi');
+            d += `                       z`;
+        });
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, 'red');
+        this.renderer.setAttribute(path, 'd', d);
+        this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
+        this.renderer.appendChild(this.svgWrap, path);
+
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 

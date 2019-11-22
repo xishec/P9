@@ -9,10 +9,12 @@ export class BFSHelper {
     queue: Coords2D[];
     bodyGrid: Map<number, number[]>;
     strokeGrid: Map<number, number[]>;
+    strokes: Set<string>;
     tolerance: number;
     mostLeft: number;
     mostRight: number;
     data: Uint8ClampedArray;
+    a: Array<Coords2D[]>;
 
     constructor(
         maxX: number,
@@ -27,6 +29,7 @@ export class BFSHelper {
         this.queue = [];
         this.bodyGrid = new Map([]);
         this.strokeGrid = new Map([]);
+        this.strokes = new Set([]);
         this.mostLeft = this.maxX;
         this.mostRight = 0;
 
@@ -67,6 +70,7 @@ export class BFSHelper {
                 }
                 if (!this.isValidPosition(neighborPixel)) {
                     this.addPixelToMap(pixel, this.strokeGrid);
+                    this.strokes.add(`${pixel.x} ${pixel.y}`);
                     break;
                 }
                 if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
@@ -74,11 +78,86 @@ export class BFSHelper {
                     this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
                 } else {
                     this.addPixelToMap(pixel, this.strokeGrid);
+                    this.strokes.add(`${pixel.x} ${pixel.y}`);
                     break;
                 }
             }
         }
         this.sortBodyGrid();
+        console.log(this.strokes);
+        this.dfs();
+    }
+
+    dfs() {
+        this.a = [];
+        let tmp = [];
+        this.visited = new Set([]);
+
+        while (this.visited.size < this.strokes.size) {
+            let pixelString = '';
+
+            for (let el of this.strokes) {
+                if (!this.visited.has(el)) {
+                    pixelString = el;
+                    break;
+                }
+            }
+
+            let pixel: Coords2D = new Coords2D(
+                Number(pixelString.substr(0, pixelString.indexOf(' '))),
+                Number(pixelString.substr(pixelString.indexOf(' ') + 1)),
+            );
+            this.visited.add(`${pixel.x} ${pixel.y}`);
+            tmp.push(pixel);
+            this.queue = [];
+            this.queue.push(pixel);
+
+            while (this.queue.length > 0) {
+                pixel = this.queue.pop()!;
+
+                const neighborPixels = [
+                    new Coords2D(pixel.x + 1, pixel.y),
+                    new Coords2D(pixel.x + 2, pixel.y),
+                    new Coords2D(pixel.x, pixel.y + 1),
+                    new Coords2D(pixel.x, pixel.y + 2),
+                    new Coords2D(pixel.x + 1, pixel.y + 2),
+                    new Coords2D(pixel.x + 2, pixel.y + 1),
+                    new Coords2D(pixel.x + 1, pixel.y + 1),
+                    new Coords2D(pixel.x + 2, pixel.y + 2),
+                    new Coords2D(pixel.x - 1, pixel.y),
+                    new Coords2D(pixel.x - 2, pixel.y),
+                    new Coords2D(pixel.x, pixel.y - 1),
+                    new Coords2D(pixel.x, pixel.y - 2),
+                    new Coords2D(pixel.x - 1, pixel.y - 2),
+                    new Coords2D(pixel.x - 2, pixel.y - 1),
+                    new Coords2D(pixel.x - 1, pixel.y - 1),
+                    new Coords2D(pixel.x - 2, pixel.y - 2),
+                    new Coords2D(pixel.x + 1, pixel.y - 2),
+                    new Coords2D(pixel.x + 2, pixel.y - 1),
+                    new Coords2D(pixel.x + 1, pixel.y - 1),
+                    new Coords2D(pixel.x + 2, pixel.y - 2),
+                    new Coords2D(pixel.x - 1, pixel.y + 2),
+                    new Coords2D(pixel.x - 2, pixel.y + 1),
+                    new Coords2D(pixel.x - 1, pixel.y + 1),
+                    new Coords2D(pixel.x - 2, pixel.y + 2),
+                ];
+
+                for (const neighborPixel of neighborPixels) {
+                    if (
+                        this.strokes.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
+                        !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
+                    ) {
+                        this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
+                        tmp.push(neighborPixel);
+                        this.queue.push(neighborPixel);
+                    }
+                }
+            }
+
+            this.a.push(tmp);
+            tmp = [];
+        }
+        console.log(this.a);
     }
 
     sortBodyGrid(): void {
