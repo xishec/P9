@@ -24,6 +24,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
+    SVGs: string[] = [];
     selectedOption = '';
     nameFilter: string;
     labelFilter: string;
@@ -66,13 +67,11 @@ export class OpenFileModalWindowComponent implements OnInit {
             )
             .subscribe((ans: any) => {
                 ans.forEach((drawing: Drawing) => {
-                    console.log(drawing);
                     this.drawingsFromServer.push(drawing);
-
                     this.cloudService
                         .download(drawing.createdOn.toString())
                         .then((url: string) => {
-                            console.log(url);
+                            this.SVGs.push(url);
                         })
                         .catch((error: Error) => {
                             console.log(error);
@@ -176,11 +175,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         return [width, height];
     }
 
-    getViewBox(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
-        return `0 0 ${dimensions[0]} ${dimensions[1]}`;
-    }
-
     getWidth(drawingName: string): string {
         const dimensions = this.getDimensions(drawingName);
 
@@ -191,11 +185,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         const dimensions = this.getDimensions(drawingName);
 
         return dimensions[0] < dimensions[1] ? '100%' : '60px';
-    }
-
-    getSVG(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-        return this.drawingsFromServer[i].svg;
     }
 
     findIndexByName(drawingName: string): number {
@@ -211,7 +200,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onDelete() {
         this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
-            console.log(message);
             if (message.title && message.title === 'Delete' && message.body && message.body === 'Success') {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.name !== this.selectedOption;
