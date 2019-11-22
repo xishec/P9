@@ -4,6 +4,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
+import { ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { QuillToolService } from './quill-tool.service';
 
@@ -179,7 +180,7 @@ describe('QuillToolService', () => {
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(1);
+        expect(service.angle).toEqual(ROTATION_ANGLE.Alter);
     });
 
     it('angle should increase by 15 degree if Alt is not pressed and wheel is scrolled upwards when onWheel is called', () => {
@@ -190,7 +191,7 @@ describe('QuillToolService', () => {
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(15);
+        expect(service.angle).toEqual(ROTATION_ANGLE.Base);
     });
 
     it('angle should decrease by 1 degree if Alt is pressed and wheel is scrolled downwards when onWheel is called', () => {
@@ -201,7 +202,7 @@ describe('QuillToolService', () => {
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(-1);
+        expect(service.angle).toEqual(-ROTATION_ANGLE.Alter);
     });
 
     it('angle should decrease by 15 degree if Alt is not pressed and wheel is scrolled downwards when onWheel is called', () => {
@@ -212,7 +213,7 @@ describe('QuillToolService', () => {
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(-15);
+        expect(service.angle).toEqual(-ROTATION_ANGLE.Base);
     });
 
     it('isAlterRotation should be set to true when Alt key is pressed', () => {

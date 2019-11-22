@@ -33,7 +33,7 @@ export class QuillToolService extends TracingToolService {
         { x: 0, y: 0 },
     ];
 
-    currentMousePosition: Coords2D;
+    currentMousePosition: Coords2D = new Coords2D(0, 0);
 
     counter = 0;
 
