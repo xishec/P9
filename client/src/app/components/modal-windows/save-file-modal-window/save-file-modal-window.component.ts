@@ -76,9 +76,13 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToServer(): void {
-        this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
-        );
+        const newDrawing: NameAndLabels = {
+            name: this.saveFileModalForm.value.name,
+            drawingLabels: this.selectedLabels,
+            createdOn: this.createdOn,
+            lastModified: this.lastModified,
+        }
+        this.drawingSaverService.sendFileToServer(newDrawing);
         this.isSaving = true;
 
         this.drawingSaverService.currentIsSaved

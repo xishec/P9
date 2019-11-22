@@ -1,9 +1,6 @@
-export class NameAndLabels {
+export interface NameAndLabels {
     name: string;
     drawingLabels: string[];
-
-    constructor(name: string, drawingLabels: string[]) {
-        this.name = name;
-        this.drawingLabels = drawingLabels;
-    }
+    createdOn: number;
+    lastModified: number;
 }
