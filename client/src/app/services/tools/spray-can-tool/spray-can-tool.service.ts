@@ -9,6 +9,7 @@ import {
     SPRAYER_STROKE_WIDTH,
     TOOL_NAME,
     MAX_CHARS_IN_PATH,
+    CIRCLES_TO_APPEND,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
@@ -78,7 +79,7 @@ export class SprayCanToolService extends TracingToolService {
     }
 
     appendSpray(): void {
-        for (let i = 0; i < 20; ++i) {
+        for (let i = 0; i < CIRCLES_TO_APPEND; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
             const x = Math.floor(this.getXPos(this.event.clientX) + radius * Math.cos(angle) - this.currentWidth / 2);
