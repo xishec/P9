@@ -12,6 +12,7 @@ export class MagnetismToolService implements OnInit {
     currentPointPosition: Coords2D;
     currentGridSize: number;
 
+    magnetize(deltaX: number, deltaY: number) {}
     constructor(private gridToolService: GridToolService, private selectionToolService: SelectionToolService) {
         // Prendre du tool selector si ca chie
         this.currentPointPosition = new Coords2D(0, 0);
