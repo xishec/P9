@@ -20,7 +20,6 @@ import {
 export class MagnetismAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Magnetism;
     magnetismAttributesForm: FormGroup;
-    currentMagnetismPoint: string = CONTROL_POINTS.TopLeft;
 
     readonly CONTROL_POINTS = CONTROL_POINTS;
     readonly TOP_CONTROL_POINTS = TOP_CONTROL_POINTS;
@@ -39,7 +38,7 @@ export class MagnetismAttributesComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.gridToolService.currentState.subscribe((state: boolean) => {
+        this.magnetismService.state.subscribe((state: boolean) => {
             this.magnetismAttributesForm.controls.state.setValue(state);
         });
         this.drawingLoaderService.untouchedWorkZone.subscribe(() => {
@@ -55,9 +54,7 @@ export class MagnetismAttributesComponent implements OnInit {
 
     onStateChange(): void {
         const state = this.magnetismAttributesForm.value.state;
-        // TODO : Change value for magnetism
-        this.magnetismService;
-        this.gridToolService.changeState(state);
+        this.magnetismService.changeState(state);
     }
 
     onFocus(): void {
@@ -73,7 +70,7 @@ export class MagnetismAttributesComponent implements OnInit {
         }
     }
 
-    setMagnetismPoint(value: string) {
-        this.currentMagnetismPoint = value;
+    setMagnetismPoint(value: CONTROL_POINTS) {
+        this.magnetismService.currentPoint = value;
     }
 }
