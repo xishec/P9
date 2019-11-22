@@ -24,7 +24,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
-    SVGs: string[] = [];
+    SVGs: Map<string, string> = new Map([]);
     selectedOption = '';
     nameFilter: string;
     labelFilter: string;
@@ -71,7 +71,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     this.cloudService
                         .download(drawing.createdOn.toString())
                         .then((url: string) => {
-                            this.SVGs.push(url);
+                            this.SVGs.set(drawing.name, url);
                         })
                         .catch((error: Error) => {
                             console.log(error);
@@ -165,33 +165,6 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     localFormIsInvalid(): boolean {
         return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
-    }
-
-    getDimensions(drawingName: string): number[] {
-        const i: number = this.findIndexByName(drawingName);
-        const height: number = this.drawingsFromServer[i].drawingInfo.height;
-        const width: number = this.drawingsFromServer[i].drawingInfo.width;
-
-        return [width, height];
-    }
-
-    getWidth(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
-
-        return dimensions[0] > dimensions[1] ? '100%' : '60px';
-    }
-
-    getHeight(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
-
-        return dimensions[0] < dimensions[1] ? '100%' : '60px';
-    }
-
-    findIndexByName(drawingName: string): number {
-        const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
-            return el.name === drawingName;
-        }) as Drawing;
-        return this.drawingsFromServer.indexOf(drawing);
     }
 
     getGifSource() {

@@ -57,12 +57,7 @@
                                     </div>
                                 </div>
                                 <div id="drawing-thumbnail">
-                                    <img
-                                        *ngIf="SVGs[i]"
-                                        [attr.width]="getWidth(drawing.name)"
-                                        [attr.height]="getHeight(drawing.name)"
-                                        [src]="SVGs[i]"
-                                    />
+                                    <img *ngIf="SVGs.get(drawing.name)" [src]="SVGs.get(drawing.name)" />
                                 </div>
                             </div>
                         </mat-list-option>
