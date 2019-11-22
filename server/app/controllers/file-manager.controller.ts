@@ -28,19 +28,19 @@ export class FileManagerController {
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
             this.fileManagerService
                 .addDrawing(req.body)
-                .then((drawing: any) => {
-                    res.json(drawing);
+                .then((drawingToUpdate: any) => {
+                    res.json(drawingToUpdate);
                 })
                 .catch((error: MongoError) => {
                     throw error;
                 });
         });
 
-        this.router.delete('/:name', async (req: Request, res: Response, nex: NextFunction) => {
-            let name = req.param.name;
+        this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
+            let id = req.params.id;
             this.fileManagerService
-                .deleteDrawing(name)
-                .then((drawing: any) => {
+                .deleteDrawing(id)
+                .then((deletedDrawing: any) => {
                     res.json({ title: 'Delete', body: 'Success' } as Message);
                 })
                 .catch((error: MongoError) => {
