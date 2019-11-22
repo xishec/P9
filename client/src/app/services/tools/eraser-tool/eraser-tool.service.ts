@@ -272,7 +272,6 @@ export class EraserToolService extends AbstractToolService {
     }
 
     checkIfStamp(idElement: number, tool: string, borderColor: string) {
-        console.log(tool);
 
         if (tool === TOOL_NAME.Stamp) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
