@@ -3,13 +3,13 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE, SVG_NS } from 'src/constants/constants';
 import {
+    CIRCLES_TO_APPEND,
     HTML_ATTRIBUTE,
+    MAX_CHARS_IN_PATH,
     SPRAY_DIAMETER,
     SPRAY_INTERVAL,
     SPRAYER_STROKE_WIDTH,
     TOOL_NAME,
-    MAX_CHARS_IN_PATH,
-    CIRCLES_TO_APPEND,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
@@ -67,18 +67,18 @@ export class SprayCanToolService extends TracingToolService {
             this.isDrawing = true;
             this.createSVGWrapper();
             this.createSVGPath();
-            this.appendSpray();
+            this.spray();
             this.appendSprayer();
 
             clearInterval(this.interval);
             this.interval = setInterval(() => {
-                this.appendSpray();
+                this.spray();
                 this.appendSprayer();
             }, this.intervalTime);
         }
     }
 
-    appendSpray(): void {
+    spray(): void {
         for (let i = 0; i < CIRCLES_TO_APPEND; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
@@ -93,7 +93,7 @@ export class SprayCanToolService extends TracingToolService {
     }
 
     onMouseUp(event: MouseEvent) {
-        if (event.button === MOUSE.LeftButton && this.getIsDrawing()) {
+        if (event.button === MOUSE.LeftButton && this.isDrawing) {
             this.isDrawing = false;
             this.currentPath = '';
 
