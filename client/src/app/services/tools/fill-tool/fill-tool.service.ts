@@ -118,54 +118,92 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
+        let d: string = this.createFillPath();
 
-        const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-        let d = '';
-        let lasPixel: Coords2D = this.bfsHelper.pathsToFill[0][0];
-        this.bfsHelper.pathsToFill.forEach((el) => {
-            el.forEach((pixel: Coords2D, i: number) => {
-                if (i === 0 || this.isTooFar(lasPixel, pixel)) {
-                    d += ` M${pixel.x + 0.5} ${pixel.y + 0.5}`;
-                } else {
-                    d += ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
-                }
-                lasPixel = pixel;
-            });
-            d += ' z';
-        });
-        this.setFillAndStrokeColor(path);
-        this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
-        this.renderer.setAttribute(path, 'd', d);
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_width, this.strokeWidth.toString());
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
-        this.renderer.appendChild(this.svgWrap, path);
+        switch (this.traceType) {
+            case TRACE_TYPE.Outline: {
+                const bodyWrap: SVGGElement = this.fillBody(d);
+                this.renderer.removeChild(this.svgWrap, bodyWrap);
+                this.fillStroke(d, bodyWrap);
+                break;
+            }
+            case TRACE_TYPE.Full: {
+                this.fillBody(d);
+                break;
+            }
+            case TRACE_TYPE.Both: {
+                const bodyWrap: SVGGElement = this.fillBody(d);
+                this.fillStroke(d, bodyWrap);
+                break;
+            }
+        }
 
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    setFillAndStrokeColor(path: SVGPathElement): void {
-        switch (this.traceType) {
-            case TRACE_TYPE.Outline: {
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, 'none');
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, this.strokeColor);
-                break;
-            }
-            case TRACE_TYPE.Full: {
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, this.fillColor);
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, 'none');
-                break;
-            }
-            case TRACE_TYPE.Both: {
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, this.fillColor);
-                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, this.strokeColor);
-                break;
-            }
-        }
+    fillBody(d: string): SVGGElement {
+        const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, '1');
+
+        const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+        this.renderer.setAttribute(path, 'd', d);
+        this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
+
+        this.renderer.appendChild(bodyWrap, path);
+        this.renderer.appendChild(this.svgWrap, bodyWrap);
+        return bodyWrap;
+    }
+    fillStroke(d: string, bodyWrap: SVGGElement): void {
+        const id: string = Date.now().toString();
+        this.appendMask(d, bodyWrap.cloneNode(true) as SVGGElement, id);
+
+        const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, 'stroke');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.strokeColor);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.strokeWidth * 2).toString());
+
+        const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
+        this.renderer.setAttribute(path, 'd', d);
+        this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
+
+        this.renderer.appendChild(strokeWrap, path);
+        this.renderer.appendChild(this.svgWrap, strokeWrap);
+    }
+    appendMask(d: string, bodyWrap: SVGGElement, id: string): void {
+        const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(mask, 'id', id);
+        this.renderer.appendChild(mask, bodyWrap);
+        this.renderer.appendChild(this.svgWrap, mask);
+    }
+
+    createFillPath(): string {
+        let d = '';
+        this.bfsHelper.pathsToFill.forEach((el) => {
+            el.forEach((pixel: Coords2D, i: number) => {
+                if (i === 0) {
+                    d += ` M${pixel.x + 0.5} ${pixel.y + 0.5}`;
+                } else {
+                    d += ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
+                }
+            });
+            d += ' z';
+        });
+        // console.log(d);
+        return d;
     }
 
     isTooFar(a: Coords2D, b: Coords2D): boolean {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 50;
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 111180;
     }
 
     updateCanvas(): void {

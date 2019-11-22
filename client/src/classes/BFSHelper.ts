@@ -7,7 +7,8 @@ export class BFSHelper {
     context2D: CanvasRenderingContext2D;
     visited: Set<string>;
     queue: Coords2D[];
-    strokes: Set<string>;
+    strokes: Coords2D[];
+    strokesSet: Set<string>;
     tolerance: number;
     data: Uint8ClampedArray;
     pathsToFill: Array<Coords2D[]>;
@@ -23,7 +24,8 @@ export class BFSHelper {
         this.context2D = context2D;
         this.visited = new Set([]);
         this.queue = [];
-        this.strokes = new Set([]);
+        this.strokes = [];
+        this.strokesSet = new Set([]);
 
         attributesManagerService.tolerance.subscribe((tolerance: number) => {
             this.tolerance = tolerance;
@@ -31,6 +33,7 @@ export class BFSHelper {
     }
 
     computeBFS(clickPosition: Coords2D): void {
+        console.time('bfs');
         const imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
         this.data = imageData.data;
 
@@ -56,19 +59,25 @@ export class BFSHelper {
                     continue;
                 }
                 if (!this.isValidPosition(neighborPixel)) {
-                    this.strokes.add(`${pixel.x} ${pixel.y}`);
+                    this.strokes.push(pixel);
+                    this.strokesSet.add(`${pixel.x} ${pixel.y}`);
                     break;
                 }
                 if (this.isSameColor(this.getPixelColor(neighborPixel), targetColor)) {
                     this.queue.push(neighborPixel);
                     this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
                 } else {
-                    this.strokes.add(`${pixel.x} ${pixel.y}`);
+                    this.strokes.push(neighborPixel);
+                    this.strokesSet.add(`${neighborPixel.x} ${neighborPixel.y}`);
                     break;
                 }
             }
         }
+        console.timeEnd('bfs');
+
+        console.time('dfs');
         this.dfs();
+        console.timeEnd('dfs');
     }
 
     dfs() {
@@ -76,71 +85,60 @@ export class BFSHelper {
         let tmp = [];
         this.visited = new Set([]);
 
-        while (this.visited.size < this.strokes.size) {
-            let pixelString = '';
-
-            for (let el of this.strokes) {
-                if (!this.visited.has(el)) {
-                    pixelString = el;
-                    break;
-                }
+        let pixel: Coords2D = new Coords2D(-1, -1);
+        for (let el of this.strokes) {
+            if (!this.visited.has(`${el.x} ${el.y}`)) {
+                pixel = el;
+                break;
             }
-
-            let pixel: Coords2D = new Coords2D(
-                Number(pixelString.substr(0, pixelString.indexOf(' '))),
-                Number(pixelString.substr(pixelString.indexOf(' ') + 1)),
-            );
-            this.visited.add(`${pixel.x} ${pixel.y}`);
-            tmp.push(pixel);
-            this.queue = [];
-            this.queue.push(pixel);
-
-            while (this.queue.length > 0) {
-                pixel = this.queue.pop()!;
-
-                const neighborPixels = [
-                    new Coords2D(pixel.x + 1, pixel.y),
-                    new Coords2D(pixel.x + 2, pixel.y),
-                    new Coords2D(pixel.x, pixel.y + 1),
-                    new Coords2D(pixel.x, pixel.y + 2),
-                    new Coords2D(pixel.x + 1, pixel.y + 2),
-                    new Coords2D(pixel.x + 2, pixel.y + 1),
-                    new Coords2D(pixel.x + 1, pixel.y + 1),
-                    new Coords2D(pixel.x + 2, pixel.y + 2),
-                    new Coords2D(pixel.x - 1, pixel.y),
-                    new Coords2D(pixel.x - 2, pixel.y),
-                    new Coords2D(pixel.x, pixel.y - 1),
-                    new Coords2D(pixel.x, pixel.y - 2),
-                    new Coords2D(pixel.x - 1, pixel.y - 2),
-                    new Coords2D(pixel.x - 2, pixel.y - 1),
-                    new Coords2D(pixel.x - 1, pixel.y - 1),
-                    new Coords2D(pixel.x - 2, pixel.y - 2),
-                    new Coords2D(pixel.x + 1, pixel.y - 2),
-                    new Coords2D(pixel.x + 2, pixel.y - 1),
-                    new Coords2D(pixel.x + 1, pixel.y - 1),
-                    new Coords2D(pixel.x + 2, pixel.y - 2),
-                    new Coords2D(pixel.x - 1, pixel.y + 2),
-                    new Coords2D(pixel.x - 2, pixel.y + 1),
-                    new Coords2D(pixel.x - 1, pixel.y + 1),
-                    new Coords2D(pixel.x - 2, pixel.y + 2),
-                ];
-
-                for (const neighborPixel of neighborPixels) {
-                    if (
-                        this.strokes.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
-                        !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
-                    ) {
-                        this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
-                        tmp.push(neighborPixel);
-                        this.queue.push(neighborPixel);
-                    }
-                }
-            }
-
-            this.pathsToFill.push(tmp);
-            tmp = [];
         }
-        console.log(this.pathsToFill);
+        this.visited.add(`${pixel.x} ${pixel.y}`);
+        tmp.push(pixel);
+
+        while (pixel.x >= 0 && pixel.x >= 0) {
+            let closestNeighbor: Coords2D = new Coords2D(-1, -1);
+
+            const neighborPixels = [
+                new Coords2D(pixel.x - 1, pixel.y),
+                new Coords2D(pixel.x + 1, pixel.y),
+                new Coords2D(pixel.x, pixel.y - 1),
+                new Coords2D(pixel.x, pixel.y + 1),
+            ];
+            neighborPixels.forEach((neighborPixel: Coords2D) => {
+                if (
+                    this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
+                    !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
+                ) {
+                    closestNeighbor = neighborPixel;
+                }
+            });
+
+            if (closestNeighbor.x === -1 && closestNeighbor.x === -1) {
+                let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
+                this.strokes.forEach((el: Coords2D) => {
+                    if (!this.visited.has(`${el.x} ${el.y}`)) {
+                        let distance = el.distanceTo(pixel);
+
+                        if (distance < closestNeighborDistance) {
+                            closestNeighborDistance = distance;
+                            closestNeighbor = el;
+                        }
+                    }
+                });
+
+                if (closestNeighborDistance > 100) {
+                    this.pathsToFill.push(tmp);
+                    tmp = [];
+                }
+            }
+
+            this.visited.add(`${closestNeighbor.x} ${closestNeighbor.y}`);
+            tmp.push(closestNeighbor);
+            pixel = closestNeighbor;
+        }
+
+        this.pathsToFill.push(tmp);
+        tmp = [];
     }
 
     isSameColor(color1: number[], color2: number[]): boolean {
