@@ -62,15 +62,14 @@ export class DrawingSaverService {
             this.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
         } else if (nameAndLabels.name.length > 0) {
             this.postDrawing(nameAndLabels);
-            this.saveToCloud(nameAndLabels.name);
         }
     }
 
-    saveToCloud(name: string) {
+    saveToCloud(id: string) {
         let clone = this.workZoneRef.nativeElement.cloneNode(true);
         this.renderer.setAttribute(clone, 'xmlns', SVG_NS);
         let file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
-        this.cloudService.save(name, file);
+        this.cloudService.save(id, file);
     }
 
     getXMLSVG(clone: any): string {
@@ -103,6 +102,7 @@ export class DrawingSaverService {
             .subscribe((drawing: Drawing) => {
                 if (drawing || JSON.parse(drawing).name === nameAndLabels.name) {
                     this.drawingLoaderService.currentDrawing.next(drawing);
+                    this.saveToCloud(drawing.createdOn.toString());
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');

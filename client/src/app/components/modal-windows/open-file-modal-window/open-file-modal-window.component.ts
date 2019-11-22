@@ -11,6 +11,7 @@ import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.serv
 import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/Message';
+import { CloudService } from 'src/app/services/cloud/cloud.service';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -40,6 +41,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private snackBar: MatSnackBar,
+        private cloudService: CloudService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -64,7 +66,17 @@ export class OpenFileModalWindowComponent implements OnInit {
             )
             .subscribe((ans: any) => {
                 ans.forEach((drawing: Drawing) => {
+                    console.log(drawing);
                     this.drawingsFromServer.push(drawing);
+
+                    this.cloudService
+                        .download(drawing.createdOn.toString())
+                        .then((url: string) => {
+                            console.log(url);
+                        })
+                        .catch((error: Error) => {
+                            console.log(error);
+                        });
                 });
                 this.isLoading = false;
             });

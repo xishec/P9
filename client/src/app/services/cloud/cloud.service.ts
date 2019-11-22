@@ -23,13 +23,8 @@ export class CloudService {
         this.storage = firebase.storage();
     }
 
-    save(name: string, file: Blob) {
-        var storageRef = this.storage.ref(name);
-
-        // let clone = this.workZoneRef.nativeElement.cloneNode(true);
-        // this.renderer.setAttribute(clone, 'xmlns', SVG_NS);
-        // let file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
-
+    save(id: string, file: Blob) {
+        var storageRef = this.storage.ref(id);
         storageRef
             .put(file)
             .then(() => {
@@ -40,8 +35,8 @@ export class CloudService {
             });
     }
 
-    download(): Promise<string> {
-        let pathReference = this.storage.ref('Hx_logo_lightRed.png');
+    download(name: string): Promise<string> {
+        let pathReference = this.storage.ref(name);
         return pathReference.getDownloadURL();
     }
 }
