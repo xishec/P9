@@ -26,8 +26,22 @@ export class FileManagerService {
             return error;
         }
 
-        const query = { name: drawing.name };
-        const update = drawing;
+        console.log(drawing);
+        
+        
+        const currentTimestamp = Date.now();
+        const newCreatedOn = (drawing.createdOn === 0) ? currentTimestamp : drawing.createdOn;
+
+        const query = drawing;
+        const update = {
+            name: drawing.name,
+            labels: drawing.labels,
+            svg: drawing.svg,
+            idStack: drawing.idStack,
+            drawingInfo: drawing.drawingInfo,
+            createdOn: newCreatedOn,
+            lastModified: currentTimestamp,
+        };
         const options = { upsert: true, new: true };
 
         return DrawingModel.findOneAndUpdate(query, update, options)
@@ -39,12 +53,12 @@ export class FileManagerService {
             });
     }
 
-    async deleteDrawing(nameToDelete: string): Promise<any> {
-        const query = { name: nameToDelete };
+    async deleteDrawing(id: string): Promise<any> {
+        const query = { id: id };
 
         return DrawingModel.findOneAndDelete(query)
-            .then((drawing: any) => {
-                return drawing;
+            .then((deletedDrawing: any) => {
+                return deletedDrawing;
             })
             .catch((error: Error) => {
                 throw error;

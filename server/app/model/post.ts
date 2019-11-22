@@ -10,6 +10,8 @@ const drawingSchema = createSchema({
         height: Type.number({ required: true }),
         color: Type.string({ required: true }),
     }),
+    createdOn: Type.number({ required: true }),
+    lastModified: Type.number({ required: true }),
 });
 
 export const DrawingModel = typedModel('Drawing', drawingSchema);
