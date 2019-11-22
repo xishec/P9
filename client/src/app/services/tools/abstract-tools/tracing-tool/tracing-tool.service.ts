@@ -10,7 +10,7 @@ import { AbstractToolService } from '../abstract-tool.service';
     providedIn: 'root',
 })
 export abstract class TracingToolService extends AbstractToolService {
-    protected isDrawing = false;
+    isDrawing = false;
     protected currentPath = '';
     protected currentWidth = 0;
     protected currentColorAndOpacity = '';

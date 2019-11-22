@@ -5,13 +5,11 @@ import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SprayCanToolService } from './spray-can-tool.service';
 
-fdescribe('SprayCanToolService', () => {
+describe('SprayCanToolService', () => {
     let injector: TestBed;
     let service: SprayCanToolService;
     let leftMouseEvent: MouseEvent;
     let rightMouseEvent: MouseEvent;
-
-    // let spyOnremoveChild: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -84,8 +82,6 @@ fdescribe('SprayCanToolService', () => {
 
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
-
-        // spyOnremoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
     });
 
     it('should be created', () => {
@@ -108,12 +104,20 @@ fdescribe('SprayCanToolService', () => {
         expect(service.event).not.toEqual(rightMouseEvent);
     });
 
-    it('onMouseUp should call clearInterval', () => {
+    it('onMouseUp should not call clearInterval if mouse event is not left', () => {
         const spyOnclearInterval = spyOn(global, 'clearInterval');
 
         service.onMouseUp(rightMouseEvent);
 
         expect(spyOnclearInterval).not.toHaveBeenCalled();
+    });
+
+    it('onMouseUp should set isDrawing to false if mouse event is left', () => {
+        service.isDrawing = true;
+
+        service.onMouseUp(leftMouseEvent);
+
+        expect(service.isDrawing).toEqual(false);
     });
 
     it('onMouseMove should call setSprayerToMouse', () => {
