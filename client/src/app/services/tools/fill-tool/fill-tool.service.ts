@@ -118,23 +118,6 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
-        // switch (this.traceType) {
-        //     case TRACE_TYPE.Outline: {
-        //         const bodyWrap: SVGGElement = this.fillBody();
-        //         this.renderer.removeChild(this.svgWrap, bodyWrap);
-        //         this.fillStroke(bodyWrap);
-        //         break;
-        //     }
-        //     case TRACE_TYPE.Full: {
-        //         this.fillBody();
-        //         break;
-        //     }
-        //     case TRACE_TYPE.Both: {
-        //         const bodyWrap: SVGGElement = this.fillBody();
-        //         this.fillStroke(bodyWrap);
-        //         break;
-        //     }
-        // }
 
         const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
         let d = '';
@@ -150,13 +133,35 @@ export class FillToolService extends AbstractToolService {
             });
             d += ' z';
         });
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, 'red');
-        this.renderer.setAttribute(path, 'd', d);
-        // this.renderer.setAttribute(path, 'fill', 'none');
+        this.setFillAndStrokeColor(path);
         this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
+        this.renderer.setAttribute(path, 'd', d);
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_width, this.strokeWidth.toString());
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
         this.renderer.appendChild(this.svgWrap, path);
 
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
+    }
+
+    setFillAndStrokeColor(path: SVGPathElement): void {
+        switch (this.traceType) {
+            case TRACE_TYPE.Outline: {
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, 'none');
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, this.strokeColor);
+                break;
+            }
+            case TRACE_TYPE.Full: {
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, this.fillColor);
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, 'none');
+                break;
+            }
+            case TRACE_TYPE.Both: {
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.fill, this.fillColor);
+                this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, this.strokeColor);
+                break;
+            }
+        }
     }
 
     isTooFar(a: Coords2D, b: Coords2D): boolean {

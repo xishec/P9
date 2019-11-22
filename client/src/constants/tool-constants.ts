@@ -281,6 +281,7 @@ enum HTML_ATTRIBUTE {
     points = 'points',
     stroke_dasharray = 'stroke-dasharray',
     stroke_linejoin = 'stroke-linejoin',
+    stroke_linecap = 'stroke-linecap',
     title = 'title',
     canvas = 'canvas',
     a = 'a',
