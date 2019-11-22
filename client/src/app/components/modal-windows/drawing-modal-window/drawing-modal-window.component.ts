@@ -76,7 +76,8 @@ export class DrawingModalWindowComponent implements OnInit {
             svg: '',
             idStack: [],
             drawingInfo: { width: 0, height: 0, color: '' } as DrawingInfo,
-            timeStamp: 0,
+            createdOn: 0,
+            lastModified: 0,
         } as Drawing);
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);

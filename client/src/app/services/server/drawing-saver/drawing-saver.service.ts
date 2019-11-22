@@ -64,6 +64,8 @@ export class DrawingSaverService {
                 this.workZoneRef.nativeElement.innerHTML,
                 this.drawStackService.idStack,
                 this.currentDrawingInfo,
+                0,
+                0,
             )
             .pipe(
                 filter((subject) => {
