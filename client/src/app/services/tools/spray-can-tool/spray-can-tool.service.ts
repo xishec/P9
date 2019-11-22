@@ -8,6 +8,7 @@ import {
     SPRAY_INTERVAL,
     SPRAYER_STROKE_WIDTH,
     TOOL_NAME,
+    MAX_CHARS_IN_PATH,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
@@ -80,12 +81,12 @@ export class SprayCanToolService extends TracingToolService {
         for (let i = 0; i < 20; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
-            const x = this.getXPos(this.event.clientX) + radius * Math.cos(angle) - this.currentWidth;
-            const y = this.getYPos(this.event.clientY) + radius * Math.sin(angle);
-            const upperArc = ` a 1 1 0 0 1 ${this.currentWidth} 0 `;
-            const lowerArc = ` a 1 1 0 0 1 -${this.currentWidth} 0 `;
+            const x = Math.floor(this.getXPos(this.event.clientX) + radius * Math.cos(angle) - this.currentWidth / 2);
+            const y = Math.floor(this.getYPos(this.event.clientY) + radius * Math.sin(angle));
+            const upperArc = `a1 1 0 0 1 ${this.currentWidth} 0`;
+            const lowerArc = `a1 1 0 0 1 -${this.currentWidth} 0`;
 
-            this.currentPath += ` M${x} ${y}` + upperArc + lowerArc;
+            this.currentPath += `M${x} ${y}` + upperArc + lowerArc;
         }
         this.updateSVGPath();
     }
@@ -156,11 +157,12 @@ export class SprayCanToolService extends TracingToolService {
     createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_width, this.currentWidth.toString());
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     updateSVGPath(): void {
-        if (this.currentPath.length > 100000) {
+        if (this.currentPath.length > MAX_CHARS_IN_PATH) {
             this.currentPath = '';
             this.createSVGPath();
         } else {
