@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -12,7 +13,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
+import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
@@ -49,6 +50,7 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private snackBar: MatSnackBar,
     ) {}
 
     ngOnInit(): void {
@@ -168,7 +170,9 @@ export class WorkZoneComponent implements OnInit {
 
     onClickRectangle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            alert('Veuillez créer un nouveau dessin!');
+            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
         }
     }
 
