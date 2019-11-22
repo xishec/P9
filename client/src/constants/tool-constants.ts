@@ -372,34 +372,34 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
-enum SELECTION_POINTS {
-    TopLeft = 'TopLeft',
-    TopMiddle = 'TopMiddle',
-    TopRight = 'TopRight',
-    CenterLeft = 'CenterLeft',
-    CenterMiddle = 'CenterMiddle',
-    CenterRight = 'CenterRight',
-    BottomLeft = 'BottomLeft',
-    BottomMiddle = 'BottomMiddle',
-    BottomRight = 'BottomRight',
+enum CONTROL_POINTS {
+    TopLeft = 0,
+    TopMiddle = 1,
+    TopRight = 2,
+    CenterLeft = 3,
+    CenterMiddle = 4,
+    CenterRight = 5,
+    BottomLeft = 6,
+    BottomMiddle = 7,
+    BottomRight = 8,
 }
 
-const TOP_MAGNETISM_POINTS: MagnetismPoint[] = [
-    { point: SELECTION_POINTS.TopLeft, svg_icon: '1' },
-    { point: SELECTION_POINTS.TopMiddle, svg_icon: '2' },
-    { point: SELECTION_POINTS.TopRight, svg_icon: '3' },
+const TOP_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.TopLeft, svg_icon: '1' },
+    { point: CONTROL_POINTS.TopMiddle, svg_icon: '2' },
+    { point: CONTROL_POINTS.TopRight, svg_icon: '3' },
 ];
 
-const CENTER_MAGNETISM_POINTS: MagnetismPoint[] = [
-    { point: SELECTION_POINTS.CenterLeft, svg_icon: '4' },
-    { point: SELECTION_POINTS.CenterMiddle, svg_icon: '5' },
-    { point: SELECTION_POINTS.CenterRight, svg_icon: '6' },
+const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.CenterLeft, svg_icon: '4' },
+    { point: CONTROL_POINTS.CenterMiddle, svg_icon: '5' },
+    { point: CONTROL_POINTS.CenterRight, svg_icon: '6' },
 ];
 
-const BOTTOM_MAGNETISM_POINTS: MagnetismPoint[] = [
-    { point: SELECTION_POINTS.BottomLeft, svg_icon: '7' },
-    { point: SELECTION_POINTS.BottomMiddle, svg_icon: '8' },
-    { point: SELECTION_POINTS.BottomRight, svg_icon: '9' },
+const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.BottomLeft, svg_icon: '7' },
+    { point: CONTROL_POINTS.BottomMiddle, svg_icon: '8' },
+    { point: CONTROL_POINTS.BottomRight, svg_icon: '9' },
 ];
 
 export {
@@ -460,8 +460,8 @@ export {
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
-    SELECTION_POINTS,
-    TOP_MAGNETISM_POINTS,
-    CENTER_MAGNETISM_POINTS,
-    BOTTOM_MAGNETISM_POINTS,
+    CONTROL_POINTS,
+    TOP_CONTROL_POINTS,
+    CENTER_CONTROL_POINTS,
+    BOTTOM_CONTROL_POINTS,
 };
