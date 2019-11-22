@@ -96,7 +96,6 @@ export class FillToolService extends AbstractToolService {
         this.createBFSHelper();
         this.bfsHelper.computeBFS(this.currentMouseCoords);
 
-        this.divideLinesToSegments();
         this.fill();
 
         this.drawStack.push(this.svgWrap);
@@ -139,50 +138,29 @@ export class FillToolService extends AbstractToolService {
 
         const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
         let d = '';
-        this.bfsHelper.a.forEach((el) => {
+        let lasPixel: Coords2D = this.bfsHelper.pathsToFill[0][0];
+        this.bfsHelper.pathsToFill.forEach((el) => {
             el.forEach((pixel: Coords2D, i: number) => {
-                if (i === 0) {
+                if (i === 0 || this.isTooFar(lasPixel, pixel)) {
                     d += ` M${pixel.x + 0.5} ${pixel.y + 0.5}`;
                 } else {
                     d += ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
                 }
+                lasPixel = pixel;
             });
-            console.log('hi');
-            d += `                       z`;
+            d += ' z';
         });
         this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke, 'red');
         this.renderer.setAttribute(path, 'd', d);
+        // this.renderer.setAttribute(path, 'fill', 'none');
         this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
         this.renderer.appendChild(this.svgWrap, path);
 
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    divideLinesToSegments(): void {
-        this.segmentsToDraw = new Map([]);
-
-        this.bfsHelper.bodyGrid.forEach((column, x) => {
-            let fillStructure = new FillStructure();
-            fillStructure.bottom = new Coords2D(x, column[0]);
-            for (let y = 1; y < column.length; y++) {
-                if (column[y] !== column[y - 1] + 1) {
-                    fillStructure.top = new Coords2D(x, column[y - 1]);
-                    this.addToMap(x, fillStructure, this.segmentsToDraw);
-                    fillStructure = new FillStructure();
-                    fillStructure.bottom = new Coords2D(x, column[y]);
-                }
-            }
-            fillStructure.top = new Coords2D(x, column[column.length - 1]);
-            this.addToMap(x, fillStructure, this.segmentsToDraw);
-        });
-    }
-
-    addToMap(x: number, fillStructure: FillStructure, map: Map<number, FillStructure[]>): void {
-        if (map.has(x)) {
-            (map.get(x) as FillStructure[]).push(fillStructure);
-        } else {
-            map.set(x, [fillStructure]);
-        }
+    isTooFar(a: Coords2D, b: Coords2D): boolean {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 50;
     }
 
     updateCanvas(): void {
@@ -201,175 +179,6 @@ export class FillToolService extends AbstractToolService {
         );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
-    }
-
-    updateVerticalStrokePaths(x: number): void {
-        const column: number[] = this.bfsHelper.strokeGrid.get(x) as number[];
-        column.sort((a: number, b: number) => {
-            return a < b ? -1 : 1;
-        });
-
-        let d = `M${x} ${column[0]}`;
-        const lines = [];
-        for (let y = 1; y < column.length; y++) {
-            if (column[y] !== column[y - 1] + 1) {
-                lines.push(d);
-                d = `M${x} ${column[y]}`;
-            } else {
-                d += ` L${x} ${column[y]}`;
-            }
-        }
-        lines.push(d);
-        lines.forEach((element) => {
-            if (element.includes('L')) {
-                this.strokePaths.push(element);
-            }
-        });
-    }
-
-    appendBodyPaths(bodyWrap: SVGGElement, bodyPaths: string[]): void {
-        bodyPaths.forEach((d) => {
-            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-            this.renderer.setAttribute(path, 'd', d);
-            this.renderer.appendChild(bodyWrap, path);
-        });
-    }
-    updateBodyPaths(bodyPaths: string[], fillStructure: FillStructure, i: number): void {
-        bodyPaths[
-            i
-        ] += ` M${fillStructure.top.x} ${fillStructure.top.y} L${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
-    }
-
-    appendStrokePaths(topStrokePaths: string[], bottomStrokePaths: string[]): void {
-        this.strokePaths.push(...topStrokePaths);
-        this.strokePaths.push(...bottomStrokePaths);
-    }
-    updateStrokePaths(
-        fillStructure: FillStructure,
-        x: number,
-        i: number,
-        topStrokePaths: string[],
-        bottomStrokePaths: string[],
-    ): void {
-        const lastFillStructures: FillStructure[] = this.segmentsToDraw.get(x - 1) as FillStructure[];
-        const lastTop = lastFillStructures[i].top;
-        const lastbottom = lastFillStructures[i].bottom;
-        if (fillStructure.top.distanceTo(lastTop) > MAX_NORMAL_LENGTH) {
-            topStrokePaths[i] += ` M${fillStructure.top.x} ${fillStructure.top.y}`;
-        } else {
-            topStrokePaths[i] += ` L${fillStructure.top.x} ${fillStructure.top.y}`;
-        }
-        if (fillStructure.bottom.distanceTo(lastbottom) > MAX_NORMAL_LENGTH) {
-            bottomStrokePaths[i] += ` M${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
-        } else {
-            bottomStrokePaths[i] += ` L${fillStructure.bottom.x} ${fillStructure.bottom.y}`;
-        }
-    }
-
-    resetBodyAndStrokePaths(
-        fillStructures: FillStructure[],
-        bodyPaths: string[],
-        topStrokePaths: string[],
-        bottomStrokePaths: string[],
-    ) {
-        bodyPaths.length = 0;
-        topStrokePaths.length = 0;
-        bottomStrokePaths.length = 0;
-        fillStructures.forEach((fillStructure: FillStructure) => {
-            bodyPaths.push(
-                `M${fillStructure.bottom.x} ${fillStructure.bottom.y} L${fillStructure.top.x} ${fillStructure.top.y}`,
-            );
-
-            topStrokePaths.push(`M${fillStructure.top.x} ${fillStructure.top.y}`);
-            bottomStrokePaths.push(`M${fillStructure.bottom.x} ${fillStructure.bottom.y}`);
-        });
-    }
-
-    fillBody(): SVGGElement {
-        const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-
-        this.strokePaths = [];
-        const bodyPaths: string[] = [];
-        const topStrokePaths: string[] = [];
-        const bottomStrokePaths: string[] = [];
-        let lastFillStructuresLength = -1;
-
-        for (let x = this.bfsHelper.mostLeft; x <= this.bfsHelper.mostRight; x++) {
-            this.updateVerticalStrokePaths(x);
-
-            let fillStructures: FillStructure[];
-            if (this.segmentsToDraw.get(x) === undefined) {
-                continue;
-            } else {
-                fillStructures = this.segmentsToDraw.get(x) as FillStructure[];
-            }
-
-            // if current column has a different structure than the last column
-            if (fillStructures.length !== lastFillStructuresLength) {
-                this.appendBodyPaths(bodyWrap, bodyPaths);
-                this.appendStrokePaths(topStrokePaths, bottomStrokePaths);
-                this.resetBodyAndStrokePaths(fillStructures, bodyPaths, topStrokePaths, bottomStrokePaths);
-            } else {
-                fillStructures.forEach((fillStructure: FillStructure, i: number) => {
-                    this.updateBodyPaths(bodyPaths, fillStructure, i);
-                    this.updateStrokePaths(fillStructure, x, i, topStrokePaths, bottomStrokePaths);
-                });
-            }
-            lastFillStructuresLength = fillStructures.length;
-        }
-        this.strokePaths.push(...topStrokePaths);
-        this.strokePaths.push(...bottomStrokePaths);
-
-        this.appendBody(bodyPaths, bodyWrap);
-        this.renderer.appendChild(this.svgWrap, bodyWrap);
-        return bodyWrap;
-    }
-
-    appendBody(bodyPaths: string[], bodyWrap: SVGGElement) {
-        bodyPaths.forEach((d) => {
-            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-            this.renderer.setAttribute(path, 'd', d);
-            this.renderer.appendChild(bodyWrap, path);
-        });
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, 'body');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, FILL_STROKE_WIDTH);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(bodyWrap, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
-    }
-
-    fillStroke(bodyWrap: SVGGElement) {
-        const id: string = Date.now().toString();
-        this.appendMask(bodyWrap.cloneNode(true) as SVGGElement, id);
-        this.appendStroke(id);
-    }
-
-    appendMask(bodyWrap: SVGGElement, id: string): void {
-        const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(mask, 'id', id);
-        this.renderer.appendChild(mask, bodyWrap);
-        this.renderer.appendChild(this.svgWrap, mask);
-    }
-
-    appendStroke(id: string): void {
-        const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.strokePaths.forEach((d) => {
-            const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
-            this.renderer.setAttribute(path, 'd', d);
-            this.renderer.appendChild(strokeWrap, path);
-        });
-
-        this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, 'stroke');
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.strokeWidth * 2).toString());
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(strokeWrap, 'stroke-linecap', 'round');
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.strokeColor);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
-        this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
 
     createSVGWrapper(): void {

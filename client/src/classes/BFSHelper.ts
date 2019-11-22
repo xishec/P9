@@ -7,14 +7,10 @@ export class BFSHelper {
     context2D: CanvasRenderingContext2D;
     visited: Set<string>;
     queue: Coords2D[];
-    bodyGrid: Map<number, number[]>;
-    strokeGrid: Map<number, number[]>;
     strokes: Set<string>;
     tolerance: number;
-    mostLeft: number;
-    mostRight: number;
     data: Uint8ClampedArray;
-    a: Array<Coords2D[]>;
+    pathsToFill: Array<Coords2D[]>;
 
     constructor(
         maxX: number,
@@ -27,11 +23,7 @@ export class BFSHelper {
         this.context2D = context2D;
         this.visited = new Set([]);
         this.queue = [];
-        this.bodyGrid = new Map([]);
-        this.strokeGrid = new Map([]);
         this.strokes = new Set([]);
-        this.mostLeft = this.maxX;
-        this.mostRight = 0;
 
         attributesManagerService.tolerance.subscribe((tolerance: number) => {
             this.tolerance = tolerance;
@@ -48,12 +40,7 @@ export class BFSHelper {
         while (this.queue.length > 0) {
             const pixel: Coords2D = this.queue.pop() as Coords2D;
 
-            this.mostLeft = pixel.x < this.mostLeft ? pixel.x : this.mostLeft;
-            this.mostRight = pixel.x > this.mostRight ? pixel.x : this.mostRight;
-
-            if (this.isSameColor(this.getPixelColor(pixel), targetColor)) {
-                this.addPixelToMap(pixel, this.bodyGrid);
-            } else {
+            if (!this.isSameColor(this.getPixelColor(pixel), targetColor)) {
                 continue;
             }
 
@@ -69,7 +56,6 @@ export class BFSHelper {
                     continue;
                 }
                 if (!this.isValidPosition(neighborPixel)) {
-                    this.addPixelToMap(pixel, this.strokeGrid);
                     this.strokes.add(`${pixel.x} ${pixel.y}`);
                     break;
                 }
@@ -77,19 +63,16 @@ export class BFSHelper {
                     this.queue.push(neighborPixel);
                     this.visited.add(`${neighborPixel.x} ${neighborPixel.y}`);
                 } else {
-                    this.addPixelToMap(pixel, this.strokeGrid);
                     this.strokes.add(`${pixel.x} ${pixel.y}`);
                     break;
                 }
             }
         }
-        this.sortBodyGrid();
-        console.log(this.strokes);
         this.dfs();
     }
 
     dfs() {
-        this.a = [];
+        this.pathsToFill = [];
         let tmp = [];
         this.visited = new Set([]);
 
@@ -154,39 +137,24 @@ export class BFSHelper {
                 }
             }
 
-            this.a.push(tmp);
+            this.pathsToFill.push(tmp);
             tmp = [];
         }
-        console.log(this.a);
-    }
-
-    sortBodyGrid(): void {
-        this.bodyGrid.forEach((el) => {
-            el.sort((a: number, b: number) => {
-                return a < b ? -1 : 1;
-            });
-        });
-    }
-
-    addPixelToMap(pixel: Coords2D, map: Map<number, number[]>): void {
-        if (map.has(pixel.x)) {
-            (map.get(pixel.x) as number[]).push(pixel.y);
-        } else {
-            map.set(pixel.x, [pixel.y]);
-        }
+        console.log(this.pathsToFill);
     }
 
     isSameColor(color1: number[], color2: number[]): boolean {
         if (this.tolerance === 0) {
-            this.tolerance = 0.5;
+            return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
+        } else {
+            const difference = Math.sqrt(
+                Math.pow(color1[0] - color2[0], 2) +
+                    Math.pow(color1[1] - color2[1], 2) +
+                    Math.pow(color1[2] - color2[2], 2),
+            );
+            const sum = 255 * 3;
+            return difference <= (this.tolerance / 100) * sum;
         }
-        const difference = Math.sqrt(
-            Math.pow(color1[0] - color2[0], 2) +
-                Math.pow(color1[1] - color2[1], 2) +
-                Math.pow(color1[2] - color2[2], 2),
-        );
-        const sum = 255 * 3;
-        return difference <= (this.tolerance / 100) * sum;
     }
 
     isValidPosition(pixel: Coords2D): boolean {
@@ -198,7 +166,6 @@ export class BFSHelper {
         const r: number = this.data[index++];
         const g: number = this.data[index++];
         const b: number = this.data[index];
-
         return [r, g, b];
     }
 }
