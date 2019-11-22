@@ -21,23 +21,23 @@ export class FileManagerService {
     }
 
     postDrawing(
-        id: string,
         name: string,
         labels: string[],
         svg: string,
         idStack: string[],
         drawingInfo: DrawingInfo,
+        createdOn: number,
         lastModified: number,
     ): Observable<Drawing> {
-        const drawing: Drawing = { id, name, labels, svg, idStack, drawingInfo, lastModified };
+        const drawing: Drawing = { name, labels, svg, idStack, drawingInfo, createdOn, lastModified };
         return this.http
             .post<Drawing>(environment.BASE_URL + '/api/file-manager/save', drawing)
             .pipe(catchError(this.handleError<Drawing>('postDrawing')));
     }
 
-    deleteDrawing(name: string): Observable<Message[] | Message> {
+    deleteDrawing(id: string): Observable<Message[] | Message> {
         return this.http
-            .delete<Message[]>(environment.BASE_URL + `/api/file-manager/${name}`)
+            .delete<Message[]>(environment.BASE_URL + `/api/file-manager/${id}`)
             .pipe(catchError(this.handleError<Message>('deleteDrawing')));
     }
 
