@@ -93,9 +93,9 @@ export class BFSHelper {
             }
         }
         this.visited.add(`${pixel.x} ${pixel.y}`);
-        tmp.push(pixel);
 
         while (pixel.x >= 0 && pixel.x >= 0) {
+            tmp.push(pixel);
             let closestNeighbor: Coords2D = new Coords2D(-1, -1);
 
             const neighborPixels = [
@@ -133,7 +133,6 @@ export class BFSHelper {
             }
 
             this.visited.add(`${closestNeighbor.x} ${closestNeighbor.y}`);
-            tmp.push(closestNeighbor);
             pixel = closestNeighbor;
         }
 

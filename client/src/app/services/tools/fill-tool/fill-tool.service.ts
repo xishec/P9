@@ -3,13 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { FillStructure } from 'src/classes/FillStructure';
 import { SVG_NS } from 'src/constants/constants';
-import {
-    FILL_STROKE_WIDTH,
-    HTML_ATTRIBUTE,
-    MAX_NORMAL_LENGTH,
-    TOOL_NAME,
-    TRACE_TYPE,
-} from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { BFSHelper } from '../../../../classes/BFSHelper';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ModalManagerService } from '../../modal-manager/modal-manager.service';
@@ -146,6 +140,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, '1');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, 'body');
 
         const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(path, 'd', d);
@@ -198,7 +193,6 @@ export class FillToolService extends AbstractToolService {
             });
             d += ' z';
         });
-        // console.log(d);
         return d;
     }
 
