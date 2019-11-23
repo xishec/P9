@@ -3,7 +3,6 @@ import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
 import { FileManagerService } from '../services/file-manager.service';
-import { Message } from '../../../common/communication/Message';
 import Types from '../types';
 import { Drawing } from '../../../common/communication/Drawing';
 
@@ -41,8 +40,8 @@ export class FileManagerController {
             let id = req.params.id;
             this.fileManagerService
                 .deleteDrawing(id)
-                .then((deletedDrawing: any) => {
-                    res.json({ title: 'Delete', body: 'Success' } as Message);
+                .then(() => {
+                    res.json(id);
                 })
                 .catch((error: MongoError) => {
                     throw error;

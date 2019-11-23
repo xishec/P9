@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { Message } from '../../../../../../common/communication/Message';
 
 @Injectable({
     providedIn: 'root',
@@ -35,10 +34,10 @@ export class FileManagerService {
             .pipe(catchError(this.handleError<Drawing>('postDrawing')));
     }
 
-    deleteDrawing(id: string): Observable<Message[] | Message> {
+    deleteDrawing(createdOn: number): Observable<number> {
         return this.http
-            .delete<Message[]>(environment.BASE_URL + `/api/file-manager/${id}`)
-            .pipe(catchError(this.handleError<Message>('deleteDrawing')));
+            .delete<number>(environment.BASE_URL + `/api/file-manager/${createdOn.toString()}`)
+            .pipe(catchError(this.handleError<number>('deleteDrawing')));
     }
 
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {

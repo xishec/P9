@@ -5,16 +5,8 @@ import { DrawingModel } from '../model/post';
 
 @injectable()
 export class FileManagerService {
-    async getAllDrawings(): Promise<any> {
-        const query = {};
-
-        return DrawingModel.find(query)
-            .then((drawings: any) => {
-                return drawings;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+    async getAllDrawings(){
+        return DrawingModel.find({});
     }
 
     async addDrawing(drawing: Drawing){
@@ -42,16 +34,8 @@ export class FileManagerService {
         });
     }
 
-    async deleteDrawing(id: string): Promise<any> {
-        const query = { id: id };
-
-        return DrawingModel.findOneAndDelete(query)
-            .then((deletedDrawing: any) => {
-                return deletedDrawing;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+    async deleteDrawing(createdOn: string) {
+        return DrawingModel.findOneAndDelete({ createdOn: parseInt(createdOn) });
     }
 
     isDrawingValid(drawing: Drawing): boolean {

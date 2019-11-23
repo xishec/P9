@@ -79,7 +79,7 @@ export class DrawingSaverService {
                     return false;
                 }),
             )
-            .subscribe((drawing: Drawing) => {
+            .subscribe((drawing: Drawing) => {                
                 if (drawing || JSON.parse(drawing).name === nameAndLabels.name) {
                     this.drawingLoaderService.currentDrawing.next(drawing);
                     this.currentIsSaved.next(true);
