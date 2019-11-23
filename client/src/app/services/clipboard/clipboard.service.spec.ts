@@ -9,7 +9,7 @@ import { ManipulatorService } from '../manipulator/manipulator.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 import { ClipboardService } from './clipboard.service';
 
-describe('ClipboardService', () => {
+fdescribe('ClipboardService', () => {
     let injector: TestBed;
     let service: ClipboardService;
     let selection: Selection;
@@ -77,11 +77,6 @@ describe('ClipboardService', () => {
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
 
-        jasmine.clock().install();
-    });
-
-    afterEach(() => {
-        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -344,7 +339,6 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.cut();
-        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(service.pasteOffsetValue).toEqual(0);
@@ -425,7 +419,6 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.delete();
-        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
