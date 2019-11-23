@@ -16,6 +16,8 @@ export class MagnetismToolService {
     currentGridSize: number;
     totalDeltaX = 0;
     totalDeltaY = 0;
+    lastControlPoint = 0;
+    lastGridSize = GRID_SIZE.Default;
 
     selection: Selection;
 
@@ -44,6 +46,8 @@ export class MagnetismToolService {
     }
 
     updateControlPointPosition(): void {
+        console.log('current point:' + this.currentPoint);
+
         if (this.currentPoint === CONTROL_POINTS.CenterMiddle) {
             const selectionBox: SVGRectElement = this.selection.selectionBox;
             const x = selectionBox.x.baseVal.value + selectionBox.width.baseVal.value / 2;
@@ -68,11 +72,18 @@ export class MagnetismToolService {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
     }
 
-    magnetizeX(deltaX: number, isFirstSelection: Boolean): number {
+    magnetizeX(deltaX: number, isFirstSelection: boolean): number {
+        //this.lastControlPoint = this.currentPoint;
         this.updateControlPointPosition(); // to implement a function that calls both magnetize
 
         const remainder = this.currentPointPosition.x % this.currentGridSize;
-        if (isFirstSelection) {
+        if (
+            isFirstSelection ||
+            this.lastControlPoint !== this.currentPoint ||
+            this.lastGridSize !== this.currentGridSize
+        ) {
+            this.lastControlPoint = this.currentPoint;
+            this.lastGridSize = this.currentGridSize;
             console.log('FIRST SELECTION');
 
             return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
