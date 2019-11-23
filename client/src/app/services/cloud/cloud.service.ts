@@ -35,8 +35,13 @@ export class CloudService {
             });
     }
 
-    download(name: string): Promise<string> {
-        let pathReference = this.storage.ref(name);
+    download(id: string): Promise<string> {
+        let pathReference = this.storage.ref(id);
         return pathReference.getDownloadURL();
+    }
+
+    delete(id: string) {
+        let pathReference = this.storage.ref(id);
+        pathReference.delete();
     }
 }

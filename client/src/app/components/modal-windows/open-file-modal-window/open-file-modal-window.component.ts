@@ -185,6 +185,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         ) as Drawing;
         this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdOn).subscribe((createdOn: number) => {
             if (createdOn === selectedDrawing.drawingInfo.createdOn) {
+                this.cloudService.delete(createdOn.toString());
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.drawingInfo.createdOn !== createdOn;
                 });
