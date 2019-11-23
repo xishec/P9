@@ -203,8 +203,6 @@ export class SelectionToolService extends AbstractToolService {
             this.updateSelectionRectangle();
             this.checkSelection();
         }
-
-        this.manipulator.updateOrigins(this.selection);
     }
 
     handleRightMouseDrag(): void {
@@ -271,8 +269,6 @@ export class SelectionToolService extends AbstractToolService {
             this.selection.emptySelection();
         }
 
-        this.manipulator.updateOrigins(this.selection);
-
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
         this.isOnTarget = false;
@@ -286,7 +282,6 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isOnTarget) {
             this.singlySelectInvert(this.currentTarget);
         }
-        this.manipulator.updateOrigins(this.selection);
         this.isRightMouseDown = false;
         this.isRightMouseDragging = false;
         this.isOnTarget = false;
@@ -312,6 +307,8 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.manipulator.updateOrigins(this.selection);
     }
 
     saveState() {
@@ -335,9 +332,9 @@ export class SelectionToolService extends AbstractToolService {
         event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            if (!this.manipulator.isRotateOnSelf) {
-                this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
-            }
+            // if (!this.manipulator.isRotateOnSelf) {
+            //     this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
+            // }
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = ALTER_ROTATION;
@@ -348,9 +345,9 @@ export class SelectionToolService extends AbstractToolService {
         event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            if (this.manipulator.isRotateOnSelf) {
-                this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
-            }
+            // if (this.manipulator.isRotateOnSelf) {
+            //     this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
+            // }
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = BASE_ROTATION;
@@ -358,7 +355,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        if (!this.isTranslatingSelection) {
+        if (!this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended) {
             this.manipulator.rotateSelection(event, this.selection);
             this.clipBoard.restartDuplication();
             this.saveState();
