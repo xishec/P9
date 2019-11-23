@@ -14,10 +14,12 @@ export class MagnetismToolService {
     currentPoint: CONTROL_POINTS;
     currentPointPosition: Coords2D;
     currentGridSize: number;
+    totalDeltaX = 0;
+    totalDeltaY = 0;
 
     selection: Selection;
 
-    state: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    isMagnetic: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(
         private gridToolService: GridToolService,
@@ -31,7 +33,7 @@ export class MagnetismToolService {
 
         this.gridToolService.size.subscribe((size: number) => {
             this.currentGridSize = size;
-            console.log(this.currentGridSize);
+            //console.log(this.currentGridSize);
         });
     }
 
@@ -58,36 +60,41 @@ export class MagnetismToolService {
 
     changeState(state: boolean): void {
         if (!this.drawingLoaderService.untouchedWorkZone.value) {
-            this.state.next(state);
+            this.isMagnetic.next(state);
         }
     }
 
     switchState(): void {
-        this.state.value ? this.changeState(false) : this.changeState(true);
+        this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
     }
 
     // grid size n'est pas bon
     // remainder semble aussi etre weird
-    magnetizeX(deltaX: number): number {
-        let remainder = deltaX % this.currentGridSize;
-        console.log(deltaX);
+    magnetizeX(deltaX: number, lastXPosition: number): number {
+        this.totalDeltaX += deltaX;
+        let remainder = this.totalDeltaX % this.currentGridSize;
 
+        // console.log(deltaX);
         console.log('remainder: ' + remainder);
-        console.log('grid size: ' + this.currentGridSize);
+        //  console.log('grid size: ' + this.currentGridSize);
 
         if (remainder < this.currentGridSize / 2) {
-            return deltaX - remainder;
+            return 0;
         } else {
-            return deltaX + remainder;
+            this.totalDeltaX = 0;
+            return lastXPosition + this.currentGridSize / 2;
         }
     }
 
-    magnetizeY(deltaY: number): number {
-        let remainder = deltaY % this.currentGridSize;
+    magnetizeY(deltaY: number, lastYPosition: number): number {
+        this.totalDeltaY += deltaY;
+
+        let remainder = this.totalDeltaY % this.currentGridSize;
         if (remainder < this.currentGridSize / 2) {
-            return deltaY - remainder;
+            return 0;
         } else {
-            return deltaY + remainder;
+            this.totalDeltaY = 0;
+            return lastYPosition + this.currentGridSize / 2;
         }
     }
 }
