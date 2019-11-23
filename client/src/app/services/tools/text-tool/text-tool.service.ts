@@ -189,6 +189,7 @@ export class TextToolService extends AbstractToolService {
 
     initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.title, 'element-to-remove');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke, 'black');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_width, '1');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.fill, 'none');

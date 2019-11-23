@@ -28,6 +28,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         this.renderer = renderer;
         this.drawStack = drawStack;
         this.previewRectangle = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.title, 'element-to-remove');
     }
 
     abstract onMouseMove(event: MouseEvent): void;
