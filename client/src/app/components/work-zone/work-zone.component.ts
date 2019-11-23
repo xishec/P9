@@ -28,6 +28,7 @@ import { Drawing } from 'src/classes/Drawing';
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = { width: 0, height: 0, color: DEFAULT_WHITE } as DrawingInfo;
     gridIsActive = false;
+    modalIsDisplayed: boolean;
 
     gridSize = GRID_SIZE.Default;
     gridOpacity = GRID_OPACITY.Max;
@@ -112,6 +113,9 @@ export class WorkZoneComponent implements OnInit {
             this.gridOpacity = opacity;
         });
 
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
         this.setDefaultWorkZoneProperties();
     }
 
