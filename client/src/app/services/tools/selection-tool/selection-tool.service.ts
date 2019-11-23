@@ -30,6 +30,7 @@ export class SelectionToolService extends AbstractToolService {
     isLeftMouseDragging = false;
     isTranslatingSelection = false;
     isRightMouseDragging = false;
+    isFirstSelection = false;
 
     selection: Selection;
 
@@ -168,6 +169,7 @@ export class SelectionToolService extends AbstractToolService {
 
     startSelection(): void {
         this.isSelecting = true;
+        this.isFirstSelection = true;
         this.updateSelectionRectangle();
         this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
@@ -202,10 +204,12 @@ export class SelectionToolService extends AbstractToolService {
             let deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
             // TO DO: make it also work with right mouse drag...
             if (this.magnetismService.isMagnetic.value) {
-                deltaX = this.magnetismService.magnetizeX(deltaX, this.lastMagneticMouseCoords.x);
+                deltaX = this.magnetismService.magnetizeX(deltaX, this.isFirstSelection);
                 this.magnetismService.magnetizeY(deltaY, this.lastMagneticMouseCoords.y);
                 this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+                this.isFirstSelection = false;
             } else {
+                this.isFirstSelection = true;
                 this.manipulator.translateSelection(deltaX, deltaY, this.selection);
             }
         } else {

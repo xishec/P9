@@ -68,28 +68,34 @@ export class MagnetismToolService {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
     }
 
-    // grid size n'est pas bon
-    // remainder semble aussi etre weird
-    magnetizeX(deltaX: number, lastXPosition: number): number {
+    magnetizeX(deltaX: number, isFirstSelection: Boolean): number {
         this.updateControlPointPosition(); // to implement a function that calls both magnetize
 
-        this.totalDeltaX += deltaX;
-        let remainder = this.currentPointPosition.x % this.currentGridSize;
-        // let finalDeltaX = this.currentPointPosition.x - remainder;
+        const remainder = this.currentPointPosition.x % this.currentGridSize;
+        if (isFirstSelection) {
+            console.log('FIRST SELECTION');
 
+            return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
+        }
+
+        this.totalDeltaX += deltaX;
+
+        this.currentPointPosition.x = Math.round(this.currentPointPosition.x);
         console.log('currentPointPosition: ' + this.currentPointPosition.x);
         console.log('remainder: ' + remainder);
-        console.log('this.currentGridSize: ' + this.currentGridSize);
-        //   console.log(this.selection.controlPoints[this.currentPoint].cx.baseVal.value);
-        // console.log(deltaX);
-        //  console.log('grid size: ' + this.currentGridSize);
 
-        if (remainder < this.currentGridSize / 2) {
-            this.totalDeltaX = 0;
-            return -remainder;
+        if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
+            return 0;
         } else {
+            console.log('total deltaX: ' + this.totalDeltaX);
+
+            const tempTotalDelta = this.totalDeltaX;
             this.totalDeltaX = 0;
-            return this.currentGridSize - remainder;
+            if (tempTotalDelta > 0) {
+                return this.currentGridSize;
+            } else {
+                return -this.currentGridSize;
+            }
         }
     }
 
