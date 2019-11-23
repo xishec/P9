@@ -18,7 +18,6 @@ import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 export class SelectionToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     lastMouseCoords: Coords2D = new Coords2D(0, 0);
-    lastMagneticMouseCoords: Coords2D = new Coords2D(0, 0);
     initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
@@ -259,10 +258,6 @@ export class SelectionToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                this.lastMagneticMouseCoords.x =
-                    event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-                this.lastMagneticMouseCoords.y =
-                    event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
                 this.handleLeftMouseDown();
                 break;
 
