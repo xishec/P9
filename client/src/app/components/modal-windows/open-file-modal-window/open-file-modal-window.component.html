@@ -45,19 +45,22 @@
                                 let i = index
                             "
                             id="list-option"
-                            [value]="drawing.name"
+                            [value]="drawing.drawingInfo.name"
                         >
                             <div id="drawing-option">
                                 <div id="drawing-name">
-                                    {{ drawing.name }}
+                                    {{ drawing.drawingInfo.name }}
                                 </div>
                                 <div id="drawing-labels-list">
-                                    <div id="drawing-label" *ngFor="let label of drawing.labels">
+                                    <div id="drawing-label" *ngFor="let label of drawing.drawingInfo.labels">
                                         {{ label }}
                                     </div>
                                 </div>
                                 <div id="drawing-thumbnail">
-                                    <img *ngIf="SVGs.get(drawing.name)" [src]="SVGs.get(drawing.name)" />
+                                    <img
+                                        *ngIf="SVGs.get(drawing.drawingInfo.name)"
+                                        [src]="SVGs.get(drawing.drawingInfo.name)"
+                                    />
                                 </div>
                             </div>
                         </mat-list-option>
