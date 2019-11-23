@@ -18,35 +18,41 @@
         </div>
 
         <div class="attribute">
-            <mat-button-toggle-group>
-                <mat-button-toggle
-                    *ngFor="let TOP_MAGNETISM_POINT of TOP_CONTROL_POINTS"
-                    [value]="TOP_MAGNETISM_POINT.point"
-                    [checked]="this.magnetismService.currentPoint === TOP_MAGNETISM_POINT.point"
-                    (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
-                    >{{ TOP_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                >
-            </mat-button-toggle-group>
+            <div>
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let TOP_MAGNETISM_POINT of TOP_CONTROL_POINTS"
+                        [value]="TOP_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === TOP_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
+                        >{{ TOP_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                    >
+                </mat-button-toggle-group>
+            </div>
 
-            <mat-button-toggle-group>
-                <mat-button-toggle
-                    *ngFor="let CENTER_MAGNETISM_POINT of CENTER_CONTROL_POINTS"
-                    [value]="CENTER_MAGNETISM_POINT.point"
-                    [checked]="this.magnetismService.currentPoint === CENTER_MAGNETISM_POINT.point"
-                    (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
-                    >{{ CENTER_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                >
-            </mat-button-toggle-group>
+            <div>
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let CENTER_MAGNETISM_POINT of CENTER_CONTROL_POINTS"
+                        [value]="CENTER_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === CENTER_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
+                        >{{ CENTER_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                    >
+                </mat-button-toggle-group>
+            </div>
 
-            <mat-button-toggle-group>
-                <mat-button-toggle
-                    *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_CONTROL_POINTS"
-                    [value]="BOTTOM_MAGNETISM_POINT.point"
-                    [checked]="this.magnetismService.currentPoint === BOTTOM_MAGNETISM_POINT.point"
-                    (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
-                    >{{ BOTTOM_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                >
-            </mat-button-toggle-group>
+            <div>
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_CONTROL_POINTS"
+                        [value]="BOTTOM_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === BOTTOM_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
+                        >{{ BOTTOM_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
+                    >
+                </mat-button-toggle-group>
+            </div>
         </div>
     </form>
 </div>

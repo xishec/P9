@@ -84,7 +84,7 @@ enum POLYGON_SIDES {
 
 enum GRID_SIZE {
     Min = 5,
-    Default = 10,
+    Default = 100,
     Max = 200,
 }
 
@@ -385,21 +385,21 @@ enum CONTROL_POINTS {
 }
 
 const TOP_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.TopLeft, svg_icon: '1' },
-    { point: CONTROL_POINTS.TopMiddle, svg_icon: '2' },
-    { point: CONTROL_POINTS.TopRight, svg_icon: '3' },
+    { point: CONTROL_POINTS.TopLeft, svg_icon: '0' },
+    { point: CONTROL_POINTS.TopMiddle, svg_icon: '1' },
+    { point: CONTROL_POINTS.TopRight, svg_icon: '2' },
 ];
 
 const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.CenterLeft, svg_icon: '4' },
-    { point: CONTROL_POINTS.CenterMiddle, svg_icon: '5' },
-    { point: CONTROL_POINTS.CenterRight, svg_icon: '6' },
+    { point: CONTROL_POINTS.CenterLeft, svg_icon: '3' },
+    { point: CONTROL_POINTS.CenterMiddle, svg_icon: '8' },
+    { point: CONTROL_POINTS.CenterRight, svg_icon: '4' },
 ];
 
 const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.BottomLeft, svg_icon: '7' },
-    { point: CONTROL_POINTS.BottomMiddle, svg_icon: '8' },
-    { point: CONTROL_POINTS.BottomRight, svg_icon: '9' },
+    { point: CONTROL_POINTS.BottomLeft, svg_icon: '5' },
+    { point: CONTROL_POINTS.BottomMiddle, svg_icon: '6' },
+    { point: CONTROL_POINTS.BottomRight, svg_icon: '7' },
 ];
 
 export {
