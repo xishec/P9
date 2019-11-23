@@ -135,7 +135,7 @@ export class WorkZoneComponent implements OnInit {
     appendDrawingToView(selectedDrawing: Drawing) {
         this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
 
-        const idStack = Object.values(selectedDrawing.idStack);
+        const idStack = Object.values(selectedDrawing.drawingInfo.idStack);
         idStack.forEach((id) => {
             const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
             const child: SVGElement = children.filter((filterChild) => {

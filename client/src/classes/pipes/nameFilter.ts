@@ -16,7 +16,7 @@ export class NameFilter implements PipeTransform {
         } else {
             nameFilter = nameFilter.toLowerCase();
             return drawings.filter((drawing: Drawing) => {
-                return drawing.name.toLowerCase().includes(nameFilter);
+                return drawing.drawingInfo.name.toLowerCase().includes(nameFilter);
             });
         }
     }

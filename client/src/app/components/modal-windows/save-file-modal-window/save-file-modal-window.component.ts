@@ -7,7 +7,7 @@ import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 
 @Component({
@@ -45,15 +45,15 @@ export class SaveFileModalWindowComponent implements OnInit {
     ngOnInit() {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
-            this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
-            currentDrawing.labels.forEach((label) => {
+            this.saveFileModalForm.controls.name.setValue(currentDrawing.drawingInfo.name);
+            currentDrawing.drawingInfo.labels.forEach((label) => {
                 if (!this.drawingLabels.includes(label)) {
                     this.drawingLabels.push(label);
                 }
             });
-            this.selectedLabels = Array.from(currentDrawing.labels);
-            this.createdOn = (currentDrawing.createdOn === null) ? 0 : currentDrawing.createdOn;
-            this.lastModified = currentDrawing.lastModified;
+            this.selectedLabels = Array.from(currentDrawing.drawingInfo.labels);
+            this.createdOn = currentDrawing.drawingInfo.createdOn === null ? 0 : currentDrawing.drawingInfo.createdOn;
+            this.lastModified = currentDrawing.drawingInfo.lastModified;
         });
         this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
             this.errorMesaage = errorMesaage;
@@ -80,13 +80,13 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToServer(): void {
-        const newDrawing: NameAndLabels = {
+        const drawingSavingInfo: DrawingSavingInfo = {
             name: this.saveFileModalForm.value.name,
             drawingLabels: this.selectedLabels,
             createdOn: this.createdOn,
             lastModified: this.lastModified,
-        }
-        this.drawingSaverService.sendFileToServer(newDrawing);
+        };
+        this.drawingSaverService.sendFileToServer(drawingSavingInfo);
         this.isSaving = true;
 
         this.drawingSaverService.currentIsSaved

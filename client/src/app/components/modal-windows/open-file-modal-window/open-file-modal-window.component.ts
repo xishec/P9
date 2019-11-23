@@ -12,6 +12,7 @@ import { GIFS } from 'src/constants/constants';
 import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/Message';
 import { CloudService } from 'src/app/services/cloud/cloud.service';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -66,16 +67,27 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((ans: any) => {
-                ans.forEach((drawing: Drawing) => {
-                    this.drawingsFromServer.push(drawing);
+                ans.forEach((drawingInfo: DrawingInfo) => {
+                    let drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
                     this.cloudService
-                        .download(drawing.createdOn.toString())
+                        .download(drawingInfo.createdOn.toString())
                         .then((url: string) => {
-                            this.SVGs.set(drawing.name, url);
+                            this.SVGs.set(drawingInfo.name, url);
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.responseType = 'blob';
+                            xhr.onload = async () => {
+                                var blob = xhr.response;
+                                const text = await new Response(blob).text();
+                                drawing.svg = text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
+                            };
+                            xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
+                            xhr.send();
                         })
                         .catch((error: Error) => {
                             console.log(error);
                         });
+                    this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
             });
@@ -116,7 +128,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     loadServerFile(): void {
         this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.name === this.selectedOption,
+            (drawing) => drawing.drawingInfo.name === this.selectedOption,
         ) as Drawing;
         this.drawingLoaderService.currentDrawing.next(selectedDrawing);
         this.closeDialog();
@@ -137,16 +149,8 @@ export class OpenFileModalWindowComponent implements OnInit {
             reader.onload = () => {
                 try {
                     const localFileContent = JSON.parse(reader.result as string);
-                    this.fileToLoad = {
-                        name: files[0].name,
-                        labels: [],
-                        svg: localFileContent.svg,
-                        idStack: localFileContent.idStack,
-                        drawingInfo: localFileContent.drawingInfo,
-                        createdOn: localFileContent.createdOn,
-                        lastModified: localFileContent.timeStamp,
-                    };
-                    this.localFileName = this.fileToLoad.name;
+                    this.fileToLoad = localFileContent as Drawing;
+                    this.localFileName = this.fileToLoad.drawingInfo.name;
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
@@ -175,7 +179,7 @@ export class OpenFileModalWindowComponent implements OnInit {
         this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
             if (message.title && message.title === 'Delete' && message.body && message.body === 'Success') {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
-                    return drawing.name !== this.selectedOption;
+                    return drawing.drawingInfo.name !== this.selectedOption;
                 });
                 this.snackBar.open('Suppression réussie!', 'OK');
             } else {

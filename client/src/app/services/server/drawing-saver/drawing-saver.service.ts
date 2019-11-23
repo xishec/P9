@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -49,19 +49,18 @@ export class DrawingSaverService {
     getLocalFileDownloadUrl(): SafeResourceUrl {
         const jsonObj: string = JSON.stringify({
             svg: this.workZoneRef.nativeElement.innerHTML,
-            idStack: this.drawStackService.idStack,
             drawingInfo: this.currentDrawingInfo,
         });
         const blob = new Blob([jsonObj], { type: 'text/plain' });
         return this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     }
 
-    sendFileToServer(nameAndLabels: NameAndLabels): void {
+    sendFileToServer(drawingSavingInfo: DrawingSavingInfo): void {
         if (this.drawingLoaderService.emptyDrawStack.value) {
             this.currentIsSaved.next(false);
             this.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
-        } else if (nameAndLabels.name.length > 0) {
-            this.postDrawing(nameAndLabels);
+        } else if (drawingSavingInfo.name.length > 0) {
+            this.postDrawing(drawingSavingInfo);
         }
     }
 
@@ -76,17 +75,14 @@ export class DrawingSaverService {
         return new XMLSerializer().serializeToString(clone);
     }
 
-    postDrawing(nameAndLabels: NameAndLabels) {
+    postDrawing(drawingSavingInfo: DrawingSavingInfo) {
+        this.currentDrawingInfo.name = drawingSavingInfo.name;
+        this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
+        this.currentDrawingInfo.createdOn = drawingSavingInfo.createdOn;
+        this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
+
         this.fileManagerService
-            .postDrawing(
-                nameAndLabels.name,
-                nameAndLabels.drawingLabels,
-                this.workZoneRef.nativeElement.innerHTML,
-                this.drawStackService.idStack,
-                this.currentDrawingInfo,
-                nameAndLabels.createdOn,
-                nameAndLabels.lastModified,
-            )
+            .postDrawing(this.currentDrawingInfo)
             .pipe(
                 filter((subject) => {
                     if (subject !== undefined) {
@@ -99,10 +95,11 @@ export class DrawingSaverService {
                     return false;
                 }),
             )
-            .subscribe((drawing: Drawing) => {
-                if (drawing || JSON.parse(drawing).name === nameAndLabels.name) {
+            .subscribe((drawingInfo: DrawingInfo) => {
+                if (drawingInfo || JSON.parse(drawingInfo).createdOn === drawingSavingInfo.createdOn) {
+                    let drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
                     this.drawingLoaderService.currentDrawing.next(drawing);
-                    this.saveToCloud(drawing.createdOn.toString());
+                    this.saveToCloud(drawing.drawingInfo.createdOn.toString());
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');

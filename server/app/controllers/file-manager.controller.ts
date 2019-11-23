@@ -5,7 +5,7 @@ import { MongoError } from 'mongodb';
 import { FileManagerService } from '../services/file-manager.service';
 import { Message } from '../../../common/communication/Message';
 import Types from '../types';
-import { Drawing } from '../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerController {
@@ -29,8 +29,8 @@ export class FileManagerController {
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
             this.fileManagerService
                 .addDrawing(req.body)
-                .then((newDrawing: Drawing) => {
-                    res.json(newDrawing);
+                .then((newDrawingInfo: DrawingInfo) => {
+                    res.json(newDrawingInfo);
                 })
                 .catch((error: MongoError) => {
                     throw error;

@@ -1,4 +1,4 @@
-export interface NameAndLabels {
+export interface DrawingSavingInfo {
     name: string;
     drawingLabels: string[];
     createdOn: number;

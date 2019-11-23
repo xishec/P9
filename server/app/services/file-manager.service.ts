@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingModel } from '../model/post';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerService {
@@ -9,36 +9,30 @@ export class FileManagerService {
         const query = {};
 
         return DrawingModel.find(query)
-            .then((drawings: any) => {
-                return drawings;
+            .then((drawingInfos: any) => {
+                return drawingInfos;
             })
             .catch((error: Error) => {
                 throw error;
             });
     }
 
-    async addDrawing(drawing: Drawing){
-            if (!this.isDrawingValid(drawing)) {
-                throw new Error('Invalid Drawing');
-            }
+    async addDrawing(drawingInfo: DrawingInfo) {
+        if (!this.isDrawingValid(drawingInfo)) {
+            throw new Error('Invalid Drawing');
+        }
 
         const currentTimestamp = Date.now();
-        const newCreatedOn = (drawing.createdOn === 0) ? currentTimestamp : drawing.createdOn;
+        const newCreatedOn = drawingInfo.createdOn === 0 ? currentTimestamp : drawingInfo.createdOn;
 
-        const query = { createdOn: drawing.createdOn, name: drawing.name };
-        const newDrawing = {
-            name: drawing.name,
-            labels: drawing.labels,
-            svg: drawing.svg,
-            idStack: drawing.idStack,
-            drawingInfo: drawing.drawingInfo,
-            createdOn: newCreatedOn,
-            lastModified: currentTimestamp,
-        };
+        const query = { createdOn: drawingInfo.createdOn, name: drawingInfo.name };
         const options = { upsert: true, new: true };
 
-        return DrawingModel.findOneAndUpdate(query, newDrawing, options).then(() => {
-            return newDrawing as Drawing;
+        drawingInfo.createdOn = newCreatedOn;
+        drawingInfo.lastModified = currentTimestamp;
+
+        return DrawingModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
+            return drawingInfo;
         });
     }
 
@@ -54,7 +48,7 @@ export class FileManagerService {
             });
     }
 
-    isDrawingValid(drawing: Drawing): boolean {
-        return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
+    isDrawingValid(drawingInfo: DrawingInfo): boolean {
+        return drawingInfo.name !== '' && drawingInfo.height > 0 && drawingInfo.width > 0;
     }
 }

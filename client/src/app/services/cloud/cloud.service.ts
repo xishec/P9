@@ -24,7 +24,7 @@ export class CloudService {
     }
 
     save(id: string, file: Blob) {
-        var storageRef = this.storage.ref(id);
+        let storageRef = this.storage.ref(id);
         storageRef
             .put(file)
             .then(() => {

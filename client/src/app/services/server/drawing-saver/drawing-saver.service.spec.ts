@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
-import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { NameAndLabels } from 'src/classes/DrawingSavingInfo';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
