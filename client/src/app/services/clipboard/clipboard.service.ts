@@ -87,6 +87,7 @@ export class ClipboardService {
             newSelection.add(deepCopy);
         }
         this.updateSelection(newSelection);
+        this.manipulator.updateOrigins(this.selection);
     }
 
     updateSelection(newSelection: Set<SVGGElement>): void {

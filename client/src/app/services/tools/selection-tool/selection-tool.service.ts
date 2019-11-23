@@ -359,5 +359,6 @@ export class SelectionToolService extends AbstractToolService {
 
     onWheel(event: WheelEvent): void {
         this.manipulator.rotateSelection(event, this.selection);
+        this.clipBoard.restartDuplication();
     }
 }
