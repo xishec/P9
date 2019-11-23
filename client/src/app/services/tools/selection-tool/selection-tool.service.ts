@@ -18,6 +18,7 @@ import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 export class SelectionToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     lastMouseCoords: Coords2D = new Coords2D(0, 0);
+    lastMagneticMouseCoords: Coords2D = new Coords2D(0, 0);
     initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
@@ -199,11 +200,14 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection = true;
             let deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             let deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
-            if (this.magnetismService.state.value) {
-                deltaX = this.magnetismService.magnetizeX(deltaX);
-                deltaY = this.magnetismService.magnetizeY(deltaY);
+            // TO DO: make it also work with right mouse drag...
+            if (this.magnetismService.isMagnetic.value) {
+                deltaX = this.magnetismService.magnetizeX(deltaX, this.lastMagneticMouseCoords.x);
+                deltaY = this.magnetismService.magnetizeY(deltaY, this.lastMagneticMouseCoords.y);
+                this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            } else {
+                this.manipulator.translateSelection(deltaX, deltaY, this.selection);
             }
-            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
@@ -250,6 +254,10 @@ export class SelectionToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
+                this.lastMagneticMouseCoords.x =
+                    event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+                this.lastMagneticMouseCoords.y =
+                    event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
                 this.handleLeftMouseDown();
                 break;
 

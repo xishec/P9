@@ -38,7 +38,7 @@ export class MagnetismAttributesComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
-        this.magnetismService.state.subscribe((state: boolean) => {
+        this.magnetismService.isMagnetic.subscribe((state: boolean) => {
             this.magnetismAttributesForm.controls.state.setValue(state);
         });
         this.drawingLoaderService.untouchedWorkZone.subscribe(() => {
