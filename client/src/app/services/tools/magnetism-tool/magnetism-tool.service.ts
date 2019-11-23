@@ -77,6 +77,7 @@ export class MagnetismToolService {
         this.updateControlPointPosition(); // to implement a function that calls both magnetize
 
         const remainder = this.currentPointPosition.x % this.currentGridSize;
+        // Align correcly the rectangle on only the first move of the mouse
         if (
             isFirstSelection ||
             this.lastControlPoint !== this.currentPoint ||
@@ -95,6 +96,7 @@ export class MagnetismToolService {
         console.log('currentPointPosition: ' + this.currentPointPosition.x);
         console.log('remainder: ' + remainder);
 
+        // Add (or subtruct) a full grid size to the current position of the selected control point
         if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
             return 0;
         } else {

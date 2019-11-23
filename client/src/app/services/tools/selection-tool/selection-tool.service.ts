@@ -160,6 +160,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selection.emptySelection();
         this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
+        this.isFirstSelection = true;
     }
 
     singlySelectInvert(stackPosition: number): void {
