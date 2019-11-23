@@ -198,7 +198,6 @@ export class SelectionToolService extends AbstractToolService {
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
             this.selection.selectedElements.forEach((element) => {this.manipulator.translateElement(deltaX, deltaY, element);});
             this.selection.updateFullSelectionBox();
-            //this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
@@ -362,6 +361,7 @@ export class SelectionToolService extends AbstractToolService {
         if (!this.isTranslatingSelection) {
             this.manipulator.rotateSelection(event, this.selection);
             this.clipBoard.restartDuplication();
+            this.saveState();
         }
     }
 }
