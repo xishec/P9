@@ -11,7 +11,8 @@ export class ManipulatorService {
     renderer: Renderer2;
     isRotateOnSelf = false;
     boxOrigin: Coords2D = new Coords2D(0,0);
-    selectedElementsOrigin: Coords2D[] = new Array();
+    // selectedElementsOrigin: Coords2D[] = new Array();
+    selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = BASE_ROTATION;
     lastRotation: SVGTransform;
     angle = 0;
@@ -21,7 +22,7 @@ export class ManipulatorService {
     }
 
     preventRotationOverwrite(selection: Selection, wasRotateOnSelf: boolean): void {
-        let index = 0;
+        this.angle = 0;
         for (const el of selection.selectedElements) {
             const transformsList = el.transform.baseVal;
             if (
@@ -31,26 +32,30 @@ export class ManipulatorService {
                 const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
                 const rotateToZero = svg.createSVGTransform();
                 if (wasRotateOnSelf) {
-                    rotateToZero.setRotate(0, this.selectedElementsOrigin[index].x, this.selectedElementsOrigin[index].y);
+                    rotateToZero.setRotate(0, (this.selectedElementsOrigin.get(el) as Coords2D).x, (this.selectedElementsOrigin.get(el) as Coords2D).y);
                     el.transform.baseVal.insertItemBefore(rotateToZero, 0);
-                    index++;
                 } else {
                     rotateToZero.setRotate(0, this.boxOrigin.x, this.boxOrigin.y);
                     el.transform.baseVal.insertItemBefore(rotateToZero, 0);
                 }
             }
         }
-        this.angle = 0;
     }
 
     updateOrigins(selection: Selection): void {
-        this.selectedElementsOrigin.splice(0, this.selectedElementsOrigin.length);
-        for (const el of selection.selectedElements) {
-            const origin: Coords2D = {x: (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), y: (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2)};
-            this.selectedElementsOrigin.push(origin);
-        }
+        this.updateElementsOrigins(selection);
         this.boxOrigin.y = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
         this.boxOrigin.x = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
+    }
+
+    updateElementsOrigins(selection: Selection): void {
+        //this.selectedElementsOrigin.splice(0, this.selectedElementsOrigin.length);
+        this.selectedElementsOrigin.clear();
+        for (const el of selection.selectedElements) {
+            const origin: Coords2D = new Coords2D( (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2));
+            this.selectedElementsOrigin.set(el, origin);
+            //this.selectedElementsOrigin.push(origin);
+        }
     }
 
     rotateSelection(event: WheelEvent, selection: Selection): void {
@@ -60,54 +65,72 @@ export class ManipulatorService {
         } else {
             this.angle += this.rotationStep;
         }
-        if (this.isRotateOnSelf) {
-            this.rotateOnSelf(selection);
-        } else {
-            this.rotateOnBoxCenter(selection);
-        }
-    }
-
-    rotateOnBoxCenter(selection: Selection): void {
-        for (const el of selection.selectedElements) {
-            const transformsList = el.transform.baseVal;
-            if (
-                transformsList.numberOfItems === 0 ||
-                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
-            ) {
-                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                const rotateToZero = svg.createSVGTransform();
-                rotateToZero.setRotate(0, 0, 0);
-                el.transform.baseVal.insertItemBefore(rotateToZero, 0);
+        for (const element of selection.selectedElements) {
+            if (this.isRotateOnSelf) {
+                this.rotateElement(element, this.selectedElementsOrigin.get(element) as Coords2D);
+            } else {
+                this.rotateElement(element, this.boxOrigin);
             }
-            el.transform.baseVal.getItem(0).setRotate(this.angle, this.boxOrigin.x, this.boxOrigin.y);
         }
         selection.updateFullSelectionBox();
-        this.selectedElementsOrigin.splice(0, this.selectedElementsOrigin.length);
-        for (const el of selection.selectedElements) {
-            const origin: Coords2D = {x: (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), y: (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2)};
-            this.selectedElementsOrigin.push(origin);
+        if (!this.isRotateOnSelf) {
+            this.updateElementsOrigins(selection);
         }
+        // if (this.isRotateOnSelf) {
+        //     this.rotateOnSelf(selection);
+        // } else {
+        //     this.rotateOnBoxCenter(selection);
+        // }
     }
 
-    rotateOnSelf(selection: Selection): void {
-        let index = 0;
-        for (const el of selection.selectedElements) {
-            const transformsList = el.transform.baseVal;
-            if (
-                transformsList.numberOfItems === 0 ||
-                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
-            ) {
-                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                const rotateToZero = svg.createSVGTransform();
-                rotateToZero.setRotate(0, 0, 0);
-                el.transform.baseVal.insertItemBefore(rotateToZero, 0);
-            }
-            el.transform.baseVal.getItem(0).setRotate(this.angle, this.selectedElementsOrigin[index].x, this.selectedElementsOrigin[index].y);
-            index++;
+    rotateElement(element: SVGGElement, origin: Coords2D): void {
+        const transformsList = element.transform.baseVal;
+        if (
+            transformsList.numberOfItems === 0 ||
+            transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
+        ) {
+            const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+            const rotateToZero = svg.createSVGTransform();
+            rotateToZero.setRotate(0, 0, 0);
+            element.transform.baseVal.insertItemBefore(rotateToZero, 0);
         }
-
-        selection.updateFullSelectionBox();
+        element.transform.baseVal.getItem(0).setRotate(this.angle, origin.x, origin.y);
     }
+
+    // rotateOnBoxCenter(selection: Selection): void {
+    //     for (const el of selection.selectedElements) {
+    //         const transformsList = el.transform.baseVal;
+    //         if (
+    //             transformsList.numberOfItems === 0 ||
+    //             transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
+    //         ) {
+    //             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+    //             const rotateToZero = svg.createSVGTransform();
+    //             rotateToZero.setRotate(0, 0, 0);
+    //             el.transform.baseVal.insertItemBefore(rotateToZero, 0);
+    //         }
+    //         el.transform.baseVal.getItem(0).setRotate(this.angle, this.boxOrigin.x, this.boxOrigin.y);
+    //     }
+    //     selection.updateFullSelectionBox();
+    //     this.updateElementsOrigins(selection);
+    // }
+
+    // rotateOnSelf(selection: Selection): void {
+    //     for (const el of selection.selectedElements) {
+    //         const transformsList = el.transform.baseVal;
+    //         if (
+    //             transformsList.numberOfItems === 0 ||
+    //             transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_ROTATE
+    //         ) {
+    //             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+    //             const rotateToZero = svg.createSVGTransform();
+    //             rotateToZero.setRotate(0, 0, 0);
+    //             el.transform.baseVal.insertItemBefore(rotateToZero, 0);
+    //         }
+    //         el.transform.baseVal.getItem(0).setRotate(this.angle, (this.selectedElementsOrigin.get(el) as Coords2D).x, (this.selectedElementsOrigin.get(el) as Coords2D).y);
+    //     }
+    //     selection.updateFullSelectionBox();
+    // }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
         for (const el of selection.selectedElements) {

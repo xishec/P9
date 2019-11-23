@@ -306,7 +306,6 @@ export class SelectionToolService extends AbstractToolService {
 
             case MOUSE.RightButton:
                 this.handleRightMouseUp();
-                this.manipulator.angle = 0;
                 break;
 
             default:
@@ -358,7 +357,9 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        this.manipulator.rotateSelection(event, this.selection);
-        this.clipBoard.restartDuplication();
+        if (!this.isTranslatingSelection) {
+            this.manipulator.rotateSelection(event, this.selection);
+            this.clipBoard.restartDuplication();
+        }
     }
 }
