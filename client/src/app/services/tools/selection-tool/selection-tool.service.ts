@@ -196,7 +196,9 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
-            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            this.selection.selectedElements.forEach((element) => {this.manipulator.translateElement(deltaX, deltaY, element);});
+            this.selection.updateFullSelectionBox();
+            //this.manipulator.translateSelection(deltaX, deltaY, this.selection);
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
