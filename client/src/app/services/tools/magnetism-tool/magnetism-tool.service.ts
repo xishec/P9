@@ -105,11 +105,7 @@ export class MagnetismToolService {
         } else {
             const tempTotalDelta = this.totalDeltaX;
             this.totalDeltaX = 0;
-            if (tempTotalDelta > 0) {
-                return this.currentGridSize;
-            } else {
-                return -this.currentGridSize;
-            }
+            return tempTotalDelta > 0 ? this.currentGridSize : -this.currentGridSize;
         }
     }
 
@@ -123,11 +119,7 @@ export class MagnetismToolService {
         } else {
             const tempTotalDelta = this.totalDeltaY;
             this.totalDeltaY = 0;
-            if (tempTotalDelta > 0) {
-                return this.currentGridSize;
-            } else {
-                return -this.currentGridSize;
-            }
+            return tempTotalDelta > 0 ? this.currentGridSize : -this.currentGridSize;
         }
     }
 }
