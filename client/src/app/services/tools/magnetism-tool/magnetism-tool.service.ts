@@ -16,10 +16,8 @@ export class MagnetismToolService {
     currentGridSize: number;
     totalDeltaX = 0;
     totalDeltaY = 0;
-    lastXControlPoint = 0;
-    lastYControlPoint = 0;
-    lastGridSizeX = GRID_SIZE.Default;
-    lastGridSizeY = GRID_SIZE.Default;
+    lastControlPoint = 0;
+    lastGridSize = GRID_SIZE.Default;
 
     selection: Selection;
 
@@ -37,11 +35,8 @@ export class MagnetismToolService {
 
         this.gridToolService.size.subscribe((size: number) => {
             this.currentGridSize = size;
-            //console.log(this.currentGridSize);
         });
     }
-
-    //  ngOnInit() {}
 
     initializeService(selection: Selection) {
         this.selection = selection;
@@ -74,29 +69,41 @@ export class MagnetismToolService {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
     }
 
-    magnetizeX(deltaX: number, isFirstSelection: boolean): number {
-        this.updateControlPointPosition(); // to implement a function that calls both magnetize
+    magnetizeXY(deltaX: number, deltaY: number, isFirstSelection: boolean): Coords2D {
+        this.updateControlPointPosition();
 
-        const remainder = this.currentPointPosition.x % this.currentGridSize;
+        const magnetizedCoords = new Coords2D(0, 0);
 
-        //make this if a function?
         if (
             isFirstSelection ||
-            this.lastXControlPoint !== this.currentPoint ||
-            this.lastGridSizeX !== this.currentGridSize
+            this.lastControlPoint !== this.currentPoint ||
+            this.lastGridSize !== this.currentGridSize
         ) {
-            this.lastXControlPoint = this.currentPoint;
-            this.lastGridSizeX = this.currentGridSize;
+            this.lastControlPoint = this.currentPoint;
+            this.lastGridSize = this.currentGridSize;
+
             console.log('XFIRST SELECTION');
 
-            return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
+            const remainderX = this.currentPointPosition.x % this.currentGridSize;
+            const remainderY = this.currentPointPosition.y % this.currentGridSize;
+
+            magnetizedCoords.x =
+                remainderX < this.currentGridSize / 2 ? -remainderX : this.currentGridSize - remainderX;
+            magnetizedCoords.y =
+                remainderY < this.currentGridSize / 2 ? -remainderY : this.currentGridSize - remainderY;
+            return magnetizedCoords;
         }
 
+        magnetizedCoords.x = this.magnetizeX(deltaX);
+        magnetizedCoords.y = this.magnetizeY(deltaY);
+
+        return magnetizedCoords;
+    }
+
+    magnetizeX(deltaX: number): number {
         this.totalDeltaX += deltaX;
 
         this.currentPointPosition.x = Math.round(this.currentPointPosition.x);
-        console.log('currentPointPosition: ' + this.currentPointPosition.x);
-        console.log('remainder: ' + remainder);
 
         if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
             return 0;
@@ -113,28 +120,10 @@ export class MagnetismToolService {
         }
     }
 
-    magnetizeY(deltaY: number, isFirstSelection: boolean): number {
-        //this.lastControlPoint = this.currentPoint;
-        this.updateControlPointPosition(); // to implement a function that calls both magnetize
-
-        const remainder = this.currentPointPosition.y % this.currentGridSize;
-        if (
-            isFirstSelection ||
-            this.lastYControlPoint !== this.currentPoint ||
-            this.lastGridSizeY !== this.currentGridSize
-        ) {
-            this.lastYControlPoint = this.currentPoint;
-            this.lastGridSizeY = this.currentGridSize;
-            console.log('YFIRST SELECTION');
-
-            return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
-        }
-
+    magnetizeY(deltaY: number): number {
         this.totalDeltaY += deltaY;
 
         this.currentPointPosition.y = Math.round(this.currentPointPosition.y);
-        console.log('currentPointPosition: ' + this.currentPointPosition.y);
-        console.log('remainder: ' + remainder);
 
         if (Math.abs(this.totalDeltaY) < this.currentGridSize) {
             return 0;
