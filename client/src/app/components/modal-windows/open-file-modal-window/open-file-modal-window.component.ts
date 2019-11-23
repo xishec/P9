@@ -119,7 +119,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     handleSelection(event: any): void {
-        this.selectedOption = event.option.selected ? event.option.value : '';
+        this.selectedOption = event.option.selected ? event.option.value : 0;
         this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
     }
 
