@@ -147,6 +147,10 @@ export class StampToolService extends AbstractToolService {
             'transform',
             `rotate(${this.angle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        const rotateToZero = svg.createSVGTransform();
+        rotateToZero.setRotate(0, this.currentMouseCoords.x, this.currentMouseCoords.y);
+        el.transform.baseVal.insertItemBefore(rotateToZero, 0);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
             this.drawStack.push(el);
