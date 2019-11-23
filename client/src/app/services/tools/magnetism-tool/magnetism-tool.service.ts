@@ -110,15 +110,41 @@ export class MagnetismToolService {
         }
     }
 
-    magnetizeY(deltaY: number, lastYPosition: number): number {
+    magnetizeY(deltaY: number, isFirstSelection: boolean): number {
+        //this.lastControlPoint = this.currentPoint;
+        this.updateControlPointPosition(); // to implement a function that calls both magnetize
+
+        const remainder = this.currentPointPosition.y % this.currentGridSize;
+        if (
+            isFirstSelection ||
+            this.lastControlPoint !== this.currentPoint ||
+            this.lastGridSize !== this.currentGridSize
+        ) {
+            this.lastControlPoint = this.currentPoint;
+            this.lastGridSize = this.currentGridSize;
+            console.log('FIRST SELECTION');
+
+            return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
+        }
+
         this.totalDeltaY += deltaY;
 
-        let remainder = this.totalDeltaY % this.currentGridSize;
-        if (remainder < this.currentGridSize / 2) {
+        this.currentPointPosition.y = Math.round(this.currentPointPosition.y);
+        console.log('currentPointPosition: ' + this.currentPointPosition.y);
+        console.log('remainder: ' + remainder);
+
+        if (Math.abs(this.totalDeltaY) < this.currentGridSize) {
             return 0;
         } else {
+            console.log('total deltaY: ' + this.totalDeltaY);
+
+            const tempTotalDelta = this.totalDeltaY;
             this.totalDeltaY = 0;
-            return lastYPosition + this.currentGridSize / 2;
+            if (tempTotalDelta > 0) {
+                return this.currentGridSize;
+            } else {
+                return -this.currentGridSize;
+            }
         }
     }
 }
