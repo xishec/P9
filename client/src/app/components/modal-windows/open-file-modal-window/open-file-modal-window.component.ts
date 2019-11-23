@@ -10,7 +10,6 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { GIFS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
-import { Message } from '../../../../../../common/communication/Message';
 import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { Drawing } from 'src/classes/Drawing';
@@ -27,7 +26,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     drawingsFromServer: Drawing[] = [];
     SVGs: Map<string, string> = new Map([]);
-    selectedOption = '';
+    selectedOption: number;
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
@@ -131,7 +130,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     loadServerFile(): void {
         this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.drawingInfo.name === this.selectedOption,
+            (drawing) => drawing.drawingInfo.createdOn === this.selectedOption,
         ) as Drawing;
         this.drawingLoaderService.currentDrawing.next(selectedDrawing);
         this.closeDialog();
@@ -181,10 +180,13 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     onDelete() {
-        this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
-            if (message.title && message.title === 'Delete' && message.body && message.body === 'Success') {
+        const selectedDrawing: Drawing = this.drawingsFromServer.find(
+            (drawing) => drawing.drawingInfo.createdOn === this.selectedOption,
+        ) as Drawing;
+        this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdOn).subscribe((createdOn: number) => {
+            if (createdOn === selectedDrawing.drawingInfo.createdOn) {
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
-                    return drawing.drawingInfo.name !== this.selectedOption;
+                    return drawing.drawingInfo.createdOn !== createdOn;
                 });
                 this.snackBar.open('Suppression réussie!', 'OK', {
                     duration: SNACKBAR_DURATION,
