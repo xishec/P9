@@ -40,6 +40,7 @@ export class ManipulatorService {
                 }
             }
         }
+        this.angle = 0;
     }
 
     updateOrigins(selection: Selection): void {
