@@ -376,12 +376,12 @@ enum CONTROL_POINTS {
     TopLeft = 0,
     TopMiddle = 1,
     TopRight = 2,
-    CenterLeft = 3,
+    CenterLeft = 7,
     CenterMiddle = 8,
-    CenterRight = 4,
-    BottomLeft = 5,
-    BottomMiddle = 6,
-    BottomRight = 7,
+    CenterRight = 3,
+    BottomLeft = 6,
+    BottomMiddle = 5,
+    BottomRight = 4,
 }
 
 const TOP_CONTROL_POINTS: MagnetismPoint[] = [
