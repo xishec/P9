@@ -1,4 +1,4 @@
-import { Drawing } from '../../../common/communication/Drawing';
+import { Drawing } from './Drawing';
 
 export class DrawingState {
     drawing: Drawing;

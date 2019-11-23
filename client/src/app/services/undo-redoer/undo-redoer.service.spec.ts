@@ -2,13 +2,13 @@ import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingState } from '../../../classes/DrawingState';
 import { DEFAULT_WHITE } from '../../../constants/color-constants';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { UndoRedoerService } from './undo-redoer.service';
+import { Drawing } from 'src/classes/Drawing';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
 const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);

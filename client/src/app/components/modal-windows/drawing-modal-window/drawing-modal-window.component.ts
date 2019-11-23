@@ -7,11 +7,11 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from '../../../services/tools/color-tool/color-tool.service';
+import { Drawing } from 'src/classes/Drawing';
 
 @Component({
     selector: 'app-drawing-modal-window',

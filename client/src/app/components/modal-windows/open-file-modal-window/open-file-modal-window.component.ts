@@ -10,10 +10,10 @@ import { FileManagerService } from 'src/app/services/server/file-manager/file-ma
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { GIFS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { Message } from '../../../../../../common/communication/Message';
 import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { Drawing } from 'src/classes/Drawing';
 
 @Component({
     selector: 'app-open-file-modal-window',

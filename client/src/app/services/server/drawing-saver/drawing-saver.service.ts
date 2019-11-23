@@ -9,9 +9,9 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
 import { FileManagerService } from '../file-manager/file-manager.service';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { SVG_NS } from 'src/constants/constants';
 import { CloudService } from '../../cloud/cloud.service';
+import { Drawing } from 'src/classes/Drawing';
 
 @Injectable({
     providedIn: 'root',

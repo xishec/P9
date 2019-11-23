@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 import { DrawingModel } from '../model/post';
 import { FileManagerService } from './file-manager.service';

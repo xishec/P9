@@ -14,11 +14,11 @@ import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.serv
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
-import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
 import { CloudService } from 'src/app/services/cloud/cloud.service';
+import { Drawing } from 'src/classes/Drawing';
 
 @Component({
     selector: 'app-work-zone',

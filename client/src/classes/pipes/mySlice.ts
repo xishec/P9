@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Drawing } from '../../../../common/communication/Drawing';
+
+import { Drawing } from '../Drawing';
 
 @Pipe({
     name: 'mySlice',
