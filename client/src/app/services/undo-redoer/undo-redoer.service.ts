@@ -44,8 +44,7 @@ export class UndoRedoerService {
         this.redos = [];
     }
 
-    createDrawing(idStackArray: string[]): Drawing {
-
+    getCleanInnerHTML() : string {
         const cloneWorkzone = this.workzoneRef.nativeElement.cloneNode(true);
 
         const elToRemove = new Array<SVGElement>();
@@ -60,10 +59,17 @@ export class UndoRedoerService {
             cloneWorkzone.removeChild(el);
         });
 
+        return (cloneWorkzone as SVGElement).innerHTML;
+    }
+ 
+    createDrawing(idStackArray: string[]): Drawing {
+
+        const cleanedInnerHTML = this.getCleanInnerHTML();
+
         const drawing: Drawing = new Drawing(
             '',
             [],
-            (cloneWorkzone as SVGElement).innerHTML,
+            cleanedInnerHTML,
             idStackArray,
             this.currentDrawingInfos,
         );
