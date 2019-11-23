@@ -71,11 +71,7 @@ export class MagnetismToolService {
 
         const magnetizedCoords = new Coords2D(0, 0);
 
-        if (
-            isFirstSelection ||
-            this.lastControlPoint !== this.currentPoint ||
-            this.lastGridSize !== this.currentGridSize
-        ) {
+        if (this.needToAlign(isFirstSelection)) {
             this.lastControlPoint = this.currentPoint;
             this.lastGridSize = this.currentGridSize;
 
@@ -93,6 +89,14 @@ export class MagnetismToolService {
         magnetizedCoords.y = this.magnetizeY(deltaY);
 
         return magnetizedCoords;
+    }
+
+    needToAlign(isFirstSelection: boolean): boolean {
+        return (
+            isFirstSelection ||
+            this.lastControlPoint !== this.currentPoint ||
+            this.lastGridSize !== this.currentGridSize
+        );
     }
 
     magnetizeX(deltaX: number): number {
