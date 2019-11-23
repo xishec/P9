@@ -71,18 +71,25 @@ export class MagnetismToolService {
     // grid size n'est pas bon
     // remainder semble aussi etre weird
     magnetizeX(deltaX: number, lastXPosition: number): number {
-        this.totalDeltaX += deltaX;
-        let remainder = this.totalDeltaX % this.currentGridSize;
+        this.updateControlPointPosition(); // to implement a function that calls both magnetize
 
-        // console.log(deltaX);
+        this.totalDeltaX += deltaX;
+        let remainder = this.currentPointPosition.x % this.currentGridSize;
+        // let finalDeltaX = this.currentPointPosition.x - remainder;
+
+        console.log('currentPointPosition: ' + this.currentPointPosition.x);
         console.log('remainder: ' + remainder);
+        console.log('this.currentGridSize: ' + this.currentGridSize);
+        //   console.log(this.selection.controlPoints[this.currentPoint].cx.baseVal.value);
+        // console.log(deltaX);
         //  console.log('grid size: ' + this.currentGridSize);
 
         if (remainder < this.currentGridSize / 2) {
-            return 0;
+            this.totalDeltaX = 0;
+            return -remainder;
         } else {
             this.totalDeltaX = 0;
-            return lastXPosition + this.currentGridSize / 2;
+            return this.currentGridSize - remainder;
         }
     }
 

@@ -203,7 +203,7 @@ export class SelectionToolService extends AbstractToolService {
             // TO DO: make it also work with right mouse drag...
             if (this.magnetismService.isMagnetic.value) {
                 deltaX = this.magnetismService.magnetizeX(deltaX, this.lastMagneticMouseCoords.x);
-                deltaY = this.magnetismService.magnetizeY(deltaY, this.lastMagneticMouseCoords.y);
+                this.magnetismService.magnetizeY(deltaY, this.lastMagneticMouseCoords.y);
                 this.manipulator.translateSelection(deltaX, deltaY, this.selection);
             } else {
                 this.manipulator.translateSelection(deltaX, deltaY, this.selection);
