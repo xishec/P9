@@ -37,11 +37,11 @@ export class FileManagerController {
         });
 
         this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
-            let id = req.params.id;
+            let id: string = req.params.id;
             this.fileManagerService
                 .deleteDrawing(id)
                 .then(() => {
-                    res.json(id);
+                    res.json(Number(id));
                 })
                 .catch((error: MongoError) => {
                     throw error;
