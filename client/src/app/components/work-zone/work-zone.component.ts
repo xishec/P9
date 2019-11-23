@@ -27,6 +27,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     gridIsActive = false;
+    modalIsDisplayed: boolean;
 
     gridSize = GRID_SIZE.Default;
     gridOpacity = GRID_OPACITY.Max;
@@ -109,6 +110,9 @@ export class WorkZoneComponent implements OnInit {
             this.gridOpacity = opacity;
         });
 
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
         this.setDefaultWorkZoneProperties();
     }
 
