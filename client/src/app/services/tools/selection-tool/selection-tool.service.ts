@@ -200,13 +200,11 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection
         ) {
             this.isTranslatingSelection = true;
-            let deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
-            let deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
-            // TO DO: make it also work with right mouse drag...
+            const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
+            const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
             if (this.magnetismService.isMagnetic.value) {
-                deltaX = this.magnetismService.magnetizeX(deltaX, this.isFirstSelection);
-                deltaY = this.magnetismService.magnetizeY(deltaY, this.isFirstSelection);
-                this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+                const magnetizedCoords = this.magnetismService.magnetizeXY(deltaX, deltaY, this.isFirstSelection);
+                this.manipulator.translateSelection(magnetizedCoords.x, magnetizedCoords.y, this.selection);
                 this.isFirstSelection = false;
             } else {
                 this.isFirstSelection = true;

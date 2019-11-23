@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+
 import { CONTROL_POINTS, GRID_SIZE } from 'src/constants/tool-constants';
 import { GridToolService } from '../grid-tool/grid-tool.service';
-//import { SelectionToolService } from '../selection-tool/selection-tool.service';
 import { Coords2D } from 'src/classes/Coords2D';
 import { BehaviorSubject } from 'rxjs';
 import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
@@ -28,7 +28,6 @@ export class MagnetismToolService {
 
         private drawingLoaderService: DrawingLoaderService,
     ) {
-        // Prendre du tool selector si ca chie
         this.currentPoint = CONTROL_POINTS.TopLeft;
         this.currentPointPosition = new Coords2D(0, 0);
         this.currentGridSize = GRID_SIZE.Default;
@@ -43,8 +42,6 @@ export class MagnetismToolService {
     }
 
     updateControlPointPosition(): void {
-        console.log('current point:' + this.currentPoint);
-
         if (this.currentPoint === CONTROL_POINTS.CenterMiddle) {
             const selectionBox: SVGRectElement = this.selection.selectionBox;
             const x = selectionBox.x.baseVal.value + selectionBox.width.baseVal.value / 2;
@@ -82,8 +79,6 @@ export class MagnetismToolService {
             this.lastControlPoint = this.currentPoint;
             this.lastGridSize = this.currentGridSize;
 
-            console.log('XFIRST SELECTION');
-
             const remainderX = this.currentPointPosition.x % this.currentGridSize;
             const remainderY = this.currentPointPosition.y % this.currentGridSize;
 
@@ -108,8 +103,6 @@ export class MagnetismToolService {
         if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
             return 0;
         } else {
-            console.log('total deltaX: ' + this.totalDeltaX);
-
             const tempTotalDelta = this.totalDeltaX;
             this.totalDeltaX = 0;
             if (tempTotalDelta > 0) {
@@ -128,8 +121,6 @@ export class MagnetismToolService {
         if (Math.abs(this.totalDeltaY) < this.currentGridSize) {
             return 0;
         } else {
-            console.log('total deltaY: ' + this.totalDeltaY);
-
             const tempTotalDelta = this.totalDeltaY;
             this.totalDeltaY = 0;
             if (tempTotalDelta > 0) {
