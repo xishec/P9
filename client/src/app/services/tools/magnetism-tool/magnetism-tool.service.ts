@@ -18,7 +18,8 @@ export class MagnetismToolService {
     totalDeltaY = 0;
     lastXControlPoint = 0;
     lastYControlPoint = 0;
-    lastGridSize = GRID_SIZE.Default;
+    lastGridSizeX = GRID_SIZE.Default;
+    lastGridSizeY = GRID_SIZE.Default;
 
     selection: Selection;
 
@@ -74,17 +75,18 @@ export class MagnetismToolService {
     }
 
     magnetizeX(deltaX: number, isFirstSelection: boolean): number {
-        //this.lastControlPoint = this.currentPoint;
         this.updateControlPointPosition(); // to implement a function that calls both magnetize
 
         const remainder = this.currentPointPosition.x % this.currentGridSize;
+
+        //make this if a function?
         if (
             isFirstSelection ||
             this.lastXControlPoint !== this.currentPoint ||
-            this.lastGridSize !== this.currentGridSize
+            this.lastGridSizeX !== this.currentGridSize
         ) {
             this.lastXControlPoint = this.currentPoint;
-            this.lastGridSize = this.currentGridSize;
+            this.lastGridSizeX = this.currentGridSize;
             console.log('XFIRST SELECTION');
 
             return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
@@ -119,10 +121,10 @@ export class MagnetismToolService {
         if (
             isFirstSelection ||
             this.lastYControlPoint !== this.currentPoint ||
-            this.lastGridSize !== this.currentGridSize
+            this.lastGridSizeY !== this.currentGridSize
         ) {
             this.lastYControlPoint = this.currentPoint;
-            this.lastGridSize = this.currentGridSize;
+            this.lastGridSizeY = this.currentGridSize;
             console.log('YFIRST SELECTION');
 
             return remainder < this.currentGridSize / 2 ? -remainder : this.currentGridSize - remainder;
