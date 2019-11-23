@@ -8,10 +8,10 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { MagnetismToolService } from '../tools/magnetism-tool/magnetism-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
-import { MagnetismToolService } from '../tools/magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',

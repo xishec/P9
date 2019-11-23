@@ -8,6 +8,7 @@ import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawi
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -17,7 +18,6 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 
 @Component({
     selector: 'app-work-zone',

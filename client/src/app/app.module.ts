@@ -58,6 +58,7 @@ import { EllipsisAttributesComponent } from './components/sidebar-tools/attribut
 import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
+// tslint:disable-next-line: max-line-length
 import { MagnetismAttributesComponent } from './components/sidebar-tools/attribute-panel/magnetism-attributes/magnetism-attributes.component';
 import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';

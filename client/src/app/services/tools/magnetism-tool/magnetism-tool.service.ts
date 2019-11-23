@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { CONTROL_POINTS, GRID_SIZE } from 'src/constants/tool-constants';
-import { GridToolService } from '../grid-tool/grid-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 import { BehaviorSubject } from 'rxjs';
-import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
+import { Coords2D } from 'src/classes/Coords2D';
 import { Selection } from 'src/classes/selection/selection';
+import { CONTROL_POINTS, GRID_SIZE } from 'src/constants/tool-constants';
+import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
+import { GridToolService } from '../grid-tool/grid-tool.service';
 
 @Injectable({
     providedIn: 'root',
