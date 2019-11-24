@@ -85,9 +85,12 @@ export class ManipulatorService {
         return selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
     }
 
-            el.transform.baseVal.getItem(0).setScale(1, newScaleFactor);
-            el.transform.baseVal.getItem(1).setTranslate(0, deltaY);
-        }
+    applyTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number) {
+        selection.selectedElements.forEach((element: SVGGElement) => {
+            element.transform.baseVal.getItem(0).setTranslate(xTranslate, yTranslate);
+            element.transform.baseVal.getItem(1).setScale(xScale, yScale);
+        });
+    }
         selection.updateFullSelectionBox();
 
     }
