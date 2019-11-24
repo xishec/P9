@@ -20,6 +20,11 @@ export class Selection {
     controlPoints: SVGCircleElement[] = new Array(CONTROL_POINTS_AMOUNT);
     activeControlPoint: SVGCircleElement;
 
+    ogSelectionBoxHeight: number;
+    ogSelectionBoxWidth: number;
+    ogActiveControlPointCoords: Coords2D;
+    ogSelectionBoxPositions: Coords2D;
+
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     isAppended = false;
