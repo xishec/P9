@@ -114,6 +114,23 @@ export class BFSHelper {
             });
 
             if (closestNeighbor.x === -1 && closestNeighbor.x === -1) {
+                const neighborPixels = [
+                    new Coords2D(pixel.x - 1, pixel.y - 1),
+                    new Coords2D(pixel.x - 1, pixel.y + 1),
+                    new Coords2D(pixel.x + 1, pixel.y - 1),
+                    new Coords2D(pixel.x + 1, pixel.y + 1),
+                ];
+                neighborPixels.forEach((neighborPixel: Coords2D) => {
+                    if (
+                        this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
+                        !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
+                    ) {
+                        closestNeighbor = neighborPixel;
+                    }
+                });
+            }
+
+            if (closestNeighbor.x === -1 && closestNeighbor.x === -1) {
                 let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
                 this.strokes.forEach((el: Coords2D) => {
                     if (!this.visited.has(`${el.x} ${el.y}`)) {
