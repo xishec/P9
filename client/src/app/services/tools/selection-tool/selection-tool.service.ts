@@ -195,9 +195,14 @@ export class SelectionToolService extends AbstractToolService {
 
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if ((this.isScalingSelection) || (this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection)) {
+        } else if ((this.isScalingSelection) ||
+                    (this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection)) {
             this.isScalingSelection = true;
-            this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            this.manipulator.scaleSelection(
+                this.currentMouseCoords,
+                this.initialMouseCoords,
+                this.selection.activeControlPoint,
+                this.selection);
         } else if (
             (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting && !this.isScalingSelection) ||
             (this.isTranslatingSelection)
