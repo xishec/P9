@@ -5,7 +5,7 @@
 
     <form [formGroup]="magnetismAttributesForm">
         <div class="attribute">
-            <label for="activateGrid">
+            <label for="activateMagnetism">
                 Activer le magnétisme
                 <i
                     class="fas fa-info-circle"
@@ -18,15 +18,18 @@
         </div>
 
         <div class="attribute">
+            <label for="controlPoint">Sélection du point d'ancrage</label>
+            <br />
             <div>
+                <br />
                 <mat-button-toggle-group>
                     <mat-button-toggle
                         *ngFor="let TOP_MAGNETISM_POINT of TOP_CONTROL_POINTS"
                         [value]="TOP_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === TOP_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
-                        >{{ TOP_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                    >
+                        ><img src="{{ TOP_MAGNETISM_POINT.svg_icon }}"
+                    /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
 
@@ -37,8 +40,8 @@
                         [value]="CENTER_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === CENTER_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
-                        >{{ CENTER_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                    >
+                        ><img src="{{ CENTER_MAGNETISM_POINT.svg_icon }}"
+                    /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
 
@@ -49,8 +52,8 @@
                         [value]="BOTTOM_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === BOTTOM_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
-                        >{{ BOTTOM_MAGNETISM_POINT.svg_icon }}</mat-button-toggle
-                    >
+                        ><img src="{{ BOTTOM_MAGNETISM_POINT.svg_icon }}"
+                    /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
         </div>
