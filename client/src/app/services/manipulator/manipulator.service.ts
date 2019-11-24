@@ -45,21 +45,21 @@ export class ManipulatorService {
         }
     }
 
-    applyTopScale(currentMouse: Coords2D, initialMouse: Coords2D, selection: Selection): void {
-        for (const el of selection.selectedElements) {
-            const transformsList = el.transform.baseVal;
-            if (
-                transformsList.numberOfItems === 0 ||
-                transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_SCALE
-            ) {
-                const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+    initTransformMatrix(selection: Selection) {
 
-                nullTranslate.setTranslate(0, 0);
-                el.transform.baseVal.insertItemBefore(nullTranslate, 0);
-                const nullScale = svg.createSVGTransform();
-                nullScale.setScale(1, 1);
-                el.transform.baseVal.insertItemBefore(nullScale, 0);
-            }
+        selection.selectedElements.forEach((element: SVGGElement) => {
+            const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+
+            const initScale = svg.createSVGTransform();
+            const initTranslate = svg.createSVGTransform();
+
+            initScale.setScale(1, 1);
+            initTranslate.setTranslate(0, 0);
+
+            element.transform.baseVal.insertItemBefore(initTranslate, 0);
+            element.transform.baseVal.insertItemBefore(initScale, 1);
+        });
+    }
             let newScaleFactor = currentMouse.y / initialMouse.y;
 
             const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y;
