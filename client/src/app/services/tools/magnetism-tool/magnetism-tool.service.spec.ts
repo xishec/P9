@@ -88,7 +88,7 @@ fdescribe('MagnetismToolService', () => {
         expect(service.needToAlign(true)).toEqual(true);
     });
 
-    it('needToAlign should return false if isFirstSelection is false and all other elments are the same', () => {
+    it('needToAlign should return false if isFirstSelection is false and all other elments did not change', () => {
         service.lastControlPoint = 0;
         service.lastGridSize = GRID_SIZE.Default;
 
@@ -108,7 +108,7 @@ fdescribe('MagnetismToolService', () => {
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
-    it('magnetizeXY should return a new Coords2D with x and y elements equal currentGridSize - remainder', () => {
+    it('magnetizeXY should return a new Coords2D with x and y elements equal to (currentGridSize - remainder)', () => {
         const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(true);
         const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
 
@@ -143,7 +143,7 @@ fdescribe('MagnetismToolService', () => {
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
-    it('magnetizeXY should return a new Coords2D with -10,-10 if delta X and Y and -10', () => {
+    it('magnetizeXY should return a new Coords2D with -10,-10 if delta X and Y are -10', () => {
         const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
         const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
         service.currentGridSize = 10;
