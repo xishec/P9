@@ -65,4 +65,22 @@ fdescribe('MagnetismToolService', () => {
 
         expect(service.isMagnetic.value).toEqual(true);
     });
+
+    it('switchState should change isMagnetic to true if it is false', () => {
+        service.drawingLoaderService.untouchedWorkZone = new BehaviorSubject(false);
+        service.isMagnetic = new BehaviorSubject(false);
+
+        service.switchState();
+
+        expect(service.isMagnetic.value).toEqual(true);
+    });
+
+    it('switchState should change isMagnetic to false if it is true', () => {
+        service.drawingLoaderService.untouchedWorkZone = new BehaviorSubject(false);
+        service.isMagnetic = new BehaviorSubject(true);
+
+        service.switchState();
+
+        expect(service.isMagnetic.value).toEqual(false);
+    });
 });
