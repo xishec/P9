@@ -333,10 +333,12 @@ export class SelectionToolService extends AbstractToolService {
         }, 0);
     }
 
+    onMouseLeave(event: MouseEvent): void {
+        this.cleanUp();
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty

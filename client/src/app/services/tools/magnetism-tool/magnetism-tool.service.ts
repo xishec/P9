@@ -98,8 +98,6 @@ export class MagnetismToolService {
     magnetizeX(deltaX: number): number {
         this.totalDeltaX += deltaX;
 
-        this.currentPointPosition.x = Math.round(this.currentPointPosition.x);
-
         if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
             return 0;
         } else {
@@ -111,8 +109,6 @@ export class MagnetismToolService {
 
     magnetizeY(deltaY: number): number {
         this.totalDeltaY += deltaY;
-
-        this.currentPointPosition.y = Math.round(this.currentPointPosition.y);
 
         if (Math.abs(this.totalDeltaY) < this.currentGridSize) {
             return 0;
