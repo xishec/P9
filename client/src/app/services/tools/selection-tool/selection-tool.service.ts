@@ -238,6 +238,26 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
+
+        if (this.selection.mouseIsInControlPoint(this.currentMouseCoords)) {
+            this.saveOriginalState();
+            this.manipulator.initTransformMatrix(this.selection);
+        }
+    }
+
+    saveOriginalState(): void {
+        this.selection.ogSelectionBoxHeight = this.getDOMRect(this.selection.selectionBox).height;
+        this.selection.ogSelectionBoxWidth = this.getDOMRect(this.selection.selectionBox).width;
+
+        this.selection.ogSelectionBoxPositions = new Coords2D(
+            this.getDOMRect(this.selection.selectionBox).left - SIDEBAR_WIDTH + window.scrollX,
+            this.getDOMRect(this.selection.selectionBox).top + window.scrollY,
+        );
+
+        this.selection.ogActiveControlPointCoords = new Coords2D(
+            this.selection.getControlPointCx(this.selection.activeControlPoint) + window.scrollX,
+            this.selection.getControlPointCy(this.selection.activeControlPoint) + window.scrollY,
+        );
     }
 
     handleRightMouseDown(): void {
