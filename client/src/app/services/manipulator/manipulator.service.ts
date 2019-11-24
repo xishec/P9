@@ -91,6 +91,22 @@ export class ManipulatorService {
             element.transform.baseVal.getItem(1).setScale(xScale, yScale);
         });
     }
+
+    applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean) {
+        let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
+        dx = isRight ? dx : -dx;
+
+        let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
+        dy = isBottom ? dy : -dy;
+
+        const xScaleFactor = this.getXScaleFactor(dx, selection, isRight);
+        const yScaleFactor = this.getYScaleFactor(dy, selection, isBottom);
+
+        const xTranslate = this.getXTranslate(dx, xScaleFactor, selection, isRight);
+        const yTranslate = this.getYTranslate(dy, yScaleFactor, selection, isBottom);
+
+        this.applyTransformations(selection, xScaleFactor, yScaleFactor, xTranslate, yTranslate);
+
         selection.updateFullSelectionBox();
     }
 
