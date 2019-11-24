@@ -92,7 +92,32 @@ export class ManipulatorService {
         });
     }
         selection.updateFullSelectionBox();
+    }
 
+    applyScaleX(currentMouse: Coords2D, selection: Selection, isRight: boolean): void {
+        let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
+        dx = isRight ? dx : -dx;
+
+        const scaleFactor = this.getXScaleFactor(dx, selection, isRight);
+
+        const xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
+
+        this.applyTransformations(selection, scaleFactor, 1, xTranslate, 0);
+
+        selection.updateFullSelectionBox();
+    }
+
+    applyScaleY(currentMouse: Coords2D, selection: Selection, isBottom: boolean): void {
+        let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
+        dy = isBottom ? dy : -dy;
+
+        const scaleFactor = this.getYScaleFactor(dy, selection, isBottom);
+
+        const yTranslate = this.getYTranslate(dy, scaleFactor, selection, isBottom);
+
+        this.applyTransformations(selection, 1, scaleFactor, 0, yTranslate);
+
+        selection.updateFullSelectionBox();
     }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
