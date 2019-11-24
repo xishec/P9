@@ -23,11 +23,7 @@ export class MagnetismToolService {
 
     isMagnetic: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    constructor(
-        private gridToolService: GridToolService,
-
-        private drawingLoaderService: DrawingLoaderService,
-    ) {
+    constructor(private gridToolService: GridToolService, public drawingLoaderService: DrawingLoaderService) {
         this.currentPoint = CONTROL_POINTS.TopLeft;
         this.currentPointPosition = new Coords2D(0, 0);
         this.currentGridSize = GRID_SIZE.Default;
