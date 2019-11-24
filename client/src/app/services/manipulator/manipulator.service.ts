@@ -61,6 +61,20 @@ export class ManipulatorService {
         });
     }
             let newScaleFactor = currentMouse.y / initialMouse.y;
+    getXScaleFactor(dx: number, selection: Selection, isRight: boolean): number {
+        const distFromOgXToCurrentMouse = dx + (isRight ? selection.ogSelectionBoxWidth : 0);
+
+        const newWidth = distFromOgXToCurrentMouse + (isRight ? 0 : selection.ogSelectionBoxWidth);
+
+        return newWidth / selection.ogSelectionBoxWidth;
+    }
+    getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {
+        const distFromOgYToCurrentMouse = dy + (isBottom ? selection.ogSelectionBoxHeight : 0);
+
+        const newHeight = distFromOgYToCurrentMouse + (isBottom ? 0 : selection.ogSelectionBoxHeight);
+
+        return newHeight / selection.ogSelectionBoxHeight;
+    }
 
             const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y;
             const deltaY = (currentY - (currentY * newScaleFactor)) / newScaleFactor;
