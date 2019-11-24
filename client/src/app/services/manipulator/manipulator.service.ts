@@ -14,24 +14,30 @@ export class ManipulatorService {
     }
 
     scaleSelection(currentMouseCoords: Coords2D, initialMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
-        switch(fromControlPoint.getAttribute('controlPointId') as string) {
+        switch (fromControlPoint.getAttribute('controlPointId') as string) {
             case '0':
+                this.applyScaleCorner(currentMouseCoords, selection, false, false);
                 break;
             case '1':
-                //this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
+                this.applyScaleY(currentMouseCoords, selection, false);
                 break;
             case '2':
+                this.applyScaleCorner(currentMouseCoords, selection, true, false);
                 break;
             case '3':
+                this.applyScaleX(currentMouseCoords, selection, true);
                 break;
             case '4':
+                this.applyScaleCorner(currentMouseCoords, selection, true, true);
                 break;
             case '5':
-                this.applyTopScale(currentMouseCoords, initialMouseCoords, selection);
+                this.applyScaleY(currentMouseCoords, selection, true);
                 break;
             case '6':
+                this.applyScaleCorner(currentMouseCoords, selection, false, true);
                 break;
             case '7':
+                this.applyScaleX(currentMouseCoords, selection, false);
                 break;
             default:
                 console.log('what');
@@ -47,7 +53,7 @@ export class ManipulatorService {
                 transformsList.getItem(0).type !== SVGTransform.SVG_TRANSFORM_SCALE
             ) {
                 const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-                const nullTranslate = svg.createSVGTransform();
+
                 nullTranslate.setTranslate(0, 0);
                 el.transform.baseVal.insertItemBefore(nullTranslate, 0);
                 const nullScale = svg.createSVGTransform();
