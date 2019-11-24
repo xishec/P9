@@ -83,4 +83,16 @@ fdescribe('MagnetismToolService', () => {
 
         expect(service.isMagnetic.value).toEqual(false);
     });
+
+    it('needToAlign should return true if isFirstSelection is true', () => {
+        expect(service.needToAlign(true)).toEqual(true);
+    });
+
+    it('needToAlign should return false if isFirstSelection is false and all other elments are the same', () => {
+        service.lastControlPoint = 0;
+        service.lastGridSize = GRID_SIZE.Default;
+
+        expect(service.needToAlign(false)).toEqual(false);
+    });
+
 });
