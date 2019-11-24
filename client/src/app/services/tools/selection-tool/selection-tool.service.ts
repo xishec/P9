@@ -66,6 +66,8 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
+        this.magnetismService.totalDeltaY = 0;
+        this.magnetismService.totalDeltaX = 0;
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {

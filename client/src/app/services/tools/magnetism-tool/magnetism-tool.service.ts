@@ -102,7 +102,12 @@ export class MagnetismToolService {
             return 0;
         } else {
             const tempTotalDelta = this.totalDeltaX;
-            this.totalDeltaX = 0;
+            if (this.totalDeltaX < 0) {
+                this.totalDeltaX = this.totalDeltaX + this.currentGridSize;
+            } else {
+                this.totalDeltaX = this.totalDeltaX - this.currentGridSize;
+            }
+
             return tempTotalDelta > 0 ? this.currentGridSize : -this.currentGridSize;
         }
     }
@@ -114,7 +119,12 @@ export class MagnetismToolService {
             return 0;
         } else {
             const tempTotalDelta = this.totalDeltaY;
-            this.totalDeltaY = 0;
+            if (this.totalDeltaY < 0) {
+                this.totalDeltaY = this.totalDeltaY + this.currentGridSize;
+            } else {
+                this.totalDeltaY = this.totalDeltaY - this.currentGridSize;
+            }
+
             return tempTotalDelta > 0 ? this.currentGridSize : -this.currentGridSize;
         }
     }
