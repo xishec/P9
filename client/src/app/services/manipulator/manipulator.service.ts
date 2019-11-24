@@ -60,7 +60,7 @@ export class ManipulatorService {
             element.transform.baseVal.insertItemBefore(initScale, 1);
         });
     }
-            let newScaleFactor = currentMouse.y / initialMouse.y;
+
     getXScaleFactor(dx: number, selection: Selection, isRight: boolean): number {
         const distFromOgXToCurrentMouse = dx + (isRight ? selection.ogSelectionBoxWidth : 0);
 
@@ -68,6 +68,11 @@ export class ManipulatorService {
 
         return newWidth / selection.ogSelectionBoxWidth;
     }
+
+    getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
+        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
+    }
+
     getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {
         const distFromOgYToCurrentMouse = dy + (isBottom ? selection.ogSelectionBoxHeight : 0);
 
@@ -76,8 +81,9 @@ export class ManipulatorService {
         return newHeight / selection.ogSelectionBoxHeight;
     }
 
-            const currentY = (selection.selectionBox.getBoundingClientRect() as DOMRect).y;
-            const deltaY = (currentY - (currentY * newScaleFactor)) / newScaleFactor;
+    getYTranslate(dy: number, scaleFactor: number, selection: Selection, isBottom: boolean): number {
+        return selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
+    }
 
             el.transform.baseVal.getItem(0).setScale(1, newScaleFactor);
             el.transform.baseVal.getItem(1).setTranslate(0, deltaY);
