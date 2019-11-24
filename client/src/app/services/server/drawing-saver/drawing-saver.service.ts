@@ -80,6 +80,7 @@ export class DrawingSaverService {
         this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
         this.currentDrawingInfo.createdOn = drawingSavingInfo.createdOn;
         this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
+        this.currentDrawingInfo.idStack = this.drawStackService.idStack;
 
         this.fileManagerService
             .postDrawing(this.currentDrawingInfo)
