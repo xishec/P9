@@ -95,4 +95,62 @@ fdescribe('MagnetismToolService', () => {
         expect(service.needToAlign(false)).toEqual(false);
     });
 
+    it('magnetizeXY should change lastControlPoint to the currentPoint', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(true);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+        service.lastControlPoint = 0;
+        service.currentPoint = 10;
+
+        service.magnetizeXY(1, 1, true);
+
+        expect(service.lastControlPoint).toEqual(service.currentPoint);
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
+
+    it('magnetizeXY should return a new Coords2D with x and y elements equal currentGridSize - remainder', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(true);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+
+        service.currentGridSize = 10;
+        service.currentPointPosition.x = 9;
+        service.currentPointPosition.y = 9;
+
+        expect(service.magnetizeXY(1, 1, true)).toEqual(
+            new Coords2D(service.currentGridSize - 9, service.currentGridSize - 9),
+        );
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
+
+    it('magnetizeXY should return a new Coords2D with 0,0 if totalDelta < currentGridSize', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+        service.currentGridSize = 10;
+
+        expect(service.magnetizeXY(1, 1, true)).toEqual(new Coords2D(0, 0));
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
+
+    it('magnetizeXY should return a new Coords2D with 10,10 if totalDelta >= currentGridSize', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+        service.currentGridSize = 10;
+
+        expect(service.magnetizeXY(10, 10, true)).toEqual(new Coords2D(10, 10));
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
+
+    it('magnetizeXY should return a new Coords2D with 10,10 if totalDelta >= currentGridSize', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+        service.currentGridSize = 10;
+
+        expect(service.magnetizeXY(-10, -10, true)).toEqual(new Coords2D(-10, -10));
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
+
 });
