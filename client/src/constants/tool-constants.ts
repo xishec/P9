@@ -385,21 +385,21 @@ enum CONTROL_POINTS {
 }
 
 const TOP_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.TopLeft, svg_icon: '0' },
-    { point: CONTROL_POINTS.TopMiddle, svg_icon: '1' },
-    { point: CONTROL_POINTS.TopRight, svg_icon: '2' },
+    { point: CONTROL_POINTS.TopLeft, svg_icon: '../../../assets/controlPoints/topleft.png' },
+    { point: CONTROL_POINTS.TopMiddle, svg_icon: '../../../assets/controlPoints/top.png' },
+    { point: CONTROL_POINTS.TopRight, svg_icon: '../../../assets/controlPoints/topright.png' },
 ];
 
 const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.CenterLeft, svg_icon: '3' },
-    { point: CONTROL_POINTS.CenterMiddle, svg_icon: '8' },
-    { point: CONTROL_POINTS.CenterRight, svg_icon: '4' },
+    { point: CONTROL_POINTS.CenterLeft, svg_icon: '../../../assets/controlPoints/left.png' },
+    { point: CONTROL_POINTS.CenterMiddle, svg_icon: '../../../assets/controlPoints/center.png' },
+    { point: CONTROL_POINTS.CenterRight, svg_icon: '../../../assets/controlPoints/right.png' },
 ];
 
 const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
-    { point: CONTROL_POINTS.BottomLeft, svg_icon: '5' },
-    { point: CONTROL_POINTS.BottomMiddle, svg_icon: '6' },
-    { point: CONTROL_POINTS.BottomRight, svg_icon: '7' },
+    { point: CONTROL_POINTS.BottomLeft, svg_icon: '../../../assets/controlPoints/bottomleft.png' },
+    { point: CONTROL_POINTS.BottomMiddle, svg_icon: '../../../assets/controlPoints/bottom.png' },
+    { point: CONTROL_POINTS.BottomRight, svg_icon: '../../../assets/controlPoints/bottomright.png' },
 ];
 
 export {
