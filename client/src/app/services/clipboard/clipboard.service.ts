@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
