@@ -97,7 +97,7 @@ export class DrawingSaverService {
             )
             .subscribe((drawingInfo: DrawingInfo) => {
                 if (drawingInfo || JSON.parse(drawingInfo).createdOn === drawingSavingInfo.createdOn) {
-                    let drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
+                    const drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
                     this.drawingLoaderService.currentDrawing.next(drawing);
                     this.saveToCloud(drawing.drawingInfo.createdOn.toString());
                     this.currentIsSaved.next(true);

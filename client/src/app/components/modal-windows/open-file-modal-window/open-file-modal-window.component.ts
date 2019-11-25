@@ -68,8 +68,8 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
-            .subscribe((ans: any) => {
-                ans.forEach((drawingInfo: DrawingInfo) => {
+            .subscribe((drawingList: DrawingInfo[]) => {
+                drawingList.forEach((drawingInfo: DrawingInfo) => {
                     let drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
                     this.cloudService
                         .download(drawingInfo.createdOn.toString())
@@ -87,7 +87,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                             xhr.send();
                         })
                         .catch((error: Error) => {
-                            console.log(error);
+                            console.error(error);
                         });
                     this.drawingsFromServer.push(drawing);
                 });
