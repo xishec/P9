@@ -13,8 +13,8 @@ export class ManipulatorService {
     boxOrigin: Coords2D = new Coords2D(0,0);
     selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = BASE_ROTATION;
-    lastRotation: SVGTransform;
-    angle = 0;
+    //lastRotation: SVGTransform;
+    //angle = 0;
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
