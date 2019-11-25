@@ -198,10 +198,6 @@ export class FillToolService extends AbstractToolService {
         return d;
     }
 
-    isTooFar(a: Coords2D, b: Coords2D): boolean {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 111180;
-    }
-
     updateCanvas(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);

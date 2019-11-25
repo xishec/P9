@@ -3,8 +3,6 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { BFSHelper } from 'src/classes/BFSHelper';
-import { Coords2D } from 'src/classes/Coords2D';
-import { FillStructure } from 'src/classes/FillStructure';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS } from 'src/constants/constants';
@@ -12,8 +10,9 @@ import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { FillToolService } from './fill-tool.service';
+import { Coords2D } from 'src/classes/Coords2D';
 
-describe('FillToolService', () => {
+fdescribe('FillToolService', () => {
     let service: FillToolService;
     let injector: TestBed;
     let mockRenderer: Renderer2;
@@ -157,7 +156,6 @@ describe('FillToolService', () => {
             service.bfsHelper = {} as BFSHelper;
             service.bfsHelper.computeBFS = () => null;
         };
-        service.divideLinesToSegments = () => null;
         service.fill = () => null;
 
         const spy = spyOn(service, 'fill');
@@ -191,6 +189,8 @@ describe('FillToolService', () => {
     });
 
     it('should fillStroke when TRACE_TYPE.Outline on call fill', () => {
+        service.createSVGWrapper = () => null;
+        service.createFillPath = () => '';
         service.fillStroke = () => null;
         service.fillBody = () => {
             return {} as SVGGElement;
@@ -203,6 +203,8 @@ describe('FillToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
     it('should fillBody when TRACE_TYPE.Full on call fill', () => {
+        service.createSVGWrapper = () => null;
+        service.createFillPath = () => '';
         service.fillStroke = () => null;
         service.fillBody = () => {
             return {} as SVGGElement;
@@ -215,6 +217,8 @@ describe('FillToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
     it('should fillBody when TRACE_TYPE.Both on call fill', () => {
+        service.createSVGWrapper = () => null;
+        service.createFillPath = () => '';
         service.fillStroke = () => null;
         service.fillBody = () => {
             return {} as SVGGElement;
@@ -229,160 +233,8 @@ describe('FillToolService', () => {
         expect(spy2).toHaveBeenCalled();
     });
 
-    it('should fill segmentsToDraw on call divideLinesToSegments', () => {
-        service.bfsHelper = {} as BFSHelper;
-        service.bfsHelper.bodyGrid = new Map([
-            [1, [1, 2, 3]],
-            [2, [1, 2, 3]],
-            [3, [1, 2, 3, 1000]],
-        ]);
-        service.divideLinesToSegments();
-        expect(service.segmentsToDraw.size).toBeGreaterThan(0);
-    });
-
-    it('should addToMap on call addToMap with an absent key', () => {
-        const map: Map<number, FillStructure[]> = new Map([]);
-        service.addToMap(1, { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure, map);
-        expect(map.size).toEqual(1);
-        expect((map.get(1) as FillStructure[])[0].top.x).toEqual(0);
-        expect((map.get(1) as FillStructure[])[0].top.y).toEqual(1);
-        expect((map.get(1) as FillStructure[])[0].bottom.x).toEqual(0);
-        expect((map.get(1) as FillStructure[])[0].bottom.y).toEqual(10);
-    });
-    it('should addToMap on call addToMap with an existing key', () => {
-        const map: Map<number, FillStructure[]> = new Map([
-            [1, [{ top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure]],
-        ]);
-        service.addToMap(1, { top: new Coords2D(3, 1), bottom: new Coords2D(3, 10) } as FillStructure, map);
-        expect(map.size).toEqual(1);
-        expect((map.get(1) as FillStructure[])[1].top.x).toEqual(3);
-        expect((map.get(1) as FillStructure[])[1].top.y).toEqual(1);
-        expect((map.get(1) as FillStructure[])[1].bottom.x).toEqual(3);
-        expect((map.get(1) as FillStructure[])[1].bottom.y).toEqual(10);
-    });
-
-    it('should push to strokePaths on call updateVerticalStrokePaths', () => {
-        service.strokePaths = [];
-        service.bfsHelper = {} as BFSHelper;
-        service.bfsHelper.strokeGrid = new Map([
-            [1, [1, 2, 3]],
-            [2, [1, 2, 30]],
-            [3, [1, 2, 3, 1000]],
-        ]);
-
-        service.updateVerticalStrokePaths(1);
-        expect(service.strokePaths.length).toEqual(1);
-    });
-    it('should not push to strokePaths on call updateVerticalStrokePaths with invalid stroke path', () => {
-        service.strokePaths = [];
-        service.bfsHelper = {} as BFSHelper;
-        service.bfsHelper.strokeGrid = new Map([
-            [1, [1, 7, 3]],
-            [2, [1, 2, 30]],
-            [3, [1, 2, 3, 1000]],
-        ]);
-
-        service.updateVerticalStrokePaths(1);
-        expect(service.strokePaths.length).not.toEqual(1);
-    });
-
-    it('should append BodyPaths to bodyPaths on call appendBodyPaths', () => {
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.appendBodyPaths({} as SVGGElement, ['1', '2']);
-        expect(spy).toHaveBeenCalledTimes(2);
-    });
-    it('should add to bodyPaths on call updateBodyPaths', () => {
-        const bodyPaths = ['1', '2'];
-        service.updateBodyPaths(
-            bodyPaths,
-            { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure,
-            0,
-        );
-
-        expect(bodyPaths.length).toEqual(2);
-    });
-
-    it('should append StrokePaths to bodyPaths on call appendStrokePaths', () => {
-        service.strokePaths = [];
-        service.appendStrokePaths(['3', '4'], ['1', '2']);
-        expect(service.strokePaths.length).toEqual(4);
-    });
-    it('should add L to bodyPaths on call updateStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
-        const fillStructure2: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
-        service.segmentsToDraw = new Map([]);
-        service.segmentsToDraw.set(1, [fillStructure1]);
-        const topStrokePaths = ['1', '2'];
-        const bottomStrokePaths = ['3', '4'];
-        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottomStrokePaths);
-
-        expect(topStrokePaths[0].includes('L')).toEqual(true);
-        expect(bottomStrokePaths[0].includes('L')).toEqual(true);
-    });
-    it('should add M to bodyPaths on call updateStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
-        const fillStructure2: FillStructure = {
-            top: new Coords2D(1110, 1111),
-            bottom: new Coords2D(1110, 11110),
-        } as FillStructure;
-        service.segmentsToDraw = new Map([]);
-        service.segmentsToDraw.set(1, [fillStructure1]);
-        const topStrokePaths = ['1', '2'];
-        const bottomStrokePaths = ['3', '4'];
-        service.updateStrokePaths(fillStructure2, 2, 0, topStrokePaths, bottomStrokePaths);
-
-        expect(topStrokePaths[0].includes('M')).toEqual(true);
-        expect(bottomStrokePaths[0].includes('M')).toEqual(true);
-    });
-
-    it('should reset BodyAndStrokePaths on call resetBodyAndStrokePaths', () => {
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
-        const fillStructure2: FillStructure = {
-            top: new Coords2D(1110, 1111),
-            bottom: new Coords2D(1110, 11110),
-        } as FillStructure;
-        const topStrokePaths = ['1'];
-        const bottomStrokePaths = ['3'];
-        const bodyPaths: string[] = ['123'];
-        service.resetBodyAndStrokePaths([fillStructure1, fillStructure2], bodyPaths, topStrokePaths, bottomStrokePaths);
-
-        expect(bodyPaths.length).toEqual(2);
-        expect(topStrokePaths.length).toEqual(2);
-        expect(bottomStrokePaths.length).toEqual(2);
-    });
-
-    it('should append Body on call appendBody', () => {
-        const bodyPaths: string[] = ['1', '2'];
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.appendBody(bodyPaths, {} as SVGGElement);
-        expect(spy).toHaveBeenCalledTimes(2);
-    });
-
-    it('should fill stroke on call fillStroke', () => {
-        service.appendMask = () => null;
-        service.appendStroke = () => null;
-        const spy1 = spyOn(service, 'appendMask');
-        const spy2 = spyOn(service, 'appendStroke');
-        service.fillStroke(({ cloneNode: () => null } as unknown) as SVGGElement);
-        expect(spy1).toHaveBeenCalled();
-        expect(spy2).toHaveBeenCalled();
-    });
-
-    it('should append Mask on call appendMask', () => {
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.appendMask({} as SVGGElement, '123');
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('should append Stroke on call appendStroke', () => {
-        service.strokePaths = ['1', '2'];
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.appendStroke('123');
-        expect(spy).toHaveBeenCalledTimes(3);
-    });
-
-    it('should create SVGWrapper on call createSVGWrapper', () => {
-        const spy = spyOn(service.renderer, 'createElement');
+    it('should create SVG Wrapper on call createSVGWrapper', () => {
+        const spy = spyOn(service.renderer, 'setAttribute');
         service.createSVGWrapper();
         expect(spy).toHaveBeenCalledTimes(1);
     });
@@ -399,23 +251,34 @@ describe('FillToolService', () => {
         expect(spy).toHaveBeenCalledTimes(3);
     });
 
-    it('should fill Body on call fillBody', () => {
+    it('should create Fill Path on call createFillPath', () => {
+        let pixel1 = new Coords2D(0, 1);
+        let pixel2 = new Coords2D(0, 2);
         service.bfsHelper = {} as BFSHelper;
-        service.bfsHelper.mostLeft = 1;
-        service.bfsHelper.mostRight = 1;
-        service.updateVerticalStrokePaths = () => null;
-        service.appendBodyPaths = () => null;
-        service.appendStrokePaths = () => null;
-        service.resetBodyAndStrokePaths = () => null;
-        service.updateBodyPaths = () => null;
-        service.updateStrokePaths = () => null;
-        const fillStructure1: FillStructure = { top: new Coords2D(0, 1), bottom: new Coords2D(0, 10) } as FillStructure;
-        service.segmentsToDraw = new Map([]);
-        service.segmentsToDraw.set(1, [fillStructure1]);
-        service.segmentsToDraw.set(2, [fillStructure1]);
+        service.bfsHelper.pathsToFill = [[pixel1, pixel2]] as Coords2D[][];
 
+        expect(service.createFillPath()).toEqual(' M0.5 1.5 L0.5 2.5 z');
+    });
+
+    it('should append Mask on call appendMask', () => {
         const spy = spyOn(service.renderer, 'appendChild');
-        service.fillBody();
-        expect(spy).toHaveBeenCalled();
+        service.appendMask('', {} as SVGGElement, '');
+        expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should fill Stroke on call fillStroke', () => {
+        const spy = spyOn(service.renderer, 'appendChild');
+        service.fillStroke('', {
+            cloneNode: () => {
+                null;
+            },
+        } as SVGGElement);
+        expect(spy).toHaveBeenCalledTimes(4);
+    });
+
+    it('should fill Body on call fillBody', () => {
+        const spy = spyOn(service.renderer, 'appendChild');
+        service.fillBody('');
+        expect(spy).toHaveBeenCalledTimes(2);
     });
 });
