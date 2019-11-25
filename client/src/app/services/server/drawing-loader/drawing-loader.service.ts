@@ -14,7 +14,7 @@ export class DrawingLoaderService {
             name: '',
             labels: [],
             idStack: [],
-            createdOn: 0,
+            createdAt: 0,
             lastModified: 0,
             width: 0,
             height: 0,

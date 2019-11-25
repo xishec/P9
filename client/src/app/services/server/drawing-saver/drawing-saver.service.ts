@@ -78,7 +78,7 @@ export class DrawingSaverService {
     postDrawing(drawingSavingInfo: DrawingSavingInfo) {
         this.currentDrawingInfo.name = drawingSavingInfo.name;
         this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
-        this.currentDrawingInfo.createdOn = drawingSavingInfo.createdOn;
+        this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
         this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
         this.currentDrawingInfo.idStack = this.drawStackService.idStack;
 
@@ -97,10 +97,10 @@ export class DrawingSaverService {
                 }),
             )
             .subscribe((drawingInfo: DrawingInfo) => {
-                if (drawingInfo || JSON.parse(drawingInfo).createdOn === drawingSavingInfo.createdOn) {
+                if (drawingInfo || JSON.parse(drawingInfo).createdAt === drawingSavingInfo.createdAt) {
                     const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
                     this.drawingLoaderService.currentDrawing.next(drawing);
-                    this.saveToCloud(drawing.drawingInfo.createdOn.toString());
+                    this.saveToCloud(drawing.drawingInfo.createdAt.toString());
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');

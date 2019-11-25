@@ -7,7 +7,7 @@ const drawingSchema = createSchema({
     width: Type.number({ required: true }),
     height: Type.number({ required: true }),
     color: Type.string({ required: true }),
-    createdOn: Type.number({ required: true }),
+    createdAt: Type.number({ required: true }),
     lastModified: Type.number({ required: true }),
 });
 

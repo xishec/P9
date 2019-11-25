@@ -16,7 +16,7 @@ const TEST_DRAWING_INFO: DrawingInfo = {
     name: 'La Cene',
     labels: ['Italie', 'Leonardo', 'De Vinci'],
     idStack: ['0', '1', '2', '3', '4', '5'],
-    createdOn: 0,
+    createdAt: 0,
     lastModified: 0,
 } as DrawingInfo;
 

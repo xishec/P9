@@ -15,12 +15,12 @@ export class FileManagerService {
         }
 
         const currentTimestamp = Date.now();
-        const newCreatedOn = drawingInfo.createdOn === 0 ? currentTimestamp : drawingInfo.createdOn;
+        const newCreatedAt = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
 
-        const query = { createdOn: drawingInfo.createdOn, name: drawingInfo.name };
+        const query = { createdAt: drawingInfo.createdAt, name: drawingInfo.name };
         const options = { upsert: true, new: true };
 
-        drawingInfo.createdOn = newCreatedOn;
+        drawingInfo.createdAt = newCreatedAt;
         drawingInfo.lastModified = currentTimestamp;
 
         return DrawingModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
@@ -28,8 +28,8 @@ export class FileManagerService {
         });
     }
 
-    async deleteDrawing(createdOn: string) {
-        return DrawingModel.findOneAndDelete({ createdOn: parseInt(createdOn) });
+    async deleteDrawing(createdAt: string) {
+        return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt) });
     }
 
     isDrawingValid(drawingInfo: DrawingInfo): boolean {

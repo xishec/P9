@@ -72,7 +72,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 drawingList.forEach((drawingInfo: DrawingInfo) => {
                     const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
                     this.cloudService
-                        .download(drawingInfo.createdOn.toString())
+                        .download(drawingInfo.createdAt.toString())
                         .then((url: string) => {
                             this.SVGs.set(drawingInfo.name, url);
 
@@ -130,7 +130,7 @@ export class OpenFileModalWindowComponent implements OnInit {
     loadServerFile(): void {
         this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.drawingInfo.createdOn === this.selectedOption,
+            (drawing) => drawing.drawingInfo.createdAt === this.selectedOption,
         ) as Drawing;
         this.drawingLoaderService.currentDrawing.next(selectedDrawing);
         this.closeDialog();
@@ -181,13 +181,13 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     onDelete() {
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.drawingInfo.createdOn === this.selectedOption,
+            (drawing) => drawing.drawingInfo.createdAt === this.selectedOption,
         ) as Drawing;
-        this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdOn).subscribe((createdOn: number) => {
-            if (createdOn === selectedDrawing.drawingInfo.createdOn) {
-                this.cloudService.delete(createdOn.toString());
+        this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdAt).subscribe((createdAt: number) => {
+            if (createdAt === selectedDrawing.drawingInfo.createdAt) {
+                this.cloudService.delete(createdAt.toString());
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
-                    return drawing.drawingInfo.createdOn !== createdOn;
+                    return drawing.drawingInfo.createdAt !== createdAt;
                 });
                 this.snackBar.open('Suppression réussie!', 'OK', {
                     duration: SNACKBAR_DURATION,
