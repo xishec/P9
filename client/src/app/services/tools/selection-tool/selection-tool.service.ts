@@ -50,6 +50,7 @@ export class SelectionToolService extends AbstractToolService {
         for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
+        this.manipulator.updateOrigins(this.selection);
     }
 
     cleanUp(): void {
@@ -332,9 +333,6 @@ export class SelectionToolService extends AbstractToolService {
         event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            // if (!this.manipulator.isRotateOnSelf) {
-            //     this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
-            // }
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = ALTER_ROTATION;
@@ -345,9 +343,6 @@ export class SelectionToolService extends AbstractToolService {
         event.preventDefault();
         const key = event.key;
         if(key === KEYS.Shift) {
-            // if (this.manipulator.isRotateOnSelf) {
-            //     this.manipulator.preventRotationOverwrite(this.selection, this.manipulator.isRotateOnSelf);
-            // }
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = BASE_ROTATION;

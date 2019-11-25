@@ -85,8 +85,6 @@ export class ClipboardService {
             this.manipulator.translateElement(offset, offset, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             newSelection.add(deepCopy);
-            console.log('original ' + (el.getCTM() as DOMMatrix).e);
-            console.log('copy ' + (deepCopy.getCTM() as DOMMatrix).e);
         }
         this.updateSelection(newSelection);
         this.manipulator.updateOrigins(this.selection);

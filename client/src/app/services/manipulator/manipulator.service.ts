@@ -20,9 +20,9 @@ export class ManipulatorService {
         this.renderer = renderer;
     }
 
-    isFirstTransformInvalid(transformsList: SVGTransformList, transformType: number): boolean {
-        return transformsList.numberOfItems === 0 || transformsList.getItem(0).type !== transformType;
-    }
+    // isFirstTransformInvalid(transformsList: SVGTransformList, transformType: number): boolean {
+    //     return transformsList.numberOfItems === 0 || transformsList.getItem(0).type !== transformType;
+    // }
 
     // preventRotationOverwrite(selection: Selection, wasRotateOnSelf?: boolean): void {
     //     this.angle = 0;
@@ -54,6 +54,15 @@ export class ManipulatorService {
         }
     }
 
+    prepareForTransform(element: SVGGElement): void {
+        if (element.transform.baseVal.numberOfItems === 0) {
+            const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+            const nullTransform = svg.createSVGTransform();
+            nullTransform.setTranslate(0,0);
+            element.transform.baseVal.appendItem(nullTransform);
+        }
+    }
+
     rotateSelection(event: WheelEvent, selection: Selection): void {
         const deltaY = event.deltaY;
 
@@ -78,7 +87,8 @@ export class ManipulatorService {
     rotateElement(element: SVGGElement, origin: Coords2D): void {
         /*TRYING OUT MATRIX*/
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        let ctm = element.getCTM() as DOMMatrix;
+        this.prepareForTransform(element);
+        let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;
         let rotationMatrix = svg.createSVGTransform();
         rotationMatrix.setRotate(this.rotationStep, origin.x, origin.y);
         ctm = rotationMatrix.matrix.multiply(ctm);
@@ -97,7 +107,8 @@ export class ManipulatorService {
     translateElement(deltaX: number, deltaY: number, element: SVGGElement): void {
         /*TRYING OUT MATRIX*/
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        let ctm = element.getCTM() as DOMMatrix;
+        this.prepareForTransform(element);
+        let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;
         let translationMatrix = svg.createSVGTransform();
         translationMatrix.setTranslate(deltaX, deltaY);
         ctm = translationMatrix.matrix.multiply(ctm);
