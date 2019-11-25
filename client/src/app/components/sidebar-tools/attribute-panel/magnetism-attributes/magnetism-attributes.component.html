@@ -28,7 +28,7 @@
                         [value]="TOP_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === TOP_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
-                        ><img src="{{ TOP_MAGNETISM_POINT.svg_icon }}"
+                        ><img src="{{ TOP_MAGNETISM_POINT.img_src }}"
                     /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
@@ -40,7 +40,7 @@
                         [value]="CENTER_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === CENTER_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
-                        ><img src="{{ CENTER_MAGNETISM_POINT.svg_icon }}"
+                        ><img src="{{ CENTER_MAGNETISM_POINT.img_src }}"
                     /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
@@ -52,7 +52,7 @@
                         [value]="BOTTOM_MAGNETISM_POINT.point"
                         [checked]="this.magnetismService.currentPoint === BOTTOM_MAGNETISM_POINT.point"
                         (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
-                        ><img src="{{ BOTTOM_MAGNETISM_POINT.svg_icon }}"
+                        ><img src="{{ BOTTOM_MAGNETISM_POINT.img_src }}"
                     /></mat-button-toggle>
                 </mat-button-toggle-group>
             </div>

@@ -1,4 +1,4 @@
 export interface MagnetismPoint {
     point: number;
-    svg_icon: string;
+    img_src: string;
 }
