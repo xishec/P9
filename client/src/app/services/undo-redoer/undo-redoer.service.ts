@@ -1,11 +1,11 @@
 import { ElementRef, Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Drawing } from 'src/classes/Drawing';
 import { DrawingState } from 'src/classes/DrawingState';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
-import { Drawing } from 'src/classes/Drawing';
 
 @Injectable({
     providedIn: 'root',

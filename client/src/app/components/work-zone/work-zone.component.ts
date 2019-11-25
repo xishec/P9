@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 
 import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
+import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -11,14 +12,13 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
+import { Drawing } from 'src/classes/Drawing';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
-import { CloudService } from 'src/app/services/cloud/cloud.service';
-import { Drawing } from 'src/classes/Drawing';
 
 @Component({
     selector: 'app-work-zone',

@@ -3,15 +3,15 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { Drawing } from 'src/classes/Drawing';
 import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
+import { SVG_NS } from 'src/constants/constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { CloudService } from '../../cloud/cloud.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
 import { FileManagerService } from '../file-manager/file-manager.service';
-import { SVG_NS } from 'src/constants/constants';
-import { CloudService } from '../../cloud/cloud.service';
-import { Drawing } from 'src/classes/Drawing';
 
 @Injectable({
     providedIn: 'root',
@@ -65,9 +65,9 @@ export class DrawingSaverService {
     }
 
     saveToCloud(id: string) {
-        let clone = this.workZoneRef.nativeElement.cloneNode(true);
+        const clone = this.workZoneRef.nativeElement.cloneNode(true);
         this.renderer.setAttribute(clone, 'xmlns', SVG_NS);
-        let file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
+        const file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
         this.cloudService.save(id, file);
     }
 
@@ -89,7 +89,7 @@ export class DrawingSaverService {
                         return true;
                     }
                     this.currentErrorMesaage.next(
-                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                     );
                     this.currentIsSaved.next(false);
                     return false;
@@ -97,7 +97,7 @@ export class DrawingSaverService {
             )
             .subscribe((drawingInfo: DrawingInfo) => {
                 if (drawingInfo || JSON.parse(drawingInfo).createdOn === drawingSavingInfo.createdOn) {
-                    const drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
+                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
                     this.drawingLoaderService.currentDrawing.next(drawing);
                     this.saveToCloud(drawing.drawingInfo.createdOn.toString());
                     this.currentIsSaved.next(true);

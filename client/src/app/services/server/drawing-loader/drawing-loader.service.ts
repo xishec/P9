@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { Drawing } from 'src/classes/Drawing';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
 @Injectable({
     providedIn: 'root',

@@ -4,15 +4,15 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 
+import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
+import { Drawing } from 'src/classes/Drawing';
 import { GIFS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
-import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { Drawing } from 'src/classes/Drawing';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -58,7 +58,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
+                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -70,16 +70,16 @@ export class OpenFileModalWindowComponent implements OnInit {
             )
             .subscribe((drawingList: DrawingInfo[]) => {
                 drawingList.forEach((drawingInfo: DrawingInfo) => {
-                    let drawing: Drawing = { drawingInfo: drawingInfo, svg: '' } as Drawing;
+                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
                     this.cloudService
                         .download(drawingInfo.createdOn.toString())
                         .then((url: string) => {
                             this.SVGs.set(drawingInfo.name, url);
 
-                            var xhr = new XMLHttpRequest();
+                            const xhr = new XMLHttpRequest();
                             xhr.responseType = 'blob';
                             xhr.onload = async () => {
-                                var blob = xhr.response;
+                                const blob = xhr.response;
                                 const text = await new Response(blob).text();
                                 drawing.svg = text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
                             };
@@ -156,7 +156,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
+                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }

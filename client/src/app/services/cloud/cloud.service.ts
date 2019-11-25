@@ -9,7 +9,7 @@ export class CloudService {
     storage: firebase.storage.Storage;
 
     initializeApp() {
-        let firebaseConfig = {
+        const firebaseConfig = {
             apiKey: 'AIzaSyDLUNTqEdILpLnw-SruhmkglA2x0t8e-bk',
             authDomain: 'p9-cloud.firebaseapp.com',
             databaseURL: 'https://p9-cloud.firebaseio.com',
@@ -24,7 +24,7 @@ export class CloudService {
     }
 
     save(id: string, file: Blob) {
-        let storageRef = this.storage.ref(id);
+        const storageRef = this.storage.ref(id);
         storageRef
             .put(file)
             .then(() => {
@@ -36,12 +36,12 @@ export class CloudService {
     }
 
     download(id: string): Promise<string> {
-        let pathReference = this.storage.ref(id);
+        const pathReference = this.storage.ref(id);
         return pathReference.getDownloadURL();
     }
 
     delete(id: string) {
-        let pathReference = this.storage.ref(id);
+        const pathReference = this.storage.ref(id);
         pathReference.delete();
     }
 }
