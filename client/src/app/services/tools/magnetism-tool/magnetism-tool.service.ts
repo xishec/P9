@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Selection } from 'src/classes/selection/selection';
-import { CONTROL_POINTS, GRID_SIZE } from 'src/constants/tool-constants';
+import { CONTROL_POINTS, GRID_SIZE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from '../grid-tool/grid-tool.service';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
@@ -23,7 +24,11 @@ export class MagnetismToolService {
 
     isMagnetic: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    constructor(private gridToolService: GridToolService, public drawingLoaderService: DrawingLoaderService) {
+    constructor(
+        private gridToolService: GridToolService,
+        public drawingLoaderService: DrawingLoaderService,
+        private snackBar: MatSnackBar,
+    ) {
         this.currentPoint = CONTROL_POINTS.TopLeft;
         this.currentPointPosition = new Coords2D(0, 0);
         this.currentGridSize = GRID_SIZE.Default;
@@ -60,6 +65,10 @@ export class MagnetismToolService {
 
     switchState(): void {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
+        const stateTranslation = this.isMagnetic.value ? 'maintenant activé' : 'désactivé';
+        this.snackBar.open(`Le magnétisme est ${stateTranslation}`, '', {
+            duration: SNACKBAR_DURATION,
+        });
     }
 
     magnetizeXY(deltaX: number, deltaY: number, isFirstSelection: boolean): Coords2D {
