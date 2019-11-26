@@ -153,11 +153,22 @@ fdescribe('MagnetismToolService', () => {
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
-    // TODO
-    // it('updateControlPointPosition should be created', () => {
-    //   service.currentPoint = CONTROL_POINTS.CenterMiddle;
+    it('magnetizeXY should change the totalDelta X and Y to grid size - totalDelta', () => {
+        const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
+        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
+        service.currentGridSize = 10;
+        service.totalDeltaX = 20;
+        service.totalDeltaY = 20;
+        const tempTotalDeltaX = service.totalDeltaX;
+        const tempTotalDeltaY = service.totalDeltaY;
 
-    //   service.updateControlPointPosition();
+        expect(service.magnetizeXY(0, 0, true)).toEqual(new Coords2D(service.currentGridSize, service.currentGridSize));
+
+        expect(spyOnNeedToAlign).toHaveBeenCalled();
+        expect(service.totalDeltaX).toEqual(tempTotalDeltaX - service.currentGridSize);
+        expect(service.totalDeltaY).toEqual(tempTotalDeltaY - service.currentGridSize);
+        expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
+    });
 
     //     expect(service.currentPointPosition.x).toEqual();
     // });
