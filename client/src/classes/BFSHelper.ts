@@ -1,6 +1,7 @@
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { Coords2D } from './Coords2D';
-import { MAX_RGB_NUMBER } from 'src/constants/color-constants';
+import { MAX_RGB_NUMBER, RGBA_ARRAY_LENGTH } from 'src/constants/color-constants';
+import { MAX_PERCENTAGE, MAX_PATH_DISTANCE } from 'src/constants/tool-constants';
 
 export class BFSHelper {
     maxX: number;
@@ -120,7 +121,7 @@ export class BFSHelper {
             }
         });
 
-        if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
+        if (closestNeighborDistance > MAX_PATH_DISTANCE && this.tmpPath.length > 0) {
             this.pathsToFill.push(this.tmpPath);
             this.tmpPath = [];
         }
@@ -167,8 +168,8 @@ export class BFSHelper {
             const difference =
                 Math.abs(color1[0] - color2[0]) + Math.abs(color1[1] - color2[1]) + Math.abs(color1[2] - color2[2]);
 
-            const sum = MAX_RGB_NUMBER * 3;
-            return difference <= (this.tolerance / 100) * sum;
+            const sum = MAX_RGB_NUMBER * color1.length;
+            return difference <= (this.tolerance / MAX_PERCENTAGE) * sum;
         }
     }
 
@@ -177,7 +178,7 @@ export class BFSHelper {
     }
 
     getPixelColor(pixel: Coords2D): number[] {
-        let index: number = 4 * (pixel.x + pixel.y * this.maxX);
+        let index: number = RGBA_ARRAY_LENGTH * (pixel.x + pixel.y * this.maxX);
         const r: number = this.data[index++];
         const g: number = this.data[index++];
         const b: number = this.data[index];
