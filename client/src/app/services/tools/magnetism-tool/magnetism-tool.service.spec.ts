@@ -11,7 +11,7 @@ import { GRID_SIZE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { MagnetismToolService } from './magnetism-tool.service';
 
-fdescribe('MagnetismToolService', () => {
+describe('MagnetismToolService', () => {
     let injector: TestBed;
     let service: MagnetismToolService;
 

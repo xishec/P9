@@ -71,6 +71,31 @@ export const createMockSVGElement = (): any => {
                 };
                 return boundRect;
             },
+            selectionBox: () => {
+                const mockSelectionBox = {
+                    x: {
+                        baseVal: {
+                            value: 0,
+                        },
+                    },
+                    y: {
+                        baseVal: {
+                            value: 0,
+                        },
+                    },
+                    width: {
+                        baseVal: {
+                            value: 100,
+                        },
+                    },
+                    height: {
+                        baseVal: {
+                            value: 100,
+                        },
+                    },
+                } as SVGRectElement;
+                return mockSelectionBox;
+            },
         },
     };
     return (mockSVGElement as unknown) as ElementRef<SVGElement>;
