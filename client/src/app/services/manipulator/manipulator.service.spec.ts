@@ -6,7 +6,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
 
-describe('ManipulatorService', () => {
+fdescribe('ManipulatorService', () => {
     // let selection: Selection;
     let service: ManipulatorService;
     let injector: TestBed;
