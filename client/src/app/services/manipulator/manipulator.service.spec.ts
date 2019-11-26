@@ -2,12 +2,10 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
-// import { Coords2D } from 'src/classes/Coords2D';
-// import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
 import { Coords2D } from 'src/classes/Coords2D';
-//import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 
 fdescribe('ManipulatorService', () => {
     let selection: Selection;
@@ -243,6 +241,80 @@ fdescribe('ManipulatorService', () => {
         expect(spyOnUpdateOrigins).toHaveBeenCalled();
         expect(spyOnUpdateSelection).toHaveBeenCalled();
     });
+
+    it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
+        const mockSVGG = {
+            transform:{
+                baseVal:{
+                    clear:() => null,
+                    consolidate:() => {
+                        const mockTransform = {
+                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    appendItem:() => null,
+                },
+            },
+        };
+
+        spyOnCreateElement.and.callFake(() => {
+            const mockSVG = {
+                createSVGTransform: () => {
+                    const mockTransform = {
+                        setRotate:() => null,
+                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                    };
+                    return mockTransform as unknown as SVGTransform;
+                },
+                createSVGTransformFromMatrix: () => null,
+            };
+
+            return mockSVG as unknown as SVGSVGElement;
+        });
+
+        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
+
+        service.rotateElement(mockSVGG as unknown as SVGGElement, new Coords2D(0,0));
+        expect(spyOnPrepare).toHaveBeenCalled();
+    })
+
+    it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
+        const mockSVGG = {
+            transform:{
+                baseVal:{
+                    clear:() => null,
+                    consolidate:() => {
+                        const mockTransform = {
+                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    appendItem:() => null,
+                },
+            },
+        };
+
+        spyOnCreateElement.and.callFake(() => {
+            const mockSVG = {
+                createSVGTransform: () => {
+                    const mockTransform = {
+                        setTranslate:() => null,
+                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                    };
+                    return mockTransform as unknown as SVGTransform;
+                },
+                createSVGTransformFromMatrix: () => null,
+            };
+
+            return mockSVG as unknown as SVGSVGElement;
+        });
+
+        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
+
+        service.translateElement(0, 0, mockSVGG as unknown as SVGGElement);
+        expect(spyOnPrepare).toHaveBeenCalled();
+    })
 
     it('should call translateElement for all elements and update the selection box on translateSelection', () => {
         const spyTranslate = spyOn(service, 'translateElement').and.callFake(() => null);
