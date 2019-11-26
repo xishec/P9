@@ -8,9 +8,8 @@ import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { GRID_SIZE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { MagnetismToolService } from './magnetism-tool.service';
-
-// import { Selection } from 'src/classes/selection/selection';
-// import { CONTROL_POINTS } from 'src/constants/tool-constants';
+import { createMockSVGElement } from 'src/classes/test-helpers.spec';
+import { Selection } from 'src/classes/selection/selection';
 
 fdescribe('MagnetismToolService', () => {
     let injector: TestBed;
@@ -35,10 +34,13 @@ fdescribe('MagnetismToolService', () => {
                 },
                 {
                     provide: MatSnackBar,
-                    useValue: {},
+                    useValue: {
+                        open: () => null,
+                    },
                 },
                 provideAutoMock(ElementRef),
                 provideAutoMock(DrawStackService),
+                provideAutoMock(Selection),
             ],
         });
 
@@ -170,11 +172,9 @@ fdescribe('MagnetismToolService', () => {
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
-    //     expect(service.currentPointPosition.x).toEqual();
-    // });
+    it('initializeService should ', () => {
+        service.initializeService(createMockSVGElement());
 
-    // it('initializeService should ', () => {
-    //   service.initializeService(new Selection(Renderer2, ElementRef))
-    //     expect(service).toBeTruthy();
-    // });
+        expect(service.selection).toBeDefined();
+    });
 });
