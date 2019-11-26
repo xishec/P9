@@ -13,7 +13,7 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
+import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
@@ -27,6 +27,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
 export class WorkZoneComponent implements OnInit {
     drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
     gridIsActive = false;
+    modalIsDisplayed: boolean;
 
     gridSize = GRID_SIZE.Default;
     gridOpacity = GRID_OPACITY.Max;
@@ -109,6 +110,9 @@ export class WorkZoneComponent implements OnInit {
             this.gridOpacity = opacity;
         });
 
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
         this.setDefaultWorkZoneProperties();
     }
 
@@ -170,7 +174,9 @@ export class WorkZoneComponent implements OnInit {
 
     onClickRectangle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK');
+            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
         }
     }
 
