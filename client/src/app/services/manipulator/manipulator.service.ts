@@ -46,6 +46,19 @@ export class ManipulatorService {
         }
     }
 
+    getCurrentTransformMatrix(element: SVGGElement): DOMMatrix {
+        this.prepareForTransform(element);
+        return element.transform.baseVal.consolidate().matrix as DOMMatrix;
+    }
+
+    applyTransformation(element: SVGGElement, transform: SVGTransform): void {
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        let currentTransformMatrix = this.getCurrentTransformMatrix(element);
+        currentTransformMatrix = transform.matrix.multiply(currentTransformMatrix);
+        element.transform.baseVal.clear();
+        element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(currentTransformMatrix));
+    }
+
     rotateSelection(event: WheelEvent, selection: Selection): void {
         const deltaY = event.deltaY;
 
@@ -67,14 +80,16 @@ export class ManipulatorService {
     }
 
     rotateElement(element: SVGGElement, origin: Coords2D): void {
+        // this.prepareForTransform(element);
+        // let currentTransformMatrix = element.transform.baseVal.consolidate().matrix as DOMMatrix;
+        // currentTransformMatrix = rotationMatrix.matrix.multiply(currentTransformMatrix);
+        // element.transform.baseVal.clear();
+        // element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(currentTransformMatrix));
+
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        this.prepareForTransform(element);
-        let currentTransformMatrix = element.transform.baseVal.consolidate().matrix as DOMMatrix;
-        const rotationMatrix = svg.createSVGTransform();
-        rotationMatrix.setRotate(this.rotationStep, origin.x, origin.y);
-        currentTransformMatrix = rotationMatrix.matrix.multiply(currentTransformMatrix);
-        element.transform.baseVal.clear();
-        element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(currentTransformMatrix));
+        const rotateTransform = svg.createSVGTransform();
+        rotateTransform.setRotate(this.rotationStep, origin.x, origin.y);
+        this.applyTransformation(element, rotateTransform);
     }
 
     translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
@@ -86,12 +101,8 @@ export class ManipulatorService {
 
     translateElement(deltaX: number, deltaY: number, element: SVGGElement): void {
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        this.prepareForTransform(element);
-        let currentTransformMatrix = element.transform.baseVal.consolidate().matrix as DOMMatrix;
-        const translationMatrix = svg.createSVGTransform();
-        translationMatrix.setTranslate(deltaX, deltaY);
-        currentTransformMatrix = translationMatrix.matrix.multiply(currentTransformMatrix);
-        element.transform.baseVal.clear();
-        element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(currentTransformMatrix));
+        const translateTransform = svg.createSVGTransform();
+        translateTransform.setTranslate(deltaX, deltaY);
+        this.applyTransformation(element, translateTransform);
     }
 }

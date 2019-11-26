@@ -242,6 +242,62 @@ describe('ManipulatorService', () => {
         expect(spyOnUpdateSelection).toHaveBeenCalled();
     });
 
+    it('should prepare element for transform, consolidate all transforms and return DOMMatrix on getCurrentTransformationMatrix', () => {
+        const mockSVGG = {
+            transform: {
+                baseVal: {
+                    clear: () => null,
+                    consolidate: () => {
+                        const mockTransform = {
+                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    appendItem: () => null,
+                },
+            },
+        };
+        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
+        const res = service.getCurrentTransformMatrix(mockSVGG as unknown as SVGGElement);
+
+        expect(spyOnPrepare).toHaveBeenCalled();
+        expect(res instanceof DOMMatrix).toBeTruthy();
+    });
+
+    it('should perform matrix multiplication and apply only the combo matrix to transforms on ', () => {
+        // const mockSVGG = {
+        //     transform: {
+        //         baseVal: {
+        //             clear: () => null,
+        //             consolidate: () => {
+        //                 const mockTransform = {
+        //                     matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+        //                 };
+        //                 return mockTransform as unknown as SVGTransform;
+        //             },
+        //             appendItem: () => null,
+        //         },
+        //     },
+        // };
+
+        // spyOnCreateElement.and.callFake(() => {
+        //     const mockSVG = {
+        //         createSVGTransform: () => {
+        //             const mockTransform = {
+        //                 setRotate: () => null,
+        //                 matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+        //             };
+        //             return mockTransform as unknown as SVGTransform;
+        //         },
+        //         createSVGTransformFromMatrix: () => null,
+        //     };
+
+        //     return mockSVG as unknown as SVGSVGElement;
+        // });
+
+        // service.applyTransformation(mockSVGG as unknown as SVGGElement, )
+    });
+
     it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
         const mockSVGG = {
             transform: {
