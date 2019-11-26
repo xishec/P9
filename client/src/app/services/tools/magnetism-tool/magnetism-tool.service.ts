@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { MatSnackBar } from '@angular/material';
+
 import { BehaviorSubject } from 'rxjs';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Selection } from 'src/classes/selection/selection';
