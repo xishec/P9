@@ -4,12 +4,12 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs';
 import { Coords2D } from 'src/classes/Coords2D';
+import { Selection } from 'src/classes/selection/selection';
+import { createMockSVGElement } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { GRID_SIZE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { MagnetismToolService } from './magnetism-tool.service';
-import { createMockSVGElement } from 'src/classes/test-helpers.spec';
-import { Selection } from 'src/classes/selection/selection';
 
 fdescribe('MagnetismToolService', () => {
     let injector: TestBed;

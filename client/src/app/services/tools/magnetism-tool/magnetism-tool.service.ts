@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
+import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Selection } from 'src/classes/selection/selection';
 import { CONTROL_POINTS, GRID_SIZE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from '../grid-tool/grid-tool.service';
-import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root',
