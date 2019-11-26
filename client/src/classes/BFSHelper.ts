@@ -1,7 +1,7 @@
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { Coords2D } from './Coords2D';
 import { MAX_RGB_NUMBER, RGBA_ARRAY_LENGTH } from 'src/constants/color-constants';
-import { MAX_PERCENTAGE, MAX_PATH_DISTANCE } from 'src/constants/tool-constants';
+import { MAX_PATH_DISTANCE, MAX_PERCENTAGE } from 'src/constants/tool-constants';
+import { Coords2D } from './Coords2D';
 
 export class BFSHelper {
     maxX: number;
@@ -13,8 +13,8 @@ export class BFSHelper {
     strokesSet: Set<string>;
     tolerance: number;
     data: Uint8ClampedArray;
-    pathsToFill: Array<Coords2D[]>;
-    tmpPath: Array<Coords2D>;
+    pathsToFill: Coords2D[][];
+    tmpPath: Coords2D[];
 
     constructor(
         maxX: number,
@@ -113,7 +113,7 @@ export class BFSHelper {
         let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
         this.strokes.forEach((el: Coords2D) => {
             if (!this.visited.has(`${el.x} ${el.y}`)) {
-                let distance = el.distanceTo(pixel);
+                const distance = el.distanceTo(pixel);
                 if (distance < closestNeighborDistance) {
                     closestNeighborDistance = distance;
                     closestNeighbor.setCoords(el);
@@ -138,19 +138,19 @@ export class BFSHelper {
     }
 
     createPathToFill() {
-        if (this.strokes.length === 0) return;
+        if (this.strokes.length === 0) { return; }
 
         this.pathsToFill = [];
         this.visited = new Set([]);
         this.tmpPath = [];
 
-        let pixel: Coords2D = this.strokes[0];
+        const pixel: Coords2D = this.strokes[0];
         this.visited.add(`${pixel.x} ${pixel.y}`);
 
         while (pixel.isValide()) {
             this.tmpPath.push(pixel.clone());
 
-            let closestNeighbor: Coords2D = new Coords2D(-1, -1);
+            const closestNeighbor: Coords2D = new Coords2D(-1, -1);
             this.updateClosestNeighbor(pixel, closestNeighbor);
 
             this.visited.add(`${closestNeighbor.x} ${closestNeighbor.y}`);

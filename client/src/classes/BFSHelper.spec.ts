@@ -97,9 +97,9 @@ describe('Selection', () => {
     });
 
     it('should search in array on call searchIn', () => {
-        let pixel1 = new Coords2D(1110, 1110);
-        let pixel2 = new Coords2D(11, 1110);
-        let closestNeighbor = new Coords2D(-1, -1);
+        const pixel1 = new Coords2D(1110, 1110);
+        const pixel2 = new Coords2D(11, 1110);
+        const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.strokesSet = new Set([`${pixel2.x} ${pixel2.y}`]);
         bfsHelper.serachIn([pixel1, pixel2], closestNeighbor);
         expect(closestNeighbor.x).toEqual(11);
@@ -107,7 +107,7 @@ describe('Selection', () => {
     });
 
     it('should search In Direct Neighbors on call searchInDirectNeighbors', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.strokesSet = new Set([`1110 1111`]);
         bfsHelper.searchInDirectNeighbors(new Coords2D(1110, 1110), closestNeighbor);
         expect(closestNeighbor.x).toEqual(1110);
@@ -115,7 +115,7 @@ describe('Selection', () => {
     });
 
     it('should search In Indirect Neighbors on call searchInIndirectNeighbors', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.strokesSet = new Set([`1111 1111`]);
         bfsHelper.searchInIndirectNeighbors(new Coords2D(1110, 1110), closestNeighbor);
         expect(closestNeighbor.x).toEqual(1111);
@@ -123,7 +123,7 @@ describe('Selection', () => {
     });
 
     it('should find Closest Pixel on call findClosestPixel', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.strokes = [new Coords2D(1, 2), new Coords2D(0, 1)];
         bfsHelper.visited = new Set([]);
         bfsHelper.pathsToFill = [];
@@ -135,7 +135,7 @@ describe('Selection', () => {
     });
 
     it('should update the Closest Neighbor on call updateClosestNeighbor', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.searchInDirectNeighbors = () => null;
         bfsHelper.searchInIndirectNeighbors = () => null;
         bfsHelper.findClosestPixel = () => null;
@@ -149,7 +149,7 @@ describe('Selection', () => {
     });
 
     it('should update the Closest Neighbor on call updateClosestNeighbor, and found with searchInDirectNeighbors', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         closestNeighbor.isValide = () => {
             return true;
         };
@@ -163,7 +163,7 @@ describe('Selection', () => {
     });
 
     it('should update the Closest Neighbor on call updateClosestNeighbor, and found with searchInIndirectNeighbors', () => {
-        let closestNeighbor = new Coords2D(-1, -1);
+        const closestNeighbor = new Coords2D(-1, -1);
         let counter = 0;
         closestNeighbor.isValide = () => {
             return counter++ > 0;

@@ -3,6 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { BFSHelper } from 'src/classes/BFSHelper';
+import { Coords2D } from 'src/classes/Coords2D';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS } from 'src/constants/constants';
@@ -10,7 +11,6 @@ import { TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { FillToolService } from './fill-tool.service';
-import { Coords2D } from 'src/classes/Coords2D';
 
 describe('FillToolService', () => {
     let service: FillToolService;
@@ -252,8 +252,8 @@ describe('FillToolService', () => {
     });
 
     it('should create Fill Path on call createFillPath', () => {
-        let pixel1 = new Coords2D(0, 1);
-        let pixel2 = new Coords2D(0, 2);
+        const pixel1 = new Coords2D(0, 1);
+        const pixel2 = new Coords2D(0, 2);
         service.bfsHelper = {} as BFSHelper;
         service.bfsHelper.pathsToFill = [[pixel1, pixel2]] as Coords2D[][];
 
@@ -270,7 +270,7 @@ describe('FillToolService', () => {
         const spy = spyOn(service.renderer, 'appendChild');
         service.fillStroke('', {
             cloneNode: () => {
-                null;
+                return {} as Node;
             },
         } as SVGGElement);
         expect(spy).toHaveBeenCalledTimes(4);

@@ -14,7 +14,7 @@ const MAX_RGB_NUMBER = 255;
 const MIN_RGB_NUMBER = 0;
 const MAX_NUMBER_OF_LAST_COLORS = 10;
 
-let RGBA_ARRAY_LENGTH = 4;
+const RGBA_ARRAY_LENGTH = 4;
 
 export {
     RGBA_ARRAY_LENGTH,

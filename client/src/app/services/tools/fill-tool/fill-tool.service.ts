@@ -112,7 +112,7 @@ export class FillToolService extends AbstractToolService {
 
     fill(): void {
         this.createSVGWrapper();
-        let d: string = this.createFillPath();
+        const d: string = this.createFillPath();
 
         switch (this.traceType) {
             case TRACE_TYPE.Outline: {
