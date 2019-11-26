@@ -120,7 +120,7 @@ export class BFSHelper {
             }
         });
 
-        if (closestNeighborDistance > 100) {
+        if (closestNeighborDistance > 100 && this.tmpPath.length > 0) {
             this.pathsToFill.push(this.tmpPath);
             this.tmpPath = [];
         }

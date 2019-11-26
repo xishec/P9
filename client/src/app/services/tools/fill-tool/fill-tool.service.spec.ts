@@ -12,7 +12,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 import { FillToolService } from './fill-tool.service';
 import { Coords2D } from 'src/classes/Coords2D';
 
-fdescribe('FillToolService', () => {
+describe('FillToolService', () => {
     let service: FillToolService;
     let injector: TestBed;
     let mockRenderer: Renderer2;
