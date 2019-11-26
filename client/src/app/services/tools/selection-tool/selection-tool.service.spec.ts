@@ -3,14 +3,15 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
-import { MOUSE } from 'src/constants/constants';
+import { MOUSE, KEYS } from 'src/constants/constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { SelectionToolService } from './selection-tool.service';
+import { ALTER_ROTATION, BASE_ROTATION } from 'src/constants/tool-constants';
 
-fdescribe('SelectionToolService', () => {
+describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.LeftButton);
     const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.RightButton);
 
@@ -82,6 +83,12 @@ fdescribe('SelectionToolService', () => {
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         spyOnCreateElement = spyOn(service.renderer, 'createElement').and.callFake(() => null);
+
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -270,6 +277,25 @@ fdescribe('SelectionToolService', () => {
         expect(spyselection).toHaveBeenCalled();
     });
 
+    it('should pass the DOMRect of selection box and of each element in draw stack to selection on checkSelection', () => {
+        const sizeOfDrawStack = 3;
+        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
+        const spyOnSelection = spyOn(service.selection, 'handleSelection').and.callFake(() => null as unknown as DOMRect);
+        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => {return true;});
+        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => {return 0;});
+
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+
+        service.checkSelection();
+
+        expect(spyOnDomRect).toHaveBeenCalledTimes(sizeOfDrawStack + 1);
+        expect(spyOnSelection).toHaveBeenCalledTimes(sizeOfDrawStack);
+        expect(spyOnIsInSelection).toHaveBeenCalled();
+        expect(spyOnStrokeWidth).toHaveBeenCalled();
+    });
+
     it('handleLeftMouseDrag should use manipulator if mouse is in selection and not selecting or was already translating', () => {
         service.isOnTarget = false;
         service.isSelecting = false;
@@ -301,6 +327,25 @@ fdescribe('SelectionToolService', () => {
         service.handleRightMouseDrag();
 
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should pass the DOMRect of selection box and of each element in draw stack to selection on checkSelectionInverse', () => {
+        const sizeOfDrawStack = 3;
+        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
+        const spyOnSelection = spyOn(service.selection, 'handleInvertSelection').and.callFake(() => null as unknown as DOMRect);
+        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => {return true;});
+        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => {return 0;});
+
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+
+        service.checkSelectionInverse();
+
+        expect(spyOnDomRect).toHaveBeenCalledTimes(sizeOfDrawStack + 1);
+        expect(spyOnSelection).toHaveBeenCalledTimes(sizeOfDrawStack);
+        expect(spyOnIsInSelection).toHaveBeenCalled();
+        expect(spyOnStrokeWidth).toHaveBeenCalled();
     });
 
     it('onMouseMove should call handleLeftMouseDrag if isLeftMouseDown', () => {
@@ -339,6 +384,18 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it('should set the initialMouseCoords to currentMouseCoords and isLeftMouseDOwn to true when calling handleLeftMouseDown', () => {
+        service.currentMouseCoords.x = 10;
+        service.currentMouseCoords.y = 20;
+        service.isLeftMouseDown = false;
+
+        service.handleLeftMouseDown();
+
+        expect(service.initialMouseCoords.x).toEqual(service.currentMouseCoords.x);
+        expect(service.initialMouseCoords.y).toEqual(service.currentMouseCoords.y);
+        expect(service.isLeftMouseDown).toBeTruthy();
+    });
+
     it('onMouseDown should call handleRightMouseDown if mouseEvent is right button', () => {
         const spy = spyOn(service, 'handleRightMouseDown');
 
@@ -354,6 +411,8 @@ fdescribe('SelectionToolService', () => {
     });
 
     it('should set isSelecting to false when handling a right mouse up and isSelecting was true', () => {
+        service.isSelecting = true;
+
         service.handleRightMouseUp();
 
         expect(service.isSelecting).toBeFalsy();
@@ -391,12 +450,14 @@ fdescribe('SelectionToolService', () => {
         expect(spyOnSinglySelect).toHaveBeenCalled();
     });
 
-    it('should set isTranslatinSelection to false when handling a left mouse up was translating', () => {
-        service.isTranslatingSelection = false;
+    it('should set isTranslatinSelection to false when handling a left mouse up and was translating', () => {
+        const spyUndoRedo = spyOn(service, 'saveState').and.callFake(() => null);
+        service.isTranslatingSelection = true;
 
         service.handleLeftMouseUp();
 
         expect(service.isTranslatingSelection).toBeFalsy();
+        expect(spyUndoRedo).toHaveBeenCalled();
     });
 
     it('should empty selection when handling a left mouse up outside of selection', () => {
@@ -467,4 +528,42 @@ fdescribe('SelectionToolService', () => {
         expect(spyManipulator).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
     });
+
+    it('should set rotate on self to true when keydown on shift', () => {
+        service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Shift));
+
+        expect(service.manipulator.isRotateOnSelf).toBeTruthy();
+    });
+
+    it('should set rotate step to ALTER_ROTATION when keydown on alt', () => {
+        service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Alt));
+
+        expect(service.manipulator.rotationStep).toEqual(ALTER_ROTATION);
+    });
+
+    it('should set rotate on self to false when keyup on shift', () => {
+        service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Shift));
+
+        expect(service.manipulator.isRotateOnSelf).toBeFalsy();
+    });
+
+    it('should set rotate step to BASE_ROTATION when keyup on alt', () => {
+        service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Alt));
+
+        expect(service.manipulator.rotationStep).toEqual(BASE_ROTATION);
+    });
+
+    it('should remove the selection box, save state and append the selection box on saveState', () => {
+        const spyOnUndoRedo = spyOn(service.undoRedoerService, 'saveCurrentState').and.callFake(() => null);
+        const spyOnRemoveSelectionBox = spyOn(service.selection, 'removeFullSelectionBox').and.callFake(() => null);
+        const spyOnAppendSelectionBox = spyOn(service.selection, 'appendFullSelectionBox').and.callFake(() => null);
+
+        service.saveState();
+
+        jasmine.clock().tick(1);
+
+        expect(spyOnUndoRedo).toHaveBeenCalled();
+        expect(spyOnRemoveSelectionBox).toHaveBeenCalled();
+        expect(spyOnAppendSelectionBox).toHaveBeenCalled();
+    })
 });

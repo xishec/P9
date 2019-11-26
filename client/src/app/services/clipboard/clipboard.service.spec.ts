@@ -9,7 +9,7 @@ import { ManipulatorService } from '../manipulator/manipulator.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 import { ClipboardService } from './clipboard.service';
 
-describe('ClipboardService', () => {
+fdescribe('ClipboardService', () => {
     let injector: TestBed;
     let service: ClipboardService;
     let selection: Selection;
