@@ -62,7 +62,6 @@ export class ManipulatorService {
     }
 
     rotateElement(element: SVGGElement, origin: Coords2D): void {
-        /*TRYING OUT MATRIX*/
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         this.prepareForTransform(element);
         let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;
@@ -81,7 +80,6 @@ export class ManipulatorService {
     }
 
     translateElement(deltaX: number, deltaY: number, element: SVGGElement): void {
-        /*TRYING OUT MATRIX*/
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         this.prepareForTransform(element);
         let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;

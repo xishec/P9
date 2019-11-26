@@ -1,18 +1,21 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import * as TestHelpers from 'src/classes/test-helpers.spec';
 // import { Coords2D } from 'src/classes/Coords2D';
 // import { OFFSET_STEP } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
+import { Coords2D } from 'src/classes/Coords2D';
+//import { SIDEBAR_WIDTH } from 'src/constants/constants';
 
 fdescribe('ManipulatorService', () => {
-    // let selection: Selection;
+    let selection: Selection;
     let service: ManipulatorService;
     let injector: TestBed;
     let rendererMock: Renderer2;
-    // let elementRefMock: ElementRef<SVGGElement>;
-    // let spyOnCreateElement: jasmine.Spy;
+    let elementRefMock: ElementRef<SVGGElement>;
+    let spyOnCreateElement: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -48,194 +51,210 @@ fdescribe('ManipulatorService', () => {
         });
         injector = getTestBed();
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        // elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
-        // selection = new Selection(rendererMock, elementRefMock);
+        elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
+        selection = new Selection(rendererMock, elementRefMock);
         service = injector.get(ManipulatorService);
         service.initializeService(rendererMock);
-        // spyOnCreateElement = spyOn(rendererMock, 'createElement');
+        spyOnCreateElement = spyOn(rendererMock, 'createElement');
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
-    // it('translateSelection should call createSVGTransform if transformList.numberOfItems === 0', () => {
-    //     const mockSVGTransform = ({
-    //         type: 0,
-    //         setTranslate: () => null,
-    //         matrix: {
-    //             e: 0,
-    //             f: 0,
-    //         },
-    //     } as unknown) as SVGTransform;
+    it('should assign the renderer on initializeService', () => {
+        expect(service.renderer).toBeTruthy();
+    });
 
-    //     const mockSVGTranformList = ({
-    //         numberOfItems: 0,
-    //         getItem: () => mockSVGTransform,
-    //         insertItemBefore: () => null,
-    //     } as unknown) as SVGTransformList;
+    it('should update selected elements origins and boxOrigin on updateOrigins', () => {
+        const mockRect = {
+            x:{
+                baseVal:{
+                    value: 10,
+                },
+            },
+            y:{
+                baseVal:{
+                    value: 10,
+                },
+            },
+            width:{
+                baseVal:{
+                    value: 10,
+                },
+            },
+            height:{
+                baseVal:{
+                    value: 10,
+                },
+            },
+        };
+        selection.selectionBox = mockRect as unknown as SVGRectElement;
+        const spy = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
 
-    //     const mockSVGGelement = ({
-    //         transform: {
-    //             baseVal: mockSVGTranformList,
-    //         },
-    //     } as unknown) as SVGGElement;
+        service.updateOrigins(selection);
 
-    //     selection.selectedElements = new Set<SVGGElement>();
-    //     selection.selectedElements.add(mockSVGGelement);
+        expect(spy).toHaveBeenCalled();
+        expect(service.boxOrigin.x).toEqual(15);
+        expect(service.boxOrigin.y).toEqual(15);
+    });
 
-    //     const mockTranslate = ({
-    //         setTranslate: () => null,
-    //     } as unknown) as SVGTransform;
+    it('should update selected elements origins and boxOrigin on updateOrigins', () => {
+        const mockRect = {
+            x:{
+                baseVal:{
+                    value: 10 as number,
+                },
+            },
+            y:{
+                baseVal:{
+                    value: 10 as number,
+                },
+            },
+            width:{
+                baseVal:{
+                    value: 10 as number,
+                },
+            },
+            height:{
+                baseVal:{
+                    value: 10 as number,
+                },
+            },
+        };
 
-    //     const mockSVGSVGElement = {
-    //         createSVGTransform: () => mockTranslate,
-    //     } as SVGSVGElement;
+        const mockSvgG = {
+            getBoundingClientRect:() => {
+                return mockRect as unknown as ClientRect;
+            },
+        };
 
-    //     spyOnCreateElement.and.returnValue(mockSVGSVGElement);
+        const spyClear = spyOn(service.selectedElementsOrigin, 'clear').and.callFake(() => null);
+        const spySet = spyOn(service.selectedElementsOrigin, 'set').and.callFake(() => {return new Map<SVGGElement, Coords2D>();});
+        selection.selectedElements.add(mockSvgG as unknown as SVGGElement);
+        service.updateElementsOrigins(selection);
 
-    //     const spy = spyOn(mockSVGTransform, 'setTranslate');
-    //     const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
+        expect(spyClear).toHaveBeenCalled();
+        expect(spySet).toHaveBeenCalled();
+    });
 
-    //     const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
-    //     const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
-    //     service.translateSelection(
-    //         dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-    //         dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-    //         selection,
-    //     );
+    it('should not do anything if there is more than 0 transforms on element on prepareForTransform', () => {
+        const mockSVGG = {
+            transform:{
+                baseVal:{
+                    numberOfItems: 1,
+                    appendItem:() => null,
+                },
+            },
+        };
 
-    //     expect(spy).toHaveBeenCalled();
-    //     expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
-    // });
+        spyOnCreateElement.and.callFake(() => {
+            const mockSVG = {
+                createSVGTransform: () => {
+                    const mockTransform = {
+                        setTranslate:() => null,
+                    };
+                    return mockTransform as unknown as SVGTransform;
+                },
+            };
 
-    // it('translateSelection should not call createSVGTransform if transformList is not empty and first transform is translate', () => {
-    //     const mockSVGTransform = ({
-    //         type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
-    //         setTranslate: () => null,
-    //         matrix: {
-    //             e: 0,
-    //             f: 0,
-    //         },
-    //     } as unknown) as SVGTransform;
+            return mockSVG as unknown as SVGSVGElement;
+        });
 
-    //     const mockSVGTranformList = ({
-    //         numberOfItems: 5,
-    //         getItem: () => mockSVGTransform,
-    //         insertItemBefore: () => null,
-    //     } as unknown) as SVGTransformList;
+        const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
-    //     const mockSVGGelement = ({
-    //         transform: {
-    //             baseVal: mockSVGTranformList,
-    //         },
-    //     } as unknown) as SVGGElement;
+        service.prepareForTransform(mockSVGG as unknown as SVGGElement);
 
-    //     selection.selectedElements = new Set<SVGGElement>();
-    //     selection.selectedElements.add(mockSVGGelement);
+        expect(spyOnCreateElement).not.toHaveBeenCalled();
+        expect(spy).not.toHaveBeenCalled();
+    });
 
-    //     const mockTranslate = ({
-    //         setTranslate: () => null,
-    //     } as unknown) as SVGTransform;
+    it('should set a dummy transform if there is 0 transforms on element on prepareForTransform', () => {
+        const mockSVGG = {
+            transform:{
+                baseVal:{
+                    numberOfItems: 0,
+                    appendItem:() => null,
+                },
+            },
+        };
 
-    //     const mockSVGSVGElement = {
-    //         createSVGTransform: () => mockTranslate,
-    //     } as SVGSVGElement;
+        spyOnCreateElement.and.callFake(() => {
+            const mockSVG = {
+                createSVGTransform: () => {
+                    const mockTransform = {
+                        setTranslate:() => null,
+                    };
+                    return mockTransform as unknown as SVGTransform;
+                },
+            };
 
-    //     spyOnCreateElement.and.returnValue(mockSVGSVGElement);
+            return mockSVG as unknown as SVGSVGElement;
+        });
 
-    //     const spy = spyOn(mockSVGTransform, 'setTranslate');
-    //     const spyOnUpdateFullSelectionBox = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
+        const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
-    //     const dummyMouseCoordsInit: Coords2D = { x: 10, y: 10 };
-    //     const dummyMouseCoordsCurr: Coords2D = { x: 20, y: 20 };
-    //     service.translateSelection(
-    //         dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-    //         dummyMouseCoordsInit.x - dummyMouseCoordsCurr.x,
-    //         selection,
-    //     );
+        service.prepareForTransform(mockSVGG as unknown as SVGGElement);
 
-    //     expect(spy).toHaveBeenCalled();
-    //     expect(spyOnUpdateFullSelectionBox).toHaveBeenCalled();
-    // });
+        expect(spyOnCreateElement).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalled();
+    });
 
-    // it('offsetSingle should call createSVGTransform if transformList.numberOfItems === 0', () => {
-    //     const mockSVGTransform = ({
-    //         type: 0,
-    //         setTranslate: () => null,
-    //         matrix: {
-    //             e: 0,
-    //             f: 0,
-    //         },
-    //     } as unknown) as SVGTransform;
+    it('should use a negative rotation step for negative deltaY on rotateSelection', () => {
+        service.rotateSelection(TestHelpers.createWheelEvent(0, -150), selection);
 
-    //     const mockSVGTranformList = ({
-    //         numberOfItems: 0,
-    //         getItem: () => mockSVGTransform,
-    //         insertItemBefore: () => null,
-    //     } as unknown) as SVGTransformList;
+        expect(service.rotationStep).toBeLessThan(0);
+    });
 
-    //     const mockSVGGelement = ({
-    //         transform: {
-    //             baseVal: mockSVGTranformList,
-    //         },
-    //     } as unknown) as SVGGElement;
+    it('should use a positive rotation step for positive deltaY on rotateSelection', () => {
+        service.rotateSelection(TestHelpers.createWheelEvent(0, 150), selection);
 
-    //     const mockTranslate = ({
-    //         setTranslate: () => null,
-    //     } as unknown) as SVGTransform;
+        expect(service.rotationStep).toBeGreaterThan(0);
+    });
 
-    //     const mockSVGSVGElement = {
-    //         createSVGTransform: () => mockTranslate,
-    //     } as SVGSVGElement;
+    it('should get center from selected elements origins when rotateOnSelf is true and not update origins on rotateSelection', () => {
+        service.isRotateOnSelf = true;
+        const element = TestHelpers.createMockSVGGElement();
+        const coords = new Coords2D(0,0);
+        selection.selectedElements.add(element as unknown as SVGGElement);
+        service.selectedElementsOrigin.set(element, coords);
+        const spyOnRotate = spyOn(service, 'rotateElement').and.callFake(() => null);
+        const spyOnUpdateOrigins = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
+        const spyOnUpdateSelection = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-    //     spyOnCreateElement.and.returnValue(mockSVGSVGElement);
+        service.rotateSelection(TestHelpers.createWheelEvent(0, 150), selection);
 
-    //     const spy = spyOn(mockSVGTransform, 'setTranslate');
+        expect(spyOnRotate).toHaveBeenCalledWith(element, coords);
+        expect(spyOnUpdateOrigins).not.toHaveBeenCalled();
+        expect(spyOnUpdateSelection).toHaveBeenCalled();
+    });
 
-    //     const offset = OFFSET_STEP;
-    //     service.offsetSingle(offset, mockSVGGelement);
+    it('should use boxOrigin as center when rotateOnSelf is false and update origins on rotateSelection', () => {
+        service.isRotateOnSelf = false;
+        const element = TestHelpers.createMockSVGGElement();
+        selection.selectedElements.add(element as unknown as SVGGElement);
+        const spyOnRotate = spyOn(service, 'rotateElement').and.callFake(() => null);
+        const spyOnUpdateOrigins = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
+        const spyOnUpdateSelection = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-    //     expect(spy).toHaveBeenCalled();
-    // });
+        service.rotateSelection(TestHelpers.createWheelEvent(0, 150), selection);
 
-    // it('translateSelection should not call createSVGTransform if transformList is empty and first transform is translate', () => {
-    //     const mockSVGTransform = ({
-    //         type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
-    //         setTranslate: () => null,
-    //         matrix: {
-    //             e: 0,
-    //             f: 0,
-    //         },
-    //     } as unknown) as SVGTransform;
+        expect(spyOnRotate).toHaveBeenCalledWith(element, service.boxOrigin);
+        expect(spyOnUpdateOrigins).toHaveBeenCalled();
+        expect(spyOnUpdateSelection).toHaveBeenCalled();
+    });
 
-    //     const mockSVGTranformList = ({
-    //         numberOfItems: 5,
-    //         getItem: () => mockSVGTransform,
-    //         insertItemBefore: () => null,
-    //     } as unknown) as SVGTransformList;
+    it('should call translateElement for all elements and update the selection box on translateSelection', () => {
+        const spyTranslate = spyOn(service, 'translateElement').and.callFake(() => null);
+        const spySelection = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
-    //     const mockSVGGelement = ({
-    //         transform: {
-    //             baseVal: mockSVGTranformList,
-    //         },
-    //     } as unknown) as SVGGElement;
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
-    //     const mockTranslate = ({
-    //         setTranslate: () => null,
-    //     } as unknown) as SVGTransform;
+        service.translateSelection(10, 10, selection);
 
-    //     const mockSVGSVGElement = {
-    //         createSVGTransform: () => mockTranslate,
-    //     } as SVGSVGElement;
-
-    //     spyOnCreateElement.and.returnValue(mockSVGSVGElement);
-
-    //     const spy = spyOn(mockSVGTransform, 'setTranslate');
-
-    //     const offset = OFFSET_STEP;
-    //     service.offsetSingle(offset, mockSVGGelement);
-
-    //     expect(spy).toHaveBeenCalled();
-    // });
+        expect(spyTranslate).toHaveBeenCalledTimes(3);
+        expect(spySelection).toHaveBeenCalled();
+    });
 });
