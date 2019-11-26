@@ -349,7 +349,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        if (!this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended) {
+        if (!this.isTranslatingSelection && !this.isSelecting) {
             this.manipulator.rotateSelection(event, this.selection);
             this.clipBoard.restartDuplication();
             this.saveState();

@@ -32,6 +32,14 @@ export const createMouseEvent = (
     return (mouseEvent as unknown) as MouseEvent;
 };
 
+export const createWheelEvent = (deltaX: number, deltaY: number): WheelEvent => {
+    const wheelEvent = {
+        deltaX: deltaX,
+        deltaY: deltaY,
+    };
+    return (wheelEvent as unknown) as WheelEvent;
+};
+
 export const createKeyBoardEvent = (keyPressed: KEYS): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,

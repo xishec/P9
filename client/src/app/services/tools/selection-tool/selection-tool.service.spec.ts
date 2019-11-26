@@ -439,4 +439,32 @@ fdescribe('SelectionToolService', () => {
         expect(spy).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
     });
+
+    it('should not do anything if translating or selecting on mouse wheel', () => {
+        const spyUndoRedo = spyOn(service, 'saveState').and.callFake(() => null);
+        const spyManipulator = spyOn(service.manipulator, 'rotateSelection').and.callFake(() => null);
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
+        service.isTranslatingSelection = true;
+        service.isSelecting = true;
+
+        service.onWheel(TestHelpers.createWheelEvent(0, 150));
+
+        expect(spyUndoRedo).not.toHaveBeenCalled();
+        expect(spyManipulator).not.toHaveBeenCalled();
+        expect(spyClipboard).not.toHaveBeenCalled();
+    });
+
+    it('should rotate selection if not translating and not selecting on mouse wheel', () => {
+        const spyUndoRedo = spyOn(service, 'saveState').and.callFake(() => null);
+        const spyManipulator = spyOn(service.manipulator, 'rotateSelection').and.callFake(() => null);
+        const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
+        service.isTranslatingSelection = false;
+        service.isSelecting = false;
+
+        service.onWheel(TestHelpers.createWheelEvent(0, 150));
+
+        expect(spyUndoRedo).toHaveBeenCalled();
+        expect(spyManipulator).toHaveBeenCalled();
+        expect(spyClipboard).toHaveBeenCalled();
+    });
 });
