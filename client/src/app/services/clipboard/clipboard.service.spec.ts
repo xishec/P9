@@ -121,7 +121,7 @@ describe('ClipboardService', () => {
 
         const spyOnPush = spyOn(drawStackMock, 'push');
         const spyOnUpdateSelection = spyOn(service, 'updateSelection');
-        const spyOnManipulator = spyOn(manipulator, 'offsetSingle');
+        const spyOnManipulator = spyOn(manipulator, 'translateElement');
 
         service.clone(elementsToClone, 0);
 

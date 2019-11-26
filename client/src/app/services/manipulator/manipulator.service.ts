@@ -13,32 +13,10 @@ export class ManipulatorService {
     boxOrigin: Coords2D = new Coords2D(0,0);
     selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = BASE_ROTATION;
-    //lastRotation: SVGTransform;
-    //angle = 0;
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
     }
-
-    // isFirstTransformInvalid(transformsList: SVGTransformList, transformType: number): boolean {
-    //     return transformsList.numberOfItems === 0 || transformsList.getItem(0).type !== transformType;
-    // }
-
-    // preventRotationOverwrite(selection: Selection, wasRotateOnSelf?: boolean): void {
-    //     this.angle = 0;
-    //     for (const el of selection.selectedElements) {
-    //         if (!this.isFirstTransformInvalid(el.transform.baseVal, SVGTransform.SVG_TRANSFORM_ROTATE)) {
-    //             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-    //             const rotateToZero = svg.createSVGTransform();
-    //             if (wasRotateOnSelf) {
-    //                 rotateToZero.setRotate(0, (this.selectedElementsOrigin.get(el) as Coords2D).x, (this.selectedElementsOrigin.get(el) as Coords2D).y);
-    //             } else {
-    //                 rotateToZero.setRotate(0, this.boxOrigin.x, this.boxOrigin.y);
-    //             }
-    //             el.transform.baseVal.insertItemBefore(rotateToZero, 0);
-    //         }
-    //     }
-    // }
 
     updateOrigins(selection: Selection): void {
         this.updateElementsOrigins(selection);
@@ -66,7 +44,6 @@ export class ManipulatorService {
     rotateSelection(event: WheelEvent, selection: Selection): void {
         const deltaY = event.deltaY;
 
-        // this.angle += (deltaY < 0) ? -this.rotationStep : this.rotationStep;
         this.rotationStep = (deltaY < 0) ? (Math.abs(this.rotationStep) * -1) : (Math.abs(this.rotationStep) * 1);
 
         for (const element of selection.selectedElements) {
@@ -94,14 +71,13 @@ export class ManipulatorService {
         ctm = rotationMatrix.matrix.multiply(ctm);
         element.transform.baseVal.clear();
         element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(ctm));
-        // const transformsList = element.transform.baseVal;
-        // if (this.isFirstTransformInvalid(transformsList, SVGTransform.SVG_TRANSFORM_ROTATE)) {
-        //     const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        //     const rotateToZero = svg.createSVGTransform();
-        //     rotateToZero.setRotate(0, 0, 0);
-        //     element.transform.baseVal.insertItemBefore(rotateToZero, 0);
-        // }
-        // element.transform.baseVal.getItem(0).setRotate(this.angle, origin.x, origin.y);
+    }
+
+    translateSelection(deltaX: number, deltaY: number, selection: Selection): void {
+        for (const element of selection.selectedElements) {
+            this.translateElement(deltaX, deltaY, element);
+        }
+        selection.updateFullSelectionBox();
     }
 
     translateElement(deltaX: number, deltaY: number, element: SVGGElement): void {
@@ -114,17 +90,5 @@ export class ManipulatorService {
         ctm = translationMatrix.matrix.multiply(ctm);
         element.transform.baseVal.clear();
         element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(ctm));
-        // const transformsList = element.transform.baseVal;
-        // if (this.isFirstTransformInvalid(transformsList, SVGTransform.SVG_TRANSFORM_TRANSLATE)) {
-        //     const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
-        //     const translateToZero = svg.createSVGTransform();
-        //     translateToZero.setTranslate(0, 0);
-        //     element.transform.baseVal.insertItemBefore(translateToZero, 0);
-        // }
-
-        // const initialTransform = transformsList.getItem(0);
-        // const offsetX = -initialTransform.matrix.e;
-        // const offsetY = -initialTransform.matrix.f;
-        // element.transform.baseVal.getItem(0).setTranslate(deltaX - offsetX, deltaY - offsetY);
     }
 }

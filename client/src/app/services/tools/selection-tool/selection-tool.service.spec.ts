@@ -10,7 +10,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { SelectionToolService } from './selection-tool.service';
 
-describe('SelectionToolService', () => {
+fdescribe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.LeftButton);
     const MOCK_RIGHT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.RightButton);
 
@@ -24,6 +24,7 @@ describe('SelectionToolService', () => {
     let spyOnSetAttribute: jasmine.Spy;
     let spyOnAppendChild: jasmine.Spy;
     let spyOnRemoveChild: jasmine.Spy;
+    let spyOnCreateElement: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -31,6 +32,16 @@ describe('SelectionToolService', () => {
                 SelectionToolService,
                 ClipboardService,
                 ManipulatorService,
+                {
+                    provide: DrawStackService,
+                    useValue: {
+                        currentStackTarget:{
+                            subscribe: () => null,
+                        },
+                        drawStack: new Array<SVGGElement>(),
+                        getDrawStackLength: () => null,
+                    },
+                },
                 {
                     provide: Renderer2,
                     useValue: {
@@ -70,35 +81,54 @@ describe('SelectionToolService', () => {
         spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
+        spyOnCreateElement = spyOn(service.renderer, 'createElement').and.callFake(() => null);
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should select all drawStack when calling selectAll', () => {
-        const spy = spyOn(service.selection, 'addToSelection');
+    it('should select all drawStack, update origins and restart duplication when calling selectAll', () => {
+        const spyOnAddToSelection = spyOn(service.selection, 'addToSelection');
+        const spyOnUpdateOrigins = spyOn(service.manipulator, 'updateOrigins').and.callFake(() => null);
+        const spyOnRestartDuplication = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
+        spyOn(service.drawStack, 'getDrawStackLength').and.callFake(() => {return service.drawStack.drawStack.length});
 
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
+        service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
         service.selectAll();
 
-        expect(spy).toHaveBeenCalledTimes(service.drawStack.getDrawStackLength());
+        expect(spyOnAddToSelection).toHaveBeenCalledTimes(service.drawStack.getDrawStackLength());
+        expect(spyOnUpdateOrigins).toHaveBeenCalled();
+        expect(spyOnRestartDuplication).toHaveBeenCalled();
     });
 
     it('should initialize the selectionRectangle and Selection on creation', () => {
         const spyClipboard = spyOn(service.clipBoard, 'initializeService');
+        const spyManipulator = spyOn(service.manipulator, 'initializeService');
+        const spySubscribe = spyOn(service.drawStack.currentStackTarget, 'subscribe');
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
         expect(spyOnSetAttribute).toHaveBeenCalled();
-        expect(service.selection).toBeTruthy();
+        expect(spyOnCreateElement).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
+        expect(spyManipulator).toHaveBeenCalled();
+        expect(spySubscribe).toHaveBeenCalled();
+        expect(service.selection).toBeTruthy();
     });
 
-    it('should set all behavioral booleans to false and remove the selection rectangle', () => {
+    it('should set all behavioral booleans to false and remove the selection rectangle on cleanUp', () => {
         service.isSelecting = true;
+        service.isLeftMouseDown = true;
+        service.isRightMouseDown = true;
+        service.isSelecting = true;
+        service.isLeftMouseDragging = true;
+        service.isRightMouseDragging = true;
+        service.isTranslatingSelection = true;
 
         service.cleanUp();
 
         expect(spyOnRemoveChild).toHaveBeenCalled();
-        expect(service.isTheCurrentTool).toBeFalsy();
         expect(service.isLeftMouseDown).toBeFalsy();
         expect(service.isRightMouseDown).toBeFalsy();
         expect(service.isLeftMouseDragging).toBeFalsy();
@@ -381,6 +411,7 @@ describe('SelectionToolService', () => {
         const spy = spyOn(service, 'handleLeftMouseUp');
         const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
+        spyOn(service.manipulator, 'updateOrigins').and.callFake(() => null);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
 
@@ -401,6 +432,7 @@ describe('SelectionToolService', () => {
         const spy = spyOn(service, 'handleRightMouseUp');
         const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
+        spyOn(service.manipulator, 'updateOrigins').and.callFake(() => null);
 
         service.onMouseUp(MOCK_RIGHT_CLICK);
 
