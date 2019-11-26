@@ -12,6 +12,7 @@ export class BFSHelper {
     tolerance: number;
     data: Uint8ClampedArray;
     pathsToFill: Array<Coords2D[]>;
+    tmpPath: Array<Coords2D>;
 
     constructor(
         maxX: number,
@@ -33,7 +34,6 @@ export class BFSHelper {
     }
 
     computeBFS(clickPosition: Coords2D): void {
-        console.time('bfs');
         const imageData: ImageData = this.context2D.getImageData(0, 0, this.maxX, this.maxY);
         this.data = imageData.data;
 
@@ -73,88 +73,90 @@ export class BFSHelper {
                 }
             }
         }
-        console.timeEnd('bfs');
-
-        console.time('dfs');
-        this.dfs();
-        console.timeEnd('dfs');
+        this.createPathToFill();
     }
 
-    dfs() {
-        this.pathsToFill = [];
-        let tmp = [];
-        this.visited = new Set([]);
-
-        let pixel: Coords2D = new Coords2D(-1, -1);
-        for (let el of this.strokes) {
-            if (!this.visited.has(`${el.x} ${el.y}`)) {
-                pixel = el;
-                break;
+    serachIn(neighborPixels: Coords2D[], closestNeighbor: Coords2D): void {
+        neighborPixels.forEach((neighborPixel: Coords2D) => {
+            if (
+                this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
+                !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
+            ) {
+                closestNeighbor.setCoords(neighborPixel);
             }
+        });
+    }
+
+    searchInDirectNeighbors(pixel: Coords2D, closestNeighbor: Coords2D): void {
+        const neighborPixels = [
+            new Coords2D(pixel.x - 1, pixel.y),
+            new Coords2D(pixel.x + 1, pixel.y),
+            new Coords2D(pixel.x, pixel.y - 1),
+            new Coords2D(pixel.x, pixel.y + 1),
+        ];
+        this.serachIn(neighborPixels, closestNeighbor);
+    }
+
+    searchInIndirectNeighbors(pixel: Coords2D, closestNeighbor: Coords2D): void {
+        const neighborPixels = [
+            new Coords2D(pixel.x - 1, pixel.y - 1),
+            new Coords2D(pixel.x - 1, pixel.y + 1),
+            new Coords2D(pixel.x + 1, pixel.y - 1),
+            new Coords2D(pixel.x + 1, pixel.y + 1),
+        ];
+        this.serachIn(neighborPixels, closestNeighbor);
+    }
+
+    findClosestPixel(pixel: Coords2D, closestNeighbor: Coords2D): void {
+        let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
+        this.strokes.forEach((el: Coords2D) => {
+            if (!this.visited.has(`${el.x} ${el.y}`)) {
+                let distance = el.distanceTo(pixel);
+                if (distance < closestNeighborDistance) {
+                    closestNeighborDistance = distance;
+                    closestNeighbor.setCoords(el);
+                }
+            }
+        });
+
+        if (closestNeighborDistance > 100) {
+            this.pathsToFill.push(this.tmpPath);
+            this.tmpPath = [];
         }
+    }
+
+    updateClosestNeighbor(pixel: Coords2D, closestNeighbor: Coords2D): void {
+        this.searchInDirectNeighbors(pixel, closestNeighbor);
+        if (!closestNeighbor.isValide()) {
+            this.searchInIndirectNeighbors(pixel, closestNeighbor);
+        }
+        if (!closestNeighbor.isValide()) {
+            this.findClosestPixel(pixel, closestNeighbor);
+        }
+    }
+
+    createPathToFill() {
+        if (this.strokes.length === 0) return;
+
+        this.pathsToFill = [];
+        this.visited = new Set([]);
+        this.tmpPath = [];
+
+        let pixel: Coords2D = this.strokes[0];
         this.visited.add(`${pixel.x} ${pixel.y}`);
 
-        while (pixel.x >= 0 && pixel.x >= 0) {
-            tmp.push(pixel);
+        while (pixel.isValide()) {
+            this.tmpPath.push(pixel.clone());
+
             let closestNeighbor: Coords2D = new Coords2D(-1, -1);
-
-            const neighborPixels = [
-                new Coords2D(pixel.x - 1, pixel.y),
-                new Coords2D(pixel.x + 1, pixel.y),
-                new Coords2D(pixel.x, pixel.y - 1),
-                new Coords2D(pixel.x, pixel.y + 1),
-            ];
-            neighborPixels.forEach((neighborPixel: Coords2D) => {
-                if (
-                    this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
-                    !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
-                ) {
-                    closestNeighbor = neighborPixel;
-                }
-            });
-
-            if (closestNeighbor.x === -1 && closestNeighbor.x === -1) {
-                const neighborPixels = [
-                    new Coords2D(pixel.x - 1, pixel.y - 1),
-                    new Coords2D(pixel.x - 1, pixel.y + 1),
-                    new Coords2D(pixel.x + 1, pixel.y - 1),
-                    new Coords2D(pixel.x + 1, pixel.y + 1),
-                ];
-                neighborPixels.forEach((neighborPixel: Coords2D) => {
-                    if (
-                        this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
-                        !this.visited.has(`${neighborPixel.x} ${neighborPixel.y}`)
-                    ) {
-                        closestNeighbor = neighborPixel;
-                    }
-                });
-            }
-
-            if (closestNeighbor.x === -1 && closestNeighbor.x === -1) {
-                let closestNeighborDistance = Number.MAX_SAFE_INTEGER;
-                this.strokes.forEach((el: Coords2D) => {
-                    if (!this.visited.has(`${el.x} ${el.y}`)) {
-                        let distance = el.distanceTo(pixel);
-
-                        if (distance < closestNeighborDistance) {
-                            closestNeighborDistance = distance;
-                            closestNeighbor = el;
-                        }
-                    }
-                });
-
-                if (closestNeighborDistance > 100) {
-                    this.pathsToFill.push(tmp);
-                    tmp = [];
-                }
-            }
+            this.updateClosestNeighbor(pixel, closestNeighbor);
 
             this.visited.add(`${closestNeighbor.x} ${closestNeighbor.y}`);
-            pixel = closestNeighbor;
+            pixel.setCoords(closestNeighbor);
         }
 
-        this.pathsToFill.push(tmp);
-        tmp = [];
+        this.pathsToFill.push(this.tmpPath);
+        this.tmpPath = [];
     }
 
     isSameColor(color1: number[], color2: number[]): boolean {
