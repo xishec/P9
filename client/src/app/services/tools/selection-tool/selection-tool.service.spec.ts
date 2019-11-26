@@ -556,6 +556,7 @@ describe('SelectionToolService', () => {
     it('should remove the selection box, save state and append the selection box on saveState', () => {
         const spyOnRemoveSelectionBox = spyOn(service.selection, 'removeFullSelectionBox').and.callFake(() => null);
         const spyOnAppendSelectionBox = spyOn(service.selection, 'appendFullSelectionBox').and.callFake(() => null);
+        const spyUndoRedo = spyOn(service.undoRedoerService, 'saveCurrentState').and.callFake(() => null);
 
         service.saveState();
 
@@ -563,5 +564,6 @@ describe('SelectionToolService', () => {
 
         expect(spyOnRemoveSelectionBox).toHaveBeenCalled();
         expect(spyOnAppendSelectionBox).toHaveBeenCalled();
+        expect(spyUndoRedo).toHaveBeenCalled();
     })
 });

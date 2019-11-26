@@ -27,6 +27,7 @@ describe('StampToolService', () => {
     let spyOnRemoveChild: jasmine.Spy;
     let spyOnDrawStackPush: jasmine.Spy;
     let spyOnPreventDefault: jasmine.Spy;
+    let spyOnCreateElement: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -83,6 +84,7 @@ describe('StampToolService', () => {
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
         spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
+        spyOnCreateElement = spyOn(rendererMock, 'createElement');
 
         spyOnStampWidth = spyOnProperty(service, 'stampWidth', 'get').and.callFake(() => {
             return mockDrawRect.width;
@@ -182,6 +184,31 @@ describe('StampToolService', () => {
     });
 
     it('should call setAttribute and appendChild after a stamp is added', () => {
+        spyOnCreateElement.and.callFake((param: string, ns: string) => {
+            if (param === "svg") {
+                const mockSVG = {
+                    createSVGTransform: () => {
+                        const mockTransform = {
+                            setRotate:() => null,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    createSVGTransformFromMatrix: () => null,
+                };
+
+                return mockSVG as unknown as SVGSVGElement;
+
+            } else {
+                const mockG = {
+                    transform: {
+                        baseVal:{
+                            insertItemBefore: () => null,
+                        },
+                    },
+                };
+                return mockG as unknown as SVGGElement;
+            }
+        });
         service.addStamp();
         jasmine.clock().tick(1);
 
@@ -235,6 +262,31 @@ describe('StampToolService', () => {
     });
 
     it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
+        spyOnCreateElement.and.callFake((param: string, ns: string) => {
+            if (param === "svg") {
+                const mockSVG = {
+                    createSVGTransform: () => {
+                        const mockTransform = {
+                            setRotate:() => null,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    createSVGTransformFromMatrix: () => null,
+                };
+
+                return mockSVG as unknown as SVGSVGElement;
+
+            } else {
+                const mockG = {
+                    transform: {
+                        baseVal:{
+                            insertItemBefore: () => null,
+                        },
+                    },
+                };
+                return mockG as unknown as SVGGElement;
+            }
+        });
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
 

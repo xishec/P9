@@ -7,7 +7,7 @@ import { ManipulatorService } from './manipulator.service';
 import { Coords2D } from 'src/classes/Coords2D';
 import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 
-fdescribe('ManipulatorService', () => {
+describe('ManipulatorService', () => {
     let selection: Selection;
     let service: ManipulatorService;
     let injector: TestBed;
@@ -279,7 +279,7 @@ fdescribe('ManipulatorService', () => {
         expect(spyOnPrepare).toHaveBeenCalled();
     })
 
-    it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
+    it('should perform matrix multiplication to include translation and apply only the combo matrix to transforms', () => {
         const mockSVGG = {
             transform:{
                 baseVal:{

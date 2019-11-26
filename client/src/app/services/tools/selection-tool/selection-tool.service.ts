@@ -40,7 +40,7 @@ export class SelectionToolService extends AbstractToolService {
     constructor(
         public clipBoard: ClipboardService,
         public manipulator: ManipulatorService,
-        private undoRedoerService: UndoRedoerService,
+        public undoRedoerService: UndoRedoerService,
     ) {
         super();
     }
