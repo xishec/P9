@@ -336,7 +336,7 @@ describe('ClipboardService', () => {
     });
 
     it('should not do anything when no items are selected on duplicate', () => {
-        const spyOnHandleDuplicateOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => {return true;});
+        const spyOnHandleDuplicateOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => true);
         const spyOnIncreaseDuplicateOffsetValue = spyOn(service, 'increaseDuplicateOffsetValue').and.callFake(() => null);
         const spyOnClone = spyOn(service, 'clone').and.callFake(() => null);
         const spyOnSaveState = spyOn(service, 'saveStateFromDuplicate').and.callFake(() => null);

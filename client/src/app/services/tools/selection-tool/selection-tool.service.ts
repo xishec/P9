@@ -2,8 +2,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { MOUSE, SIDEBAR_WIDTH, SVG_NS, KEYS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE, BASE_ROTATION, ALTER_ROTATION } from 'src/constants/tool-constants';
+import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { ALTER_ROTATION, BASE_ROTATION, DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -331,7 +331,7 @@ export class SelectionToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {
         event.preventDefault();
         const key = event.key;
-        if(key === KEYS.Shift) {
+        if (key === KEYS.Shift) {
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = ALTER_ROTATION;
@@ -341,7 +341,7 @@ export class SelectionToolService extends AbstractToolService {
     onKeyUp(event: KeyboardEvent): void {
         event.preventDefault();
         const key = event.key;
-        if(key === KEYS.Shift) {
+        if (key === KEYS.Shift) {
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             this.manipulator.rotationStep = BASE_ROTATION;

@@ -34,8 +34,8 @@ export const createMouseEvent = (
 
 export const createWheelEvent = (deltaX: number, deltaY: number): WheelEvent => {
     const wheelEvent = {
-        deltaX: deltaX,
-        deltaY: deltaY,
+        deltaX,
+        deltaY,
     };
     return (wheelEvent as unknown) as WheelEvent;
 };

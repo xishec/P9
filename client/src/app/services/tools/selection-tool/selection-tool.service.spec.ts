@@ -3,13 +3,13 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
-import { MOUSE, KEYS } from 'src/constants/constants';
+import { KEYS, MOUSE } from 'src/constants/constants';
+import { ALTER_ROTATION, BASE_ROTATION } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { SelectionToolService } from './selection-tool.service';
-import { ALTER_ROTATION, BASE_ROTATION } from 'src/constants/tool-constants';
 
 describe('SelectionToolService', () => {
     const MOCK_LEFT_CLICK = TestHelpers.createMouseEvent(0, 0, MOUSE.LeftButton);
@@ -36,7 +36,7 @@ describe('SelectionToolService', () => {
                 {
                     provide: DrawStackService,
                     useValue: {
-                        currentStackTarget:{
+                        currentStackTarget: {
                             subscribe: () => null,
                         },
                         drawStack: new Array<SVGGElement>(),
@@ -99,7 +99,7 @@ describe('SelectionToolService', () => {
         const spyOnAddToSelection = spyOn(service.selection, 'addToSelection');
         const spyOnUpdateOrigins = spyOn(service.manipulator, 'updateOrigins').and.callFake(() => null);
         const spyOnRestartDuplication = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
-        spyOn(service.drawStack, 'getDrawStackLength').and.callFake(() => {return service.drawStack.drawStack.length});
+        spyOn(service.drawStack, 'getDrawStackLength').and.callFake(() => service.drawStack.drawStack.length);
 
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
@@ -281,8 +281,8 @@ describe('SelectionToolService', () => {
         const sizeOfDrawStack = 3;
         const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
         const spyOnSelection = spyOn(service.selection, 'handleSelection').and.callFake(() => null as unknown as DOMRect);
-        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => {return true;});
-        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => {return 0;});
+        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => true);
+        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => 0);
 
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
@@ -333,8 +333,8 @@ describe('SelectionToolService', () => {
         const sizeOfDrawStack = 3;
         const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
         const spyOnSelection = spyOn(service.selection, 'handleInvertSelection').and.callFake(() => null as unknown as DOMRect);
-        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => {return true;});
-        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => {return 0;});
+        const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => true);
+        const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => 0);
 
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
@@ -565,5 +565,5 @@ describe('SelectionToolService', () => {
         expect(spyOnRemoveSelectionBox).toHaveBeenCalled();
         expect(spyOnAppendSelectionBox).toHaveBeenCalled();
         expect(spyUndoRedo).toHaveBeenCalled();
-    })
+    });
 });

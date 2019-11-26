@@ -1,8 +1,8 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { SVG_NS, SIDEBAR_WIDTH } from 'src/constants/constants';
-import { Selection } from '../../../classes/selection/selection';
-import { BASE_ROTATION } from 'src/constants/tool-constants';
 import { Coords2D } from 'src/classes/Coords2D';
+import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { BASE_ROTATION } from 'src/constants/tool-constants';
+import { Selection } from '../../../classes/selection/selection';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +10,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 export class ManipulatorService {
     renderer: Renderer2;
     isRotateOnSelf = false;
-    boxOrigin: Coords2D = new Coords2D(0,0);
+    boxOrigin: Coords2D = new Coords2D(0, 0);
     selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = BASE_ROTATION;
 
@@ -20,14 +20,19 @@ export class ManipulatorService {
 
     updateOrigins(selection: Selection): void {
         this.updateElementsOrigins(selection);
-        this.boxOrigin.y = selection.selectionBox.y.baseVal.value + (selection.selectionBox.height.baseVal.value / 2);
-        this.boxOrigin.x = selection.selectionBox.x.baseVal.value + (selection.selectionBox.width.baseVal.value / 2);
+        this.boxOrigin.y = selection.selectionBox.y.baseVal.value + selection.selectionBox.height.baseVal.value / 2;
+        this.boxOrigin.x = selection.selectionBox.x.baseVal.value + selection.selectionBox.width.baseVal.value / 2;
     }
 
     updateElementsOrigins(selection: Selection): void {
         this.selectedElementsOrigin.clear();
         for (const el of selection.selectedElements) {
-            const origin: Coords2D = new Coords2D( (el.getBoundingClientRect() as DOMRect).x - SIDEBAR_WIDTH + ((el.getBoundingClientRect() as DOMRect).width / 2), (el.getBoundingClientRect() as DOMRect).y + ((el.getBoundingClientRect() as DOMRect).height / 2));
+            const origin: Coords2D = new Coords2D(
+                (el.getBoundingClientRect() as DOMRect).x -
+                    SIDEBAR_WIDTH +
+                    (el.getBoundingClientRect() as DOMRect).width / 2,
+                (el.getBoundingClientRect() as DOMRect).y + (el.getBoundingClientRect() as DOMRect).height / 2,
+            );
             this.selectedElementsOrigin.set(el, origin);
         }
     }
@@ -36,7 +41,7 @@ export class ManipulatorService {
         if (element.transform.baseVal.numberOfItems === 0) {
             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
             const nullTransform = svg.createSVGTransform();
-            nullTransform.setTranslate(0,0);
+            nullTransform.setTranslate(0, 0);
             element.transform.baseVal.appendItem(nullTransform);
         }
     }
@@ -44,7 +49,7 @@ export class ManipulatorService {
     rotateSelection(event: WheelEvent, selection: Selection): void {
         const deltaY = event.deltaY;
 
-        this.rotationStep = (deltaY < 0) ? (Math.abs(this.rotationStep) * -1) : (Math.abs(this.rotationStep) * 1);
+        this.rotationStep = deltaY < 0 ? Math.abs(this.rotationStep) * -1 : Math.abs(this.rotationStep) * 1;
 
         for (const element of selection.selectedElements) {
             if (this.isRotateOnSelf) {
@@ -65,7 +70,7 @@ export class ManipulatorService {
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         this.prepareForTransform(element);
         let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;
-        let rotationMatrix = svg.createSVGTransform();
+        const rotationMatrix = svg.createSVGTransform();
         rotationMatrix.setRotate(this.rotationStep, origin.x, origin.y);
         ctm = rotationMatrix.matrix.multiply(ctm);
         element.transform.baseVal.clear();
@@ -83,7 +88,7 @@ export class ManipulatorService {
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         this.prepareForTransform(element);
         let ctm = element.transform.baseVal.consolidate().matrix as DOMMatrix;
-        let translationMatrix = svg.createSVGTransform();
+        const translationMatrix = svg.createSVGTransform();
         translationMatrix.setTranslate(deltaX, deltaY);
         ctm = translationMatrix.matrix.multiply(ctm);
         element.transform.baseVal.clear();

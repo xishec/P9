@@ -185,11 +185,11 @@ describe('StampToolService', () => {
 
     it('should call setAttribute and appendChild after a stamp is added', () => {
         spyOnCreateElement.and.callFake((param: string, ns: string) => {
-            if (param === "svg") {
+            if (param === 'svg') {
                 const mockSVG = {
                     createSVGTransform: () => {
                         const mockTransform = {
-                            setRotate:() => null,
+                            setRotate: () => null,
                         };
                         return mockTransform as unknown as SVGTransform;
                     },
@@ -201,7 +201,7 @@ describe('StampToolService', () => {
             } else {
                 const mockG = {
                     transform: {
-                        baseVal:{
+                        baseVal: {
                             insertItemBefore: () => null,
                         },
                     },
@@ -263,11 +263,11 @@ describe('StampToolService', () => {
 
     it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
         spyOnCreateElement.and.callFake((param: string, ns: string) => {
-            if (param === "svg") {
+            if (param === 'svg') {
                 const mockSVG = {
                     createSVGTransform: () => {
                         const mockTransform = {
-                            setRotate:() => null,
+                            setRotate: () => null,
                         };
                         return mockTransform as unknown as SVGTransform;
                     },
@@ -279,7 +279,7 @@ describe('StampToolService', () => {
             } else {
                 const mockG = {
                     transform: {
-                        baseVal:{
+                        baseVal: {
                             insertItemBefore: () => null,
                         },
                     },

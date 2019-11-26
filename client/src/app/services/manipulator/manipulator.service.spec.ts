@@ -1,11 +1,11 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ElementRef, Renderer2, Type } from '@angular/core';
+import { Coords2D } from 'src/classes/Coords2D';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
+import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
-import { Coords2D } from 'src/classes/Coords2D';
-import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 
 describe('ManipulatorService', () => {
     let selection: Selection;
@@ -66,23 +66,23 @@ describe('ManipulatorService', () => {
 
     it('should update selected elements origins and boxOrigin on updateOrigins', () => {
         const mockRect = {
-            x:{
-                baseVal:{
+            x: {
+                baseVal: {
                     value: 10,
                 },
             },
-            y:{
-                baseVal:{
+            y: {
+                baseVal: {
                     value: 10,
                 },
             },
-            width:{
-                baseVal:{
+            width: {
+                baseVal: {
                     value: 10,
                 },
             },
-            height:{
-                baseVal:{
+            height: {
+                baseVal: {
                     value: 10,
                 },
             },
@@ -99,36 +99,36 @@ describe('ManipulatorService', () => {
 
     it('should update selected elements origins and boxOrigin on updateOrigins', () => {
         const mockRect = {
-            x:{
-                baseVal:{
+            x: {
+                baseVal: {
                     value: 10 as number,
                 },
             },
-            y:{
-                baseVal:{
+            y: {
+                baseVal: {
                     value: 10 as number,
                 },
             },
-            width:{
-                baseVal:{
+            width: {
+                baseVal: {
                     value: 10 as number,
                 },
             },
-            height:{
-                baseVal:{
+            height: {
+                baseVal: {
                     value: 10 as number,
                 },
             },
         };
 
         const mockSvgG = {
-            getBoundingClientRect:() => {
+            getBoundingClientRect: () => {
                 return mockRect as unknown as ClientRect;
             },
         };
 
         const spyClear = spyOn(service.selectedElementsOrigin, 'clear').and.callFake(() => null);
-        const spySet = spyOn(service.selectedElementsOrigin, 'set').and.callFake(() => {return new Map<SVGGElement, Coords2D>();});
+        const spySet = spyOn(service.selectedElementsOrigin, 'set').and.callFake(() => new Map<SVGGElement, Coords2D>());
         selection.selectedElements.add(mockSvgG as unknown as SVGGElement);
         service.updateElementsOrigins(selection);
 
@@ -138,10 +138,10 @@ describe('ManipulatorService', () => {
 
     it('should not do anything if there is more than 0 transforms on element on prepareForTransform', () => {
         const mockSVGG = {
-            transform:{
-                baseVal:{
+            transform: {
+                baseVal: {
                     numberOfItems: 1,
-                    appendItem:() => null,
+                    appendItem: () => null,
                 },
             },
         };
@@ -150,7 +150,7 @@ describe('ManipulatorService', () => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        setTranslate:() => null,
+                        setTranslate: () => null,
                     };
                     return mockTransform as unknown as SVGTransform;
                 },
@@ -169,10 +169,10 @@ describe('ManipulatorService', () => {
 
     it('should set a dummy transform if there is 0 transforms on element on prepareForTransform', () => {
         const mockSVGG = {
-            transform:{
-                baseVal:{
+            transform: {
+                baseVal: {
                     numberOfItems: 0,
-                    appendItem:() => null,
+                    appendItem: () => null,
                 },
             },
         };
@@ -181,7 +181,7 @@ describe('ManipulatorService', () => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        setTranslate:() => null,
+                        setTranslate: () => null,
                     };
                     return mockTransform as unknown as SVGTransform;
                 },
@@ -213,7 +213,7 @@ describe('ManipulatorService', () => {
     it('should get center from selected elements origins when rotateOnSelf is true and not update origins on rotateSelection', () => {
         service.isRotateOnSelf = true;
         const element = TestHelpers.createMockSVGGElement();
-        const coords = new Coords2D(0,0);
+        const coords = new Coords2D(0, 0);
         selection.selectedElements.add(element as unknown as SVGGElement);
         service.selectedElementsOrigin.set(element, coords);
         const spyOnRotate = spyOn(service, 'rotateElement').and.callFake(() => null);
@@ -244,16 +244,16 @@ describe('ManipulatorService', () => {
 
     it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
         const mockSVGG = {
-            transform:{
-                baseVal:{
-                    clear:() => null,
-                    consolidate:() => {
+            transform: {
+                baseVal: {
+                    clear: () => null,
+                    consolidate: () => {
                         const mockTransform = {
                             matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                         };
                         return mockTransform as unknown as SVGTransform;
                     },
-                    appendItem:() => null,
+                    appendItem: () => null,
                 },
             },
         };
@@ -262,7 +262,7 @@ describe('ManipulatorService', () => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        setRotate:() => null,
+                        setRotate: () => null,
                         matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                     };
                     return mockTransform as unknown as SVGTransform;
@@ -275,22 +275,22 @@ describe('ManipulatorService', () => {
 
         const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
 
-        service.rotateElement(mockSVGG as unknown as SVGGElement, new Coords2D(0,0));
+        service.rotateElement(mockSVGG as unknown as SVGGElement, new Coords2D(0, 0));
         expect(spyOnPrepare).toHaveBeenCalled();
-    })
+    });
 
     it('should perform matrix multiplication to include translation and apply only the combo matrix to transforms', () => {
         const mockSVGG = {
-            transform:{
-                baseVal:{
-                    clear:() => null,
-                    consolidate:() => {
+            transform: {
+                baseVal: {
+                    clear: () => null,
+                    consolidate: () => {
                         const mockTransform = {
                             matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                         };
                         return mockTransform as unknown as SVGTransform;
                     },
-                    appendItem:() => null,
+                    appendItem: () => null,
                 },
             },
         };
@@ -299,7 +299,7 @@ describe('ManipulatorService', () => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        setTranslate:() => null,
+                        setTranslate: () => null,
                         matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                     };
                     return mockTransform as unknown as SVGTransform;
@@ -314,7 +314,7 @@ describe('ManipulatorService', () => {
 
         service.translateElement(0, 0, mockSVGG as unknown as SVGGElement);
         expect(spyOnPrepare).toHaveBeenCalled();
-    })
+    });
 
     it('should call translateElement for all elements and update the selection box on translateSelection', () => {
         const spyTranslate = spyOn(service, 'translateElement').and.callFake(() => null);

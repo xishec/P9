@@ -3,13 +3,13 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
+    ALTER_ROTATION,
     BASE64_STAMPS_MAP,
+    BASE_ROTATION,
     HTML_ATTRIBUTE,
     NO_STAMP,
-    ALTER_ROTATION,
     STAMP_ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
-    BASE_ROTATION,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
 } from 'src/constants/tool-constants';
