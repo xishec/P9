@@ -10,7 +10,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { Drawing } from 'src/classes/Drawing';
-import { GIFS } from 'src/constants/constants';
+import { GIFS, NUMBER_OF_MS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
@@ -58,7 +58,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -156,7 +156,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }
@@ -202,5 +202,40 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     unmaskAll() {
         this.nameFilter = '$tout';
+    }
+
+    convertTimeStampToDate(timestamp: number): string {
+        const currentTimestamp = Date.now();
+
+        if (this.numberOfDaysBetween(timestamp, currentTimestamp) < 7) {
+            const differenceInMs = currentTimestamp - timestamp;
+            return 'il y a ' + this.msToDaysHoursMinutes(differenceInMs);
+        }
+        const date = new Date(timestamp);
+
+        const creationDate =
+            `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
+            `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
+
+        return creationDate;
+    }
+
+    numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
+        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.day);
+        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.day);
+
+        return numberDaysDate2 - numberDaysDate1;
+    }
+
+    msToDaysHoursMinutes(differenceInMs: number): string {
+        const days = Math.floor(differenceInMs / NUMBER_OF_MS.day);
+        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.day) / NUMBER_OF_MS.hours);
+        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.hours) / NUMBER_OF_MS.minutes);
+
+        const daysDisplay = days <= 1 ? ' jour, ' : ' jours, ';
+        const hoursDisplay = hours <= 1 ? ' heure et ' : ' heures et ';
+        const minutesDisplay = minutes <= 1 ? ' minute ' : ' minutes';
+
+        return days + daysDisplay + hours + hoursDisplay + minutes + minutesDisplay;
     }
 }

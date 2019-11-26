@@ -27,6 +27,7 @@
                         <mat-label id="name-title">Nom :</mat-label>
                         <mat-label id="label-title">Étiquettes :</mat-label>
                         <mat-label id="preview-title">Aperçu :</mat-label>
+                        <mat-label id="creation-date-title">Date de création :</mat-label>
                     </div>
 
                     <mat-selection-list
@@ -61,6 +62,9 @@
                                         *ngIf="SVGs.get(drawing.drawingInfo.name)"
                                         [src]="SVGs.get(drawing.drawingInfo.name)"
                                     />
+                                </div>
+                                <div id="creation-date">
+                                    {{ convertTimeStampToDate(drawing.drawingInfo.createdAt) }}
                                 </div>
                             </div>
                         </mat-list-option>
