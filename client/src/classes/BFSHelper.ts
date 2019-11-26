@@ -1,5 +1,6 @@
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
 import { Coords2D } from './Coords2D';
+import { MAX_RGB_NUMBER } from 'src/constants/color-constants';
 
 export class BFSHelper {
     maxX: number;
@@ -163,12 +164,10 @@ export class BFSHelper {
         if (this.tolerance === 0) {
             return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
         } else {
-            const difference = Math.sqrt(
-                Math.pow(color1[0] - color2[0], 2) +
-                    Math.pow(color1[1] - color2[1], 2) +
-                    Math.pow(color1[2] - color2[2], 2),
-            );
-            const sum = 255 * 3;
+            const difference =
+                Math.abs(color1[0] - color2[0]) + Math.abs(color1[1] - color2[1]) + Math.abs(color1[2] - color2[2]);
+
+            const sum = MAX_RGB_NUMBER * 3;
             return difference <= (this.tolerance / 100) * sum;
         }
     }

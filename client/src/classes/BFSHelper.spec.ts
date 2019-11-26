@@ -24,25 +24,6 @@
 //         expect(bfsHelper).toBeTruthy();
 //     });
 
-//     it('should sort BodyGrid on call sortBodyGrid', () => {
-//         bfsHelper.bodyGrid = new Map([[1, [7, 9, 8]]]);
-//         bfsHelper.sortBodyGrid();
-//         const sorted = bfsHelper.bodyGrid.get(1) as number[];
-//         expect(sorted).toEqual([7, 8, 9]);
-//     });
-
-//     it('should add Pixel To Map with push on call addPixelToMap', () => {
-//         bfsHelper.bodyGrid = new Map([[1, [7, 9, 8]]]);
-//         bfsHelper.addPixelToMap(new Coords2D(1, 1), bfsHelper.bodyGrid);
-//         const data = bfsHelper.bodyGrid.get(1) as number[];
-//         expect(data).toEqual([7, 9, 8, 1]);
-//     });
-//     it('should add Pixel To Map with set on call addPixelToMap', () => {
-//         bfsHelper.bodyGrid = new Map([[1, [7, 9, 8]]]);
-//         bfsHelper.addPixelToMap(new Coords2D(2, 1), bfsHelper.bodyGrid);
-//         const data = bfsHelper.bodyGrid.get(2) as number[];
-//         expect(data).toEqual([1]);
-//     });
 
 //     it('should return false on call isSameColor with tolerance 0', () => {
 //         bfsHelper.tolerance = 0;
