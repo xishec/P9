@@ -5,6 +5,6 @@ export interface DrawingInfo {
     name: string;
     labels: string[];
     idStack: string[];
-    createdOn: number;
+    createdAt: number;
     lastModified: number;
 }
