@@ -18,31 +18,31 @@ describe('CloudService', () => {
 
     it('should save file to firebase App on call save', () => {
         const service: CloudService = TestBed.get(CloudService);
-        let mockStorageRef = ({ put: () => 'hi' } as unknown) as firebase.storage.Reference;
+        const mockStorageRef = ({ put: () => 'hi' } as unknown) as firebase.storage.Reference;
         service.storage = ({
             ref: () => mockStorageRef,
         } as unknown) as firebase.storage.Storage;
 
-        let spy = spyOn(mockStorageRef, 'put');
+        const spy = spyOn(mockStorageRef, 'put');
         service.save('id', {} as Blob);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should delete file to firebase App on call delete', () => {
         const service: CloudService = TestBed.get(CloudService);
-        let mockStorageRef = ({ delete: () => 'hi' } as unknown) as firebase.storage.Reference;
+        const mockStorageRef = ({ delete: () => 'hi' } as unknown) as firebase.storage.Reference;
         service.storage = ({
             ref: () => mockStorageRef,
         } as unknown) as firebase.storage.Storage;
 
-        let spy = spyOn(mockStorageRef, 'delete');
+        const spy = spyOn(mockStorageRef, 'delete');
         service.delete('id');
         expect(spy).toHaveBeenCalled();
     });
 
     it('should download file to firebase App on call download', () => {
         const service: CloudService = TestBed.get(CloudService);
-        let mockStorageRef = ({ getDownloadURL: () => 'hi' } as unknown) as firebase.storage.Reference;
+        const mockStorageRef = ({ getDownloadURL: () => 'hi' } as unknown) as firebase.storage.Reference;
         service.storage = ({
             ref: () => mockStorageRef,
         } as unknown) as firebase.storage.Storage;
