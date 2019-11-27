@@ -58,7 +58,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -74,17 +74,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     this.cloudService
                         .download(drawingInfo.createdAt.toString())
                         .then((url: string) => {
-                            this.SVGs.set(drawingInfo.name, url);
-
-                            const xhr = new XMLHttpRequest();
-                            xhr.responseType = 'blob';
-                            xhr.onload = async () => {
-                                const blob = xhr.response;
-                                const text = await new Response(blob).text();
-                                drawing.svg = text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
-                            };
-                            xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
-                            xhr.send();
+                            this.downloadAndUpdateSVG(drawing, drawingInfo, url);
                         })
                         .catch((error: Error) => {
                             console.error(error);
@@ -99,6 +89,24 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
+    }
+
+    downloadAndUpdateSVG(drawing: Drawing, drawingInfo: DrawingInfo, url: string): void {
+        this.SVGs.set(drawingInfo.name, url);
+
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = async () => {
+            const blob = xhr.response;
+            const text = await new Response(blob).text();
+            drawing.svg = this.extractInnerHTML(text);
+        };
+        xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
+        xhr.send();
+    }
+
+    extractInnerHTML(text: string): string {
+        return text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
     }
 
     initializeForms(): void {
@@ -156,7 +164,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }

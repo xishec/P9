@@ -25,14 +25,7 @@ export class CloudService {
 
     save(id: string, file: Blob) {
         const storageRef = this.storage.ref(id);
-        storageRef
-            .put(file)
-            .then(() => {
-                console.log('Uploaded a blob or file!');
-            })
-            .catch((e: Error) => {
-                console.log(e);
-            });
+        storageRef.put(file);
     }
 
     download(id: string): Promise<string> {
