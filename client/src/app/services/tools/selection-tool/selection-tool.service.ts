@@ -327,29 +327,32 @@ export class SelectionToolService extends AbstractToolService {
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
+
     onKeyDown(event: KeyboardEvent): void {
-        event.preventDefault();
         const key = event.key;
         if (key === KEYS.Shift) {
+            event.preventDefault();
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
+            event.preventDefault();
             this.manipulator.rotationStep = ALTER_ROTATION;
         }
     }
-    // tslint:disable-next-line: no-empty
+
     onKeyUp(event: KeyboardEvent): void {
-        event.preventDefault();
         const key = event.key;
         if (key === KEYS.Shift) {
+            event.preventDefault();
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
+            event.preventDefault();
             this.manipulator.rotationStep = BASE_ROTATION;
         }
     }
 
     onWheel(event: WheelEvent): void {
-        if (!this.isTranslatingSelection && !this.isSelecting) {
+        if (!this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended) {
+            event.preventDefault();
             this.manipulator.rotateSelection(event, this.selection);
             this.clipBoard.restartDuplication();
             this.saveState();

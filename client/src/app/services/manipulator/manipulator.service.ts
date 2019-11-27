@@ -29,9 +29,9 @@ export class ManipulatorService {
         for (const el of selection.selectedElements) {
             const origin: Coords2D = new Coords2D(
                 (el.getBoundingClientRect() as DOMRect).x -
-                    SIDEBAR_WIDTH +
+                    SIDEBAR_WIDTH + window.scrollX +
                     (el.getBoundingClientRect() as DOMRect).width / 2,
-                (el.getBoundingClientRect() as DOMRect).y + (el.getBoundingClientRect() as DOMRect).height / 2,
+                (el.getBoundingClientRect() as DOMRect).y + window.scrollY + (el.getBoundingClientRect() as DOMRect).height / 2,
             );
             this.selectedElementsOrigin.set(el, origin);
         }

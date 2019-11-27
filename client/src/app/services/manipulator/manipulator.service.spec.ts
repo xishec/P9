@@ -279,7 +279,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        const mockTransform = {
+        const transformMock = {
             matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
         };
 
@@ -287,7 +287,6 @@ describe('ManipulatorService', () => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        setRotate: () => null,
                         matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                     };
                     return mockTransform as unknown as SVGTransform;
@@ -298,9 +297,9 @@ describe('ManipulatorService', () => {
             return mockSVG as unknown as SVGSVGElement;
         });
 
-        const spyOnGetTransformMatrix = spyOn(service, 'getCurrentTransformMatrix').and.callFake(() => {return autoMock(DOMMatrix)});
+        const spyOnGetTransformMatrix = spyOn(service, 'getCurrentTransformMatrix').and.callFake(() => autoMock(DOMMatrix));
 
-        service.applyTransformation(mockSVGG as unknown as SVGGElement, mockTransform as unknown as SVGTransform);
+        service.applyTransformation(mockSVGG as unknown as SVGGElement, transformMock as unknown as SVGTransform);
 
         expect(spyOnGetTransformMatrix).toHaveBeenCalledWith(mockSVGG);
     });
@@ -324,11 +323,11 @@ describe('ManipulatorService', () => {
         spyOnCreateElement.and.callFake(() => {
             const mockSVG = {
                 createSVGTransform: () => {
-                    const mockTransform = {
+                    const transformMock = {
                         setRotate: () => null,
                         matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                     };
-                    return mockTransform as unknown as SVGTransform;
+                    return transformMock as unknown as SVGTransform;
                 },
                 createSVGTransformFromMatrix: () => null,
             };
@@ -361,11 +360,11 @@ describe('ManipulatorService', () => {
         spyOnCreateElement.and.callFake(() => {
             const mockSVG = {
                 createSVGTransform: () => {
-                    const mockTransform = {
+                    const transformMock = {
                         setTranslate: () => null,
                         matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
                     };
-                    return mockTransform as unknown as SVGTransform;
+                    return transformMock as unknown as SVGTransform;
                 },
                 createSVGTransformFromMatrix: () => null,
             };

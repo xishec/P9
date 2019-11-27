@@ -521,6 +521,7 @@ describe('SelectionToolService', () => {
         const spyClipboard = spyOn(service.clipBoard, 'restartDuplication').and.callFake(() => null);
         service.isTranslatingSelection = false;
         service.isSelecting = false;
+        service.selection.isAppended = true;
 
         service.onWheel(TestHelpers.createWheelEvent(0, 150));
 
