@@ -63,7 +63,7 @@ describe('FileManagerService', () => {
         sinon.replace(DrawingModel, 'findOneAndUpdate', postUpdate);
 
         const result = await fileManagerService.addDrawing(TEST_DRAWING_INFO);
-        expect(result).to.eql([TEST_DRAWING_INFO]);
+        expect(result).to.eql(TEST_DRAWING_INFO);
     });
 
     it('should return an error when database cannot retrieve documents on addDrawing', async () => {
@@ -82,16 +82,17 @@ describe('FileManagerService', () => {
         badDrawing.name = '';
 
         fileManagerService.addDrawing(badDrawing).catch((err) => {
-            expect(err).to.eql(new Error('Invalid Drawing'));
+            expect(err.message).to.eql(new Error('Invalid Drawing').message);
         });
     });
 
     it('should return a drawing when deleteDrawing is called with a valid message', async () => {
+        TEST_DRAWING_INFO.name = 'hi';
         fileManagerService.addDrawing(TEST_DRAWING_INFO);
         const postDelete = sinon.fake.resolves([TEST_DRAWING_INFO]);
         sinon.replace(DrawingModel, 'findOneAndDelete', postDelete);
 
-        const result = await fileManagerService.deleteDrawing(TEST_DRAWING_INFO.name);
+        const result = await fileManagerService.deleteDrawing(TEST_DRAWING_INFO.createdAt.toString());
         expect(result).to.eql([TEST_DRAWING_INFO]);
     });
 
