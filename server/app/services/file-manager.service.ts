@@ -1,11 +1,11 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { DrawingModel } from '../model/post';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { DrawingModel } from '../model/post';
 
 @injectable()
 export class FileManagerService {
-    async getAllDrawings(){
+    async getAllDrawings() {
         return DrawingModel.find({});
     }
 
