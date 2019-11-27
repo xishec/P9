@@ -60,6 +60,10 @@
                                     <img
                                         *ngIf="SVGs.get(drawing.drawingInfo.name)"
                                         [src]="SVGs.get(drawing.drawingInfo.name)"
+                                        [ngClass]="{
+                                            tall: drawing.drawingInfo.height > drawing.drawingInfo.width,
+                                            fat: drawing.drawingInfo.height <= drawing.drawingInfo.width
+                                        }"
                                     />
                                 </div>
                             </div>

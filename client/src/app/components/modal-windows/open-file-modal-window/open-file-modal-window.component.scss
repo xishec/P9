@@ -101,7 +101,18 @@
         width: 60px;
         padding: 0;
 
-        img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .tall {
+            width: auto;
+            height: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .fat {
             width: 100%;
             height: auto;
             background-size: cover;
