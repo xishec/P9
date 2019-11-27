@@ -3,8 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
-import { NameAndLabels } from 'src/classes/DrawingSavingInfo';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
+import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -48,7 +47,16 @@ describe('DrawingSaverService', () => {
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
-                        drawingInfo: new BehaviorSubject(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        drawingInfo: new BehaviorSubject({
+                            name: '',
+                            createdAt: 0,
+                            lastModified: 0,
+                            labels: [],
+                            idStack: [],
+                            width: 0,
+                            height: 0,
+                            color: '',
+                        } as DrawingInfo),
                     },
                 },
                 {
@@ -78,7 +86,7 @@ describe('DrawingSaverService', () => {
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
 
-        service.initializeDrawingSaverService(elementRefMock, drawStackMock);
+        service.initializeDrawingSaverService(elementRefMock, drawStackMock, service.renderer);
     });
 
     it('should be created', () => {
@@ -92,10 +100,10 @@ describe('DrawingSaverService', () => {
     });
 
     it('should display error message if draw stack is empty on sendFileToServer call', () => {
-        const nameAndLabels = new NameAndLabels('name', ['label1', 'label2']);
+        const drawingSavingInfo = { name: 'name', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(true);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
         expect(service.currentErrorMesaage.value).toEqual('Aucun dessin dans le zone de travail!');
     });
@@ -103,21 +111,21 @@ describe('DrawingSaverService', () => {
     it('should post valid name and labels if draw stack is not empty on sendFileToServer call', () => {
         const SPY = spyOn(service, 'postDrawing');
 
-        const nameAndLabels = new NameAndLabels('name', ['label1', 'label2']);
+        const drawingSavingInfo = { name: 'name', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(false);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
-        expect(SPY).toHaveBeenCalledWith(nameAndLabels);
+        expect(SPY).toHaveBeenCalledWith(drawingSavingInfo);
     });
 
     it('should do nothing if draw stack is not empty and name and lables is not valid on sendFileToServer call', () => {
         const SPY = spyOn(service, 'postDrawing');
 
-        const nameAndLabels = new NameAndLabels('', ['label1', 'label2']);
+        const drawingSavingInfo = { name: '', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(false);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
         expect(SPY).not.toHaveBeenCalled();
     });
