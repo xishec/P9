@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { CloudService } from './cloud.service';
 
-fdescribe('CloudService', () => {
+describe('CloudService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
