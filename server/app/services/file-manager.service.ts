@@ -29,7 +29,7 @@ export class FileManagerService {
     }
 
     async deleteDrawing(createdAt: string) {
-        return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt) });
+        return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
     isDrawingValid(drawingInfo: DrawingInfo): boolean {
