@@ -36,7 +36,7 @@ export const createWheelEvent = (deltaX: number, deltaY: number): WheelEvent => 
     const wheelEvent = {
         deltaX,
         deltaY,
-        preventDefault:() => null,
+        preventDefault: () => null,
     };
     return (wheelEvent as unknown) as WheelEvent;
 };
