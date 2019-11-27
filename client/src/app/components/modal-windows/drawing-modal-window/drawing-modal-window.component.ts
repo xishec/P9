@@ -74,7 +74,7 @@ export class DrawingModalWindowComponent implements OnInit {
             svg: '',
             drawingInfo: {
                 name: '',
-                createdOn: 0,
+                createdAt: 0,
                 lastModified: 0,
                 labels: [],
                 idStack: [],

@@ -27,7 +27,7 @@ describe('OpenFileModalWindowComponent', () => {
             name: 'mona lisa',
             labels: ['Italy', 'Louvre', 'Paris'],
             idStack: ['work-zone', 'background', 'rect1'],
-            createdOn: 1000,
+            createdAt: 1000,
             lastModified: 1500,
         } as DrawingInfo,
     };
@@ -41,7 +41,7 @@ describe('OpenFileModalWindowComponent', () => {
             name: 'harry potter',
             labels: ['England', 'JK Rowling', 'novel'],
             idStack: ['work-zone', 'background', 'ellipse'],
-            createdOn: 500,
+            createdAt: 500,
             lastModified: 2500,
         } as DrawingInfo,
     };
@@ -156,7 +156,7 @@ describe('OpenFileModalWindowComponent', () => {
 
     it('should load the right drawing from server when loadServerFile is called', () => {
         const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
-        component.selectedOption = TEST_DRAWING.drawingInfo.createdOn;
+        component.selectedOption = TEST_DRAWING.drawingInfo.createdAt;
         component.drawingsFromServer = [TEST_DRAWING2, TEST_DRAWING];
         component.loadServerFile();
 

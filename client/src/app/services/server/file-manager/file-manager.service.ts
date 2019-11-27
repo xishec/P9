@@ -24,9 +24,9 @@ export class FileManagerService {
             .pipe(catchError(this.handleError<DrawingInfo>('postDrawing')));
     }
 
-    deleteDrawing(createdOn: number): Observable<number> {
+    deleteDrawing(createdAt: number): Observable<number> {
         return this.http
-            .delete<number>(environment.BASE_URL + `/api/file-manager/${createdOn.toString()}`)
+            .delete<number>(environment.BASE_URL + `/api/file-manager/${createdAt.toString()}`)
             .pipe(catchError(this.handleError<number>('deleteDrawing')));
     }
 
