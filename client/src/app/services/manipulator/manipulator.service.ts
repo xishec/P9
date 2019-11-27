@@ -80,12 +80,6 @@ export class ManipulatorService {
     }
 
     rotateElement(element: SVGGElement, origin: Coords2D): void {
-        // this.prepareForTransform(element);
-        // let currentTransformMatrix = element.transform.baseVal.consolidate().matrix as DOMMatrix;
-        // currentTransformMatrix = rotationMatrix.matrix.multiply(currentTransformMatrix);
-        // element.transform.baseVal.clear();
-        // element.transform.baseVal.appendItem(svg.createSVGTransformFromMatrix(currentTransformMatrix));
-
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         const rotateTransform = svg.createSVGTransform();
         rotateTransform.setRotate(this.rotationStep, origin.x, origin.y);

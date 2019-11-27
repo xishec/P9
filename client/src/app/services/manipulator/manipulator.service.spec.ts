@@ -258,44 +258,51 @@ describe('ManipulatorService', () => {
             },
         };
         const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
-        const res = service.getCurrentTransformMatrix(mockSVGG as unknown as SVGGElement);
+        service.getCurrentTransformMatrix(mockSVGG as unknown as SVGGElement);
 
         expect(spyOnPrepare).toHaveBeenCalled();
-        expect(res instanceof DOMMatrix).toBeTruthy();
     });
 
-    it('should perform matrix multiplication and apply only the combo matrix to transforms on ', () => {
-        // const mockSVGG = {
-        //     transform: {
-        //         baseVal: {
-        //             clear: () => null,
-        //             consolidate: () => {
-        //                 const mockTransform = {
-        //                     matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
-        //                 };
-        //                 return mockTransform as unknown as SVGTransform;
-        //             },
-        //             appendItem: () => null,
-        //         },
-        //     },
-        // };
+    it('should perform matrix multiplication and apply only the combo matrix to transforms on applyTransformation', () => {
+        const mockSVGG = {
+            transform: {
+                baseVal: {
+                    clear: () => null,
+                    consolidate: () => {
+                        const mockTransform = {
+                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        };
+                        return mockTransform as unknown as SVGTransform;
+                    },
+                    appendItem: () => null,
+                },
+            },
+        };
 
-        // spyOnCreateElement.and.callFake(() => {
-        //     const mockSVG = {
-        //         createSVGTransform: () => {
-        //             const mockTransform = {
-        //                 setRotate: () => null,
-        //                 matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
-        //             };
-        //             return mockTransform as unknown as SVGTransform;
-        //         },
-        //         createSVGTransformFromMatrix: () => null,
-        //     };
+        const mockTransform = {
+            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+        };
 
-        //     return mockSVG as unknown as SVGSVGElement;
-        // });
+        spyOnCreateElement.and.callFake(() => {
+            const mockSVG = {
+                createSVGTransform: () => {
+                    const mockTransform = {
+                        setRotate: () => null,
+                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                    };
+                    return mockTransform as unknown as SVGTransform;
+                },
+                createSVGTransformFromMatrix: () => null,
+            };
 
-        // service.applyTransformation(mockSVGG as unknown as SVGGElement, )
+            return mockSVG as unknown as SVGSVGElement;
+        });
+
+        const spyOnGetTransformMatrix = spyOn(service, 'getCurrentTransformMatrix').and.callFake(() => {return autoMock(DOMMatrix)});
+
+        service.applyTransformation(mockSVGG as unknown as SVGGElement, mockTransform as unknown as SVGTransform);
+
+        expect(spyOnGetTransformMatrix).toHaveBeenCalledWith(mockSVGG);
     });
 
     it('should perform matrix multiplication to include rotation and apply only the combo matrix to transforms', () => {
@@ -329,10 +336,10 @@ describe('ManipulatorService', () => {
             return mockSVG as unknown as SVGSVGElement;
         });
 
-        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
+        const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
         service.rotateElement(mockSVGG as unknown as SVGGElement, new Coords2D(0, 0));
-        expect(spyOnPrepare).toHaveBeenCalled();
+        expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 
     it('should perform matrix multiplication to include translation and apply only the combo matrix to transforms', () => {
@@ -366,10 +373,10 @@ describe('ManipulatorService', () => {
             return mockSVG as unknown as SVGSVGElement;
         });
 
-        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
+        const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
         service.translateElement(0, 0, mockSVGG as unknown as SVGGElement);
-        expect(spyOnPrepare).toHaveBeenCalled();
+        expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 
     it('should call translateElement for all elements and update the selection box on translateSelection', () => {
