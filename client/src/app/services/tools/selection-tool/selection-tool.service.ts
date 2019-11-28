@@ -20,7 +20,6 @@ export class SelectionToolService extends AbstractToolService {
     initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
-    isTheCurrentTool = false;
     isSelecting = false;
     isOnTarget = false;
     isLeftMouseDown = false;
@@ -75,7 +74,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
+            if (stackTarget.targetPosition !== undefined) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
