@@ -154,7 +154,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isAbleToRotate(): boolean {
-        return !this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended;
+        return !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection&& this.selection.isAppended;
     }
 
     singlySelect(stackPosition: number): void {
@@ -368,7 +368,7 @@ export class SelectionToolService extends AbstractToolService {
         const key = event.key;
         if (key === KEYS.Shift) {
             event.preventDefault();
-            this.selection.isShiftDown = true; 
+            this.selection.isShiftDown = true;
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             event.preventDefault();
