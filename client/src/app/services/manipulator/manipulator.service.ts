@@ -117,13 +117,15 @@ export class ManipulatorService {
         });
     }
 
+    getDistanceFromControlPoint(currentMousePos: number, cntrlPointPos: number, isRightOrBottom: boolean) {
+        let distance = currentMousePos - cntrlPointPos;
+        distance = isRightOrBottom ? distance : -distance;
+        return distance;
+    }
 
     applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean) {
-        let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
-        dx = isRight ? dx : -dx;
-
-        let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
-        dy = isBottom ? dy : -dy;
+        let dx = this.getDistanceFromControlPoint(currentMouse.x, selection.ogActiveControlPointCoords.x, isRight);
+        let dy = this.getDistanceFromControlPoint(currentMouse.y, selection.ogActiveControlPointCoords.y, isBottom);
 
         if (selection.isShiftDown) {
             // Want to keep the ratio
@@ -158,13 +160,7 @@ export class ManipulatorService {
     }
 
     applyScaleX(currentMouse: Coords2D, selection: Selection, isRight: boolean): void {
-        // distance between mouse and control point
-        let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
-
-        // If its going to the left, we get the positive value WHY ?????
-        dx = isRight ? dx : -dx;
-
-        // this way for alt
+        let dx = this.getDistanceFromControlPoint(currentMouse.x, selection.ogActiveControlPointCoords.x, isRight);
 
         let scaleFactor =  this.getXScaleFactor(dx, selection, isRight);
         
@@ -176,8 +172,7 @@ export class ManipulatorService {
     }
 
     applyScaleY(currentMouse: Coords2D, selection: Selection, isBottom: boolean): void {
-        let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
-        dy = isBottom ? dy : -dy;
+        let dy = this.getDistanceFromControlPoint(currentMouse.y, selection.ogActiveControlPointCoords.y, isBottom);
 
         const scaleFactor = this.getYScaleFactor(dy, selection, isBottom);
 
