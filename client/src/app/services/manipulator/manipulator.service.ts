@@ -128,8 +128,7 @@ export class ManipulatorService {
         let dy = this.getDistanceFromControlPoint(currentMouse.y, selection.ogActiveControlPointCoords.y, isBottom);
 
         if (selection.isShiftDown) {
-            // Want to keep the ratio
-            // find the new wanted dimensions of the wanted redimBox
+            // find the new wanted dimensions of the redimBox
             const width2 = selection.ogSelectionBoxWidth + dx;
             const height2 = selection.ogSelectionBoxHeight + dy;
 
@@ -140,7 +139,7 @@ export class ManipulatorService {
             // Get the smallest scale
             const scale = Math.min(Math.abs(horizScale), Math.abs(vertScale));
 
-            // Always the same sign as scale... HERE the problem ??
+            // Get Dimensions of the scaled rectangle
             const newWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
             const newHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
 
