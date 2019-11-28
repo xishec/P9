@@ -62,6 +62,7 @@ export class ManipulatorService {
     }
 
     getXScaleFactor(dx: number, selection: Selection, isRight: boolean): number {
+        // get the distance from mouse to the coords x of box
         const distFromOgXToCurrentMouse = dx + (isRight ? selection.ogSelectionBoxWidth : 0);
 
         const newWidth = distFromOgXToCurrentMouse + (isRight ? 0 : selection.ogSelectionBoxWidth);
@@ -92,12 +93,31 @@ export class ManipulatorService {
         });
     }
 
+
     applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean) {
         let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
         dx = isRight ? dx : -dx;
 
         let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
         dy = isBottom ? dy : -dy;
+
+        // find the new wanted dimensions of the wanted redimBox
+        const width2 = selection.ogSelectionBoxWidth + dx;
+        const height2 = selection.ogSelectionBoxHeight + dy;
+
+        // get the scale factor for both directions
+        const horizScale = width2 / selection.ogSelectionBoxWidth;
+        const vertScale = height2 / selection.ogSelectionBoxHeight;
+
+        // Get the smallest scale
+        const scale = Math.min(Math.abs(horizScale), Math.abs(vertScale));
+
+        // Always the same sign as scale... HERE the problem ??
+        const newWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
+        const newHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
+
+        dx = newWidth - selection.ogSelectionBoxWidth;
+        dy = newHeight - selection.ogSelectionBoxHeight;
 
         const xScaleFactor = this.getXScaleFactor(dx, selection, isRight);
         const yScaleFactor = this.getYScaleFactor(dy, selection, isBottom);
@@ -111,7 +131,10 @@ export class ManipulatorService {
     }
 
     applyScaleX(currentMouse: Coords2D, selection: Selection, isRight: boolean): void {
+        // distance between mouse and control point
         let dx = currentMouse.x - selection.ogActiveControlPointCoords.x;
+
+        // If its going to the left, we get the positive value WHY ?????
         dx = isRight ? dx : -dx;
 
         const scaleFactor = this.getXScaleFactor(dx, selection, isRight);
