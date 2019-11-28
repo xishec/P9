@@ -62,7 +62,7 @@ export class ManipulatorService {
     rotateSelection(event: WheelEvent, selection: Selection): void {
         const deltaY = event.deltaY;
 
-        this.rotationStep = deltaY < 0 ? Math.abs(this.rotationStep) * -1 : Math.abs(this.rotationStep) * 1;
+        this.rotationStep = deltaY < 0 ? Math.abs(this.rotationStep) * -1 : Math.abs(this.rotationStep);
 
         for (const element of selection.selectedElements) {
             if (this.isRotateOnSelf) {
