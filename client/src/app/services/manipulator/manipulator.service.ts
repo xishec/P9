@@ -71,7 +71,7 @@ export class ManipulatorService {
     }
 
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
-        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
+        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx) - dx;
     }
 
     getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {
@@ -140,7 +140,8 @@ export class ManipulatorService {
         // If its going to the left, we get the positive value WHY ?????
         dx = isRight ? dx : -dx;
 
-        const scaleFactor = this.getXScaleFactor(dx, selection, isRight);
+        // this way for alt
+        const scaleFactor = 2 * this.getXScaleFactor(dx, selection, isRight) - 1;
 
         const xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
 
