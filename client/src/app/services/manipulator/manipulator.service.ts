@@ -101,23 +101,26 @@ export class ManipulatorService {
         let dy = currentMouse.y - selection.ogActiveControlPointCoords.y;
         dy = isBottom ? dy : -dy;
 
-        // find the new wanted dimensions of the wanted redimBox
-        const width2 = selection.ogSelectionBoxWidth + dx;
-        const height2 = selection.ogSelectionBoxHeight + dy;
+        if (selection.isShiftDown) {
+            // Want to keep the ratio
+            // find the new wanted dimensions of the wanted redimBox
+            const width2 = selection.ogSelectionBoxWidth + dx;
+            const height2 = selection.ogSelectionBoxHeight + dy;
 
-        // get the scale factor for both directions
-        const horizScale = width2 / selection.ogSelectionBoxWidth;
-        const vertScale = height2 / selection.ogSelectionBoxHeight;
+            // get the scale factor for both directions
+            const horizScale = width2 / selection.ogSelectionBoxWidth;
+            const vertScale = height2 / selection.ogSelectionBoxHeight;
 
-        // Get the smallest scale
-        const scale = Math.min(Math.abs(horizScale), Math.abs(vertScale));
+            // Get the smallest scale
+            const scale = Math.min(Math.abs(horizScale), Math.abs(vertScale));
 
-        // Always the same sign as scale... HERE the problem ??
-        const newWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
-        const newHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
+            // Always the same sign as scale... HERE the problem ??
+            const newWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
+            const newHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
 
-        dx = newWidth - selection.ogSelectionBoxWidth;
-        dy = newHeight - selection.ogSelectionBoxHeight;
+            dx = newWidth - selection.ogSelectionBoxWidth;
+            dy = newHeight - selection.ogSelectionBoxHeight;
+        }
 
         const xScaleFactor = this.getXScaleFactor(dx, selection, isRight);
         const yScaleFactor = this.getYScaleFactor(dy, selection, isBottom);

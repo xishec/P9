@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
@@ -362,7 +362,15 @@ export class SelectionToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {}
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === KEYS.Shift) {
+            this.selection.isShiftDown = true;
+        }
+    }
     // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {}
+    onKeyUp(event: KeyboardEvent): void {
+        if (event.key === KEYS.Shift) {
+            this.selection.isShiftDown = false;
+        }
+    }
 }
