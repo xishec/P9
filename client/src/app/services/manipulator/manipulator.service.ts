@@ -71,7 +71,10 @@ export class ManipulatorService {
     }
 
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
-        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx) - dx;
+        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
+        // - dx for isRight when alt
+        // nothing when not is right
+        
     }
 
     getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {

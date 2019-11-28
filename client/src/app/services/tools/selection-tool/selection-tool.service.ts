@@ -365,12 +365,16 @@ export class SelectionToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {
         if (event.key === KEYS.Shift) {
             this.selection.isShiftDown = true;
+        } else if (event.key === KEYS.Alt) {
+            this.selection.isAltDown = true;
         }
     }
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {
         if (event.key === KEYS.Shift) {
             this.selection.isShiftDown = false;
+        } else if (event.key === KEYS.Alt) {
+            this.selection.isAltDown = true;
         }
     }
 }
