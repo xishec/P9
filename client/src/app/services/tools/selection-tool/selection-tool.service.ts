@@ -152,6 +152,10 @@ export class SelectionToolService extends AbstractToolService {
         return true;
     }
 
+    isAbleToRotate(): boolean {
+        return !this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended;
+    }
+
     singlySelect(stackPosition: number): void {
         this.selection.emptySelection();
         this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
@@ -351,7 +355,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     onWheel(event: WheelEvent): void {
-        if (!this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended) {
+        if (this.isAbleToRotate()) {
             event.preventDefault();
             this.manipulator.rotateSelection(event, this.selection);
             this.clipBoard.restartDuplication();
