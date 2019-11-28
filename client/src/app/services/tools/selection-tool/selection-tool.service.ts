@@ -374,7 +374,7 @@ export class SelectionToolService extends AbstractToolService {
         if (event.key === KEYS.Shift) {
             this.selection.isShiftDown = false;
         } else if (event.key === KEYS.Alt) {
-            this.selection.isAltDown = true;
+            this.selection.isAltDown = false;
         }
     }
 }

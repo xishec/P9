@@ -2,6 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
 import { Coords2D } from 'src/classes/Coords2D';
+import { SELECTION_COLOR } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -67,14 +68,23 @@ export class ManipulatorService {
 
         const newWidth = distFromOgXToCurrentMouse + (isRight ? 0 : selection.ogSelectionBoxWidth);
 
-        return newWidth / selection.ogSelectionBoxWidth;
+        let scaleFactor = newWidth / selection.ogSelectionBoxWidth;
+
+        if (selection.isAltDown) {
+            scaleFactor = 2 * scaleFactor - 1;
+        }
+
+        return scaleFactor;
     }
 
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
-        return selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
-        // - dx for isRight when alt
-        // nothing when not is right
-        
+        let xTranslate =  selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
+
+        if (selection.isAltDown) {
+            xTranslate = xTranslate - (isRight ? dx : 0)
+        }
+
+        return xTranslate;
     }
 
     getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {
@@ -144,10 +154,11 @@ export class ManipulatorService {
         dx = isRight ? dx : -dx;
 
         // this way for alt
-        const scaleFactor = 2 * this.getXScaleFactor(dx, selection, isRight) - 1;
 
-        const xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
-
+        let scaleFactor =  this.getXScaleFactor(dx, selection, isRight);
+        
+        let xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
+    
         this.applyTransformations(selection, scaleFactor, 1, xTranslate, 0);
 
         selection.updateFullSelectionBox();
