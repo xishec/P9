@@ -2,7 +2,6 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { SVG_NS } from 'src/constants/constants';
 import { Selection } from '../../../classes/selection/selection';
 import { Coords2D } from 'src/classes/Coords2D';
-import { SELECTION_COLOR } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -92,11 +91,23 @@ export class ManipulatorService {
 
         const newHeight = distFromOgYToCurrentMouse + (isBottom ? 0 : selection.ogSelectionBoxHeight);
 
-        return newHeight / selection.ogSelectionBoxHeight;
+        let scaleFactor = newHeight / selection.ogSelectionBoxHeight;
+
+        if (selection.isAltDown) {
+            scaleFactor = 2 * scaleFactor - 1;
+        }
+
+        return scaleFactor;
     }
 
     getYTranslate(dy: number, scaleFactor: number, selection: Selection, isBottom: boolean): number {
-        return selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
+        let yTranslate = selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
+
+        if(selection.isAltDown) {
+            yTranslate = yTranslate - (isBottom ? dy : 0);
+        }
+
+        return yTranslate;
     }
 
     applyTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number) {
