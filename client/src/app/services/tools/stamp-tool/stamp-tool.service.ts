@@ -3,13 +3,13 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
+    ALTER_ROTATION,
     BASE64_STAMPS_MAP,
+    BASE_ROTATION,
     HTML_ATTRIBUTE,
     NO_STAMP,
-    STAMP_ALTER_ROTATION,
     STAMP_ANGLE_ORIENTATION,
     STAMP_BASE_HEIGHT,
-    STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
 } from 'src/constants/tool-constants';
@@ -148,6 +148,10 @@ export class StampToolService extends AbstractToolService {
             'transform',
             `rotate(${this.angle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        const rotateToZero = svg.createSVGTransform();
+        rotateToZero.setRotate(0, this.currentMouseCoords.x, this.currentMouseCoords.y);
+        el.transform.baseVal.insertItemBefore(rotateToZero, 0);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
             this.drawStack.push(el);
@@ -155,19 +159,13 @@ export class StampToolService extends AbstractToolService {
     }
 
     rotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - STAMP_BASE_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + STAMP_BASE_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -BASE_ROTATION : BASE_ROTATION;
+        this.angle = this.angle % 360;
     }
 
     alterRotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - STAMP_ALTER_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + STAMP_ALTER_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -ALTER_ROTATION : ALTER_ROTATION;
+        this.angle = this.angle % 360;
     }
 
     onMouseMove(event: MouseEvent): void {
