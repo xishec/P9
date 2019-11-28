@@ -159,19 +159,13 @@ export class StampToolService extends AbstractToolService {
     }
 
     rotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - BASE_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + BASE_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -BASE_ROTATION : BASE_ROTATION;
+        this.angle = this.angle % 360;
     }
 
     alterRotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - ALTER_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + ALTER_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -ALTER_ROTATION : ALTER_ROTATION;
+        this.angle = this.angle % 360;
     }
 
     onMouseMove(event: MouseEvent): void {
