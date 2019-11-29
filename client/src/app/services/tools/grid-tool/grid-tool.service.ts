@@ -18,7 +18,7 @@ export class GridToolService {
     currentOpacity: Observable<number> = this.opacity.asObservable();
 
     changeState(state: boolean): void {
-        if (!this.drawingLoaderService.emptyDrawStack.value) {
+        if (!this.drawingLoaderService.untouchedWorkZone.value) {
             this.state.next(state);
         }
     }

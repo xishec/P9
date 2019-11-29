@@ -23,6 +23,7 @@ import { AttributesManagerService } from '../../../../services/tools/attributes-
 })
 export class StampAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Stamp;
+    selected: string;
 
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;

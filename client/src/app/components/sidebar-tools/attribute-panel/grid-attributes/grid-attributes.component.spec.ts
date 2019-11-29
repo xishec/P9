@@ -191,7 +191,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should enable the slider if workzone is not empty', () => {
-        drawingLoaderService.emptyDrawStack.next(false);
+        drawingLoaderService.untouchedWorkZone.next(false);
 
         component.enableSlider();
 
@@ -199,7 +199,7 @@ describe('GridAttributesComponent', () => {
     });
 
     it('enableSlider should not enable the slider if workzone is empty', () => {
-        drawingLoaderService.emptyDrawStack.next(true);
+        drawingLoaderService.untouchedWorkZone.next(true);
 
         component.enableSlider();
 

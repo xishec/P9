@@ -3,7 +3,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
-    ANGLE_ORIENTATION,
     BASE64_STAMPS_MAP,
     HTML_ATTRIBUTE,
     NO_STAMP,
@@ -23,7 +22,7 @@ export class StampToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: ANGLE_ORIENTATION = ANGLE_ORIENTATION.Default;
+    angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
 
     stampLink = NO_STAMP;

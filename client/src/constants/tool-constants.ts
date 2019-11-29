@@ -12,6 +12,9 @@ const STAMP_BASE_HEIGHT = 50;
 enum ROTATION_ANGLE {
     Base = 15,
     Alter = 1,
+    Min = -360,
+    Default = 0,
+    Max = 360,
 }
 
 enum QUILL_STROKE_WIDTH {
@@ -188,12 +191,6 @@ enum STAMP_SCALING {
     Min = 0.1,
     Default = 1.0,
     Max = 10.0,
-}
-
-enum ANGLE_ORIENTATION {
-    Min = -360,
-    Default = 0,
-    Max = 360,
 }
 
 enum ERASER_SIZE {
@@ -397,7 +394,6 @@ export {
     POLYGON_RADIUS_CORRECTION,
     POLYGON_OFFSET_ANGLES,
     STAMP_SCALING,
-    ANGLE_ORIENTATION,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
