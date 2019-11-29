@@ -14,9 +14,8 @@ import { GridToolService } from '../grid-tool/grid-tool.service';
 export class MagnetismToolService {
     currentPoint: CONTROL_POINTS;
     currentPointPosition: Coords2D;
-    lastPointPosition = new Coords2D(0, 0);
-
     currentGridSize: number;
+
     totalDeltaX = 0;
     totalDeltaY = 0;
     alignX = 0;
