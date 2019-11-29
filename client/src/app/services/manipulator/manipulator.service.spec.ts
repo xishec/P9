@@ -7,13 +7,29 @@ import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
 
-describe('ManipulatorService', () => {
+fdescribe('ManipulatorService', () => {
     let selection: Selection;
     let service: ManipulatorService;
     let injector: TestBed;
     let rendererMock: Renderer2;
     let elementRefMock: ElementRef<SVGGElement>;
     let spyOnCreateElement: jasmine.Spy;
+
+    let createMockSVGSVGElement = () : SVGSVGElement => {
+        const mockSVGSVG = {
+            createSVGTransform: () => {
+                const mockTransform = {
+                    setTranslate: () => null,
+                    setRotate: () => null,
+                    setScale: () => null,
+                    matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                }
+                return mockTransform as unknown as SVGTransform;
+            },
+            createSVGTransformFromMatrix: () => null,
+        }
+        return mockSVGSVG as unknown as SVGSVGElement;
+    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -146,18 +162,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const mockTransform = {
-                        setTranslate: () => null,
-                    };
-                    return mockTransform as unknown as SVGTransform;
-                },
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
@@ -177,18 +182,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const mockTransform = {
-                        setTranslate: () => null,
-                    };
-                    return mockTransform as unknown as SVGTransform;
-                },
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
@@ -357,20 +351,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const transformMock = {
-                        setTranslate: () => null,
-                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
-                    };
-                    return transformMock as unknown as SVGTransform;
-                },
-                createSVGTransformFromMatrix: () => null,
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
