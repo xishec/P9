@@ -23,7 +23,6 @@ export class FileManagerController {
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
             const drawing = (await this.fileManagerService.getAllDrawingInfos()) as Drawing[];
-
             res.json(drawing);
         });
 

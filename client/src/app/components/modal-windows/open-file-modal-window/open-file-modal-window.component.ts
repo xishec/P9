@@ -67,11 +67,10 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((drawings: Drawing[]) => {
-                console.log(drawings);
-                // drawings.forEach((drawing: Drawing) => {
-                //     this.drawingsFromServer.push(drawing);
-                // });
-                // this.isLoading = false;
+                drawings.forEach((drawing: Drawing) => {
+                    this.drawingsFromServer.push(drawing);
+                });
+                this.isLoading = false;
             });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {
@@ -195,6 +194,43 @@ export class OpenFileModalWindowComponent implements OnInit {
                 });
             }
         });
+    }
+
+    getDimensions(drawingName: string): number[] {
+        const i: number = this.findIndexByName(drawingName);
+        const height: number = this.drawingsFromServer[i].drawingInfo.height;
+        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+
+        return [width, height];
+    }
+
+    getViewBox(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+        return `0 0 ${dimensions[0]} ${dimensions[1]}`;
+    }
+
+    getWidth(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+
+        return dimensions[0] > dimensions[1] ? '100%' : '60px';
+    }
+
+    getHeight(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+
+        return dimensions[0] < dimensions[1] ? '100%' : '60px';
+    }
+
+    getSVG(drawingName: string): string {
+        const i: number = this.findIndexByName(drawingName);
+        return this.drawingsFromServer[i].svg;
+    }
+
+    findIndexByName(drawingName: string): number {
+        const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
+            return el.drawingInfo.name === drawingName;
+        }) as Drawing;
+        return this.drawingsFromServer.indexOf(drawing);
     }
 
     unmaskAll() {

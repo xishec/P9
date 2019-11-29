@@ -57,14 +57,12 @@
                                     </div>
                                 </div>
                                 <div id="drawing-thumbnail">
-                                    <img
-                                        *ngIf="SVGs.get(drawing.drawingInfo.name)"
-                                        [src]="SVGs.get(drawing.drawingInfo.name)"
-                                        [ngClass]="{
-                                            tall: drawing.drawingInfo.height > drawing.drawingInfo.width,
-                                            fat: drawing.drawingInfo.height <= drawing.drawingInfo.width
-                                        }"
-                                    />
+                                    <svg
+                                        [attr.width]="getWidth(drawing.drawingInfo.name)"
+                                        [attr.height]="getHeight(drawing.drawingInfo.name)"
+                                        [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
+                                        [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
+                                    ></svg>
                                 </div>
                             </div>
                         </mat-list-option>

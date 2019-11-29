@@ -92,34 +92,6 @@
             border-radius: 5px;
         }
     }
-
-    #drawing-thumbnail {
-        grid-column: 3 / 4;
-        grid-row: 1 / 2;
-
-        height: 60px;
-        width: 60px;
-        padding: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .tall {
-            width: auto;
-            height: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .fat {
-            width: 100%;
-            height: auto;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-    }
 }
 
 mat-list-option[aria-selected='true'] {
