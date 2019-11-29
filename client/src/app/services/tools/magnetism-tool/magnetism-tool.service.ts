@@ -22,9 +22,6 @@ export class MagnetismToolService {
     alignX = 0;
     alignY = 0;
 
-    lastControlPoint = 0;
-    lastGridSize = GRID_SIZE.Default;
-
     selection: Selection;
 
     isMagnetic: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -81,9 +78,6 @@ export class MagnetismToolService {
 
         const magnetizedCoords = new Coords2D(0, 0);
 
-        this.lastControlPoint = this.currentPoint;
-        this.lastGridSize = this.currentGridSize;
-
         const remainderX = this.currentPointPosition.x % this.currentGridSize;
         const remainderY = this.currentPointPosition.y % this.currentGridSize;
 
@@ -94,16 +88,6 @@ export class MagnetismToolService {
         magnetizedCoords.y = this.magnetizeY(deltaY);
 
         return magnetizedCoords;
-    }
-
-    needToAlign(isFirstSelection: boolean): boolean {
-        return (
-            isFirstSelection ||
-            this.lastControlPoint !== this.currentPoint ||
-            this.lastGridSize !== this.currentGridSize ||
-            this.lastPointPosition.x !== this.currentPointPosition.x ||
-            this.lastPointPosition.y !== this.currentPointPosition.y
-        );
     }
 
     magnetizeX(deltaX: number): number {
