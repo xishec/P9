@@ -9,6 +9,8 @@ import {
     LINE_JOINT_TYPE,
     LINE_STROKE_TYPE,
     ROTATION_ANGLE,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
     STAMP_SCALING,
     STAMP_TYPES,
     THICKNESS,
@@ -31,6 +33,8 @@ export class AttributesManagerService {
     angle: BehaviorSubject<number> = new BehaviorSubject(ROTATION_ANGLE.Default);
     stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
+    sprayDiameter: BehaviorSubject<number> = new BehaviorSubject(SPRAY_DIAMETER.Default);
+    sprayInterval: BehaviorSubject<number> = new BehaviorSubject(SPRAY_INTERVAL.Default);
 
     boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);

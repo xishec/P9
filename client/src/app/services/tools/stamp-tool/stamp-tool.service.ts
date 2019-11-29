@@ -10,6 +10,7 @@ import {
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -123,6 +124,7 @@ export class StampToolService extends AbstractToolService {
 
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Stamp);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.scaling).toString());
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.height, (STAMP_BASE_HEIGHT * this.scaling).toString());

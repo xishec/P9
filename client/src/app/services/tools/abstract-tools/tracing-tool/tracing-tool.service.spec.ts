@@ -155,10 +155,10 @@ describe('TracingToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
-    it('when createSVGCircle setAttribute is called 4 times', () => {
+    it('when createSVGCircle setAttribute is called 5 times', () => {
         service.createSVGCircle(MOCK_X, MOCK_Y);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(5);
     });
 
     it('when createSVGPath then setAttribute is called 4 times and before appendChild', () => {

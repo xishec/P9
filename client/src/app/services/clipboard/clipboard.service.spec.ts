@@ -77,11 +77,6 @@ describe('ClipboardService', () => {
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
 
-        jasmine.clock().install();
-    });
-
-    afterEach(() => {
-        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -360,7 +355,6 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.cut();
-        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(service.pasteOffsetValue).toEqual(0);
@@ -445,37 +439,12 @@ describe('ClipboardService', () => {
         service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.delete();
-        jasmine.clock().tick(1);
 
         expect(service.firstDuplication).toBeTruthy();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
         expect(spyOnRemoveChild).toHaveBeenCalled();
         expect(spyOnDeleteDrawStack).toHaveBeenCalled();
         expect(spyOnEmptySelection).toHaveBeenCalled();
-    });
-
-    it('should remove selection box, save state and append selection box on saveStateFromPaste', () => {
-        const spyOnRemoveFullSelectionBox = spyOn(service.selection, 'removeFullSelectionBox');
-        const spyOnAppendSelectionFullBox = spyOn(service.selection, 'appendFullSelectionBox');
-
-        service.saveStateFromPaste();
-
-        jasmine.clock().tick(1);
-
-        expect(spyOnRemoveFullSelectionBox).toHaveBeenCalled();
-        expect(spyOnAppendSelectionFullBox).toHaveBeenCalled();
-    });
-
-    it('should remove selection box, save state and append selection box on saveStateFromDuplicate', () => {
-        const spyOnRemoveFullSelectionBox = spyOn(service.selection, 'removeFullSelectionBox');
-        const spyOnAppendSelectionFullBox = spyOn(service.selection, 'appendFullSelectionBox');
-
-        service.saveStateFromDuplicate();
-
-        jasmine.clock().tick(1);
-
-        expect(spyOnRemoveFullSelectionBox).toHaveBeenCalled();
-        expect(spyOnAppendSelectionFullBox).toHaveBeenCalled();
     });
 
     it('should notify true when clippings is empty', () => {

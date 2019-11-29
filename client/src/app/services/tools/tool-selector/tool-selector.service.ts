@@ -25,6 +25,7 @@ import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
 import { QuillToolService } from '../quill-tool/quill-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
+import { SprayCanToolService } from '../spray-can-tool/spray-can-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
 
@@ -60,6 +61,7 @@ export class ToolSelectorService {
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
+        private sprayCanTool: SprayCanToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -97,6 +99,8 @@ export class ToolSelectorService {
 
         this.eraserTool.initializeService(ref, renderer, drawStack);
 
+        this.sprayCanTool.initializeService(ref, renderer, drawStack);
+
         this.TOOLS_MAP = new Map([
             [TOOL_NAME.Selection, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Rectangle, this.rectangleTool as AbstractToolService],
@@ -111,7 +115,8 @@ export class ToolSelectorService {
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
             [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
-            [TOOL_NAME.SprayCan, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.SprayCan, this.sprayCanTool as AbstractToolService],
             [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
         ]);
@@ -269,6 +274,10 @@ export class ToolSelectorService {
 
     getEraserTool(): EraserToolService {
         return this.eraserTool;
+    }
+
+    getSprayCanTool(): SprayCanToolService {
+        return this.sprayCanTool;
     }
 
     changeTool(tooltipName: TOOL_NAME): void {
