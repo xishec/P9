@@ -385,4 +385,30 @@ fdescribe('ManipulatorService', () => {
         expect(spyOnCreateElement).toHaveBeenCalledTimes(2);
     });
 
+    it('should retun a scale factor of 2 when dx is the same as width(10) and isRight and going in positive direction', () => {
+        selection.ogSelectionBoxWidth = 10;
+        selection.isAltDown = false;
+
+        const xScaleFactor = service.getXScaleFactor(10, selection, true);
+
+        expect(xScaleFactor).toEqual(2);
+    });
+
+    it('should retun a scale factor of 0.5 when dx is the same as width/2(5) and isRight and going in negative direction', () => {
+        selection.ogSelectionBoxWidth = 10;
+        selection.isAltDown = false;
+
+        const xScaleFactor = service.getXScaleFactor(-5, selection, true);
+
+        expect(xScaleFactor).toEqual(0.5);
+    });
+
+    it('should retun a scale factor of 3 when dx is the same as width(10) and isRight and going in positive direction and altIsDown', () => {
+        selection.ogSelectionBoxWidth = 10;
+        selection.isAltDown = true;
+
+        const xScaleFactor = service.getXScaleFactor(10, selection, true);
+
+        expect(xScaleFactor).toEqual(3);
+    });
 });
