@@ -37,7 +37,6 @@ export class DropperToolService extends AbstractToolService {
 
     updateSVGCopy(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
-        //const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml,' + encodeURIComponent(serializedSVG));
         this.renderer.setProperty(this.canvas, 'width', this.elementRef.nativeElement.getBoundingClientRect().width);
         this.renderer.setProperty(this.canvas, 'height', this.elementRef.nativeElement.getBoundingClientRect().height);
