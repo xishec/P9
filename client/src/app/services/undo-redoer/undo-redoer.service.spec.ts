@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { Drawing } from 'src/classes/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingState } from '../../../classes/DrawingState';
 import { DrawStackService } from '../draw-stack/draw-stack.service';

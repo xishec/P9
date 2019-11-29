@@ -1,4 +1,4 @@
-import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { DrawingInfo } from './DrawingInfo';
 
 export interface Drawing {
     drawingInfo: DrawingInfo;

@@ -3,9 +3,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { Drawing } from 'src/classes/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
-import { SVG_NS } from 'src/constants/constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -87,9 +86,8 @@ export class DrawingSaverService {
                     return false;
                 }),
             )
-            .subscribe((drawingInfo: DrawingInfo) => {
-                if (drawingInfo || JSON.parse(drawingInfo).createdAt === drawingSavingInfo.createdAt) {
-                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
+            .subscribe((drawing: Drawing) => {
+                if (drawing.drawingInfo || JSON.parse(drawing.drawingInfo).createdAt === drawingSavingInfo.createdAt) {
                     this.drawingLoaderService.currentDrawing.next(drawing);
                     this.currentIsSaved.next(true);
                 } else {

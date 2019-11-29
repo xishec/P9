@@ -8,7 +8,7 @@ import { ModalManagerService } from 'src/app/services/modal-manager/modal-manage
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { Drawing } from 'src/classes/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { GIFS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
@@ -66,9 +66,8 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
-            .subscribe((drawingList: DrawingInfo[]) => {
-                drawingList.forEach((drawingInfo: DrawingInfo) => {
-                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
+            .subscribe((drawings: Drawing[]) => {
+                drawings.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;

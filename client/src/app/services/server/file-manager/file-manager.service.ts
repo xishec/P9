@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 
 @Injectable({
     providedIn: 'root',
@@ -12,16 +12,16 @@ import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo'
 export class FileManagerService {
     constructor(private http: HttpClient) {}
 
-    getAllDrawings(): Observable<DrawingInfo[]> {
+    getAllDrawings(): Observable<Drawing[]> {
         return this.http
-            .get<DrawingInfo[]>(environment.BASE_URL + '/api/file-manager/')
-            .pipe(catchError(this.handleError<DrawingInfo[]>('getAllDrawings')));
+            .get<Drawing[]>(environment.BASE_URL + '/api/file-manager/')
+            .pipe(catchError(this.handleError<Drawing[]>('getAllDrawings')));
     }
 
-    postDrawing(drawingInfo: DrawingInfo): Observable<DrawingInfo> {
+    postDrawing(drawingInfo: Drawing): Observable<Drawing> {
         return this.http
-            .post<DrawingInfo>(environment.BASE_URL + '/api/file-manager/save', drawingInfo)
-            .pipe(catchError(this.handleError<DrawingInfo>('postDrawing')));
+            .post<Drawing>(environment.BASE_URL + '/api/file-manager/save', drawingInfo)
+            .pipe(catchError(this.handleError<Drawing>('postDrawing')));
     }
 
     deleteDrawing(createdAt: number): Observable<number> {
