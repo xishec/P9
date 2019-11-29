@@ -1,38 +1,38 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { Drawing } from '../../../common/communication/Drawing';
-import { DrawingModel } from '../model/post';
+import { DrawingInfoModel } from '../model/post';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerService {
-    async getAllDrawings() {
-        return DrawingModel.find({});
+    async getAllDrawingInfos() {
+        return DrawingInfoModel.find({});
     }
 
-    async addDrawing(drawing: Drawing) {
-        if (!this.isDrawingValid(drawing.drawingInfo)) {
-            throw new Error('Invalid Drawing');
+    async addDrawingInfo(drawingInfo: DrawingInfo) {
+        if (!this.isDrawingInfoValid(drawingInfo)) {
+            throw new Error('Invalid DrawingInfo');
         }
 
         const currentTimestamp = Date.now();
-        const newCreatedOn = drawing.drawingInfo.createdAt === 0 ? currentTimestamp : drawing.drawingInfo.createdAt;
+        const newCreatedOn = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
 
-        const query = { createdAt: drawing.drawingInfo.createdAt, name: drawing.drawingInfo.name };
+        const query = { createdAt: drawingInfo.createdAt, name: drawingInfo.name };
         const options = { upsert: true, new: true };
 
-        drawing.drawingInfo.createdAt = newCreatedOn;
-        drawing.drawingInfo.lastModified = currentTimestamp;
+        drawingInfo.createdAt = newCreatedOn;
+        drawingInfo.lastModified = currentTimestamp;
 
-        return DrawingModel.findOneAndUpdate(query, drawing.drawingInfo, options).then(() => {
-            return drawing.drawingInfo;
+        return DrawingInfoModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
+            return drawingInfo;
         });
     }
 
-    async deleteDrawing(createdAt: string) {
-        return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
+    async deleteDrawingInfo(createdAt: string) {
+        return DrawingInfoModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
-    isDrawingValid(drawing: Drawing): boolean {
-        return drawing.drawingInfo.name !== '' && drawing.drawingInfo.height > 0 && drawing.drawingInfo.width > 0;
+    isDrawingInfoValid(drawingInfo: DrawingInfo): boolean {
+        return drawingInfo.name !== '' && drawingInfo.height > 0 && drawingInfo.width > 0;
     }
 }

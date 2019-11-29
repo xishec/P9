@@ -5,6 +5,7 @@ import { MongoError } from 'mongodb';
 import { Drawing } from '../../../common/communication/Drawing';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerController {
@@ -21,15 +22,15 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            const drawings = await this.fileManagerService.getAllDrawings();
-            res.json(drawings);
+            const drawingInfos = await this.fileManagerService.getAllDrawingInfos();
+            res.json(drawingInfos);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
             this.fileManagerService
-                .addDrawing(req.body)
-                .then((newDrawing: Drawing) => {
-                    res.json(newDrawing);
+                .addDrawingInfo(req.body.drawingInfo)
+                .then((newDrawingInfo: DrawingInfo) => {
+                    res.json({ drawingInfo: newDrawingInfo, svg: '' } as Drawing);
                 })
                 .catch((error: MongoError) => {
                     throw error;
@@ -39,7 +40,7 @@ export class FileManagerController {
         this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
             const id: string = req.params.id;
             this.fileManagerService
-                .deleteDrawing(id)
+                .deleteDrawingInfo(id)
                 .then(() => {
                     res.json(Number(id));
                 })
