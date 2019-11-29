@@ -82,11 +82,12 @@ export class ClipboardService {
         for (const el of elementsToClone) {
             const deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
             this.drawStack.push(deepCopy, false);
-            this.manipulator.offsetSingle(offset, deepCopy);
+            this.manipulator.translateElement(offset, offset, deepCopy);
             this.renderer.appendChild(this.elementRef.nativeElement, deepCopy);
             newSelection.add(deepCopy);
         }
         this.updateSelection(newSelection);
+        this.manipulator.updateOrigins(this.selection);
     }
 
     updateSelection(newSelection: Set<SVGGElement>): void {
