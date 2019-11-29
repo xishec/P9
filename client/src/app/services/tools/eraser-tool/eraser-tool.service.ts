@@ -4,7 +4,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { ELEMENTS_BEFORE_LAST_CIRCLE, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { ELEMENTS_BEFORE_LAST_CIRCLE, MOUSE, SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
@@ -58,7 +58,7 @@ export class EraserToolService extends AbstractToolService {
         });
 
         this.eraser = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.title, 'element-to-remove');
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.width, this.currentSize.toString());
         this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.height, this.currentSize.toString());
 

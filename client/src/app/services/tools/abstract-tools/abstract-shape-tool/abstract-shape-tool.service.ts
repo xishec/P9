@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Coords2D } from 'src/classes/Coords2D';
 import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
-import { SVG_NS } from '../../../../../constants/constants';
+import { SVG_NS, TITLE_ELEMENT_TO_REMOVE } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
 
 @Injectable({
@@ -28,7 +28,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         this.renderer = renderer;
         this.drawStack = drawStack;
         this.previewRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.title, 'element-to-remove');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
     }
 
     abstract onMouseMove(event: MouseEvent): void;

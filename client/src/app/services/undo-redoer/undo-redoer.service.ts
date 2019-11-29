@@ -6,6 +6,8 @@ import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
+import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -50,7 +52,7 @@ export class UndoRedoerService {
         const elToRemove = new Array<SVGElement>();
 
         cloneWorkzone.childNodes.forEach((childNode: ChildNode) => {
-            if ((childNode as SVGElement).getAttribute('title') === 'element-to-remove') {
+            if ((childNode as SVGElement).getAttribute(HTML_ATTRIBUTE.title) === TITLE_ELEMENT_TO_REMOVE) {
                 elToRemove.push(childNode as SVGElement);
             }
         });
