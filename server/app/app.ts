@@ -8,6 +8,9 @@ import * as logger from 'morgan';
 import { FileManagerController } from './controllers/file-manager.controller';
 import Types from './types';
 
+import * as serviceAccount from '../P9-cloud-230ae8edfba8.json';
+var admin = require('firebase-admin');
+
 @injectable()
 export class Application {
     private readonly internalError: number = 500;
@@ -19,6 +22,27 @@ export class Application {
         this.config();
 
         this.bindRoutes();
+
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            storageBucket: 'p9-cloud.appspot.com',
+        });
+
+        const srcFilename = 'test';
+        // const destFilename = './1574824466789';
+
+        var bucket = admin.storage().bucket();
+
+        bucket
+            .file(srcFilename)
+            .download({ destination: './1574824466789' })
+            .then((err: any, contents: any) => {
+                console.log(contents as string);
+            });
+
+        // bucket.file(srcFilename).save('hi123', (err: any) => {
+        //     console.log(err);
+        // });
     }
 
     private config(): void {
