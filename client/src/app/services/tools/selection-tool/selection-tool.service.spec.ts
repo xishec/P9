@@ -269,6 +269,7 @@ describe('SelectionToolService', () => {
     it('handleLeftMouseDrag should call checkSelection if mouse is not in selection or not translating and is not on target', () => {
         service.isOnTarget = false;
         const spy = spyOn(service, 'checkSelection');
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
         const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => false);
 
         service.handleLeftMouseDrag();
@@ -301,7 +302,8 @@ describe('SelectionToolService', () => {
         service.isSelecting = false;
         service.isTranslatingSelection = true;
         const spySelection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
-        const spyManipulator = spyOn(service.manipulator, 'translateSelection');
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
+        const spyManipulator = spyOn(service.manipulator, 'translateSelection').and.callFake(() => null);
 
         service.handleLeftMouseDrag();
 
@@ -388,6 +390,7 @@ describe('SelectionToolService', () => {
         service.currentMouseCoords.x = 10;
         service.currentMouseCoords.y = 20;
         service.isLeftMouseDown = false;
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
 
         service.handleLeftMouseDown();
 
