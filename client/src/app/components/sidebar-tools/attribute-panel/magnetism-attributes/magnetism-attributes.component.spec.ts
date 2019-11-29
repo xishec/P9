@@ -3,11 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
+import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { AttributesManagerService } from 'src/app/services/tools/attributes-manager/attributes-manager.service';
-import { MagnetismAttributesComponent } from './magnetism-attributes.component';
-import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
+import { MagnetismAttributesComponent } from './magnetism-attributes.component';
 
 describe('MagnetismAttributesComponent', () => {
     let component: MagnetismAttributesComponent;

@@ -84,7 +84,7 @@ enum POLYGON_SIDES {
 
 enum GRID_SIZE {
     Min = 5,
-    Default = 100,
+    Default = 10,
     Max = 200,
 }
 
