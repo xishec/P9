@@ -299,7 +299,6 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection = false;
             this.saveState();
         } else if (this.isScalingSelection) {
-            console.log('eum what');
             this.isScalingSelection = false;
         } else {
             this.selection.emptySelection();
@@ -370,10 +369,16 @@ export class SelectionToolService extends AbstractToolService {
             event.preventDefault();
             this.selection.isShiftDown = true;
             this.manipulator.isRotateOnSelf = true;
+            if(this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.selection.isAltDown = true;
             this.manipulator.rotationStep = ALTER_ROTATION;
+            if(this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            }
         }
     }
 
@@ -383,10 +388,16 @@ export class SelectionToolService extends AbstractToolService {
             event.preventDefault();
             this.manipulator.isRotateOnSelf = false;
             this.selection.isShiftDown = false;
+            if(this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.manipulator.rotationStep = BASE_ROTATION;
             this.selection.isAltDown = false;
+            if(this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            }
         }
     }
 
