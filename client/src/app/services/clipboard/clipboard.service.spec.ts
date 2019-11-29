@@ -447,30 +447,6 @@ describe('ClipboardService', () => {
         expect(spyOnEmptySelection).toHaveBeenCalled();
     });
 
-    it('should remove selection box, save state and append selection box on saveStateFromPaste', () => {
-        const spyOnRemoveFullSelectionBox = spyOn(service.selection, 'removeFullSelectionBox');
-        const spyOnAppendSelectionFullBox = spyOn(service.selection, 'appendFullSelectionBox');
-
-        service.saveStateFromPaste();
-
-        jasmine.clock().tick(1);
-
-        expect(spyOnRemoveFullSelectionBox).toHaveBeenCalled();
-        expect(spyOnAppendSelectionFullBox).toHaveBeenCalled();
-    });
-
-    it('should remove selection box, save state and append selection box on saveStateFromDuplicate', () => {
-        const spyOnRemoveFullSelectionBox = spyOn(service.selection, 'removeFullSelectionBox');
-        const spyOnAppendSelectionFullBox = spyOn(service.selection, 'appendFullSelectionBox');
-
-        service.saveStateFromDuplicate();
-
-        jasmine.clock().tick(1);
-
-        expect(spyOnRemoveFullSelectionBox).toHaveBeenCalled();
-        expect(spyOnAppendSelectionFullBox).toHaveBeenCalled();
-    });
-
     it('should notify true when clippings is empty', () => {
         const spy = spyOn(service.isClippingsEmpty, 'next');
 
