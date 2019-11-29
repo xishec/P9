@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { FontInfo } from 'src/classes/FontInfos';
 import { TextCursor } from 'src/classes/textStyle/textCursor';
-import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     FONT_ALIGN,
     FONT_STYLE,
@@ -189,6 +189,7 @@ export class TextToolService extends AbstractToolService {
 
     initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke, 'black');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_width, '1');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.fill, 'none');
