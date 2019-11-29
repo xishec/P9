@@ -62,7 +62,13 @@ export const createMockSVGLine = (): any => {
 };
 
 export const createMockSVGGElement = (): any => {
-    const mockSVGElement = {};
+    const mockSVGElement = {
+        transform : {
+            baseVal : {
+                insertItemBefore: () => null,
+            }
+        }
+    };
     return (mockSVGElement as unknown) as SVGGElement;
 };
 
@@ -84,6 +90,24 @@ export const createMockSVGElement = (): any => {
     };
     return (mockSVGElement as unknown) as ElementRef<SVGElement>;
 };
+
+export const createMockSVGTransform = (): SVGTransform => {
+    const mockTransform = {
+        setTranslate: () => null,
+        setRotate: () => null,
+        setScale: () => null,
+    };
+    return mockTransform as unknown as SVGTransform;
+}
+
+export const createMockSVGSVGElementWithTransform = (): SVGSVGElement => {
+    const mockSVGSVG = {
+        createSVGTransform: () => {
+            createMockSVGTransform();
+        }
+    };
+    return mockSVGSVG as unknown as SVGSVGElement;
+}
 
 export const createMockCanvasElement = (): any => {
     const mockCanvasElement = {};
