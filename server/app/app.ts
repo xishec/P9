@@ -33,16 +33,21 @@ export class Application {
 
         var bucket = admin.storage().bucket();
 
+        // const file = bucket.file(srcFilename);
+        // const contents = 'This is the contents of the file.';
+        // file.save(contents, function(err: any) {
+        //     if (!err) {
+        //         console.log('yes!');
+        //     }
+        // });
+
         bucket
             .file(srcFilename)
-            .download({ destination: './1574824466789' })
-            .then((err: any, contents: any) => {
-                console.log(contents as string);
+            .download()
+            .then((data: any) => {
+                const contents = data[0];
+                console.log((contents as Buffer).toString());
             });
-
-        // bucket.file(srcFilename).save('hi123', (err: any) => {
-        //     console.log(err);
-        // });
     }
 
     private config(): void {
