@@ -333,7 +333,6 @@ export class EraserToolService extends AbstractToolService {
 
         const currentChangedTargetIsValid = (this.changedElements.get(this.currentTarget.toString()) !== undefined);
         if (this.erasedSomething) {
-
             if (currentChangedTargetIsValid) {
                 const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
                 this.restoreBorder(
