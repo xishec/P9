@@ -115,7 +115,7 @@ export class ManipulatorService {
         return yTranslate;
     }
 
-    applyTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number) {
+    applyRedimTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number) {
         selection.selectedElements.forEach((element: SVGGElement) => {
             element.transform.baseVal.getItem(0).setTranslate(xTranslate, yTranslate);
             element.transform.baseVal.getItem(1).setScale(xScale, yScale);
@@ -158,7 +158,7 @@ export class ManipulatorService {
         const xTranslate = this.getXTranslate(dx, xScaleFactor, selection, isRight);
         const yTranslate = this.getYTranslate(dy, yScaleFactor, selection, isBottom);
 
-        this.applyTransformations(selection, xScaleFactor, yScaleFactor, xTranslate, yTranslate);
+        this.applyRedimTransformations(selection, xScaleFactor, yScaleFactor, xTranslate, yTranslate);
 
         selection.updateFullSelectionBox();
     }
@@ -170,7 +170,7 @@ export class ManipulatorService {
 
         const xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
 
-        this.applyTransformations(selection, scaleFactor, 1, xTranslate, 0);
+        this.applyRedimTransformations(selection, scaleFactor, 1, xTranslate, 0);
 
         selection.updateFullSelectionBox();
     }
@@ -182,7 +182,7 @@ export class ManipulatorService {
 
         const yTranslate = this.getYTranslate(dy, scaleFactor, selection, isBottom);
 
-        this.applyTransformations(selection, 1, scaleFactor, 0, yTranslate);
+        this.applyRedimTransformations(selection, 1, scaleFactor, 0, yTranslate);
 
         selection.updateFullSelectionBox();
     }

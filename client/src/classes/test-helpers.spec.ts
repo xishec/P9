@@ -104,7 +104,9 @@ export const createMockSVGSVGElementWithTransform = (): SVGSVGElement => {
     const mockSVGSVG = {
         createSVGTransform: () => {
             createMockSVGTransform();
-        }
+        },
+        setTranslate: () => null,
+        setScale: () => null,
     };
     return mockSVGSVG as unknown as SVGSVGElement;
 }
