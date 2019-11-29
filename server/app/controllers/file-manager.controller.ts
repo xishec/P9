@@ -6,7 +6,6 @@ import { Drawing } from '../../../common/communication/Drawing';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
-import { CloudService } from '../services/cloud.service';
 
 @injectable()
 export class FileManagerController {
@@ -15,7 +14,6 @@ export class FileManagerController {
     constructor(
         @inject(Types.FileManagerService)
         private fileManagerService: FileManagerService,
-        @inject(Types.CloudService) private cloudService: CloudService,
     ) {
         this.configureRouter();
     }
@@ -24,26 +22,21 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            const drawingInfos = (await this.fileManagerService.getAllDrawingInfos()) as DrawingInfo[];
-            let drawings: Drawing[] = [];
-            drawingInfos.forEach(async (drawingInfo: DrawingInfo) => {
-                let buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
-                drawings.push({ drawingInfo: drawingInfo, svg: buffer[0].toString() } as Drawing);
-            });
-            res.json(drawingInfos);
+            const drawing = (await this.fileManagerService.getAllDrawingInfos()) as Drawing[];
+
+            res.json(drawing);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
             let drawing: Drawing = req.body;
             this.fileManagerService
-                .addDrawingInfo(drawing.drawingInfo)
+                .addDrawingInfo(drawing)
                 .then((newDrawingInfo: DrawingInfo) => {
                     drawing.drawingInfo = newDrawingInfo;
                 })
                 .catch((error: MongoError) => {
                     throw error;
                 });
-            this.cloudService.save(drawing.drawingInfo.createdAt.toString(), drawing.svg);
             res.json(drawing);
         });
 

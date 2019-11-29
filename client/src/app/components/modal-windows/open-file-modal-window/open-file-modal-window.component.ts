@@ -67,10 +67,11 @@ export class OpenFileModalWindowComponent implements OnInit {
                 }),
             )
             .subscribe((drawings: Drawing[]) => {
-                drawings.forEach((drawing: Drawing) => {
-                    this.drawingsFromServer.push(drawing);
-                });
-                this.isLoading = false;
+                console.log(drawings);
+                // drawings.forEach((drawing: Drawing) => {
+                //     this.drawingsFromServer.push(drawing);
+                // });
+                // this.isLoading = false;
             });
 
         this.drawingLoaderService.emptyDrawStack.subscribe((emptyDrawStack) => {

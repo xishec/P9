@@ -11,12 +11,19 @@ export class CloudService {
             credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
             storageBucket: 'p9-cloud.appspot.com',
         });
-        console.log('init cloud');
+
+        // let bucket = admin.storage().bucket();
+        // bucket
+        //     .file('1575050724800')
+        //     .getMetadata()
+        //     .then((data: any) => {
+        //         console.log(data);
+        //     });
     }
 
     save(srcFilename: string, content: string) {
         let bucket = admin.storage().bucket();
-        bucket.file(srcFilename).save(content, function(err: any) {
+        bucket.file(srcFilename).save(content, (err: any) => {
             if (!err) {
                 console.log('yes!');
             }
