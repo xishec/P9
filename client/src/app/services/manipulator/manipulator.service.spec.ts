@@ -470,4 +470,19 @@ fdescribe('ManipulatorService', () => {
         expect(yTranslate).toEqual(-30);
     });
 
+    it('should return a distance of 10 when mousePos is 10 pix away from activeControlPoint in positive direction and isRight', () => {
+        const distance = service.getDistanceFromControlPoint(20, 10, true);
+
+        expect(distance).toEqual(10);
+    });
+
+    it('should return a distance of -10 when mousePos is 10 pix away from activeControlPoint in negative direction and isRight', () => {
+        const distance = service.getDistanceFromControlPoint(10, 20, true);
+
+        expect(distance).toEqual(-10);
+    });
+
+    // test applyScaleCorner
+    // test applyScaleX
+    // test applyScaleY
 });
