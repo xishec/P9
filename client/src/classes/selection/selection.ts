@@ -1,6 +1,6 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     CONTROL_POINT_RADIUS,
     CONTROL_POINTS_AMOUNT,
@@ -46,10 +46,12 @@ export class Selection {
 
     initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, 'none');
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
             this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);

@@ -81,6 +81,7 @@ describe('UndoRedoerService', () => {
     });
 
     it('createDrawing should return a drawing with the innerHTML', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
 
@@ -90,6 +91,7 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveStateAndDuplicateOffset should create a DrawingState with the duplicateOffSet and saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
@@ -102,6 +104,7 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveStateFromPaste should create a DrawingState with the pasteOffset and saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
@@ -114,6 +117,7 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
         service.currentDrawingInfos = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
