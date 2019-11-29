@@ -26,10 +26,10 @@ export class StampAttributesComponent implements OnInit {
 
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;
-    readonly stampScaling = STAMP_SCALING;
-    readonly stampAngleOrientation = ANGLE_ORIENTATION;
-    readonly stampTypes = STAMP_TYPES;
-    readonly stampNames = STAMP_NAMES;
+    readonly STAMP_SCALING = STAMP_SCALING;
+    readonly STAMP_ANGLE_ORIENTATION = ANGLE_ORIENTATION;
+    readonly STAMP_TYPES = STAMP_TYPES;
+    readonly STAMP_NAMES = STAMP_NAMES;
 
     constructor(
         private formBuilder: FormBuilder,

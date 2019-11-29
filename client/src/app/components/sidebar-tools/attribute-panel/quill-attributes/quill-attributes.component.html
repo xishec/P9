@@ -7,10 +7,10 @@
       <div class="attribute">
           <label for="thickness">Longueur du trait</label>
           <mat-slider
-              placeholder="Hex"
               formControlName="thickness"
               (input)="onSliderChange($event)"
               [min]="THICKNESS.Min"
+              [max]="THICKNESS.Max"
               value="{{ quillAttributesForm.value.thickness }}"
           ></mat-slider>
           <mat-form-field class="small">
@@ -31,7 +31,7 @@
       </div>
 
       <div class="attribute">
-          <label for="ladder">Angle courant</label>
+          <label>Angle courant</label>
           <mat-form-field id="angle-attribute">
               <input
                   autocomplete="off"
@@ -42,12 +42,12 @@
                   formControlName="angle"
                   (input)="onAngleChange()"
                   [value]="quillToolService.angle"
-                  [min]="quillAngleOrientation.Min"
-                  [max]="quillAngleOrientation.Max"
+                  [min]="QUILL_ANGLE_ORIENTATION.Min"
+                  [max]="QUILL_ANGLE_ORIENTATION.Max"
               />
               <mat-error
-                  >La valeur inscrite doit être entre {{ quillAngleOrientation.Min }} et
-                  {{ quillAngleOrientation.Max }} degrés</mat-error
+                  >La valeur inscrite doit être entre {{ QUILL_ANGLE_ORIENTATION.Min }} et
+                  {{ QUILL_ANGLE_ORIENTATION.Max }} degrés</mat-error
               >
               <span matSuffix>degré(s)</span>
           </mat-form-field>

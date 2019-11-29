@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -98,7 +98,7 @@ export class QuillToolService extends TracingToolService {
 
         this.getColorAndOpacity();
 
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, '1');
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, QUILL_STROKE_WIDTH.initialValue);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
@@ -109,7 +109,7 @@ export class QuillToolService extends TracingToolService {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.title, 'element-to-remove');
-        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, '2');
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, QUILL_STROKE_WIDTH.preview);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
     }
@@ -136,12 +136,7 @@ export class QuillToolService extends TracingToolService {
 
         this.updatePreview();
 
-        if (!this.isDrawing) {
-            return;
-        }
-
-        // to keep only one point out of two....
-        if (this.counter++ % 2 !== 0) {
+        if (!this.isDrawing || this.takeOneOnTwoPoints()) {
             return;
         }
 
@@ -158,6 +153,11 @@ export class QuillToolService extends TracingToolService {
         this.tracePolygon();
 
         this.previousCoords = this.currentCoords.slice(0);
+    }
+
+    takeOneOnTwoPoints(): boolean {
+        this.counter++;
+        return (this.counter % 2 === 1);
     }
 
     onWheel(event: WheelEvent): void {

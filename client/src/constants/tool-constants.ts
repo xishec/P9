@@ -14,6 +14,11 @@ enum ROTATION_ANGLE {
     Alter = 1,
 }
 
+enum QUILL_STROKE_WIDTH {
+    initialValue = '1',
+    preview = '2',
+}
+
 const OFFSET_STEP = 10;
 
 enum TOOL_NAME {
@@ -429,4 +434,5 @@ export {
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
     ROTATION_ANGLE,
+    QUILL_STROKE_WIDTH,
 };

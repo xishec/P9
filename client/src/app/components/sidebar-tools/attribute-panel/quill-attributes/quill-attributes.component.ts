@@ -20,7 +20,7 @@ export class QuillAttributesComponent implements OnInit {
     quillToolService: QuillToolService;
 
     readonly THICKNESS = THICKNESS;
-    readonly quillAngleOrientation = ANGLE_ORIENTATION;
+    readonly QUILL_ANGLE_ORIENTATION = ANGLE_ORIENTATION;
 
     constructor(
         private formBuilder: FormBuilder,
