@@ -108,7 +108,7 @@ export class ManipulatorService {
     getYTranslate(dy: number, scaleFactor: number, selection: Selection, isBottom: boolean): number {
         let yTranslate = selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
 
-        if(selection.isAltDown) {
+        if (selection.isAltDown) {
             yTranslate = yTranslate - (isBottom ? dy : 0);
         }
 
@@ -129,8 +129,8 @@ export class ManipulatorService {
     }
 
     applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean) {
-        let dx = this.getDistanceFromControlPoint(currentMouse.x, selection.ogActiveControlPointCoords.x, isRight);
-        let dy = this.getDistanceFromControlPoint(currentMouse.y, selection.ogActiveControlPointCoords.y, isBottom);
+        let dx = this.getDistanceFromControlPoint(currentMouse.x + window.scrollX, selection.ogActiveControlPointCoords.x, isRight);
+        let dy = this.getDistanceFromControlPoint(currentMouse.y + window.scrollY, selection.ogActiveControlPointCoords.y, isBottom);
 
         if (selection.isShiftDown) {
             // find the new wanted dimensions of the redimBox
@@ -164,19 +164,19 @@ export class ManipulatorService {
     }
 
     applyScaleX(currentMouse: Coords2D, selection: Selection, isRight: boolean): void {
-        let dx = this.getDistanceFromControlPoint(currentMouse.x, selection.ogActiveControlPointCoords.x, isRight);
+        const dx = this.getDistanceFromControlPoint(currentMouse.x + window.scrollX, selection.ogActiveControlPointCoords.x, isRight);
 
-        let scaleFactor =  this.getXScaleFactor(dx, selection, isRight);
-        
-        let xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
-    
+        const scaleFactor =  this.getXScaleFactor(dx, selection, isRight);
+
+        const xTranslate = this.getXTranslate(dx, scaleFactor, selection, isRight);
+
         this.applyTransformations(selection, scaleFactor, 1, xTranslate, 0);
 
         selection.updateFullSelectionBox();
     }
 
     applyScaleY(currentMouse: Coords2D, selection: Selection, isBottom: boolean): void {
-        let dy = this.getDistanceFromControlPoint(currentMouse.y, selection.ogActiveControlPointCoords.y, isBottom);
+        const dy = this.getDistanceFromControlPoint(currentMouse.y + window.scrollY, selection.ogActiveControlPointCoords.y, isBottom);
 
         const scaleFactor = this.getYScaleFactor(dy, selection, isBottom);
 
