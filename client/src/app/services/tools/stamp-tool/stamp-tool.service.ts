@@ -3,12 +3,10 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
 import {
-    ALTER_ROTATION,
     BASE64_STAMPS_MAP,
-    BASE_ROTATION,
     HTML_ATTRIBUTE,
     NO_STAMP,
-    STAMP_ANGLE_ORIENTATION,
+    ROTATION_ANGLE,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
@@ -25,7 +23,7 @@ export class StampToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: STAMP_ANGLE_ORIENTATION = STAMP_ANGLE_ORIENTATION.Default;
+    angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
     selected: SVGGElement;
 
@@ -161,12 +159,12 @@ export class StampToolService extends AbstractToolService {
     }
 
     rotateStamp(direction: number): void {
-        this.angle += direction < 0 ? -BASE_ROTATION : BASE_ROTATION;
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Base : ROTATION_ANGLE.Base;
         this.angle = this.angle % 360;
     }
 
     alterRotateStamp(direction: number): void {
-        this.angle += direction < 0 ? -ALTER_ROTATION : ALTER_ROTATION;
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Alter : ROTATION_ANGLE.Alter;
         this.angle = this.angle % 360;
     }
 

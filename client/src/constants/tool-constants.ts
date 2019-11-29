@@ -8,8 +8,19 @@ const SELECTION_COLOR = '#ff5722';
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
-const BASE_ROTATION = 15;
-const ALTER_ROTATION = 1;
+
+enum ROTATION_ANGLE {
+    Base = 15,
+    Alter = 1,
+    Min = -360,
+    Default = 0,
+    Max = 360,
+}
+
+enum QUILL_STROKE_WIDTH {
+    initialValue = '1',
+    preview = '2',
+}
 
 const OFFSET_STEP = 10;
 
@@ -180,12 +191,6 @@ enum STAMP_SCALING {
     Min = 0.1,
     Default = 1.0,
     Max = 10.0,
-}
-
-enum STAMP_ANGLE_ORIENTATION {
-    Min = -360,
-    Default = 0,
-    Max = 360,
 }
 
 enum ERASER_SIZE {
@@ -413,7 +418,6 @@ export {
     POLYGON_RADIUS_CORRECTION,
     POLYGON_OFFSET_ANGLES,
     STAMP_SCALING,
-    STAMP_ANGLE_ORIENTATION,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
@@ -446,11 +450,11 @@ export {
     SNACKBAR_DURATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
-    BASE_ROTATION,
-    ALTER_ROTATION,
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    ROTATION_ANGLE,
+    QUILL_STROKE_WIDTH,
     SPRAY_DIAMETER,
     SPRAY_INTERVAL,
     SPRAYER_STROKE_WIDTH,

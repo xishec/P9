@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { BASE_ROTATION } from 'src/constants/tool-constants';
+import { ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ManipulatorService {
     isRotateOnSelf = false;
     boxOrigin: Coords2D = new Coords2D(0, 0);
     selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
-    rotationStep = BASE_ROTATION;
+    rotationStep = ROTATION_ANGLE.Base;
 
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
