@@ -19,6 +19,7 @@ export class LineAttributesComponent implements OnInit, AfterViewInit {
     toolName = TOOL_NAME.Line;
     lineAttributesForm: FormGroup;
     lineToolService: LineToolService;
+    selected: string;
 
     lineStrokeType: LINE_STROKE_TYPE;
     LineStrokeTypeChoices = [LINE_STROKE_TYPE.Continuous, LINE_STROKE_TYPE.Dotted_line, LINE_STROKE_TYPE.Dotted_circle];

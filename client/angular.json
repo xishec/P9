@@ -31,8 +31,8 @@
                         "production": {
                             "fileReplacements": [
                                 {
-                                    "replace": "environment",
-                                    "with": "environment.prod"
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
                                 }
                             ],
                             "optimization": true,
