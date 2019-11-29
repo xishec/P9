@@ -20,6 +20,7 @@ import { TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 
 describe('WorkZoneComponent', () => {
     let component: WorkZoneComponent;
@@ -110,6 +111,10 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: ClipboardService,
+                    useValue: {},
+                },
+                {
+                    provide: MagnetismToolService,
                     useValue: {},
                 },
             ],
