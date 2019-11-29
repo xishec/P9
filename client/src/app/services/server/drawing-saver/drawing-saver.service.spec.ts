@@ -105,7 +105,7 @@ describe('DrawingSaverService', () => {
 
         service.sendFileToServer(drawingSavingInfo);
 
-        expect(service.currentErrorMesaage.value).toEqual('Aucun dessin dans le zone de travail!');
+        expect(service.currentErrorMesage.value).toEqual('Aucun dessin dans le zone de travail!');
     });
 
     it('should post valid name and labels if draw stack is not empty on sendFileToServer call', () => {
