@@ -10,6 +10,7 @@ import {
 import { KEYS, SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { EraserToolService } from './eraser-tool.service';
 
 describe('EraserToolService', () => {
@@ -32,6 +33,12 @@ describe('EraserToolService', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                         setProperty: () => null,
+                    },
+                },
+                {
+                    provide: UndoRedoerService,
+                    useValue: {
+                        saveCurrentState: () => null,
                     },
                 },
                 {

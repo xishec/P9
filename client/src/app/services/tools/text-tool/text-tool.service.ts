@@ -14,6 +14,7 @@ import {
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -272,6 +273,7 @@ export class TextToolService extends AbstractToolService {
             this.createNewLine();
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Text);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);

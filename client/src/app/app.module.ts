@@ -62,6 +62,8 @@ import { PenAttributesComponent } from './components/sidebar-tools/attribute-pan
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
+// tslint:disable-next-line: max-line-length
+import { SprayCanAttributesComponent } from './components/sidebar-tools/attribute-panel/spray-can-attributes/spray-can-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
@@ -104,6 +106,7 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         PenAttributesComponent,
         TextAttributesComponent,
         EraserAttributesComponent,
+        SprayCanAttributesComponent,
     ],
     imports: [
         MatSliderModule,
