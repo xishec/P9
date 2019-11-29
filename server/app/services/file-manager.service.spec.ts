@@ -2,13 +2,13 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
-import { DrawingModel } from '../model/post';
+import { DrawingInfoModel } from '../model/post';
 import { FileManagerService } from './file-manager.service';
 import { Drawing } from '../../../common/communication/Drawing';
 
 let fileManagerService: FileManagerService;
 
-let getAllDrawingsStub: sinon.SinonStub<[], any>;
+let getAllDrawingInfosStub: sinon.SinonStub<[], any>;
 
 const TEST_DRAWING: Drawing = {
     drawingInfo: {
@@ -31,81 +31,81 @@ describe('FileManagerService', () => {
         sinon.restore();
     });
 
-    it('should return a list of documents when getAllDrawings is called', async () => {
-        getAllDrawingsStub = sinon.stub(fileManagerService, 'getAllDrawings');
+    it('should return a list of documents when getAllDrawingInfos is called', async () => {
+        getAllDrawingInfosStub = sinon.stub(fileManagerService, 'getAllDrawingInfos');
 
-        fileManagerService.addDrawing(TEST_DRAWING);
-        getAllDrawingsStub.resolves([TEST_DRAWING]);
+        fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo);
+        getAllDrawingInfosStub.resolves([TEST_DRAWING.drawingInfo]);
 
-        const result = await fileManagerService.getAllDrawings();
-        expect(result).to.eql([TEST_DRAWING]);
+        const result = await fileManagerService.getAllDrawingInfos();
+        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
     });
 
-    it('should return a list of documents when database sends valid documents on getAllDrawings', async () => {
-        fileManagerService.addDrawing(TEST_DRAWING);
-        const postFind = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(DrawingModel, 'find', postFind);
+    it('should return a list of documents when database sends valid documents on getAllDrawingInfos', async () => {
+        fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo);
+        const postFind = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'find', postFind);
 
-        const result = await fileManagerService.getAllDrawings();
-        expect(result).to.eql([TEST_DRAWING]);
+        const result = await fileManagerService.getAllDrawingInfos();
+        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
     });
 
-    it('should return an error when database cannot retrieve documents on getAllDrawings', async () => {
+    it('should return an error when database cannot retrieve documents on getAllDrawingInfos', async () => {
         const error: Error = new Error();
-        fileManagerService.addDrawing(TEST_DRAWING);
+        fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo);
         const postFind = sinon.fake.rejects(error);
-        sinon.replace(DrawingModel, 'find', postFind);
+        sinon.replace(DrawingInfoModel, 'find', postFind);
 
-        const result = await fileManagerService.getAllDrawings().catch((err) => {
+        const result = await fileManagerService.getAllDrawingInfos().catch((err) => {
             return err;
         });
         expect(result).to.eql(error);
     });
 
-    it('should return a drawing when addDrawing is called with a valid message', async () => {
-        const postUpdate = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(DrawingModel, 'findOneAndUpdate', postUpdate);
+    it('should return a drawing when addDrawingInfo is called with a valid message', async () => {
+        const postUpdate = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'findOneAndUpdate', postUpdate);
 
-        const result = await fileManagerService.addDrawing(TEST_DRAWING);
-        expect(result).to.eql(TEST_DRAWING);
+        const result = await fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo);
+        expect(result).to.eql(TEST_DRAWING.drawingInfo);
     });
 
-    it('should return an error when database cannot retrieve documents on addDrawing', async () => {
+    it('should return an error when database cannot retrieve documents on addDrawingInfo', async () => {
         const error: Error = new Error();
         const postUpdate = sinon.fake.rejects(error);
-        sinon.replace(DrawingModel, 'findOneAndUpdate', postUpdate);
+        sinon.replace(DrawingInfoModel, 'findOneAndUpdate', postUpdate);
 
-        const result = await fileManagerService.addDrawing(TEST_DRAWING).catch((err) => {
+        const result = await fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo).catch((err) => {
             return err;
         });
         expect(result).to.eql(error);
     });
 
-    it('should return an error when addDrawing is called with an invalid message', () => {
-        const badDrawing = TEST_DRAWING;
-        badDrawing.drawingInfo.name = '';
+    it('should return an error when addDrawingInfo is called with an invalid message', () => {
+        const badDrawingInfo: DrawingInfo = TEST_DRAWING.drawingInfo;
+        badDrawingInfo.name = '';
 
-        fileManagerService.addDrawing(badDrawing).catch((err) => {
+        fileManagerService.addDrawingInfo(badDrawingInfo).catch((err) => {
             expect(err.message).to.eql(new Error('Invalid Drawing').message);
         });
     });
 
-    it('should return a drawing when deleteDrawing is called with a valid message', async () => {
+    it('should return a drawing when deleteDrawingInfo is called with a valid message', async () => {
         TEST_DRAWING.drawingInfo.name = 'hi';
-        fileManagerService.addDrawing(TEST_DRAWING);
-        const postDelete = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(DrawingModel, 'findOneAndDelete', postDelete);
+        fileManagerService.addDrawingInfo(TEST_DRAWING.drawingInfo);
+        const postDelete = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'findOneAndDelete', postDelete);
 
-        const result = await fileManagerService.deleteDrawing(TEST_DRAWING.drawingInfo.createdAt.toString());
-        expect(result).to.eql([TEST_DRAWING]);
+        const result = await fileManagerService.deleteDrawingInfo(TEST_DRAWING.drawingInfo.createdAt.toString());
+        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
     });
 
-    it('should return an error when database cannot retrieve document on deleteDrawing', async () => {
+    it('should return an error when database cannot retrieve document on deleteDrawingInfo', async () => {
         const error: Error = new Error();
         const postDelete = sinon.fake.rejects(error);
-        sinon.replace(DrawingModel, 'findOneAndDelete', postDelete);
+        sinon.replace(DrawingInfoModel, 'findOneAndDelete', postDelete);
 
-        const result = await fileManagerService.deleteDrawing(TEST_DRAWING.drawingInfo.name).catch((err) => {
+        const result = await fileManagerService.deleteDrawingInfo(TEST_DRAWING.drawingInfo.name).catch((err) => {
             return err;
         });
         expect(result).to.eql(error);

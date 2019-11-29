@@ -5,49 +5,24 @@ import * as express from 'express';
 import { inject, injectable } from 'inversify';
 import * as mongoose from 'mongoose';
 import * as logger from 'morgan';
+
 import { FileManagerController } from './controllers/file-manager.controller';
 import Types from './types';
-
-import * as serviceAccount from '../P9-cloud-230ae8edfba8.json';
-var admin = require('firebase-admin');
+import { CloudService } from './services/cloud.service';
 
 @injectable()
 export class Application {
     private readonly internalError: number = 500;
     app: express.Application;
 
-    constructor(@inject(Types.FileManagerController) private fileManagerController: FileManagerController) {
+    constructor(
+        @inject(Types.FileManagerController) private fileManagerController: FileManagerController,
+        @inject(Types.CloudService) private cloudService: CloudService,
+    ) {
         this.app = express();
-
         this.config();
-
         this.bindRoutes();
-
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            storageBucket: 'p9-cloud.appspot.com',
-        });
-
-        const srcFilename = 'test';
-        // const destFilename = './1574824466789';
-
-        var bucket = admin.storage().bucket();
-
-        // const file = bucket.file(srcFilename);
-        // const contents = 'This is the contents of the file.';
-        // file.save(contents, function(err: any) {
-        //     if (!err) {
-        //         console.log('yes!');
-        //     }
-        // });
-
-        bucket
-            .file(srcFilename)
-            .download()
-            .then((data: any) => {
-                const contents = data[0];
-                console.log((contents as Buffer).toString());
-            });
+        this.cloudService.initialize();
     }
 
     private config(): void {
