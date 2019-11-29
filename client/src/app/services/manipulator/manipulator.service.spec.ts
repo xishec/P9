@@ -372,4 +372,17 @@ fdescribe('ManipulatorService', () => {
         expect(spyTranslate).toHaveBeenCalledTimes(3);
         expect(spySelection).toHaveBeenCalled();
     });
+
+    // PARTIE REDIM !
+
+    it('should create a svg element for each selected elements in selection', () => {
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement() as unknown as SVGGElement);
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement() as unknown as SVGGElement);
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
+
+        service.initTransformMatrix(selection);
+
+        expect(spyOnCreateElement).toHaveBeenCalledTimes(2);
+    });
+
 });
