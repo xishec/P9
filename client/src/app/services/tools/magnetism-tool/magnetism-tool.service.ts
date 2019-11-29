@@ -111,13 +111,16 @@ export class MagnetismToolService {
             return 0;
         } else {
             const oldTotalDeltaX = this.totalDeltaX;
+            console.log(this.totalDeltaX);
+
+            const multipierX = Math.abs(Math.floor(this.totalDeltaX / this.currentGridSize));
 
             this.totalDeltaX =
                 this.totalDeltaX < 0
-                    ? this.totalDeltaX + this.currentGridSize
-                    : this.totalDeltaX - this.currentGridSize;
+                    ? this.totalDeltaX + this.currentGridSize * multipierX
+                    : this.totalDeltaX - this.currentGridSize * multipierX;
 
-            return oldTotalDeltaX > 0 ? this.currentGridSize : -this.currentGridSize;
+            return oldTotalDeltaX > 0 ? this.currentGridSize * multipierX : -this.currentGridSize * multipierX;
         }
     }
 
@@ -129,12 +132,14 @@ export class MagnetismToolService {
         } else {
             const oldTotalDeltaY = this.totalDeltaY;
 
+            const multipierY = Math.abs(Math.floor(this.totalDeltaY / this.currentGridSize));
+
             this.totalDeltaY =
                 this.totalDeltaY < 0
-                    ? this.totalDeltaY + this.currentGridSize
-                    : this.totalDeltaY - this.currentGridSize;
+                    ? this.totalDeltaY + this.currentGridSize * multipierY
+                    : this.totalDeltaY - this.currentGridSize * multipierY;
 
-            return oldTotalDeltaY > 0 ? this.currentGridSize : -this.currentGridSize;
+            return oldTotalDeltaY > 0 ? this.currentGridSize * multipierY : -this.currentGridSize * multipierY;
         }
     }
 }
