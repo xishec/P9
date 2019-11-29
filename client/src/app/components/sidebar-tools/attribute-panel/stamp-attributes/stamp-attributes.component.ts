@@ -7,7 +7,7 @@ import { StampToolService } from 'src/app/services/tools/stamp-tool/stamp-tool.s
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
 import {
-    ANGLE_ORIENTATION,
+    ROTATION_ANGLE,
     STAMP_NAMES,
     STAMP_SCALING,
     STAMP_TYPES,
@@ -28,7 +28,7 @@ export class StampAttributesComponent implements OnInit {
     stampAttributesForm: FormGroup;
     stampToolService: StampToolService;
     readonly STAMP_SCALING = STAMP_SCALING;
-    readonly STAMP_ANGLE_ORIENTATION = ANGLE_ORIENTATION;
+    readonly STAMP_ANGLE_ORIENTATION = ROTATION_ANGLE;
     readonly STAMP_TYPES = STAMP_TYPES;
     readonly STAMP_NAMES = STAMP_NAMES;
 
@@ -55,11 +55,11 @@ export class StampAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(STAMP_SCALING.Min), Validators.max(STAMP_SCALING.Max)],
             ],
             angle: [
-                ANGLE_ORIENTATION.Default,
+                ROTATION_ANGLE.Default,
                 [
                     Validators.required,
-                    Validators.min(ANGLE_ORIENTATION.Min),
-                    Validators.max(ANGLE_ORIENTATION.Max),
+                    Validators.min(ROTATION_ANGLE.Min),
+                    Validators.max(ROTATION_ANGLE.Max),
                 ],
             ],
             stampType: [0],

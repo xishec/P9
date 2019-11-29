@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { QuillToolService } from 'src/app/services/tools/quill-tool/quill-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { ANGLE_ORIENTATION, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { ROTATION_ANGLE, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-quill-attributes',
@@ -20,7 +20,7 @@ export class QuillAttributesComponent implements OnInit {
     quillToolService: QuillToolService;
 
     readonly THICKNESS = THICKNESS;
-    readonly QUILL_ANGLE_ORIENTATION = ANGLE_ORIENTATION;
+    readonly QUILL_ANGLE_ORIENTATION = ROTATION_ANGLE;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -46,8 +46,8 @@ export class QuillAttributesComponent implements OnInit {
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
             angle: [
-                ANGLE_ORIENTATION.Default,
-                [Validators.required, Validators.min(ANGLE_ORIENTATION.Min), Validators.max(ANGLE_ORIENTATION.Max)],
+                ROTATION_ANGLE.Default,
+                [Validators.required, Validators.min(ROTATION_ANGLE.Min), Validators.max(ROTATION_ANGLE.Max)],
             ],
         });
     }

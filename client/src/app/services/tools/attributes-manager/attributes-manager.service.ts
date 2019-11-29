@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import {
-    ANGLE_ORIENTATION,
+    ROTATION_ANGLE,
     BRUSH_STYLE,
     ERASER_SIZE,
     FONT_ALIGN,
@@ -28,7 +28,7 @@ export class AttributesManagerService {
     lineJointType: BehaviorSubject<LINE_JOINT_TYPE> = new BehaviorSubject(LINE_JOINT_TYPE.Curvy);
     circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
     scaling: BehaviorSubject<number> = new BehaviorSubject(STAMP_SCALING.Default);
-    angle: BehaviorSubject<number> = new BehaviorSubject(ANGLE_ORIENTATION.Default);
+    angle: BehaviorSubject<number> = new BehaviorSubject(ROTATION_ANGLE.Default);
     stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
 
