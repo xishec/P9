@@ -28,7 +28,6 @@ export class SelectionToolService extends AbstractToolService {
     isLeftMouseDragging = false;
     isTranslatingSelection = false;
     isRightMouseDragging = false;
-    isFirstSelection = false;
 
     selection: Selection;
 
@@ -165,7 +164,6 @@ export class SelectionToolService extends AbstractToolService {
         this.selection.emptySelection();
         this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
-        this.isFirstSelection = true;
     }
 
     singlySelectInvert(stackPosition: number): void {
@@ -175,7 +173,6 @@ export class SelectionToolService extends AbstractToolService {
 
     startSelection(): void {
         this.isSelecting = true;
-        this.isFirstSelection = true;
         this.updateSelectionRectangle();
         this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
@@ -209,11 +206,9 @@ export class SelectionToolService extends AbstractToolService {
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
             if (this.magnetismService.isMagnetic.value) {
-                const magnetizedCoords = this.magnetismService.magnetizeXY(deltaX, deltaY, this.isFirstSelection);
+                const magnetizedCoords = this.magnetismService.magnetizeXY(deltaX, deltaY);
                 this.manipulator.translateSelection(magnetizedCoords.x, magnetizedCoords.y, this.selection);
-                this.isFirstSelection = false;
             } else {
-                this.isFirstSelection = true;
                 this.manipulator.translateSelection(deltaX, deltaY, this.selection);
             }
         } else {
