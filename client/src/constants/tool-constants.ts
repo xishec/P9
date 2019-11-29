@@ -402,6 +402,11 @@ const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
     { point: CONTROL_POINTS.BottomRight, img_src: '../../../assets/controlPoints/bottomright.png' },
 ];
 
+enum MAGNETISM_STATE {
+    active = 'maintenant activé',
+    inactive = 'désactivé',
+}
+
 export {
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
@@ -464,4 +469,5 @@ export {
     TOP_CONTROL_POINTS,
     CENTER_CONTROL_POINTS,
     BOTTOM_CONTROL_POINTS,
+    MAGNETISM_STATE,
 };

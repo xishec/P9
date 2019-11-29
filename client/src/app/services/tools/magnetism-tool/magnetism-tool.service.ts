@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Selection } from 'src/classes/selection/selection';
-import { CONTROL_POINTS, GRID_SIZE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
+import { CONTROL_POINTS, GRID_SIZE, MAGNETISM_STATE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 import { GridToolService } from '../grid-tool/grid-tool.service';
 
@@ -65,7 +65,7 @@ export class MagnetismToolService {
 
     switchState(): void {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
-        const stateTranslation = this.isMagnetic.value ? 'maintenant activé' : 'désactivé';
+        const stateTranslation = this.isMagnetic.value ? MAGNETISM_STATE.active : MAGNETISM_STATE.inactive;
         this.snackBar.open(`Le magnétisme est ${stateTranslation}`, '', {
             duration: SNACKBAR_DURATION,
         });
