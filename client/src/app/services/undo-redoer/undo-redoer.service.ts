@@ -1,13 +1,13 @@
 import { ElementRef, Injectable } from '@angular/core';
-
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { DrawingState } from 'src/classes/DrawingState';
+import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
-import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
