@@ -25,9 +25,9 @@ export class SprayCanAttributesComponent implements OnInit, AfterViewInit {
     sprayCanAttributesForm: FormGroup;
     sprayCanToolService: SprayCanToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
-    readonly thickness = SPRAY_PARTICLE_THICKNESS;
-    readonly diameter = SPRAY_DIAMETER;
-    readonly interval = SPRAY_INTERVAL;
+    readonly THICKNESS = SPRAY_PARTICLE_THICKNESS;
+    readonly DIAMETER = SPRAY_DIAMETER;
+    readonly INTERVAL = SPRAY_INTERVAL;
 
     constructor(
         private formBuilder: FormBuilder,

@@ -9,8 +9,8 @@
             <mat-slider
                 formControlName="thickness"
                 (input)="onThicknessSliderChange($event)"
-                [min]="thickness.Min"
-                [max]="thickness.Max"
+                [min]="THICKNESS.Min"
+                [max]="THICKNESS.Max"
                 value="{{ sprayCanAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -22,10 +22,10 @@
                     type="number"
                     formControlName="thickness"
                     (input)="onThicknessChange()"
-                    [min]="thickness.Min"
-                    [max]="thickness.Max"
+                    [min]="THICKNESS.Min"
+                    [max]="THICKNESS.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
@@ -35,8 +35,8 @@
             <mat-slider
                 formControlName="diameter"
                 (input)="onDiameterSliderChange($event)"
-                [min]="diameter.Min"
-                [max]="diameter.Max"
+                [min]="DIAMETER.Min"
+                [max]="DIAMETER.Max"
                 value="{{ sprayCanAttributesForm.value.diameter }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -48,10 +48,10 @@
                     type="number"
                     formControlName="diameter"
                     (input)="onDiameterChange()"
-                    [min]="diameter.Min"
-                    [max]="diameter.Max"
+                    [min]="DIAMETER.Min"
+                    [max]="DIAMETER.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ diameter.Min }} et {{ diameter.Max }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ DIAMETER.Min }} et {{ DIAMETER.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
@@ -61,8 +61,8 @@
             <mat-slider
                 formControlName="interval"
                 (input)="onIntervalSliderChange($event)"
-                [min]="interval.Min"
-                [max]="interval.Max"
+                [min]="INTERVAL.Min"
+                [max]="INTERVAL.Max"
                 value="{{ sprayCanAttributesForm.value.interval }}"
             ></mat-slider>
             <mat-form-field id="intervalInput">
@@ -74,10 +74,10 @@
                     type="number"
                     formControlName="interval"
                     (input)="onIntervalChange()"
-                    [min]="interval.Min"
-                    [max]="interval.Max"
+                    [min]="INTERVAL.Min"
+                    [max]="INTERVAL.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ interval.Min }} et {{ interval.Max }} ms</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ INTERVAL.Min }} et {{ INTERVAL.Max }} ms</mat-error>
                 <span matSuffix>ms</span>
             </mat-form-field>
         </div>
