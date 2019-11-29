@@ -43,7 +43,7 @@ export class QuillToolService extends TracingToolService {
         super();
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
-            this.getColorAndOpacity();
+            this.setColorAndOpacity();
         });
     }
 
@@ -92,7 +92,7 @@ export class QuillToolService extends TracingToolService {
             this.getYPos(event.clientY) + this.offsets[1].y,
         );
 
-        this.getColorAndOpacity();
+        this.setColorAndOpacity();
 
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, QUILL_STROKE_WIDTH.initialValue);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);

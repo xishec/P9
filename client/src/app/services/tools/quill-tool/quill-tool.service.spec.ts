@@ -99,7 +99,7 @@ describe('QuillToolService', () => {
     });
 
     it('onMouseDown should set isDrawing to true and call getColorAndOpacity if LeftMouseDown', () => {
-        const spy = spyOn(service, 'getColorAndOpacity').and.returnValue();
+        const spy = spyOn(service, 'setColorAndOpacity').and.returnValue();
 
         service.onMouseDown(MOCK_MOUSE_EVENT);
 
