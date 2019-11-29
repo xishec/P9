@@ -1,8 +1,8 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { Selection } from '../../../classes/selection/selection';
 import { ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { Selection } from '../../../classes/selection/selection';
 
 @Injectable({
     providedIn: 'root',

@@ -338,7 +338,7 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             event.preventDefault();
-            this.manipulator.rotationStep = ROTATION_ANGLE.Base;
+            this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
         }
     }
 
@@ -349,7 +349,7 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             event.preventDefault();
-            this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
+            this.manipulator.rotationStep = ROTATION_ANGLE.Base;
         }
     }
 

@@ -162,7 +162,7 @@ export class StampToolService extends AbstractToolService {
     }
 
     alterRotateStamp(direction: number): void {
-        this.angle += direction < 0 ? - ROTATION_ANGLE.Alter : ROTATION_ANGLE.Alter;
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Alter : ROTATION_ANGLE.Alter;
         this.angle = this.angle % 360;
     }
 

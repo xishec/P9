@@ -161,8 +161,6 @@ export class QuillToolService extends TracingToolService {
         val = (event.deltaY < 0 ? -val : val);
         this.angle = ( this.angle + val ) % 360;
 
-        console.log("Hello");
-        
         this.computeOffset();
         this.updatePreview();
     }
