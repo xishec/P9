@@ -411,4 +411,25 @@ fdescribe('ManipulatorService', () => {
 
         expect(xScaleFactor).toEqual(3);
     });
+
+    it('should retun a xTranslate of -10 when dx is the same as width(10) and isRight and scalefactor is 2', () => {
+        selection.ogSelectionBoxWidth = 10;
+        selection.isAltDown = false;
+        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+
+        const xTranslate = service.getXTranslate(10, 2, selection, true);
+
+        expect(xTranslate).toEqual(-10);
+    });
+
+    it('should retun a xTranslate of -30 when dx is the same as width(10) and isRight and scalefactor is 3 and altIsDown', () => {
+        selection.ogSelectionBoxWidth = 10;
+        selection.isAltDown = true;
+        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+
+        const xTranslate = service.getXTranslate(10, 3, selection, true);
+
+        expect(xTranslate).toEqual(-30);
+    });
+
 });
