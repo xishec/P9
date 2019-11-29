@@ -3,36 +3,28 @@ import 'reflect-metadata';
 import * as admin from 'firebase-admin';
 
 import * as serviceAccount from '../../P9-cloud-230ae8edfba8.json';
-import { Bucket } from '@google-cloud/storage';
 
 @injectable()
 export class CloudService {
-    bucket: Bucket;
-
-    initialize() {
+    initialize(): void {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
             storageBucket: 'p9-cloud.appspot.com',
         });
-        this.bucket = admin.storage().bucket();
+        console.log('init cloud');
     }
 
     save(srcFilename: string, content: string) {
-        const file = this.bucket.file(srcFilename);
-        file.save(content, function(err: any) {
+        let bucket = admin.storage().bucket();
+        bucket.file(srcFilename).save(content, function(err: any) {
             if (!err) {
                 console.log('yes!');
             }
         });
     }
 
-    download(srcFilename: string) {
-        this.bucket
-            .file(srcFilename)
-            .download()
-            .then((data: any) => {
-                const contents = data[0];
-                console.log((contents as Buffer).toString());
-            });
+    download(srcFilename: string): Promise<[Buffer]> {
+        let bucket = admin.storage().bucket();
+        return bucket.file(srcFilename).download();
     }
 }

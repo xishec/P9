@@ -6,6 +6,7 @@ import { Drawing } from '../../../common/communication/Drawing';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { CloudService } from '../services/cloud.service';
 
 @injectable()
 export class FileManagerController {
@@ -14,6 +15,7 @@ export class FileManagerController {
     constructor(
         @inject(Types.FileManagerService)
         private fileManagerService: FileManagerService,
+        @inject(Types.CloudService) private cloudService: CloudService,
     ) {
         this.configureRouter();
     }
@@ -22,19 +24,27 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            const drawingInfos = await this.fileManagerService.getAllDrawingInfos();
+            const drawingInfos = (await this.fileManagerService.getAllDrawingInfos()) as DrawingInfo[];
+            let drawings: Drawing[] = [];
+            drawingInfos.forEach(async (drawingInfo: DrawingInfo) => {
+                let buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
+                drawings.push({ drawingInfo: drawingInfo, svg: buffer[0].toString() } as Drawing);
+            });
             res.json(drawingInfos);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
+            let drawing: Drawing = req.body;
             this.fileManagerService
-                .addDrawingInfo(req.body.drawingInfo)
+                .addDrawingInfo(drawing.drawingInfo)
                 .then((newDrawingInfo: DrawingInfo) => {
-                    res.json({ drawingInfo: newDrawingInfo, svg: '' } as Drawing);
+                    drawing.drawingInfo = newDrawingInfo;
                 })
                 .catch((error: MongoError) => {
                     throw error;
                 });
+            this.cloudService.save(drawing.drawingInfo.createdAt.toString(), drawing.svg);
+            res.json(drawing);
         });
 
         this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
