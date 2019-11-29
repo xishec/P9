@@ -432,4 +432,42 @@ fdescribe('ManipulatorService', () => {
         expect(xTranslate).toEqual(-30);
     });
 
+    it('should retun a scale factor of 2 when dy is the same as height(10) and isBottom and going in positive direction', () => {
+        selection.ogSelectionBoxHeight = 10;
+        selection.isAltDown = false;
+
+        const yScaleFactor = service.getYScaleFactor(10, selection, true);
+
+        expect(yScaleFactor).toEqual(2);
+    });
+
+    it('should retun a scale factor of 3 when dy is the same as height(10) and isBottom and going in positive direction and altIsDown', () => {
+        selection.ogSelectionBoxHeight = 10;
+        selection.isAltDown = true;
+
+        const yScaleFactor = service.getYScaleFactor(10, selection, true);
+
+        expect(yScaleFactor).toEqual(3);
+    });
+
+    it('should retun a yTranslate of -10 when dy is the same as height(10) and isBottom and scalefactor is 2', () => {
+        selection.ogSelectionBoxHeight = 10;
+        selection.isAltDown = false;
+        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+
+        const yTranslate = service.getYTranslate(10, 2, selection, true);
+
+        expect(yTranslate).toEqual(-10);
+    });
+
+    it('should retun a yTranslate of -30 when dy is the same as height(10) and isBottom and scalefactor is 3 and altIsDown', () => {
+        selection.ogSelectionBoxHeight = 10;
+        selection.isAltDown = true;
+        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+
+        const yTranslate = service.getYTranslate(10, 3, selection, true);
+
+        expect(yTranslate).toEqual(-30);
+    });
+
 });
