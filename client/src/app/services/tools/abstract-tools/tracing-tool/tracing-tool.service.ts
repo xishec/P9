@@ -140,6 +140,7 @@ export abstract class TracingToolService extends AbstractToolService {
             this.renderer.removeChild(this.elementRef.nativeElement, this.svgWrap);
             this.svgWrap = this.renderer.createElement('g', SVG_NS);
             this.currentPath = '';
+            this.isDrawing = false;
         }
     }
 }
