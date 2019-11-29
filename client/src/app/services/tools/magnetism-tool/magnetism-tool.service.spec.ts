@@ -159,8 +159,8 @@ describe('MagnetismToolService', () => {
         const spyOnNeedToAlign = spyOn(service, 'needToAlign').and.returnValue(false);
         const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
         service.currentGridSize = 10;
-        service.totalDeltaX = 20;
-        service.totalDeltaY = 20;
+        service.totalDeltaX = 15;
+        service.totalDeltaY = 15;
         const tempTotalDeltaX = service.totalDeltaX;
         const tempTotalDeltaY = service.totalDeltaY;
 
