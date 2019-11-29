@@ -272,9 +272,6 @@ export class ToolSelectorService {
     changeTool(tooltipName: TOOL_NAME): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
-            if (this.currentTool instanceof SelectionToolService) {
-                this.selectionTool.isTheCurrentTool = false;
-            }
         }
 
         if (tooltipName === TOOL_NAME.Grid) {
@@ -291,9 +288,6 @@ export class ToolSelectorService {
         if (tool !== undefined) {
             this.currentTool = tool;
             this.changeCurrentToolName(tooltipName);
-            if (this.currentTool instanceof SelectionToolService) {
-                this.selectionTool.isTheCurrentTool = true;
-            }
             return;
         }
 
