@@ -14,9 +14,14 @@ import { GridToolService } from '../grid-tool/grid-tool.service';
 export class MagnetismToolService {
     currentPoint: CONTROL_POINTS;
     currentPointPosition: Coords2D;
+    lastPointPosition = new Coords2D(0, 0);
+
     currentGridSize: number;
     totalDeltaX = 0;
     totalDeltaY = 0;
+    alignX = 0;
+    alignY = 0;
+
     lastControlPoint = 0;
     lastGridSize = GRID_SIZE.Default;
 
@@ -71,24 +76,19 @@ export class MagnetismToolService {
         });
     }
 
-    magnetizeXY(deltaX: number, deltaY: number, isFirstSelection: boolean): Coords2D {
+    magnetizeXY(deltaX: number, deltaY: number): Coords2D {
         this.updateControlPointPosition();
 
         const magnetizedCoords = new Coords2D(0, 0);
 
-        if (this.needToAlign(isFirstSelection)) {
-            this.lastControlPoint = this.currentPoint;
-            this.lastGridSize = this.currentGridSize;
+        this.lastControlPoint = this.currentPoint;
+        this.lastGridSize = this.currentGridSize;
 
-            const remainderX = this.currentPointPosition.x % this.currentGridSize;
-            const remainderY = this.currentPointPosition.y % this.currentGridSize;
+        const remainderX = this.currentPointPosition.x % this.currentGridSize;
+        const remainderY = this.currentPointPosition.y % this.currentGridSize;
 
-            magnetizedCoords.x =
-                remainderX < this.currentGridSize / 2 ? -remainderX : this.currentGridSize - remainderX;
-            magnetizedCoords.y =
-                remainderY < this.currentGridSize / 2 ? -remainderY : this.currentGridSize - remainderY;
-            return magnetizedCoords;
-        }
+        this.alignX = remainderX < this.currentGridSize / 2 ? -remainderX : this.currentGridSize - remainderX;
+        this.alignY = remainderY < this.currentGridSize / 2 ? -remainderY : this.currentGridSize - remainderY;
 
         magnetizedCoords.x = this.magnetizeX(deltaX);
         magnetizedCoords.y = this.magnetizeY(deltaY);
@@ -100,12 +100,18 @@ export class MagnetismToolService {
         return (
             isFirstSelection ||
             this.lastControlPoint !== this.currentPoint ||
-            this.lastGridSize !== this.currentGridSize
+            this.lastGridSize !== this.currentGridSize ||
+            this.lastPointPosition.x !== this.currentPointPosition.x ||
+            this.lastPointPosition.y !== this.currentPointPosition.y
         );
     }
 
     magnetizeX(deltaX: number): number {
         this.totalDeltaX += deltaX;
+
+        if (this.alignX !== 0) {
+            return this.alignX;
+        }
 
         if (Math.abs(this.totalDeltaX) < this.currentGridSize) {
             return 0;
@@ -126,6 +132,10 @@ export class MagnetismToolService {
 
     magnetizeY(deltaY: number): number {
         this.totalDeltaY += deltaY;
+
+        if (this.alignY !== 0) {
+            return this.alignY;
+        }
 
         if (Math.abs(this.totalDeltaY) < this.currentGridSize) {
             return 0;
