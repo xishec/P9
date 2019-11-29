@@ -24,6 +24,7 @@ export class StampToolService extends AbstractToolService {
 
     angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
+    selected: SVGGElement;
 
     stampLink = NO_STAMP;
     transform = '';
@@ -145,6 +146,10 @@ export class StampToolService extends AbstractToolService {
             'transform',
             `rotate(${this.angle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        const rotateToZero = svg.createSVGTransform();
+        rotateToZero.setRotate(0, this.currentMouseCoords.x, this.currentMouseCoords.y);
+        el.transform.baseVal.insertItemBefore(rotateToZero, 0);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
             this.drawStack.push(el);
@@ -152,19 +157,13 @@ export class StampToolService extends AbstractToolService {
     }
 
     rotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - ROTATION_ANGLE.Base) % 360;
-        } else {
-            this.angle = (this.angle + ROTATION_ANGLE.Base) % 360;
-        }
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Base : ROTATION_ANGLE.Base;
+        this.angle = this.angle % 360;
     }
 
     alterRotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - ROTATION_ANGLE.Alter) % 360;
-        } else {
-            this.angle = (this.angle + ROTATION_ANGLE.Alter) % 360;
-        }
+        this.angle += direction < 0 ? - ROTATION_ANGLE.Alter : ROTATION_ANGLE.Alter;
+        this.angle = this.angle % 360;
     }
 
     onMouseMove(event: MouseEvent): void {

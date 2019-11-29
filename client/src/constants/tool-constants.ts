@@ -356,7 +356,7 @@ enum FONT_SIZE {
 const TEXT_CURSOR = '█';
 const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
-const SNACKBAR_DURATION = 3000;
+const SNACKBAR_DURATION = 1000;
 
 enum FONT_ALIGN {
     Middle = 'middle',
