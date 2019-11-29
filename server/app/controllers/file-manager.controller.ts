@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
-import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { Drawing } from '../../../common/communication/Drawing';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
 
@@ -28,8 +28,8 @@ export class FileManagerController {
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
             this.fileManagerService
                 .addDrawing(req.body)
-                .then((newDrawingInfo: DrawingInfo) => {
-                    res.json(newDrawingInfo);
+                .then((newDrawing: Drawing) => {
+                    res.json(newDrawing);
                 })
                 .catch((error: MongoError) => {
                     throw error;

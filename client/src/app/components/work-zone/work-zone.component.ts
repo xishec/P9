@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 
 import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
-import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -53,11 +52,9 @@ export class WorkZoneComponent implements OnInit {
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
         private snackBar: MatSnackBar,
-        private cloudService: CloudService,
     ) {}
 
     ngOnInit(): void {
-        this.cloudService.initializeApp();
         this.undoRedoerService.initializeService(this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 

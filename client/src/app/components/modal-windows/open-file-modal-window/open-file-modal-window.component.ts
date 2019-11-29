@@ -4,7 +4,6 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 
-import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
@@ -43,7 +42,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private snackBar: MatSnackBar,
-        private cloudService: CloudService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -58,7 +56,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -71,14 +69,6 @@ export class OpenFileModalWindowComponent implements OnInit {
             .subscribe((drawingList: DrawingInfo[]) => {
                 drawingList.forEach((drawingInfo: DrawingInfo) => {
                     const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
-                    this.cloudService
-                        .download(drawingInfo.createdAt.toString())
-                        .then((url: string) => {
-                            this.downloadAndUpdateSVG(drawing, drawingInfo, url);
-                        })
-                        .catch((error: Error) => {
-                            console.error(error);
-                        });
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -164,7 +154,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }
@@ -193,7 +183,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         ) as Drawing;
         this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdAt).subscribe((createdAt: number) => {
             if (createdAt === selectedDrawing.drawingInfo.createdAt) {
-                this.cloudService.delete(createdAt.toString());
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.drawingInfo.createdAt !== createdAt;
                 });

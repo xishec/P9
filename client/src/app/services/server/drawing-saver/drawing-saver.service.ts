@@ -7,7 +7,6 @@ import { Drawing } from 'src/classes/Drawing';
 import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { SVG_NS } from 'src/constants/constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { CloudService } from '../../cloud/cloud.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
@@ -30,7 +29,6 @@ export class DrawingSaverService {
         private drawingLoaderService: DrawingLoaderService,
         private fileManagerService: FileManagerService,
         private sanitizer: DomSanitizer,
-        private cloudService: CloudService,
     ) {}
 
     initializeDrawingSaverService(
@@ -64,33 +62,26 @@ export class DrawingSaverService {
         }
     }
 
-    saveToCloud(id: string) {
-        const clone = this.workZoneRef.nativeElement.cloneNode(true);
-        this.renderer.setAttribute(clone, 'xmlns', SVG_NS);
-        const file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
-        this.cloudService.save(id, file);
-    }
-
-    getXMLSVG(clone: any): string {
-        return new XMLSerializer().serializeToString(clone);
-    }
-
     postDrawing(drawingSavingInfo: DrawingSavingInfo) {
         this.currentDrawingInfo.name = drawingSavingInfo.name;
         this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
         this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
         this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
         this.currentDrawingInfo.idStack = this.drawStackService.idStack;
+        let drawing: Drawing = {
+            drawingInfo: this.currentDrawingInfo,
+            svg: this.workZoneRef.nativeElement.innerHTML,
+        };
 
         this.fileManagerService
-            .postDrawing(this.currentDrawingInfo)
+            .postDrawing(drawing)
             .pipe(
                 filter((subject) => {
                     if (subject !== undefined) {
                         return true;
                     }
                     this.currentErrorMesaage.next(
-                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                     );
                     this.currentIsSaved.next(false);
                     return false;
@@ -100,7 +91,6 @@ export class DrawingSaverService {
                 if (drawingInfo || JSON.parse(drawingInfo).createdAt === drawingSavingInfo.createdAt) {
                     const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
                     this.drawingLoaderService.currentDrawing.next(drawing);
-                    this.saveToCloud(drawing.drawingInfo.createdAt.toString());
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');

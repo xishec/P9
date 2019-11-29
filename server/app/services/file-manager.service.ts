@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingModel } from '../model/post';
 
 @injectable()
@@ -9,22 +9,22 @@ export class FileManagerService {
         return DrawingModel.find({});
     }
 
-    async addDrawing(drawingInfo: DrawingInfo) {
-        if (!this.isDrawingValid(drawingInfo)) {
+    async addDrawing(drawing: Drawing) {
+        if (!this.isDrawingValid(drawing.drawingInfo)) {
             throw new Error('Invalid Drawing');
         }
 
         const currentTimestamp = Date.now();
-        const newCreatedOn = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
+        const newCreatedOn = drawing.drawingInfo.createdAt === 0 ? currentTimestamp : drawing.drawingInfo.createdAt;
 
-        const query = { createdAt: drawingInfo.createdAt, name: drawingInfo.name };
+        const query = { createdAt: drawing.drawingInfo.createdAt, name: drawing.drawingInfo.name };
         const options = { upsert: true, new: true };
 
-        drawingInfo.createdAt = newCreatedOn;
-        drawingInfo.lastModified = currentTimestamp;
+        drawing.drawingInfo.createdAt = newCreatedOn;
+        drawing.drawingInfo.lastModified = currentTimestamp;
 
-        return DrawingModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
-            return drawingInfo;
+        return DrawingModel.findOneAndUpdate(query, drawing.drawingInfo, options).then(() => {
+            return drawing.drawingInfo;
         });
     }
 
@@ -32,7 +32,7 @@ export class FileManagerService {
         return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
-    isDrawingValid(drawingInfo: DrawingInfo): boolean {
-        return drawingInfo.name !== '' && drawingInfo.height > 0 && drawingInfo.width > 0;
+    isDrawingValid(drawing: Drawing): boolean {
+        return drawing.drawingInfo.name !== '' && drawing.drawingInfo.height > 0 && drawing.drawingInfo.width > 0;
     }
 }
