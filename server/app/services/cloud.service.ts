@@ -15,7 +15,7 @@ export class CloudService {
             console.log('Connected to Cloud Storage!');
         } catch (e) {
             if (e instanceof Error && e.message.includes('Cannot find module')) {
-                console.log("Can't find serviceAccount!");
+                console.log('Can\'t find serviceAccount!');
             } else {
                 throw e;
             }
