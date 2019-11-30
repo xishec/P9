@@ -92,7 +92,7 @@ export class MagnetismToolService {
     magnetizeX(deltaX: number): number {
         this.totalDeltaX += deltaX;
 
-        if (this.alignX !== 0) {
+        if (Math.round(this.alignX) !== 0) {
             return this.alignX;
         }
 
@@ -100,7 +100,6 @@ export class MagnetismToolService {
             return 0;
         } else {
             const oldTotalDeltaX = this.totalDeltaX;
-            console.log(this.totalDeltaX);
 
             const multipierX = Math.abs(Math.floor(this.totalDeltaX / this.currentGridSize));
 
@@ -116,7 +115,7 @@ export class MagnetismToolService {
     magnetizeY(deltaY: number): number {
         this.totalDeltaY += deltaY;
 
-        if (this.alignY !== 0) {
+        if (Math.round(this.alignY) !== 0) {
             return this.alignY;
         }
 

@@ -85,7 +85,7 @@ enum POLYGON_SIDES {
 enum GRID_SIZE {
     Min = 5,
     Default = 10,
-    Max = 200,
+    Max = 100,
 }
 
 enum GRID_OPACITY {
