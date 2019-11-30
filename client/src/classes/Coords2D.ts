@@ -11,7 +11,7 @@ export class Coords2D {
         return Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2);
     }
 
-    isValide(): boolean {
+    isValid(): boolean {
         return this.x >= 0 && this.y >= 0;
     }
 

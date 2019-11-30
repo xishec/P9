@@ -150,7 +150,7 @@ describe('Selection', () => {
 
     it('should update the Closest Neighbor on call updateClosestNeighbor, and found with searchInDirectNeighbors', () => {
         const closestNeighbor = new Coords2D(-1, -1);
-        closestNeighbor.isValide = () => {
+        closestNeighbor.isValid = () => {
             return true;
         };
         const spy1 = spyOn(bfsHelper, 'searchInDirectNeighbors');
@@ -165,7 +165,7 @@ describe('Selection', () => {
     it('should update the Closest Neighbor on call updateClosestNeighbor, and found with searchInIndirectNeighbors', () => {
         const closestNeighbor = new Coords2D(-1, -1);
         let counter = 0;
-        closestNeighbor.isValide = () => {
+        closestNeighbor.isValid = () => {
             return counter++ > 0;
         };
         const spy1 = spyOn(bfsHelper, 'searchInDirectNeighbors');

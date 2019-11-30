@@ -129,16 +129,18 @@ export class BFSHelper {
 
     updateClosestNeighbor(pixel: Coords2D, closestNeighbor: Coords2D): void {
         this.searchInDirectNeighbors(pixel, closestNeighbor);
-        if (!closestNeighbor.isValide()) {
+        if (!closestNeighbor.isValid()) {
             this.searchInIndirectNeighbors(pixel, closestNeighbor);
         }
-        if (!closestNeighbor.isValide()) {
+        if (!closestNeighbor.isValid()) {
             this.findClosestPixel(pixel, closestNeighbor);
         }
     }
 
     createPathToFill() {
-        if (this.strokes.length === 0) { return; }
+        if (this.strokes.length === 0) {
+            return;
+        }
 
         this.pathsToFill = [];
         this.visited = new Set([]);
@@ -147,7 +149,7 @@ export class BFSHelper {
         const pixel: Coords2D = this.strokes[0];
         this.visited.add(`${pixel.x} ${pixel.y}`);
 
-        while (pixel.isValide()) {
+        while (pixel.isValid()) {
             this.tmpPath.push(pixel.clone());
 
             const closestNeighbor: Coords2D = new Coords2D(-1, -1);

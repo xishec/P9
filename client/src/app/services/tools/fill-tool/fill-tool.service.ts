@@ -1,7 +1,6 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { FillStructure } from 'src/classes/FillStructure';
 import { SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { BFSHelper } from '../../../../classes/BFSHelper';

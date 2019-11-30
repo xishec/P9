@@ -67,7 +67,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.radiusCorrection = this.radius * correction;
     }
 
-    isValidePolygon(): boolean {
+    isValidPolygon(): boolean {
         const isValidHeight = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
         const isValidWidth = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
 
@@ -150,7 +150,7 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     renderdrawPolygon(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
-        if (this.isValidePolygon()) {
+        if (this.isValidPolygon()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.fill, this.userFillColor)
                 : this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
@@ -240,7 +240,7 @@ export class PolygonToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === MOUSE.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValidePolygon()) {
+        if (button === MOUSE.LeftButton && this.isMouseInRef(event, this.elementRef) && this.isValidPolygon()) {
             this.createSVG();
         }
         this.cleanUp();
