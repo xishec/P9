@@ -1,19 +1,19 @@
-import { injectable, inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
-import { DrawingInfoModel } from '../model/post';
+import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { DrawingInfoModel } from '../model/post';
 import { CloudService } from '../services/cloud.service';
 import Types from '../types';
-import { Drawing } from '../../../common/communication/Drawing';
 
 @injectable()
 export class FileManagerService {
     constructor(@inject(Types.CloudService) private cloudService: CloudService) {}
 
     async getAllDrawingInfos() {
-        let drawingInfos = (await DrawingInfoModel.find({})) as DrawingInfo[];
-        let drawings: Drawing[] = [];
+        const drawingInfos = (await DrawingInfoModel.find({})) as DrawingInfo[];
+        const drawings: Drawing[] = [];
 
         for (const drawingInfo of drawingInfos) {
             await this.downloadSVG(drawings, drawingInfo);
@@ -23,15 +23,15 @@ export class FileManagerService {
     }
 
     async downloadSVG(drawings: any, drawingInfo: any) {
-        let buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
-        drawings.push({ drawingInfo: drawingInfo, svg: buffer[0].toString() } as Drawing);
+        const buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
+        drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
     }
 
     async addDrawingInfo(drawing: Drawing) {
         if (!this.isDrawingInfoValid(drawing.drawingInfo)) {
             throw new Error('Invalid DrawingInfo');
         }
-        let drawingInfo: DrawingInfo = drawing.drawingInfo;
+        const drawingInfo: DrawingInfo = drawing.drawingInfo;
 
         const currentTimestamp = Date.now();
         const newCreatedOn = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;

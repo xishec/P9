@@ -3,9 +3,9 @@ import { Container } from 'inversify';
 import { Application } from './app';
 import { FileManagerController } from './controllers/file-manager.controller';
 import { Server } from './server';
+import { CloudService } from './services/cloud.service';
 import { FileManagerService } from './services/file-manager.service';
 import Types from './types';
-import { CloudService } from './services/cloud.service';
 
 const container: Container = new Container();
 

@@ -67,7 +67,7 @@ export class DrawingSaverService {
         this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
         this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
         this.currentDrawingInfo.idStack = this.drawStackService.idStack;
-        let drawing: Drawing = {
+        const drawing: Drawing = {
             drawingInfo: this.currentDrawingInfo,
             svg: this.workZoneRef.nativeElement.innerHTML,
         };
@@ -86,9 +86,12 @@ export class DrawingSaverService {
                     return false;
                 }),
             )
-            .subscribe((drawing: Drawing) => {
-                if (drawing.drawingInfo || JSON.parse(drawing.drawingInfo).createdAt === drawingSavingInfo.createdAt) {
-                    this.drawingLoaderService.currentDrawing.next(drawing);
+            .subscribe((receivedDrawing: Drawing) => {
+                if (
+                    receivedDrawing.drawingInfo ||
+                    JSON.parse(receivedDrawing.drawingInfo).createdAt === drawingSavingInfo.createdAt
+                ) {
+                    this.drawingLoaderService.currentDrawing.next(receivedDrawing);
                     this.currentIsSaved.next(true);
                 } else {
                     this.currentErrorMesage.next('Erreur de sauvegarde du côté serveur!');

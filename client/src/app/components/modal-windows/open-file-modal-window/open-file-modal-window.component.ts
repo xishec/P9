@@ -4,11 +4,11 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { Drawing } from 'src/../../common/communication/Drawing';
 import { GIFS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
@@ -56,7 +56,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
+                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -153,7 +153,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
+                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }

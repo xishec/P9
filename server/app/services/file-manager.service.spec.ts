@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
+import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 import { DrawingInfoModel } from '../model/post';
-import { FileManagerService } from './file-manager.service';
-import { Drawing } from '../../../common/communication/Drawing';
 import { CloudService } from './cloud.service';
+import { FileManagerService } from './file-manager.service';
 
 let fileManagerService: FileManagerService;
 
@@ -26,8 +26,15 @@ const TEST_DRAWING: Drawing = {
 };
 
 describe('FileManagerService', () => {
-    let cloudService = new CloudService();
+    const cloudService = new CloudService();
     cloudService.initialize();
+    cloudService.save = () => null;
+    cloudService.download = () =>
+        new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([Buffer.from('', 'utf8')]);
+            }, 10);
+        });
     fileManagerService = new FileManagerService(cloudService);
 
     afterEach(() => {
@@ -45,12 +52,6 @@ describe('FileManagerService', () => {
     });
 
     it('should return a list of documents when database sends valid documents on getAllDrawingInfos', async () => {
-        fileManagerService[`cloudService`].download = () =>
-            new Promise((resolve) => {
-                setTimeout(function() {
-                    resolve([Buffer.from('', 'utf8')]);
-                }, 10);
-            });
         fileManagerService.addDrawingInfo(TEST_DRAWING);
         const postFind = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
         sinon.replace(DrawingInfoModel, 'find', postFind);

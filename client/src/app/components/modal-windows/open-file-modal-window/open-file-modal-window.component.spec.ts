@@ -5,10 +5,10 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 

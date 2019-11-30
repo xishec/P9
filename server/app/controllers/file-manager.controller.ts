@@ -3,9 +3,9 @@ import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
 import { Drawing } from '../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
-import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerController {
@@ -27,7 +27,7 @@ export class FileManagerController {
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
-            let drawing: Drawing = req.body;
+            const drawing: Drawing = req.body;
             this.fileManagerService
                 .addDrawingInfo(drawing)
                 .then((newDrawingInfo: DrawingInfo) => {

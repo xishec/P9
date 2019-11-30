@@ -7,8 +7,8 @@ import * as mongoose from 'mongoose';
 import * as logger from 'morgan';
 
 import { FileManagerController } from './controllers/file-manager.controller';
-import Types from './types';
 import { CloudService } from './services/cloud.service';
+import Types from './types';
 
 @injectable()
 export class Application {

@@ -1,9 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { FileManagerService } from './file-manager.service';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 
 let service: FileManagerService;
 
