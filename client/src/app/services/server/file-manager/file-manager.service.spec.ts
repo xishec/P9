@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { FileManagerService } from './file-manager.service';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 
 let service: FileManagerService;
 
@@ -25,15 +26,18 @@ describe('FileManagerService', () => {
 
     it('should return a observable on postDrawing', () => {
         const answer = service.postDrawing({
-            name: '',
-            createdAt: 0,
-            lastModified: 0,
-            labels: [],
-            idStack: [],
-            width: 0,
-            height: 0,
-            color: '',
-        } as DrawingInfo);
+            drawingInfo: {
+                name: '',
+                createdAt: 0,
+                lastModified: 0,
+                labels: [],
+                idStack: [],
+                width: 0,
+                height: 0,
+                color: '',
+            } as DrawingInfo,
+            svg: '',
+        } as Drawing);
         expect(answer).toBeTruthy();
     });
 

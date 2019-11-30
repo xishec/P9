@@ -15,7 +15,7 @@ export class UndoRedoerService {
     redos = new Array<DrawingState>();
 
     workzoneRef: ElementRef<SVGElement>;
-    currentDrawingInfos: DrawingInfo;
+    currentDrawingInfo: DrawingInfo;
 
     fromLoader = false;
 
@@ -35,7 +35,7 @@ export class UndoRedoerService {
     initializeService(workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
-            this.currentDrawingInfos = drawingInfo;
+            this.currentDrawingInfo = drawingInfo;
         });
     }
 
@@ -46,13 +46,17 @@ export class UndoRedoerService {
 
     createDrawing(idStackArray: string[]): Drawing {
         const drawing: Drawing = {
-            name: '',
-            labels: [],
             svg: this.workzoneRef.nativeElement.innerHTML,
-            idStack: idStackArray,
-            drawingInfo: this.currentDrawingInfos,
-            createdAt: 0,
-            lastModified: 0,
+            drawingInfo: {
+                name: '',
+                labels: [],
+                idStack: idStackArray,
+                height: this.currentDrawingInfo.height,
+                width: this.currentDrawingInfo.width,
+                color: this.currentDrawingInfo.color,
+                createdAt: 0,
+                lastModified: 0,
+            } as DrawingInfo,
         } as Drawing;
         return drawing;
     }
