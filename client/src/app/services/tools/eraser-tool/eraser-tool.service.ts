@@ -4,7 +4,13 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { ELEMENTS_BEFORE_LAST_CIRCLE, MOUSE, SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import {
+    ELEMENTS_BEFORE_LAST_CIRCLE,
+    MOUSE,
+    SIDEBAR_WIDTH,
+    SVG_NS,
+    TITLE_ELEMENT_TO_REMOVE,
+} from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
@@ -24,6 +30,7 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
 })
 export class EraserToolService extends AbstractToolService {
     eraser: SVGRectElement;
+    textBorder: SVGRectElement;
     attributesManagerService: AttributesManagerService;
     currentTarget = 0;
     currentSize = ERASER_SIZE.Default;
@@ -116,6 +123,7 @@ export class EraserToolService extends AbstractToolService {
                 this.elementRef.nativeElement,
                 this.drawStack.getElementByPosition(this.currentTarget),
             );
+            this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
 
             this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
 
@@ -241,6 +249,10 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
+        if (this.checkIfText(idElement, tool, '#' + DEFAULT_RED, borderWidth)) {
+            return;
+        }
+
         this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
 
         this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
@@ -260,7 +272,7 @@ export class EraserToolService extends AbstractToolService {
     }
 
     checkIfPen(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.Pen) {
+        if (tool === TOOL_NAME.Pen || tool === TOOL_NAME.Text) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
                 this.drawStack.getElementByPosition(idElement).childNodes[
@@ -270,6 +282,43 @@ export class EraserToolService extends AbstractToolService {
                 borderColor,
             );
         }
+    }
+
+    checkIfText(idElement: number, tool: string, borderColor: string, borderWidth: string): boolean {
+        if (tool === TOOL_NAME.Text) {
+            if (borderWidth === '0') {
+                this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+
+                return true;
+            }
+            const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
+            const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
+
+            const x = parseInt(
+                this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.x) as string,
+                DEFAULT_RADIX,
+            );
+            const y = parseInt(
+                this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.y) as string,
+                DEFAULT_RADIX,
+            );
+
+            this.textBorder = this.renderer.createElement('rect', SVG_NS);
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.width, width);
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.height, height);
+
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.fill, 'none');
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke, borderColor);
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke_width, borderWidth);
+
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
+            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
+            this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
+
+            return true;
+        }
+        return false;
     }
 
     checkIfStamp(idElement: number, tool: string, borderColor: string) {
@@ -301,6 +350,12 @@ export class EraserToolService extends AbstractToolService {
 
         if (borderWidth === null) {
             borderWidth = '0';
+        }
+
+        console.log('text borderWidth: ' + borderWidth);
+
+        if (this.checkIfText(idElement, tool, borderColor, borderWidth)) {
+            return;
         }
 
         this.checkIfPen(idElement, tool, borderColor);
