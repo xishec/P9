@@ -23,7 +23,7 @@ export class FileManagerService {
     }
 
     async downloadSVG(drawings: any, drawingInfo: any) {
-        const buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
+        const buffer: [Buffer] = (await this.cloudService.download(drawingInfo.createdAt.toString())) as [Buffer];
         drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
     }
 

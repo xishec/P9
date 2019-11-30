@@ -15,7 +15,7 @@ export class CloudService {
                 storageBucket: 'p9-cloud.appspot.com',
             });
         } catch (e) {
-            if (e instanceof Error && e.message === 'MODULE_NOT_FOUND') {
+            if (e instanceof Error && e.message === 'Cannot find module \'../../P9-cloud-230ae8edfba8.json\'') {
                 console.log('Can\'t find serviceAccount!');
             } else {
                 throw e;
@@ -24,12 +24,17 @@ export class CloudService {
     }
 
     save(srcFilename: string, content: string): void {
-        const bucket = admin.storage().bucket();
-        bucket.file(srcFilename).save(content);
+        if (this.serviceAccount) {
+            const bucket = admin.storage().bucket();
+            bucket.file(srcFilename).save(content);
+        }
     }
 
-    download(srcFilename: string): Promise<[Buffer]> {
-        const bucket = admin.storage().bucket();
-        return bucket.file(srcFilename).download();
+    download(srcFilename: string): Promise<[Buffer]> | undefined {
+        if (this.serviceAccount) {
+            const bucket = admin.storage().bucket();
+            return bucket.file(srcFilename).download();
+        }
+        return undefined;
     }
 }
