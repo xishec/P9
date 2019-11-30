@@ -2,15 +2,23 @@ import * as admin from 'firebase-admin';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
-import * as serviceAccount from '../../P9-cloud-230ae8edfba8.json';
-
 @injectable()
 export class CloudService {
     initialize(): void {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-            storageBucket: 'p9-cloud.appspot.com',
-        });
+        try {
+            let serviceAccount = require('../../P9-cloud-230ae8edfba8.json');
+
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+                storageBucket: 'p9-cloud.appspot.com',
+            });
+        } catch (e) {
+            if (e instanceof Error && e.message === 'MODULE_NOT_FOUND') {
+                console.log("Can't find serviceAccount!");
+            } else {
+                throw e;
+            }
+        }
     }
 
     save(srcFilename: string, content: string): void {
