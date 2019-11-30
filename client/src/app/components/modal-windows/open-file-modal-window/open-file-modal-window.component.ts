@@ -242,7 +242,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
         if (this.numberOfDaysBetween(timestamp, currentTimestamp) < 7) {
             const differenceInMs = currentTimestamp - timestamp;
-            return 'il y a ' + this.msToDaysHoursMinutes(differenceInMs);
+            return 'Créé il y a ' + this.msToDaysHoursMinutes(differenceInMs);
         }
         const date = new Date(timestamp);
 
@@ -250,7 +250,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
             `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
 
-        return creationDate;
+        return 'Créé le ' + creationDate;
     }
 
     numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
