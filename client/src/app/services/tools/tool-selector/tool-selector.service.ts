@@ -115,7 +115,6 @@ export class ToolSelectorService {
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
             [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
-            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.SprayCan, this.sprayCanTool as AbstractToolService],
             [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
