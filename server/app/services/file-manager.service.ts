@@ -18,13 +18,14 @@ export class FileManagerService {
         for (const drawingInfo of drawingInfos) {
             await this.downloadSVG(drawings, drawingInfo);
         }
-
         return drawings;
     }
 
     async downloadSVG(drawings: any, drawingInfo: any) {
-        const buffer: [Buffer] = (await this.cloudService.download(drawingInfo.createdAt.toString())) as [Buffer];
-        drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
+        const buffer: [Buffer] | undefined = await this.cloudService.download(drawingInfo.createdAt.toString());
+        if (buffer) {
+            drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
+        }
     }
 
     async addDrawingInfo(drawing: Drawing) {
