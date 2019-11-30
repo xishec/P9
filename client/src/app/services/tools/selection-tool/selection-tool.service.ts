@@ -154,7 +154,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isAbleToRotate(): boolean {
-        return !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection&& this.selection.isAppended;
+        return !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection && this.selection.isAppended;
     }
 
     singlySelect(stackPosition: number): void {
@@ -200,7 +200,6 @@ export class SelectionToolService extends AbstractToolService {
             this.isScalingSelection = true;
             this.manipulator.scaleSelection(
                 this.currentMouseCoords,
-                this.initialMouseCoords,
                 this.selection.activeControlPoint,
                 this.selection);
         } else if (
@@ -361,15 +360,15 @@ export class SelectionToolService extends AbstractToolService {
             event.preventDefault();
             this.selection.isShiftDown = true;
             this.manipulator.isRotateOnSelf = true;
-            if(this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.selection.isAltDown = true;
             this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
-            if(this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         }
     }
@@ -380,15 +379,15 @@ export class SelectionToolService extends AbstractToolService {
             event.preventDefault();
             this.manipulator.isRotateOnSelf = false;
             this.selection.isShiftDown = false;
-            if(this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.manipulator.rotationStep = ROTATION_ANGLE.Base;
             this.selection.isAltDown = false;
-            if(this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.initialMouseCoords, this.selection.activeControlPoint, this.selection);
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         }
     }

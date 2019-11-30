@@ -18,7 +18,7 @@ export class ManipulatorService {
         this.renderer = renderer;
     }
 
-    scaleSelection(currentMouseCoords: Coords2D, initialMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
+    scaleSelection(currentMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
         switch (fromControlPoint.getAttribute('controlPointId') as string) {
             case '0':
                 this.applyScaleCorner(currentMouseCoords, selection, false, false);
@@ -45,7 +45,6 @@ export class ManipulatorService {
                 this.applyScaleX(currentMouseCoords, selection, false);
                 break;
             default:
-                console.log('what');
                 break;
         }
     }
@@ -85,7 +84,7 @@ export class ManipulatorService {
         let xTranslate =  selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
 
         if (selection.isAltDown) {
-            xTranslate = xTranslate - (isRight ? dx : 0)
+            xTranslate = xTranslate - (isRight ? dx : 0);
         }
 
         return xTranslate;

@@ -7,7 +7,7 @@ import { autoMock } from 'src/classes/test.helper.msTeams.spec';
 import { Selection } from '../../../classes/selection/selection';
 import { ManipulatorService } from './manipulator.service';
 
-fdescribe('ManipulatorService', () => {
+describe('ManipulatorService', () => {
     let selection: Selection;
     let service: ManipulatorService;
     let injector: TestBed;
@@ -403,7 +403,8 @@ fdescribe('ManipulatorService', () => {
         expect(xScaleFactor).toEqual(0.5);
     });
 
-    it('should retun a scale factor of 3 when dx is the same as width(10) and isRight and going in positive direction and altIsDown', () => {
+    it('should retun a scale factor of 3 when dx is the same as width(10)' +
+        'and isRight and going in positive direction and altIsDown', () => {
         selection.ogSelectionBoxWidth = 10;
         selection.isAltDown = true;
 
@@ -415,7 +416,7 @@ fdescribe('ManipulatorService', () => {
     it('should retun a xTranslate of -10 when dx is the same as width(10) and isRight and scalefactor is 2', () => {
         selection.ogSelectionBoxWidth = 10;
         selection.isAltDown = false;
-        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const xTranslate = service.getXTranslate(10, 2, selection, true);
 
@@ -425,7 +426,7 @@ fdescribe('ManipulatorService', () => {
     it('should retun a xTranslate of -30 when dx is the same as width(10) and isRight and scalefactor is 3 and altIsDown', () => {
         selection.ogSelectionBoxWidth = 10;
         selection.isAltDown = true;
-        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const xTranslate = service.getXTranslate(10, 3, selection, true);
 
@@ -441,7 +442,8 @@ fdescribe('ManipulatorService', () => {
         expect(yScaleFactor).toEqual(2);
     });
 
-    it('should retun a scale factor of 3 when dy is the same as height(10) and isBottom and going in positive direction and altIsDown', () => {
+    it('should retun a scale factor of 3 when dy is the same as height(10)' +
+        'and isBottom and going in positive direction and altIsDown', () => {
         selection.ogSelectionBoxHeight = 10;
         selection.isAltDown = true;
 
@@ -453,7 +455,7 @@ fdescribe('ManipulatorService', () => {
     it('should retun a yTranslate of -10 when dy is the same as height(10) and isBottom and scalefactor is 2', () => {
         selection.ogSelectionBoxHeight = 10;
         selection.isAltDown = false;
-        selection.ogSelectionBoxPositions = new Coords2D(10,10);
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const yTranslate = service.getYTranslate(10, 2, selection, true);
 
@@ -509,7 +511,8 @@ fdescribe('ManipulatorService', () => {
         expect(spyYTranslate).toHaveBeenCalledWith(mockDist, mockScale, selection, true);
     });
 
-    it('should get X and Y scale factor and X and Y translate when applyScaleCorner and isShiftDown and call function with dx dy scaled', () => {
+    it('should get X and Y scale factor and X and Y translate when applyScaleCorner' +
+        'and isShiftDown and call function with dx dy scaled', () => {
         const mockDist = 10;
         const mockScale = 2;
         spyOn(service, 'getDistanceFromControlPoint').and.callFake(() => mockDist);
@@ -612,7 +615,7 @@ fdescribe('ManipulatorService', () => {
 
             spyOn(mockControlPoint, 'getAttribute').and.returnValue(i.toString());
 
-            service.scaleSelection(new Coords2D(10, 10), new Coords2D(0, 0), mockControlPoint, selection);
+            service.scaleSelection(new Coords2D(10, 10), mockControlPoint, selection);
         }
 
         expect(spyCorner).toHaveBeenCalledTimes(4);
