@@ -243,6 +243,8 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
 
+        this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
+
         this.checkIfLine(idElement, tool, '#' + DEFAULT_RED);
 
         this.renderer.setAttribute(
@@ -265,6 +267,17 @@ export class EraserToolService extends AbstractToolService {
                     childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
                 ],
                 HTML_ATTRIBUTE.fill,
+                borderColor,
+            );
+        }
+    }
+
+    checkIfStamp(idElement: number, tool: string, borderColor: string) {
+        if (tool === TOOL_NAME.Stamp) {
+            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+            this.renderer.setAttribute(
+                this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
+                HTML_ATTRIBUTE.stroke,
                 borderColor,
             );
         }
@@ -331,20 +344,24 @@ export class EraserToolService extends AbstractToolService {
 
         this.isOnTarget = false;
 
-        const currentChangedTargetIsValid = (this.changedElements.get(this.currentTarget.toString()) !== undefined);
-        if (this.erasedSomething) {
-            if (currentChangedTargetIsValid) {
+        if (this.currentTarget !== undefined) {
+            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget.toString()) !== undefined;
+
+            if (this.erasedSomething && currentChangedTargetIsValid) {
                 const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
+                this.renderer.removeChild(this.elementRef, this.eraser);
                 this.restoreBorder(
                     this.currentTarget,
                     currentChangedTarget.borderColor,
                     currentChangedTarget.borderWidth,
-                    this.lastToolName);
+                    this.lastToolName,
+                );
                 setTimeout(() => {
                     this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
                 }, 0);
                 setTimeout(() => {
                     this.colorBorder(this.currentTarget, currentChangedTarget.borderWidth, this.lastToolName);
+                    this.appendEraser();
                 }, 0);
             } else {
                 this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
