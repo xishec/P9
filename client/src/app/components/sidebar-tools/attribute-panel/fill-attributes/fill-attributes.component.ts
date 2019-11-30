@@ -19,8 +19,8 @@ export class FillAttributesComponent implements OnInit, AfterViewInit {
     fillAttributesForm: FormGroup;
     fillToolService: FillToolService;
     attributesManagerService: AttributesManagerService = new AttributesManagerService();
-    readonly thickness = THICKNESS;
-    readonly tolerance = TOLERANCE;
+    readonly THICKNESS = THICKNESS;
+    readonly TOLERANCE = TOLERANCE;
 
     constructor(
         private formBuilder: FormBuilder,

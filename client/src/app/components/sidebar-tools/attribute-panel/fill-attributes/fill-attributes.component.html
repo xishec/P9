@@ -5,13 +5,13 @@
 
     <form [formGroup]="fillAttributesForm">
         <div class="attribute">
-            <label for="thickness">Épaisseur du trait</label>
+            <label for="THICKNESS">Épaisseur du trait</label>
             <mat-slider
-                placeholder="Hex"
-                formControlName="thickness"
+                formControlName="THICKNESS"
                 (input)="onThicknessSliderChange($event)"
-                [min]="thickness.Min"
-                value="{{ fillAttributesForm.value.thickness }}"
+                [min]="THICKNESS.Min"
+                [max]="THICKNESS.Max"
+                value="{{ fillAttributesForm.value.THICKNESS }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
@@ -20,23 +20,24 @@
                     (focusout)="onFocusOut()"
                     matInput
                     type="number"
-                    formControlName="thickness"
+                    formControlName="THICKNESS"
                     (input)="onThicknessChange()"
-                    [min]="thickness.Min"
-                    [max]="thickness.Max"
+                    [min]="THICKNESS.Min"
+                    [max]="THICKNESS.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ thickness.Min }} et {{ thickness.Max }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error>
                 <span matSuffix>px</span>
             </mat-form-field>
         </div>
         <div class="attribute">
-            <label for="tolerance">Tolérance</label> <br />
+            <label for="TOLERANCE">Tolérance</label> <br />
             <mat-slider
                 placeholder="Tolérance"
-                formControlName="tolerance"
+                formControlName="TOLERANCE"
                 (input)="onToleranceSliderChange($event)"
-                [min]="tolerance.Min"
-                value="{{ fillAttributesForm.value.tolerance }}"
+                [min]="TOLERANCE.Min"
+                [max]="TOLERANCE.Max"
+                value="{{ fillAttributesForm.value.TOLERANCE }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
@@ -45,12 +46,12 @@
                     (focusout)="onFocusOut()"
                     matInput
                     type="number"
-                    formControlName="tolerance"
+                    formControlName="TOLERANCE"
                     (input)="onToleranceChange()"
-                    [min]="tolerance.Min"
-                    [max]="tolerance.Max"
+                    [min]="TOLERANCE.Min"
+                    [max]="TOLERANCE.Max"
                 />
-                <mat-error>La valeur inscrite doit être entre {{ tolerance.Min }} et {{ tolerance.Max }} px</mat-error>
+                <mat-error>La valeur inscrite doit être entre {{ TOLERANCE.Min }} et {{ TOLERANCE.Max }} %</mat-error>
                 <span matSuffix>%</span>
             </mat-form-field>
         </div>
