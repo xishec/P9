@@ -4,7 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { ALTER_ROTATION, BASE_ROTATION } from 'src/constants/tool-constants';
+import { ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -83,12 +83,6 @@ describe('SelectionToolService', () => {
         spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
         spyOnCreateElement = spyOn(service.renderer, 'createElement').and.callFake(() => null);
-
-        jasmine.clock().install();
-    });
-
-    afterEach(() => {
-        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -539,7 +533,7 @@ describe('SelectionToolService', () => {
     it('should set rotate step to ALTER_ROTATION when keydown on alt', () => {
         service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
-        expect(service.manipulator.rotationStep).toEqual(ALTER_ROTATION);
+        expect(service.manipulator.rotationStep).toEqual(ROTATION_ANGLE.Alter);
     });
 
     it('should set rotate on self to false when keyup on shift', () => {
@@ -551,20 +545,6 @@ describe('SelectionToolService', () => {
     it('should set rotate step to BASE_ROTATION when keyup on alt', () => {
         service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
-        expect(service.manipulator.rotationStep).toEqual(BASE_ROTATION);
-    });
-
-    it('should remove the selection box, save state and append the selection box on saveState', () => {
-        const spyOnRemoveSelectionBox = spyOn(service.selection, 'removeFullSelectionBox').and.callFake(() => null);
-        const spyOnAppendSelectionBox = spyOn(service.selection, 'appendFullSelectionBox').and.callFake(() => null);
-        const spyUndoRedo = spyOn(service.undoRedoerService, 'saveCurrentState').and.callFake(() => null);
-
-        service.saveState();
-
-        jasmine.clock().tick(1);
-
-        expect(spyOnRemoveSelectionBox).toHaveBeenCalled();
-        expect(spyOnAppendSelectionBox).toHaveBeenCalled();
-        expect(spyUndoRedo).toHaveBeenCalled();
+        expect(service.manipulator.rotationStep).toEqual(ROTATION_ANGLE.Base);
     });
 });
