@@ -184,11 +184,7 @@ export class FillToolService extends AbstractToolService {
         let d = '';
         this.bfsHelper.pathsToFill.forEach((el) => {
             el.forEach((pixel: Coords2D, i: number) => {
-                if (i === 0) {
-                    d += ` M${pixel.x + 0.5} ${pixel.y + 0.5}`;
-                } else {
-                    d += ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
-                }
+                d += i === 0 ? ` M${pixel.x + 0.5} ${pixel.y + 0.5}` : ` L${pixel.x + 0.5} ${pixel.y + 0.5}`;
             });
             d += ' z';
         });

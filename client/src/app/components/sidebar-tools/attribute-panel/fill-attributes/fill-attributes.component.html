@@ -5,13 +5,13 @@
 
     <form [formGroup]="fillAttributesForm">
         <div class="attribute">
-            <label for="THICKNESS">Épaisseur du trait</label>
+            <label for="thickness">Épaisseur du trait</label>
             <mat-slider
-                formControlName="THICKNESS"
+                formControlName="thickness"
                 (input)="onThicknessSliderChange($event)"
                 [min]="THICKNESS.Min"
                 [max]="THICKNESS.Max"
-                value="{{ fillAttributesForm.value.THICKNESS }}"
+                value="{{ fillAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
@@ -20,7 +20,7 @@
                     (focusout)="onFocusOut()"
                     matInput
                     type="number"
-                    formControlName="THICKNESS"
+                    formControlName="thickness"
                     (input)="onThicknessChange()"
                     [min]="THICKNESS.Min"
                     [max]="THICKNESS.Max"
@@ -30,14 +30,14 @@
             </mat-form-field>
         </div>
         <div class="attribute">
-            <label for="TOLERANCE">Tolérance</label> <br />
+            <label for="tolerance">Tolérance</label> <br />
             <mat-slider
                 placeholder="Tolérance"
-                formControlName="TOLERANCE"
+                formControlName="tolerance"
                 (input)="onToleranceSliderChange($event)"
                 [min]="TOLERANCE.Min"
                 [max]="TOLERANCE.Max"
-                value="{{ fillAttributesForm.value.TOLERANCE }}"
+                value="{{ fillAttributesForm.value.tolerance }}"
             ></mat-slider>
             <mat-form-field class="small">
                 <input
@@ -46,7 +46,7 @@
                     (focusout)="onFocusOut()"
                     matInput
                     type="number"
-                    formControlName="TOLERANCE"
+                    formControlName="tolerance"
                     (input)="onToleranceChange()"
                     [min]="TOLERANCE.Min"
                     [max]="TOLERANCE.Max"
