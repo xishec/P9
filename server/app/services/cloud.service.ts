@@ -21,13 +21,9 @@ export class CloudService {
         //     });
     }
 
-    save(srcFilename: string, content: string) {
+    save(srcFilename: string, content: string): void {
         let bucket = admin.storage().bucket();
-        bucket.file(srcFilename).save(content, (err: any) => {
-            if (!err) {
-                console.log('yes!');
-            }
-        });
+        bucket.file(srcFilename).save(content);
     }
 
     download(srcFilename: string): Promise<[Buffer]> {

@@ -16,13 +16,13 @@ export class FileManagerService {
         let drawings: Drawing[] = [];
 
         for (const drawingInfo of drawingInfos) {
-            await this.hi(drawings, drawingInfo);
+            await this.downloadSVG(drawings, drawingInfo);
         }
 
         return drawings;
     }
 
-    async hi(drawings: any, drawingInfo: any) {
+    async downloadSVG(drawings: any, drawingInfo: any) {
         let buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
         drawings.push({ drawingInfo: drawingInfo, svg: buffer[0].toString() } as Drawing);
     }

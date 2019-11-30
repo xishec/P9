@@ -27,6 +27,7 @@ const TEST_DRAWING: Drawing = {
 
 describe('FileManagerService', () => {
     let cloudService = new CloudService();
+    cloudService.initialize();
     fileManagerService = new FileManagerService(cloudService);
 
     afterEach(() => {
@@ -44,12 +45,18 @@ describe('FileManagerService', () => {
     });
 
     it('should return a list of documents when database sends valid documents on getAllDrawingInfos', async () => {
+        fileManagerService[`cloudService`].download = () =>
+            new Promise((resolve) => {
+                setTimeout(function() {
+                    resolve([Buffer.from('', 'utf8')]);
+                }, 10);
+            });
         fileManagerService.addDrawingInfo(TEST_DRAWING);
         const postFind = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
         sinon.replace(DrawingInfoModel, 'find', postFind);
 
         const result = await fileManagerService.getAllDrawingInfos();
-        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
+        expect(result).to.eql([TEST_DRAWING]);
     });
 
     it('should return an error when database cannot retrieve documents on getAllDrawingInfos', async () => {
@@ -87,7 +94,7 @@ describe('FileManagerService', () => {
         TEST_DRAWING.drawingInfo.name = '';
 
         fileManagerService.addDrawingInfo(TEST_DRAWING).catch((err) => {
-            expect(err.message).to.eql(new Error('Invalid Drawing').message);
+            expect(err.message).to.eql(new Error('Invalid DrawingInfo').message);
         });
     });
 
