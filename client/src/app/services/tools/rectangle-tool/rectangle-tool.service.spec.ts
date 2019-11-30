@@ -534,8 +534,6 @@ describe('RectangleToolService', () => {
         rectangleTool.createSVG();
 
         jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();
@@ -553,8 +551,6 @@ describe('RectangleToolService', () => {
         rectangleTool.userFillColor = NONE_COLOR;
         rectangleTool.createSVG();
 
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
         jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();

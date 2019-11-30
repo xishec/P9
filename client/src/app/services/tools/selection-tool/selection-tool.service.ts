@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { ALTER_ROTATION, BASE_ROTATION, DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -325,15 +325,7 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     saveState() {
-        setTimeout(() => {
-            this.selection.removeFullSelectionBox();
-        }, 0);
-        setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        }, 0);
-        setTimeout(() => {
-            this.selection.appendFullSelectionBox();
-        }, 0);
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty
@@ -348,7 +340,7 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isRotateOnSelf = true;
         } else if (key === KEYS.Alt) {
             event.preventDefault();
-            this.manipulator.rotationStep = ALTER_ROTATION;
+            this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
         }
     }
 
@@ -359,7 +351,7 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isRotateOnSelf = false;
         } else if (key === KEYS.Alt) {
             event.preventDefault();
-            this.manipulator.rotationStep = BASE_ROTATION;
+            this.manipulator.rotationStep = ROTATION_ANGLE.Base;
         }
     }
 

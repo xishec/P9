@@ -189,6 +189,7 @@ export class WorkZoneComponent implements OnInit {
         }
         switch (this.toolName) {
             case TOOL_NAME.Eraser:
+            case TOOL_NAME.Quill:
                 return { cursor: 'none' };
             case TOOL_NAME.Brush:
             case TOOL_NAME.Pencil:
@@ -198,7 +199,6 @@ export class WorkZoneComponent implements OnInit {
             case TOOL_NAME.Polygon:
             case TOOL_NAME.ColorApplicator:
             case TOOL_NAME.Line:
-            case TOOL_NAME.Quill:
             case TOOL_NAME.SprayCan:
             case TOOL_NAME.Fill:
                 return { cursor: 'crosshair' };

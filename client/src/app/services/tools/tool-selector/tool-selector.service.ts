@@ -23,8 +23,10 @@ import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
+import { QuillToolService } from '../quill-tool/quill-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
+import { SprayCanToolService } from '../spray-can-tool/spray-can-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
 
@@ -49,6 +51,7 @@ export class ToolSelectorService {
         private ellipsisTool: EllipsisToolService,
         private pencilTool: PencilToolService,
         private penTool: PenToolService,
+        private quillTool: QuillToolService,
         private brushTool: BrushToolService,
         private stampTool: StampToolService,
         private dropperTool: DropperToolService,
@@ -60,6 +63,7 @@ export class ToolSelectorService {
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
         private magnetismTool: MagnetismToolService,
+        private sprayCanTool: SprayCanToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -76,6 +80,8 @@ export class ToolSelectorService {
         this.pencilTool.initializeService(ref, renderer, drawStack);
 
         this.penTool.initializeService(ref, renderer, drawStack);
+
+        this.quillTool.initializeService(ref, renderer, drawStack);
 
         this.brushTool.initializeService(ref, renderer, drawStack);
 
@@ -95,6 +101,8 @@ export class ToolSelectorService {
 
         this.eraserTool.initializeService(ref, renderer, drawStack);
 
+        this.sprayCanTool.initializeService(ref, renderer, drawStack);
+
         this.TOOLS_MAP = new Map([
             [TOOL_NAME.Selection, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Rectangle, this.rectangleTool as AbstractToolService],
@@ -107,9 +115,10 @@ export class ToolSelectorService {
             [TOOL_NAME.Line, this.lineTool as AbstractToolService],
             [TOOL_NAME.Dropper, this.dropperTool as AbstractToolService],
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
+            [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
             [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
-            [TOOL_NAME.SprayCan, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.SprayCan, this.sprayCanTool as AbstractToolService],
             [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
         ]);
@@ -225,6 +234,10 @@ export class ToolSelectorService {
         return this.penTool;
     }
 
+    getQuillTool(): QuillToolService {
+        return this.quillTool;
+    }
+
     getRectangleTool(): RectangleToolService {
         return this.rectangleTool;
     }
@@ -267,6 +280,10 @@ export class ToolSelectorService {
 
     getMagnetismTool(): MagnetismToolService {
         return this.magnetismTool;
+    }
+
+    getSprayCanTool(): SprayCanToolService {
+        return this.sprayCanTool;
     }
 
     changeTool(tooltipName: TOOL_NAME): void {
