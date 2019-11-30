@@ -26,8 +26,6 @@ export class FillToolService extends AbstractToolService {
 
     bfsHelper: BFSHelper;
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    segmentsToDraw: Map<number, FillStructure[]>;
-    strokePaths: string[];
     svgWrap: SVGGElement;
 
     traceType = TRACE_TYPE.Full;
