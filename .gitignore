@@ -52,6 +52,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
-server/P9-cloud-230ae8edfba8.json
-
-server/API_KEYS.ts
+*API_KEYS*
