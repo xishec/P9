@@ -4,17 +4,19 @@ import 'reflect-metadata';
 
 @injectable()
 export class CloudService {
+    serviceAccount: JSON;
+
     initialize(): void {
         try {
-            let serviceAccount = require('../../P9-cloud-230ae8edfba8.json');
-
+            // tslint:disable-next-line: no-require-imports
+            this.serviceAccount = require('../../P9-cloud-230ae8edfba8.json');
             admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+                credential: admin.credential.cert(this.serviceAccount as admin.ServiceAccount),
                 storageBucket: 'p9-cloud.appspot.com',
             });
         } catch (e) {
             if (e instanceof Error && e.message === 'MODULE_NOT_FOUND') {
-                console.log("Can't find serviceAccount!");
+                console.log('Can\'t find serviceAccount!');
             } else {
                 throw e;
             }
