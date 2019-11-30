@@ -23,12 +23,21 @@ export class CloudService {
     }
 
     save(srcFilename: string, content: string): void {
-        const bucket = admin.storage().bucket();
-        bucket.file(srcFilename).save(content);
+        if (admin.apps.length) {
+            const bucket = admin.storage().bucket();
+            bucket.file(srcFilename).save(content);
+        }
     }
 
     download(srcFilename: string): Promise<[Buffer]> {
-        const bucket = admin.storage().bucket();
-        return bucket.file(srcFilename).download();
+        if (admin.apps.length) {
+            const bucket = admin.storage().bucket();
+            return bucket.file(srcFilename).download();
+        }
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([Buffer.from('', 'utf8')]);
+            }, 10);
+        });
     }
 }
