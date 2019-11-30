@@ -80,7 +80,7 @@ export class DrawingSaverService {
                         return true;
                     }
                     this.currentErrorMesage.next(
-                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
+                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                     );
                     this.currentIsSaved.next(false);
                     return false;
