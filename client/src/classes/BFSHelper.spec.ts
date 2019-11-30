@@ -101,7 +101,7 @@ describe('Selection', () => {
         const pixel2 = new Coords2D(11, 1110);
         const closestNeighbor = new Coords2D(-1, -1);
         bfsHelper.strokesSet = new Set([`${pixel2.x} ${pixel2.y}`]);
-        bfsHelper.serachIn([pixel1, pixel2], closestNeighbor);
+        bfsHelper.searchIn([pixel1, pixel2], closestNeighbor);
         expect(closestNeighbor.x).toEqual(11);
         expect(closestNeighbor.y).toEqual(1110);
     });

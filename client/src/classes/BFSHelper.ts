@@ -78,7 +78,7 @@ export class BFSHelper {
         this.createPathToFill();
     }
 
-    serachIn(neighborPixels: Coords2D[], closestNeighbor: Coords2D): void {
+    searchIn(neighborPixels: Coords2D[], closestNeighbor: Coords2D): void {
         neighborPixels.forEach((neighborPixel: Coords2D) => {
             if (
                 this.strokesSet.has(`${neighborPixel.x} ${neighborPixel.y}`) &&
@@ -96,7 +96,7 @@ export class BFSHelper {
             new Coords2D(pixel.x, pixel.y - 1),
             new Coords2D(pixel.x, pixel.y + 1),
         ];
-        this.serachIn(neighborPixels, closestNeighbor);
+        this.searchIn(neighborPixels, closestNeighbor);
     }
 
     searchInIndirectNeighbors(pixel: Coords2D, closestNeighbor: Coords2D): void {
@@ -106,7 +106,7 @@ export class BFSHelper {
             new Coords2D(pixel.x + 1, pixel.y - 1),
             new Coords2D(pixel.x + 1, pixel.y + 1),
         ];
-        this.serachIn(neighborPixels, closestNeighbor);
+        this.searchIn(neighborPixels, closestNeighbor);
     }
 
     findClosestPixel(pixel: Coords2D, closestNeighbor: Coords2D): void {
