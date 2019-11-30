@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { FontInfo } from 'src/classes/FontInfos';
 import { TextCursor } from 'src/classes/textStyle/textCursor';
-import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     FONT_ALIGN,
     FONT_STYLE,
@@ -14,6 +14,7 @@ import {
     TEXT_CURSOR,
     TEXT_LINEBREAK,
     TEXT_SPACE,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -189,6 +190,7 @@ export class TextToolService extends AbstractToolService {
 
     initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke, 'black');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_width, '1');
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.fill, 'none');
@@ -271,6 +273,7 @@ export class TextToolService extends AbstractToolService {
             this.createNewLine();
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Text);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);

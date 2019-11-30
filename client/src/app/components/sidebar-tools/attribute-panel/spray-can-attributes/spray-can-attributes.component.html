@@ -1,0 +1,85 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="sprayCanAttributesForm">
+        <div class="attribute">
+            <label for="thickness">Épaisseur des particules</label>
+            <mat-slider
+                formControlName="thickness"
+                (input)="onThicknessSliderChange($event)"
+                [min]="THICKNESS.Min"
+                [max]="THICKNESS.Max"
+                value="{{ sprayCanAttributesForm.value.thickness }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="thickness"
+                    (input)="onThicknessChange()"
+                    [min]="THICKNESS.Min"
+                    [max]="THICKNESS.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ THICKNESS.Min }} et {{ THICKNESS.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="diameter">Diamètre de l'émission</label>
+            <mat-slider
+                formControlName="diameter"
+                (input)="onDiameterSliderChange($event)"
+                [min]="DIAMETER.Min"
+                [max]="DIAMETER.Max"
+                value="{{ sprayCanAttributesForm.value.diameter }}"
+            ></mat-slider>
+            <mat-form-field class="small">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="diameter"
+                    (input)="onDiameterChange()"
+                    [min]="DIAMETER.Min"
+                    [max]="DIAMETER.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ DIAMETER.Min }} et {{ DIAMETER.Max }} px</mat-error>
+                <span matSuffix>px</span>
+            </mat-form-field>
+        </div>
+
+        <div class="attribute">
+            <label for="diameter">Intervalle des émissions</label>
+            <mat-slider
+                formControlName="interval"
+                (input)="onIntervalSliderChange($event)"
+                [min]="INTERVAL.Min"
+                [max]="INTERVAL.Max"
+                value="{{ sprayCanAttributesForm.value.interval }}"
+            ></mat-slider>
+            <mat-form-field id="intervalInput">
+                <input
+                    autocomplete="off"
+                    (focus)="onFocus()"
+                    (focusout)="onFocusOut()"
+                    matInput
+                    type="number"
+                    formControlName="interval"
+                    (input)="onIntervalChange()"
+                    [min]="INTERVAL.Min"
+                    [max]="INTERVAL.Max"
+                />
+                <mat-error>La valeur inscrite doit être entre {{ INTERVAL.Min }} et {{ INTERVAL.Max }} ms</mat-error>
+                <span matSuffix>ms</span>
+            </mat-form-field>
+        </div>
+    </form>
+</div>

@@ -2,8 +2,8 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -20,7 +20,6 @@ export class SelectionToolService extends AbstractToolService {
     initialMouseCoords: Coords2D = new Coords2D(0, 0);
     currentTarget = 0;
 
-    isTheCurrentTool = false;
     isSelecting = false;
     isOnTarget = false;
     isLeftMouseDown = false;
@@ -40,7 +39,7 @@ export class SelectionToolService extends AbstractToolService {
     constructor(
         public clipBoard: ClipboardService,
         public manipulator: ManipulatorService,
-        private undoRedoerService: UndoRedoerService,
+        public undoRedoerService: UndoRedoerService,
     ) {
         super();
     }
@@ -50,6 +49,7 @@ export class SelectionToolService extends AbstractToolService {
         for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
+        this.manipulator.updateOrigins(this.selection);
     }
 
     cleanUp(): void {
@@ -74,7 +74,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
+            if (stackTarget.targetPosition !== undefined) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
@@ -149,6 +149,10 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         return true;
+    }
+
+    isAbleToRotate(): boolean {
+        return !this.isTranslatingSelection && !this.isSelecting && this.selection.isAppended;
     }
 
     singlySelect(stackPosition: number): void {
@@ -306,26 +310,47 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.manipulator.updateOrigins(this.selection);
     }
 
     saveState() {
-        setTimeout(() => {
-            this.selection.removeFullSelectionBox();
-        }, 0);
-        setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        }, 0);
-        setTimeout(() => {
-            this.selection.appendFullSelectionBox();
-        }, 0);
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {}
+
+    onKeyDown(event: KeyboardEvent): void {
+        const key = event.key;
+        if (key === KEYS.Shift) {
+            event.preventDefault();
+            this.manipulator.isRotateOnSelf = true;
+        } else if (key === KEYS.Alt) {
+            event.preventDefault();
+            this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        const key = event.key;
+        if (key === KEYS.Shift) {
+            event.preventDefault();
+            this.manipulator.isRotateOnSelf = false;
+        } else if (key === KEYS.Alt) {
+            event.preventDefault();
+            this.manipulator.rotationStep = ROTATION_ANGLE.Base;
+        }
+    }
+
+    onWheel(event: WheelEvent): void {
+        if (this.isAbleToRotate()) {
+            event.preventDefault();
+            this.manipulator.rotateSelection(event, this.selection);
+            this.clipBoard.restartDuplication();
+            this.saveState();
+        }
+    }
 }

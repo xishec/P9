@@ -1,8 +1,10 @@
 import { ElementRef, Injectable } from '@angular/core';
-
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingState } from 'src/classes/DrawingState';
+import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
@@ -44,9 +46,28 @@ export class UndoRedoerService {
         this.redos = [];
     }
 
+    getCleanInnerHTML(): string {
+        const cloneWorkzone = this.workzoneRef.nativeElement.cloneNode(true) as SVGElement;
+
+        const elToRemove = new Array<SVGElement>();
+
+        cloneWorkzone.childNodes.forEach((childNode: ChildNode) => {
+            if ((childNode as SVGElement).getAttribute(HTML_ATTRIBUTE.title) === TITLE_ELEMENT_TO_REMOVE) {
+                elToRemove.push(childNode as SVGElement);
+            }
+        });
+
+        elToRemove.forEach((el: SVGElement) => {
+            cloneWorkzone.removeChild(el);
+        });
+
+        return cloneWorkzone.innerHTML;
+    }
+
     createDrawing(idStackArray: string[]): Drawing {
+        const cleanedInnerHTML = this.getCleanInnerHTML();
         const drawing: Drawing = {
-            svg: this.workzoneRef.nativeElement.innerHTML,
+            svg: cleanedInnerHTML,
             drawingInfo: {
                 name: '',
                 labels: [],
@@ -58,6 +79,7 @@ export class UndoRedoerService {
                 lastModified: 0,
             } as DrawingInfo,
         } as Drawing;
+
         return drawing;
     }
 
