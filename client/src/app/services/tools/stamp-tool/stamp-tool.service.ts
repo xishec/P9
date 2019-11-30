@@ -6,12 +6,11 @@ import {
     BASE64_STAMPS_MAP,
     HTML_ATTRIBUTE,
     NO_STAMP,
-    STAMP_ALTER_ROTATION,
-    STAMP_ANGLE_ORIENTATION,
+    ROTATION_ANGLE,
     STAMP_BASE_HEIGHT,
-    STAMP_BASE_ROTATION,
     STAMP_BASE_WIDTH,
     STAMP_SCALING,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
@@ -24,7 +23,7 @@ export class StampToolService extends AbstractToolService {
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
     stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: STAMP_ANGLE_ORIENTATION = STAMP_ANGLE_ORIENTATION.Default;
+    angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
     selected: string;
 
@@ -125,6 +124,7 @@ export class StampToolService extends AbstractToolService {
 
     addStamp(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Stamp);
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.width, (STAMP_BASE_WIDTH * this.scaling).toString());
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.height, (STAMP_BASE_HEIGHT * this.scaling).toString());
@@ -148,6 +148,10 @@ export class StampToolService extends AbstractToolService {
             'transform',
             `rotate(${this.angle}, ${this.currentMouseCoords.x}, ${this.currentMouseCoords.y})`,
         );
+        const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
+        const rotateToZero = svg.createSVGTransform();
+        rotateToZero.setRotate(0, this.currentMouseCoords.x, this.currentMouseCoords.y);
+        el.transform.baseVal.insertItemBefore(rotateToZero, 0);
         this.renderer.appendChild(this.elementRef.nativeElement, el);
         setTimeout(() => {
             this.drawStack.push(el);
@@ -155,19 +159,13 @@ export class StampToolService extends AbstractToolService {
     }
 
     rotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - STAMP_BASE_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + STAMP_BASE_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Base : ROTATION_ANGLE.Base;
+        this.angle = this.angle % 360;
     }
 
     alterRotateStamp(direction: number): void {
-        if (direction < 0) {
-            this.angle = (this.angle - STAMP_ALTER_ROTATION) % 360;
-        } else {
-            this.angle = (this.angle + STAMP_ALTER_ROTATION) % 360;
-        }
+        this.angle += direction < 0 ? -ROTATION_ANGLE.Alter : ROTATION_ANGLE.Alter;
+        this.angle = this.angle % 360;
     }
 
     onMouseMove(event: MouseEvent): void {

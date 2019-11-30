@@ -2,18 +2,29 @@ import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { Drawing } from 'src/classes/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingState } from '../../../classes/DrawingState';
-import { DEFAULT_WHITE } from '../../../constants/color-constants';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { UndoRedoerService } from './undo-redoer.service';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
-const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
+const MOCK_DRAWING_INFO = {
+    name: '',
+    createdAt: 0,
+    lastModified: 0,
+    labels: [],
+    idStack: [],
+    width: 0,
+    height: 0,
+    color: '',
+} as DrawingInfo;
 
-const MOCK_DRAWING: Drawing = new Drawing('', [], MOCK_INNER_HTML, [], MOCK_DRAWING_INFO);
+const MOCK_DRAWING: Drawing = {
+    svg: MOCK_INNER_HTML,
+    drawingInfo: MOCK_DRAWING_INFO,
+} as Drawing;
 
 const MOCK_DRAWING_STATE: DrawingState = {
     drawing: MOCK_DRAWING,
@@ -81,8 +92,9 @@ describe('UndoRedoerService', () => {
     });
 
     it('createDrawing should return a drawing with the innerHTML', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        service.currentDrawingInfo = MOCK_DRAWING_INFO;
 
         const resDrawing = service.createDrawing([]);
 
@@ -90,8 +102,9 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveStateAndDuplicateOffset should create a DrawingState with the duplicateOffSet and saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        service.currentDrawingInfo = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveStateAndDuplicateOffset([], 10);
@@ -102,8 +115,9 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveStateFromPaste should create a DrawingState with the pasteOffset and saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        service.currentDrawingInfo = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveStateFromPaste([], 10, new Set<SVGElement>());
@@ -114,8 +128,9 @@ describe('UndoRedoerService', () => {
     });
 
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
+        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
         service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        service.currentDrawingInfo = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
 
         service.saveCurrentState([]);
@@ -142,9 +157,15 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should pop undos and push this to redos if undos.length > 1', () => {
-        const initDrawing: Drawing = new Drawing('1', [], '1', [], MOCK_DRAWING_INFO);
+        const initDrawing: Drawing = {
+            svg: MOCK_INNER_HTML,
+            drawingInfo: MOCK_DRAWING_INFO,
+        } as Drawing;
 
-        const mockDrawing: Drawing = new Drawing('2', [], '2', [], MOCK_DRAWING_INFO);
+        const mockDrawing: Drawing = {
+            svg: MOCK_INNER_HTML,
+            drawingInfo: MOCK_DRAWING_INFO,
+        } as Drawing;
 
         const mockState1: DrawingState = {
             drawing: initDrawing,

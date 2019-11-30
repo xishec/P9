@@ -2,9 +2,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
+import { Drawing } from '../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
-import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 
 @injectable()
 export class FileManagerController {
@@ -21,25 +22,27 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            const drawings = await this.fileManagerService.getAllDrawings();
-            res.json(drawings);
+            const drawing = (await this.fileManagerService.getAllDrawingInfos()) as Drawing[];
+            res.json(drawing);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
+            const drawing: Drawing = req.body;
             this.fileManagerService
-                .addDrawing(req.body)
+                .addDrawingInfo(drawing)
                 .then((newDrawingInfo: DrawingInfo) => {
-                    res.json(newDrawingInfo);
+                    drawing.drawingInfo = newDrawingInfo;
                 })
                 .catch((error: MongoError) => {
                     throw error;
                 });
+            res.json(drawing);
         });
 
         this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
-            let id: string = req.params.id;
+            const id: string = req.params.id;
             this.fileManagerService
-                .deleteDrawing(id)
+                .deleteDrawingInfo(id)
                 .then(() => {
                     res.json(Number(id));
                 })

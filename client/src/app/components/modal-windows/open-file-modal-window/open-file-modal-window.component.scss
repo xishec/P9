@@ -96,18 +96,11 @@
     #drawing-thumbnail {
         grid-column: 3 / 4;
         grid-row: 1 / 2;
+        margin-left: -25px;
 
         height: 60px;
         width: 60px;
         padding: 0;
-
-        img {
-            width: 100%;
-            height: auto;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
     }
 }
 

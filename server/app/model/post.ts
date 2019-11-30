@@ -11,4 +11,4 @@ const drawingSchema = createSchema({
     lastModified: Type.number({ required: true }),
 });
 
-export const DrawingModel = typedModel('DrawingInfo', drawingSchema);
+export const DrawingInfoModel = typedModel('DrawingInfo', drawingSchema);

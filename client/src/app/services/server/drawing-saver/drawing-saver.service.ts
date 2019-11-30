@@ -3,11 +3,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { Drawing } from 'src/classes/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
-import { SVG_NS } from 'src/constants/constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
-import { CloudService } from '../../cloud/cloud.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../drawing-loader/drawing-loader.service';
@@ -18,7 +16,7 @@ import { FileManagerService } from '../file-manager/file-manager.service';
 })
 export class DrawingSaverService {
     currentIsSaved: BehaviorSubject<boolean | undefined> = new BehaviorSubject(undefined);
-    currentErrorMesaage: BehaviorSubject<string> = new BehaviorSubject('');
+    currentErrorMesage: BehaviorSubject<string> = new BehaviorSubject('');
 
     workZoneRef: ElementRef<SVGElement>;
     currentDrawingInfo: DrawingInfo;
@@ -30,7 +28,6 @@ export class DrawingSaverService {
         private drawingLoaderService: DrawingLoaderService,
         private fileManagerService: FileManagerService,
         private sanitizer: DomSanitizer,
-        private cloudService: CloudService,
     ) {}
 
     initializeDrawingSaverService(
@@ -58,21 +55,10 @@ export class DrawingSaverService {
     sendFileToServer(drawingSavingInfo: DrawingSavingInfo): void {
         if (this.drawingLoaderService.emptyDrawStack.value) {
             this.currentIsSaved.next(false);
-            this.currentErrorMesaage.next('Aucun dessin dans le zone de travail!');
+            this.currentErrorMesage.next('Aucun dessin dans le zone de travail!');
         } else if (drawingSavingInfo.name.length > 0) {
             this.postDrawing(drawingSavingInfo);
         }
-    }
-
-    saveToCloud(id: string) {
-        const clone = this.workZoneRef.nativeElement.cloneNode(true);
-        this.renderer.setAttribute(clone, 'xmlns', SVG_NS);
-        const file = new Blob([this.getXMLSVG(clone)], { type: 'image/svg+xml;charset=utf-8' });
-        this.cloudService.save(id, file);
-    }
-
-    getXMLSVG(clone: any): string {
-        return new XMLSerializer().serializeToString(clone);
     }
 
     postDrawing(drawingSavingInfo: DrawingSavingInfo) {
@@ -81,29 +67,34 @@ export class DrawingSaverService {
         this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
         this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
         this.currentDrawingInfo.idStack = this.drawStackService.idStack;
+        const drawing: Drawing = {
+            drawingInfo: this.currentDrawingInfo,
+            svg: this.workZoneRef.nativeElement.innerHTML,
+        };
 
         this.fileManagerService
-            .postDrawing(this.currentDrawingInfo)
+            .postDrawing(drawing)
             .pipe(
                 filter((subject) => {
                     if (subject !== undefined) {
                         return true;
                     }
-                    this.currentErrorMesaage.next(
+                    this.currentErrorMesage.next(
                         'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                     );
                     this.currentIsSaved.next(false);
                     return false;
                 }),
             )
-            .subscribe((drawingInfo: DrawingInfo) => {
-                if (drawingInfo || JSON.parse(drawingInfo).createdAt === drawingSavingInfo.createdAt) {
-                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
-                    this.drawingLoaderService.currentDrawing.next(drawing);
-                    this.saveToCloud(drawing.drawingInfo.createdAt.toString());
+            .subscribe((receivedDrawing: Drawing) => {
+                if (
+                    receivedDrawing.drawingInfo ||
+                    JSON.parse(receivedDrawing.drawingInfo).createdAt === drawingSavingInfo.createdAt
+                ) {
+                    this.drawingLoaderService.currentDrawing.next(receivedDrawing);
                     this.currentIsSaved.next(true);
                 } else {
-                    this.currentErrorMesaage.next('Erreur de sauvegarde du côté serveur!');
+                    this.currentErrorMesage.next('Erreur de sauvegarde du côté serveur!');
                     this.currentIsSaved.next(false);
                 }
             });

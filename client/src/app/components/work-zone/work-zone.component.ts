@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { MatSnackBar } from '@angular/material';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
-import { CloudService } from 'src/app/services/cloud/cloud.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
@@ -12,7 +12,6 @@ import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.s
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { Drawing } from 'src/classes/Drawing';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
@@ -53,11 +52,9 @@ export class WorkZoneComponent implements OnInit {
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
         private snackBar: MatSnackBar,
-        private cloudService: CloudService,
     ) {}
 
     ngOnInit(): void {
-        this.cloudService.initializeApp();
         this.undoRedoerService.initializeService(this.refSVG);
         this.drawStack = new DrawStackService(this.renderer, this.drawingLoaderService, this.undoRedoerService);
 
@@ -189,6 +186,7 @@ export class WorkZoneComponent implements OnInit {
         }
         switch (this.toolName) {
             case TOOL_NAME.Eraser:
+            case TOOL_NAME.Quill:
                 return { cursor: 'none' };
             case TOOL_NAME.Brush:
             case TOOL_NAME.Pencil:
@@ -198,7 +196,6 @@ export class WorkZoneComponent implements OnInit {
             case TOOL_NAME.Polygon:
             case TOOL_NAME.ColorApplicator:
             case TOOL_NAME.Line:
-            case TOOL_NAME.Quill:
             case TOOL_NAME.SprayCan:
             case TOOL_NAME.Fill:
                 return { cursor: 'crosshair' };

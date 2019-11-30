@@ -4,12 +4,11 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { filter } from 'rxjs/operators';
 
-import { CloudService } from 'src/app/services/cloud/cloud.service';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { Drawing } from 'src/classes/Drawing';
 import { GIFS, NUMBER_OF_MS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
@@ -43,7 +42,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private snackBar: MatSnackBar,
-        private cloudService: CloudService,
     ) {
         this.formBuilder = formBuilder;
     }
@@ -68,27 +66,8 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
-            .subscribe((drawingList: DrawingInfo[]) => {
-                drawingList.forEach((drawingInfo: DrawingInfo) => {
-                    const drawing: Drawing = { drawingInfo, svg: '' } as Drawing;
-                    this.cloudService
-                        .download(drawingInfo.createdAt.toString())
-                        .then((url: string) => {
-                            this.SVGs.set(drawingInfo.name, url);
-
-                            const xhr = new XMLHttpRequest();
-                            xhr.responseType = 'blob';
-                            xhr.onload = async () => {
-                                const blob = xhr.response;
-                                const text = await new Response(blob).text();
-                                drawing.svg = text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
-                            };
-                            xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
-                            xhr.send();
-                        })
-                        .catch((error: Error) => {
-                            console.error(error);
-                        });
+            .subscribe((drawings: Drawing[]) => {
+                drawings.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -99,6 +78,24 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
+    }
+
+    downloadAndUpdateSVG(drawing: Drawing, drawingInfo: DrawingInfo, url: string): void {
+        this.SVGs.set(drawingInfo.name, url);
+
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = async () => {
+            const blob = xhr.response;
+            const text = await new Response(blob).text();
+            drawing.svg = this.extractInnerHTML(text);
+        };
+        xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
+        xhr.send();
+    }
+
+    extractInnerHTML(text: string): string {
+        return text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
     }
 
     initializeForms(): void {
@@ -185,7 +182,6 @@ export class OpenFileModalWindowComponent implements OnInit {
         ) as Drawing;
         this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdAt).subscribe((createdAt: number) => {
             if (createdAt === selectedDrawing.drawingInfo.createdAt) {
-                this.cloudService.delete(createdAt.toString());
                 this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
                     return drawing.drawingInfo.createdAt !== createdAt;
                 });
@@ -198,6 +194,43 @@ export class OpenFileModalWindowComponent implements OnInit {
                 });
             }
         });
+    }
+
+    getDimensions(drawingName: string): number[] {
+        const i: number = this.findIndexByName(drawingName);
+        const height: number = this.drawingsFromServer[i].drawingInfo.height;
+        const width: number = this.drawingsFromServer[i].drawingInfo.width;
+
+        return [width, height];
+    }
+
+    getViewBox(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+        return `0 0 ${dimensions[0]} ${dimensions[1]}`;
+    }
+
+    getWidth(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+
+        return dimensions[0] > dimensions[1] ? '100%' : '60px';
+    }
+
+    getHeight(drawingName: string): string {
+        const dimensions = this.getDimensions(drawingName);
+
+        return dimensions[0] < dimensions[1] ? '100%' : '60px';
+    }
+
+    getSVG(drawingName: string): string {
+        const i: number = this.findIndexByName(drawingName);
+        return this.drawingsFromServer[i].svg;
+    }
+
+    findIndexByName(drawingName: string): number {
+        const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
+            return el.drawingInfo.name === drawingName;
+        }) as Drawing;
+        return this.drawingsFromServer.indexOf(drawing);
     }
 
     unmaskAll() {

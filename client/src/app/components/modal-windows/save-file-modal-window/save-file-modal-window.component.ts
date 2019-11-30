@@ -47,7 +47,7 @@ export class SaveFileModalWindowComponent implements OnInit {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
             this.saveFileModalForm.controls.name.setValue(currentDrawing.drawingInfo.name);
-            currentDrawing.drawingInfo.labels.forEach((label) => {
+            currentDrawing.drawingInfo.labels.forEach((label: string) => {
                 if (!this.drawingLabels.includes(label)) {
                     this.drawingLabels.push(label);
                 }
@@ -56,7 +56,7 @@ export class SaveFileModalWindowComponent implements OnInit {
             this.createdAt = currentDrawing.drawingInfo.createdAt === null ? 0 : currentDrawing.drawingInfo.createdAt;
             this.lastModified = currentDrawing.drawingInfo.lastModified;
         });
-        this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
+        this.drawingSaverService.currentErrorMesage.subscribe((errorMesaage) => {
             this.errorMesaage = errorMesaage;
         });
         this.isSaving = false;

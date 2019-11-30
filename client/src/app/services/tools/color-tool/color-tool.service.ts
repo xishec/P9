@@ -88,17 +88,17 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        const r: string = this.DecimalToHex(R);
-        const g: string = this.DecimalToHex(G);
-        const b: string = this.DecimalToHex(B);
+        const r: string = this.decimalToHex(R);
+        const g: string = this.decimalToHex(G);
+        const b: string = this.decimalToHex(B);
         if (A !== undefined) {
-            const a = this.DecimalToHex(A * 255);
+            const a = this.decimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
     }
 
-    DecimalToHex(RGBNumber: number): string {
+    decimalToHex(RGBNumber: number): string {
         let correctedRGBNumber = '';
         if (RGBNumber > MAX_RGB_NUMBER) {
             correctedRGBNumber = 'ff';

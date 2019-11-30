@@ -66,6 +66,8 @@ const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/r
 
 const MAX_NB_LABELS = 6;
 
+const TITLE_ELEMENT_TO_REMOVE = 'element-to-remove';
+
 export {
     MAX_NB_LABELS,
     GIFS,
@@ -77,4 +79,5 @@ export {
     PREDICATE,
     ELEMENTS_BEFORE_LAST_CIRCLE,
     NUMBER_OF_MS,
+    TITLE_ELEMENT_TO_REMOVE,
 };

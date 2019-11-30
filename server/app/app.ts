@@ -5,7 +5,9 @@ import * as express from 'express';
 import { inject, injectable } from 'inversify';
 import * as mongoose from 'mongoose';
 import * as logger from 'morgan';
+
 import { FileManagerController } from './controllers/file-manager.controller';
+import { CloudService } from './services/cloud.service';
 import Types from './types';
 
 @injectable()
@@ -13,12 +15,14 @@ export class Application {
     private readonly internalError: number = 500;
     app: express.Application;
 
-    constructor(@inject(Types.FileManagerController) private fileManagerController: FileManagerController) {
+    constructor(
+        @inject(Types.FileManagerController) private fileManagerController: FileManagerController,
+        @inject(Types.CloudService) private cloudService: CloudService,
+    ) {
         this.app = express();
-
         this.config();
-
         this.bindRoutes();
+        this.cloudService.initialize();
     }
 
     private config(): void {

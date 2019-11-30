@@ -1,18 +1,36 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { DrawingModel } from '../model/post';
+
+import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { DrawingInfoModel } from '../model/post';
+import { CloudService } from '../services/cloud.service';
+import Types from '../types';
 
 @injectable()
 export class FileManagerService {
-    async getAllDrawings(){
-        return DrawingModel.find({});
+    constructor(@inject(Types.CloudService) private cloudService: CloudService) {}
+
+    async getAllDrawingInfos() {
+        const drawingInfos = (await DrawingInfoModel.find({})) as DrawingInfo[];
+        const drawings: Drawing[] = [];
+
+        for (const drawingInfo of drawingInfos) {
+            await this.downloadSVG(drawings, drawingInfo);
+        }
+        return drawings;
     }
 
-    async addDrawing(drawingInfo: DrawingInfo) {
-        if (!this.isDrawingValid(drawingInfo)) {
-            throw new Error('Invalid Drawing');
+    async downloadSVG(drawings: any, drawingInfo: any) {
+        const buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
+        drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
+    }
+
+    async addDrawingInfo(drawing: Drawing) {
+        if (!this.isDrawingInfoValid(drawing.drawingInfo)) {
+            throw new Error('Invalid DrawingInfo');
         }
+        const drawingInfo: DrawingInfo = drawing.drawingInfo;
 
         const currentTimestamp = Date.now();
         const newCreatedAt = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
@@ -23,16 +41,17 @@ export class FileManagerService {
         drawingInfo.createdAt = newCreatedAt;
         drawingInfo.lastModified = currentTimestamp;
 
-        return DrawingModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
+        this.cloudService.save(drawing.drawingInfo.createdAt.toString(), drawing.svg);
+        return DrawingInfoModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
             return drawingInfo;
         });
     }
 
-    async deleteDrawing(createdAt: string) {
-        return DrawingModel.findOneAndDelete({ createdAt: parseInt(createdAt) });
+    async deleteDrawingInfo(createdAt: string) {
+        return DrawingInfoModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
-    isDrawingValid(drawingInfo: DrawingInfo): boolean {
+    isDrawingInfoValid(drawingInfo: DrawingInfo): boolean {
         return drawingInfo.name !== '' && drawingInfo.height > 0 && drawingInfo.width > 0;
     }
 }

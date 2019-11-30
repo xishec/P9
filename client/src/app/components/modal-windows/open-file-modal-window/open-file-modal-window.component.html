@@ -58,10 +58,12 @@
                                     </div>
                                 </div>
                                 <div id="drawing-thumbnail">
-                                    <img
-                                        *ngIf="SVGs.get(drawing.drawingInfo.name)"
-                                        [src]="SVGs.get(drawing.drawingInfo.name)"
-                                    />
+                                    <svg
+                                        [attr.width]="getWidth(drawing.drawingInfo.name)"
+                                        [attr.height]="getHeight(drawing.drawingInfo.name)"
+                                        [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
+                                        [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
+                                    ></svg>
                                 </div>
                                 <div id="creation-date">
                                     {{ convertTimeStampToDate(drawing.drawingInfo.createdAt) }}
