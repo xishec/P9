@@ -258,12 +258,12 @@ export class SelectionToolService extends AbstractToolService {
         this.initialMouseCoords.y = this.currentMouseCoords.y;
 
         if (this.selection.mouseIsInControlPoint(this.currentMouseCoords)) {
-            this.saveOriginalState();
+            this.saveOriginalSelectionBoxState();
             this.manipulator.initTransformMatrix(this.selection);
         }
     }
 
-    saveOriginalState(): void {
+    saveOriginalSelectionBoxState(): void {
         this.selection.ogSelectionBoxHeight = this.getDOMRect(this.selection.selectionBox).height;
         this.selection.ogSelectionBoxWidth = this.getDOMRect(this.selection.selectionBox).width;
 
