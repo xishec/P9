@@ -14,6 +14,9 @@ export class ManipulatorService {
     selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = ROTATION_ANGLE.Base;
 
+    isAltDown: boolean;
+    isShiftDown: boolean;
+
     initializeService(renderer: Renderer2): void {
         this.renderer = renderer;
     }
@@ -73,7 +76,7 @@ export class ManipulatorService {
 
         let scaleFactor = newWidth / selection.ogSelectionBoxWidth;
 
-        if (selection.isAltDown) {
+        if (this.isAltDown) {
             scaleFactor = 2 * scaleFactor - 1;
         }
 
@@ -83,7 +86,7 @@ export class ManipulatorService {
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
         let xTranslate =  selection.ogSelectionBoxPositions.x - (scaleFactor * selection.ogSelectionBoxPositions.x) - (isRight ? 0 : dx);
 
-        if (selection.isAltDown) {
+        if (this.isAltDown) {
             xTranslate = xTranslate - (isRight ? dx : 0);
         }
 
@@ -97,7 +100,7 @@ export class ManipulatorService {
 
         let scaleFactor = newHeight / selection.ogSelectionBoxHeight;
 
-        if (selection.isAltDown) {
+        if (this.isAltDown) {
             scaleFactor = 2 * scaleFactor - 1;
         }
 
@@ -107,7 +110,7 @@ export class ManipulatorService {
     getYTranslate(dy: number, scaleFactor: number, selection: Selection, isBottom: boolean): number {
         let yTranslate = selection.ogSelectionBoxPositions.y - (scaleFactor * selection.ogSelectionBoxPositions.y) - (isBottom ? 0 : dy);
 
-        if (selection.isAltDown) {
+        if (this.isAltDown) {
             yTranslate = yTranslate - (isBottom ? dy : 0);
         }
 
@@ -131,7 +134,7 @@ export class ManipulatorService {
         let dx = this.getDistanceFromControlPoint(currentMouse.x + window.scrollX, selection.ogActiveControlPointCoords.x, isRight);
         let dy = this.getDistanceFromControlPoint(currentMouse.y + window.scrollY, selection.ogActiveControlPointCoords.y, isBottom);
 
-        if (selection.isShiftDown) {
+        if (this.isShiftDown) {
             // find the new wanted dimensions of the redimBox
             const width2 = selection.ogSelectionBoxWidth + dx;
             const height2 = selection.ogSelectionBoxHeight + dy;

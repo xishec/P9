@@ -24,8 +24,6 @@ export class Selection {
     ogSelectionBoxWidth: number;
     ogActiveControlPointCoords: Coords2D;
     ogSelectionBoxPositions: Coords2D;
-    isShiftDown: boolean;
-    isAltDown: boolean;
 
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 

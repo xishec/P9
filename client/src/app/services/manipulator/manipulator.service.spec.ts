@@ -385,7 +385,7 @@ describe('ManipulatorService', () => {
 
     it('should return a scale factor of 2 when dx is the same as width(10) and isRight and going in positive direction', () => {
         selection.ogSelectionBoxWidth = 10;
-        selection.isAltDown = false;
+        service.isAltDown = false;
 
         const xScaleFactor = service.getXScaleFactor(10, selection, true);
 
@@ -394,7 +394,7 @@ describe('ManipulatorService', () => {
 
     it('should return a scale factor of 0.5 when dx is the same as width/2(5) and isRight and going in negative direction', () => {
         selection.ogSelectionBoxWidth = 10;
-        selection.isAltDown = false;
+        service.isAltDown = false;
 
         const xScaleFactor = service.getXScaleFactor(-5, selection, true);
 
@@ -404,7 +404,7 @@ describe('ManipulatorService', () => {
     it('should return a scale factor of 3 when dx is the same as width(10)' +
         'and isRight and going in positive direction and altIsDown', () => {
         selection.ogSelectionBoxWidth = 10;
-        selection.isAltDown = true;
+        service.isAltDown = true;
 
         const xScaleFactor = service.getXScaleFactor(10, selection, true);
 
@@ -413,7 +413,7 @@ describe('ManipulatorService', () => {
 
     it('should return a xTranslate of -10 when dx is the same as width(10) and isRight and scalefactor is 2', () => {
         selection.ogSelectionBoxWidth = 10;
-        selection.isAltDown = false;
+        service.isAltDown = false;
         selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const xTranslate = service.getXTranslate(10, 2, selection, true);
@@ -423,7 +423,7 @@ describe('ManipulatorService', () => {
 
     it('should return a xTranslate of -30 when dx is the same as width(10) and isRight and scalefactor is 3 and altIsDown', () => {
         selection.ogSelectionBoxWidth = 10;
-        selection.isAltDown = true;
+        service.isAltDown = true;
         selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const xTranslate = service.getXTranslate(10, 3, selection, true);
@@ -433,7 +433,7 @@ describe('ManipulatorService', () => {
 
     it('should return a scale factor of 2 when dy is the same as height(10) and isBottom and going in positive direction', () => {
         selection.ogSelectionBoxHeight = 10;
-        selection.isAltDown = false;
+        service.isAltDown = false;
 
         const yScaleFactor = service.getYScaleFactor(10, selection, true);
 
@@ -443,7 +443,7 @@ describe('ManipulatorService', () => {
     it('should return a scale factor of 3 when dy is the same as height(10)' +
         'and isBottom and going in positive direction and altIsDown', () => {
         selection.ogSelectionBoxHeight = 10;
-        selection.isAltDown = true;
+        service.isAltDown = true;
 
         const yScaleFactor = service.getYScaleFactor(10, selection, true);
 
@@ -452,7 +452,7 @@ describe('ManipulatorService', () => {
 
     it('should return a yTranslate of -10 when dy is the same as height(10) and isBottom and scalefactor is 2', () => {
         selection.ogSelectionBoxHeight = 10;
-        selection.isAltDown = false;
+        service.isAltDown = false;
         selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const yTranslate = service.getYTranslate(10, 2, selection, true);
@@ -462,7 +462,7 @@ describe('ManipulatorService', () => {
 
     it('should return a yTranslate of -30 when dy is the same as height(10) and isBottom and scalefactor is 3 and altIsDown', () => {
         selection.ogSelectionBoxHeight = 10;
-        selection.isAltDown = true;
+        service.isAltDown = true;
         selection.ogSelectionBoxPositions = new Coords2D(10, 10);
 
         const yTranslate = service.getYTranslate(10, 3, selection, true);
@@ -486,7 +486,7 @@ describe('ManipulatorService', () => {
         const mockDist = 10;
         const mockScale = 2;
         spyOn(service, 'getDistanceFromControlPoint').and.callFake(() => mockDist);
-        selection.isShiftDown = false;
+        service.isShiftDown = false;
 
         const spyXScale = spyOn(service, 'getXScaleFactor').and.callFake(() => mockScale);
         const spyYScale = spyOn(service, 'getYScaleFactor').and.callFake(() => mockScale);
@@ -514,7 +514,7 @@ describe('ManipulatorService', () => {
         const mockDist = 10;
         const mockScale = 2;
         spyOn(service, 'getDistanceFromControlPoint').and.callFake(() => mockDist);
-        selection.isShiftDown = true;
+        service.isShiftDown = true;
 
         selection.ogSelectionBoxWidth = 20;
         selection.ogSelectionBoxHeight = 10;

@@ -373,14 +373,14 @@ export class SelectionToolService extends AbstractToolService {
         const key = event.key;
         if (key === KEYS.Shift) {
             event.preventDefault();
-            this.selection.isShiftDown = true;
+            this.manipulator.isShiftDown = true;
             this.manipulator.isRotateOnSelf = true;
             if (this.isScalingSelection) {
                 this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
-            this.selection.isAltDown = true;
+            this.manipulator.isAltDown = true;
             this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
             if (this.isScalingSelection) {
                 this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
@@ -393,14 +393,14 @@ export class SelectionToolService extends AbstractToolService {
         if (key === KEYS.Shift) {
             event.preventDefault();
             this.manipulator.isRotateOnSelf = false;
-            this.selection.isShiftDown = false;
+            this.manipulator.isShiftDown = false;
             if (this.isScalingSelection) {
                 this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.manipulator.rotationStep = ROTATION_ANGLE.Base;
-            this.selection.isAltDown = false;
+            this.manipulator.isAltDown = false;
             if (this.isScalingSelection) {
                 this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
             }
