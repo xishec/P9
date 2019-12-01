@@ -8,6 +8,7 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { MagnetismToolService } from '../tools/magnetism-tool/magnetism-tool.service';
 import { QuillToolService } from '../tools/quill-tool/quill-tool.service';
 import { SelectionToolService } from '../tools/selection-tool/selection-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
@@ -33,6 +34,7 @@ export class EventListenerService {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private clipboardService: ClipboardService,
+        private magnetismToolService: MagnetismToolService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -150,6 +152,10 @@ export class EventListenerService {
 
             if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
+            }
+
+            if (event.key === KEYS.m && this.shouldAllowShortcuts()) {
+                this.magnetismToolService.switchState();
             }
 
             if (event.key === KEYS.delete) {

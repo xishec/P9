@@ -388,6 +388,7 @@ describe('ToolSelectorService', () => {
         service[`dropperTool`].initializeService = () => null;
         service[`colorApplicatorTool`].initializeService = () => null;
         service[`eraserTool`].initializeService = () => null;
+        service[`fillTool`].initializeService = () => null;
 
         const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);

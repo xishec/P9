@@ -9,6 +9,7 @@ import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawi
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -52,6 +53,7 @@ export class WorkZoneComponent implements OnInit {
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
         private snackBar: MatSnackBar,
+        private magnetismToolService: MagnetismToolService,
     ) {}
 
     ngOnInit(): void {
@@ -157,6 +159,7 @@ export class WorkZoneComponent implements OnInit {
             this.drawingLoaderService,
             this.undoRedoerService,
             this.clipboard,
+            this.magnetismToolService,
         );
         this.eventListenerService.addEventListeners();
     }
