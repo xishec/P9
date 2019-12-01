@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { ROTATION_ANGLE, CONTROL_POINTS } from 'src/constants/tool-constants';
+import { CONTROL_POINTS, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 
 const RIGHT = true;
@@ -27,7 +27,7 @@ export class ManipulatorService {
     }
 
     scaleSelection(currentMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
-        switch (parseInt(fromControlPoint.getAttribute('controlPointId') as string)) {
+        switch (Number(fromControlPoint.getAttribute('controlPointId') as string)) {
             case CONTROL_POINTS.TopLeft:
                 this.applyScaleCorner(currentMouseCoords, selection, LEFT, TOP);
                 break;
@@ -78,9 +78,9 @@ export class ManipulatorService {
 
         const newWidth = distFromOgXToCurrentMouse + (isRight ? 0 : selection.ogSelectionBoxWidth);
 
-        let scaleFactor = newWidth / selection.ogSelectionBoxWidth;
+        const scaleFactor = newWidth / selection.ogSelectionBoxWidth;
 
-        return (this.isAltDown)? 2 * scaleFactor - 1 : scaleFactor;
+        return (this.isAltDown) ? 2 * scaleFactor - 1 : scaleFactor;
     }
 
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
@@ -93,12 +93,12 @@ export class ManipulatorService {
         return xTranslate;
     }
 
-    getYScaleFactor(dy: number, selection: Selection, isBottom: boolean) {
+    getYScaleFactor(dy: number, selection: Selection, isBottom: boolean): number {
         const distFromOgYToCurrentMouse = dy + (isBottom ? selection.ogSelectionBoxHeight : 0);
 
         const newHeight = distFromOgYToCurrentMouse + (isBottom ? 0 : selection.ogSelectionBoxHeight);
 
-        let scaleFactor = newHeight / selection.ogSelectionBoxHeight;
+        const scaleFactor = newHeight / selection.ogSelectionBoxHeight;
 
         return (this.isAltDown) ? 2 * scaleFactor - 1 : scaleFactor;
     }
@@ -113,20 +113,20 @@ export class ManipulatorService {
         return yTranslate;
     }
 
-    applyRedimTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number) {
+    applyRedimTransformations(selection: Selection, xScale: number, yScale: number, xTranslate: number, yTranslate: number): void {
         selection.selectedElements.forEach((element: SVGGElement) => {
             element.transform.baseVal.getItem(0).setTranslate(xTranslate, yTranslate);
             element.transform.baseVal.getItem(1).setScale(xScale, yScale);
         });
     }
 
-    getDistanceFromControlPoint(currentMousePos: number, cntrlPointPos: number, isRightOrBottom: boolean) {
+    getDistanceFromControlPoint(currentMousePos: number, cntrlPointPos: number, isRightOrBottom: boolean): number {
         let distance = currentMousePos - cntrlPointPos;
         distance = isRightOrBottom ? distance : -distance;
         return distance;
     }
 
-    applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean) {
+    applyScaleCorner(currentMouse: Coords2D, selection: Selection, isRight: boolean, isBottom: boolean): void {
         let dx = this.getDistanceFromControlPoint(currentMouse.x + window.scrollX, selection.ogActiveControlPointCoords.x, isRight);
         let dy = this.getDistanceFromControlPoint(currentMouse.y + window.scrollY, selection.ogActiveControlPointCoords.y, isBottom);
 
