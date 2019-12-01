@@ -52,7 +52,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         });
     }
 
-    isValidEllipse(): boolean {
+    isValidllipse(): boolean {
         const isValidRadiusX = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
         const isValidRadiusY = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
 
@@ -158,7 +158,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
     }
 
     renderDrawEllipsis(): void {
-        if (this.isValidEllipse()) {
+        if (this.isValidllipse()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, this.userFillColor)
                 : this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
@@ -221,7 +221,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
 
     onMouseUp(event: MouseEvent): void {
         const button = event.button;
-        if (button === MOUSE.LeftButton && this.isValidEllipse() && this.isMouseInRef(event, this.elementRef)) {
+        if (button === MOUSE.LeftButton && this.isValidllipse() && this.isMouseInRef(event, this.elementRef)) {
             this.createSVG();
         }
         this.cleanUp();
