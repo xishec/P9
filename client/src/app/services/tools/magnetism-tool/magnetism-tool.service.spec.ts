@@ -45,7 +45,7 @@ describe('MagnetismToolService', () => {
 
         injector = getTestBed();
         service = injector.get(MagnetismToolService);
-        spyOnupdateControlPointPosition = spyOn<any>(service, 'serviceupdateControlPointPosition');
+        spyOnupdateControlPointPosition = spyOn<any>(service, 'updateControlPointPosition');
     });
 
     it('should be created', () => {
