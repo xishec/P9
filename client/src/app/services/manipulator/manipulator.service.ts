@@ -131,23 +131,22 @@ export class ManipulatorService {
         let dy = this.getDistanceFromControlPoint(currentMouse.y + window.scrollY, selection.ogActiveControlPointCoords.y, isBottom);
 
         if (this.isShiftDown) {
-            // find the new wanted dimensions of the redimBox
-            const width2 = selection.ogSelectionBoxWidth + dx;
-            const height2 = selection.ogSelectionBoxHeight + dy;
+            const notProportionalWidth = selection.ogSelectionBoxWidth + dx;
+            const notProportionalHeight = selection.ogSelectionBoxHeight + dy;
 
             // get the scale factor for both directions
-            const horizScale = width2 / selection.ogSelectionBoxWidth;
-            const vertScale = height2 / selection.ogSelectionBoxHeight;
+            const horizScale = notProportionalWidth / selection.ogSelectionBoxWidth;
+            const vertScale = notProportionalHeight / selection.ogSelectionBoxHeight;
 
             // Get the smallest scale
             const scale = Math.min(Math.abs(horizScale), Math.abs(vertScale));
 
             // Get Dimensions of the scaled rectangle
-            const newWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
-            const newHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
+            const proportionalWidth = Math.sign(horizScale) * scale * selection.ogSelectionBoxWidth;
+            const proporionalHeight = Math.sign(vertScale) * scale * selection.ogSelectionBoxHeight;
 
-            dx = newWidth - selection.ogSelectionBoxWidth;
-            dy = newHeight - selection.ogSelectionBoxHeight;
+            dx = proportionalWidth - selection.ogSelectionBoxWidth;
+            dy = proporionalHeight - selection.ogSelectionBoxHeight;
         }
 
         const xScaleFactor = this.getXScaleFactor(dx, selection, isRight);
