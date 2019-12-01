@@ -22,6 +22,11 @@ export class CloudService {
         }
     }
 
+    delete(srcFilename: string) {
+        const bucket = admin.storage().bucket();
+        bucket.file(srcFilename).delete();
+    }
+
     save(srcFilename: string, content: string): void {
         if (admin.apps.length) {
             const bucket = admin.storage().bucket();

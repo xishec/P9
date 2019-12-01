@@ -29,6 +29,7 @@ describe('FileManagerService', () => {
     const cloudService = new CloudService();
     cloudService.initialize();
     cloudService.save = () => null;
+    cloudService.delete = () => null;
     cloudService.download = () =>
         new Promise((resolve) => {
             setTimeout(() => {

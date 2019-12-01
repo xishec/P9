@@ -48,6 +48,7 @@ export class FileManagerService {
     }
 
     async deleteDrawingInfo(createdAt: string) {
+        this.cloudService.delete(createdAt);
         return DrawingInfoModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
