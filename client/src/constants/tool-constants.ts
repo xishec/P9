@@ -1,4 +1,5 @@
 import { FontType } from 'src/classes/FontType';
+import { MagnetismPoint } from 'src/classes/MagnetismPoint';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
@@ -56,6 +57,7 @@ enum TOOL_NAME {
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
     Export = 'Exporter',
+    Magnetism = 'Magnétisme',
 }
 
 enum THICKNESS {
@@ -100,7 +102,7 @@ enum POLYGON_SIDES {
 enum GRID_SIZE {
     Min = 5,
     Default = 10,
-    Max = 200,
+    Max = 100,
 }
 
 enum GRID_OPACITY {
@@ -123,6 +125,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eye-dropper', tooltipName: TOOL_NAME.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: TOOL_NAME.Stamp, shortcut: '' },
     { iconName: 'fas fa-border-all', tooltipName: TOOL_NAME.Grid, shortcut: '' },
+    { iconName: 'fas fa-magnet', tooltipName: TOOL_NAME.Magnetism, shortcut: '(M)' },
 ];
 
 const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -381,6 +384,41 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+enum CONTROL_POINTS {
+    TopLeft = 0,
+    TopMiddle = 1,
+    TopRight = 2,
+    CenterLeft = 7,
+    CenterMiddle = 8,
+    CenterRight = 3,
+    BottomLeft = 6,
+    BottomMiddle = 5,
+    BottomRight = 4,
+}
+
+const TOP_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.TopLeft, img_src: '../../../assets/controlPoints/topleft.png' },
+    { point: CONTROL_POINTS.TopMiddle, img_src: '../../../assets/controlPoints/top.png' },
+    { point: CONTROL_POINTS.TopRight, img_src: '../../../assets/controlPoints/topright.png' },
+];
+
+const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.CenterLeft, img_src: '../../../assets/controlPoints/left.png' },
+    { point: CONTROL_POINTS.CenterMiddle, img_src: '../../../assets/controlPoints/center.png' },
+    { point: CONTROL_POINTS.CenterRight, img_src: '../../../assets/controlPoints/right.png' },
+];
+
+const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.BottomLeft, img_src: '../../../assets/controlPoints/bottomleft.png' },
+    { point: CONTROL_POINTS.BottomMiddle, img_src: '../../../assets/controlPoints/bottom.png' },
+    { point: CONTROL_POINTS.BottomRight, img_src: '../../../assets/controlPoints/bottomright.png' },
+];
+
+enum MAGNETISM_STATE {
+    active = 'maintenant activé',
+    inactive = 'désactivé',
+}
+
 const MAX_NORMAL_LENGTH = 5;
 const FILL_STROKE_WIDTH = '4';
 
@@ -471,6 +509,11 @@ export {
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    CONTROL_POINTS,
+    TOP_CONTROL_POINTS,
+    CENTER_CONTROL_POINTS,
+    BOTTOM_CONTROL_POINTS,
+    MAGNETISM_STATE,
     ROTATION_ANGLE,
     QUILL_STROKE_WIDTH,
     SPRAY_DIAMETER,

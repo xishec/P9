@@ -10,6 +10,7 @@ import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
@@ -40,6 +41,7 @@ export class SelectionToolService extends AbstractToolService {
         public clipBoard: ClipboardService,
         public manipulator: ManipulatorService,
         public undoRedoerService: UndoRedoerService,
+        public magnetismService: MagnetismToolService,
     ) {
         super();
     }
@@ -63,6 +65,8 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDragging = false;
         this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
+        this.magnetismService.totalDeltaY = 0;
+        this.magnetismService.totalDeltaX = 0;
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
@@ -73,6 +77,7 @@ export class SelectionToolService extends AbstractToolService {
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
+        this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
             if (stackTarget.targetPosition !== undefined) {
                 this.currentTarget = stackTarget.targetPosition;
@@ -200,7 +205,12 @@ export class SelectionToolService extends AbstractToolService {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
-            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            if (this.magnetismService.isMagnetic.value) {
+                const magnetizedCoords = this.magnetismService.magnetizeXY(deltaX, deltaY);
+                this.manipulator.translateSelection(magnetizedCoords.x, magnetizedCoords.y, this.selection);
+            } else {
+                this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            }
         } else {
             this.startSelection();
             this.updateSelectionRectangle();

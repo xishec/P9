@@ -1,6 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { MatSnackBar } from '@angular/material';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
@@ -9,6 +10,7 @@ import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { SelectionToolService } from './selection-tool.service';
 
 describe('SelectionToolService', () => {
@@ -33,6 +35,7 @@ describe('SelectionToolService', () => {
                 SelectionToolService,
                 ClipboardService,
                 ManipulatorService,
+                MagnetismToolService,
                 {
                     provide: DrawStackService,
                     useValue: {
@@ -69,6 +72,10 @@ describe('SelectionToolService', () => {
                     },
                 },
                 provideAutoMock(Selection),
+                {
+                    provide: MatSnackBar,
+                    useValue: {},
+                },
             ],
         });
 
@@ -273,8 +280,10 @@ describe('SelectionToolService', () => {
 
     it('should pass the DOMRect of selection box and of each element in draw stack to selection on checkSelection', () => {
         const sizeOfDrawStack = 3;
-        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
-        const spyOnSelection = spyOn(service.selection, 'handleSelection').and.callFake(() => null as unknown as DOMRect);
+        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => (null as unknown) as DOMRect);
+        const spyOnSelection = spyOn(service.selection, 'handleSelection').and.callFake(
+            () => (null as unknown) as DOMRect,
+        );
         const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => true);
         const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => 0);
 
@@ -325,8 +334,10 @@ describe('SelectionToolService', () => {
 
     it('should pass the DOMRect of selection box and of each element in draw stack to selection on checkSelectionInverse', () => {
         const sizeOfDrawStack = 3;
-        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => null as unknown as DOMRect);
-        const spyOnSelection = spyOn(service.selection, 'handleInvertSelection').and.callFake(() => null as unknown as DOMRect);
+        const spyOnDomRect = spyOn(service, 'getDOMRect').and.callFake(() => (null as unknown) as DOMRect);
+        const spyOnSelection = spyOn(service.selection, 'handleInvertSelection').and.callFake(
+            () => (null as unknown) as DOMRect,
+        );
         const spyOnIsInSelection = spyOn(service, 'isInSelection').and.callFake(() => true);
         const spyOnStrokeWidth = spyOn(service, 'getStrokeWidth').and.callFake(() => 0);
 

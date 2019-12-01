@@ -20,6 +20,7 @@ import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 import { ExportToolService } from '../export-tool/export-tool.service';
 import { FillToolService } from '../fill-tool/fill-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
@@ -63,6 +64,7 @@ export class ToolSelectorService {
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
+        private magnetismTool: MagnetismToolService,
         private sprayCanTool: SprayCanToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
@@ -283,6 +285,10 @@ export class ToolSelectorService {
         return this.eraserTool;
     }
 
+    getMagnetismTool(): MagnetismToolService {
+        return this.magnetismTool;
+    }
+
     getSprayCanTool(): SprayCanToolService {
         return this.sprayCanTool;
     }
@@ -293,6 +299,11 @@ export class ToolSelectorService {
         }
 
         if (tooltipName === TOOL_NAME.Grid) {
+            this.changeCurrentToolName(tooltipName);
+            return;
+        }
+
+        if (tooltipName === TOOL_NAME.Magnetism) {
             this.changeCurrentToolName(tooltipName);
             return;
         }

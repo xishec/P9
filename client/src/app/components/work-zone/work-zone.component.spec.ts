@@ -13,6 +13,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -110,6 +111,10 @@ describe('WorkZoneComponent', () => {
                 },
                 {
                     provide: ClipboardService,
+                    useValue: {},
+                },
+                {
+                    provide: MagnetismToolService,
                     useValue: {},
                 },
             ],
