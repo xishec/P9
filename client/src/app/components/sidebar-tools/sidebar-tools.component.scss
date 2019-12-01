@@ -65,7 +65,7 @@
 #tracing-tools {
     width: 180px;
     height: 35px;
-    position: absolute;
+    position: fixed;
     top: 36px;
     left: 36px;
     z-index: 3;
@@ -75,7 +75,7 @@
 #shape-tools {
     width: 108px;
     height: 35px;
-    position: absolute;
+    position: fixed;
     top: 72px;
     left: 36px;
     z-index: 3;
