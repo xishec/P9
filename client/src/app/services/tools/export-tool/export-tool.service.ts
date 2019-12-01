@@ -15,7 +15,6 @@ export class ExportToolService {
     img: HTMLImageElement;
     fileType: FILE_TYPE;
     canvasToBMP: CanvasToBMP;
-    originalSVGSize: ClientRect;
 
     launchDownload(): void {
         this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.download, 'untitled.' + this.fileType);
