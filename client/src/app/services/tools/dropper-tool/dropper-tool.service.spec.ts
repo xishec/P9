@@ -109,19 +109,19 @@ describe('DropperToolService', () => {
     });
 
     it('should change the position of the current cooridination of the mouse to be positive if the event is positive', () => {
-        service.currentMouseCoords.x = -5;
+        service[`currentMouseCoords`].x = -5;
 
         service.onMouseMove(positiveMouseEvent);
 
-        expect(service.currentMouseCoords.x).toBeGreaterThan(0);
+        expect(service[`currentMouseCoords`].x).toBeGreaterThan(0);
     });
 
     it('should change the position of the current cooridination of the mouse to be negative if the event is negative', () => {
-        service.currentMouseCoords.x = 5;
+        service[`currentMouseCoords`].x = 5;
 
         service.onMouseMove(negativeMouseEvent);
 
-        expect(service.currentMouseCoords.x).toBeLessThan(0);
+        expect(service[`currentMouseCoords`].x).toBeLessThan(0);
     });
 
     it('should call getColor', () => {

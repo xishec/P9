@@ -10,16 +10,15 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class DropperToolService extends AbstractToolService {
-    svg: SVGElement;
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    pixelColor: string;
-    canvas: HTMLCanvasElement;
-    context2D: CanvasRenderingContext2D;
-    SVGImg: HTMLImageElement;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private canvas: HTMLCanvasElement;
+    private context2D: CanvasRenderingContext2D;
+    private SVGImg: HTMLImageElement;
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    // @ts-ignore
+    private drawStack: DrawStackService;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -28,7 +27,6 @@ export class DropperToolService extends AbstractToolService {
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         this.elementRef = elementRef;
         this.renderer = renderer;
-        this.drawStack = drawStack;
 
         this.canvas = this.renderer.createElement('canvas');
         this.SVGImg = this.renderer.createElement('img');
