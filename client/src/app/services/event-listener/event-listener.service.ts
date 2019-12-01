@@ -132,7 +132,6 @@ export class EventListenerService {
 
             // Call the onKeyDown of the current tool, if the current tool doesn't do anything
             if (this.currentTool !== undefined && this.shouldAllowEvent()) {
-                event.preventDefault();
                 this.currentTool.onKeyDown(event);
             }
 
