@@ -66,6 +66,12 @@ enum THICKNESS {
     Max = 100,
 }
 
+enum TOLERANCE {
+    Min = 0,
+    Default = 0,
+    Max = 100,
+}
+
 const PEN_WIDTH_FACTOR = 5;
 
 enum TRACE_TYPE {
@@ -283,6 +289,7 @@ enum HTML_ATTRIBUTE {
     points = 'points',
     stroke_dasharray = 'stroke-dasharray',
     stroke_linejoin = 'stroke-linejoin',
+    stroke_linecap = 'stroke-linecap',
     title = 'title',
     canvas = 'canvas',
     a = 'a',
@@ -412,6 +419,12 @@ enum MAGNETISM_STATE {
     inactive = 'désactivé',
 }
 
+const MAX_NORMAL_LENGTH = 5;
+const FILL_STROKE_WIDTH = '4';
+
+const MAX_PERCENTAGE = 100;
+const MAX_PATH_DISTANCE = 100;
+
 enum SPRAY_DIAMETER {
     Min = 20,
     Default = 30,
@@ -437,6 +450,11 @@ const MAX_CHARS_IN_PATH = 10000;
 const CIRCLES_TO_APPEND = 20;
 
 export {
+    MAX_PERCENTAGE,
+    MAX_PATH_DISTANCE,
+    TOLERANCE,
+    FILL_STROKE_WIDTH,
+    MAX_NORMAL_LENGTH,
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
     HTML_ATTRIBUTE,

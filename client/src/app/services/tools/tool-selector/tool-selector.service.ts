@@ -18,6 +18,7 @@ import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 import { ExportToolService } from '../export-tool/export-tool.service';
+import { FillToolService } from '../fill-tool/fill-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
 import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
@@ -55,6 +56,7 @@ export class ToolSelectorService {
         private brushTool: BrushToolService,
         private stampTool: StampToolService,
         private dropperTool: DropperToolService,
+        private fillTool: FillToolService,
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygonTool: PolygonToolService,
         private lineTool: LineToolService,
@@ -89,6 +91,8 @@ export class ToolSelectorService {
 
         this.dropperTool.initializeService(ref, renderer, drawStack);
 
+        this.fillTool.initializeService(ref, renderer, drawStack);
+
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
 
         this.polygonTool.initializeService(ref, renderer, drawStack);
@@ -117,9 +121,8 @@ export class ToolSelectorService {
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
             [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
-            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
             [TOOL_NAME.SprayCan, this.sprayCanTool as AbstractToolService],
-            [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.Fill, this.fillTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
         ]);
 
@@ -256,6 +259,10 @@ export class ToolSelectorService {
 
     getDropperTool(): DropperToolService {
         return this.dropperTool;
+    }
+
+    getFillTool(): FillToolService {
+        return this.fillTool;
     }
 
     getColorApplicatorTool(): ColorApplicatorToolService {
