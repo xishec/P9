@@ -24,4 +24,13 @@ describe('CloudService', () => {
         cloudService.download('test');
         expect(cloudService).eql(cloudService);
     });
+
+    it('should delete test string from firebase on call delete', () => {
+        const cloudService = new CloudService();
+        cloudService.save('test', 'test');
+        setTimeout(() => {
+            cloudService.delete('test');
+        }, 1000);
+        expect(cloudService).eql(cloudService);
+    });
 });

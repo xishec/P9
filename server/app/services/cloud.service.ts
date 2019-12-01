@@ -7,19 +7,24 @@ export class CloudService {
     initialize(): void {
         try {
             // tslint:disable-next-line: no-require-imports
-            const serviceAccount = require('../../P9-cloud-230ae8edfba8.json');
+            const serviceAccount = require('../../API_KEYS');
             admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+                credential: admin.credential.cert(serviceAccount.default as admin.ServiceAccount),
                 storageBucket: 'p9-cloud.appspot.com',
             });
             console.log('Connected to Cloud Storage!');
         } catch (e) {
-            if (e instanceof Error && e.message === 'Cannot find module \'../../P9-cloud-230ae8edfba8.json\'') {
+            if (e instanceof Error && e.message.includes('Cannot find module')) {
                 console.log('Can\'t find serviceAccount!');
             } else {
                 throw e;
             }
         }
+    }
+
+    delete(srcFilename: string) {
+        const bucket = admin.storage().bucket();
+        bucket.file(srcFilename).delete();
     }
 
     save(srcFilename: string, content: string): void {

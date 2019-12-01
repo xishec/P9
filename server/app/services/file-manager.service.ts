@@ -35,7 +35,7 @@ export class FileManagerService {
         const currentTimestamp = Date.now();
         const newCreatedAt = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
 
-        const query = { createdAt: drawingInfo.createdAt, name: drawingInfo.name };
+        const query = { createdAt: drawingInfo.createdAt };
         const options = { upsert: true, new: true };
 
         drawingInfo.createdAt = newCreatedAt;
@@ -48,6 +48,7 @@ export class FileManagerService {
     }
 
     async deleteDrawingInfo(createdAt: string) {
+        this.cloudService.delete(createdAt);
         return DrawingInfoModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
