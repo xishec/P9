@@ -299,6 +299,7 @@ export class SelectionToolService extends AbstractToolService {
             this.saveState();
         } else if (this.isScalingSelection) {
             this.isScalingSelection = false;
+            this.saveState();
         } else {
             this.selection.emptySelection();
         }
