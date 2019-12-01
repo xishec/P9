@@ -303,7 +303,6 @@ describe('SelectionToolService', () => {
     it('handleLeftMouseDrag should use manipulator if mouse is in selection and not selecting or was already translating', () => {
         service.isOnTarget = false;
         service.isSelecting = false;
-        service.isTranslatingSelection = true;
         const spySelection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
         spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
         const spyManipulator = spyOn(service.manipulator, 'translateSelection').and.callFake(() => null);

@@ -195,22 +195,26 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
+    isAbleToScale(): boolean {
+        return this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection;
+    }
+
+    isAbleToTranslate(): boolean {
+        return this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting && !this.isScalingSelection;
+    }
+
     handleLeftMouseDrag(): void {
         this.isLeftMouseDragging = true;
 
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if ((this.isScalingSelection) ||
-                    (this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection)) {
+        } else if (this.isScalingSelection || this.isAbleToScale()) {
             this.isScalingSelection = true;
             this.manipulator.scaleSelection(
                 this.currentMouseCoords,
                 this.selection.activeControlPoint,
                 this.selection);
-        } else if (
-            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting && !this.isScalingSelection) ||
-            (this.isTranslatingSelection)
-        ) {
+        } else if (this.isTranslatingSelection ||  this.isAbleToTranslate()) {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
