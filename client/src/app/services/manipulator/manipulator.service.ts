@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { ROTATION_ANGLE, CONTROL_POINTS } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 
 @Injectable({
@@ -22,29 +22,29 @@ export class ManipulatorService {
     }
 
     scaleSelection(currentMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
-        switch (fromControlPoint.getAttribute('controlPointId') as string) {
-            case '0':
+        switch (parseInt(fromControlPoint.getAttribute('controlPointId') as string)) {
+            case CONTROL_POINTS.TopLeft:
                 this.applyScaleCorner(currentMouseCoords, selection, false, false);
                 break;
-            case '1':
+            case CONTROL_POINTS.TopMiddle:
                 this.applyScaleY(currentMouseCoords, selection, false);
                 break;
-            case '2':
+            case CONTROL_POINTS.TopRight:
                 this.applyScaleCorner(currentMouseCoords, selection, true, false);
                 break;
-            case '3':
+            case CONTROL_POINTS.CenterRight:
                 this.applyScaleX(currentMouseCoords, selection, true);
                 break;
-            case '4':
+            case CONTROL_POINTS.BottomRight:
                 this.applyScaleCorner(currentMouseCoords, selection, true, true);
                 break;
-            case '5':
+            case CONTROL_POINTS.BottomMiddle:
                 this.applyScaleY(currentMouseCoords, selection, true);
                 break;
-            case '6':
+            case CONTROL_POINTS.BottomLeft:
                 this.applyScaleCorner(currentMouseCoords, selection, false, true);
                 break;
-            case '7':
+            case CONTROL_POINTS.CenterLeft:
                 this.applyScaleX(currentMouseCoords, selection, false);
                 break;
             default:
