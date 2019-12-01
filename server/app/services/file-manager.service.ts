@@ -35,7 +35,7 @@ export class FileManagerService {
         const currentTimestamp = Date.now();
         const newCreatedOn = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
 
-        const query = { createdAt: drawingInfo.createdAt, name: drawingInfo.name };
+        const query = { createdAt: drawingInfo.createdAt };
         const options = { upsert: true, new: true };
 
         drawingInfo.createdAt = newCreatedOn;
