@@ -53,7 +53,6 @@ export class ManipulatorService {
     }
 
     initTransformMatrix(selection: Selection) {
-
         selection.selectedElements.forEach((element: SVGGElement) => {
             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
 
@@ -76,11 +75,7 @@ export class ManipulatorService {
 
         let scaleFactor = newWidth / selection.ogSelectionBoxWidth;
 
-        if (this.isAltDown) {
-            scaleFactor = 2 * scaleFactor - 1;
-        }
-
-        return scaleFactor;
+        return (this.isAltDown)? 2 * scaleFactor - 1 : scaleFactor;
     }
 
     getXTranslate(dx: number, scaleFactor: number, selection: Selection, isRight: boolean): number {
@@ -100,11 +95,7 @@ export class ManipulatorService {
 
         let scaleFactor = newHeight / selection.ogSelectionBoxHeight;
 
-        if (this.isAltDown) {
-            scaleFactor = 2 * scaleFactor - 1;
-        }
-
-        return scaleFactor;
+        return (this.isAltDown) ? 2 * scaleFactor - 1 : scaleFactor;
     }
 
     getYTranslate(dy: number, scaleFactor: number, selection: Selection, isBottom: boolean): number {
