@@ -4,6 +4,11 @@ import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import { ROTATION_ANGLE, CONTROL_POINTS } from 'src/constants/tool-constants';
 import { Selection } from '../../../classes/selection/selection';
 
+const RIGHT = true;
+const LEFT = false;
+const TOP = false;
+const BOTTOM = true;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -24,28 +29,28 @@ export class ManipulatorService {
     scaleSelection(currentMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
         switch (parseInt(fromControlPoint.getAttribute('controlPointId') as string)) {
             case CONTROL_POINTS.TopLeft:
-                this.applyScaleCorner(currentMouseCoords, selection, false, false);
+                this.applyScaleCorner(currentMouseCoords, selection, LEFT, TOP);
                 break;
             case CONTROL_POINTS.TopMiddle:
-                this.applyScaleY(currentMouseCoords, selection, false);
+                this.applyScaleY(currentMouseCoords, selection, TOP);
                 break;
             case CONTROL_POINTS.TopRight:
-                this.applyScaleCorner(currentMouseCoords, selection, true, false);
+                this.applyScaleCorner(currentMouseCoords, selection, RIGHT, TOP);
                 break;
             case CONTROL_POINTS.CenterRight:
-                this.applyScaleX(currentMouseCoords, selection, true);
+                this.applyScaleX(currentMouseCoords, selection, RIGHT);
                 break;
             case CONTROL_POINTS.BottomRight:
-                this.applyScaleCorner(currentMouseCoords, selection, true, true);
+                this.applyScaleCorner(currentMouseCoords, selection, RIGHT, BOTTOM);
                 break;
             case CONTROL_POINTS.BottomMiddle:
-                this.applyScaleY(currentMouseCoords, selection, true);
+                this.applyScaleY(currentMouseCoords, selection, BOTTOM);
                 break;
             case CONTROL_POINTS.BottomLeft:
-                this.applyScaleCorner(currentMouseCoords, selection, false, true);
+                this.applyScaleCorner(currentMouseCoords, selection, LEFT, BOTTOM);
                 break;
             case CONTROL_POINTS.CenterLeft:
-                this.applyScaleX(currentMouseCoords, selection, false);
+                this.applyScaleX(currentMouseCoords, selection, LEFT);
                 break;
             default:
                 break;
