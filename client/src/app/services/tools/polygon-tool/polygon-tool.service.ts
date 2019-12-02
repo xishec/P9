@@ -83,8 +83,8 @@ export class PolygonToolService extends AbstractShapeToolService {
         const r = this.radius;
         const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
-        let xValue;
-        let yValue;
+        let xValue: number;
+        let yValue: number;
         const polygonOffsetAngles: number = POLYGON_OFFSET_ANGLES.get(this.nbVertices) as number;
 
         const cos =
