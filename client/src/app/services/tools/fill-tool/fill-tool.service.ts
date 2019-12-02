@@ -14,24 +14,24 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class FillToolService extends AbstractToolService {
-    attributesManagerService: AttributesManagerService;
-    canvas: HTMLCanvasElement;
-    context2D: CanvasRenderingContext2D;
-    SVGImg: HTMLImageElement;
+    private attributesManagerService: AttributesManagerService;
+    private canvas: HTMLCanvasElement;
+    private context2D: CanvasRenderingContext2D;
+    private SVGImg: HTMLImageElement;
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
-    bfsHelper: BFSHelper;
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    svgWrap: SVGGElement;
+    private bfsHelper: BFSHelper;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private svgWrap: SVGGElement;
 
-    traceType = TRACE_TYPE.Full;
-    strokeWidth: number;
-    strokeColor: string;
-    fillColor: string;
-    mouseDown: boolean;
+    private traceType = TRACE_TYPE.Full;
+    private strokeWidth: number;
+    private strokeColor: string;
+    private fillColor: string;
+    private mouseDown: boolean;
 
     constructor(private modalManagerService: ModalManagerService, private colorToolService: ColorToolService) {
         super();
@@ -63,7 +63,7 @@ export class FillToolService extends AbstractToolService {
         });
     }
 
-    shouldNotFill(event: MouseEvent): boolean {
+    private shouldNotFill(event: MouseEvent): boolean {
         return (
             !this.isMouseInRef(event, this.elementRef) ||
             this.modalManagerService.modalIsDisplayed.value ||
@@ -93,7 +93,7 @@ export class FillToolService extends AbstractToolService {
         this.mouseDown = false;
     }
 
-    createBFSHelper(): void {
+    private createBFSHelper(): void {
         this.bfsHelper = new BFSHelper(
             this.canvas.width,
             this.canvas.height,
@@ -102,12 +102,12 @@ export class FillToolService extends AbstractToolService {
         );
     }
 
-    updateMousePosition(event: MouseEvent): void {
+    private updateMousePosition(event: MouseEvent): void {
         this.currentMouseCoords.x = event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
         this.currentMouseCoords.y = event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
     }
 
-    fill(): void {
+    private fill(): void {
         this.createSVGWrapper();
         const d: string = this.createFillPath();
 
@@ -134,7 +134,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.svgWrap);
     }
 
-    fillBody(d: string): SVGGElement {
+    private fillBody(d: string): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
@@ -151,7 +151,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgWrap, bodyWrap);
         return bodyWrap;
     }
-    fillStroke(d: string, bodyWrap: SVGGElement): void {
+    private fillStroke(d: string, bodyWrap: SVGGElement): void {
         const id: string = Date.now().toString();
         this.appendMask(d, bodyWrap.cloneNode(true) as SVGGElement, id);
 
@@ -171,7 +171,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(strokeWrap, path);
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
-    appendMask(d: string, bodyWrap: SVGGElement, id: string): void {
+    private appendMask(d: string, bodyWrap: SVGGElement, id: string): void {
         const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
         this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
@@ -180,7 +180,7 @@ export class FillToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgWrap, mask);
     }
 
-    createFillPath(): string {
+    private createFillPath(): string {
         let d = '';
         this.bfsHelper.pathsToFill.forEach((el) => {
             el.forEach((pixel: Coords2D, i: number) => {
@@ -191,7 +191,7 @@ export class FillToolService extends AbstractToolService {
         return d;
     }
 
-    updateCanvas(): void {
+    private updateCanvas(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         const base64SVG = btoa(serializedSVG);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml;base64,' + base64SVG);
@@ -209,7 +209,7 @@ export class FillToolService extends AbstractToolService {
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }
 
-    createSVGWrapper(): void {
+    private createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Fill);
         this.svgWrap = wrap;

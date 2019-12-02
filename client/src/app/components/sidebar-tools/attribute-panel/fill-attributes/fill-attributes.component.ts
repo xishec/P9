@@ -16,9 +16,10 @@ import { ToolSelectorService } from '../../../../services/tools/tool-selector/to
 })
 export class FillAttributesComponent implements OnInit, AfterViewInit {
     toolName = TOOL_NAME.Fill;
-    fillAttributesForm: FormGroup;
-    fillToolService: FillToolService;
-    attributesManagerService: AttributesManagerService = new AttributesManagerService();
+    private fillAttributesForm: FormGroup;
+    private fillToolService: FillToolService;
+    private attributesManagerService: AttributesManagerService = new AttributesManagerService();
+
     readonly THICKNESS = THICKNESS;
     readonly TOLERANCE = TOLERANCE;
 
