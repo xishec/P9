@@ -40,6 +40,7 @@ export class EraserToolService extends AbstractToolService {
     lastElementColoredNumber = RESET_POSITION_NUMBER;
     lastToolName = '';
     erasedSomething = false;
+    isHoveringText = false;
 
     // the string represents the id_element
     changedElements: Map<string, SVGGElementInfo> = new Map([]);
@@ -123,7 +124,10 @@ export class EraserToolService extends AbstractToolService {
                 this.elementRef.nativeElement,
                 this.drawStack.getElementByPosition(this.currentTarget),
             );
-            this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+
+            if (this.isHoveringText) {
+                this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+            }
 
             this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
 
@@ -290,9 +294,10 @@ export class EraserToolService extends AbstractToolService {
         if (tool === TOOL_NAME.Text) {
             if (borderWidth === '0') {
                 this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
-
+                this.isHoveringText = false;
                 return true;
             }
+            this.isHoveringText = true;
             const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
             const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
 
@@ -337,7 +342,7 @@ export class EraserToolService extends AbstractToolService {
     //changer nom
     checkIfLine(idElement: number, tool: string, borderColor: string) {
         if (
-            (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
+            tool === TOOL_NAME.Line /*|| tool === TOOL_NAME.Quill)*/ &&
             this.drawStack.getElementByPosition(idElement).childElementCount > 1
         ) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
