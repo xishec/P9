@@ -1,17 +1,23 @@
+#filters {
+    margin: 10px;
+}
+
 ::ng-deep.mat-dialog-content {
     margin: 0 !important;
 }
 
-#filters {
-    margin: 10px;
+::ng-deep.mat-list-text {
+    padding-right: 0 !important;
 }
 
 .mat-typography,
 .mat-typography-local {
     display: grid;
     align-self: center;
-    padding: 15px 40px;
-    width: 640px;
+    
+    :focus {
+        outline: none;
+    }
 }
 
 .tab-content {
@@ -23,54 +29,34 @@
     overflow-x: hidden;
 }
 
-#header {
-    display: grid;
-    grid-template-columns: 90px 380px 80px;
-    grid-template-rows: 20px;
-    align-self: center;
-    margin: 15px 30px 0 30px;
-
-    #name-title {
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-    }
-
-    #label-title {
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-    }
-
-    #preview-title {
-        grid-column: 3 / 4;
-        grid-row: 1 / 2;
-    }
-}
-
 #selection-list {
     ::ng-deep.mat-pseudo-checkbox {
         display: none !important;
     }
 
     #list-option {
-        padding: 5px;
-        height: 65px;
+        height: 100%;
+        margin: 10px 0;
+
+        border: 1px solid #e1e4e8;
+        border-radius: 5px;
     }
 }
 
 #drawing-option {
     display: grid;
-    grid-template-columns: 120px 400px 105px;
-    grid-template-rows: minmax(65px, auto) 15px;
-    align-self: center;
-    width: 100%;
+    grid-template-columns: 130px minmax(400px, auto) 60px;
+    grid-template-rows: minmax(50px, auto) 20px;
 
     #drawing-name {
         grid-column: 1 / 2;
         grid-row: 1 / 2;
 
+        font-size: 14px;
+
         display: flex;
         align-self: center;
-        justify-content: center;
+        justify-content: flex-start;
     }
 
     #drawing-labels-list {
@@ -96,11 +82,12 @@
     #drawing-thumbnail {
         grid-column: 3 / 4;
         grid-row: 1 / 3;
-        margin-left: -25px;
 
         height: 60px;
         width: 60px;
         padding: 0;
+        display: flex;
+        align-self: center;
     }
 
     #drawing-created-at {
@@ -109,6 +96,8 @@
 
         font-size: 10px;
         line-height: 1;
+        align-self: center;
+        color: #586069;
     }
 }
 

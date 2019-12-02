@@ -222,12 +222,6 @@
             </div>
             <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
                 <div *ngIf="!isLoading" id="drawing-list">
-                    <div id="header">
-                        <mat-label id="name-title">Nom</mat-label>
-                        <mat-label id="label-title">Étiquettes</mat-label>
-                        <mat-label id="preview-title">Aperçu</mat-label>
-                    </div>
-
                     <mat-selection-list
                         #drawings
                         formControlName="selectedDrawing"
