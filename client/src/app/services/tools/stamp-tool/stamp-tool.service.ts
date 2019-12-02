@@ -20,28 +20,28 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class StampToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    stampCoords: Coords2D = new Coords2D(0, 0);
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private stampCoords: Coords2D = new Coords2D(0, 0);
 
-    angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
-    scaling: STAMP_SCALING = STAMP_SCALING.Default;
-    selected: SVGGElement;
+    private angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
+    private scaling: STAMP_SCALING = STAMP_SCALING.Default;
+    private selected: SVGGElement;
 
-    stampLink = NO_STAMP;
-    transform = '';
+    private stampLink = NO_STAMP;
+    private transform = '';
 
-    stampIsAppended = false;
-    isAlterRotation = false;
-    isStampLinkValid = false;
+    private stampIsAppended = false;
+    private isAlterRotation = false;
+    private isStampLinkValid = false;
 
-    stamp: SVGImageElement;
-    stampWrapper: SVGGElement;
+    private stamp: SVGImageElement;
+    private stampWrapper: SVGGElement;
 
-    attributesManagerService: AttributesManagerService;
+    private attributesManagerService: AttributesManagerService;
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
     constructor() {
         super();
