@@ -31,7 +31,7 @@ export class ExportFileModalWindowComponent implements OnInit {
 
     ngOnInit() {
         this.initializeForm();
-        this.drawingLoaderService.emptyDrawStack.subscribe((isEmpty: boolean) => {
+        this.drawingLoaderService.untouchedWorkZone.subscribe((isEmpty: boolean) => {
             this.workZoneIsEmpty = isEmpty;
         });
     }
