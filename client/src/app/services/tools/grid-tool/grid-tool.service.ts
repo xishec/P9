@@ -13,10 +13,6 @@ export class GridToolService {
     size: BehaviorSubject<number> = new BehaviorSubject(GRID_SIZE.Default);
     opacity: BehaviorSubject<number> = new BehaviorSubject(GRID_OPACITY.Max);
 
-    currentState: Observable<boolean> = this.state.asObservable();
-    currentSize: Observable<number> = this.size.asObservable();
-    currentOpacity: Observable<number> = this.opacity.asObservable();
-
     changeState(state: boolean): void {
         if (!this.drawingLoaderService.untouchedWorkZone.value) {
             this.state.next(state);
