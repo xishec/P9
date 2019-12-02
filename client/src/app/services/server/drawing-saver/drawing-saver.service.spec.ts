@@ -86,7 +86,7 @@ describe('DrawingSaverService', () => {
         drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
 
-        service.initializeDrawingSaverService(elementRefMock, drawStackMock, service.renderer);
+        service.initializeDrawingSaverService(elementRefMock, drawStackMock);
     });
 
     it('should be created', () => {
@@ -105,7 +105,7 @@ describe('DrawingSaverService', () => {
 
         service.sendFileToServer(drawingSavingInfo);
 
-        expect(service.currentErrorMessage.value).toEqual('Aucun dessin dans le zone de travail!');
+        expect(service.currentErrorMessage.value).toEqual('Aucun dessin dans la zone de travail!');
     });
 
     it('should post valid name and labels if draw stack is not empty on sendFileToServer call', () => {

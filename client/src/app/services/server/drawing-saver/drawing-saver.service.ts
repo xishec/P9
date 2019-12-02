@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -21,8 +21,6 @@ export class DrawingSaverService {
     workZoneRef: ElementRef<SVGElement>;
     currentDrawingInfo: DrawingInfo;
     drawStackService: DrawStackService;
-    renderer: Renderer2;
-
     constructor(
         private drawingModalWindowService: DrawingModalWindowService,
         private drawingLoaderService: DrawingLoaderService,
@@ -30,17 +28,12 @@ export class DrawingSaverService {
         private sanitizer: DomSanitizer,
     ) {}
 
-    initializeDrawingSaverService(
-        ref: ElementRef<SVGElement>,
-        drawStackService: DrawStackService,
-        renderer: Renderer2,
-    ) {
+    initializeDrawingSaverService(ref: ElementRef<SVGElement>, drawStackService: DrawStackService) {
         this.workZoneRef = ref;
         this.drawStackService = drawStackService;
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
             this.currentDrawingInfo = drawingInfo;
         });
-        this.renderer = renderer;
     }
 
     getLocalFileDownloadUrl(): SafeResourceUrl {
@@ -55,7 +48,7 @@ export class DrawingSaverService {
     sendFileToServer(drawingSavingInfo: DrawingSavingInfo): void {
         if (this.drawingLoaderService.emptyDrawStack.value) {
             this.currentIsSaved.next(false);
-            this.currentErrorMessage.next('Aucun dessin dans le zone de travail!');
+            this.currentErrorMessage.next('Aucun dessin dans la zone de travail!');
         } else if (drawingSavingInfo.name.length > 0) {
             this.postDrawing(drawingSavingInfo);
         }
@@ -80,7 +73,7 @@ export class DrawingSaverService {
                         return true;
                     }
                     this.currentErrorMessage.next(
-                        'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
+                        "Erreur de sauvegarde du côté serveur! Le serveur n'est peut-être pas ouvert.",
                     );
                     this.currentIsSaved.next(false);
                     return false;

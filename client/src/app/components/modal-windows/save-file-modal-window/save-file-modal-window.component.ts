@@ -111,7 +111,7 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToLocal(): boolean {
         if (this.drawingLoaderService.emptyDrawStack.value) {
-            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans le zone de travail!', 'OK', {
+            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans la zone de travail!', 'OK', {
                 duration: SNACKBAR_DURATION,
             });
             return false;
