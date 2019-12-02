@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GRID_OPACITY, GRID_SIZE, GRID_SIZE_DECREMENT, GRID_SIZE_INCREMENT } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../../server/drawing-loader/drawing-loader.service';
 
