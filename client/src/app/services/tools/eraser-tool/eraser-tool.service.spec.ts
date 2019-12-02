@@ -310,6 +310,14 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
+    it('restoreBorder should not call checkIfPen if tool is text', () => {
+        const spyOncheckIfPen: jasmine.Spy = spyOn(service, 'checkIfPen');
+
+        service.restoreBorder(0, 'red', '0', TOOL_NAME.Text);
+
+        expect(spyOncheckIfPen).not.toHaveBeenCalled();
+    });
+
     it('removeBorder should call restoreBorder if element is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
