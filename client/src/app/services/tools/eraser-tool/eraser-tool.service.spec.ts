@@ -433,4 +433,24 @@ describe('EraserToolService', () => {
         expect(spyOnremoveChild).toHaveBeenCalled();
         expect(spyOnremoveBorder).toHaveBeenCalled();
     });
+
+    it('checkIfText should set isHoveringText to false and call removeChild', () => {
+        service.isHoveringText = true;
+
+        service.checkIfText(1, TOOL_NAME.Text, 'red', '0');
+
+        expect(spyOnremoveChild).toHaveBeenCalled();
+        expect(service.isHoveringText).toEqual(false);
+    });
+
+    it('checkIfText should set isHoveringText to true and call appendChild', () => {
+        service.isHoveringText = false;
+        const spyOnappendChild: jasmine.Spy = spyOn(service.renderer, 'appendChild');
+
+        service.checkIfText(1, TOOL_NAME.Text, 'red', '5');
+
+        expect(spyOnappendChild).toHaveBeenCalled();
+        expect(service.isHoveringText).toEqual(true);
+    });
+
 });
