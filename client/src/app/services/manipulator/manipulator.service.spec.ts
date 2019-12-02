@@ -61,7 +61,7 @@ describe('ManipulatorService', () => {
     });
 
     it('should assign the renderer on initializeService', () => {
-        expect(service.renderer).toBeTruthy();
+        expect(service[`renderer`]).toBeTruthy();
     });
 
     it('should update selected elements origins and boxOrigin on updateOrigins', () => {
@@ -87,14 +87,14 @@ describe('ManipulatorService', () => {
                 },
             },
         };
-        selection.selectionBox = mockRect as unknown as SVGRectElement;
-        const spy = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
+        selection.selectionBox = (mockRect as unknown) as SVGRectElement;
+        const spy = spyOn<any>(service, 'updateElementsOrigins').and.callFake(() => null);
 
         service.updateOrigins(selection);
 
         expect(spy).toHaveBeenCalled();
-        expect(service.boxOrigin.x).toEqual(15);
-        expect(service.boxOrigin.y).toEqual(15);
+        expect(service[`boxOrigin`].x).toEqual(15);
+        expect(service[`boxOrigin`].y).toEqual(15);
     });
 
     it('should update selected elements origins and boxOrigin on updateOrigins', () => {
@@ -123,14 +123,16 @@ describe('ManipulatorService', () => {
 
         const mockSvgG = {
             getBoundingClientRect: () => {
-                return mockRect as unknown as ClientRect;
+                return (mockRect as unknown) as ClientRect;
             },
         };
 
-        const spyClear = spyOn(service.selectedElementsOrigin, 'clear').and.callFake(() => null);
-        const spySet = spyOn(service.selectedElementsOrigin, 'set').and.callFake(() => new Map<SVGGElement, Coords2D>());
-        selection.selectedElements.add(mockSvgG as unknown as SVGGElement);
-        service.updateElementsOrigins(selection);
+        const spyClear = spyOn(service[`selectedElementsOrigin`], 'clear').and.callFake(() => null);
+        const spySet = spyOn(service[`selectedElementsOrigin`], 'set').and.callFake(
+            () => new Map<SVGGElement, Coords2D>(),
+        );
+        selection.selectedElements.add((mockSvgG as unknown) as SVGGElement);
+        service[`updateElementsOrigins`](selection);
 
         expect(spyClear).toHaveBeenCalled();
         expect(spySet).toHaveBeenCalled();
@@ -152,16 +154,16 @@ describe('ManipulatorService', () => {
                     const mockTransform = {
                         setTranslate: () => null,
                     };
-                    return mockTransform as unknown as SVGTransform;
+                    return (mockTransform as unknown) as SVGTransform;
                 },
             };
 
-            return mockSVG as unknown as SVGSVGElement;
+            return (mockSVG as unknown) as SVGSVGElement;
         });
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
-        service.prepareForTransform(mockSVGG as unknown as SVGGElement);
+        service[`prepareForTransform`]((mockSVGG as unknown) as SVGGElement);
 
         expect(spyOnCreateElement).not.toHaveBeenCalled();
         expect(spy).not.toHaveBeenCalled();
@@ -183,16 +185,16 @@ describe('ManipulatorService', () => {
                     const mockTransform = {
                         setTranslate: () => null,
                     };
-                    return mockTransform as unknown as SVGTransform;
+                    return (mockTransform as unknown) as SVGTransform;
                 },
             };
 
-            return mockSVG as unknown as SVGSVGElement;
+            return (mockSVG as unknown) as SVGSVGElement;
         });
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
-        service.prepareForTransform(mockSVGG as unknown as SVGGElement);
+        service[`prepareForTransform`]((mockSVGG as unknown) as SVGGElement);
 
         expect(spyOnCreateElement).toHaveBeenCalled();
         expect(spy).toHaveBeenCalled();
@@ -214,10 +216,10 @@ describe('ManipulatorService', () => {
         service.isRotateOnSelf = true;
         const element = TestHelpers.createMockSVGGElement();
         const coords = new Coords2D(0, 0);
-        selection.selectedElements.add(element as unknown as SVGGElement);
-        service.selectedElementsOrigin.set(element, coords);
-        const spyOnRotate = spyOn(service, 'rotateElement').and.callFake(() => null);
-        const spyOnUpdateOrigins = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
+        selection.selectedElements.add((element as unknown) as SVGGElement);
+        service[`selectedElementsOrigin`].set(element, coords);
+        const spyOnRotate = spyOn<any>(service, 'rotateElement').and.callFake(() => null);
+        const spyOnUpdateOrigins = spyOn<any>(service, 'updateElementsOrigins').and.callFake(() => null);
         const spyOnUpdateSelection = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
         service.rotateSelection(TestHelpers.createWheelEvent(0, 150), selection);
@@ -230,14 +232,14 @@ describe('ManipulatorService', () => {
     it('should use boxOrigin as center when rotateOnSelf is false and update origins on rotateSelection', () => {
         service.isRotateOnSelf = false;
         const element = TestHelpers.createMockSVGGElement();
-        selection.selectedElements.add(element as unknown as SVGGElement);
-        const spyOnRotate = spyOn(service, 'rotateElement').and.callFake(() => null);
-        const spyOnUpdateOrigins = spyOn(service, 'updateElementsOrigins').and.callFake(() => null);
+        selection.selectedElements.add((element as unknown) as SVGGElement);
+        const spyOnRotate = spyOn<any>(service, 'rotateElement').and.callFake(() => null);
+        const spyOnUpdateOrigins = spyOn<any>(service, 'updateElementsOrigins').and.callFake(() => null);
         const spyOnUpdateSelection = spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
 
         service.rotateSelection(TestHelpers.createWheelEvent(0, 150), selection);
 
-        expect(spyOnRotate).toHaveBeenCalledWith(element, service.boxOrigin);
+        expect(spyOnRotate).toHaveBeenCalledWith(element, service[`boxOrigin`]);
         expect(spyOnUpdateOrigins).toHaveBeenCalled();
         expect(spyOnUpdateSelection).toHaveBeenCalled();
     });
@@ -249,16 +251,16 @@ describe('ManipulatorService', () => {
                     clear: () => null,
                     consolidate: () => {
                         const mockTransform = {
-                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                            matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                         };
-                        return mockTransform as unknown as SVGTransform;
+                        return (mockTransform as unknown) as SVGTransform;
                     },
                     appendItem: () => null,
                 },
             },
         };
-        const spyOnPrepare = spyOn(service, 'prepareForTransform').and.callFake(() => null);
-        service.getCurrentTransformMatrix(mockSVGG as unknown as SVGGElement);
+        const spyOnPrepare = spyOn<any>(service, 'prepareForTransform').and.callFake(() => null);
+        service[`getCurrentTransformMatrix`]((mockSVGG as unknown) as SVGGElement);
 
         expect(spyOnPrepare).toHaveBeenCalled();
     });
@@ -270,9 +272,9 @@ describe('ManipulatorService', () => {
                     clear: () => null,
                     consolidate: () => {
                         const mockTransform = {
-                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                            matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                         };
-                        return mockTransform as unknown as SVGTransform;
+                        return (mockTransform as unknown) as SVGTransform;
                     },
                     appendItem: () => null,
                 },
@@ -280,26 +282,28 @@ describe('ManipulatorService', () => {
         };
 
         const transformMock = {
-            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+            matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
         };
 
         spyOnCreateElement.and.callFake(() => {
             const mockSVG = {
                 createSVGTransform: () => {
                     const mockTransform = {
-                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                     };
-                    return mockTransform as unknown as SVGTransform;
+                    return (mockTransform as unknown) as SVGTransform;
                 },
                 createSVGTransformFromMatrix: () => null,
             };
 
-            return mockSVG as unknown as SVGSVGElement;
+            return (mockSVG as unknown) as SVGSVGElement;
         });
 
-        const spyOnGetTransformMatrix = spyOn(service, 'getCurrentTransformMatrix').and.callFake(() => autoMock(DOMMatrix));
+        const spyOnGetTransformMatrix = spyOn<any>(service, 'getCurrentTransformMatrix').and.callFake(() =>
+            autoMock(DOMMatrix),
+        );
 
-        service.applyTransformation(mockSVGG as unknown as SVGGElement, transformMock as unknown as SVGTransform);
+        service.applyTransformation((mockSVGG as unknown) as SVGGElement, (transformMock as unknown) as SVGTransform);
 
         expect(spyOnGetTransformMatrix).toHaveBeenCalledWith(mockSVGG);
     });
@@ -311,9 +315,9 @@ describe('ManipulatorService', () => {
                     clear: () => null,
                     consolidate: () => {
                         const mockTransform = {
-                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                            matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                         };
-                        return mockTransform as unknown as SVGTransform;
+                        return (mockTransform as unknown) as SVGTransform;
                     },
                     appendItem: () => null,
                 },
@@ -325,19 +329,19 @@ describe('ManipulatorService', () => {
                 createSVGTransform: () => {
                     const transformMock = {
                         setRotate: () => null,
-                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                     };
-                    return transformMock as unknown as SVGTransform;
+                    return (transformMock as unknown) as SVGTransform;
                 },
                 createSVGTransformFromMatrix: () => null,
             };
 
-            return mockSVG as unknown as SVGSVGElement;
+            return (mockSVG as unknown) as SVGSVGElement;
         });
 
         const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
-        service.rotateElement(mockSVGG as unknown as SVGGElement, new Coords2D(0, 0));
+        service[`rotateElement`]((mockSVGG as unknown) as SVGGElement, new Coords2D(0, 0));
         expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 
@@ -348,9 +352,9 @@ describe('ManipulatorService', () => {
                     clear: () => null,
                     consolidate: () => {
                         const mockTransform = {
-                            matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                            matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                         };
-                        return mockTransform as unknown as SVGTransform;
+                        return (mockTransform as unknown) as SVGTransform;
                     },
                     appendItem: () => null,
                 },
@@ -362,19 +366,19 @@ describe('ManipulatorService', () => {
                 createSVGTransform: () => {
                     const transformMock = {
                         setTranslate: () => null,
-                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                        matrix: (autoMock(DOMMatrix) as unknown) as DOMMatrix,
                     };
-                    return transformMock as unknown as SVGTransform;
+                    return (transformMock as unknown) as SVGTransform;
                 },
                 createSVGTransformFromMatrix: () => null,
             };
 
-            return mockSVG as unknown as SVGSVGElement;
+            return (mockSVG as unknown) as SVGSVGElement;
         });
 
         const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
-        service.translateElement(0, 0, mockSVGG as unknown as SVGGElement);
+        service.translateElement(0, 0, (mockSVGG as unknown) as SVGGElement);
         expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 

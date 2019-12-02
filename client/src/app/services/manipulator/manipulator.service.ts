@@ -8,10 +8,10 @@ import { Selection } from '../../../classes/selection/selection';
     providedIn: 'root',
 })
 export class ManipulatorService {
-    renderer: Renderer2;
+    private renderer: Renderer2;
     isRotateOnSelf = false;
-    boxOrigin: Coords2D = new Coords2D(0, 0);
-    selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
+    private boxOrigin: Coords2D = new Coords2D(0, 0);
+    private selectedElementsOrigin: Map<SVGGElement, Coords2D> = new Map();
     rotationStep = ROTATION_ANGLE.Base;
 
     initializeService(renderer: Renderer2): void {
@@ -24,20 +24,23 @@ export class ManipulatorService {
         this.boxOrigin.x = selection.selectionBox.x.baseVal.value + selection.selectionBox.width.baseVal.value / 2;
     }
 
-    updateElementsOrigins(selection: Selection): void {
+    private updateElementsOrigins(selection: Selection): void {
         this.selectedElementsOrigin.clear();
         for (const el of selection.selectedElements) {
             const origin: Coords2D = new Coords2D(
                 (el.getBoundingClientRect() as DOMRect).x -
-                    SIDEBAR_WIDTH + window.scrollX +
+                    SIDEBAR_WIDTH +
+                    window.scrollX +
                     (el.getBoundingClientRect() as DOMRect).width / 2,
-                (el.getBoundingClientRect() as DOMRect).y + window.scrollY + (el.getBoundingClientRect() as DOMRect).height / 2,
+                (el.getBoundingClientRect() as DOMRect).y +
+                    window.scrollY +
+                    (el.getBoundingClientRect() as DOMRect).height / 2,
             );
             this.selectedElementsOrigin.set(el, origin);
         }
     }
 
-    prepareForTransform(element: SVGGElement): void {
+    private prepareForTransform(element: SVGGElement): void {
         if (element.transform.baseVal.numberOfItems === 0) {
             const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
             const nullTransform = svg.createSVGTransform();
@@ -46,7 +49,7 @@ export class ManipulatorService {
         }
     }
 
-    getCurrentTransformMatrix(element: SVGGElement): DOMMatrix {
+    private getCurrentTransformMatrix(element: SVGGElement): DOMMatrix {
         this.prepareForTransform(element);
         return element.transform.baseVal.consolidate().matrix as DOMMatrix;
     }
@@ -79,7 +82,7 @@ export class ManipulatorService {
         }
     }
 
-    rotateElement(element: SVGGElement, origin: Coords2D): void {
+    private rotateElement(element: SVGGElement, origin: Coords2D): void {
         const svg: SVGSVGElement = this.renderer.createElement('svg', SVG_NS);
         const rotateTransform = svg.createSVGTransform();
         rotateTransform.setRotate(this.rotationStep, origin.x, origin.y);
