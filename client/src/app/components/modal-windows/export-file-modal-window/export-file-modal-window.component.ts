@@ -13,8 +13,8 @@ import { FILE_TYPE } from 'src/constants/tool-constants';
     styleUrls: ['./export-file-modal-window.component.scss'],
 })
 export class ExportFileModalWindowComponent implements OnInit {
-    exportFileModalForm: FormGroup;
-    formBuilder: FormBuilder;
+    private exportFileModalForm: FormGroup;
+    private formBuilder: FormBuilder;
     workZoneIsEmpty = true;
 
     readonly FILE_TYPE = FILE_TYPE;
@@ -31,7 +31,7 @@ export class ExportFileModalWindowComponent implements OnInit {
 
     ngOnInit() {
         this.initializeForm();
-        this.drawingLoaderService.emptyDrawStack.subscribe((isEmpty) => {
+        this.drawingLoaderService.emptyDrawStack.subscribe((isEmpty: boolean) => {
             this.workZoneIsEmpty = isEmpty;
         });
     }

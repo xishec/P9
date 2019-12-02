@@ -8,24 +8,24 @@ import { FILE_TYPE, HTML_ATTRIBUTE, MAX_BMP_SIZE } from 'src/constants/tool-cons
     providedIn: 'root',
 })
 export class ExportToolService {
-    svg: SVGElement;
-    anchor: HTMLAnchorElement;
-    canvas: HTMLCanvasElement;
-    renderer: Renderer2;
-    img: HTMLImageElement;
-    fileType: FILE_TYPE;
-    canvasToBMP: CanvasToBMP;
+    private svg: SVGElement;
+    private anchor: HTMLAnchorElement;
+    private canvas: HTMLCanvasElement;
+    private renderer: Renderer2;
+    private img: HTMLImageElement;
+    private fileType: FILE_TYPE;
+    private canvasToBMP: CanvasToBMP;
 
-    launchDownload(): void {
+    private launchDownload(): void {
         this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.download, 'untitled.' + this.fileType);
         this.anchor.click();
     }
 
-    getXMLSVG(): string {
+    private getXMLSVG(): string {
         return new XMLSerializer().serializeToString(this.svg);
     }
 
-    createSVGBlob(): Blob {
+    private createSVGBlob(): Blob {
         this.renderer.setAttribute(this.svg, 'xmlns', SVG_NS);
         return new Blob([this.getXMLSVG()], { type: 'image/svg+xml;charset=utf-8' });
     }
@@ -47,16 +47,15 @@ export class ExportToolService {
         } else {
             this.saveAsOther();
         }
-
     }
 
-    saveAsSVG(): void {
+    private saveAsSVG(): void {
         const uri = 'data:image/svg+xml,' + encodeURIComponent(this.getXMLSVG());
-        this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.href, uri ) ;
+        this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.href, uri);
         this.launchDownload();
     }
 
-    saveAsOther(): void {
+    private saveAsOther(): void {
         const originalSvgSize: ClientRect | DOMRect = this.svg.getBoundingClientRect();
 
         if (FILE_TYPE.BMP === this.fileType) {
@@ -76,31 +75,27 @@ export class ExportToolService {
         }
     }
 
-    resizeCanvas(): void {
+    private resizeCanvas(): void {
         const svgSize = this.svg.getBoundingClientRect();
         this.canvas.width = svgSize.width;
         this.canvas.height = svgSize.height;
     }
 
-    compressSVG(): void {
+    private compressSVG(): void {
         const svgSize = this.svg.getBoundingClientRect();
-        this.renderer.setAttribute(
-            this.svg,
-            HTML_ATTRIBUTE.viewBox,
-            `0,0,${svgSize.width},${svgSize.height}`,
-        );
+        this.renderer.setAttribute(this.svg, HTML_ATTRIBUTE.viewBox, `0,0,${svgSize.width},${svgSize.height}`);
         this.renderer.setAttribute(this.svg, HTML_ATTRIBUTE.width, `${MAX_BMP_SIZE}`);
         this.renderer.setAttribute(this.svg, HTML_ATTRIBUTE.height, `${MAX_BMP_SIZE}`);
         this.resizeCanvas();
     }
 
-    decompressSVG(svgSize: ClientRect | DOMRect): void {
+    private decompressSVG(svgSize: ClientRect | DOMRect): void {
         this.renderer.removeAttribute(this.svg, HTML_ATTRIBUTE.viewBox);
         this.renderer.setAttribute(this.svg, HTML_ATTRIBUTE.width, `${svgSize.width}`);
         this.renderer.setAttribute(this.svg, HTML_ATTRIBUTE.height, `${svgSize.height}`);
     }
 
-    setUri(url: string): string {
+    private setUri(url: string): string {
         (this.canvas.getContext('2d') as CanvasRenderingContext2D).drawImage(this.img, 0, 0);
 
         URL.revokeObjectURL(url);
