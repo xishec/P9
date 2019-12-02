@@ -182,7 +182,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInSelectionBox should return true if mouseCoords are in selectionBox and selectionBox is appended', () => {
-        const mockMouseCoords: Coords2D = { x: 5, y: 5 };
+        const mockMouseCoords: Coords2D = new Coords2D(5, 5);
 
         const mockDOMRect = {
             x: 360,
@@ -200,7 +200,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInSelectionBox should return false if mouseCoords are not in selectionBox and selectionBox is appended', () => {
-        const mockMouseCoords: Coords2D = { x: 0, y: 0 };
+        const mockMouseCoords: Coords2D = new Coords2D(0, 0);
 
         const mockDOMRect = {
             x: 370,
@@ -218,7 +218,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInControlPoint should return true if mouse is in a controlPoint and isAppended is true', () => {
-        const mockMouseCoords: Coords2D = { x: 0, y: 0 };
+        const mockMouseCoords: Coords2D = new Coords2D(0, 0);
 
         proxy.isAppended = true;
 
@@ -238,7 +238,7 @@ describe('Selection', () => {
     });
 
     it('mouseIsInControlPoint should return false if mouse is not in a controlPoint and isAppended is true', () => {
-        const mockMouseCoords: Coords2D = { x: 20, y: 20 };
+        const mockMouseCoords: Coords2D = new Coords2D(20, 20);
 
         proxy.isAppended = true;
 

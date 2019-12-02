@@ -43,7 +43,7 @@ describe('QuillToolService', () => {
                 {
                     provide: DrawStackService,
                     useValue: {
-                      push: () => null,
+                        push: () => null,
                     },
                 },
             ],
@@ -269,14 +269,8 @@ describe('QuillToolService', () => {
     it('tracePolygon should call render setAttributes and appendChild', () => {
         const setAttributeSpy = spyOn(service.renderer, 'setAttribute');
         const appendChildSpy = spyOn(service.renderer, 'appendChild');
-        service.previousCoords = [
-            { x: 0, y: 0 },
-            { x: 1, y: 1 },
-        ];
-        service.currentCoords = [
-            { x: 2, y: 2 },
-            { x: 3, y: 3 },
-        ];
+        service.previousCoords = [new Coords2D(0, 0), new Coords2D(1, 1)];
+        service.currentCoords = [new Coords2D(2, 2), new Coords2D(3, 3)];
 
         service.tracePolygon();
 
