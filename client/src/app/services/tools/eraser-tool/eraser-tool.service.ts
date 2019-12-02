@@ -257,13 +257,11 @@ export class EraserToolService extends AbstractToolService {
             return;
         }
 
-        console.log('tool name:' + tool);
-
         this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
 
         this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
 
-        this.checkIfLine(idElement, tool, '#' + DEFAULT_RED);
+        this.checkIfLineOrQuill(idElement, tool, '#' + DEFAULT_RED);
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
@@ -297,6 +295,7 @@ export class EraserToolService extends AbstractToolService {
                 this.isHoveringText = false;
                 return true;
             }
+
             this.isHoveringText = true;
             const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
             const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
@@ -340,15 +339,16 @@ export class EraserToolService extends AbstractToolService {
     }
 
     //changer nom
-    checkIfLine(idElement: number, tool: string, borderColor: string) {
+    checkIfLineOrQuill(idElement: number, tool: string, borderColor: string) {
         if (
-            tool === TOOL_NAME.Line /*|| tool === TOOL_NAME.Quill)*/ &&
+            (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
             this.drawStack.getElementByPosition(idElement).childElementCount > 1
         ) {
+            const startingIndex = tool === TOOL_NAME.Line ? 1 : 0;
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
-            for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
+            for (let childIndex = startingIndex; childIndex < childrenCount; childIndex++) {
                 this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
             }
         }
@@ -369,7 +369,7 @@ export class EraserToolService extends AbstractToolService {
 
         this.checkIfPen(idElement, tool, borderColor);
 
-        this.checkIfLine(idElement, tool, borderColor);
+        this.checkIfLineOrQuill(idElement, tool, borderColor);
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
         this.renderer.setAttribute(
