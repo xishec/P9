@@ -19,7 +19,7 @@ export class PencilToolService extends TracingToolService {
         super.initializeService(elementRef, renderer, drawStack);
     }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
+    protected createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
         return circle;
     }
