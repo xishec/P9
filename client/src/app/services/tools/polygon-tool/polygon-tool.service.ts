@@ -43,12 +43,12 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
     }
 
-    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
         super.initializeService(elementRef, renderer, drawStack);
         this.drawPolygon = this.renderer.createElement('polygon', SVG_NS);
     }
 
-    initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
+    initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.strokeWidth = thickness;
@@ -62,7 +62,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         });
     }
 
-    private setRadiusCorrection() {
+    private setRadiusCorrection(): void {
         const correction: number = POLYGON_RADIUS_CORRECTION.get(this.nbVertices) as number;
         this.radiusCorrection = this.radius * correction;
     }
@@ -119,7 +119,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, vertices);
     }
 
-    private updatePreviewRectangle() {
+    private updatePreviewRectangle(): void {
         const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
@@ -191,7 +191,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.renderdrawPolygon();
     }
 
-    private updateTraceType(traceType: string) {
+    private updateTraceType(traceType: string): void {
         this.traceType = traceType;
         switch (traceType) {
             case TRACE_TYPE.Outline: {
