@@ -16,7 +16,7 @@ import { FileManagerService } from '../file-manager/file-manager.service';
 })
 export class DrawingSaverService {
     currentIsSaved: BehaviorSubject<boolean | undefined> = new BehaviorSubject(undefined);
-    currentErrorMesage: BehaviorSubject<string> = new BehaviorSubject('');
+    currentErrorMessage: BehaviorSubject<string> = new BehaviorSubject('');
 
     workZoneRef: ElementRef<SVGElement>;
     currentDrawingInfo: DrawingInfo;
@@ -55,7 +55,7 @@ export class DrawingSaverService {
     sendFileToServer(drawingSavingInfo: DrawingSavingInfo): void {
         if (this.drawingLoaderService.emptyDrawStack.value) {
             this.currentIsSaved.next(false);
-            this.currentErrorMesage.next('Aucun dessin dans le zone de travail!');
+            this.currentErrorMessage.next('Aucun dessin dans le zone de travail!');
         } else if (drawingSavingInfo.name.length > 0) {
             this.postDrawing(drawingSavingInfo);
         }
@@ -79,7 +79,7 @@ export class DrawingSaverService {
                     if (subject !== undefined) {
                         return true;
                     }
-                    this.currentErrorMesage.next(
+                    this.currentErrorMessage.next(
                         'Erreur de sauvegarde du côté serveur! Le serveur n\'est peut-être pas ouvert.',
                     );
                     this.currentIsSaved.next(false);
@@ -94,7 +94,7 @@ export class DrawingSaverService {
                     this.drawingLoaderService.currentDrawing.next(receivedDrawing);
                     this.currentIsSaved.next(true);
                 } else {
-                    this.currentErrorMesage.next('Erreur de sauvegarde du côté serveur!');
+                    this.currentErrorMessage.next('Erreur de sauvegarde du côté serveur!');
                     this.currentIsSaved.next(false);
                 }
             });

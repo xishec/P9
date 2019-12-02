@@ -56,7 +56,7 @@ export class SaveFileModalWindowComponent implements OnInit {
             this.createdAt = currentDrawing.drawingInfo.createdAt === null ? 0 : currentDrawing.drawingInfo.createdAt;
             this.lastModified = currentDrawing.drawingInfo.lastModified;
         });
-        this.drawingSaverService.currentErrorMesage.subscribe((errorMessage) => {
+        this.drawingSaverService.currentErrorMessage.subscribe((errorMessage) => {
             this.errorMessage = errorMessage;
         });
         this.isSaving = false;
