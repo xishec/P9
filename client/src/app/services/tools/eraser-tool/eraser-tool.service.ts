@@ -253,6 +253,8 @@ export class EraserToolService extends AbstractToolService {
             return;
         }
 
+        console.log('tool name:' + tool);
+
         this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
 
         this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
@@ -332,8 +334,12 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
+    //changer nom
     checkIfLine(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
+        if (
+            (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
+            this.drawStack.getElementByPosition(idElement).childElementCount > 1
+        ) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
@@ -351,8 +357,6 @@ export class EraserToolService extends AbstractToolService {
         if (borderWidth === null) {
             borderWidth = '0';
         }
-
-        console.log('text borderWidth: ' + borderWidth);
 
         if (this.checkIfText(idElement, tool, borderColor, borderWidth)) {
             return;
