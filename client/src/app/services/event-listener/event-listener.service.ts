@@ -99,16 +99,13 @@ export class EventListenerService {
         });
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-            // If control is pressed
             if (this.currentTool !== undefined && event.ctrlKey) {
                 event.preventDefault();
 
-                // Control tools : new drawing, save, export, open...
                 if (CONTROL_SHORTCUTS.has(event.key)) {
                     this.toolSelectorService.changeTool(CONTROL_SHORTCUTS.get(event.key) as TOOL_NAME);
                 }
 
-                // Undo Redo
                 if (event.key === KEYS.z) {
                     this.currentTool.cleanUp();
                     this.undoRedoerService.undo();
@@ -130,12 +127,10 @@ export class EventListenerService {
                 }
             }
 
-            // Call the onKeyDown of the current tool, if the current tool doesn't do anything
             if (this.currentTool !== undefined && this.shouldAllowEvent()) {
                 this.currentTool.onKeyDown(event);
             }
 
-            // If the key is a shortcut for a tool, change current tool
             if (this.shouldAllowShortcuts() && TOOL_NAME_SHORTCUTS.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(TOOL_NAME_SHORTCUTS.get(event.key) as TOOL_NAME);
