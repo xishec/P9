@@ -56,9 +56,9 @@ describe('QuillToolService', () => {
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        service.currentMousePosition = new Coords2D(0, 0);
-        spyOn(service, 'getXPos').and.returnValue(0);
-        spyOn(service, 'getYPos').and.returnValue(0);
+        service[`currentMousePosition`] = new Coords2D(0, 0);
+        spyOn<any>(service, 'getXPos').and.returnValue(0);
+        spyOn<any>(service, 'getYPos').and.returnValue(0);
     });
 
     it('should be created', () => {
@@ -68,13 +68,13 @@ describe('QuillToolService', () => {
     it('initializeService should set the corresponding values', () => {
         service.initializeService(elementRefMock, rendererMock, drawStackMock);
 
-        expect(service.elementRef).toBe(elementRefMock);
-        expect(service.renderer).toBe(rendererMock);
-        expect(service.drawStack).toBe(drawStackMock);
+        expect(service[`elementRef`]).toBe(elementRefMock);
+        expect(service[`renderer`]).toBe(rendererMock);
+        expect(service[`drawStack`]).toBe(drawStackMock);
     });
 
     it('onMouseEnter should call appendPreview()', () => {
-        const spy = spyOn(service, 'appendPreview').and.returnValue();
+        const spy = spyOn<any>(service, 'appendPreview');
 
         service.onMouseEnter(MOCK_MOUSE_EVENT);
 
@@ -82,7 +82,7 @@ describe('QuillToolService', () => {
     });
 
     it('onMouseLeave should call removePreview()', () => {
-        const spy = spyOn(service, 'removePreview').and.returnValue();
+        const spy = spyOn<any>(service, 'removePreview');
 
         service.onMouseLeave(MOCK_MOUSE_EVENT);
 
@@ -99,7 +99,7 @@ describe('QuillToolService', () => {
     });
 
     it('onMouseDown should set isDrawing to true and call getColorAndOpacity if LeftMouseDown', () => {
-        const spy = spyOn(service, 'setColorAndOpacity').and.returnValue();
+        const spy = spyOn<any>(service, 'setColorAndOpacity');
 
         service.onMouseDown(MOCK_MOUSE_EVENT);
 
@@ -108,38 +108,38 @@ describe('QuillToolService', () => {
     });
 
     it('appendPreview should set previewEnabled to true and call renderer.createElement and appendChild', () => {
-        const spyCreateElement = spyOn(service.renderer, 'createElement');
-        const spySetAttribute = spyOn(service.renderer, 'setAttribute');
-        service.previewEnabled = false;
+        const spyCreateElement = spyOn(service[`renderer`], 'createElement');
+        const spySetAttribute = spyOn(service[`renderer`], 'setAttribute');
+        service[`previewEnabled`] = false;
 
-        service.appendPreview();
+        service[`appendPreview`]();
 
         expect(spyCreateElement).toHaveBeenCalled();
         expect(spySetAttribute).toHaveBeenCalled();
-        expect(service.previewEnabled).toBeTruthy();
+        expect(service[`previewEnabled`]).toBeTruthy();
     });
 
     it('removePreview should set previewEnabled to false and call renderer.Removechild', () => {
-        const spy = spyOn(service.renderer, 'removeChild');
-        service.previewEnabled = true;
+        const spy = spyOn(service[`renderer`], 'removeChild');
+        service[`previewEnabled`] = true;
 
-        service.removePreview();
+        service[`removePreview`]();
 
         expect(spy).toHaveBeenCalled();
-        expect(service.previewEnabled).toBeFalsy();
+        expect(service[`previewEnabled`]).toBeFalsy();
     });
 
     it('updatePreview should call setAttribute 4 times', () => {
-        const spy = spyOn(service.renderer, 'setAttribute');
+        const spy = spyOn(service[`renderer`], 'setAttribute');
 
-        service.updatePreview();
+        service[`updatePreview`]();
 
         expect(spy).toHaveBeenCalledTimes(4);
     });
 
     it('onMouseMove should call updatePreview', () => {
-        const spy = spyOn(service, 'updatePreview').and.returnValue();
-        spyOn(service, 'tracePolygon').and.returnValue();
+        const spy = spyOn<any>(service, 'updatePreview');
+        spyOn<any>(service, 'tracePolygon');
 
         service.onMouseMove(MOCK_MOUSE_EVENT);
 
@@ -148,8 +148,8 @@ describe('QuillToolService', () => {
 
     it('onMouseMove should not call tracePolygon if !isDrawing', () => {
         service.isDrawing = false;
-        spyOn(service, 'updatePreview').and.returnValue();
-        const spy = spyOn(service, 'tracePolygon');
+        spyOn<any>(service, 'updatePreview');
+        const spy = spyOn<any>(service, 'tracePolygon');
 
         service.onMouseDown(MOCK_MOUSE_EVENT);
 
@@ -157,7 +157,7 @@ describe('QuillToolService', () => {
     });
 
     it('onWheel should call computeOffset', () => {
-        const spy = spyOn(service, 'computeOffset');
+        const spy = spyOn<any>(service, 'computeOffset');
 
         service.onWheel(MOCK_WHEEL_EVENT);
 
@@ -165,7 +165,7 @@ describe('QuillToolService', () => {
     });
 
     it('onWheel should call updatePreview', () => {
-        const spy = spyOn(service, 'updatePreview');
+        const spy = spyOn<any>(service, 'updatePreview');
 
         service.onWheel(MOCK_WHEEL_EVENT);
 
@@ -173,79 +173,79 @@ describe('QuillToolService', () => {
     });
 
     it('angle should increase by 1 degree if Alt is pressed and wheel is scrolled upwards when onWheel is called', () => {
-        service.angle = 0;
-        service.isAlterRotation = true;
+        service[`angle`] = 0;
+        service[`isAlterRotation`] = true;
 
         const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: 1 });
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(ROTATION_ANGLE.Alter);
+        expect(service[`angle`]).toEqual(ROTATION_ANGLE.Alter);
     });
 
     it('angle should increase by 15 degree if Alt is not pressed and wheel is scrolled upwards when onWheel is called', () => {
-        service.angle = 0;
-        service.isAlterRotation = false;
+        service[`angle`] = 0;
+        service[`isAlterRotation`] = false;
 
         const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: 1 });
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(ROTATION_ANGLE.Base);
+        expect(service[`angle`]).toEqual(ROTATION_ANGLE.Base);
     });
 
     it('angle should decrease by 1 degree if Alt is pressed and wheel is scrolled downwards when onWheel is called', () => {
-        service.angle = 0;
-        service.isAlterRotation = true;
+        service[`angle`] = 0;
+        service[`isAlterRotation`] = true;
 
         const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: -1 });
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(-ROTATION_ANGLE.Alter);
+        expect(service[`angle`]).toEqual(-ROTATION_ANGLE.Alter);
     });
 
     it('angle should decrease by 15 degree if Alt is not pressed and wheel is scrolled downwards when onWheel is called', () => {
-        service.angle = 0;
-        service.isAlterRotation = false;
+        service[`angle`] = 0;
+        service[`isAlterRotation`] = false;
 
         const MOCK_UNIQUE_WHEEL_EVENT = new WheelEvent('wheelEvent', { deltaY: -1 });
 
         service.onWheel(MOCK_UNIQUE_WHEEL_EVENT);
 
-        expect(service.angle).toEqual(-ROTATION_ANGLE.Base);
+        expect(service[`angle`]).toEqual(-ROTATION_ANGLE.Base);
     });
 
     it('isAlterRotation should be set to true when Alt key is pressed', () => {
-        service.isAlterRotation = false;
+        service[`isAlterRotation`] = false;
 
         service.onKeyDown(MOCK_KEYBOARD_ALT);
 
-        expect(service.isAlterRotation).toEqual(true);
+        expect(service[`isAlterRotation`]).toEqual(true);
     });
 
     it('isAlterRotation should not do anything when any key other than Alt is pressed', () => {
-        service.isAlterRotation = false;
+        service[`isAlterRotation`] = false;
 
         service.onKeyDown(MOCK_KEYBOARD_SHIFT);
 
-        expect(service.isAlterRotation).toEqual(false);
+        expect(service[`isAlterRotation`]).toEqual(false);
     });
 
     it('isAlterRotation should be set to false when Alt key is unpressed', () => {
-        service.isAlterRotation = true;
+        service[`isAlterRotation`] = true;
 
         service.onKeyUp(MOCK_KEYBOARD_ALT);
 
-        expect(service.isAlterRotation).toEqual(false);
+        expect(service[`isAlterRotation`]).toEqual(false);
     });
 
     it('isAlterRotation should not do anything when any key other than Alt is unpressed', () => {
-        service.isAlterRotation = true;
+        service[`isAlterRotation`] = true;
 
         service.onKeyUp(MOCK_KEYBOARD_SHIFT);
 
-        expect(service.isAlterRotation).toEqual(true);
+        expect(service[`isAlterRotation`]).toEqual(true);
     });
 
     it('onMouseUp should set isDrawing to false if true', () => {
@@ -267,53 +267,53 @@ describe('QuillToolService', () => {
     });
 
     it('tracePolygon should call render setAttributes and appendChild', () => {
-        const setAttributeSpy = spyOn(service.renderer, 'setAttribute');
-        const appendChildSpy = spyOn(service.renderer, 'appendChild');
-        service.previousCoords = [new Coords2D(0, 0), new Coords2D(1, 1)];
-        service.currentCoords = [new Coords2D(2, 2), new Coords2D(3, 3)];
+        const setAttributeSpy = spyOn(service[`renderer`], 'setAttribute');
+        const appendChildSpy = spyOn(service[`renderer`], 'appendChild');
+        service[`previousCoords`] = [new Coords2D(0, 0), new Coords2D(1, 1)];
+        service[`currentCoords`] = [new Coords2D(2, 2), new Coords2D(3, 3)];
 
-        service.tracePolygon();
+        service[`tracePolygon`]();
 
         expect(setAttributeSpy).toHaveBeenCalled();
         expect(appendChildSpy).toHaveBeenCalled();
     });
 
     it('computeOffset sets the right values to offsets when angle is equal to 0 degrees', () => {
-        service.thickness = 2;
-        service.angle = 0;
+        service[`thickness`] = 2;
+        service[`angle`] = 0;
 
-        service.computeOffset();
+        service[`computeOffset`]();
 
-        expect(service.offsets[0].x).toEqual(0);
-        expect(service.offsets[0].y).toEqual(1);
-        expect(service.offsets[1].x).toEqual(0);
-        expect(service.offsets[1].y).toEqual(-1);
+        expect(service[`offsets`][0].x).toEqual(0);
+        expect(service[`offsets`][0].y).toEqual(1);
+        expect(service[`offsets`][1].x).toEqual(0);
+        expect(service[`offsets`][1].y).toEqual(-1);
     });
 
     it('computeOffset sets the right values to offsets when angle is equal to 90 degrees', () => {
-        service.thickness = 2;
-        service.angle = 90;
+        service[`thickness`] = 2;
+        service[`angle`] = 90;
 
-        service.computeOffset();
+        service[`computeOffset`]();
 
-        expect(service.offsets[0].x).toEqual(1);
-        expect(service.offsets[0].y).toBeCloseTo(0); // y = 6.123233995736766e-17
-        expect(service.offsets[1].x).toEqual(-1);
-        expect(service.offsets[1].y).toBeCloseTo(0);
+        expect(service[`offsets`][0].x).toEqual(1);
+        expect(service[`offsets`][0].y).toBeCloseTo(0); // y = 6.123233995736766e-17
+        expect(service[`offsets`][1].x).toEqual(-1);
+        expect(service[`offsets`][1].y).toBeCloseTo(0);
     });
 
     it('degreesToRadians converts degree values to proper radian values', () => {
-        expect(service.degreesToRadians(0)).toEqual(0);
-        expect(service.degreesToRadians(30)).toEqual(Math.PI / 6);
-        expect(service.degreesToRadians(45)).toEqual(Math.PI / 4);
-        expect(service.degreesToRadians(60)).toEqual(Math.PI / 3);
-        expect(service.degreesToRadians(90)).toEqual(Math.PI / 2);
-        expect(service.degreesToRadians(180)).toEqual(Math.PI);
-        expect(service.degreesToRadians(270)).toEqual(Math.PI * (3 / 2));
+        expect(service[`degreesToRadians`](0)).toEqual(0);
+        expect(service[`degreesToRadians`](30)).toEqual(Math.PI / 6);
+        expect(service[`degreesToRadians`](45)).toEqual(Math.PI / 4);
+        expect(service[`degreesToRadians`](60)).toEqual(Math.PI / 3);
+        expect(service[`degreesToRadians`](90)).toEqual(Math.PI / 2);
+        expect(service[`degreesToRadians`](180)).toEqual(Math.PI);
+        expect(service[`degreesToRadians`](270)).toEqual(Math.PI * (3 / 2));
     });
 
     it('cleanUp calls removePreview', () => {
-        const spy = spyOn(service, 'removePreview');
+        const spy = spyOn<any>(service, 'removePreview');
 
         service.cleanUp();
 
@@ -321,7 +321,7 @@ describe('QuillToolService', () => {
     });
 
     it('cleanUp calls removeChild if isDrawing is equal to true', () => {
-        const spy = spyOn(service.renderer, 'removeChild');
+        const spy = spyOn(service[`renderer`], 'removeChild');
         service.isDrawing = true;
 
         service.cleanUp();

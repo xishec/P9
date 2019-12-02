@@ -146,7 +146,7 @@ describe('BrushToolService', () => {
     });
 
     it('when createSVGCircle it should call super.getDrawStackLength', () => {
-        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
+        const spyOnSuperCreateCircle = spyOn<any>(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
             createMockSVGCircle(),
         );
 

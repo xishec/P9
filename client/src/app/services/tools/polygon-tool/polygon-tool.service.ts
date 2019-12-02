@@ -119,7 +119,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, vertices);
     }
 
-    private updatePreviewRectangle(): void {
+    updatePreviewRectangle(): void {
         const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(Math.abs(deltaX), Math.abs(deltaY));
@@ -164,7 +164,7 @@ export class PolygonToolService extends AbstractShapeToolService {
         }
     }
 
-    private createSVG(): void {
+    createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
         this.copyPreviewRectangleAttributes(drawPolygon);
