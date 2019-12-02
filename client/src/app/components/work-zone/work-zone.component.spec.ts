@@ -54,7 +54,16 @@ describe('WorkZoneComponent', () => {
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
-                        drawingInfo: new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        drawingInfo: new BehaviorSubject<DrawingInfo>({
+                            name: '',
+                            createdAt: 0,
+                            lastModified: 0,
+                            labels: [],
+                            idStack: [],
+                            width: 0,
+                            height: 0,
+                            color: '',
+                        } as DrawingInfo),
                         currentDisplayNewDrawingModalWindow: new BehaviorSubject<boolean>(false).asObservable(),
                     },
                 },
@@ -70,7 +79,7 @@ describe('WorkZoneComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        currentToolName: new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        currentToolName: TOOL_NAME.Brush,
                         initTools: () => null,
                     },
                 },

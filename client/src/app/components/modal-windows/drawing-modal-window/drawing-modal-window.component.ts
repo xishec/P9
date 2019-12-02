@@ -2,12 +2,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../../../services/drawing-modal-window/drawing-modal-window.service';
 import { ShortcutManagerService } from '../../../services/shortcut-manager/shortcut-manager.service';
@@ -70,7 +70,19 @@ export class DrawingModalWindowComponent implements OnInit {
             this.drawingModalForm.value.height,
             this.previewColor,
         );
-        this.drawingLoaderService.currentDrawing.next(new Drawing('', [], '', [], new DrawingInfo(0, 0, '')));
+        this.drawingLoaderService.currentDrawing.next({
+            svg: '',
+            drawingInfo: {
+                name: '',
+                createdAt: 0,
+                lastModified: 0,
+                labels: [],
+                idStack: [],
+                width: 0,
+                height: 0,
+                color: '',
+            } as DrawingInfo,
+        } as Drawing);
         this.colorToolService.changeBackgroundColor(this.previewColor);
         this.colorToolService.addColorToQueue(this.previewColor);
         this.modalManagerService.setModalIsDisplayed(false);

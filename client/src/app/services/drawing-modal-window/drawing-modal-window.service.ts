@@ -8,7 +8,11 @@ import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
     providedIn: 'root',
 })
 export class DrawingModalWindowService {
-    drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE));
+    drawingInfo: BehaviorSubject<DrawingInfo> = new BehaviorSubject<DrawingInfo>({
+        width: 0,
+        height: 0,
+        color: DEFAULT_WHITE,
+    } as DrawingInfo);
 
     changeDrawingInfo(width: number, height: number, color: string) {
         this.drawingInfo.value.width = width;

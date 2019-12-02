@@ -45,23 +45,23 @@
                                 let i = index
                             "
                             id="list-option"
-                            [value]="drawing.name"
+                            [value]="drawing.drawingInfo.createdAt"
                         >
                             <div id="drawing-option">
                                 <div id="drawing-name">
-                                    {{ drawing.name }}
+                                    {{ drawing.drawingInfo.name }}
                                 </div>
                                 <div id="drawing-labels-list">
-                                    <div id="drawing-label" *ngFor="let label of drawing.labels">
+                                    <div id="drawing-label" *ngFor="let label of drawing.drawingInfo.labels">
                                         {{ label }}
                                     </div>
                                 </div>
                                 <div id="drawing-thumbnail">
                                     <svg
-                                        [attr.width]="getWidth(drawing.name)"
-                                        [attr.height]="getHeight(drawing.name)"
-                                        [attr.viewBox]="getViewBox(drawing.name)"
-                                        [innerHTML]="getSVG(drawing.name) | toTrustHtml"
+                                        [attr.width]="getWidth(drawing.drawingInfo.name)"
+                                        [attr.height]="getHeight(drawing.drawingInfo.name)"
+                                        [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
+                                        [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
                                     ></svg>
                                 </div>
                             </div>
