@@ -12,21 +12,21 @@ import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
     providedIn: 'root',
 })
 export class ClipboardService {
-    renderer: Renderer2;
-    elementRef: ElementRef<SVGElement>;
-    drawStack: DrawStackService;
-    selection: Selection;
+    private renderer: Renderer2;
+    private elementRef: ElementRef<SVGElement>;
+    private drawStack: DrawStackService;
+    private selection: Selection;
 
-    clippings: Set<SVGGElement> = new Set<SVGGElement>();
-    duplicationBuffer: Set<SVGGElement> = new Set<SVGGElement>();
+    private clippings: Set<SVGGElement> = new Set<SVGGElement>();
+    private duplicationBuffer: Set<SVGGElement> = new Set<SVGGElement>();
 
-    pasteOffsetValue = 0;
-    duplicateOffsetValue = 0;
+    private pasteOffsetValue = 0;
+    private duplicateOffsetValue = 0;
 
-    firstDuplication = true;
+    private firstDuplication = true;
     isClippingsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-    clippingsBound: DOMRect;
+    private clippingsBound: DOMRect;
 
     constructor(public manipulator: ManipulatorService, private undoRedoerService: UndoRedoerService) {
         this.undoRedoerService.currentDuplicateOffset.subscribe((value) => {
@@ -45,7 +45,7 @@ export class ClipboardService {
         });
     }
 
-    compareClipings(clip1: Set<SVGElement>, clip2: Set<SVGElement>): boolean {
+    private compareClipings(clip1: Set<SVGElement>, clip2: Set<SVGElement>): boolean {
         if (clip1.size !== clip2.size) {
             return false;
         }
@@ -77,7 +77,7 @@ export class ClipboardService {
         this.firstDuplication = true;
     }
 
-    clone(elementsToClone: Set<SVGGElement>, offset: number): void {
+    private clone(elementsToClone: Set<SVGGElement>, offset: number): void {
         const newSelection: Set<SVGGElement> = new Set<SVGGElement>();
         for (const el of elementsToClone) {
             const deepCopy: SVGGElement = el.cloneNode(true) as SVGGElement;
@@ -90,40 +90,40 @@ export class ClipboardService {
         this.manipulator.updateOrigins(this.selection);
     }
 
-    updateSelection(newSelection: Set<SVGGElement>): void {
+    private updateSelection(newSelection: Set<SVGGElement>): void {
         this.selection.emptySelection();
         for (const el of newSelection) {
             this.selection.addToSelection(el);
         }
     }
 
-    fetchSelectionBounds(): void {
+    private fetchSelectionBounds(): void {
         this.clippingsBound = this.selection.selectionBox.getBoundingClientRect() as DOMRect;
     }
 
-    handleDuplicateOutOfBounds(): void {
+    private handleDuplicateOutOfBounds(): void {
         this.fetchSelectionBounds();
         if (!this.isInBounds()) {
             this.duplicateOffsetValue = 0;
         }
     }
 
-    handlePasteOutOfBounds(): void {
+    private handlePasteOutOfBounds(): void {
         this.fetchSelectionBounds();
         if (!this.isInBounds()) {
             this.pasteOffsetValue = 0;
         }
     }
 
-    increasePasteOffsetValue(): void {
+    private increasePasteOffsetValue(): void {
         this.pasteOffsetValue += OFFSET_STEP;
     }
 
-    increaseDuplicateOffsetValue(): void {
+    private increaseDuplicateOffsetValue(): void {
         this.duplicateOffsetValue += OFFSET_STEP;
     }
 
-    isInBounds(): boolean {
+    private isInBounds(): boolean {
         const boxLeft = this.clippingsBound.x + window.scrollX - SIDEBAR_WIDTH;
         const boxTop = this.clippingsBound.y + window.scrollY;
         const parentBoxRight =
@@ -139,7 +139,7 @@ export class ClipboardService {
         return boxLeft < parentBoxRight && boxTop < parentBoxBottom;
     }
 
-    notifyClippingsState(): void {
+    private notifyClippingsState(): void {
         if (this.clippings.size > 0) {
             this.isClippingsEmpty.next(false);
         } else {
@@ -196,7 +196,7 @@ export class ClipboardService {
         this.saveStateFromDuplicate();
     }
 
-    saveStateFromDuplicate() {
+    private saveStateFromDuplicate() {
         this.undoRedoerService.saveStateAndDuplicateOffset(this.drawStack.idStack, this.duplicateOffsetValue);
     }
 
@@ -212,7 +212,7 @@ export class ClipboardService {
         this.saveStateFromPaste();
     }
 
-    saveStateFromPaste() {
+    private saveStateFromPaste() {
         this.undoRedoerService.saveStateFromPaste(this.drawStack.idStack, this.pasteOffsetValue, this.clippings);
     }
 
