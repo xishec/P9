@@ -14,6 +14,7 @@ enum KEYS {
     g = 'g',
     i = 'i',
     l = 'l',
+    m = 'm',
     o = 'o',
     p = 'p',
     r = 'r',

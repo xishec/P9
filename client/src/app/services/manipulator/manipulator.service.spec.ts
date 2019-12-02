@@ -15,6 +15,22 @@ describe('ManipulatorService', () => {
     let elementRefMock: ElementRef<SVGGElement>;
     let spyOnCreateElement: jasmine.Spy;
 
+    const createMockSVGSVGElement = (): SVGSVGElement => {
+        const mockSVGSVG = {
+            createSVGTransform: () => {
+                const mockTransform = {
+                    setTranslate: () => null,
+                    setRotate: () => null,
+                    setScale: () => null,
+                    matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
+                };
+                return mockTransform as unknown as SVGTransform;
+            },
+            createSVGTransformFromMatrix: () => null,
+        };
+        return mockSVGSVG as unknown as SVGSVGElement;
+    };
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -146,18 +162,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const mockTransform = {
-                        setTranslate: () => null,
-                    };
-                    return mockTransform as unknown as SVGTransform;
-                },
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
@@ -177,18 +182,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const mockTransform = {
-                        setTranslate: () => null,
-                    };
-                    return mockTransform as unknown as SVGTransform;
-                },
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spy = spyOn(mockSVGG.transform.baseVal, 'appendItem');
 
@@ -357,20 +351,7 @@ describe('ManipulatorService', () => {
             },
         };
 
-        spyOnCreateElement.and.callFake(() => {
-            const mockSVG = {
-                createSVGTransform: () => {
-                    const transformMock = {
-                        setTranslate: () => null,
-                        matrix: autoMock(DOMMatrix) as unknown as DOMMatrix,
-                    };
-                    return transformMock as unknown as SVGTransform;
-                },
-                createSVGTransformFromMatrix: () => null,
-            };
-
-            return mockSVG as unknown as SVGSVGElement;
-        });
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
 
         const spyOnApplyTransformation = spyOn(service, 'applyTransformation').and.callFake(() => null);
 
@@ -390,5 +371,253 @@ describe('ManipulatorService', () => {
 
         expect(spyTranslate).toHaveBeenCalledTimes(3);
         expect(spySelection).toHaveBeenCalled();
+    });
+
+    it('should create a svg element for each selected elements in selection', () => {
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement() as unknown as SVGGElement);
+        selection.selectedElements.add(TestHelpers.createMockSVGGElement() as unknown as SVGGElement);
+        spyOnCreateElement.and.callFake(createMockSVGSVGElement);
+
+        service.initTransformMatrix(selection);
+
+        expect(spyOnCreateElement).toHaveBeenCalledTimes(2);
+    });
+
+    it('should return a scale factor of 2 when dx is the same as width(10) and isRight and going in positive direction', () => {
+        selection.ogSelectionBoxWidth = 10;
+        service.isAltDown = false;
+
+        const xScaleFactor = service.getXScaleFactor(10, selection, true);
+
+        expect(xScaleFactor).toEqual(2);
+    });
+
+    it('should return a scale factor of 0.5 when dx is the same as width/2(5) and isRight and going in negative direction', () => {
+        selection.ogSelectionBoxWidth = 10;
+        service.isAltDown = false;
+
+        const xScaleFactor = service.getXScaleFactor(-5, selection, true);
+
+        expect(xScaleFactor).toEqual(0.5);
+    });
+
+    it('should return a scale factor of 3 when dx is the same as width(10)' +
+        'and isRight and going in positive direction and altIsDown', () => {
+        selection.ogSelectionBoxWidth = 10;
+        service.isAltDown = true;
+
+        const xScaleFactor = service.getXScaleFactor(10, selection, true);
+
+        expect(xScaleFactor).toEqual(3);
+    });
+
+    it('should return a xTranslate of -10 when dx is the same as width(10) and isRight and scalefactor is 2', () => {
+        selection.ogSelectionBoxWidth = 10;
+        service.isAltDown = false;
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
+
+        const xTranslate = service.getXTranslate(10, 2, selection, true);
+
+        expect(xTranslate).toEqual(-10);
+    });
+
+    it('should return a xTranslate of -30 when dx is the same as width(10) and isRight and scalefactor is 3 and altIsDown', () => {
+        selection.ogSelectionBoxWidth = 10;
+        service.isAltDown = true;
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
+
+        const xTranslate = service.getXTranslate(10, 3, selection, true);
+
+        expect(xTranslate).toEqual(-30);
+    });
+
+    it('should return a scale factor of 2 when dy is the same as height(10) and isBottom and going in positive direction', () => {
+        selection.ogSelectionBoxHeight = 10;
+        service.isAltDown = false;
+
+        const yScaleFactor = service.getYScaleFactor(10, selection, true);
+
+        expect(yScaleFactor).toEqual(2);
+    });
+
+    it('should return a scale factor of 3 when dy is the same as height(10)' +
+        'and isBottom and going in positive direction and altIsDown', () => {
+        selection.ogSelectionBoxHeight = 10;
+        service.isAltDown = true;
+
+        const yScaleFactor = service.getYScaleFactor(10, selection, true);
+
+        expect(yScaleFactor).toEqual(3);
+    });
+
+    it('should return a yTranslate of -10 when dy is the same as height(10) and isBottom and scalefactor is 2', () => {
+        selection.ogSelectionBoxHeight = 10;
+        service.isAltDown = false;
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
+
+        const yTranslate = service.getYTranslate(10, 2, selection, true);
+
+        expect(yTranslate).toEqual(-10);
+    });
+
+    it('should return a yTranslate of -30 when dy is the same as height(10) and isBottom and scalefactor is 3 and altIsDown', () => {
+        selection.ogSelectionBoxHeight = 10;
+        service.isAltDown = true;
+        selection.ogSelectionBoxPositions = new Coords2D(10, 10);
+
+        const yTranslate = service.getYTranslate(10, 3, selection, true);
+
+        expect(yTranslate).toEqual(-30);
+    });
+
+    it('should return a distance of 10 when mousePos is 10 pix away from activeControlPoint in positive direction and isRight', () => {
+        const distance = service.getDistanceFromControlPoint(20, 10, true);
+
+        expect(distance).toEqual(10);
+    });
+
+    it('should return a distance of -10 when mousePos is 10 pix away from activeControlPoint in negative direction and isRight', () => {
+        const distance = service.getDistanceFromControlPoint(10, 20, true);
+
+        expect(distance).toEqual(-10);
+    });
+
+    it('should get X and Y scale factor and X and Y translate when applyScaleCorner and call function with starting dx dy', () => {
+        const mockDist = 10;
+        const mockScale = 2;
+        spyOn(service, 'getDistanceFromControlPoint').and.callFake(() => mockDist);
+        service.isShiftDown = false;
+
+        const spyXScale = spyOn(service, 'getXScaleFactor').and.callFake(() => mockScale);
+        const spyYScale = spyOn(service, 'getYScaleFactor').and.callFake(() => mockScale);
+
+        const spyXTranslate = spyOn(service, 'getXTranslate').and.callFake(() => 1);
+        const spyYTranslate = spyOn(service, 'getYTranslate').and.callFake(() => 1);
+
+        spyOn(service, 'applyRedimTransformations').and.callFake(() => null);
+
+        spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
+
+        const coords = new Coords2D(10, 10);
+        selection.ogActiveControlPointCoords = new Coords2D(10, 10);
+
+        service.applyScaleCorner(coords, selection, true, true);
+
+        expect(spyXScale).toHaveBeenCalledWith(mockDist, selection, true);
+        expect(spyYScale).toHaveBeenCalledWith(mockDist, selection, true);
+        expect(spyXTranslate).toHaveBeenCalledWith(mockDist, mockScale, selection, true);
+        expect(spyYTranslate).toHaveBeenCalledWith(mockDist, mockScale, selection, true);
+    });
+
+    it('should get X and Y scale factor and X and Y translate when applyScaleCorner' +
+        'and isShiftDown and call function with dx dy scaled', () => {
+        const mockDist = 10;
+        const mockScale = 2;
+        spyOn(service, 'getDistanceFromControlPoint').and.callFake(() => mockDist);
+        service.isShiftDown = true;
+
+        selection.ogSelectionBoxWidth = 20;
+        selection.ogSelectionBoxHeight = 10;
+
+        const expectedDx = 10;
+        const expectedDy = 5;
+
+        const spyXScale = spyOn(service, 'getXScaleFactor').and.callFake(() => mockScale);
+        const spyYScale = spyOn(service, 'getYScaleFactor').and.callFake(() => mockScale);
+
+        const spyXTranslate = spyOn(service, 'getXTranslate').and.callFake(() => 1);
+        const spyYTranslate = spyOn(service, 'getYTranslate').and.callFake(() => 1);
+
+        spyOn(service, 'applyRedimTransformations').and.callFake(() => null);
+
+        spyOn(selection, 'updateFullSelectionBox').and.callFake(() => null);
+
+        const coords = new Coords2D(10, 10);
+        selection.ogActiveControlPointCoords = new Coords2D(10, 10);
+
+        service.applyScaleCorner(coords, selection, true, true);
+
+        expect(spyXScale).toHaveBeenCalledWith(expectedDx, selection, true);
+        expect(spyYScale).toHaveBeenCalledWith(expectedDy, selection, true);
+        expect(spyXTranslate).toHaveBeenCalledWith(expectedDx, mockScale, selection, true);
+        expect(spyYTranslate).toHaveBeenCalledWith(expectedDy, mockScale, selection, true);
+    });
+
+    it('shoul call applyTransformation with corresponding value when applyScaleX', () => {
+        selection.ogActiveControlPointCoords = new Coords2D(10, 10);
+        const mockDx = 10;
+        spyOn(service, 'getDistanceFromControlPoint').and.returnValue(mockDx);
+        const mockScaleFactor = 2;
+        spyOn(service, 'getXScaleFactor').and.returnValue(mockScaleFactor);
+        const mockXTranslate = 10;
+        spyOn(service, 'getXTranslate').and.returnValue(mockXTranslate);
+
+        const spyOnApplyTransformation = spyOn(service, 'applyRedimTransformations').and.callFake(() => null);
+        spyOn(selection, 'updateFullSelectionBox').and.callFake(() =>  null);
+
+        service.applyScaleX(new Coords2D(10, 10), selection, true);
+
+        expect(spyOnApplyTransformation).toHaveBeenCalledWith(selection, mockScaleFactor, 1, mockXTranslate, 0);
+    });
+
+    it('shoul call applyTransformation with corresponding value when applyScaleY', () => {
+        selection.ogActiveControlPointCoords = new Coords2D(10, 10);
+        const mockDy = 10;
+        spyOn(service, 'getDistanceFromControlPoint').and.returnValue(mockDy);
+        const mockScaleFactor = 2;
+        spyOn(service, 'getYScaleFactor').and.returnValue(mockScaleFactor);
+        const mockYTranslate = 10;
+        spyOn(service, 'getYTranslate').and.returnValue(mockYTranslate);
+
+        const spyOnApplyTransformation = spyOn(service, 'applyRedimTransformations').and.callFake(() => null);
+        spyOn(selection, 'updateFullSelectionBox').and.callFake(() =>  null);
+
+        service.applyScaleY(new Coords2D(10, 10), selection, true);
+
+        expect(spyOnApplyTransformation).toHaveBeenCalledWith(selection, 1, mockScaleFactor, 0, mockYTranslate);
+    });
+
+    it('should call setTranslate on each element when applyRedimTransformations', () => {
+
+        const transformElem = {
+            setTranslate: () => null,
+            setScale: () => null,
+        } as unknown as SVGTransform;
+
+        const mockSVGGElement = {
+            transform : {
+                baseVal : {
+                    getItem: () => transformElem as SVGTransform,
+                },
+            },
+        } as unknown as SVGGElement;
+
+        selection.selectedElements.add(mockSVGGElement);
+
+        const spy = spyOn(mockSVGGElement.transform.baseVal.getItem(0), 'setTranslate').and.callFake(() => null);
+
+        service.applyRedimTransformations(selection, 1, 1, 1, 1);
+
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call corresponding function when scaleSelection with activeControlPoint', () => {
+        const spyCorner = spyOn(service, 'applyScaleCorner').and.callFake(() => null);
+        const spyX = spyOn(service, 'applyScaleX').and.callFake(() => null);
+        const spyY = spyOn(service, 'applyScaleY').and.callFake(() => null);
+
+        for (let i = 0; i < 10; i++) {
+            const mockControlPoint = {
+                getAttribute: () => null,
+            } as unknown as SVGCircleElement;
+
+            spyOn(mockControlPoint, 'getAttribute').and.returnValue(i.toString());
+
+            service.scaleSelection(new Coords2D(10, 10), mockControlPoint, selection);
+        }
+
+        expect(spyCorner).toHaveBeenCalledTimes(4);
+        expect(spyX).toHaveBeenCalledTimes(2);
+        expect(spyY).toHaveBeenCalledTimes(2);
     });
 });
