@@ -38,8 +38,8 @@ export abstract class TracingToolService extends AbstractToolService {
         this.svgPreviewCircle = this.renderer.createElement('circle', SVG_NS);
     }
 
-    getIsDrawing = () => this.isDrawing;
-    getCurrentPath = () => this.currentPath;
+    getIsDrawing = (): boolean => this.isDrawing;
+    getCurrentPath = (): string => this.currentPath;
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
@@ -48,8 +48,8 @@ export abstract class TracingToolService extends AbstractToolService {
         });
     }
 
-    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    protected getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    protected getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     onMouseDown(e: MouseEvent): void {
         this.setColorAndOpacity();
@@ -65,7 +65,7 @@ export abstract class TracingToolService extends AbstractToolService {
         }
     }
 
-    setColorAndOpacity(): void {
+    protected setColorAndOpacity(): void {
         this.currentColor = this.currentColorAndOpacity.slice(0, 6);
         this.currentOpacity = (parseInt(this.currentColorAndOpacity.slice(-2), 16) / 255).toFixed(1).toString();
     }
@@ -98,7 +98,7 @@ export abstract class TracingToolService extends AbstractToolService {
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
 
-    createSVGWrapper(): void {
+    protected createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
@@ -108,7 +108,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
+    protected createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
         this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
@@ -118,7 +118,7 @@ export abstract class TracingToolService extends AbstractToolService {
         return circle;
     }
 
-    createSVGPath(): void {
+    protected createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, 'none');
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_width, this.currentWidth.toString());
@@ -127,12 +127,12 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
-    updatePreviewCircle(x: number, y: number): void {
+    protected updatePreviewCircle(x: number, y: number): void {
         this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.cx, x.toString());
         this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.cy, y.toString());
     }
 
-    updateSVGPath(): void {
+    protected updateSVGPath(): void {
         this.renderer.setAttribute(this.svgPath, 'd', this.currentPath);
     }
 
