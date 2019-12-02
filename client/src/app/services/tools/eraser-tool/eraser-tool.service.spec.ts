@@ -164,6 +164,7 @@ describe('EraserToolService', () => {
         const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
             service.renderer.createElement('rect', SVG_NS),
         );
+        service.isHoveringText = true;
 
         service.onMouseDown(leftMouseEvent);
 
@@ -279,6 +280,14 @@ describe('EraserToolService', () => {
         service.colorBorder(0, '5', TOOL_NAME.Rectangle);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('colorBorder should not call checkIfPen if tool is text', () => {
+        const spyOncheckIfPen: jasmine.Spy = spyOn(service, 'checkIfPen');
+
+        service.colorBorder(0, '0', TOOL_NAME.Text);
+
+        expect(spyOncheckIfPen).not.toHaveBeenCalled();
     });
 
     it('restoreBorder should call setAttribute if border width is null', () => {

@@ -338,7 +338,6 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    //changer nom
     checkIfLineOrQuill(idElement: number, tool: string, borderColor: string) {
         if (
             (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
