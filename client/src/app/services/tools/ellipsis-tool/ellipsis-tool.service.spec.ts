@@ -76,8 +76,8 @@ describe('EllipsisToolService', () => {
         onShiftKeyDown = createKeyBoardEvent(KEYS.Shift);
         onOtherKeyDown = createKeyBoardEvent(KEYS.Alt);
 
-        spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
+        spyOnSetAttribute = spyOn(service.renderer, 'setAttribute');
+        spyOnDrawStackPush = spyOn(service.drawStack, 'push');
 
         spyOnPreviewRectangleWidth = spyOnProperty(service, 'previewRectangleWidth', 'get').and.callFake(() => {
             return 20;
