@@ -453,4 +453,15 @@ describe('EraserToolService', () => {
         expect(service.isHoveringText).toEqual(true);
     });
 
+    it('checkIfStamp should call setAttribute', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
+            createMockSVGGElementWithAttribute('rect'),
+        );
+
+        service.checkIfStamp(1, TOOL_NAME.Stamp, 'red');
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOngetElementByPosition).toHaveBeenCalled();
+    });
 });
