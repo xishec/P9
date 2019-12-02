@@ -16,14 +16,14 @@ export class UndoRedoerService {
     undos = new Array<DrawingState>();
     redos = new Array<DrawingState>();
 
-    workzoneRef: ElementRef<SVGElement>;
-    currentDrawingInfos: DrawingInfo;
+    private workzoneRef: ElementRef<SVGElement>;
+    private currentDrawingInfos: DrawingInfo;
 
     fromLoader = false;
 
-    pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
-    duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
-    clipping: BehaviorSubject<Set<SVGElement>> = new BehaviorSubject(new Set<SVGElement>());
+    private pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    private duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    private clipping: BehaviorSubject<Set<SVGElement>> = new BehaviorSubject(new Set<SVGElement>());
 
     currentPasteOffset: Observable<number> = this.pasteOffset.asObservable();
     currentDuplicateOffset: Observable<number> = this.duplicateOffset.asObservable();
@@ -46,7 +46,7 @@ export class UndoRedoerService {
         this.redos = [];
     }
 
-    getCleanInnerHTML(): string {
+    private getCleanInnerHTML(): string {
         const cloneWorkzone = this.workzoneRef.nativeElement.cloneNode(true) as SVGElement;
 
         const elToRemove = new Array<SVGElement>();
@@ -64,17 +64,10 @@ export class UndoRedoerService {
         return cloneWorkzone.innerHTML;
     }
 
-    createDrawing(idStackArray: string[]): Drawing {
-
+    private createDrawing(idStackArray: string[]): Drawing {
         const cleanedInnerHTML = this.getCleanInnerHTML();
 
-        const drawing: Drawing = new Drawing(
-            '',
-            [],
-            cleanedInnerHTML,
-            idStackArray,
-            this.currentDrawingInfos,
-        );
+        const drawing: Drawing = new Drawing('', [], cleanedInnerHTML, idStackArray, this.currentDrawingInfos);
         return drawing;
     }
 
@@ -105,7 +98,7 @@ export class UndoRedoerService {
         this.saveState(currentState);
     }
 
-    saveState(state: DrawingState) {
+    private saveState(state: DrawingState) {
         this.undos.push(state);
         if (this.redos.length > 0) {
             this.redos = [];

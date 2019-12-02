@@ -54,7 +54,7 @@ describe('UndoRedoerService', () => {
         service = injector.get(UndoRedoerService);
 
         mockElementRef = injector.get(ElementRef);
-        service.workzoneRef = injector.get(ElementRef);
+        service[`workzoneRef`] = injector.get(ElementRef);
         drawingModalWindowServiceMock = injector.get(DrawingModalWindowService);
 
         drawingModalWindowServiceMock.drawingInfo = new BehaviorSubject<DrawingInfo>(MOCK_DRAWING_INFO);
@@ -70,79 +70,79 @@ describe('UndoRedoerService', () => {
 
         service.initializeService(mockElementRef);
 
-        expect(service.workzoneRef.nativeElement.innerHTML).toEqual(mockExpectedInnerHTML);
+        expect(service[`workzoneRef`].nativeElement.innerHTML).toEqual(mockExpectedInnerHTML);
     });
 
     it('initializeStacks should reset undos and redos', () => {
         service.initializeStacks();
 
-        expect(service.undos).toEqual([]);
-        expect(service.redos).toEqual([]);
+        expect(service[`undos`]).toEqual([]);
+        expect(service[`redos`]).toEqual([]);
     });
 
     it('createDrawing should return a drawing with the innerHTML', () => {
-        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
-        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
+        spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
+        service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
+        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
 
-        const resDrawing = service.createDrawing([]);
+        const resDrawing = service[`createDrawing`]([]);
 
         expect(resDrawing.svg).toEqual(MOCK_INNER_HTML);
     });
 
     it('saveStateAndDuplicateOffset should create a DrawingState with the duplicateOffSet and saveState', () => {
-        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
-        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
-        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
+        spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
+        service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
+        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveStateAndDuplicateOffset([], 10);
 
         expect(spyOnSaveState).toHaveBeenCalled();
-        const state = service.undos.pop() as DrawingState;
+        const state = service[`undos`].pop() as DrawingState;
         expect(state.duplicateOffset).toEqual(10);
     });
 
     it('saveStateFromPaste should create a DrawingState with the pasteOffset and saveState', () => {
-        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
-        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
-        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
+        spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
+        service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
+        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveStateFromPaste([], 10, new Set<SVGElement>());
 
         expect(spyOnSaveState).toHaveBeenCalled();
-        const state = service.undos.pop() as DrawingState;
+        const state = service[`undos`].pop() as DrawingState;
         expect(state.pasteOffset).toEqual(10);
     });
 
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
-        spyOn(service, 'getCleanInnerHTML').and.callFake( () => MOCK_INNER_HTML);
-        service.workzoneRef.nativeElement.innerHTML = MOCK_INNER_HTML;
-        service.currentDrawingInfos = MOCK_DRAWING_INFO;
-        const spyOnSaveState = spyOn(service, 'saveState').and.callThrough();
+        spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
+        service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
+        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveCurrentState([]);
 
         expect(spyOnSaveState).toHaveBeenCalled();
-        const state = service.undos.pop() as DrawingState;
+        const state = service[`undos`].pop() as DrawingState;
         expect(state.pasteOffset).toBeUndefined();
         expect(state.duplicateOffset).toBeUndefined();
     });
 
     it('saveState should push DrawingState on undos', () => {
-        service.saveState(MOCK_DRAWING_STATE);
+        service[`saveState`](MOCK_DRAWING_STATE);
 
-        const resDrawingState = service.undos.pop() as DrawingState;
+        const resDrawingState = service[`undos`].pop() as DrawingState;
         expect(resDrawingState).toEqual(MOCK_DRAWING_STATE);
     });
 
     it('saveState should reset redos if redos.length > 0', () => {
-        service.redos.push(MOCK_DRAWING_STATE);
+        service[`redos`].push(MOCK_DRAWING_STATE);
 
-        service.saveState(MOCK_DRAWING_STATE);
+        service[`saveState`](MOCK_DRAWING_STATE);
 
-        expect(service.redos).toEqual([]);
+        expect(service[`redos`]).toEqual([]);
     });
 
     it('undo should pop undos and push this to redos if undos.length > 1', () => {
@@ -157,22 +157,22 @@ describe('UndoRedoerService', () => {
             drawing: mockDrawing,
         };
 
-        service.undos.push(mockState1);
-        service.undos.push(mockState2);
+        service[`undos`].push(mockState1);
+        service[`undos`].push(mockState2);
 
         service.undo();
 
-        expect(service.redos[0]).toEqual(mockState2);
+        expect(service[`redos`][0]).toEqual(mockState2);
     });
 
     it('undo should not do anything if undos.length <= 1', () => {
-        service.undos = [];
-        service.redos = [];
+        service[`undos`] = [];
+        service[`redos`] = [];
 
         service.undo();
 
-        expect(service.undos).toEqual([]);
-        expect(service.redos).toEqual([]);
+        expect(service[`undos`]).toEqual([]);
+        expect(service[`redos`]).toEqual([]);
     });
 
     it('undo should change the value of duplicateOffset if stateToLoad has one', () => {
@@ -180,12 +180,12 @@ describe('UndoRedoerService', () => {
             drawing: MOCK_DRAWING,
             duplicateOffset: 10,
         };
-        service.undos.push(mockDrawingState);
-        service.undos.push(MOCK_DRAWING_STATE);
+        service[`undos`].push(mockDrawingState);
+        service[`undos`].push(MOCK_DRAWING_STATE);
 
         service.undo();
 
-        expect(service.duplicateOffset.value).toEqual(10);
+        expect(service[`duplicateOffset`].value).toEqual(10);
     });
 
     it('undo should change the value of pasteOffset if stateToLoad has one', () => {
@@ -195,12 +195,12 @@ describe('UndoRedoerService', () => {
             clippings: new Set<SVGElement>(),
         };
 
-        service.undos.push(mockDrawingState);
-        service.undos.push(MOCK_DRAWING_STATE);
+        service[`undos`].push(mockDrawingState);
+        service[`undos`].push(MOCK_DRAWING_STATE);
 
         service.undo();
 
-        expect(service.pasteOffset.value).toEqual(10);
+        expect(service[`pasteOffset`].value).toEqual(10);
     });
 
     it('redo should change the value of duplicateOffset if stateToLoad has one', () => {
@@ -208,11 +208,11 @@ describe('UndoRedoerService', () => {
             drawing: MOCK_DRAWING,
             duplicateOffset: 10,
         };
-        service.redos.push(mockDrawingState);
+        service[`redos`].push(mockDrawingState);
 
         service.redo();
 
-        expect(service.duplicateOffset.value).toEqual(10);
+        expect(service[`duplicateOffset`].value).toEqual(10);
     });
 
     it('redo should change the value of pasteOffset if stateToLoad has one', () => {
@@ -220,28 +220,28 @@ describe('UndoRedoerService', () => {
             drawing: MOCK_DRAWING,
             pasteOffset: 10,
         };
-        service.redos.push(mockDrawingState);
+        service[`redos`].push(mockDrawingState);
 
         service.redo();
 
-        expect(service.pasteOffset.value).toEqual(10);
+        expect(service[`pasteOffset`].value).toEqual(10);
     });
 
     it('redo should pop redos and push this to undos if length > 0', () => {
-        service.redos.push(MOCK_DRAWING_STATE);
+        service[`redos`].push(MOCK_DRAWING_STATE);
 
         service.redo();
 
-        expect(service.undos[0]).toEqual(MOCK_DRAWING_STATE);
+        expect(service[`undos`][0]).toEqual(MOCK_DRAWING_STATE);
     });
 
     it('redo should not do anything if redos.length <= 0', () => {
-        service.undos = [];
-        service.redos = [];
+        service[`undos`] = [];
+        service[`redos`] = [];
 
         service.redo();
 
-        expect(service.undos).toEqual([]);
-        expect(service.redos).toEqual([]);
+        expect(service[`undos`]).toEqual([]);
+        expect(service[`redos`]).toEqual([]);
     });
 });
