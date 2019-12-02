@@ -106,7 +106,8 @@ describe('PolygonToolService', () => {
 
         let vertex: Vertex;
         vertex = polygonTool.calculateVertex(5);
-        expect(vertex).toEqual({ x: 0.6698729810778055, y: 7.499999999999999 });
+        expect(vertex.x).toEqual(0.6698729810778055);
+        expect(vertex.y).toEqual(7.499999999999999);
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {

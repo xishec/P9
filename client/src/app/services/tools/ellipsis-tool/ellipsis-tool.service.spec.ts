@@ -206,7 +206,7 @@ describe('EllipsisToolService', () => {
         service.userStrokeWidth = 2;
         spyOnDrawEllipseRadiusX.and.callFake(() => 10);
 
-        expect(service.isValidEllipse()).toEqual(true);
+        expect(service.isValidllipse()).toEqual(true);
     });
 
     it('should return false if radiusX and radiusY of elipse are equal to zero', () => {
@@ -215,7 +215,7 @@ describe('EllipsisToolService', () => {
         spyOnDrawEllipseRadiusX.and.callFake(() => 0);
         spyOnDrawEllipseRadiusY.and.callFake(() => 0);
 
-        expect(service.isValidEllipse()).toEqual(false);
+        expect(service.isValidllipse()).toEqual(false);
     });
 
     it('should set userFillColor to none if Outline is selected', () => {
@@ -273,31 +273,31 @@ describe('EllipsisToolService', () => {
     });
 
     it('should call setAttribute and fill to userFillColor without "#" if userFillColor is none', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(true);
         service.userFillColor = NONE;
 
         service.renderDrawEllipsis();
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnisValidEllipse).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
     it('should call setAttribute and fill to userFillColor with "#" if userFillColor is different than none', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(true);
         service.userFillColor = NOTNONE;
 
         service.renderDrawEllipsis();
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnisValidEllipse).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
     it('should call setAttribute and fill to none if ellipse in not valid', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(false);
 
         service.renderDrawEllipsis();
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnisValidEllipse).toHaveBeenCalled();
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
@@ -353,31 +353,31 @@ describe('EllipsisToolService', () => {
         expect(spyOnUpdateDrawing).toHaveBeenCalledTimes(0);
     });
 
-    it('should not call isValideEllipse if the left button of the mouse is not clicked', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
+    it('should not call isValidEllipse if the left button of the mouse is not clicked', () => {
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(false);
 
         service.onMouseUp(rightMouseEvent);
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalledTimes(0);
+        expect(spyOnisValidEllipse).toHaveBeenCalledTimes(0);
     });
 
     it('should not call createSVG if the left button of the mouse is clicked and the ellipse is not valide', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(false);
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(false);
         const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnisValidEllipse).toHaveBeenCalled();
         expect(spyOnCreateSVG).toHaveBeenCalledTimes(0);
     });
 
     it('should call createSVG if the left button of the mouse is clicked and the ellipse is valide', () => {
-        const spyOnIsValideEllipse: jasmine.Spy = spyOn(service, 'isValidEllipse').and.returnValue(true);
+        const spyOnisValidEllipse: jasmine.Spy = spyOn(service, 'isValidllipse').and.returnValue(true);
         const spyOnCreateSVG: jasmine.Spy = spyOn(service, 'createSVG').and.returnValue();
 
         service.onMouseUp(leftMouseEvent);
 
-        expect(spyOnIsValideEllipse).toHaveBeenCalled();
+        expect(spyOnisValidEllipse).toHaveBeenCalled();
         expect(spyOnCreateSVG).toHaveBeenCalled();
     });
 
