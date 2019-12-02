@@ -57,7 +57,7 @@ export class LineToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.thickness.subscribe((thickness) => {
+        this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.currentStrokeWidth = thickness;
         });
         this.attributesManagerService.lineStrokeType.subscribe((strokeType) => {
@@ -66,7 +66,7 @@ export class LineToolService extends AbstractToolService {
         this.attributesManagerService.lineJointType.subscribe((jointType) => {
             this.currentJointType = jointType;
         });
-        this.attributesManagerService.circleJointDiameter.subscribe((circleJointDiameter) => {
+        this.attributesManagerService.circleJointDiameter.subscribe((circleJointDiameter: number) => {
             this.circleJointDiameter = circleJointDiameter;
         });
     }
