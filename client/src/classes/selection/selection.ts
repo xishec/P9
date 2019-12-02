@@ -11,8 +11,8 @@ import {
 import { Coords2D } from '../Coords2D';
 
 export class Selection {
-    renderer: Renderer2;
-    svgRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private svgRef: ElementRef<SVGElement>;
 
     selectedElements: Set<SVGGElement> = new Set();
     invertSelectionBuffer: Set<SVGGElement> = new Set();
@@ -36,7 +36,7 @@ export class Selection {
         this.isAppended = false;
     }
 
-    initFullSelectionBox(): void {
+    private initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
@@ -50,7 +50,7 @@ export class Selection {
         }
     }
 
-    removeFullSelectionBox(): void {
+    private removeFullSelectionBox(): void {
         if (this.isAppended) {
             this.renderer.removeChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
@@ -61,7 +61,7 @@ export class Selection {
         }
     }
 
-    appendFullSelectionBox(): void {
+    private appendFullSelectionBox(): void {
         if (!this.isAppended) {
             this.renderer.appendChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
@@ -72,23 +72,23 @@ export class Selection {
         }
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    getControlPointCx(ctrlPt: SVGCircleElement): number {
+    private getControlPointCx(ctrlPt: SVGCircleElement): number {
         return ctrlPt.cx.baseVal.value;
     }
 
-    getControlPointCy(ctrlPt: SVGCircleElement): number {
+    private getControlPointCy(ctrlPt: SVGCircleElement): number {
         return ctrlPt.cy.baseVal.value;
     }
 
-    getControlPointR(ctrlPt: SVGCircleElement): number {
+    private getControlPointR(ctrlPt: SVGCircleElement): number {
         return ctrlPt.r.baseVal.value;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
+    private getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
             return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
