@@ -79,16 +79,7 @@ describe('WorkZoneComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        currentToolName: new BehaviorSubject<DrawingInfo>({
-                            name: '',
-                            createdAt: 0,
-                            lastModified: 0,
-                            labels: [],
-                            idStack: [],
-                            width: 0,
-                            height: 0,
-                            color: '',
-                        } as DrawingInfo),
+                        currentToolName: TOOL_NAME.Brush,
                         initTools: () => null,
                     },
                 },
