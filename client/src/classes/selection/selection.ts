@@ -132,7 +132,7 @@ export class Selection {
         return false;
     }
 
-    findLeftMostCoord(): number {
+    private findLeftMostCoord(): number {
         const leftCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -142,7 +142,7 @@ export class Selection {
         return Math.min.apply(Math, leftCoords);
     }
 
-    findRightMostCoord(): number {
+    private findRightMostCoord(): number {
         const rightCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -158,7 +158,7 @@ export class Selection {
         return Math.max.apply(Math, rightCoords);
     }
 
-    findTopMostCoord(): number {
+    private findTopMostCoord(): number {
         const topCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -168,7 +168,7 @@ export class Selection {
         return Math.min.apply(Math, topCoords);
     }
 
-    findBottomMostCoord(): number {
+    private findBottomMostCoord(): number {
         const bottomCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -198,7 +198,7 @@ export class Selection {
         this.updateControlPoints();
     }
 
-    updateControlPoints(): void {
+    private updateControlPoints(): void {
         const positionMap: Map<number, [string, string]> = new Map();
 
         positionMap.set(0, [
@@ -268,7 +268,7 @@ export class Selection {
         }
     }
 
-    removeFromSelection(element: SVGGElement): void {
+    private removeFromSelection(element: SVGGElement): void {
         this.selectedElements.delete(element);
         this.updateFullSelectionBox();
         if (this.selectedElements.size === 0) {
