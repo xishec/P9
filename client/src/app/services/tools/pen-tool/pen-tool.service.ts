@@ -10,15 +10,13 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PenToolService extends TracingToolService {
-    oldTimeStamp = -1;
-    lastMouseX: number;
-    lastMouseY: number;
-    speedX: number;
-    oldSpeedX = 0;
-    oldSpeedY = 0;
-    speedY: number;
-    maxThickness: number;
-    minThickness: number;
+    private oldTimeStamp = -1;
+    private lastMouseX: number;
+    private lastMouseY: number;
+    private speedX: number;
+    private speedY: number;
+    private maxThickness: number;
+    private minThickness: number;
 
     constructor(private colorToolService: ColorToolService) {
         super();
