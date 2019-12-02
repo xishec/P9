@@ -1,6 +1,4 @@
 <h1 mat-dialog-title>Ouvrir un dessin existant</h1>
-
-<!-- <mat-tab-group animationDuration="0ms">
     <mat-tab label="Ouvrir un fichier dans la BD">
         <div class="tab-content" id="open-server">
             <div id="filters">
@@ -220,78 +218,82 @@
                     id="label-filter"
                 />
             </div>
-            <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
-                <div *ngIf="!isLoading" id="drawing-list">
-                    <mat-selection-list
-                        #drawings
-                        formControlName="selectedDrawing"
-                        (selectionChange)="handleSelection($event)"
-                        id="selection-list"
-                        required
-                    >
-                        <mat-list-option
-                            *ngFor="
-                                let drawing of drawingsFromServer
-                                    | nameFilter: nameFilter
-                                    | labelFilter: labelFilter
-                                    | mySlice: nameFilter;
-                                let i = index
-                            "
-                            id="list-option"
-                            [value]="drawing.drawingInfo.createdAt"
+            <div id="test">
+                <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
+                    <div *ngIf="!isLoading" id="drawing-list">
+                        <mat-selection-list
+                            #drawings
+                            formControlName="selectedDrawing"
+                            (selectionChange)="handleSelection($event)"
+                            id="selection-list"
+                            required
                         >
-                            <div id="drawing-option">
-                                <div id="drawing-name">
-                                    {{ drawing.drawingInfo.name }}
-                                </div>
-                                <div id="drawing-labels-list">
-                                    <div id="drawing-label" *ngFor="let label of drawing.drawingInfo.labels">
-                                        {{ label }}
+                            <mat-list-option
+                                *ngFor="
+                                    let drawing of drawingsFromServer
+                                        | nameFilter: nameFilter
+                                        | labelFilter: labelFilter
+                                        | mySlice: nameFilter;
+                                    let i = index
+                                "
+                                id="list-option"
+                                [value]="drawing.drawingInfo.createdAt"
+                            >
+                                <div id="drawing-option">
+                                    <div id="drawing-name">
+                                        {{ drawing.drawingInfo.name }}
+                                    </div>
+                                    <div id="drawing-labels-list">
+                                        <div id="drawing-label" *ngFor="let label of drawing.drawingInfo.labels">
+                                            {{ label }}
+                                        </div>
+                                    </div>
+                                    <div id="drawing-thumbnail">
+                                        <svg
+                                            [attr.width]="getWidth(drawing.drawingInfo.name)"
+                                            [attr.height]="getHeight(drawing.drawingInfo.name)"
+                                            [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
+                                            [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
+                                        ></svg>
+                                    </div>
+                                    <div id="drawing-created-at">
+                                        {{ convertTimeStampToDate(drawing.drawingInfo.createdAt) }}
                                     </div>
                                 </div>
-                                <div id="drawing-thumbnail">
-                                    <svg
-                                        [attr.width]="getWidth(drawing.drawingInfo.name)"
-                                        [attr.height]="getHeight(drawing.drawingInfo.name)"
-                                        [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
-                                        [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
-                                    ></svg>
-                                </div>
-                                <div id="drawing-created-at">
-                                    {{ convertTimeStampToDate(drawing.drawingInfo.createdAt) }}
-                                </div>
-                            </div>
-                        </mat-list-option>
-                    </mat-selection-list>
-                    <div
-                        class="hidden-info"
-                        *ngIf="
-                            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
-                            nameFilter !== '$tout'
-                        "
-                    >
-                        {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
-                        {{
-                            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
-                                ? 'dessins masqués ...'
-                                : 'dessin masqué ...'
-                        }}
-                        <a id="clickable" (click)="unmaskAll()">voir tout</a>
+                            </mat-list-option>
+                        </mat-selection-list>
+                        <div
+                            class="hidden-info"
+                            *ngIf="
+                                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0
+                            "
+                        >
+                            Aucun dessin trouvé!
+                        </div>
                     </div>
-                    <div
-                        class="hidden-info"
-                        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
-                    >
-                        Aucun dessin trouvé!
+                    <div *ngIf="isLoading" id="loading-div">
+                        <img id="img" [src]="getGifSource()" alt="" />
+                        <div>
+                            Loading ...
+                        </div>
                     </div>
+                </mat-dialog-content>
+                <div
+                    class="hidden-info"
+                    *ngIf="
+                        (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
+                        nameFilter !== '$tout'
+                    "
+                >
+                    {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
+                    {{
+                        (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
+                            ? 'dessins masqués ...'
+                            : 'dessin masqué ...'
+                    }}
+                    <a id="clickable" (click)="unmaskAll()">voir tout</a>
                 </div>
-                <div *ngIf="isLoading" id="loading-div">
-                    <img id="img" [src]="getGifSource()" alt="" />
-                    <div>
-                        Loading ...
-                    </div>
-                </div>
-            </mat-dialog-content>
+            </div>
             <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
                 <mat-error class="center">
                     <i class="fas fa-exclamation-triangle"></i>
