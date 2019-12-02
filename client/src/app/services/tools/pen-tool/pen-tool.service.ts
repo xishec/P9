@@ -29,7 +29,7 @@ export class PenToolService extends TracingToolService {
         super.initializeService(elementRef, renderer, drawStack);
     }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
+    protected createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
         return circle;
     }
@@ -55,12 +55,10 @@ export class PenToolService extends TracingToolService {
             this.currentPath = `M${x} ${y}`;
             this.createSVGPath();
         }
-        this.oldSpeedX = this.speedX;
-        this.oldSpeedY = this.speedY;
         return;
     }
 
-    calculateSpeed(e: MouseEvent): void {
+    private calculateSpeed(e: MouseEvent): void {
         if (this.oldTimeStamp === -1) {
             this.speedX = 0;
             this.speedY = 0;

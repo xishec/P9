@@ -46,58 +46,58 @@ describe('PenToolService', () => {
     });
 
     it('should call createSVGCircle of super on createSVGCircle', () => {
-        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
+        const spyOnSuperCreateCircle = spyOn<any>(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
             createMockSVGCircle(),
         );
 
-        service.createSVGCircle(X, Y);
+        service[`createSVGCircle`](X, Y);
 
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
     });
 
     it('should set default value on calculateSpeed initially', () => {
-        service.oldTimeStamp = -1;
+        service[`oldTimeStamp`] = -1;
         const mockLeftButton = {
             screenX: 10,
             screenY: 10,
         };
 
-        service.calculateSpeed(mockLeftButton as MouseEvent);
+        service[`calculateSpeed`](mockLeftButton as MouseEvent);
 
-        expect(service.speedX).toEqual(0);
-        expect(service.speedY).toEqual(0);
-        expect(service.lastMouseX).toEqual(10);
-        expect(service.lastMouseY).toEqual(10);
+        expect(service[`speedX`]).toEqual(0);
+        expect(service[`speedY`]).toEqual(0);
+        expect(service[`lastMouseX`]).toEqual(10);
+        expect(service[`lastMouseY`]).toEqual(10);
     });
 
     it('should not set default value on calculateSpeed initially', () => {
-        service.oldTimeStamp = 1;
+        service[`oldTimeStamp`] = 1;
         const mockLeftButton = {
             screenX: 10,
             screenY: 10,
         };
 
-        service.calculateSpeed(mockLeftButton as MouseEvent);
+        service[`calculateSpeed`](mockLeftButton as MouseEvent);
 
-        expect(service.speedX).not.toEqual(0);
-        expect(service.speedY).not.toEqual(0);
-        expect(service.lastMouseX).toEqual(10);
-        expect(service.lastMouseY).toEqual(10);
+        expect(service[`speedX`]).not.toEqual(0);
+        expect(service[`speedY`]).not.toEqual(0);
+        expect(service[`lastMouseX`]).toEqual(10);
+        expect(service[`lastMouseY`]).toEqual(10);
     });
 
     it('should change speed to max on calculateSpeed with a speed greater than max speed', () => {
-        service.oldTimeStamp = Date.now();
-        service.lastMouseX = 0;
-        service.lastMouseY = 0;
+        service[`oldTimeStamp`] = Date.now();
+        service[`lastMouseX`] = 0;
+        service[`lastMouseY`] = 0;
         const mockLeftButton = {
             screenX: 10000,
             screenY: 10000,
         };
-        service.maxThickness = 7;
-        service.minThickness = 2;
+        service[`maxThickness`] = 7;
+        service[`minThickness`] = 2;
         service[`currentWidth`] = 0;
 
-        service.calculateSpeed(mockLeftButton as MouseEvent);
+        service[`calculateSpeed`](mockLeftButton as MouseEvent);
 
         const totalSpeed = PEN_WIDTH_FACTOR;
         const targetWidth = 7 * (1 - totalSpeed / PEN_WIDTH_FACTOR) + 2;
