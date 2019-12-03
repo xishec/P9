@@ -1,6 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
+import { BehaviorSubject } from 'rxjs';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import {
     createKeyBoardEvent,
@@ -11,6 +12,7 @@ import { KEYS, SVG_NS } from 'src/constants/constants';
 import { HTML_ATTRIBUTE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
+import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { EraserToolService } from './eraser-tool.service';
 
 describe('EraserToolService', () => {
@@ -397,6 +399,18 @@ describe('EraserToolService', () => {
         service.onMouseUp(rightMouseEvent);
 
         expect(service.isLeftMouseDown).toEqual(true);
+    });
+
+    it('onMouseUp should  ', () => {
+        service.erasedSomething = true;
+        service.currentTarget = 0;
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
+
+        service.onMouseUp(leftMouseEvent);
+
+        expect(service.isLeftMouseDown).toEqual(false);
+        expect(spyOnremoveChild).toHaveBeenCalled();
+        expect(spyOnget).toHaveBeenCalled();
     });
 
     it('onMouseEnter should call appendSquare', () => {
