@@ -45,7 +45,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
                 THICKNESS.Default,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
-            traceType: ['Contour'],
+            traceType: ['Plein'],
         });
     }
 
