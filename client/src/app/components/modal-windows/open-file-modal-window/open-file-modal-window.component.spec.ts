@@ -11,12 +11,15 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
+import { NUMBER_OF_MS } from 'src/constants/constants';
 
-describe('OpenFileModalWindowComponent', () => {
+fdescribe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
     let fixture: ComponentFixture<OpenFileModalWindowComponent>;
 
     let drawingLoaderService: DrawingLoaderService;
+    let undoRedoerService: UndoRedoerService;
 
     const TEST_DRAWING: Drawing = {
         svg: 'test-svg',
@@ -126,6 +129,12 @@ describe('OpenFileModalWindowComponent', () => {
                             },
                         },
                         {
+                            provide: UndoRedoerService,
+                            useValue: {
+                                initializeStacks: () => null,
+                            },
+                        },
+                        {
                             provide: MatSnackBar,
                             useValue: {
                                 open: () => null,
@@ -140,10 +149,27 @@ describe('OpenFileModalWindowComponent', () => {
         component = fixture.componentInstance;
 
         drawingLoaderService = fixture.debugElement.injector.get(DrawingLoaderService);
+        undoRedoerService = fixture.debugElement.injector.get(UndoRedoerService);
     }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should extract the svg code of a htmlcode', () => {
+        const expectedValue = '<div><p>HELLO</p></div>';
+        const MOCK_CODE = `<svg>${expectedValue}</svg>`;
+
+        expect(component.extractInnerHTML(MOCK_CODE)).toEqual(expectedValue);
+    });
+
+    it('should call undoRedoerService initializeStacks and set fromLoader to true', () => {
+        const SPY = spyOn(undoRedoerService, 'initializeStacks');
+
+        component.initializeUndoRedoStacks();
+
+        expect(SPY).toHaveBeenCalled();
+        expect(undoRedoerService.fromLoader).toBeTruthy();
     });
 
     it('should close modal when submit button has been clicked', () => {
@@ -169,5 +195,19 @@ describe('OpenFileModalWindowComponent', () => {
         component.loadLocalFile();
 
         expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
+    });
+
+    it('should correctly return the number of days between two values in milliseconds', () => {
+        const firstValue = 3 * NUMBER_OF_MS.day + 7 * NUMBER_OF_MS.hours;
+        const secondValue = 9 * NUMBER_OF_MS.day + 1 * NUMBER_OF_MS.minutes;
+
+        expect(component.numberOfDaysBetween(firstValue, secondValue)).toEqual(6);
+    });
+
+    it('should correctly convert number of ms to days, hours and minutes format', () => {
+        const expectedResult = '1 jour, 3 heures et 24 minutes';
+        const numberOfMs = 1 * NUMBER_OF_MS.day + 3 * NUMBER_OF_MS.hours + 24 * NUMBER_OF_MS.minutes;
+
+        expect(component.msToDaysHoursMinutes(numberOfMs)).toEqual(expectedResult);
     });
 });
