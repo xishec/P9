@@ -300,6 +300,15 @@ export class EraserToolService extends AbstractToolService {
         }
 
         this.isHoveringText = true;
+
+        this.appendTextBorder(idElement, borderColor, borderWidth);
+
+        this.appendEraser();
+
+        return true;
+    }
+
+    appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
         const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
         const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
 
@@ -324,9 +333,6 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
         this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
         this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
-        this.appendEraser();
-
-        return true;
     }
 
     checkIfStamp(idElement: number, tool: string, borderColor: string): void {
