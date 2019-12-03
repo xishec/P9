@@ -59,6 +59,10 @@ export class ColorApplicatorToolService extends AbstractToolService {
         return isRectangle || isEllipsis || isPolygon;
     }
 
+    isText(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Text;
+    }
+
     isFilledShape(): boolean {
         return this.currentStackTarget.toolName === TOOL_NAME.Fill;
     }
@@ -137,6 +141,14 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
+    changeFillColorOnText(): void {
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.fill, this.primaryColor);
+    }
+
+    changeStrokeColorOnText(): void {
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.stroke, this.secondaryColor);
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
@@ -154,7 +166,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.changeFillColorOnFilledShape();
                 } else if (this.isStackTargetShape()) {
                     this.changeFillColorOnShape();
-                } else {
+                } else if (this.isText()) {
+                    this.changeFillColorOnText();
+                }else {
                     this.changeColorOnTrace();
                 }
                 break;
@@ -163,6 +177,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.changeStrokeColorOnFilledShape();
                 } else if (this.isStackTargetShape()) {
                     this.changeStrokeColorOnShape();
+                } else if(this.isText()) {
+                    this.changeStrokeColorOnText();
                 }
                 break;
             default:

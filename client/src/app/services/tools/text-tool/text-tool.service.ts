@@ -206,7 +206,7 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
         this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
         this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
+        //this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
     }
 
     createNewLine(): void {
@@ -274,6 +274,7 @@ export class TextToolService extends AbstractToolService {
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
             this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Text);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);
