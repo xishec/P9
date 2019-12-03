@@ -61,8 +61,8 @@ enum TOOL_NAME {
 }
 
 enum THICKNESS {
-    Min = 1,
-    Default = 5,
+    Min = 2,
+    Default = 10,
     Max = 100,
 }
 
