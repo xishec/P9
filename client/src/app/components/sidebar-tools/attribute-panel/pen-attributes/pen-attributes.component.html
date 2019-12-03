@@ -7,7 +7,6 @@
         <div class="attribute">
             <label for="maxThickness">Épaisseur du trait maximum</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="maxThickness"
                 (input)="onMaxSliderChange($event)"
                 [min]="THICKNESS.Min"
@@ -33,7 +32,6 @@
         <div class="attribute">
             <label for="minThickness">Épaisseur du trait minimum</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="minThickness"
                 (input)="onMinSliderChange($event)"
                 [min]="THICKNESS.Min"
