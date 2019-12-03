@@ -27,7 +27,7 @@ export class QuillToolService extends TracingToolService {
     ];
 
     private thickness = 80;
-    private angle = 80;
+    angle = 80;
     private currentMousePosition: Coords2D = new Coords2D(0, 0);
     private counter = 0;
     private isAlterRotation: boolean;
