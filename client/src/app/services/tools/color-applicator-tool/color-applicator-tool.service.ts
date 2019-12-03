@@ -142,12 +142,20 @@ export class ColorApplicatorToolService extends AbstractToolService {
     }
 
     changeFillColorOnText(): void {
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.fill, this.primaryColor);
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.fill,
+            this.primaryColor,
+        );
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     changeStrokeColorOnText(): void {
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.stroke, this.secondaryColor);
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.stroke,
+            this.secondaryColor,
+        );
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
@@ -170,7 +178,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.changeFillColorOnShape();
                 } else if (this.isText()) {
                     this.changeFillColorOnText();
-                }else {
+                } else {
                     this.changeColorOnTrace();
                 }
                 break;
@@ -179,7 +187,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
                     this.changeStrokeColorOnBucketFill();
                 } else if (this.isShape()) {
                     this.changeStrokeColorOnShape();
-                } else if(this.isText()) {
+                } else if (this.isText()) {
                     this.changeStrokeColorOnText();
                 }
                 break;
