@@ -106,6 +106,13 @@ describe('EraserToolService', () => {
         expect(service).toBeTruthy();
     });
 
+    it('should initialize AttributesManagerService on initializeAttributesManagerService', () => {
+        service.initializeAttributesManagerService({
+            eraserSize: new BehaviorSubject(1),
+        } as AttributesManagerService);
+        expect(service[`attributesManagerService`]).toBeTruthy({});
+    });
+
     it('should call onMouseDown if isLeftMouseDown is true', () => {
         service.isLeftMouseDown = true;
         const spyOnMouseDown: jasmine.Spy = spyOn(service, 'onMouseDown');
