@@ -67,25 +67,25 @@ describe('ColorApplicatorToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should return true if tool is rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+    it('should return true if tool is rectangle, polygon or ellipsis when calling isShape', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        const res = service.isStackTargetShape();
+        const res = service.isShape();
         expect(res).toBeTruthy();
     });
 
-    it('should return false if tool is not rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+    it('should return false if tool is not rectangle, polygon or ellipsis when calling isShape', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        const res = service.isStackTargetShape();
+        const res = service.isShape();
         expect(res).toBeFalsy();
     });
 
@@ -108,6 +108,28 @@ describe('ColorApplicatorToolService', () => {
         service.currentStackTarget = mockStackTargetInfo;
 
         const res = service.isText();
+        expect(res).toBeFalsy();
+    });
+
+    it('should return true if tool is fill when calling isBucketFill', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Fill,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isBucketFill();
+        expect(res).toBeTruthy();
+    });
+
+    it('should return false if tool is not fill when calling isBucketFill', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Fill,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isBucketFill();
         expect(res).toBeFalsy();
     });
 

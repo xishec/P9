@@ -52,7 +52,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
-    isStackTargetShape(): boolean {
+    isShape(): boolean {
         const isRectangle = this.currentStackTarget.toolName === TOOL_NAME.Rectangle;
         const isEllipsis = this.currentStackTarget.toolName === TOOL_NAME.Ellipsis;
         const isPolygon = this.currentStackTarget.toolName === TOOL_NAME.Polygon;
@@ -63,7 +63,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         return this.currentStackTarget.toolName === TOOL_NAME.Text;
     }
 
-    isFilledShape(): boolean {
+    isBucketFill(): boolean {
         return this.currentStackTarget.toolName === TOOL_NAME.Fill;
     }
 
@@ -95,7 +95,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
-    changeFillColorOnFilledShape(): void {
+    changeFillColorOnBucketFill(): void {
         const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
             this.currentStackTarget.targetPosition,
         );
@@ -106,7 +106,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
-    changeStrokeColorOnFilledShape(): void {
+    changeStrokeColorOnBucketFill(): void {
         const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
             this.currentStackTarget.targetPosition,
         );
@@ -164,9 +164,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                if (this.isFilledShape()) {
-                    this.changeFillColorOnFilledShape();
-                } else if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeFillColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeFillColorOnShape();
                 } else if (this.isText()) {
                     this.changeFillColorOnText();
@@ -175,9 +175,9 @@ export class ColorApplicatorToolService extends AbstractToolService {
                 }
                 break;
             case MOUSE.RightButton:
-                if (this.isFilledShape()) {
-                    this.changeStrokeColorOnFilledShape();
-                } else if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeStrokeColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeStrokeColorOnShape();
                 } else if(this.isText()) {
                     this.changeStrokeColorOnText();
