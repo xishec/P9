@@ -59,7 +59,9 @@ export class ExportToolService {
         const originalSvgSize: ClientRect | DOMRect = this.svg.getBoundingClientRect();
 
         if (FILE_TYPE.BMP === this.fileType) {
-            this.compressSVG();
+            setTimeout(() => {
+                this.compressSVG();
+            }, 0);
         }
 
         const url: string = URL.createObjectURL(this.createSVGBlob());
@@ -71,7 +73,9 @@ export class ExportToolService {
 
         this.renderer.setAttribute(this.img, HTML_ATTRIBUTE.src, url);
         if (FILE_TYPE.BMP === this.fileType) {
-            this.decompressSVG(originalSvgSize);
+            setTimeout(() => {
+                this.decompressSVG(originalSvgSize);
+            }, 0);
         }
     }
 

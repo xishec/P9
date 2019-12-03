@@ -3,7 +3,7 @@ import { MagnetismPoint } from 'src/classes/MagnetismPoint';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
-const CONTROL_POINT_RADIUS = 5;
+const CONTROL_POINT_RADIUS = 10;
 const SELECTION_COLOR = '#ff5722';
 
 const NO_STAMP = '';
@@ -61,8 +61,8 @@ enum TOOL_NAME {
 }
 
 enum THICKNESS {
-    Min = 1,
-    Default = 5,
+    Min = 2,
+    Default = 10,
     Max = 100,
 }
 
@@ -279,6 +279,8 @@ enum HTML_ATTRIBUTE {
     stroke = 'stroke',
     opacity = 'opacity',
     stroke_width = 'stroke-width',
+    x = 'x',
+    y = 'y',
     cx = 'cx',
     cy = 'cy',
     rx = 'rx',

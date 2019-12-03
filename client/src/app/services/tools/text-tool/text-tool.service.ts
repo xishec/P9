@@ -122,7 +122,7 @@ export class TextToolService extends AbstractToolService {
                 break;
         }
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, attribute, value);
+            this.renderer.setAttribute(this.gWrap, attribute, value);
             this.updatePreviewBox();
         }
     }
@@ -186,6 +186,11 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.height, textBBox.height.toString());
+
+        this.renderer.setAttribute(this.gWrap, 'x', this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.gWrap, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.height, textBBox.height.toString());
     }
 
     private initPreviewRect(): void {
@@ -201,12 +206,6 @@ export class TextToolService extends AbstractToolService {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_family, this.fontInfo.fontFamily);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_size, this.fontInfo.fontSize);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
     }
 
     private createNewLine(): void {
@@ -274,6 +273,12 @@ export class TextToolService extends AbstractToolService {
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
             this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Text);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_family, this.fontInfo.fontFamily);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_size, this.fontInfo.fontSize);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);

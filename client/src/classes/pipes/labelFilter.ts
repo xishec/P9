@@ -17,7 +17,7 @@ export class LabelFilter implements PipeTransform {
                 let checkLabels = false;
                 labelsFromFilter.forEach((labelFromFilter: string) => {
                     if (
-                        drawing.labels.filter((label: string) => {
+                        drawing.drawingInfo.labels.filter((label: string) => {
                             return label
                                 .toLowerCase()
                                 .replace(/\s/g, '')

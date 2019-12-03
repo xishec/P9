@@ -67,26 +67,90 @@ describe('ColorApplicatorToolService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should return true if tool is rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+    it('should return true if tool is rectangle, polygon or ellipsis when calling isShape', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        const res = service.isStackTargetShape();
+        const res = service.isShape();
         expect(res).toBeTruthy();
     });
 
-    it('should return false if tool is not rectangle, polygon or ellipsis when calling is stackTargetShape', () => {
+    it('should return false if tool is not rectangle, polygon or ellipsis when calling isShape', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        const res = service.isStackTargetShape();
+        const res = service.isShape();
         expect(res).toBeFalsy();
+    });
+
+    it('should return true if tool is text when calling isText', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Text,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isText();
+        expect(res).toBeTruthy();
+    });
+
+    it('should return false if tool is not text when calling isText', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isText();
+        expect(res).toBeFalsy();
+    });
+
+    it('should return true if tool is fill when calling isBucketFill', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Fill,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isBucketFill();
+        expect(res).toBeTruthy();
+    });
+
+    it('should return false if tool is not fill when calling isBucketFill', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Rectangle,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        const res = service.isBucketFill();
+        expect(res).toBeFalsy();
+    });
+
+    it('should change the stroke color of text stackTarget when calling changeStrokeColorOnText', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Text,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeStrokeColorOnText();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('should change the fill color of text stackTarget when calling changeFillColorOnText', () => {
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Text,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+        service.changeFillColorOnText();
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
     });
 
     it('should change the stroke and fill color of trace stackTarget when calling changeColorOnTrace', () => {
@@ -119,8 +183,8 @@ describe('ColorApplicatorToolService', () => {
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
     });
 
-    it('onMouseDown should call setAttribute twice when left button clicked if tool is Brush', () => {
-        const mouseEventTmp = createMouseEvent(1, 1, MOUSE.LeftButton);
+    it('onMouseDown should call setAttribute three times when left button clicked if tool is Brush', () => {
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.LeftButton);
         service.isOnTarget = true;
         const mockStackTargetInfo = {
             targetPosition: 0,
@@ -128,13 +192,13 @@ describe('ColorApplicatorToolService', () => {
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        service.onMouseDown(mouseEventTmp);
+        service.onMouseDown(mouseEventMock);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
     it('onMouseDown should call setAttribute once when left button clicked if tool is Rectangle', () => {
-        const mouseEventTmp = createMouseEvent(1, 1, MOUSE.LeftButton);
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.LeftButton);
         service.isOnTarget = true;
         const mockStackTargetInfo = {
             targetPosition: 0,
@@ -142,26 +206,26 @@ describe('ColorApplicatorToolService', () => {
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        service.onMouseDown(mouseEventTmp);
+        service.onMouseDown(mouseEventMock);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
     });
 
     it('onMouseDown should not call setAttribute to stroke when right button clicked if tool is Brush', () => {
-        const mouseEventTmp = createMouseEvent(1, 1, MOUSE.RightButton);
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.RightButton);
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        service.onMouseDown(mouseEventTmp);
+        service.onMouseDown(mouseEventMock);
 
         expect(spyOnSetAttribute).not.toHaveBeenCalled();
     });
 
     it('onMouseDown should call setAttribute once when right button clicked if tool is Rectangle ', () => {
-        const mouseEventTmp = createMouseEvent(1, 1, MOUSE.RightButton);
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.RightButton);
         service.isOnTarget = true;
         const mockStackTargetInfo = {
             targetPosition: 0,
@@ -169,7 +233,35 @@ describe('ColorApplicatorToolService', () => {
         };
         service.currentStackTarget = mockStackTargetInfo;
 
-        service.onMouseDown(mouseEventTmp);
+        service.onMouseDown(mouseEventMock);
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('onMouseDown should call setAttribute once when left button clicked if target is Text ', () => {
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.LeftButton);
+        service.isOnTarget = true;
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Text,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        service.onMouseDown(mouseEventMock);
+
+        expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
+    });
+
+    it('onMouseDown should call setAttribute once when right button clicked if target is Text ', () => {
+        const mouseEventMock = createMouseEvent(1, 1, MOUSE.RightButton);
+        service.isOnTarget = true;
+        const mockStackTargetInfo = {
+            targetPosition: 0,
+            toolName: TOOL_NAME.Text,
+        };
+        service.currentStackTarget = mockStackTargetInfo;
+
+        service.onMouseDown(mouseEventMock);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(1);
     });

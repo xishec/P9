@@ -4,7 +4,7 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOLERANCE, TOOL_NAME } from 'src/constants/tool-constants';
+import { THICKNESS, TOLERANCE, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { FillToolService } from '../../../../services/tools/fill-tool/fill-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -51,7 +51,7 @@ export class FillAttributesComponent implements OnInit, AfterViewInit {
                 TOLERANCE.Default,
                 [Validators.required, Validators.min(TOLERANCE.Min), Validators.max(TOLERANCE.Max)],
             ],
-            traceType: ['Contour'],
+            traceType: [TRACE_TYPE.Full],
         });
     }
 

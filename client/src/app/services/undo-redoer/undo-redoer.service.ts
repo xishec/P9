@@ -1,10 +1,10 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingState } from 'src/classes/DrawingState';
 import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
-import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
@@ -37,7 +37,7 @@ export class UndoRedoerService {
     initializeService(workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
-            this.currentDrawingInfos = drawingInfo;
+            this.currentDrawingInfo = drawingInfo;
         });
     }
 
@@ -66,8 +66,20 @@ export class UndoRedoerService {
 
     private createDrawing(idStackArray: string[]): Drawing {
         const cleanedInnerHTML = this.getCleanInnerHTML();
+        const drawing: Drawing = {
+            svg: cleanedInnerHTML,
+            drawingInfo: {
+                name: '',
+                labels: [],
+                idStack: idStackArray,
+                height: this.currentDrawingInfo.height,
+                width: this.currentDrawingInfo.width,
+                color: this.currentDrawingInfo.color,
+                createdAt: 0,
+                lastModified: 0,
+            } as DrawingInfo,
+        } as Drawing;
 
-        const drawing: Drawing = new Drawing('', [], cleanedInnerHTML, idStackArray, this.currentDrawingInfos);
         return drawing;
     }
 

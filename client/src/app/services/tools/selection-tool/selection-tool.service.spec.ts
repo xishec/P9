@@ -264,8 +264,9 @@ describe('SelectionToolService', () => {
     });
 
     it('handleLeftMouseDrag should call checkSelection if mouse is not in selection or not translating and is not on target', () => {
-        service[`isOnTarget`] = false;
-        const spy = spyOn<any>(service, 'checkSelection');
+        service.isOnTarget = false;
+        const spy = spyOn(service, 'checkSelection');
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
         const spyselection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => false);
 
         service[`handleLeftMouseDrag`]();
@@ -296,11 +297,11 @@ describe('SelectionToolService', () => {
     });
 
     it('handleLeftMouseDrag should use manipulator if mouse is in selection and not selecting or was already translating', () => {
-        service[`isOnTarget`] = false;
-        service[`isSelecting`] = false;
-        service[`isTranslatingSelection`] = true;
+        service.isOnTarget = false;
+        service.isSelecting = false;
         const spySelection = spyOn(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
-        const spyManipulator = spyOn(service[`manipulator`], 'translateSelection');
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
+        const spyManipulator = spyOn(service.manipulator, 'translateSelection').and.callFake(() => null);
 
         service[`handleLeftMouseDrag`]();
 
@@ -386,9 +387,10 @@ describe('SelectionToolService', () => {
     });
 
     it('should set the initialMouseCoords to currentMouseCoords and isLeftMouseDOwn to true when calling handleLeftMouseDown', () => {
-        service[`currentMouseCoords`].x = 10;
-        service[`currentMouseCoords`].y = 20;
-        service[`isLeftMouseDown`] = false;
+        service.currentMouseCoords.x = 10;
+        service.currentMouseCoords.y = 20;
+        service.isLeftMouseDown = false;
+        spyOn(service.selection, 'mouseIsInControlPoint').and.returnValue(false);
 
         service[`handleLeftMouseDown`]();
 

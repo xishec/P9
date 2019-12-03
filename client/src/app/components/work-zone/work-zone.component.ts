@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { MatSnackBar } from '@angular/material';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -15,7 +16,6 @@ import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.serv
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import { GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
-import { Drawing } from '../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -26,7 +26,7 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+    drawingInfo: DrawingInfo = { width: 0, height: 0, color: DEFAULT_WHITE } as DrawingInfo;
     gridIsActive = false;
     modalIsDisplayed: boolean;
 
@@ -138,7 +138,7 @@ export class WorkZoneComponent implements OnInit {
     appendDrawingToView(selectedDrawing: Drawing) {
         this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
 
-        const idStack = Object.values(selectedDrawing.idStack);
+        const idStack = Object.values(selectedDrawing.drawingInfo.idStack);
         idStack.forEach((id) => {
             const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
             const child: SVGElement = children.filter((filterChild) => {

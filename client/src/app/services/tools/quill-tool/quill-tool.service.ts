@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -91,6 +91,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Quill);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 

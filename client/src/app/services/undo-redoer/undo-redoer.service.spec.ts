@@ -2,18 +2,29 @@ import { ElementRef } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { Drawing } from '../../../../../common/communication/Drawing';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingState } from '../../../classes/DrawingState';
-import { DEFAULT_WHITE } from '../../../constants/color-constants';
 import { DrawStackService } from '../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { UndoRedoerService } from './undo-redoer.service';
 
 const MOCK_INNER_HTML = 'expectedInnerHtml';
-const MOCK_DRAWING_INFO = new DrawingInfo(0, 0, DEFAULT_WHITE);
+const MOCK_DRAWING_INFO = {
+    name: '',
+    createdAt: 0,
+    lastModified: 0,
+    labels: [],
+    idStack: [],
+    width: 0,
+    height: 0,
+    color: '',
+} as DrawingInfo;
 
-const MOCK_DRAWING: Drawing = new Drawing('', [], MOCK_INNER_HTML, [], MOCK_DRAWING_INFO);
+const MOCK_DRAWING: Drawing = {
+    svg: MOCK_INNER_HTML,
+    drawingInfo: MOCK_DRAWING_INFO,
+} as Drawing;
 
 const MOCK_DRAWING_STATE: DrawingState = {
     drawing: MOCK_DRAWING,
@@ -146,9 +157,15 @@ describe('UndoRedoerService', () => {
     });
 
     it('undo should pop undos and push this to redos if undos.length > 1', () => {
-        const initDrawing: Drawing = new Drawing('1', [], '1', [], MOCK_DRAWING_INFO);
+        const initDrawing: Drawing = {
+            svg: MOCK_INNER_HTML,
+            drawingInfo: MOCK_DRAWING_INFO,
+        } as Drawing;
 
-        const mockDrawing: Drawing = new Drawing('2', [], '2', [], MOCK_DRAWING_INFO);
+        const mockDrawing: Drawing = {
+            svg: MOCK_INNER_HTML,
+            drawingInfo: MOCK_DRAWING_INFO,
+        } as Drawing;
 
         const mockState1: DrawingState = {
             drawing: initDrawing,

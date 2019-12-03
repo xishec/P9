@@ -95,6 +95,11 @@ describe('ExportToolService', () => {
         spyCreateSVGBlob = spyOn<any>(service, 'createSVGBlob').and.callThrough();
         spyLaunchDownload = spyOn<any>(service, 'launchDownload').and.callThrough();
         spyGetXMLSVG = spyOn<any>(service, 'getXMLSVG').and.returnValue('');
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -118,11 +123,12 @@ describe('ExportToolService', () => {
         const spySaveAsOther = spyOn<any>(service, 'saveAsOther').and.callThrough();
 
         service.saveFile(FILE_TYPE.BMP);
+        jasmine.clock().tick(1);
 
         expect(service[`fileType`]).toEqual(FILE_TYPE.BMP);
         expect(spySaveAsOther).toHaveBeenCalled();
-        expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyCreateSVGBlob).toHaveBeenCalled();
+        expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyOnDecompressSVG).toHaveBeenCalled();
     });
 
