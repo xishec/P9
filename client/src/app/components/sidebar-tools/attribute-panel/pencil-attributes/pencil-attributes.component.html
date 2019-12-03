@@ -10,6 +10,7 @@
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
                 [min]="THICKNESS.Min"
+                [max]="THICKNESS.Max"
                 value="{{ pencilAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">

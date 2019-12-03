@@ -9,6 +9,7 @@
                     formControlName="thickness"
                     (input)="onThicknessSliderChange($event)"
                     [min]="thickness.Min"
+                    [max]="thickness.Max"
                     value="{{ polygonAttributesForm.value.thickness }}"
                 ></mat-slider>
                 <mat-form-field class="small">
