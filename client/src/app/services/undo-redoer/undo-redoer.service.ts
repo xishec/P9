@@ -17,7 +17,7 @@ export class UndoRedoerService {
     redos = new Array<DrawingState>();
 
     private workzoneRef: ElementRef<SVGElement>;
-    private currentDrawingInfos: DrawingInfo;
+    private currentDrawingInfo: DrawingInfo;
 
     fromLoader = false;
 

@@ -94,7 +94,7 @@ describe('UndoRedoerService', () => {
     it('createDrawing should return a drawing with the innerHTML', () => {
         spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
         service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
-        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        service[`currentDrawingInfo`] = MOCK_DRAWING_INFO;
 
         const resDrawing = service[`createDrawing`]([]);
 
@@ -104,7 +104,7 @@ describe('UndoRedoerService', () => {
     it('saveStateAndDuplicateOffset should create a DrawingState with the duplicateOffSet and saveState', () => {
         spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
         service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
-        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        service[`currentDrawingInfo`] = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveStateAndDuplicateOffset([], 10);
@@ -117,7 +117,7 @@ describe('UndoRedoerService', () => {
     it('saveStateFromPaste should create a DrawingState with the pasteOffset and saveState', () => {
         spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
         service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
-        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        service[`currentDrawingInfo`] = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveStateFromPaste([], 10, new Set<SVGElement>());
@@ -130,7 +130,7 @@ describe('UndoRedoerService', () => {
     it('saveCurrentState should creaye a DrawingState with no pasteOffset and duplicateOffset and call saveState', () => {
         spyOn<any>(service, 'getCleanInnerHTML').and.callFake(() => MOCK_INNER_HTML);
         service[`workzoneRef`].nativeElement.innerHTML = MOCK_INNER_HTML;
-        service[`currentDrawingInfos`] = MOCK_DRAWING_INFO;
+        service[`currentDrawingInfo`] = MOCK_DRAWING_INFO;
         const spyOnSaveState = spyOn<any>(service, 'saveState').and.callThrough();
 
         service.saveCurrentState([]);

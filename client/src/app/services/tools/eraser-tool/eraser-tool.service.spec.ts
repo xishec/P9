@@ -168,12 +168,13 @@ describe('EraserToolService', () => {
     });
 
     it('should call removeChild if isOnTarget is true and getElementByPosition returns an element', () => {
-        service.isOnTarget = true;
-        const spyOncheckElementsToErase: jasmine.Spy = spyOn(service, 'checkElementsToErase');
-        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
-            service.renderer.createElement('rect', SVG_NS),
-        );
-        service.isHoveringText = true;
+        service[`isOnTarget`] = true;
+        const spyOncheckElementsToErase: jasmine.Spy = spyOn<any>(service, 'checkElementsToErase');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(
+            service[`drawStack`],
+            'getElementByPosition',
+        ).and.returnValue(service[`renderer`].createElement('rect', SVG_NS));
+        service[`isHoveringText`] = true;
 
         service.onMouseDown(leftMouseEvent);
 
@@ -301,40 +302,41 @@ describe('EraserToolService', () => {
     });
 
     it('colorBorder should call appendEraser if tool is Text', () => {
-        const spyOnappendEraser: jasmine.Spy = spyOn(service, 'appendEraser');
+        const spyOnappendEraser: jasmine.Spy = spyOn<any>(service, 'appendEraser');
 
-        service.isHoveringText = false;
+        service[`isHoveringText`] = false;
 
-        service.colorBorder(0, null, TOOL_NAME.Text);
+        service[`colorBorder`](0, null, TOOL_NAME.Text);
 
         expect(spyOnappendEraser).toHaveBeenCalled();
-        expect(service.isHoveringText).toEqual(true);
+        expect(service[`isHoveringText`]).toEqual(true);
     });
 
     it('colorBorder should call setAttribute if tool is Quill', () => {
-        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service[`renderer`], 'setAttribute');
 
-        service.colorBorder(0, null, TOOL_NAME.Quill);
+        service[`colorBorder`](0, null, TOOL_NAME.Quill);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('colorBorder should call setAttribute if tool is Stamp', () => {
-        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
-        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
-            createMockSVGGElementWithAttribute('id_element'),
-        );
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service[`renderer`], 'setAttribute');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(
+            service[`drawStack`],
+            'getElementByPosition',
+        ).and.returnValue(createMockSVGGElementWithAttribute('id_element'));
 
-        service.colorBorder(0, null, TOOL_NAME.Stamp);
+        service[`colorBorder`](0, null, TOOL_NAME.Stamp);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
     it('colorBorder should call setAttribute if tool is Line', () => {
-        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service[`renderer`], 'setAttribute');
 
-        service.colorBorder(0, null, TOOL_NAME.Line);
+        service[`colorBorder`](0, null, TOOL_NAME.Line);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -353,27 +355,27 @@ describe('EraserToolService', () => {
     });
 
     it('restoreBorder should call appendEraser if tool is text', () => {
-        const spyOnappendEraser: jasmine.Spy = spyOn(service, 'appendEraser');
-        service.isHoveringText = true;
+        const spyOnappendEraser: jasmine.Spy = spyOn<any>(service, 'appendEraser');
+        service[`isHoveringText`] = true;
 
-        service.restoreBorder(0, 'ffffff', '0', TOOL_NAME.Text);
+        service[`restoreBorder`](0, 'ffffff', '0', TOOL_NAME.Text);
 
         expect(spyOnappendEraser).not.toHaveBeenCalled();
-        expect(service.isHoveringText).toEqual(false);
+        expect(service[`isHoveringText`]).toEqual(false);
     });
 
     it('restoreBorder should call setAttribute if tool is Quill', () => {
-        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service[`renderer`], 'setAttribute');
 
-        service.restoreBorder(0, 'ffffff', '0', TOOL_NAME.Quill);
+        service[`restoreBorder`](0, 'ffffff', '0', TOOL_NAME.Quill);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('restoreBorder should call setAttribute if tool is Line', () => {
-        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service[`renderer`], 'setAttribute');
 
-        service.restoreBorder(0, 'ffffff', '0', TOOL_NAME.Line);
+        service[`restoreBorder`](0, 'ffffff', '0', TOOL_NAME.Line);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
@@ -387,10 +389,10 @@ describe('EraserToolService', () => {
     });
 
     it('removeBorder should call restoreBorder if element is not undefined', () => {
-        service.currentTarget = 0;
-        service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
-        service.changedElements.set(0, new SVGGElementInfo());
-        const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
+        service[`currentTarget`] = 0;
+        service[`drawStack`].drawStack[0] = service[`renderer`].createElement('rect', SVG_NS);
+        service[`changedElements`].set(0, new SVGGElementInfo());
+        const spyOnrestoreBorder: jasmine.Spy = spyOn<any>(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
         service[`removeBorder`]('0', '');
@@ -400,10 +402,10 @@ describe('EraserToolService', () => {
     });
 
     it('removeBorder should call get of changedElements if currentTraget is not undefined', () => {
-        service.currentTarget = 0;
-        service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
-        service.changedElements.set(0, new SVGGElementInfo());
-        const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
+        service[`currentTarget`] = 0;
+        service[`drawStack`].drawStack[0] = service[`renderer`].createElement('rect', SVG_NS);
+        service[`changedElements`].set(0, new SVGGElementInfo());
+        const spyOnrestoreBorder: jasmine.Spy = spyOn<any>(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
 
         service[`removeBorder`]('0', TOOL_NAME.Rectangle);
@@ -461,13 +463,13 @@ describe('EraserToolService', () => {
     });
 
     it('onMouseUp should  call removeChild if erasedSomething is true and currentChangedTargetIsValid is also true', () => {
-        service.erasedSomething = true;
-        service.currentTarget = 0;
+        service[`erasedSomething`] = true;
+        service[`currentTarget`] = 0;
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
         service.onMouseUp(leftMouseEvent);
 
-        expect(service.isLeftMouseDown).toEqual(false);
+        expect(service[`isLeftMouseDown`]).toEqual(false);
         expect(spyOnremoveChild).toHaveBeenCalled();
         expect(spyOnget).toHaveBeenCalled();
     });

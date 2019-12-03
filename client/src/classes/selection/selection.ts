@@ -83,11 +83,11 @@ export class Selection {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    private getControlPointCx(ctrlPt: SVGCircleElement): number {
+    getControlPointCx(ctrlPt: SVGCircleElement): number {
         return ctrlPt.cx.baseVal.value;
     }
 
-    private getControlPointCy(ctrlPt: SVGCircleElement): number {
+    getControlPointCy(ctrlPt: SVGCircleElement): number {
         return ctrlPt.cy.baseVal.value;
     }
 
