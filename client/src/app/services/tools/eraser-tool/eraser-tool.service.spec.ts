@@ -282,12 +282,12 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('colorBorder should not call checkIfPen if tool is text', () => {
-        const spyOncheckIfPen: jasmine.Spy = spyOn(service, 'checkIfPen');
+    it('colorBorder should not call actIfPen if tool is text', () => {
+        const spyOnactIfPen: jasmine.Spy = spyOn(service, 'actIfPen');
 
         service.colorBorder(0, '0', TOOL_NAME.Text);
 
-        expect(spyOncheckIfPen).not.toHaveBeenCalled();
+        expect(spyOnactIfPen).not.toHaveBeenCalled();
     });
 
     it('restoreBorder should call setAttribute if border width is null', () => {
@@ -310,12 +310,12 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('restoreBorder should not call checkIfPen if tool is text', () => {
-        const spyOncheckIfPen: jasmine.Spy = spyOn(service, 'checkIfPen');
+    it('restoreBorder should not call actIfPen if tool is text', () => {
+        const spyOnactIfPen: jasmine.Spy = spyOn(service, 'actIfPen');
 
         service.restoreBorder(0, 'red', '0', TOOL_NAME.Text);
 
-        expect(spyOncheckIfPen).not.toHaveBeenCalled();
+        expect(spyOnactIfPen).not.toHaveBeenCalled();
     });
 
     it('removeBorder should call restoreBorder if element is not undefined', () => {
@@ -434,45 +434,45 @@ describe('EraserToolService', () => {
         expect(spyOnremoveBorder).toHaveBeenCalled();
     });
 
-    it('checkIfText should set isHoveringText to false and call removeChild', () => {
+    it('actIfText should set isHoveringText to false and call removeChild', () => {
         service.isHoveringText = true;
 
-        service.checkIfText(1, TOOL_NAME.Text, 'red', '0');
+        service.actIfText(1, TOOL_NAME.Text, 'red', '0');
 
         expect(spyOnremoveChild).toHaveBeenCalled();
         expect(service.isHoveringText).toEqual(false);
     });
 
-    it('checkIfText should set isHoveringText to true and call appendChild', () => {
+    it('actIfText should set isHoveringText to true and call appendChild', () => {
         service.isHoveringText = false;
         const spyOnappendChild: jasmine.Spy = spyOn(service.renderer, 'appendChild');
 
-        service.checkIfText(1, TOOL_NAME.Text, 'red', '5');
+        service.actIfText(1, TOOL_NAME.Text, 'red', '5');
 
         expect(spyOnappendChild).toHaveBeenCalled();
         expect(service.isHoveringText).toEqual(true);
     });
 
-    it('checkIfStamp should call setAttribute', () => {
+    it('actIfStamp should call setAttribute', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
         const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
             createMockSVGGElementWithAttribute('rect'),
         );
 
-        service.checkIfStamp(1, TOOL_NAME.Stamp, 'red');
+        service.actIfStamp(1, TOOL_NAME.Stamp, 'red');
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
     });
 
-    it('checkIfLineOrQuill should call setAttribute and getElementByPosition', () => {
+    it('actIfLineOrQuill should call setAttribute and getElementByPosition', () => {
         const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
         const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
             createMockSVGGElementWithAttribute('rect'),
         );
 
-        service.checkIfLineOrQuill(1, TOOL_NAME.Line, 'red');
-        service.checkIfLineOrQuill(1, TOOL_NAME.Quill, 'red');
+        service.actIfLineOrQuill(1, TOOL_NAME.Line, 'red');
+        service.actIfLineOrQuill(1, TOOL_NAME.Quill, 'red');
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOngetElementByPosition).toHaveBeenCalled();
