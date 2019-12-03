@@ -143,10 +143,12 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
     changeFillColorOnText(): void {
         this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.fill, this.primaryColor);
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     changeStrokeColorOnText(): void {
         this.renderer.setAttribute(this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition), HTML_ATTRIBUTE.stroke, this.secondaryColor);
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty
