@@ -42,8 +42,8 @@ export class EraserToolService extends AbstractToolService {
     erasedSomething = false;
     isHoveringText = false;
 
-    // the string represents the id_element
-    changedElements: Map<string, SVGGElementInfo> = new Map([]);
+    // the number represents the id_element
+    changedElements: Map<number, SVGGElementInfo> = new Map([]);
 
     currentMouseCoords: Coords2D = new Coords2D(0, 0);
 
@@ -135,8 +135,8 @@ export class EraserToolService extends AbstractToolService {
 
             if (this.currentTarget + 1) {
                 this.changedElements.set(
-                    this.currentTarget.toString(),
-                    this.changedElements.get((this.currentTarget + 1).toString()) as SVGGElementInfo,
+                    this.currentTarget,
+                    this.changedElements.get(this.currentTarget + 1) as SVGGElementInfo,
                 );
             }
             this.checkElementsToErase();
@@ -235,9 +235,9 @@ export class EraserToolService extends AbstractToolService {
     }
 
     addElementToMap(svgGElement: SVGGElement): void {
-        if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
+        if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
             this.changedElements.set(
-                svgGElement.getAttribute('id_element') as string,
+                parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX),
                 new SVGGElementInfo(
                     svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
                     svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
@@ -405,10 +405,10 @@ export class EraserToolService extends AbstractToolService {
 
     removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            const element = this.changedElements.get(position) as SVGGElementInfo;
+            const element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
             if (element !== undefined) {
                 this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
-                this.changedElements.delete(position);
+                this.changedElements.delete(parseInt(position, DEFAULT_RADIX));
             }
         }
     }
@@ -433,10 +433,10 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
 
         if (this.currentTarget !== undefined) {
-            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget.toString()) !== undefined;
+            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget) !== undefined;
 
             if (this.erasedSomething && currentChangedTargetIsValid) {
-                const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
+                const currentChangedTarget = this.changedElements.get(this.currentTarget) as SVGGElementInfo;
                 this.renderer.removeChild(this.elementRef, this.eraser);
                 this.restoreBorder(
                     this.currentTarget,

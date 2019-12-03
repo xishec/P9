@@ -379,7 +379,7 @@ describe('EraserToolService', () => {
     it('removeBorder should call restoreBorder if element is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
-        service.changedElements.set('0', new SVGGElementInfo());
+        service.changedElements.set(0, new SVGGElementInfo());
         const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
@@ -392,7 +392,7 @@ describe('EraserToolService', () => {
     it('removeBorder should call get of changedElements if currentTraget is not undefined', () => {
         service.currentTarget = 0;
         service.drawStack.drawStack[0] = service.renderer.createElement('rect', SVG_NS);
-        service.changedElements.set('0', new SVGGElementInfo());
+        service.changedElements.set(0, new SVGGElementInfo());
         const spyOnrestoreBorder: jasmine.Spy = spyOn(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
 
