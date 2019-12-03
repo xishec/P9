@@ -186,6 +186,11 @@ export class TextToolService extends AbstractToolService {
         this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.height, textBBox.height.toString());
+
+        this.renderer.setAttribute(this.gWrap, 'x', this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.gWrap, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.height, textBBox.height.toString());
     }
 
     initPreviewRect(): void {

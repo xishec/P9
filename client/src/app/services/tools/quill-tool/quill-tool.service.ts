@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -98,6 +98,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Quill);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
@@ -153,13 +154,13 @@ export class QuillToolService extends TracingToolService {
 
     takeOneOnTwoPoints(): boolean {
         this.counter++;
-        return (this.counter % 2 === 1);
+        return this.counter % 2 === 1;
     }
 
     onWheel(event: WheelEvent): void {
         let val = this.isAlterRotation ? ROTATION_ANGLE.Alter : ROTATION_ANGLE.Base;
-        val = (event.deltaY < 0 ? -val : val);
-        this.angle = ( this.angle + val ) % 360;
+        val = event.deltaY < 0 ? -val : val;
+        this.angle = (this.angle + val) % 360;
 
         this.computeOffset();
         this.updatePreview();
@@ -172,7 +173,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if ( event.key === KEYS.Alt) {
+        if (event.key === KEYS.Alt) {
             this.isAlterRotation = false;
         }
     }

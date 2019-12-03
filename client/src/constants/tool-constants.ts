@@ -279,6 +279,8 @@ enum HTML_ATTRIBUTE {
     stroke = 'stroke',
     opacity = 'opacity',
     stroke_width = 'stroke-width',
+    x = 'x',
+    y = 'y',
     cx = 'cx',
     cy = 'cy',
     rx = 'rx',
