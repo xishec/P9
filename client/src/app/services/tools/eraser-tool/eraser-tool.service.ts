@@ -255,25 +255,29 @@ export class EraserToolService extends AbstractToolService {
 
         const borderColor = '#' + DEFAULT_RED;
 
-        if (this.isText(tool)) {
-            this.changeBorderOnText(idElement, borderColor, borderWidth);
-            return;
-        }
+        switch (tool) {
+            case TOOL_NAME.Text:
+                this.changeBorderOnText(idElement, borderColor, borderWidth);
+                return;
 
-        if (this.isPen(tool)) {
-            this.changeBorderOnPen(idElement, borderColor);
-        }
+            case TOOL_NAME.Pen:
+                this.changeBorderOnPen(idElement, borderColor);
+                break;
 
-        if (this.isQuill(tool)) {
-            this.changeBorderOnQuill(idElement, borderColor);
-        }
+            case TOOL_NAME.Quill:
+                this.changeBorderOnQuill(idElement, borderColor);
+                break;
 
-        if (this.isStamp(tool)) {
-            this.changeBorderOnStamp(idElement, borderColor);
-        }
+            case TOOL_NAME.Stamp:
+                this.changeBorderOnStamp(idElement, borderColor);
+                break;
 
-        if (this.isLine(tool)) {
-            this.changeBorderOnLine(idElement, borderColor);
+            case TOOL_NAME.Line:
+                this.changeBorderOnLine(idElement, borderColor);
+                break;
+
+            default:
+                break;
         }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
@@ -282,26 +286,6 @@ export class EraserToolService extends AbstractToolService {
             HTML_ATTRIBUTE.stroke_width,
             borderWidth,
         );
-    }
-
-    isText(tool: string): boolean {
-        return tool === TOOL_NAME.Text ? true : false;
-    }
-
-    isPen(tool: string): boolean {
-        return tool === TOOL_NAME.Pen ? true : false;
-    }
-
-    isQuill(tool: string): boolean {
-        return tool === TOOL_NAME.Quill ? true : false;
-    }
-
-    isStamp(tool: string): boolean {
-        return tool === TOOL_NAME.Stamp ? true : false;
-    }
-
-    isLine(tool: string): boolean {
-        return tool === TOOL_NAME.Line ? true : false;
     }
 
     changeBorderOnPen(idElement: number, borderColor: string): void {
@@ -392,21 +376,25 @@ export class EraserToolService extends AbstractToolService {
 
         console.log(tool);
 
-        if (this.isText(tool)) {
-            this.changeBorderOnText(idElement, borderColor, borderWidth);
-            return;
-        }
+        switch (tool) {
+            case TOOL_NAME.Text:
+                this.changeBorderOnText(idElement, borderColor, borderWidth);
+                return;
 
-        if (this.isPen(tool)) {
-            this.changeBorderOnPen(idElement, borderColor);
-        }
+            case TOOL_NAME.Pen:
+                this.changeBorderOnPen(idElement, borderColor);
+                break;
 
-        if (this.isQuill(tool)) {
-            this.changeBorderOnQuill(idElement, borderColor);
-        }
+            case TOOL_NAME.Quill:
+                this.changeBorderOnQuill(idElement, borderColor);
+                break;
 
-        if (this.isLine(tool)) {
-            this.changeBorderOnLine(idElement, borderColor);
+            case TOOL_NAME.Line:
+                this.changeBorderOnLine(idElement, borderColor);
+                break;
+
+            default:
+                break;
         }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
