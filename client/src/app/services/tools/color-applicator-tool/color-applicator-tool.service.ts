@@ -52,14 +52,18 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
-    isStackTargetShape(): boolean {
+    isShape(): boolean {
         const isRectangle = this.currentStackTarget.toolName === TOOL_NAME.Rectangle;
         const isEllipsis = this.currentStackTarget.toolName === TOOL_NAME.Ellipsis;
         const isPolygon = this.currentStackTarget.toolName === TOOL_NAME.Polygon;
         return isRectangle || isEllipsis || isPolygon;
     }
 
-    isFilledShape(): boolean {
+    isText(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Text;
+    }
+
+    isBucketFill(): boolean {
         return this.currentStackTarget.toolName === TOOL_NAME.Fill;
     }
 
@@ -91,7 +95,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
-    changeFillColorOnFilledShape(): void {
+    changeFillColorOnBucketFill(): void {
         const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
             this.currentStackTarget.targetPosition,
         );
@@ -102,7 +106,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
-    changeStrokeColorOnFilledShape(): void {
+    changeStrokeColorOnBucketFill(): void {
         const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
             this.currentStackTarget.targetPosition,
         );
@@ -137,6 +141,24 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
+    changeFillColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.fill,
+            this.primaryColor,
+        );
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.stroke,
+            this.secondaryColor,
+        );
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
@@ -150,19 +172,23 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                if (this.isFilledShape()) {
-                    this.changeFillColorOnFilledShape();
-                } else if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeFillColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeFillColorOnShape();
+                } else if (this.isText()) {
+                    this.changeFillColorOnText();
                 } else {
                     this.changeColorOnTrace();
                 }
                 break;
             case MOUSE.RightButton:
-                if (this.isFilledShape()) {
-                    this.changeStrokeColorOnFilledShape();
-                } else if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeStrokeColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeStrokeColorOnShape();
+                } else if (this.isText()) {
+                    this.changeStrokeColorOnText();
                 }
                 break;
             default:
