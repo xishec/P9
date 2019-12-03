@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { EllipsisToolService } from 'src/app/services/tools/ellipsis-tool/ellipsis-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { THICKNESS, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-ellipsis-attributes',
@@ -45,7 +45,7 @@ export class EllipsisAttributesComponent implements OnInit, AfterViewInit {
                 THICKNESS.Default,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
-            traceType: ['Plein'],
+            traceType: [TRACE_TYPE.Full],
         });
     }
 
