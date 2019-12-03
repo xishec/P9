@@ -253,21 +253,30 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        if (this.actIfText(idElement, tool, '#' + DEFAULT_RED, borderWidth)) {
+        const borderColor = '#' + DEFAULT_RED;
+
+        if (this.isText(tool)) {
+            this.changeBorderOnText(idElement, borderColor, borderWidth);
             return;
         }
 
-        this.actIfPen(idElement, tool, '#' + DEFAULT_RED);
+        if (this.isPen(tool)) {
+            this.changeBorderOnPen(idElement, borderColor);
+        }
 
-        this.actIfStamp(idElement, tool, '#' + DEFAULT_RED);
+        if (this.isQuill(tool)) {
+            this.changeBorderOnQuill(idElement, borderColor);
+        }
 
-        this.actIfLineOrQuill(idElement, tool, '#' + DEFAULT_RED);
+        if (this.isStamp(tool)) {
+            this.changeBorderOnStamp(idElement, borderColor);
+        }
 
-        this.renderer.setAttribute(
-            this.drawStack.getElementByPosition(idElement),
-            HTML_ATTRIBUTE.stroke,
-            '#' + DEFAULT_RED,
-        );
+        if (this.isLine(tool)) {
+            this.changeBorderOnLine(idElement, borderColor);
+        }
+
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
             HTML_ATTRIBUTE.stroke_width,
@@ -275,28 +284,49 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    actIfPen(idElement: number, tool: string, borderColor: string): void {
-        if (tool === TOOL_NAME.Pen) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[
-                    childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
-                ],
-                HTML_ATTRIBUTE.fill,
-                borderColor,
-            );
+    isText(tool: string): boolean {
+        return tool === TOOL_NAME.Text ? true : false;
+    }
+
+    isPen(tool: string): boolean {
+        return tool === TOOL_NAME.Pen ? true : false;
+    }
+
+    isQuill(tool: string): boolean {
+        return tool === TOOL_NAME.Quill ? true : false;
+    }
+
+    isStamp(tool: string): boolean {
+        return tool === TOOL_NAME.Stamp ? true : false;
+    }
+
+    isLine(tool: string): boolean {
+        return tool === TOOL_NAME.Line ? true : false;
+    }
+
+    changeBorderOnPen(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE],
+            HTML_ATTRIBUTE.fill,
+            borderColor,
+        );
+    }
+
+    changeBorderOnQuill(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+        for (let childIndex = 0; childIndex < childrenCount; childIndex++) {
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
         }
     }
 
-    actIfText(idElement: number, tool: string, borderColor: string, borderWidth: string): boolean {
-        if (tool !== TOOL_NAME.Text) {
-            return false;
-        }
-
+    changeBorderOnText(idElement: number, borderColor: string, borderWidth: string): void {
         if (borderWidth === '0') {
             this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
             this.isHoveringText = false;
-            return true;
+            return;
         }
 
         this.isHoveringText = true;
@@ -304,8 +334,6 @@ export class EraserToolService extends AbstractToolService {
         this.appendTextBorder(idElement, borderColor, borderWidth);
 
         this.appendEraser();
-
-        return true;
     }
 
     appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
@@ -335,29 +363,21 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
     }
 
-    actIfStamp(idElement: number, tool: string, borderColor: string): void {
-        if (tool === TOOL_NAME.Stamp) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
-                HTML_ATTRIBUTE.stroke,
-                borderColor,
-            );
-        }
+    changeBorderOnStamp(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
+            HTML_ATTRIBUTE.stroke,
+            borderColor,
+        );
     }
 
-    actIfLineOrQuill(idElement: number, tool: string, borderColor: string): void {
-        if (
-            (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
-            this.drawStack.getElementByPosition(idElement).childElementCount > 1
-        ) {
-            const startingIndex = tool === TOOL_NAME.Line ? 1 : 0;
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            const children = this.drawStack.getElementByPosition(idElement).childNodes;
+    changeBorderOnLine(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
-            for (let childIndex = startingIndex; childIndex < childrenCount; childIndex++) {
-                this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
-            }
+        for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
         }
     }
 
@@ -370,13 +390,24 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = '0';
         }
 
-        if (this.actIfText(idElement, tool, borderColor, borderWidth)) {
+        console.log(tool);
+
+        if (this.isText(tool)) {
+            this.changeBorderOnText(idElement, borderColor, borderWidth);
             return;
         }
 
-        this.actIfPen(idElement, tool, borderColor);
+        if (this.isPen(tool)) {
+            this.changeBorderOnPen(idElement, borderColor);
+        }
 
-        this.actIfLineOrQuill(idElement, tool, borderColor);
+        if (this.isQuill(tool)) {
+            this.changeBorderOnQuill(idElement, borderColor);
+        }
+
+        if (this.isLine(tool)) {
+            this.changeBorderOnLine(idElement, borderColor);
+        }
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
         this.renderer.setAttribute(
