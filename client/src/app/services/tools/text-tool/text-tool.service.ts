@@ -201,12 +201,6 @@ export class TextToolService extends AbstractToolService {
         this.textBox = this.renderer.createElement('text', SVG_NS);
         this.renderer.setAttribute(this.textBox, 'x', x.toString());
         this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        // this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_family, this.fontInfo.fontFamily);
-        // this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_size, this.fontInfo.fontSize);
-        // this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
-        // this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
-        // this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
-        // this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
     }
 
     createNewLine(): void {
