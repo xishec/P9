@@ -211,7 +211,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number) {
+    updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
         if (this.lastElementColoredNumber !== topElement) {
             this.addElementToMap(svgGElement);
 
@@ -234,7 +234,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    addElementToMap(svgGElement: SVGGElement) {
+    addElementToMap(svgGElement: SVGGElement): void {
         if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
             this.changedElements.set(
                 svgGElement.getAttribute('id_element') as string,
@@ -275,7 +275,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    checkIfPen(idElement: number, tool: string, borderColor: string) {
+    checkIfPen(idElement: number, tool: string, borderColor: string): void {
         if (tool === TOOL_NAME.Pen) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
@@ -328,7 +328,7 @@ export class EraserToolService extends AbstractToolService {
         return false;
     }
 
-    checkIfStamp(idElement: number, tool: string, borderColor: string) {
+    checkIfStamp(idElement: number, tool: string, borderColor: string): void {
         if (tool === TOOL_NAME.Stamp) {
             const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
             this.renderer.setAttribute(
@@ -339,7 +339,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    checkIfLineOrQuill(idElement: number, tool: string, borderColor: string) {
+    checkIfLineOrQuill(idElement: number, tool: string, borderColor: string): void {
         if (
             (tool === TOOL_NAME.Line || tool === TOOL_NAME.Quill) &&
             this.drawStack.getElementByPosition(idElement).childElementCount > 1
