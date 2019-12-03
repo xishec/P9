@@ -289,43 +289,44 @@ export class EraserToolService extends AbstractToolService {
     }
 
     checkIfText(idElement: number, tool: string, borderColor: string, borderWidth: string): boolean {
-        if (tool === TOOL_NAME.Text) {
-            if (borderWidth === '0') {
-                this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
-                this.isHoveringText = false;
-                return true;
-            }
+        if (tool !== TOOL_NAME.Text) {
+            return false;
+        }
 
-            this.isHoveringText = true;
-            const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
-            const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
-
-            const x = parseInt(
-                this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.x) as string,
-                DEFAULT_RADIX,
-            );
-            const y = parseInt(
-                this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.y) as string,
-                DEFAULT_RADIX,
-            );
-
-            this.textBorder = this.renderer.createElement('rect', SVG_NS);
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.width, width);
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.height, height);
-
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.fill, 'none');
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke, borderColor);
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke_width, borderWidth);
-
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
-            this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
-            this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
-            this.appendEraser();
-
+        if (borderWidth === '0') {
+            this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+            this.isHoveringText = false;
             return true;
         }
-        return false;
+
+        this.isHoveringText = true;
+        const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
+        const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
+
+        const x = parseInt(
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.x) as string,
+            DEFAULT_RADIX,
+        );
+        const y = parseInt(
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.y) as string,
+            DEFAULT_RADIX,
+        );
+
+        this.textBorder = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.width, width);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.height, height);
+
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke, borderColor);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke_width, borderWidth);
+
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
+        this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
+        this.appendEraser();
+
+        return true;
     }
 
     checkIfStamp(idElement: number, tool: string, borderColor: string): void {
