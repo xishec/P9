@@ -4,7 +4,7 @@ import { MatSliderChange } from '@angular/material';
 
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { PREDICATE } from 'src/constants/constants';
-import { THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { THICKNESS, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 import { AttributesManagerService } from '../../../../services/tools/attributes-manager/attributes-manager.service';
 import { RectangleToolService } from '../../../../services/tools/rectangle-tool/rectangle-tool.service';
 import { ToolSelectorService } from '../../../../services/tools/tool-selector/tool-selector.service';
@@ -45,7 +45,7 @@ export class RectangleAttributesComponent implements OnInit, AfterViewInit {
                 THICKNESS.Default,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
-            traceType: ['Plein'],
+            traceType: [TRACE_TYPE.Full],
         });
     }
 
