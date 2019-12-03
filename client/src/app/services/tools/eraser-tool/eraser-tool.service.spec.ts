@@ -291,12 +291,43 @@ describe('EraserToolService', () => {
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
-    it('colorBorder should not call actIfPen if tool is text', () => {
-        const spyOnactIfPen: jasmine.Spy = spyOn(service, 'actIfPen');
+    it('colorBorder should call appendEraser if tool is Text', () => {
+        const spyOnappendEraser: jasmine.Spy = spyOn(service, 'appendEraser');
 
-        service.colorBorder(0, '0', TOOL_NAME.Text);
+        service.isHoveringText = false;
 
-        expect(spyOnactIfPen).not.toHaveBeenCalled();
+        service.colorBorder(0, null, TOOL_NAME.Text);
+
+        expect(spyOnappendEraser).toHaveBeenCalled();
+        expect(service.isHoveringText).toEqual(true);
+    });
+
+    it('colorBorder should call setAttribute if tool is Quill', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.colorBorder(0, null, TOOL_NAME.Quill);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+    });
+
+    it('colorBorder should call setAttribute if tool is Stamp', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+        const spyOngetElementByPosition: jasmine.Spy = spyOn(service.drawStack, 'getElementByPosition').and.returnValue(
+            createMockSVGGElementWithAttribute('id_element'),
+        );
+
+        service.colorBorder(0, null, TOOL_NAME.Stamp);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
+        expect(spyOngetElementByPosition).toHaveBeenCalled();
+    });
+
+    it('colorBorder should call setAttribute if tool is Line', () => {
+        const spyOnsetAttribute: jasmine.Spy = spyOn(service.renderer, 'setAttribute');
+
+        service.colorBorder(0, null, TOOL_NAME.Line);
+
+        expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('restoreBorder should call setAttribute if border width is null', () => {

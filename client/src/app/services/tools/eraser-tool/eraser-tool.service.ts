@@ -374,8 +374,6 @@ export class EraserToolService extends AbstractToolService {
             borderWidth = '0';
         }
 
-        console.log(tool);
-
         switch (tool) {
             case TOOL_NAME.Text:
                 this.changeBorderOnText(idElement, borderColor, borderWidth);
