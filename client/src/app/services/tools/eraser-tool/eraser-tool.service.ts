@@ -321,6 +321,7 @@ export class EraserToolService extends AbstractToolService {
             this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
             this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
             this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
+            this.appendEraser();
 
             return true;
         }
