@@ -1,7 +1,7 @@
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
-import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     BASE64_STAMPS_MAP,
     HTML_ATTRIBUTE,
@@ -54,6 +54,7 @@ export class StampToolService extends AbstractToolService {
 
         this.stamp = this.renderer.createElement('image', SVG_NS);
         this.stampWrapper = this.renderer.createElement('g', SVG_NS);
+        this.renderer.setAttribute(this.stampWrapper, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.appendChild(this.stampWrapper, this.stamp);
     }
 
