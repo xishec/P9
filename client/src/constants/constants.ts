@@ -46,6 +46,13 @@ enum MOUSE {
     RightButton = 2,
 }
 
+enum NUMBER_OF_MS {
+    day = 100000 * 36 * 24,
+    hours = 100000 * 36,
+    minutes = 1000 * 60,
+    seconds = 1000,
+}
+
 const SIDEBAR_WIDTH = 360;
 
 const ELEMENTS_BEFORE_LAST_CIRCLE = 1;
@@ -72,5 +79,6 @@ export {
     MOUSE,
     PREDICATE,
     ELEMENTS_BEFORE_LAST_CIRCLE,
+    NUMBER_OF_MS,
     TITLE_ELEMENT_TO_REMOVE,
 };

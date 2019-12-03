@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { GIFS } from 'src/constants/constants';
+import { GIFS, NUMBER_OF_MS } from 'src/constants/constants';
 import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
@@ -66,6 +66,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
+            .pipe(map((drawings) => drawings.sort((a, b) => b.drawingInfo.createdAt - a.drawingInfo.createdAt)))
             .subscribe((drawings: Drawing[]) => {
                 drawings.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
@@ -235,5 +236,40 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     unmaskAll() {
         this.nameFilter = '$tout';
+    }
+
+    convertTimeStampToDate(timestamp: number): string {
+        const currentTimestamp = Date.now();
+
+        if (this.numberOfDaysBetween(timestamp, currentTimestamp) < 7) {
+            const differenceInMs = currentTimestamp - timestamp;
+            return 'Créé il y a ' + this.msToDaysHoursMinutes(differenceInMs);
+        }
+        const date = new Date(timestamp);
+
+        const creationDate =
+            `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
+            `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
+
+        return 'Créé le ' + creationDate;
+    }
+
+    numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
+        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.day);
+        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.day);
+
+        return numberDaysDate2 - numberDaysDate1;
+    }
+
+    msToDaysHoursMinutes(differenceInMs: number): string {
+        const days = Math.floor(differenceInMs / NUMBER_OF_MS.day);
+        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.day) / NUMBER_OF_MS.hours);
+        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.hours) / NUMBER_OF_MS.minutes);
+
+        const daysDisplay = days <= 1 ? ' jour, ' : ' jours, ';
+        const hoursDisplay = hours <= 1 ? ' heure et ' : ' heures et ';
+        const minutesDisplay = minutes <= 1 ? ' minute ' : ' minutes';
+
+        return days + daysDisplay + hours + hoursDisplay + minutes + minutesDisplay;
     }
 }

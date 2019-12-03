@@ -33,12 +33,12 @@ export class FileManagerService {
         const drawingInfo: DrawingInfo = drawing.drawingInfo;
 
         const currentTimestamp = Date.now();
-        const newCreatedOn = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
+        const newCreatedAt = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
 
         const query = { createdAt: drawingInfo.createdAt };
         const options = { upsert: true, new: true };
 
-        drawingInfo.createdAt = newCreatedOn;
+        drawingInfo.createdAt = newCreatedAt;
         drawingInfo.lastModified = currentTimestamp;
 
         this.cloudService.save(drawing.drawingInfo.createdAt.toString(), drawing.svg);

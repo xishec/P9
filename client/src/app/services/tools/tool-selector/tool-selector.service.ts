@@ -191,7 +191,7 @@ export class ToolSelectorService {
 
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
-            panelClass: 'myapp-min-width-dialog',
+            panelClass: 'myapp-open-file-modal-dialog',
             disableClose: true,
             autoFocus: false,
         });

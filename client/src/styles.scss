@@ -60,6 +60,11 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     min-height: 400px;
 }
 
+.myapp-open-file-modal-dialog .mat-dialog-container {
+    min-width: 768px;
+    min-height: 720px;
+}
+
 body {
     -webkit-user-select: none;
     -khtml-user-select: none;
