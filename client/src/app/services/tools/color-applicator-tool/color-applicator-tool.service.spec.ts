@@ -125,7 +125,7 @@ describe('ColorApplicatorToolService', () => {
     it('should return false if tool is not fill when calling isBucketFill', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
-            toolName: TOOL_NAME.Fill,
+            toolName: TOOL_NAME.Rectangle,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
