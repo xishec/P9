@@ -14,7 +14,6 @@ export class DrawStackService {
     drawStack: SVGGElement[] = new Array<SVGGElement>();
     idStack: string[] = new Array<string>();
     currentStackTarget: Observable<StackTargetInfo> = this.stackTarget.asObservable();
-    currentStackTargetOver: Observable<StackTargetInfo> = this.stackTarget.asObservable();
     renderer: Renderer2;
 
     constructor(

@@ -98,7 +98,7 @@ describe('SaveFileModalWindowComponent', () => {
 
         form.value.name = 'hello';
         drawingSaverService.currentIsSaved = new BehaviorSubject(false);
-        component.errorMesaage = 'test error message';
+        component.errorMessage = 'test error message';
 
         component.saveToServer();
 

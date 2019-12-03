@@ -25,7 +25,7 @@ export class StampToolService extends AbstractToolService {
 
     angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     scaling: STAMP_SCALING = STAMP_SCALING.Default;
-    selected: SVGGElement;
+    selected: string;
 
     stampLink = NO_STAMP;
     transform = '';

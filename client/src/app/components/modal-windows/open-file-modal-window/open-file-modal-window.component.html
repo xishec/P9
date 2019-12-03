@@ -21,81 +21,82 @@
                     id="label-filter"
                 />
             </div>
-            <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
-                <div *ngIf="!isLoading" id="drawing-list">
-                    <div id="header">
-                        <mat-label id="name-title">Nom :</mat-label>
-                        <mat-label id="label-title">Étiquettes :</mat-label>
-                        <mat-label id="preview-title">Aperçu :</mat-label>
-                    </div>
-
-                    <mat-selection-list
-                        #drawings
-                        formControlName="selectedDrawing"
-                        (selectionChange)="handleSelection($event)"
-                        id="selection-list"
-                        required
-                    >
-                        <mat-list-option
-                            *ngFor="
-                                let drawing of drawingsFromServer
-                                    | nameFilter: nameFilter
-                                    | labelFilter: labelFilter
-                                    | mySlice: nameFilter;
-                                let i = index
-                            "
-                            id="list-option"
-                            [value]="drawing.name"
+            <div id="content-wrapper">
+                <mat-dialog-content class="mat-typography" [formGroup]="openFileModalForm">
+                    <div *ngIf="!isLoading" id="drawing-list">
+                        <mat-selection-list
+                            #drawings
+                            formControlName="selectedDrawing"
+                            (selectionChange)="handleSelection($event)"
+                            id="selection-list"
+                            required
                         >
-                            <div id="drawing-option">
-                                <div id="drawing-name">
-                                    {{ drawing.name }}
-                                </div>
-                                <div id="drawing-labels-list">
-                                    <div id="drawing-label" *ngFor="let label of drawing.labels">
-                                        {{ label }}
+                            <mat-list-option
+                                *ngFor="
+                                    let drawing of drawingsFromServer
+                                        | nameFilter: nameFilter
+                                        | labelFilter: labelFilter
+                                        | mySlice: nameFilter;
+                                    let i = index
+                                "
+                                id="list-option"
+                                [value]="drawing.drawingInfo.createdAt"
+                            >
+                                <div id="drawing-option">
+                                    <div id="drawing-name">
+                                        {{ drawing.drawingInfo.name }}
+                                    </div>
+                                    <div id="drawing-labels-list">
+                                        <div id="drawing-label" *ngFor="let label of drawing.drawingInfo.labels">
+                                            {{ label }}
+                                        </div>
+                                    </div>
+                                    <div id="drawing-thumbnail">
+                                        <svg
+                                            [attr.width]="getWidth(drawing.drawingInfo.name)"
+                                            [attr.height]="getHeight(drawing.drawingInfo.name)"
+                                            [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
+                                            [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
+                                        ></svg>
+                                    </div>
+                                    <div id="drawing-created-at">
+                                        {{ convertTimeStampToDate(drawing.drawingInfo.createdAt) }}
                                     </div>
                                 </div>
-                                <div id="drawing-thumbnail">
-                                    <svg
-                                        [attr.width]="getWidth(drawing.name)"
-                                        [attr.height]="getHeight(drawing.name)"
-                                        [attr.viewBox]="getViewBox(drawing.name)"
-                                        [innerHTML]="getSVG(drawing.name) | toTrustHtml"
-                                    ></svg>
-                                </div>
-                            </div>
-                        </mat-list-option>
-                    </mat-selection-list>
-                    <div
-                        class="hidden-info"
-                        *ngIf="
-                            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
-                            nameFilter !== '$tout'
-                        "
-                    >
-                        {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
-                        {{
-                            (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
-                                ? 'dessins masqués ...'
-                                : 'dessin masqué ...'
-                        }}
-                        <a id="clickable" (click)="unmaskAll()">voir tout</a>
+                            </mat-list-option>
+                        </mat-selection-list>
+                        <div
+                            class="hidden-info"
+                            *ngIf="
+                                (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0
+                            "
+                        >
+                            Aucun dessin trouvé!
+                        </div>
                     </div>
-                    <div
-                        class="hidden-info"
-                        *ngIf="(drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0"
-                    >
-                        Aucun dessin trouvé!
+                    <div *ngIf="isLoading" id="loading-div">
+                        <img id="img" [src]="getGifSource()" alt="" />
+                        <div>
+                            Loading ...
+                        </div>
                     </div>
+                </mat-dialog-content>
+                <div
+                    class="hidden-info"
+                    *ngIf="
+                        (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length > 5 &&
+                        nameFilter !== '$tout'
+                    "
+                >
+                    {{ (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 }}
+                    {{
+                        (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length - 5 > 1
+                            ? 'dessins masqués ...'
+                            : 'dessin masqué ...'
+                    }}
+                    <a id="clickable" (click)="unmaskAll()">voir tout</a>
                 </div>
-                <div *ngIf="isLoading" id="loading-div">
-                    <img id="img" [src]="getGifSource()" alt="" />
-                    <div>
-                        Loading ...
-                    </div>
-                </div>
-            </mat-dialog-content>
+            </div>
             <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openFileModalForm">
                 <mat-error class="center">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -139,28 +140,29 @@
     <mat-tab label="Ouvrir un fichier local">
         <div class="tab-content">
             <mat-dialog-content class="mat-typography-local" [formGroup]="openLocalFileModalForm">
-                <mat-label id="destination-label">Choisir un fichier local:</mat-label>
-                <div id="input-wrapper">
-                    <input
-                        id="destination-path"
-                        readonly
-                        type="text"
-                        placeholder="Nom du fichier"
-                        [value]="localFileName"
-                        size="80"
-                    />
-                    <input
-                        type="file"
-                        accept=".txt"
-                        name="file"
-                        id="file"
-                        class="inputfile"
-                        onclick="this.value = null"
-                        (change)="getFileToLoad($event)"
-                    />
-                    <label for="file">
-                        <i class="fas fa-folder"></i>
-                    </label>
+                <div id="content-local-wrapper">
+                    <mat-label id="destination-label">Choisir un fichier local:</mat-label>
+                    <div id="input-wrapper">
+                        <input
+                            id="destination-path"
+                            readonly
+                            type="text"
+                            placeholder="Nom du fichier"
+                            [value]="localFileName"
+                        />
+                        <input
+                            type="file"
+                            accept=".txt"
+                            name="file"
+                            id="file"
+                            class="inputfile"
+                            onclick="this.value = null"
+                            (change)="getFileToLoad($event)"
+                        />
+                        <label for="file">
+                            <i class="fas fa-folder"></i>
+                        </label>
+                    </div>
                 </div>
             </mat-dialog-content>
             <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openLocalFileModalForm">

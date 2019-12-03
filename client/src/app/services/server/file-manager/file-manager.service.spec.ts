@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { DEFAULT_GRAY_0 } from 'src/constants/color-constants';
+import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { FileManagerService } from './file-manager.service';
 
@@ -20,12 +20,24 @@ describe('FileManagerService', () => {
     });
 
     it('should return a observable on deleteDrawing', () => {
-        const answer = service.deleteDrawing('name');
+        const answer = service.deleteDrawing(1);
         expect(answer).toBeTruthy();
     });
 
     it('should return a observable on postDrawing', () => {
-        const answer = service.postDrawing('name', [], 'svg', [], new DrawingInfo(0, 0, DEFAULT_GRAY_0));
+        const answer = service.postDrawing({
+            drawingInfo: {
+                name: '',
+                createdAt: 0,
+                lastModified: 0,
+                labels: [],
+                idStack: [],
+                width: 0,
+                height: 0,
+                color: '',
+            } as DrawingInfo,
+            svg: '',
+        } as Drawing);
         expect(answer).toBeTruthy();
     });
 

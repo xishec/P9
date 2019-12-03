@@ -5,10 +5,10 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { Drawing } from '../../../../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
@@ -18,21 +18,33 @@ describe('OpenFileModalWindowComponent', () => {
 
     let drawingLoaderService: DrawingLoaderService;
 
-    const TEST_DRAWING: Drawing = new Drawing(
-        'mona lisa',
-        ['Italy', 'Louvre', 'Paris'],
-        'test_svg',
-        ['work-zone', 'background', 'rect1'],
-        new DrawingInfo(100, 100, 'ffffff'),
-    );
+    const TEST_DRAWING: Drawing = {
+        svg: 'test-svg',
+        drawingInfo: {
+            width: 100,
+            height: 100,
+            color: 'ffffff',
+            name: 'mona lisa',
+            labels: ['Italy', 'Louvre', 'Paris'],
+            idStack: ['work-zone', 'background', 'rect1'],
+            createdAt: 1000,
+            lastModified: 1500,
+        } as DrawingInfo,
+    };
 
-    const TEST_DRAWING2: Drawing = new Drawing(
-        'harry potter',
-        ['Englang', 'JK Rowling', 'novel'],
-        'test_svg2',
-        ['work-zone', 'background', 'ellipse'],
-        new DrawingInfo(50, 40, '000000'),
-    );
+    const TEST_DRAWING2: Drawing = {
+        svg: 'test-svg2',
+        drawingInfo: {
+            width: 50,
+            height: 40,
+            color: '000000',
+            name: 'harry potter',
+            labels: ['England', 'JK Rowling', 'novel'],
+            idStack: ['work-zone', 'background', 'ellipse'],
+            createdAt: 500,
+            lastModified: 2500,
+        } as DrawingInfo,
+    };
 
     const dialogMock = {
         close: () => null,
@@ -142,29 +154,9 @@ describe('OpenFileModalWindowComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('should return 100% when width of a drawing sent from the server is bigger than its height', () => {
-        component.drawingsFromServer = [TEST_DRAWING];
-
-        const i = 0;
-        component.drawingsFromServer[i].drawingInfo.height = 50;
-        component.drawingsFromServer[i].drawingInfo.width = 100;
-
-        expect(component.getWidth('mona lisa')).toEqual('100%');
-    });
-
-    it('should return 60px when width of a drawing sent from the server is smaller than its height', () => {
-        component.drawingsFromServer = [TEST_DRAWING];
-
-        const i = 0;
-        component.drawingsFromServer[i].drawingInfo.height = 50;
-        component.drawingsFromServer[i].drawingInfo.width = 10;
-
-        expect(component.getHeight('mona lisa')).toEqual('100%');
-    });
-
     it('should load the right drawing from server when loadServerFile is called', () => {
         const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
-        component.selectedOption = TEST_DRAWING.name;
+        component.selectedOption = TEST_DRAWING.drawingInfo.createdAt;
         component.drawingsFromServer = [TEST_DRAWING2, TEST_DRAWING];
         component.loadServerFile();
 
