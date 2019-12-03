@@ -401,7 +401,7 @@ describe('EraserToolService', () => {
         expect(service.isLeftMouseDown).toEqual(true);
     });
 
-    it('onMouseUp should  ', () => {
+    it('onMouseUp should  call removeChild if erasedSomething is true and currentChangedTargetIsValid is also true', () => {
         service.erasedSomething = true;
         service.currentTarget = 0;
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
