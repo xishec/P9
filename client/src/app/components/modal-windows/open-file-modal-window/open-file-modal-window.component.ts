@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -56,7 +56,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -66,6 +66,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
+            .pipe(map((drawings) => drawings.sort((a, b) => b.drawingInfo.createdAt - a.drawingInfo.createdAt)))
             .subscribe((drawings: Drawing[]) => {
                 drawings.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
@@ -153,7 +154,7 @@ export class OpenFileModalWindowComponent implements OnInit {
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                    this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
                         duration: SNACKBAR_DURATION,
                     });
                 }
