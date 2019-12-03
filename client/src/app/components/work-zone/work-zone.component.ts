@@ -94,7 +94,7 @@ export class WorkZoneComponent implements OnInit {
             }
         });
 
-        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack, this.renderer);
+        this.drawingSaverService.initializeDrawingSaverService(this.refSVG, this.drawStack);
 
         this.colorToolService.backgroundColor.subscribe((backgroundColor: string) => {
             this.drawingInfo.color = backgroundColor;
