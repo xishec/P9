@@ -71,6 +71,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -82,6 +83,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -93,6 +95,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Text,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -104,6 +107,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -115,6 +119,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Fill,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -126,6 +131,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -137,6 +143,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Text,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeStrokeColorOnText();
@@ -147,6 +154,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Text,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeFillColorOnText();
@@ -157,6 +165,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeColorOnTrace();
@@ -167,6 +176,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeStrokeColorOnShape();
@@ -177,6 +187,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
         service.changeFillColorOnShape();
@@ -189,6 +200,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -203,6 +215,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -216,6 +229,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Brush,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -230,6 +244,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Rectangle,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -244,6 +259,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Text,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
@@ -258,6 +274,7 @@ describe('ColorApplicatorToolService', () => {
         const mockStackTargetInfo = {
             targetPosition: 0,
             toolName: TOOL_NAME.Text,
+            isValid: () => true,
         };
         service.currentStackTarget = mockStackTargetInfo;
 
