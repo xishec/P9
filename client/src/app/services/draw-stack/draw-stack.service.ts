@@ -2,7 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
@@ -73,13 +73,13 @@ export class DrawStackService {
         for (let i = 0; i < el.children.length; i++) {
             this.renderer.listen(el.children.item(i), 'mousedown', () => {
                 this.changeTargetElement(
-                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, DEFAULT_RADIX), tool as string),
                 );
             });
 
             this.renderer.listen(el.children.item(i), 'mouseup', () => {
                 this.changeTargetElement(
-                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, 10), tool as string),
+                    new StackTargetInfo(parseInt(el.getAttribute('id_element') as string, DEFAULT_RADIX), tool as string),
                 );
             });
         }
@@ -96,14 +96,6 @@ export class DrawStackService {
         if (byTool) {
             this.undoRedoerService.saveCurrentState(this.idStack);
         }
-    }
-
-    pop(): SVGGElement | undefined {
-        const result = this.drawStack.pop();
-        if (this.idStack.length === 0) {
-            this.drawingLoaderService.emptyDrawStack.next(true);
-        }
-        return result;
     }
 
     reset(): SVGGElement[] {

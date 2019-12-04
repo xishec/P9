@@ -37,12 +37,11 @@ export class ExportFileModalWindowComponent implements OnInit {
         this.drawingLoaderService.untouchedWorkZone.subscribe((isEmpty: boolean) => {
             this.workZoneIsEmpty = isEmpty;
         });
-        this.exportFileModalForm.controls.fileType.setValue(FILE_TYPE);
     }
 
     initializeForm(): void {
         this.exportFileModalForm = this.formBuilder.group({
-            fileType: [[FILE_TYPE.SVG], Validators.required],
+            fileType: [FILE_TYPE.SVG, Validators.required],
             filename: [
                 '',
                 [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:)$')],

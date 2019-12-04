@@ -34,6 +34,7 @@ export class SelectionToolService extends AbstractToolService {
     private isRightMouseDown = false;
     private isTranslatingSelection = false;
     private isScalingSelection = false;
+    shouldBeNotified = false;
 
     selection: Selection;
 
@@ -85,6 +86,7 @@ export class SelectionToolService extends AbstractToolService {
         this.isScalingSelection = false;
         this.magnetismService.totalDeltaY = 0;
         this.magnetismService.totalDeltaX = 0;
+        this.shouldBeNotified = false;
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
@@ -97,7 +99,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selection = new Selection(this.renderer, this.elementRef);
         this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.isValid()) {
+            if (stackTarget.isValid() && this.shouldBeNotified) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
