@@ -199,13 +199,17 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     serverFormIsInvalid(): boolean {
         return (
-            this.openFileModalForm.value.selectedDrawing[0] === '' ||
+            this.openFileModalForm.value.selectedDrawing[0] === undefined ||
             (!this.emptyDrawStack && this.openFileModalForm.invalid)
         );
     }
 
     localFormIsInvalid(): boolean {
-        return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
+        return (
+            this.localFileName === undefined ||
+            this.localFileName === '' ||
+            (!this.emptyDrawStack && this.openLocalFileModalForm.invalid)
+        );
     }
 
     getGifSource() {
