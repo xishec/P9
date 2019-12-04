@@ -7,9 +7,9 @@ import {
     CURSOR_STYLES,
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
     ROTATION_ANGLE,
     SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
-    PREVIEW_RECTANGLE_ATTRIBUTES,
 } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';

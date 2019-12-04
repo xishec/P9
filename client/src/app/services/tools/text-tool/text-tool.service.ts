@@ -13,9 +13,9 @@ import {
     SNACKBAR_DURATION,
     TEXT_CURSOR,
     TEXT_LINEBREAK,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
     TEXT_SPACE,
     TOOL_NAME,
-    TEXT_PREVIEW_BOX_ATTRIBUTES,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
