@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers.spec';
 import { MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PolygonToolService } from './polygon-tool.service';
 
@@ -145,19 +145,19 @@ describe('PolygonToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
-                    case 'points':
+                    case HTML_ATTRIBUTE.Points:
                         el.points = String(value);
                         break;
                     default:
@@ -214,16 +214,16 @@ describe('PolygonToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:

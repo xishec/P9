@@ -318,31 +318,31 @@ describe('OpenFileModalWindowComponent', () => {
     it('should return the size of the viewbox of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getViewBox('harry potter')).toEqual('0 0 50 40');
+        expect(component.getViewBox(500)).toEqual('0 0 50 40');
     });
 
     it('should return the width of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getWidth('harry potter')).toEqual('100%');
+        expect(component.getWidth(500)).toEqual('100%');
     });
 
     it('should return the height of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getHeight('harry potter')).toEqual('60px');
+        expect(component.getHeight(500)).toEqual('60px');
     });
 
     it('should return the svg of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getSVG('harry potter')).toEqual('test-svg2');
+        expect(component.getSVG(500)).toEqual('test-svg2');
     });
 
     it('should return the index of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.findIndexByName('harry potter')).toEqual(1);
+        expect(component.findIndexByName(500)).toEqual(1);
     });
 
     it('should load the right drawing from local file when loadLocalFile is called', () => {
@@ -362,8 +362,8 @@ describe('OpenFileModalWindowComponent', () => {
     });
 
     it('should correctly return the number of days between two values in milliseconds', () => {
-        const firstValue = 3 * NUMBER_OF_MS.day + 7 * NUMBER_OF_MS.hours;
-        const secondValue = 9 * NUMBER_OF_MS.day + 1 * NUMBER_OF_MS.minutes;
+        const firstValue = 3 * NUMBER_OF_MS.Day + 7 * NUMBER_OF_MS.Hours;
+        const secondValue = 9 * NUMBER_OF_MS.Day + 1 * NUMBER_OF_MS.Minutes;
 
         expect(component.numberOfDaysBetween(firstValue, secondValue)).toEqual(6);
     });
@@ -385,7 +385,7 @@ describe('OpenFileModalWindowComponent', () => {
 
     it('should correctly convert number of ms to days, hours and minutes format', () => {
         const expectedResult = '1 jour, 3 heures et 24 minutes';
-        const numberOfMs = 1 * NUMBER_OF_MS.day + 3 * NUMBER_OF_MS.hours + 24 * NUMBER_OF_MS.minutes;
+        const numberOfMs = 1 * NUMBER_OF_MS.Day + 3 * NUMBER_OF_MS.Hours + 24 * NUMBER_OF_MS.Minutes;
 
         expect(component.msToDaysHoursMinutes(numberOfMs)).toEqual(expectedResult);
     });

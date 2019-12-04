@@ -4,6 +4,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Selection } from './selection';
 
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import * as TestHelpers from '../../classes/test-helpers.spec';
 import { Coords2D } from '../Coords2D';
 
@@ -18,6 +19,7 @@ describe('Selection', () => {
     let spyOnAppendChild: jasmine.Spy;
     let spyOnRemoveChild: jasmine.Spy;
     let spyOnCreateElement: jasmine.Spy;
+    let spyOnListen: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -30,6 +32,8 @@ describe('Selection', () => {
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {
@@ -55,6 +59,7 @@ describe('Selection', () => {
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         proxy = new Selection(rendererMock, elementRefMock);
 
+        spyOnListen = spyOn(proxy[`renderer`], 'listen');
         spyOnSetAttribute = spyOn(proxy[`renderer`], 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(proxy[`renderer`], 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(proxy[`renderer`], 'removeChild').and.returnValue();
@@ -87,6 +92,7 @@ describe('Selection', () => {
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnCreateElement).toHaveBeenCalled();
+        expect(spyOnListen).toHaveBeenCalled();
     });
 
     it('should remove the fullselection box, empty the selection and set isAppended to false when calling cleanUp', () => {
@@ -174,7 +180,7 @@ describe('Selection', () => {
     });
 
     it('getStrokeWidth should return 10 if el has stroke-width', () => {
-        const el = TestHelpers.createMockSVGGElementWithAttribute('stroke-width');
+        const el = TestHelpers.createMockSVGGElementWithAttribute(HTML_ATTRIBUTE.StrokeWidth);
 
         const resNumber = proxy[`getStrokeWidth`](el);
 

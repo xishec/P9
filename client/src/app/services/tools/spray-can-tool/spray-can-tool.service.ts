@@ -34,7 +34,7 @@ export class SprayCanToolService extends TracingToolService {
             this.currentColorAndOpacity = currentColor;
 
             if (this.sprayer !== undefined) {
-                this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
+                this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Stroke, '#' + this.currentColorAndOpacity);
             }
         });
     }
@@ -44,9 +44,9 @@ export class SprayCanToolService extends TracingToolService {
 
         this.sprayer = this.renderer.createElement('circle', SVG_NS);
         this.renderer.setAttribute(this.sprayer, 'r', this.radius.toString());
-        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke, '#' + this.currentColorAndOpacity);
-        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.stroke_width, SPRAYER_STROKE_WIDTH);
-        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Stroke, '#' + this.currentColorAndOpacity);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.StrokeWidth, SPRAYER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Fill, 'none');
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
@@ -120,8 +120,8 @@ export class SprayCanToolService extends TracingToolService {
         this.currentMouseCoords.x = this.getXPos(event.clientX);
         this.currentMouseCoords.y = this.getYPos(event.clientY);
 
-        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cx, this.currentMouseCoords.x.toString());
-        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.cy, this.currentMouseCoords.y.toString());
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Cx, this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Cy, this.currentMouseCoords.y.toString());
 
         if (!this.isSprayerAppended) {
             this.appendSprayer();
@@ -147,18 +147,18 @@ export class SprayCanToolService extends TracingToolService {
 
     protected createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.SprayCan);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Opacity, this.currentOpacity);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Title, TOOL_NAME.SprayCan);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
     protected createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_width, this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeWidth, this.currentWidth.toString());
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 

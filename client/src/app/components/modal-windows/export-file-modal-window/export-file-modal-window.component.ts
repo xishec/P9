@@ -13,7 +13,7 @@ import { FILE_TYPE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
     styleUrls: ['./export-file-modal-window.component.scss'],
 })
 export class ExportFileModalWindowComponent implements OnInit {
-    private exportFileModalForm: FormGroup;
+    exportFileModalForm: FormGroup;
     private formBuilder: FormBuilder;
     workZoneIsEmpty = true;
     filename = '';

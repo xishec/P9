@@ -1,7 +1,7 @@
 enum COLOR_TYPE {
-    backgroundColor = 'background-color',
-    primaryColor = 'primary-color',
-    secondaryColor = 'secondary-color',
+    BackgroundColor = 'background-color',
+    PrimaryColor = 'primary-color',
+    SecondaryColor = 'secondary-color',
 }
 
 const DEFAULT_WHITE = 'ffffffff';

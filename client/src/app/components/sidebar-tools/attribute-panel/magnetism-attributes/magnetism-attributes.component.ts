@@ -19,7 +19,7 @@ import {
 })
 export class MagnetismAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Magnetism;
-    private magnetismAttributesForm: FormGroup;
+    magnetismAttributesForm: FormGroup;
 
     readonly CONTROL_POINTS = CONTROL_POINTS;
     readonly TOP_CONTROL_POINTS = TOP_CONTROL_POINTS;

@@ -131,11 +131,11 @@ describe('ColorPaletteComponent', () => {
                 .whenStable()
                 .then(() => {
                     expect(component.selectedColorType).toBeDefined();
-                    colorToolService.selectedColorType.next(COLOR_TYPE.backgroundColor);
+                    colorToolService.selectedColorType.next(COLOR_TYPE.BackgroundColor);
                     return fixture.whenStable();
                 })
                 .then(() => {
-                    expect(component.selectedColorType).toEqual(COLOR_TYPE.backgroundColor);
+                    expect(component.selectedColorType).toEqual(COLOR_TYPE.BackgroundColor);
                 });
         }),
     ));

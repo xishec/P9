@@ -140,11 +140,11 @@ export class EventListenerService {
                 this.gridToolService.switchState();
             }
 
-            if (event.key === KEYS.plus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.Plus && this.shouldAllowShortcuts()) {
                 this.gridToolService.incrementSize();
             }
 
-            if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.Minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
 
@@ -152,7 +152,7 @@ export class EventListenerService {
                 this.magnetismToolService.switchState();
             }
 
-            if (event.key === KEYS.delete) {
+            if (event.key === KEYS.Delete) {
                 this.clipboardService.delete();
             }
         });

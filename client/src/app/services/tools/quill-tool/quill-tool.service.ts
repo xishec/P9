@@ -27,7 +27,7 @@ export class QuillToolService extends TracingToolService {
     ];
 
     private thickness = 80;
-    private angle = 80;
+    angle = 80;
     private currentMousePosition: Coords2D = new Coords2D(0, 0);
     private counter = 0;
     private isAlterRotation: boolean;
@@ -87,20 +87,20 @@ export class QuillToolService extends TracingToolService {
 
         this.setColorAndOpacity();
 
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke_width, QUILL_STROKE_WIDTH.initialValue);
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Quill);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.InitialValue);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Opacity, this.currentOpacity);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Title, TOOL_NAME.Quill);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
     private appendPreview(): void {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
-        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.title, 'element-to-remove');
-        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke_width, QUILL_STROKE_WIDTH.preview);
-        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.Title, 'element-to-remove');
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.Preview);
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
     }
 
@@ -151,6 +151,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     onWheel(event: WheelEvent): void {
+        event.preventDefault();
         let val = this.isAlterRotation ? ROTATION_ANGLE.Alter : ROTATION_ANGLE.Base;
         val = event.deltaY < 0 ? -val : val;
         this.angle = (this.angle + val) % 360;
@@ -190,7 +191,7 @@ export class QuillToolService extends TracingToolService {
             `${this.currentCoords[1].x},${this.currentCoords[1].y} ` +
             `${this.currentCoords[0].x},${this.currentCoords[0].y} `;
 
-        this.renderer.setAttribute(polygon, HTML_ATTRIBUTE.points, points);
+        this.renderer.setAttribute(polygon, HTML_ATTRIBUTE.Points, points);
 
         this.renderer.appendChild(this.gWrap, polygon);
     }

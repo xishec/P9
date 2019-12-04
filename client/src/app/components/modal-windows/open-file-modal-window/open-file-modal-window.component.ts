@@ -199,13 +199,17 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     serverFormIsInvalid(): boolean {
         return (
-            this.openFileModalForm.value.selectedDrawing[0] === '' ||
+            this.openFileModalForm.value.selectedDrawing[0] === undefined ||
             (!this.emptyDrawStack && this.openFileModalForm.invalid)
         );
     }
 
     localFormIsInvalid(): boolean {
-        return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
+        return (
+            this.localFileName === undefined ||
+            this.localFileName === '' ||
+            (!this.emptyDrawStack && this.openLocalFileModalForm.invalid)
+        );
     }
 
     getGifSource() {
@@ -232,41 +236,39 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    getDimensions(drawingName: string): number[] {
-        const i: number = this.findIndexByName(drawingName);
+    getDimensions(drawingId: number): number[] {
+        const i: number = this.findIndexByName(drawingId);
         const height: number = this.drawingsFromServer[i].drawingInfo.height;
         const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         return [width, height];
     }
 
-    getViewBox(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
-
+    getViewBox(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
         return `0 0 ${dimensions[0]} ${dimensions[1]}`;
     }
 
-    getWidth(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
+    getWidth(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
 
         return dimensions[0] > dimensions[1] ? '100%' : '60px';
     }
 
-    getHeight(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
+    getHeight(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
 
         return dimensions[0] < dimensions[1] ? '100%' : '60px';
     }
 
-    getSVG(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-
+    getSVG(drawingId: number): string {
+        const i: number = this.findIndexByName(drawingId);
         return this.drawingsFromServer[i].svg;
     }
 
-    findIndexByName(drawingName: string): number {
+    findIndexByName(drawingId: number): number {
         const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
-            return el.drawingInfo.name === drawingName;
+            return el.drawingInfo.createdAt === drawingId;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
     }
@@ -304,16 +306,16 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
-        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.day);
-        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.day);
+        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.Day);
+        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.Day);
 
         return numberDaysDate2 - numberDaysDate1;
     }
 
     msToDaysHoursMinutes(differenceInMs: number): string {
-        const days = Math.floor(differenceInMs / NUMBER_OF_MS.day);
-        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.day) / NUMBER_OF_MS.hours);
-        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.hours) / NUMBER_OF_MS.minutes);
+        const days = Math.floor(differenceInMs / NUMBER_OF_MS.Day);
+        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.Day) / NUMBER_OF_MS.Hours);
+        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.Hours) / NUMBER_OF_MS.Minutes);
 
         const daysDisplay = days <= 1 ? ' jour, ' : ' jours, ';
         const hoursDisplay = hours <= 1 ? ' heure et ' : ' heures et ';

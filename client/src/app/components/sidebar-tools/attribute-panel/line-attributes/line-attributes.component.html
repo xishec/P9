@@ -7,10 +7,10 @@
         <div class="attribute">
             <label for="thickness">Épaisseur du trait</label>
             <mat-slider
-                placeholder="Hex"
                 formControlName="thickness"
                 (input)="onSliderChange($event)"
                 [min]="THICKNESS.Min"
+                [max]="THICKNESS.Max"
                 value="{{ lineAttributesForm.value.thickness }}"
             ></mat-slider>
             <mat-form-field class="small">
@@ -39,7 +39,7 @@
                     [(value)]="selected"
                     [ngClass]="selected ? 'strokeType' + selected : 'strokeType1'"
                 >
-                    <mat-option *ngFor="let strokeType of LineStrokeTypeChoices" [value]="strokeType">
+                    <mat-option *ngFor="let strokeType of lineStrokeTypeChoices" [value]="strokeType">
                         {{ strokeType }}
                         <img height="40" src="/assets/strokeType{{ strokeType }}.png" />
                     </mat-option>
@@ -66,10 +66,10 @@
             <div *ngIf="circleJointSelected">
                 <label for="thickness">Diamètre des cercles</label>
                 <mat-slider
-                    placeholder="Hex"
                     formControlName="circleJointDiameter"
                     (input)="onCircleJointSliderChange($event)"
                     [min]="THICKNESS.Min"
+                    [max]="THICKNESS.Max"
                     value="{{ lineAttributesForm.value.circleJointDiameter }}"
                 ></mat-slider>
                 <mat-form-field class="small">

@@ -435,7 +435,7 @@ describe('EraserToolService', () => {
     });
 
     it('getStrokeWidth should return 10 if the getAttribute requested exists', () => {
-        const element = createMockSVGGElementWithAttribute(HTML_ATTRIBUTE.stroke_width);
+        const element = createMockSVGGElementWithAttribute(HTML_ATTRIBUTE.StrokeWidth);
 
         expect(service[`getStrokeWidth`](element)).toEqual(10);
     });

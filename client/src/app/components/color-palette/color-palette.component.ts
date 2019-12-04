@@ -13,7 +13,7 @@ interface IconStyle {
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements OnInit {
-    selectedColorType: COLOR_TYPE = COLOR_TYPE.primaryColor;
+    selectedColorType: COLOR_TYPE = COLOR_TYPE.PrimaryColor;
     previewColor = DEFAULT_WHITE;
 
     constructor(private colorToolService: ColorToolService) {}
