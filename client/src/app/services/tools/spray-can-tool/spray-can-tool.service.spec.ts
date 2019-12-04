@@ -4,6 +4,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { createMouseEvent } from 'src/classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { SprayCanToolService } from './spray-can-tool.service';
+
 describe('SprayCanToolService', () => {
     let injector: TestBed;
     let service: SprayCanToolService;
@@ -128,6 +129,7 @@ describe('SprayCanToolService', () => {
     });
 
     it('setSprayerToMouse should call appendSprayer if isSprayerAppended is false', () => {
+        service[`isSprayerAppended`] = false;
         const spyOnsappendSprayer = spyOn<any>(service, 'appendSprayer');
 
         service[`setSprayerToMouse`](leftMouseEvent);
@@ -136,10 +138,27 @@ describe('SprayCanToolService', () => {
     });
 
     it('setSprayerToMouse should not call appendSprayer if isSprayerAppended is true', () => {
+        service[`isSprayerAppended`] = true;
         const spyOnsappendSprayer = spyOn<any>(service, 'appendSprayer');
 
         service[`setSprayerToMouse`](leftMouseEvent);
 
         expect(spyOnsappendSprayer).not.toHaveBeenCalled();
+    });
+
+    it('cleanUp should set isSprayerAppended to false', () => {
+        service[`isSprayerAppended`] = true;
+
+        service.cleanUp();
+
+        expect(service[`isSprayerAppended`]).toEqual(false);
+    });
+
+    it('onMouseLeave should set isSprayerAppended to false', () => {
+        service[`isSprayerAppended`] = true;
+
+        service.onMouseLeave(leftMouseEvent);
+
+        expect(service[`isSprayerAppended`]).toEqual(false);
     });
 });
