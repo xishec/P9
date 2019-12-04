@@ -145,7 +145,7 @@ export class TextToolService extends AbstractToolService {
             }
 
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                this.renderer.setAttribute(tspan, 'x', this.textBoxXPosition.toString());
+                this.renderer.setAttribute(tspan, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
             });
             this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.TextAnchor, this.fontInfo.fontAlign);
         }
@@ -182,13 +182,13 @@ export class TextToolService extends AbstractToolService {
         this.bBoxWidth = textBBox.width;
         this.bBoxHeight = textBBox.height;
 
-        this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Y, textBBox.y.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Height, textBBox.height.toString());
 
-        this.renderer.setAttribute(this.gWrap, 'x', this.bBoxAnchorLeft.toString());
-        this.renderer.setAttribute(this.gWrap, 'y', textBBox.y.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Y, textBBox.y.toString());
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Height, textBBox.height.toString());
     }
@@ -204,8 +204,8 @@ export class TextToolService extends AbstractToolService {
 
     private createTextBox(x: number, y: number): void {
         this.textBox = this.renderer.createElement('text', SVG_NS);
-        this.renderer.setAttribute(this.textBox, 'x', x.toString());
-        this.renderer.setAttribute(this.textBox, 'y', y.toString());
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.X, x.toString());
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.Y, y.toString());
     }
 
     private createNewLine(): void {
@@ -221,7 +221,7 @@ export class TextToolService extends AbstractToolService {
 
         this.text = TEXT_CURSOR + remainingRightText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
         this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
 

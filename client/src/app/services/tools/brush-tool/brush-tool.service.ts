@@ -44,8 +44,8 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
         this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Height, '100px');
         this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Width, '100px');
-        this.renderer.setAttribute(filter, 'x', '-50px');
-        this.renderer.setAttribute(filter, 'y', '-50px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.X, '-50px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Y, '-50px');
 
         if (patternId === BRUSH_STYLE.type1 || patternId === BRUSH_STYLE.type2) {
             this.createGaussianBlurFilter(filter);

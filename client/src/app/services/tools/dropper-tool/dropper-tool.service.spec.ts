@@ -5,6 +5,7 @@ import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.
 import { KEYS } from 'src/constants/constants';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('DropperToolService', () => {
     let injector: TestBed;
@@ -22,7 +23,7 @@ describe('DropperToolService', () => {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
-                            if (elem === 'canvas') {
+                            if (elem === HTML_ATTRIBUTE.Canvas) {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {

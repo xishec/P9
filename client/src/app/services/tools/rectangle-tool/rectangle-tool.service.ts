@@ -62,12 +62,12 @@ export class RectangleToolService extends AbstractShapeToolService {
     private copyPreviewRectangleAttributes(): void {
         this.renderer.setAttribute(
             this.drawRectangle,
-            'x',
+            HTML_ATTRIBUTE.X,
             (this.previewRectangleX + this.userStrokeWidth / 2).toString(),
         );
         this.renderer.setAttribute(
             this.drawRectangle,
-            'y',
+            HTML_ATTRIBUTE.Y,
             (this.previewRectangleY + this.userStrokeWidth / 2).toString(),
         );
         if (this.previewRectangleWidth - this.userStrokeWidth < 0) {
@@ -131,8 +131,8 @@ export class RectangleToolService extends AbstractShapeToolService {
     createSVG(): void {
         const el: SVGGElement = this.renderer.createElement('g', SVG_NS);
         const drawRectangle: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(drawRectangle, 'x', this.drawRectangleX.toString());
-        this.renderer.setAttribute(drawRectangle, 'y', this.drawRectangleY.toString());
+        this.renderer.setAttribute(drawRectangle, HTML_ATTRIBUTE.X, this.drawRectangleX.toString());
+        this.renderer.setAttribute(drawRectangle, HTML_ATTRIBUTE.Y, this.drawRectangleY.toString());
         this.renderer.setAttribute(drawRectangle, HTML_ATTRIBUTE.Width, this.drawRectangleWidth.toString());
         this.renderer.setAttribute(drawRectangle, HTML_ATTRIBUTE.Height, this.drawRectangleHeight.toString());
         this.userFillColor === 'none'
@@ -168,13 +168,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (deltaX < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'x',
+                HTML_ATTRIBUTE.X,
                 (this.initialMouseCoords.x - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'x',
+                HTML_ATTRIBUTE.X,
                 (this.initialMouseCoords.x + this.userStrokeWidth / 2).toString(),
             );
         }
@@ -182,13 +182,13 @@ export class RectangleToolService extends AbstractShapeToolService {
         if (deltaY < 0) {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'y',
+                HTML_ATTRIBUTE.Y,
                 (this.initialMouseCoords.y - minLength + this.userStrokeWidth / 2).toString(),
             );
         } else {
             this.renderer.setAttribute(
                 this.drawRectangle,
-                'y',
+                HTML_ATTRIBUTE.Y,
                 (this.initialMouseCoords.y + this.userStrokeWidth / 2).toString(),
             );
         }

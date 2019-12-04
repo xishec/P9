@@ -128,15 +128,15 @@ export class StampToolService extends AbstractToolService {
         const stamp: SVGImageElement = this.renderer.createElement('image', SVG_NS);
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.Width, (STAMP_BASE_WIDTH * this.scaling).toString());
         this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.Height, (STAMP_BASE_HEIGHT * this.scaling).toString());
-        this.renderer.setAttribute(stamp, 'x', this.stampCoords.x.toString());
-        this.renderer.setAttribute(stamp, 'y', this.stampCoords.y.toString());
+        this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.X, this.stampCoords.x.toString());
+        this.renderer.setAttribute(stamp, HTML_ATTRIBUTE.Y, this.stampCoords.y.toString());
         this.renderer.setAttribute(stamp, 'href', BASE64_STAMPS_MAP.get(this.stampLink) as string);
 
         const rect: SVGRectElement = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(rect, HTML_ATTRIBUTE.Width, (STAMP_BASE_WIDTH * this.scaling).toString());
         this.renderer.setAttribute(rect, HTML_ATTRIBUTE.Height, (STAMP_BASE_HEIGHT * this.scaling).toString());
-        this.renderer.setAttribute(rect, 'x', this.stampCoords.x.toString());
-        this.renderer.setAttribute(rect, 'y', this.stampCoords.y.toString());
+        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.X, this.stampCoords.x.toString());
+        this.renderer.setAttribute(rect, HTML_ATTRIBUTE.Y, this.stampCoords.y.toString());
         this.renderer.setAttribute(rect, HTML_ATTRIBUTE.Fill, '#ffffff00');
         this.renderer.setAttribute(rect, HTML_ATTRIBUTE.Stroke, 'none');
 

@@ -6,6 +6,7 @@ import { Selection } from './selection';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import * as TestHelpers from '../../classes/test-helpers.spec';
 import { Coords2D } from '../Coords2D';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('Selection', () => {
     let injector: TestBed;
@@ -174,7 +175,7 @@ describe('Selection', () => {
     });
 
     it('getStrokeWidth should return 10 if el has stroke-width', () => {
-        const el = TestHelpers.createMockSVGGElementWithAttribute('stroke-width');
+        const el = TestHelpers.createMockSVGGElementWithAttribute(HTML_ATTRIBUTE.StrokeWidth);
 
         const resNumber = proxy[`getStrokeWidth`](el);
 

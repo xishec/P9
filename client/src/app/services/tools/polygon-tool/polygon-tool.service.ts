@@ -128,18 +128,18 @@ export class PolygonToolService extends AbstractShapeToolService {
         this.setRadiusCorrection();
 
         if (deltaX < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.X, (this.initialMouseCoords.x - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.X, this.initialMouseCoords.x.toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, minLength.toString());
         }
 
         if (deltaY < 0) {
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - minLength).toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Y, (this.initialMouseCoords.y - minLength).toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, minLength.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Y, this.initialMouseCoords.y.toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, minLength.toString());
         }
 

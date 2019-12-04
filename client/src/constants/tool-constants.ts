@@ -262,8 +262,8 @@ BASE64_STAMPS_MAP.set(
 
 enum LINE_STROKE_TYPE {
     Continuous = 1,
-    Dotted_line = 2,
-    Dotted_circle = 3,
+    DottedLine = 2,
+    DottedCircle = 3,
 }
 
 enum LINE_JOINT_TYPE {
@@ -312,7 +312,7 @@ const TOOL_NAME_SHORTCUTS: Map<string, TOOL_NAME> = new Map([
     ['c', TOOL_NAME.Pencil],
     ['w', TOOL_NAME.Brush],
     ['p', TOOL_NAME.Quill],
-    ['y', TOOL_NAME.Pen],
+    [HTML_ATTRIBUTE.Y, TOOL_NAME.Pen],
     ['a', TOOL_NAME.SprayCan],
     ['1', TOOL_NAME.Rectangle],
     ['2', TOOL_NAME.Ellipsis],

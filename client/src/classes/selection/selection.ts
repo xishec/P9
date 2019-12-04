@@ -198,8 +198,8 @@ export class Selection {
         const top = this.findTopMostCoord();
         const bottom = this.findBottomMostCoord();
 
-        this.renderer.setAttribute(this.selectionBox, 'x', left.toString());
-        this.renderer.setAttribute(this.selectionBox, 'y', top.toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.X, left.toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Y, top.toString());
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Width, (right - left).toString());
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Height, (bottom - top).toString());
 

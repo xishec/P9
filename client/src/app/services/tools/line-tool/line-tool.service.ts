@@ -170,20 +170,20 @@ export class LineToolService extends AbstractToolService {
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Opacity, this.currentOpacity);
 
         switch (this.currentStrokeType) {
-            case LINE_STROKE_TYPE.Dotted_line:
+            case LINE_STROKE_TYPE.DottedLine:
                 this.renderer.setAttribute(
                     this.currentLine,
                     HTML_ATTRIBUTE.StrokeDasharray,
                     `${this.currentStrokeWidth}, ${this.currentStrokeWidth / 2}`,
                 );
                 break;
-            case LINE_STROKE_TYPE.Dotted_circle:
+            case LINE_STROKE_TYPE.DottedCircle:
                 this.renderer.setAttribute(
                     this.currentLine,
                     HTML_ATTRIBUTE.StrokeDasharray,
                     `1, ${this.currentStrokeWidth * 1.5}`,
                 );
-                this.renderer.setAttribute(this.currentLine, 'stroke-linecap', 'round');
+                this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.StrokeLinecap, 'round');
                 break;
         }
 

@@ -48,8 +48,8 @@ export class FillToolService extends AbstractToolService {
         this.renderer = renderer;
         this.drawStack = drawStack;
 
-        this.canvas = this.renderer.createElement('canvas');
-        this.SVGImg = this.renderer.createElement('img');
+        this.canvas = this.renderer.createElement(HTML_ATTRIBUTE.Canvas);
+        this.SVGImg = this.renderer.createElement(HTML_ATTRIBUTE.Img);
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
@@ -157,7 +157,7 @@ export class FillToolService extends AbstractToolService {
 
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Title, 'stroke');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Title, HTML_ATTRIBUTE.Stroke);
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Fill, 'none');
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Stroke, this.strokeColor);
         this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.StrokeWidth, (this.strokeWidth * 2).toString());

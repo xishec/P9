@@ -123,7 +123,7 @@ export abstract class TracingToolService extends AbstractToolService {
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.Fill, 'none');
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeWidth, this.currentWidth.toString());
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
-        this.renderer.setAttribute(this.svgPath, 'stroke-linecap', 'round');
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeLinecap, 'round');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 

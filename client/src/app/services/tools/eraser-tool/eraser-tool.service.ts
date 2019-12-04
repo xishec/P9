@@ -98,8 +98,8 @@ export class EraserToolService extends AbstractToolService {
         this.currentMouseCoords.y =
             event.clientY - this.elementRef.nativeElement.getBoundingClientRect().top - this.currentSize / 2;
 
-        this.renderer.setAttribute(this.eraser, 'x', this.currentMouseCoords.x.toString());
-        this.renderer.setAttribute(this.eraser, 'y', this.currentMouseCoords.y.toString());
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.X, this.currentMouseCoords.x.toString());
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Y, this.currentMouseCoords.y.toString());
 
         if (!this.isEraserAppended) {
             this.appendEraser();
@@ -201,7 +201,7 @@ export class EraserToolService extends AbstractToolService {
                 topElement--;
                 this.removeBorder(
                     svgGElement.getAttribute('id_element') as string,
-                    svgGElement.getAttribute('title') as string,
+                    svgGElement.getAttribute(HTML_ATTRIBUTE.Title) as string,
                 );
             }
         }
@@ -215,7 +215,7 @@ export class EraserToolService extends AbstractToolService {
         if (this.lastElementColoredNumber !== topElement) {
             this.addElementToMap(svgGElement);
 
-            this.lastToolName = svgGElement.getAttribute('title') as string;
+            this.lastToolName = svgGElement.getAttribute(HTML_ATTRIBUTE.Title) as string;
 
             this.drawStack.changeTargetElement(
                 new StackTargetInfo(

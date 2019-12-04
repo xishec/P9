@@ -7,7 +7,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { TRACE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { FillToolService } from './fill-tool.service';
@@ -24,7 +24,7 @@ describe('FillToolService', () => {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
-                            if (elem === 'canvas') {
+                            if (elem === HTML_ATTRIBUTE.Canvas) {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {
@@ -141,7 +141,7 @@ describe('FillToolService', () => {
         service[`shouldNotFill`] = (event: MouseEvent): boolean => {
             return true;
         };
-        const spy = spyOn<any>(service, 'fill');
+        const spy = spyOn<any>(service, HTML_ATTRIBUTE.Fill);
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).not.toHaveBeenCalled();
@@ -158,7 +158,7 @@ describe('FillToolService', () => {
         };
         service[`fill`] = () => null;
 
-        const spy = spyOn<any>(service, 'fill');
+        const spy = spyOn<any>(service, HTML_ATTRIBUTE.Fill);
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).toHaveBeenCalled();

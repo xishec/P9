@@ -5,6 +5,7 @@ import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { MockRect } from '../../../../../classes/test-helpers.spec';
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('AbstractShapeToolService', () => {
     let injector: TestBed;
@@ -102,16 +103,16 @@ describe('AbstractShapeToolService', () => {
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: MockRect, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         mockRect.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         mockRect.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         mockRect.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         mockRect.height = Number(value);
                         break;
                     default:

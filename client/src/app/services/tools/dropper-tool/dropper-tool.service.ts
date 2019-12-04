@@ -4,6 +4,7 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE } from 'src/constants/constants';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
@@ -25,16 +26,16 @@ export class DropperToolService extends AbstractToolService {
         this.elementRef = elementRef;
         this.renderer = renderer;
 
-        this.canvas = this.renderer.createElement('canvas');
-        this.SVGImg = this.renderer.createElement('img');
+        this.canvas = this.renderer.createElement(HTML_ATTRIBUTE.Canvas);
+        this.SVGImg = this.renderer.createElement(HTML_ATTRIBUTE.Img);
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     updateSVGCopy(): void {
         const serializedSVG = new XMLSerializer().serializeToString(this.elementRef.nativeElement);
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml,' + encodeURIComponent(serializedSVG));
-        this.renderer.setProperty(this.canvas, 'width', this.elementRef.nativeElement.getBoundingClientRect().width);
-        this.renderer.setProperty(this.canvas, 'height', this.elementRef.nativeElement.getBoundingClientRect().height);
+        this.renderer.setProperty(this.canvas, HTML_ATTRIBUTE.Width, this.elementRef.nativeElement.getBoundingClientRect().width);
+        this.renderer.setProperty(this.canvas, HTML_ATTRIBUTE.Height, this.elementRef.nativeElement.getBoundingClientRect().height);
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.context2D.drawImage(this.SVGImg, 0, 0);
     }

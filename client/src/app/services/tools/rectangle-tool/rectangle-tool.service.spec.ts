@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { TRACE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
@@ -217,16 +217,16 @@ describe('RectangleToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:
@@ -253,16 +253,16 @@ describe('RectangleToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:

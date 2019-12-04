@@ -9,6 +9,7 @@ import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/dra
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
 import { MAX_NB_LABELS } from 'src/constants/constants';
 import { SaveFileModalWindowComponent } from './save-file-modal-window.component';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('SaveFileModalWindowComponent', () => {
     let component: SaveFileModalWindowComponent;

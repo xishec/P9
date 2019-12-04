@@ -11,7 +11,7 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { LINE_JOINT_TYPE, LINE_STROKE_TYPE } from 'src/constants/tool-constants';
+import { LINE_JOINT_TYPE, LINE_STROKE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { LineToolService } from './line-tool.service';
@@ -246,8 +246,8 @@ describe('LineToolService', () => {
     });
 
     // tslint:disable-next-line: max-line-length
-    it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is Dotted_line', () => {
-        service[`currentStrokeType`] = LINE_STROKE_TYPE.Dotted_line;
+    it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is DottedLine', () => {
+        service[`currentStrokeType`] = LINE_STROKE_TYPE.DottedLine;
         service[`currentJointType`] = LINE_JOINT_TYPE.Straight;
         const mockCurrentStrokeWidth = 10;
         service[`currentStrokeWidth`] = mockCurrentStrokeWidth;
@@ -258,19 +258,19 @@ describe('LineToolService', () => {
         // tslint:disable-next-line: max-line-length
         expect(spyOnSetAttribute).toHaveBeenCalledWith(
             MOCK_LINE,
-            'stroke-dasharray',
+            HTML_ATTRIBUTE.StrokeDasharray,
             `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth / 2}`,
         );
     });
 
-    it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
-        service[`currentStrokeType`] = LINE_STROKE_TYPE.Dotted_circle;
+    it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is DottedCircle', () => {
+        service[`currentStrokeType`] = LINE_STROKE_TYPE.DottedCircle;
         service[`currentJointType`] = LINE_JOINT_TYPE.Straight;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
         service[`startLine`](0, 0);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linecap', 'round');
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.StrokeLinecap, 'round');
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linejoin, round when startLine if jointType is Circle', () => {
@@ -279,7 +279,7 @@ describe('LineToolService', () => {
 
         service[`startLine`](0, 0);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linejoin', 'round');
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
     });
 
     it('should call renderer.setAttribute with currentLine, points, arrayToStringLine + currentMousePosition when previewLine', () => {
@@ -295,7 +295,7 @@ describe('LineToolService', () => {
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(
             MOCK_LINE,
-            'points',
+            HTML_ATTRIBUTE.Points,
             `${stringPointsArray} ${mousePosition}`,
         );
     });
@@ -308,7 +308,7 @@ describe('LineToolService', () => {
         service[`appendLine`](10, 10);
 
         const stringPointsArray = service[`arrayToStringLine`]();
-        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray}`);
+        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.Points, `${stringPointsArray}`);
     });
 
     it('should call renderer.appendChild when appendCircle', () => {
