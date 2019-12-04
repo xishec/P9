@@ -45,7 +45,7 @@ export class ExportFileModalWindowComponent implements OnInit {
             fileType: [[FILE_TYPE.SVG], Validators.required],
             filename: [
                 '',
-                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:|.txt)$')],
+                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])')],
             ],
         });
     }
@@ -56,16 +56,13 @@ export class ExportFileModalWindowComponent implements OnInit {
     }
 
     onSubmit(): void {
-
+        this.exportToolService.saveFile(this.exportFileModalForm.value.fileType, this.exportFileModalForm.value.filename);
         if (this.drawingLoaderService.emptyDrawStack.value) {
             this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans la zone de travail!', 'OK', {
                 duration: SNACKBAR_DURATION,
             });
             return;
         }
-        console.log(this.exportFileModalForm.value.fileType);
-        console.log(this.exportFileModalForm.value.filename);
-        
         this.exportToolService.saveFile(this.exportFileModalForm.value.fileType, this.exportFileModalForm.value.filename);
         this.filename = this.exportFileModalForm.controls.filename.value;
         this.closeDialog();
