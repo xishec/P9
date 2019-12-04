@@ -273,6 +273,10 @@ export class EraserToolService extends AbstractToolService {
                 this.changeBorderOnLine(idElement, borderColor);
                 break;
 
+            case TOOL_NAME.Fill:
+                this.changeBorderOnFill(idElement, borderColor, borderWidth);
+                break;
+
             default:
                 break;
         }
@@ -291,6 +295,20 @@ export class EraserToolService extends AbstractToolService {
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE],
             HTML_ATTRIBUTE.Fill,
             borderColor,
+        );
+    }
+
+    private changeBorderOnFill(idElement: number, borderColor: string, borderWidth: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
+            HTML_ATTRIBUTE.Stroke,
+            borderColor,
+        );
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
+            HTML_ATTRIBUTE.StrokeWidth,
+            borderWidth,
         );
     }
 
@@ -391,6 +409,10 @@ export class EraserToolService extends AbstractToolService {
 
             case TOOL_NAME.Line:
                 this.changeBorderOnLine(idElement, borderColor);
+                break;
+
+            case TOOL_NAME.Fill:
+                this.changeBorderOnFill(idElement, borderColor, borderWidth);
                 break;
 
             default:
