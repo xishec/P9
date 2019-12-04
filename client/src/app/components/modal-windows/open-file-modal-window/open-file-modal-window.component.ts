@@ -247,11 +247,23 @@ export class OpenFileModalWindowComponent implements OnInit {
         }
         const date = new Date(timestamp);
 
-        const creationDate =
-            `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
-            `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
+        const year = this.adjustValues(date.getFullYear());
+        const month = this.adjustValues(date.getMonth() + 1);
+        const day = this.adjustValues(date.getDate());
+        const hour = this.adjustValues(date.getHours());
+        const minutes = this.adjustValues(date.getMinutes());
+        const seconds = this.adjustValues(date.getSeconds());
+
+        const creationDate = `${year}/${month}/${day} à ${hour}:${minutes}:${seconds}`;
 
         return 'Créé le ' + creationDate;
+    }
+
+    adjustValues(timeValue: number): string {
+        if (timeValue === 0) {
+            return '00';
+        }
+        return timeValue < 10 ? `0${timeValue.toString()}` : timeValue.toString();
     }
 
     numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
