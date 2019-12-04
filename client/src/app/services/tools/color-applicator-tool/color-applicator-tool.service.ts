@@ -199,7 +199,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
         this.isOnTarget = false;
     }
-    // tslint:disable-next-line: no-empty
+
     onMouseUp(event: MouseEvent): void {
         this.isOnTarget = false;
     }
@@ -211,7 +211,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
-    // tslint:disable-next-line: no-empty
+
     cleanUp(): void {
         this.shouldBeNotified = false;
     }
