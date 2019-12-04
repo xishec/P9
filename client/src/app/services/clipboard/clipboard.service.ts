@@ -140,11 +140,7 @@ export class ClipboardService {
     }
 
     notifyClippingsState(): void {
-        if (this.clippings.size > 0) {
-            this.isClippingsEmpty.next(false);
-        } else {
-            this.isClippingsEmpty.next(true);
-        }
+        this.isClippingsEmpty.next(!(this.clippings.size > 0));
     }
 
     cut(): void {
