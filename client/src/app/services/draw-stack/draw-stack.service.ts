@@ -98,14 +98,6 @@ export class DrawStackService {
         }
     }
 
-    pop(): SVGGElement | undefined {
-        const result = this.drawStack.pop();
-        if (this.idStack.length === 0) {
-            this.drawingLoaderService.emptyDrawStack.next(true);
-        }
-        return result;
-    }
-
     reset(): SVGGElement[] {
         this.drawingLoaderService.emptyDrawStack.next(true);
         this.idStack.splice(0, this.idStack.length);
