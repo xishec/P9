@@ -204,7 +204,7 @@ export class ClipboardService {
         }
         this.firstDuplication = true;
         this.handlePasteOutOfBounds();
-        if(!this.isFromInitialCut){
+        if (!this.isFromInitialCut) {
             this.increasePasteOffsetValue();
         } else {
             this.isFromInitialCut = false;
