@@ -16,6 +16,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     private primaryColor = '';
     private secondaryColor = '';
     isOnTarget = false;
+    shouldBeNotified = false;
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -37,8 +38,10 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            this.currentStackTarget = stackTarget;
-            this.isOnTarget = true;
+            if (this.shouldBeNotified) {
+                this.currentStackTarget = stackTarget;
+                this.isOnTarget = true;
+            }
         });
     }
 
@@ -196,7 +199,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
         this.isOnTarget = false;
     }
-    // tslint:disable-next-line: no-empty
+
     onMouseUp(event: MouseEvent): void {
         this.isOnTarget = false;
     }
@@ -208,6 +211,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
-    // tslint:disable-next-line: no-empty
-    cleanUp(): void {}
+
+    cleanUp(): void {
+        this.shouldBeNotified = false;
+    }
 }

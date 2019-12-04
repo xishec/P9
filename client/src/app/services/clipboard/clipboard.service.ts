@@ -230,6 +230,8 @@ export class ClipboardService {
             this.renderer.removeChild(this.elementRef.nativeElement, el);
         }
         this.selection.emptySelection();
-        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
     }
 }
