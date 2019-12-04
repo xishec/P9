@@ -160,8 +160,9 @@ export class ClipboardService {
         }
         this.selection.emptySelection();
         this.notifyClippingsState();
-
-        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        setTimeout(() => {
+            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+        }, 0);
     }
 
     copy(): void {
