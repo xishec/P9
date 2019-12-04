@@ -213,8 +213,6 @@ export class EraserToolService extends AbstractToolService {
 
     private updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
         if (this.lastElementColoredNumber !== topElement) {
-            this.addElementToMap(svgGElement);
-
             this.lastToolName = svgGElement.getAttribute(HTML_ATTRIBUTE.Title) as string;
 
             this.drawStack.changeTargetElement(
@@ -224,22 +222,42 @@ export class EraserToolService extends AbstractToolService {
                 ),
             );
 
+            this.addElementToMap(svgGElement, this.lastToolName, this.currentTarget);
+
             this.lastElementColoredNumber = index;
 
-            this.colorBorder(
-                this.currentTarget,
-                this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth),
-                this.lastToolName,
-            );
+            let borderWidth = this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+
+            if (this.lastToolName === TOOL_NAME.Fill) {
+                const childrenCount = this.drawStack.getElementByPosition(this.currentTarget).childElementCount;
+                const borderElement = this.drawStack.getElementByPosition(this.currentTarget).childNodes[
+                    childrenCount - 1
+                ] as SVGGElement;
+                borderWidth = borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+            }
+
+            this.colorBorder(this.currentTarget, borderWidth, this.lastToolName);
         }
     }
 
-    private addElementToMap(svgGElement: SVGGElement): void {
+    private addElementToMap(svgGElement: SVGGElement, tool: string, idElement: number): void {
         if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
-            this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
-                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
-                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
-            } as SVGGElementInfo);
+            if (tool === TOOL_NAME.Fill) {
+                const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+                const borderElement = this.drawStack.getElementByPosition(idElement).childNodes[
+                    childrenCount - 1
+                ] as SVGGElement;
+
+                this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                    borderColor: borderElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
+                    borderWidth: borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
+                } as SVGGElementInfo);
+            } else {
+                this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                    borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
+                    borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
+                } as SVGGElementInfo);
+            }
         }
     }
 
@@ -300,6 +318,7 @@ export class EraserToolService extends AbstractToolService {
 
     private changeBorderOnFill(idElement: number, borderColor: string, borderWidth: string): void {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
             HTML_ATTRIBUTE.Stroke,
@@ -430,6 +449,7 @@ export class EraserToolService extends AbstractToolService {
     private removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
+
             if (element !== undefined) {
                 this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
                 this.changedElements.delete(parseInt(position, DEFAULT_RADIX));
