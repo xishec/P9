@@ -17,7 +17,7 @@ import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magn
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
-import { TOOL_NAME, CURSOR_STYLES } from 'src/constants/tool-constants';
+import { CURSOR_STYLES, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
