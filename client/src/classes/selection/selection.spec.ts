@@ -58,7 +58,7 @@ describe('Selection', () => {
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         proxy = new Selection(rendererMock, elementRefMock);
 
-        spyOnListen = spyOn(proxy[`renderer`],'listen');
+        spyOnListen = spyOn(proxy[`renderer`], 'listen');
         spyOnSetAttribute = spyOn(proxy[`renderer`], 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(proxy[`renderer`], 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(proxy[`renderer`], 'removeChild').and.returnValue();

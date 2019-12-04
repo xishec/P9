@@ -2,13 +2,13 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
+    CONTROL_POINT_FILL_COLOR,
     CONTROL_POINT_RADIUS,
     CONTROL_POINTS_AMOUNT,
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
-    SELECTION_COLOR,
-    CONTROL_POINT_FILL_COLOR,
     SELECTION_BOX_CURSOR_STYLES,
+    SELECTION_COLOR,
 } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
 
@@ -62,12 +62,12 @@ export class Selection {
             this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
             this.renderer.listen(this.controlPoints[i], 'mouseover', () => {
                 const currentControlPointId = i;
-                if(!this.isInputOnControlPoint){
+                if (!this.isInputOnControlPoint) {
                     this.renderer.setStyle(this.svgRef.nativeElement, 'cursor', SELECTION_BOX_CURSOR_STYLES.get(currentControlPointId));
                 }
             });
             this.renderer.listen(this.controlPoints[i], 'mouseout', () => {
-                if(!this.isInputOnControlPoint){
+                if (!this.isInputOnControlPoint) {
                     this.renderer.setStyle(this.svgRef.nativeElement, 'cursor', 'default');
                 }
             });
