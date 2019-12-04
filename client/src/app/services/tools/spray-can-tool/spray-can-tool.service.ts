@@ -26,7 +26,6 @@ export class SprayCanToolService extends TracingToolService {
     private intervalTime = SPRAY_INTERVAL.Default;
     private sprayer: SVGCircleElement;
     private currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    private isSprayerAppended = false;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -123,27 +122,22 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Cx, this.currentMouseCoords.x.toString());
         this.renderer.setAttribute(this.sprayer, HTML_ATTRIBUTE.Cy, this.currentMouseCoords.y.toString());
 
-        if (!this.isSprayerAppended) {
-            this.appendSprayer();
-        }
+        this.appendSprayer();
     }
 
     private appendSprayer(): void {
         this.renderer.appendChild(this.elementRef.nativeElement, this.sprayer);
-        this.isSprayerAppended = true;
     }
 
     cleanUp() {
         super.cleanUp();
         clearInterval(this.interval);
         this.renderer.removeChild(this.elementRef, this.sprayer);
-        this.isSprayerAppended = false;
     }
 
     onMouseLeave(event: MouseEvent) {
         super.onMouseLeave(event);
         this.renderer.removeChild(this.elementRef, this.sprayer);
-        this.isSprayerAppended = false;
     }
 
     protected createSVGWrapper(): void {
