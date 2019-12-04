@@ -23,6 +23,7 @@ export class ClipboardService {
     private pasteOffsetValue = 0;
     private duplicateOffsetValue = 0;
 
+    private isFromInitialCut = false;
     private firstDuplication = true;
     isClippingsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
@@ -140,11 +141,7 @@ export class ClipboardService {
     }
 
     private notifyClippingsState(): void {
-        if (this.clippings.size > 0) {
-            this.isClippingsEmpty.next(false);
-        } else {
-            this.isClippingsEmpty.next(true);
-        }
+        this.isClippingsEmpty.next(!(this.clippings.size > 0));
     }
 
     cut(): void {
@@ -160,6 +157,7 @@ export class ClipboardService {
         }
         this.selection.emptySelection();
         this.notifyClippingsState();
+        this.isFromInitialCut = true;
         setTimeout(() => {
             this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
         }, 0);
@@ -207,7 +205,11 @@ export class ClipboardService {
         }
         this.firstDuplication = true;
         this.handlePasteOutOfBounds();
-        this.increasePasteOffsetValue();
+        if (!this.isFromInitialCut) {
+            this.increasePasteOffsetValue();
+        } else {
+            this.isFromInitialCut = false;
+        }
         this.clone(this.clippings, this.pasteOffsetValue);
 
         this.saveStateFromPaste();
