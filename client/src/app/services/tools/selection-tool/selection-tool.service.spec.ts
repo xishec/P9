@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { ROTATION_ANGLE, CURSOR_STYLES } from 'src/constants/tool-constants';
+import { CURSOR_STYLES, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
