@@ -1,6 +1,6 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import { SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     CONTROL_POINT_RADIUS,
     CONTROL_POINTS_AMOUNT,
@@ -11,13 +11,19 @@ import {
 import { Coords2D } from '../Coords2D';
 
 export class Selection {
-    renderer: Renderer2;
-    svgRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private svgRef: ElementRef<SVGElement>;
 
     selectedElements: Set<SVGGElement> = new Set();
     invertSelectionBuffer: Set<SVGGElement> = new Set();
     selectionBox: SVGRectElement;
     controlPoints: SVGCircleElement[] = new Array(CONTROL_POINTS_AMOUNT);
+    activeControlPoint: SVGCircleElement;
+
+    ogSelectionBoxHeight: number;
+    ogSelectionBoxWidth: number;
+    ogActiveControlPointCoords: Coords2D;
+    ogSelectionBoxPositions: Coords2D;
 
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -36,19 +42,22 @@ export class Selection {
         this.isAppended = false;
     }
 
-    initFullSelectionBox(): void {
+    private initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, 'none');
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
             this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
         }
     }
 
-    removeFullSelectionBox(): void {
+    private removeFullSelectionBox(): void {
         if (this.isAppended) {
             this.renderer.removeChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
@@ -59,7 +68,7 @@ export class Selection {
         }
     }
 
-    appendFullSelectionBox(): void {
+    private appendFullSelectionBox(): void {
         if (!this.isAppended) {
             this.renderer.appendChild(this.svgRef.nativeElement, this.selectionBox);
             for (const ctrlPt of this.controlPoints) {
@@ -70,7 +79,7 @@ export class Selection {
         }
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
@@ -82,11 +91,11 @@ export class Selection {
         return ctrlPt.cy.baseVal.value;
     }
 
-    getControlPointR(ctrlPt: SVGCircleElement): number {
+    private getControlPointR(ctrlPt: SVGCircleElement): number {
         return ctrlPt.r.baseVal.value;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
+    private getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
             return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
@@ -123,6 +132,7 @@ export class Selection {
             const distY = currentMouseCoords.y - cy;
 
             if (Math.abs(distX) <= r && Math.abs(distY) <= r && this.isAppended) {
+                this.activeControlPoint = ctrlPt;
                 return true;
             }
         }
@@ -130,7 +140,7 @@ export class Selection {
         return false;
     }
 
-    findLeftMostCoord(): number {
+    private findLeftMostCoord(): number {
         const leftCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -140,7 +150,7 @@ export class Selection {
         return Math.min.apply(Math, leftCoords);
     }
 
-    findRightMostCoord(): number {
+    private findRightMostCoord(): number {
         const rightCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -156,7 +166,7 @@ export class Selection {
         return Math.max.apply(Math, rightCoords);
     }
 
-    findTopMostCoord(): number {
+    private findTopMostCoord(): number {
         const topCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -166,7 +176,7 @@ export class Selection {
         return Math.min.apply(Math, topCoords);
     }
 
-    findBottomMostCoord(): number {
+    private findBottomMostCoord(): number {
         const bottomCoords: number[] = new Array();
 
         for (const el of this.selectedElements) {
@@ -196,7 +206,7 @@ export class Selection {
         this.updateControlPoints();
     }
 
-    updateControlPoints(): void {
+    private updateControlPoints(): void {
         const positionMap: Map<number, [string, string]> = new Map();
 
         positionMap.set(0, [
@@ -266,7 +276,7 @@ export class Selection {
         }
     }
 
-    removeFromSelection(element: SVGGElement): void {
+    private removeFromSelection(element: SVGGElement): void {
         this.selectedElements.delete(element);
         this.updateFullSelectionBox();
         if (this.selectedElements.size === 0) {

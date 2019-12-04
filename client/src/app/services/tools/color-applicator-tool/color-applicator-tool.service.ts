@@ -52,11 +52,19 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
-    isStackTargetShape(): boolean {
+    isShape(): boolean {
         const isRectangle = this.currentStackTarget.toolName === TOOL_NAME.Rectangle;
         const isEllipsis = this.currentStackTarget.toolName === TOOL_NAME.Ellipsis;
         const isPolygon = this.currentStackTarget.toolName === TOOL_NAME.Polygon;
         return isRectangle || isEllipsis || isPolygon;
+    }
+
+    isText(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Text;
+    }
+
+    isBucketFill(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Fill;
     }
 
     changeFillColorOnShape(): void {
@@ -87,6 +95,27 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
+    changeFillColorOnBucketFill(): void {
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
+            this.currentStackTarget.targetPosition,
+        );
+        if (filledShapeWrap.children[0] && filledShapeWrap.children[0].getAttribute('title') === 'body') {
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.stroke, this.primaryColor);
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.fill, this.primaryColor);
+        }
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnBucketFill(): void {
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
+            this.currentStackTarget.targetPosition,
+        );
+        if (filledShapeWrap.children[2] && filledShapeWrap.children[2].getAttribute('title') === 'stroke') {
+            this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.stroke, this.secondaryColor);
+        }
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
     changeColorOnTrace(): void {
         const color = this.primaryColor.slice(0, 7);
         const opacity = (parseInt(this.primaryColor.slice(7, 9), 16) / 255).toFixed(1);
@@ -112,6 +141,24 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
+    changeFillColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.fill,
+            this.primaryColor,
+        );
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.stroke,
+            this.secondaryColor,
+        );
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
     // tslint:disable-next-line: no-empty
     onMouseMove(event: MouseEvent): void {}
     onMouseDown(event: MouseEvent): void {
@@ -125,15 +172,23 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeFillColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeFillColorOnShape();
+                } else if (this.isText()) {
+                    this.changeFillColorOnText();
                 } else {
                     this.changeColorOnTrace();
                 }
                 break;
             case MOUSE.RightButton:
-                if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeStrokeColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeStrokeColorOnShape();
+                } else if (this.isText()) {
+                    this.changeStrokeColorOnText();
                 }
                 break;
             default:

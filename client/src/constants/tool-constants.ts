@@ -1,15 +1,27 @@
 import { FontType } from 'src/classes/FontType';
+import { MagnetismPoint } from 'src/classes/MagnetismPoint';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
-const CONTROL_POINT_RADIUS = 5;
+const CONTROL_POINT_RADIUS = 10;
 const SELECTION_COLOR = '#ff5722';
 
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
-const STAMP_BASE_ROTATION = 15;
-const STAMP_ALTER_ROTATION = 1;
+
+enum ROTATION_ANGLE {
+    Base = 15,
+    Alter = 1,
+    Min = -360,
+    Default = 0,
+    Max = 360,
+}
+
+enum QUILL_STROKE_WIDTH {
+    initialValue = '1',
+    preview = '2',
+}
 
 const OFFSET_STEP = 10;
 
@@ -45,11 +57,18 @@ enum TOOL_NAME {
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
     Export = 'Exporter',
+    Magnetism = 'Magnétisme',
 }
 
 enum THICKNESS {
-    Min = 1,
-    Default = 5,
+    Min = 2,
+    Default = 10,
+    Max = 100,
+}
+
+enum TOLERANCE {
+    Min = 0,
+    Default = 0,
     Max = 100,
 }
 
@@ -83,7 +102,7 @@ enum POLYGON_SIDES {
 enum GRID_SIZE {
     Min = 5,
     Default = 10,
-    Max = 200,
+    Max = 100,
 }
 
 enum GRID_OPACITY {
@@ -106,6 +125,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eye-dropper', tooltipName: TOOL_NAME.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: TOOL_NAME.Stamp, shortcut: '' },
     { iconName: 'fas fa-border-all', tooltipName: TOOL_NAME.Grid, shortcut: '' },
+    { iconName: 'fas fa-magnet', tooltipName: TOOL_NAME.Magnetism, shortcut: '(M)' },
 ];
 
 const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -180,12 +200,6 @@ enum STAMP_SCALING {
     Min = 0.1,
     Default = 1.0,
     Max = 10.0,
-}
-
-enum STAMP_ANGLE_ORIENTATION {
-    Min = -360,
-    Default = 0,
-    Max = 360,
 }
 
 enum ERASER_SIZE {
@@ -265,6 +279,8 @@ enum HTML_ATTRIBUTE {
     stroke = 'stroke',
     opacity = 'opacity',
     stroke_width = 'stroke-width',
+    x = 'x',
+    y = 'y',
     cx = 'cx',
     cy = 'cy',
     rx = 'rx',
@@ -275,6 +291,7 @@ enum HTML_ATTRIBUTE {
     points = 'points',
     stroke_dasharray = 'stroke-dasharray',
     stroke_linejoin = 'stroke-linejoin',
+    stroke_linecap = 'stroke-linecap',
     title = 'title',
     canvas = 'canvas',
     a = 'a',
@@ -351,7 +368,7 @@ enum FONT_SIZE {
 const TEXT_CURSOR = '█';
 const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
-const SNACKBAR_DURATION = 3000;
+const SNACKBAR_DURATION = 1000;
 
 enum FONT_ALIGN {
     Middle = 'middle',
@@ -369,7 +386,77 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+enum CONTROL_POINTS {
+    TopLeft = 0,
+    TopMiddle = 1,
+    TopRight = 2,
+    CenterLeft = 7,
+    CenterMiddle = 8,
+    CenterRight = 3,
+    BottomLeft = 6,
+    BottomMiddle = 5,
+    BottomRight = 4,
+}
+
+const TOP_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.TopLeft, img_src: '../../../assets/controlPoints/topleft.png' },
+    { point: CONTROL_POINTS.TopMiddle, img_src: '../../../assets/controlPoints/top.png' },
+    { point: CONTROL_POINTS.TopRight, img_src: '../../../assets/controlPoints/topright.png' },
+];
+
+const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.CenterLeft, img_src: '../../../assets/controlPoints/left.png' },
+    { point: CONTROL_POINTS.CenterMiddle, img_src: '../../../assets/controlPoints/center.png' },
+    { point: CONTROL_POINTS.CenterRight, img_src: '../../../assets/controlPoints/right.png' },
+];
+
+const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.BottomLeft, img_src: '../../../assets/controlPoints/bottomleft.png' },
+    { point: CONTROL_POINTS.BottomMiddle, img_src: '../../../assets/controlPoints/bottom.png' },
+    { point: CONTROL_POINTS.BottomRight, img_src: '../../../assets/controlPoints/bottomright.png' },
+];
+
+enum MAGNETISM_STATE {
+    active = 'maintenant activé',
+    inactive = 'désactivé',
+}
+
+const MAX_NORMAL_LENGTH = 5;
+const FILL_STROKE_WIDTH = '4';
+
+const MAX_PERCENTAGE = 100;
+const MAX_PATH_DISTANCE = 100;
+
+enum SPRAY_DIAMETER {
+    Min = 20,
+    Default = 30,
+    Max = 100,
+}
+
+enum SPRAY_INTERVAL {
+    Min = 0,
+    Default = 20,
+    Max = 1000,
+}
+
+enum SPRAY_PARTICLE_THICKNESS {
+    Min = 1,
+    Default = 2.5,
+    Max = 5,
+}
+
+const SPRAYER_STROKE_WIDTH = '3';
+
+const MAX_CHARS_IN_PATH = 10000;
+
+const CIRCLES_TO_APPEND = 20;
+
 export {
+    MAX_PERCENTAGE,
+    MAX_PATH_DISTANCE,
+    TOLERANCE,
+    FILL_STROKE_WIDTH,
+    MAX_NORMAL_LENGTH,
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
     HTML_ATTRIBUTE,
@@ -389,7 +476,6 @@ export {
     POLYGON_RADIUS_CORRECTION,
     POLYGON_OFFSET_ANGLES,
     STAMP_SCALING,
-    STAMP_ANGLE_ORIENTATION,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
@@ -422,9 +508,20 @@ export {
     SNACKBAR_DURATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
-    STAMP_BASE_ROTATION,
-    STAMP_ALTER_ROTATION,
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    CONTROL_POINTS,
+    TOP_CONTROL_POINTS,
+    CENTER_CONTROL_POINTS,
+    BOTTOM_CONTROL_POINTS,
+    MAGNETISM_STATE,
+    ROTATION_ANGLE,
+    QUILL_STROKE_WIDTH,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
+    SPRAYER_STROKE_WIDTH,
+    SPRAY_PARTICLE_THICKNESS,
+    MAX_CHARS_IN_PATH,
+    CIRCLES_TO_APPEND,
 };

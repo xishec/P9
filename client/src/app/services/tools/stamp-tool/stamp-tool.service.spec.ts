@@ -27,6 +27,7 @@ describe('StampToolService', () => {
     let spyOnRemoveChild: jasmine.Spy;
     let spyOnDrawStackPush: jasmine.Spy;
     let spyOnPreventDefault: jasmine.Spy;
+    let spyOnCreateElement: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -78,11 +79,12 @@ describe('StampToolService', () => {
         onAltKeyDown = createKeyBoardEvent(KEYS.Alt);
         onOtherKeyDown = createKeyBoardEvent(KEYS.Shift);
 
-        spyOnSetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
-        spyOnDrawStackPush = spyOn(service.drawStack, 'push').and.returnValue();
+        spyOnSetAttribute = spyOn(service[`renderer`], 'setAttribute').and.returnValue();
+        spyOnAppendChild = spyOn(service[`renderer`], 'appendChild').and.returnValue();
+        spyOnRemoveChild = spyOn(service[`renderer`], 'removeChild').and.returnValue();
+        spyOnDrawStackPush = spyOn(service[`drawStack`], 'push').and.returnValue();
         spyOnPreventDefault = spyOn(onAltKeyDown, 'preventDefault').and.returnValue();
+        spyOnCreateElement = spyOn(rendererMock, 'createElement');
 
         spyOnStampWidth = spyOnProperty(service, 'stampWidth', 'get').and.callFake(() => {
             return mockDrawRect.width;
@@ -118,7 +120,7 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
+        newStampTool[`stamp`] = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampWidth).toEqual(WIDTH);
     });
 
@@ -133,56 +135,80 @@ describe('StampToolService', () => {
         };
         const newStampTool = new StampToolService();
         newStampTool.initializeService(elementRefMock, rendererMock, drawStackMock);
-        newStampTool.stamp = (mockImageElement as unknown) as SVGImageElement;
+        newStampTool[`stamp`] = (mockImageElement as unknown) as SVGImageElement;
         expect(newStampTool.stampHeight).toEqual(HEIGHT);
     });
 
     it('should call initStamp appendChild if stampIsAppended is false', () => {
-        service.stampIsAppended = true;
-        service.initStamp();
+        service[`stampIsAppended`] = true;
+        service[`initStamp`]();
         expect(spyOnAppendChild).toHaveBeenCalledTimes(0);
 
-        service.stampIsAppended = false;
-        service.initStamp();
+        service[`stampIsAppended`] = false;
+        service[`initStamp`]();
         expect(spyOnAppendChild).toHaveBeenCalledTimes(1);
     });
 
     it('should call removeChild if stampIsAppended is true', () => {
-        service.stampIsAppended = false;
+        service[`stampIsAppended`] = false;
         service.cleanUp();
         expect(spyOnRemoveChild).toHaveBeenCalledTimes(0);
 
-        service.stampIsAppended = true;
+        service[`stampIsAppended`] = true;
         service.cleanUp();
         expect(spyOnRemoveChild).toHaveBeenCalledTimes(1);
     });
 
     it('should call setAttribute 3 times', () => {
-        service.setStamp();
+        service[`setStamp`]();
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(3);
     });
 
     it('should call applyTransformation if isStampLinkValid is true', () => {
-        service.isStampLinkValid = false;
-        service.applyTransformation();
+        service[`isStampLinkValid`] = false;
+        service[`applyTransformation`]();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(0);
 
-        service.isStampLinkValid = true;
-        service.applyTransformation();
+        service[`isStampLinkValid`] = true;
+        service[`applyTransformation`]();
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
     it('should call applyTransformation once after a call to positionStamp', () => {
-        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation');
+        const spyOnApplyTransformation: jasmine.Spy = spyOn<any>(service, 'applyTransformation');
 
-        service.positionStamp();
+        service[`positionStamp`]();
 
         expect(spyOnApplyTransformation).toHaveBeenCalled();
     });
 
     it('should call setAttribute and appendChild after a stamp is added', () => {
-        service.addStamp();
+        spyOnCreateElement.and.callFake((param: string, ns: string) => {
+            if (param === 'svg') {
+                const mockSVG = {
+                    createSVGTransform: () => {
+                        const mockTransform = {
+                            setRotate: () => null,
+                        };
+                        return (mockTransform as unknown) as SVGTransform;
+                    },
+                    createSVGTransformFromMatrix: () => null,
+                };
+
+                return (mockSVG as unknown) as SVGSVGElement;
+            } else {
+                const mockG = {
+                    transform: {
+                        baseVal: {
+                            insertItemBefore: () => null,
+                        },
+                    },
+                };
+                return (mockG as unknown) as SVGGElement;
+            }
+        });
+        service[`addStamp`]();
         jasmine.clock().tick(1);
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
@@ -191,59 +217,83 @@ describe('StampToolService', () => {
     });
 
     it('should increase the current angle by 15 degrees if the direction is positive', () => {
-        service.rotateStamp(1);
-        expect(service.angle).toEqual(15);
+        service[`rotateStamp`](1);
+        expect(service[`angle`]).toEqual(15);
     });
 
     it('should decrease the current angle by 15 degrees if the direction is negative', () => {
-        service.rotateStamp(-1);
-        expect(service.angle).toEqual(-15);
+        service[`rotateStamp`](-1);
+        expect(service[`angle`]).toEqual(-15);
     });
 
     it('should increase the current angle by 1 degree if the direction is positive', () => {
-        service.alterRotateStamp(10);
-        expect(service.angle).toEqual(1);
+        service[`alterRotateStamp`](10);
+        expect(service[`angle`]).toEqual(1);
     });
 
     it('should decrease the current angle by 1 degree if the direction is negative', () => {
-        service.alterRotateStamp(-10);
-        expect(service.angle).toEqual(-1);
+        service[`alterRotateStamp`](-10);
+        expect(service[`angle`]).toEqual(-1);
     });
 
     it('should call positionStamp and increase the current position of the mouse if the position is positive', () => {
-        const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+        const spyOnPositionStamp: jasmine.Spy = spyOn<any>(service, 'positionStamp');
 
-        const currentMouseCoordsX = service.currentMouseCoords.x;
-        const currentMouseCoordsY = service.currentMouseCoords.y;
+        const currentMouseCoordsX = service[`currentMouseCoords`].x;
+        const currentMouseCoordsY = service[`currentMouseCoords`].y;
         service.onMouseMove(positiveMouseEvent);
 
-        expect(service.currentMouseCoords.x).toBeGreaterThan(currentMouseCoordsX);
-        expect(service.currentMouseCoords.y).toBeGreaterThan(currentMouseCoordsY);
+        expect(service[`currentMouseCoords`].x).toBeGreaterThan(currentMouseCoordsX);
+        expect(service[`currentMouseCoords`].y).toBeGreaterThan(currentMouseCoordsY);
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
     it('should call positionStamp and decrease the current position of the mouse if the position is negative', () => {
-        const spyOnPositionStamp: jasmine.Spy = spyOn(service, 'positionStamp').and.returnValue();
+        const spyOnPositionStamp: jasmine.Spy = spyOn<any>(service, 'positionStamp');
 
-        const currentMouseCoordsX = service.currentMouseCoords.x;
-        const currentMouseCoordsY = service.currentMouseCoords.y;
+        const currentMouseCoordsX = service[`currentMouseCoords`].x;
+        const currentMouseCoordsY = service[`currentMouseCoords`].y;
         service.onMouseMove(negativeMouseEvent);
 
-        expect(service.currentMouseCoords.x).toBeLessThan(currentMouseCoordsX);
-        expect(service.currentMouseCoords.y).toBeLessThan(currentMouseCoordsY);
+        expect(service[`currentMouseCoords`].x).toBeLessThan(currentMouseCoordsX);
+        expect(service[`currentMouseCoords`].y).toBeLessThan(currentMouseCoordsY);
         expect(spyOnPositionStamp).toHaveBeenCalled();
     });
 
     it('should call cleanUpStamp if event is left click, stamp link is valid and the position is correct', () => {
+        spyOnCreateElement.and.callFake((param: string, ns: string) => {
+            if (param === 'svg') {
+                const mockSVG = {
+                    createSVGTransform: () => {
+                        const mockTransform = {
+                            setRotate: () => null,
+                        };
+                        return (mockTransform as unknown) as SVGTransform;
+                    },
+                    createSVGTransformFromMatrix: () => null,
+                };
+
+                return (mockSVG as unknown) as SVGSVGElement;
+            } else {
+                const mockG = {
+                    transform: {
+                        baseVal: {
+                            insertItemBefore: () => null,
+                        },
+                    },
+                };
+                return (mockG as unknown) as SVGGElement;
+            }
+        });
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
 
-        service.isStampLinkValid = false;
-        service.stampIsAppended = true;
+        service[`isStampLinkValid`] = false;
+        service[`stampIsAppended`] = true;
         service.onMouseDown(positiveMouseEvent);
         expect(spyOnCleanUpStamp).not.toHaveBeenCalled();
 
-        service.isStampLinkValid = true;
+        service[`isStampLinkValid`] = true;
         service.onMouseDown(positiveMouseEvent);
         jasmine.clock().tick(1);
 
@@ -252,29 +302,29 @@ describe('StampToolService', () => {
     });
 
     it('should call initStamp if event is left click, isStampLinkValid is true and the position is correct', () => {
-        const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
+        const spyOnInitStamp: jasmine.Spy = spyOn<any>(service, 'initStamp');
 
-        service.isStampLinkValid = false;
+        service[`isStampLinkValid`] = false;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
-        service.isStampLinkValid = true;
-        service.stampIsAppended = true;
+        service[`isStampLinkValid`] = true;
+        service[`stampIsAppended`] = true;
         service.onMouseUp(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalled();
     });
 
     it('should call initStamp if isStampLinkValid is true', () => {
-        const spyOnInitStamp: jasmine.Spy = spyOn(service, 'initStamp').and.returnValue();
+        const spyOnInitStamp: jasmine.Spy = spyOn<any>(service, 'initStamp');
         spyOn(service, 'isMouseInRef').and.callFake(() => false);
-        service.isStampLinkValid = false;
+        service[`isStampLinkValid`] = false;
 
         service.onMouseEnter(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(0);
 
-        service.isStampLinkValid = true;
-        service.stampIsAppended = true;
+        service[`isStampLinkValid`] = true;
+        service[`stampIsAppended`] = true;
         service.onMouseEnter(positiveMouseEvent);
         expect(spyOnInitStamp).toHaveBeenCalledTimes(1);
     });
@@ -282,30 +332,30 @@ describe('StampToolService', () => {
     it('should call cleanUpStamp if isStampLinkValid is true', () => {
         const spyOnCleanUpStamp: jasmine.Spy = spyOn(service, 'cleanUp').and.returnValue();
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
-        service.isStampLinkValid = false;
+        service[`isStampLinkValid`] = false;
 
         service.onMouseLeave(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(0);
 
-        service.isStampLinkValid = true;
+        service[`isStampLinkValid`] = true;
         service.onMouseLeave(positiveMouseEvent);
         expect(spyOnCleanUpStamp).toHaveBeenCalledTimes(1);
     });
 
     it('should call alterRotateStamp if isAlterRotation is true and rotateStamp if isAlterRotation is false', () => {
         const wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
-        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
-        service.isStampLinkValid = true;
+        const spyOnApplyTransformation: jasmine.Spy = spyOn<any>(service, 'applyTransformation');
+        service[`isStampLinkValid`] = true;
 
-        service.isAlterRotation = true;
-        const spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
+        service[`isAlterRotation`] = true;
+        const spyOnAlterRotateStamp: jasmine.Spy = spyOn<any>(service, 'alterRotateStamp');
 
         service.onWheel(wheelEvent);
         expect(spyOnAlterRotateStamp).toHaveBeenCalled();
         expect(spyOnApplyTransformation).toHaveBeenCalled();
 
-        service.isAlterRotation = false;
-        const spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
+        service[`isAlterRotation`] = false;
+        const spyOnRotateStamp: jasmine.Spy = spyOn<any>(service, 'rotateStamp');
 
         service.onWheel(wheelEvent);
         expect(spyOnRotateStamp).toHaveBeenCalled();
@@ -314,18 +364,18 @@ describe('StampToolService', () => {
 
     it('should not call any rotation methods if stamp link is invalid', () => {
         const wheelEvent: WheelEvent = new WheelEvent('wheelEvent');
-        const spyOnApplyTransformation: jasmine.Spy = spyOn(service, 'applyTransformation').and.returnValue();
-        service.isStampLinkValid = false;
+        const spyOnApplyTransformation: jasmine.Spy = spyOn<any>(service, 'applyTransformation');
+        service[`isStampLinkValid`] = false;
 
-        service.isAlterRotation = true;
-        const spyOnAlterRotateStamp: jasmine.Spy = spyOn(service, 'alterRotateStamp').and.returnValue();
+        service[`isAlterRotation`] = true;
+        const spyOnAlterRotateStamp: jasmine.Spy = spyOn<any>(service, 'alterRotateStamp');
 
         service.onWheel(wheelEvent);
         expect(spyOnAlterRotateStamp).not.toHaveBeenCalled();
         expect(spyOnApplyTransformation).not.toHaveBeenCalled();
 
-        service.isAlterRotation = false;
-        const spyOnRotateStamp: jasmine.Spy = spyOn(service, 'rotateStamp').and.returnValue();
+        service[`isAlterRotation`] = false;
+        const spyOnRotateStamp: jasmine.Spy = spyOn<any>(service, 'rotateStamp');
 
         service.onWheel(wheelEvent);
         expect(spyOnRotateStamp).not.toHaveBeenCalled();
@@ -334,31 +384,31 @@ describe('StampToolService', () => {
 
     it('should call preventDefault on event and change isAlterRotation to true if it is false', () => {
         service.onKeyDown(onOtherKeyDown);
-        service.isAlterRotation = false;
+        service[`isAlterRotation`] = false;
         service.onKeyDown(onAltKeyDown);
 
-        expect(service.isAlterRotation).toBeTruthy();
+        expect(service[`isAlterRotation`]).toBeTruthy();
         expect(spyOnPreventDefault).toHaveBeenCalled();
 
-        service.isAlterRotation = true;
+        service[`isAlterRotation`] = true;
         service.onKeyDown(onAltKeyDown);
 
-        expect(service.isAlterRotation).toBeTruthy();
+        expect(service[`isAlterRotation`]).toBeTruthy();
         expect(spyOnPreventDefault).toHaveBeenCalled();
     });
 
     it('should call preventDefault on event and change isAlterRotation to false if it is true', () => {
         service.onKeyUp(onOtherKeyDown);
-        service.isAlterRotation = true;
+        service[`isAlterRotation`] = true;
         service.onKeyUp(onAltKeyDown);
 
-        expect(service.isAlterRotation).toBeFalsy();
+        expect(service[`isAlterRotation`]).toBeFalsy();
         expect(spyOnPreventDefault).toHaveBeenCalled();
 
-        service.isAlterRotation = false;
+        service[`isAlterRotation`] = false;
         service.onKeyUp(onAltKeyDown);
 
-        expect(service.isAlterRotation).toBeFalsy();
+        expect(service[`isAlterRotation`]).toBeFalsy();
         expect(spyOnPreventDefault).toHaveBeenCalled();
     });
 
@@ -367,10 +417,10 @@ describe('StampToolService', () => {
             return true;
         });
 
-        service.isStampLinkValid = true;
-        service.stampIsAppended = true;
+        service[`isStampLinkValid`] = true;
+        service[`stampIsAppended`] = true;
 
-        expect(service.isAbleToStamp(createMouseEvent(0, 0, 0))).toBeTruthy();
+        expect(service[`isAbleToStamp`](createMouseEvent(0, 0, 0))).toBeTruthy();
     });
 
     it('should return false when calling isAbleToStamp, is not in workzone and stamp link is not valid', () => {
@@ -378,8 +428,8 @@ describe('StampToolService', () => {
             return false;
         });
 
-        service.isStampLinkValid = false;
+        service[`isStampLinkValid`] = false;
 
-        expect(service.isAbleToStamp(createMouseEvent(0, 0, 0))).toBeFalsy();
+        expect(service[`isAbleToStamp`](createMouseEvent(0, 0, 0))).toBeFalsy();
     });
 });

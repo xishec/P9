@@ -92,9 +92,14 @@ describe('ExportToolService', () => {
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         service.initializeService(elementRefMock, rendererMock);
 
-        spyCreateSVGBlob = spyOn(service, 'createSVGBlob').and.callThrough();
-        spyLaunchDownload = spyOn(service, 'launchDownload').and.callThrough();
-        spyGetXMLSVG = spyOn(service, 'getXMLSVG').and.returnValue('');
+        spyCreateSVGBlob = spyOn<any>(service, 'createSVGBlob').and.callThrough();
+        spyLaunchDownload = spyOn<any>(service, 'launchDownload').and.callThrough();
+        spyGetXMLSVG = spyOn<any>(service, 'getXMLSVG').and.returnValue('');
+        jasmine.clock().install();
+    });
+
+    afterEach(() => {
+        jasmine.clock().uninstall();
     });
 
     it('should be created', () => {
@@ -102,66 +107,67 @@ describe('ExportToolService', () => {
     });
 
     it('should launch download as svg if filetype is svg', () => {
-        const spySaveAsSVG = spyOn(service, 'saveAsSVG').and.callThrough();
+        const spySaveAsSVG = spyOn<any>(service, 'saveAsSVG').and.callThrough();
 
         service.saveFile(FILE_TYPE.SVG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.SVG);
+        expect(service[`fileType`]).toEqual(FILE_TYPE.SVG);
         expect(spyLaunchDownload).toHaveBeenCalled();
         expect(spySaveAsSVG).toHaveBeenCalled();
         expect(spyGetXMLSVG).toHaveBeenCalled();
     });
 
     it('should launch download as bmp if filetype is bmp and do the compression/decompression of svg', () => {
-        const spyOnCompressSVG = spyOn(service, 'compressSVG').and.callThrough();
-        const spyOnDecompressSVG = spyOn(service, 'decompressSVG').and.callThrough();
-        const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
+        const spyOnCompressSVG = spyOn<any>(service, 'compressSVG').and.callThrough();
+        const spyOnDecompressSVG = spyOn<any>(service, 'decompressSVG').and.callThrough();
+        const spySaveAsOther = spyOn<any>(service, 'saveAsOther').and.callThrough();
 
         service.saveFile(FILE_TYPE.BMP);
+        jasmine.clock().tick(1);
 
-        expect(service.fileType).toEqual(FILE_TYPE.BMP);
+        expect(service[`fileType`]).toEqual(FILE_TYPE.BMP);
         expect(spySaveAsOther).toHaveBeenCalled();
-        expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyCreateSVGBlob).toHaveBeenCalled();
+        expect(spyOnCompressSVG).toHaveBeenCalled();
         expect(spyOnDecompressSVG).toHaveBeenCalled();
     });
 
     it('should launch download as jpeg if filetype is jpeg', () => {
-        const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
+        const spySaveAsOther = spyOn<any>(service, 'saveAsOther').and.callThrough();
 
         service.saveFile(FILE_TYPE.JPG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.JPG);
+        expect(service[`fileType`]).toEqual(FILE_TYPE.JPG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
     });
 
     it('should launch download as png if filetype is png', () => {
-        const spySaveAsOther = spyOn(service, 'saveAsOther').and.callThrough();
+        const spySaveAsOther = spyOn<any>(service, 'saveAsOther').and.callThrough();
 
         service.saveFile(FILE_TYPE.PNG);
 
-        expect(service.fileType).toEqual(FILE_TYPE.PNG);
+        expect(service[`fileType`]).toEqual(FILE_TYPE.PNG);
         expect(spyCreateSVGBlob).toHaveBeenCalled();
         expect(spySaveAsOther).toHaveBeenCalled();
     });
 
     it('shoud call toDataURL from canvas is filetype is JPEG or PNG', () => {
-        const spy = spyOn(service.canvas, 'toDataURL').and.returnValue('');
+        const spy = spyOn(service[`canvas`], 'toDataURL').and.returnValue('');
 
-        service.fileType = FILE_TYPE.PNG;
-        service.setUri(FAKE_URL);
-        service.fileType = FILE_TYPE.JPG;
-        service.setUri(FAKE_URL);
+        service[`fileType`] = FILE_TYPE.PNG;
+        service[`setUri`](FAKE_URL);
+        service[`fileType`] = FILE_TYPE.JPG;
+        service[`setUri`](FAKE_URL);
 
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('should call toDataURL from CanvasToBMP if filetype is BMP', () => {
         service.saveFile(FILE_TYPE.BMP);
-        const spy = spyOn(service.canvasToBMP, 'toDataURL').and.returnValue('');
+        const spy = spyOn(service[`canvasToBMP`], 'toDataURL').and.returnValue('');
 
-        service.setUri(FAKE_URL);
+        service[`setUri`](FAKE_URL);
 
         expect(spy).toHaveBeenCalled();
     });

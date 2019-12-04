@@ -8,10 +8,13 @@ import {
     FONT_SIZE,
     LINE_JOINT_TYPE,
     LINE_STROKE_TYPE,
-    STAMP_ANGLE_ORIENTATION,
+    ROTATION_ANGLE,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
     STAMP_SCALING,
     STAMP_TYPES,
     THICKNESS,
+    TOLERANCE,
     TRACE_TYPE,
 } from 'src/constants/tool-constants';
 
@@ -20,17 +23,20 @@ import {
 })
 export class AttributesManagerService {
     thickness: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
+    tolerance: BehaviorSubject<number> = new BehaviorSubject(TOLERANCE.Default);
     minThickness: BehaviorSubject<number> = new BehaviorSubject(1);
-    traceType: BehaviorSubject<string> = new BehaviorSubject(TRACE_TYPE.Outline);
+    traceType: BehaviorSubject<string> = new BehaviorSubject(TRACE_TYPE.Full);
     style: BehaviorSubject<BRUSH_STYLE> = new BehaviorSubject(BRUSH_STYLE.type1);
     nbVertices: BehaviorSubject<number> = new BehaviorSubject(3);
     lineStrokeType: BehaviorSubject<LINE_STROKE_TYPE> = new BehaviorSubject(LINE_STROKE_TYPE.Continuous);
     lineJointType: BehaviorSubject<LINE_JOINT_TYPE> = new BehaviorSubject(LINE_JOINT_TYPE.Curvy);
     circleJointDiameter: BehaviorSubject<number> = new BehaviorSubject(THICKNESS.Default);
     scaling: BehaviorSubject<number> = new BehaviorSubject(STAMP_SCALING.Default);
-    angle: BehaviorSubject<number> = new BehaviorSubject(STAMP_ANGLE_ORIENTATION.Default);
+    angle: BehaviorSubject<number> = new BehaviorSubject(ROTATION_ANGLE.Default);
     stampType: BehaviorSubject<string> = new BehaviorSubject(STAMP_TYPES[0]);
     eraserSize: BehaviorSubject<number> = new BehaviorSubject(ERASER_SIZE.Default);
+    sprayDiameter: BehaviorSubject<number> = new BehaviorSubject(SPRAY_DIAMETER.Default);
+    sprayInterval: BehaviorSubject<number> = new BehaviorSubject(SPRAY_INTERVAL.Default);
 
     boldState: BehaviorSubject<boolean> = new BehaviorSubject(false);
     italicState: BehaviorSubject<boolean> = new BehaviorSubject(false);

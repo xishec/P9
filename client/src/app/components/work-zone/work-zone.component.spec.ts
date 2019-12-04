@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
+import { MatSnackBar } from '@angular/material';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { DrawingModalWindowService } from 'src/app/services/drawing-modal-window/drawing-modal-window.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -12,6 +13,7 @@ import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortc
 import { AbstractToolService } from 'src/app/services/tools/abstract-tools/abstract-tool.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
@@ -44,9 +46,24 @@ describe('WorkZoneComponent', () => {
                     },
                 },
                 {
+                    provide: MatSnackBar,
+                    useValue: {
+                        open: () => null,
+                    },
+                },
+                {
                     provide: DrawingModalWindowService,
                     useValue: {
-                        drawingInfo: new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        drawingInfo: new BehaviorSubject<DrawingInfo>({
+                            name: '',
+                            createdAt: 0,
+                            lastModified: 0,
+                            labels: [],
+                            idStack: [],
+                            width: 0,
+                            height: 0,
+                            color: '',
+                        } as DrawingInfo),
                         currentDisplayNewDrawingModalWindow: new BehaviorSubject<boolean>(false).asObservable(),
                     },
                 },
@@ -62,7 +79,7 @@ describe('WorkZoneComponent', () => {
                 {
                     provide: ToolSelectorService,
                     useValue: {
-                        currentToolName: new BehaviorSubject<DrawingInfo>(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        currentToolName: TOOL_NAME.Brush,
                         initTools: () => null,
                     },
                 },
@@ -105,6 +122,10 @@ describe('WorkZoneComponent', () => {
                     provide: ClipboardService,
                     useValue: {},
                 },
+                {
+                    provide: MagnetismToolService,
+                    useValue: {},
+                },
             ],
             schemas: [NO_ERRORS_SCHEMA],
         }).compileComponents();
@@ -121,20 +142,20 @@ describe('WorkZoneComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should call window.alert with Veuillez créer un nouveau dessin!', () => {
-        spyOn(window, 'alert');
+    it('should call alert with Veuillez créer un nouveau dessin!', () => {
+        const spy = spyOn(component[`snackBar`], 'open');
         drawingLoaderService.untouchedWorkZone.next(true);
 
         component.onClickRectangle();
-        expect(window.alert).toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
+        expect(spy).toHaveBeenCalled();
     });
 
-    it('should not call window.alert with Veuillez créer un nouveau dessin!', () => {
-        spyOn(window, 'alert');
+    it('should not call alert with Veuillez créer un nouveau dessin!', () => {
+        const spy = spyOn(component[`snackBar`], 'open');
         drawingLoaderService.untouchedWorkZone.next(false);
 
         component.onClickRectangle();
-        expect(window.alert).not.toHaveBeenCalledWith('Veuillez créer un nouveau dessin!');
+        expect(spy).not.toHaveBeenCalled();
     });
 
     it('should return cursor style not-allowed when isEmpty', () => {

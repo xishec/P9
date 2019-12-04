@@ -3,110 +3,119 @@ import * as sinon from 'sinon';
 
 import { Drawing } from '../../../common/communication/Drawing';
 import { DrawingInfo } from '../../../common/communication/DrawingInfo';
-import { Message } from '../../../common/communication/Message';
-import { Post } from '../model/post';
+import { DrawingInfoModel } from '../model/post';
+import { CloudService } from './cloud.service';
 import { FileManagerService } from './file-manager.service';
 
 let fileManagerService: FileManagerService;
 
-let getAllDrawingsStub: sinon.SinonStub<[], any>;
+let getAllDrawingInfosStub: sinon.SinonStub<[], any>;
 
-const TEST_DRAWING: Drawing = new Drawing(
-    'La Cene',
-    ['Italie', 'Leonardo', 'De Vinci'],
-    '{"svg":"<rect _ngcontent-oyl-c2="" height="916px" width="1560px" }',
-    ['0', '1', '2', '3', '4', '5'],
-    new DrawingInfo(1560, 916, 'f9fff7ff'),
-);
-
-const TEST_MESSAGE: Message = {
-    title: 'Add Drawing ' + 'Mona Lisa',
-    body: JSON.stringify(TEST_DRAWING),
+const TEST_DRAWING: Drawing = {
+    drawingInfo: {
+        width: 1560,
+        height: 916,
+        color: 'f9fff7ff',
+        name: 'La Cene',
+        labels: ['Italie', 'Leonardo', 'De Vinci'],
+        idStack: ['0', '1', '2', '3', '4', '5'],
+        createdAt: 0,
+        lastModified: 0,
+    } as DrawingInfo,
+    svg: '',
 };
 
 describe('FileManagerService', () => {
-    fileManagerService = new FileManagerService();
+    const cloudService = new CloudService();
+    cloudService.initialize();
+    cloudService.save = () => null;
+    cloudService.delete = () => null;
+    cloudService.download = () =>
+        new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([Buffer.from('', 'utf8')]);
+            }, 10);
+        });
+    fileManagerService = new FileManagerService(cloudService);
 
     afterEach(() => {
         sinon.restore();
     });
 
-    it('should return a list of documents when getAllDrawings is called', async () => {
-        getAllDrawingsStub = sinon.stub(fileManagerService, 'getAllDrawings');
+    it('should return a list of documents when getAllDrawingInfos is called', async () => {
+        getAllDrawingInfosStub = sinon.stub(fileManagerService, 'getAllDrawingInfos');
 
-        fileManagerService.addDrawing(TEST_MESSAGE);
-        getAllDrawingsStub.resolves([TEST_DRAWING]);
+        fileManagerService.addDrawingInfo(TEST_DRAWING);
+        getAllDrawingInfosStub.resolves([TEST_DRAWING.drawingInfo]);
 
-        const result = await fileManagerService.getAllDrawings();
+        const result = await fileManagerService.getAllDrawingInfos();
+        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
+    });
+
+    it('should return a list of documents when database sends valid documents on getAllDrawingInfos', async () => {
+        fileManagerService.addDrawingInfo(TEST_DRAWING);
+        const postFind = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'find', postFind);
+
+        const result = await fileManagerService.getAllDrawingInfos();
         expect(result).to.eql([TEST_DRAWING]);
     });
 
-    it('should return a list of documents when database sends valid documents on getAllDrawings', async () => {
-        fileManagerService.addDrawing(TEST_MESSAGE);
-        const postFind = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(Post, 'find', postFind);
-
-        const result = await fileManagerService.getAllDrawings();
-        expect(result).to.eql([TEST_DRAWING]);
-    });
-
-    it('should return an error when database cannot retrieve documents on getAllDrawings', async () => {
+    it('should return an error when database cannot retrieve documents on getAllDrawingInfos', async () => {
         const error: Error = new Error();
-        fileManagerService.addDrawing(TEST_MESSAGE);
+        fileManagerService.addDrawingInfo(TEST_DRAWING);
         const postFind = sinon.fake.rejects(error);
-        sinon.replace(Post, 'find', postFind);
+        sinon.replace(DrawingInfoModel, 'find', postFind);
 
-        const result = await fileManagerService.getAllDrawings().catch((err) => {
+        const result = await fileManagerService.getAllDrawingInfos().catch((err) => {
             return err;
         });
         expect(result).to.eql(error);
     });
 
-    it('should return a drawing when addDrawing is called with a valid message', async () => {
-        const postUpdate = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(Post, 'findOneAndUpdate', postUpdate);
+    it('should return a drawing when addDrawingInfo is called with a valid message', async () => {
+        const postUpdate = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'findOneAndUpdate', postUpdate);
 
-        const result = await fileManagerService.addDrawing(TEST_MESSAGE);
-        expect(result).to.eql([TEST_DRAWING]);
+        const result = await fileManagerService.addDrawingInfo(TEST_DRAWING);
+        expect(result).to.eql(TEST_DRAWING.drawingInfo);
     });
 
-    it('should return an error when database cannot retrieve documents on addDrawing', async () => {
+    it('should return an error when database cannot retrieve documents on addDrawingInfo', async () => {
         const error: Error = new Error();
         const postUpdate = sinon.fake.rejects(error);
-        sinon.replace(Post, 'findOneAndUpdate', postUpdate);
+        sinon.replace(DrawingInfoModel, 'findOneAndUpdate', postUpdate);
 
-        const result = await fileManagerService.addDrawing(TEST_MESSAGE).catch((err) => {
+        const result = await fileManagerService.addDrawingInfo(TEST_DRAWING).catch((err) => {
             return err;
         });
         expect(result).to.eql(error);
     });
 
-    it('should return an error when addDrawing is called with an invalid message', () => {
-        const badDrawing = TEST_DRAWING;
-        const badMessage = TEST_MESSAGE;
-        badDrawing.name = '';
-        badMessage.body = JSON.stringify(badDrawing);
+    it('should return an error when addDrawingInfo is called with an invalid message', () => {
+        TEST_DRAWING.drawingInfo.name = '';
 
-        fileManagerService.addDrawing(badMessage).catch((err) => {
-            expect(err).to.eql(new Error('Invalid Drawing'));
+        fileManagerService.addDrawingInfo(TEST_DRAWING).catch((err) => {
+            expect(err.message).to.eql(new Error('Invalid DrawingInfo').message);
         });
     });
 
-    it('should return a drawing when deleteDrawing is called with a valid message', async () => {
-        fileManagerService.addDrawing(TEST_MESSAGE);
-        const postDelete = sinon.fake.resolves([TEST_DRAWING]);
-        sinon.replace(Post, 'findOneAndDelete', postDelete);
+    it('should return a drawing when deleteDrawingInfo is called with a valid message', async () => {
+        TEST_DRAWING.drawingInfo.name = 'hi';
+        fileManagerService.addDrawingInfo(TEST_DRAWING);
+        const postDelete = sinon.fake.resolves([TEST_DRAWING.drawingInfo]);
+        sinon.replace(DrawingInfoModel, 'findOneAndDelete', postDelete);
 
-        const result = await fileManagerService.deleteDrawing(TEST_MESSAGE);
-        expect(result).to.eql([TEST_DRAWING]);
+        const result = await fileManagerService.deleteDrawingInfo(TEST_DRAWING.drawingInfo.createdAt.toString());
+        expect(result).to.eql([TEST_DRAWING.drawingInfo]);
     });
 
-    it('should return an error when database cannot retrieve document on deleteDrawing', async () => {
+    it('should return an error when database cannot retrieve document on deleteDrawingInfo', async () => {
         const error: Error = new Error();
         const postDelete = sinon.fake.rejects(error);
-        sinon.replace(Post, 'findOneAndDelete', postDelete);
+        sinon.replace(DrawingInfoModel, 'findOneAndDelete', postDelete);
 
-        const result = await fileManagerService.deleteDrawing(TEST_MESSAGE).catch((err) => {
+        const result = await fileManagerService.deleteDrawingInfo(TEST_DRAWING.drawingInfo.name).catch((err) => {
             return err;
         });
         expect(result).to.eql(error);

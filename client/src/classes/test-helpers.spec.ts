@@ -32,6 +32,15 @@ export const createMouseEvent = (
     return (mouseEvent as unknown) as MouseEvent;
 };
 
+export const createWheelEvent = (deltaX: number, deltaY: number): WheelEvent => {
+    const wheelEvent = {
+        deltaX,
+        deltaY,
+        preventDefault: () => null,
+    };
+    return (wheelEvent as unknown) as WheelEvent;
+};
+
 export const createKeyBoardEvent = (keyPressed: KEYS): KeyboardEvent => {
     const keyboardEvent = {
         key: keyPressed,
@@ -53,7 +62,13 @@ export const createMockSVGLine = (): any => {
 };
 
 export const createMockSVGGElement = (): any => {
-    const mockSVGElement = {};
+    const mockSVGElement = {
+        transform : {
+            baseVal : {
+                insertItemBefore: () => null,
+            },
+        },
+    };
     return (mockSVGElement as unknown) as SVGGElement;
 };
 
@@ -71,9 +86,54 @@ export const createMockSVGElement = (): any => {
                 };
                 return boundRect;
             },
+            selectionBox: () => {
+                const mockSelectionBox = {
+                    x: {
+                        baseVal: {
+                            value: 0,
+                        },
+                    },
+                    y: {
+                        baseVal: {
+                            value: 0,
+                        },
+                    },
+                    width: {
+                        baseVal: {
+                            value: 100,
+                        },
+                    },
+                    height: {
+                        baseVal: {
+                            value: 100,
+                        },
+                    },
+                } as SVGRectElement;
+                return mockSelectionBox;
+            },
         },
     };
     return (mockSVGElement as unknown) as ElementRef<SVGElement>;
+};
+
+export const createMockSVGTransform = (): SVGTransform => {
+    const mockTransform = {
+        setTranslate: () => null,
+        setRotate: () => null,
+        setScale: () => null,
+    };
+    return mockTransform as unknown as SVGTransform;
+};
+
+export const createMockSVGSVGElementWithTransform = (): SVGSVGElement => {
+    const mockSVGSVG = {
+        createSVGTransform: () => {
+            createMockSVGTransform();
+        },
+        setTranslate: () => null,
+        setScale: () => null,
+    };
+    return mockSVGSVG as unknown as SVGSVGElement;
 };
 
 export const createMockCanvasElement = (): any => {

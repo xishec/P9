@@ -56,12 +56,18 @@ import { WelcomeModalWindowComponent } from './components/modal-windows/welcome-
 import { DropperAttributesComponent } from './components/sidebar-tools/attribute-panel/dropper-attributes/dropper-attributes.component';
 import { EllipsisAttributesComponent } from './components/sidebar-tools/attribute-panel/ellipsis-attributes/ellipsis-attributes.component';
 import { EraserAttributesComponent } from './components/sidebar-tools/attribute-panel/eraser-attributes/eraser-attributes.component';
+import { FillAttributesComponent } from './components/sidebar-tools/attribute-panel/fill-attributes/fill-attributes.component';
 import { GridAttributesComponent } from './components/sidebar-tools/attribute-panel/grid-attributes/grid-attributes.component';
 import { LineAttributesComponent } from './components/sidebar-tools/attribute-panel/line-attributes/line-attributes.component';
+// tslint:disable-next-line: max-line-length
+import { MagnetismAttributesComponent } from './components/sidebar-tools/attribute-panel/magnetism-attributes/magnetism-attributes.component';
 import { PenAttributesComponent } from './components/sidebar-tools/attribute-panel/pen-attributes/pen-attributes.component';
 import { PolygonAttributesComponent } from './components/sidebar-tools/attribute-panel/polygon-attributes/polygon-attributes.component';
+import { QuillAttributesComponent } from './components/sidebar-tools/attribute-panel/quill-attributes/quill-attributes.component';
 // tslint:disable-next-line: max-line-length
 import { SelectionAttributesComponent } from './components/sidebar-tools/attribute-panel/selection-attributes/selection-attributes.component';
+// tslint:disable-next-line: max-line-length
+import { SprayCanAttributesComponent } from './components/sidebar-tools/attribute-panel/spray-can-attributes/spray-can-attributes.component';
 import { StampAttributesComponent } from './components/sidebar-tools/attribute-panel/stamp-attributes/stamp-attributes.component';
 import { TextAttributesComponent } from './components/sidebar-tools/attribute-panel/text-attributes/text-attributes.component';
 import { SidebarToolsComponent } from './components/sidebar-tools/sidebar-tools.component';
@@ -104,6 +110,10 @@ import { UndoRedoerService } from './services/undo-redoer/undo-redoer.service';
         PenAttributesComponent,
         TextAttributesComponent,
         EraserAttributesComponent,
+        FillAttributesComponent,
+        MagnetismAttributesComponent,
+        QuillAttributesComponent,
+        SprayCanAttributesComponent,
     ],
     imports: [
         MatSliderModule,

@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { GIFS } from 'src/constants/constants';
-import { Drawing } from '../../../../../../common/communication/Drawing';
-import { Message } from '../../../../../../common/communication/Message';
+import { GIFS, NUMBER_OF_MS } from 'src/constants/constants';
+import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
+import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 
 @Component({
     selector: 'app-open-file-modal-window',
@@ -23,7 +24,8 @@ export class OpenFileModalWindowComponent implements OnInit {
     formBuilder: FormBuilder;
 
     drawingsFromServer: Drawing[] = [];
-    selectedOption = '';
+    SVGs: Map<string, string> = new Map([]);
+    selectedOption: number;
     nameFilter: string;
     labelFilter: string;
     emptyDrawStack = true;
@@ -54,7 +56,9 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK');
+                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                            duration: SNACKBAR_DURATION,
+                        });
                         this.isLoading = false;
                         return false;
                     } else {
@@ -62,9 +66,9 @@ export class OpenFileModalWindowComponent implements OnInit {
                     }
                 }),
             )
-            .subscribe((ans: any) => {
-                ans.forEach((el: Message) => {
-                    const drawing: Drawing = JSON.parse(el.body);
+            .pipe(map((drawings) => drawings.sort((a, b) => b.drawingInfo.createdAt - a.drawingInfo.createdAt)))
+            .subscribe((drawings: Drawing[]) => {
+                drawings.forEach((drawing: Drawing) => {
                     this.drawingsFromServer.push(drawing);
                 });
                 this.isLoading = false;
@@ -75,6 +79,24 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
 
         this.randomGifIndex = Math.floor(Math.random() * GIFS.length);
+    }
+
+    downloadAndUpdateSVG(drawing: Drawing, drawingInfo: DrawingInfo, url: string): void {
+        this.SVGs.set(drawingInfo.name, url);
+
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = async () => {
+            const blob = xhr.response;
+            const text = await new Response(blob).text();
+            drawing.svg = this.extractInnerHTML(text);
+        };
+        xhr.open('GET', 'https://cors-anywhere.herokuapp.com/' + url);
+        xhr.send();
+    }
+
+    extractInnerHTML(text: string): string {
+        return text.slice(text.indexOf('>') + 1, text.indexOf('</svg>'));
     }
 
     initializeForms(): void {
@@ -88,13 +110,13 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    intializeUndoRedoStacks(): void {
+    initializeUndoRedoStacks(): void {
         this.undoRedoerService.initializeStacks();
         this.undoRedoerService.fromLoader = true;
     }
 
     handleSelection(event: any): void {
-        this.selectedOption = event.option.selected ? event.option.value : '';
+        this.selectedOption = event.option.selected ? event.option.value : 0;
         this.openFileModalForm.controls.selectedDrawing.setValue([this.selectedOption]);
     }
 
@@ -104,16 +126,16 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     loadServerFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         const selectedDrawing: Drawing = this.drawingsFromServer.find(
-            (drawing) => drawing.name === this.selectedOption,
+            (drawing) => drawing.drawingInfo.createdAt === this.selectedOption,
         ) as Drawing;
         this.drawingLoaderService.currentDrawing.next(selectedDrawing);
         this.closeDialog();
     }
 
     loadLocalFile(): void {
-        this.intializeUndoRedoStacks();
+        this.initializeUndoRedoStacks();
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }
@@ -127,18 +149,14 @@ export class OpenFileModalWindowComponent implements OnInit {
             reader.onload = () => {
                 try {
                     const localFileContent = JSON.parse(reader.result as string);
-                    this.fileToLoad = {
-                        name: files[0].name,
-                        labels: [],
-                        svg: localFileContent.svg,
-                        idStack: localFileContent.idStack,
-                        drawingInfo: localFileContent.drawingInfo,
-                    };
-                    this.localFileName = this.fileToLoad.name;
+                    this.fileToLoad = localFileContent as Drawing;
+                    this.localFileName = this.fileToLoad.drawingInfo.name;
                 } catch (error) {
                     this.fileToLoad = null;
                     this.localFileName = '';
-                    window.alert('Le fichier choisi n\'est pas valide, veuillez réessayer.');
+                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                        duration: SNACKBAR_DURATION,
+                    });
                 }
             };
         }
@@ -153,6 +171,30 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     localFormIsInvalid(): boolean {
         return this.localFileName === '' || (!this.emptyDrawStack && this.openLocalFileModalForm.invalid);
+    }
+
+    getGifSource() {
+        return GIFS[this.randomGifIndex];
+    }
+
+    onDelete() {
+        const selectedDrawing: Drawing = this.drawingsFromServer.find(
+            (drawing) => drawing.drawingInfo.createdAt === this.selectedOption,
+        ) as Drawing;
+        this.fileManagerService.deleteDrawing(selectedDrawing.drawingInfo.createdAt).subscribe((createdAt: number) => {
+            if (createdAt === selectedDrawing.drawingInfo.createdAt) {
+                this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
+                    return drawing.drawingInfo.createdAt !== createdAt;
+                });
+                this.snackBar.open('Suppression réussie!', 'OK', {
+                    duration: SNACKBAR_DURATION,
+                });
+            } else {
+                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK', {
+                    duration: SNACKBAR_DURATION,
+                });
+            }
+        });
     }
 
     getDimensions(drawingName: string): number[] {
@@ -187,29 +229,47 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     findIndexByName(drawingName: string): number {
         const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
-            return el.name === drawingName;
+            return el.drawingInfo.name === drawingName;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
     }
 
-    getGifSource() {
-        return GIFS[this.randomGifIndex];
-    }
-
-    onDelete() {
-        this.fileManagerService.deleteDrawing(this.selectedOption).subscribe((message: Message) => {
-            if (message.title || message.title === 'Add Drawing' + this.selectedOption) {
-                this.drawingsFromServer = this.drawingsFromServer.filter((drawing: Drawing) => {
-                    return drawing.name !== this.selectedOption;
-                });
-                this.snackBar.open('Suppression réussie!', 'OK');
-            } else {
-                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK');
-            }
-        });
-    }
-
     unmaskAll() {
         this.nameFilter = '$tout';
+    }
+
+    convertTimeStampToDate(timestamp: number): string {
+        const currentTimestamp = Date.now();
+
+        if (this.numberOfDaysBetween(timestamp, currentTimestamp) < 7) {
+            const differenceInMs = currentTimestamp - timestamp;
+            return 'Créé il y a ' + this.msToDaysHoursMinutes(differenceInMs);
+        }
+        const date = new Date(timestamp);
+
+        const creationDate =
+            `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
+            `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
+
+        return 'Créé le ' + creationDate;
+    }
+
+    numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
+        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.day);
+        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.day);
+
+        return numberDaysDate2 - numberDaysDate1;
+    }
+
+    msToDaysHoursMinutes(differenceInMs: number): string {
+        const days = Math.floor(differenceInMs / NUMBER_OF_MS.day);
+        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.day) / NUMBER_OF_MS.hours);
+        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.hours) / NUMBER_OF_MS.minutes);
+
+        const daysDisplay = days <= 1 ? ' jour, ' : ' jours, ';
+        const hoursDisplay = hours <= 1 ? ' heure et ' : ' heures et ';
+        const minutesDisplay = minutes <= 1 ? ' minute ' : ' minutes';
+
+        return days + daysDisplay + hours + hoursDisplay + minutes + minutesDisplay;
     }
 }

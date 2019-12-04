@@ -48,11 +48,11 @@ describe('PencilToolService', () => {
     });
 
     it('when createSVGCirle it should call super.createSVGCircle', () => {
-        const spyOnSuperCreateCircle = spyOn(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
+        const spyOnSuperCreateCircle = spyOn<any>(TracingToolService.prototype, 'createSVGCircle').and.returnValue(
             createMockSVGCircle(),
         );
 
-        service.createSVGCircle(X, Y);
+        service[`createSVGCircle`](X, Y);
 
         expect(spyOnSuperCreateCircle).toHaveBeenCalled();
     });
