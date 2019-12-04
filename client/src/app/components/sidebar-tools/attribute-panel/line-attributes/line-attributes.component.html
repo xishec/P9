@@ -39,7 +39,7 @@
                     [(value)]="selected"
                     [ngClass]="selected ? 'strokeType' + selected : 'strokeType1'"
                 >
-                    <mat-option *ngFor="let strokeType of LineStrokeTypeChoices" [value]="strokeType">
+                    <mat-option *ngFor="let strokeType of lineStrokeTypeChoices" [value]="strokeType">
                         {{ strokeType }}
                         <img height="40" src="/assets/strokeType{{ strokeType }}.png" />
                     </mat-option>
