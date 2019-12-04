@@ -312,6 +312,9 @@ export class ToolSelectorService {
         if (tool !== undefined) {
             this.currentTool = tool;
             this.changeCurrentToolName(tooltipName);
+            if ((this.currentTool instanceof SelectionToolService) || (this.currentTool instanceof ColorApplicatorToolService)) {
+                this.currentTool.shouldBeNotified = true;
+            }
             return;
         }
 
