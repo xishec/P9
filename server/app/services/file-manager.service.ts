@@ -1,60 +1,58 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
+
 import { Drawing } from '../../../common/communication/Drawing';
-import { Message } from '../../../common/communication/Message';
-import { Post } from '../model/post';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
+import { DrawingInfoModel } from '../model/post';
+import { CloudService } from '../services/cloud.service';
+import Types from '../types';
 
 @injectable()
 export class FileManagerService {
-    async getAllDrawings(): Promise<any> {
-        const query = { title: /Add Drawing/i };
+    constructor(@inject(Types.CloudService) private cloudService: CloudService) {}
 
-        return Post.find(query)
-            .then((drawings: any) => {
-                return drawings;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+    async getAllDrawingInfos() {
+        const drawingInfos = (await DrawingInfoModel.find({})) as DrawingInfo[];
+        const drawings: Drawing[] = [];
+
+        for (const drawingInfo of drawingInfos) {
+            await this.downloadSVG(drawings, drawingInfo);
+        }
+        return drawings;
     }
 
-    async addDrawing(message: Message): Promise<any> {
-        const drawing: Drawing = JSON.parse(message.body);
+    async downloadSVG(drawings: any, drawingInfo: any) {
+        const buffer: [Buffer] = await this.cloudService.download(drawingInfo.createdAt.toString());
+        drawings.push({ drawingInfo, svg: buffer[0].toString() } as Drawing);
+    }
 
-        try {
-            if (!this.isDrawingValid(drawing)) {
-              throw new Error('Invalid Drawing');
-            }
-        } catch (error) {
-            return error;
+    async addDrawingInfo(drawing: Drawing) {
+        if (!this.isDrawingInfoValid(drawing.drawingInfo)) {
+            throw new Error('Invalid DrawingInfo');
         }
+        const drawingInfo: DrawingInfo = drawing.drawingInfo;
 
-        const query = { title: message.title };
-        const update = { body: message.body };
+        const currentTimestamp = Date.now();
+        const newCreatedAt = drawingInfo.createdAt === 0 ? currentTimestamp : drawingInfo.createdAt;
+
+        const query = { createdAt: drawingInfo.createdAt };
         const options = { upsert: true, new: true };
 
-        return Post.findOneAndUpdate(query, update, options)
-            .then((drawingToUpdate: any) => {
-                return drawingToUpdate;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+        drawingInfo.createdAt = newCreatedAt;
+        drawingInfo.lastModified = currentTimestamp;
+
+        this.cloudService.save(drawing.drawingInfo.createdAt.toString(), drawing.svg);
+        return DrawingInfoModel.findOneAndUpdate(query, drawingInfo, options).then(() => {
+            return drawingInfo;
+        });
     }
 
-    async deleteDrawing(message: Message): Promise<any> {
-        const query = { title: { $regex: message.body, $options: 'i' } };
-
-        return Post.findOneAndDelete(query)
-            .then((drawing: any) => {
-                return drawing;
-            })
-            .catch((error: Error) => {
-                throw error;
-            });
+    async deleteDrawingInfo(createdAt: string) {
+        this.cloudService.delete(createdAt);
+        return DrawingInfoModel.findOneAndDelete({ createdAt: parseInt(createdAt, 10) });
     }
 
-    isDrawingValid(drawing: Drawing): boolean {
-      return !(drawing.name === '' || drawing.labels.includes('') || drawing.svg === '');
+    isDrawingInfoValid(drawingInfo: DrawingInfo): boolean {
+        return drawingInfo.name !== '' && drawingInfo.height > 0 && drawingInfo.width > 0;
     }
 }

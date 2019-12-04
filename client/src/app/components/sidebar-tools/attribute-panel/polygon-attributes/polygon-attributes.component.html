@@ -9,6 +9,7 @@
                     formControlName="thickness"
                     (input)="onThicknessSliderChange($event)"
                     [min]="thickness.Min"
+                    [max]="thickness.Max"
                     value="{{ polygonAttributesForm.value.thickness }}"
                 ></mat-slider>
                 <mat-form-field class="small">
@@ -33,8 +34,8 @@
                 <label for="traceType">Type de tracé</label>
                 <mat-form-field>
                     <mat-select formControlName="traceType" (selectionChange)="onTraceTypeChange()">
-                        <mat-option value="Contour">Contour</mat-option>
                         <mat-option value="Plein">Plein</mat-option>
+                        <mat-option value="Contour">Contour</mat-option>
                         <mat-option value="Plein avec contour">Plein avec contour</mat-option>
                     </mat-select>
                 </mat-form-field>

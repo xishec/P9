@@ -7,7 +7,7 @@ import { AttributesManagerService } from 'src/app/services/tools/attributes-mana
 import { PolygonToolService } from 'src/app/services/tools/polygon-tool/polygon-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { PREDICATE } from 'src/constants/constants';
-import { POLYGON_SIDES, POLYGONE_FORM_TYPE, THICKNESS, TOOL_NAME } from 'src/constants/tool-constants';
+import { POLYGON_SIDES, POLYGONE_FORM_TYPE, THICKNESS, TOOL_NAME, TRACE_TYPE } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-polygon-attributes',
@@ -48,7 +48,7 @@ export class PolygonAttributesComponent implements OnInit, AfterViewInit {
                 THICKNESS.Default,
                 [Validators.required, Validators.min(THICKNESS.Min), Validators.max(THICKNESS.Max)],
             ],
-            traceType: ['Contour'],
+            traceType: [TRACE_TYPE.Full],
             nbVertices: [
                 POLYGON_SIDES.Default,
                 [Validators.required, Validators.min(POLYGON_SIDES.Min), Validators.max(POLYGON_SIDES.Max)],

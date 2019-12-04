@@ -11,7 +11,7 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class BrushToolService extends TracingToolService {
-    private style: BRUSH_STYLE = BRUSH_STYLE.type1;
+    private style: BRUSH_STYLE = BRUSH_STYLE.Type1;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -42,15 +42,15 @@ export class BrushToolService extends TracingToolService {
 
         this.renderer.setAttribute(filter, 'id', this.style.toString());
         this.renderer.setAttribute(filter, 'filterUnits', 'objectBoundingBox');
-        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.height, '100px');
-        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.width, '100px');
-        this.renderer.setAttribute(filter, 'x', '-50px');
-        this.renderer.setAttribute(filter, 'y', '-50px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Height, '100px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Width, '100px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.X, '-50px');
+        this.renderer.setAttribute(filter, HTML_ATTRIBUTE.Y, '-50px');
 
-        if (patternId === BRUSH_STYLE.type1 || patternId === BRUSH_STYLE.type2) {
+        if (patternId === BRUSH_STYLE.Type1 || patternId === BRUSH_STYLE.Type2) {
             this.createGaussianBlurFilter(filter);
         }
-        if (patternId !== BRUSH_STYLE.type1) {
+        if (patternId !== BRUSH_STYLE.Type1) {
             this.createTurbulenceDisplacementFilter(filter, patternId);
         }
         return filter;
@@ -69,23 +69,23 @@ export class BrushToolService extends TracingToolService {
         this.renderer.setAttribute(displacementMap, 'yChannelSelector', 'G');
 
         switch (patternId) {
-            case BRUSH_STYLE.type2:
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.baseFrequency, '0.1 0.9');
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.numOctaves, '10');
+            case BRUSH_STYLE.Type2:
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.BaseFrequency, '0.1 0.9');
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.NumOctaves, '10');
                 this.renderer.setAttribute(displacementMap, 'scale', '20');
                 break;
-            case BRUSH_STYLE.type3:
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.baseFrequency, '0.01 0.57');
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.numOctaves, '2');
+            case BRUSH_STYLE.Type3:
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.BaseFrequency, '0.01 0.57');
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.NumOctaves, '2');
                 break;
-            case BRUSH_STYLE.type4:
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.baseFrequency, '0.05');
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.numOctaves, '2');
+            case BRUSH_STYLE.Type4:
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.BaseFrequency, '0.05');
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.NumOctaves, '2');
                 break;
-            case BRUSH_STYLE.type5:
+            case BRUSH_STYLE.Type5:
                 this.renderer.setAttribute(turbulence, 'type', 'fractalNoise');
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.baseFrequency, '0.9');
-                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.numOctaves, '4');
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.BaseFrequency, '0.9');
+                this.renderer.setAttribute(turbulence, HTML_ATTRIBUTE.NumOctaves, '4');
                 break;
         }
         this.renderer.appendChild(filter, turbulence);
@@ -100,15 +100,12 @@ export class BrushToolService extends TracingToolService {
 
     createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.filter, `url(#${this.style.toString()})`);
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.Filter, `url(#${this.style.toString()})`);
         return circle;
     }
 
     createSVGPath(): void {
         super.createSVGPath();
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.filter, `url(#${this.style})`);
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.Filter, `url(#${this.style})`);
     }
-
-    // tslint:disable-next-line: no-empty
-    cleanUp(): void {}
 }

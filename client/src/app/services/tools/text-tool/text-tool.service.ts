@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { FontInfo } from 'src/classes/FontInfos';
 import { TextCursor } from 'src/classes/textStyle/textCursor';
-import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
+import { KEYS, MOUSE, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
     FONT_ALIGN,
     FONT_STYLE,
@@ -13,7 +13,9 @@ import {
     SNACKBAR_DURATION,
     TEXT_CURSOR,
     TEXT_LINEBREAK,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
     TEXT_SPACE,
+    TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
@@ -25,20 +27,20 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class TextToolService extends AbstractToolService {
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
-    attributesManagerService: AttributesManagerService;
+    private attributesManagerService: AttributesManagerService;
 
-    fontInfo: FontInfo = new FontInfo();
+    private fontInfo: FontInfo = {} as FontInfo;
 
-    gWrap: SVGGElement;
-    previewBox: SVGRectElement;
-    textBox: SVGTextElement;
-    currentLine: SVGTSpanElement;
-    tspans: SVGTSpanElement[] = new Array<SVGTSpanElement>();
-    currentText: BehaviorSubject<string> = new BehaviorSubject('');
+    private gWrap: SVGGElement;
+    private previewBox: SVGRectElement;
+    private textBox: SVGTextElement;
+    private currentLine: SVGTSpanElement;
+    private tspans: SVGTSpanElement[] = new Array<SVGTSpanElement>();
+    private currentText: BehaviorSubject<string> = new BehaviorSubject('');
     get text(): string {
         return this.currentText.value;
     }
@@ -46,17 +48,17 @@ export class TextToolService extends AbstractToolService {
         this.currentText.next(text);
     }
 
-    bBoxAnchorLeft: number;
-    bBoxWidth: number;
-    bBoxHeight: number;
+    private bBoxAnchorLeft: number;
+    private bBoxWidth: number;
+    private bBoxHeight: number;
 
-    textBoxXPosition: number;
-    textBoxYPosition: number;
+    private textBoxXPosition: number;
+    private textBoxYPosition: number;
 
-    textCursor: TextCursor;
-    isWriting: boolean;
+    private textCursor: TextCursor;
+    private isWriting: boolean;
 
-    keyboardActions: Map<string, (key: string) => void> = new Map([
+    private keyboardActions: Map<string, (key: string) => void> = new Map([
         [KEYS.Enter, this.createNewLine],
         [KEYS.Backspace, this.erase],
         [KEYS.ArrowLeft, this.moveCursor],
@@ -71,7 +73,7 @@ export class TextToolService extends AbstractToolService {
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
-            this.updateStyle(HTML_ATTRIBUTE.fill, '#' + color);
+            this.updateStyle(HTML_ATTRIBUTE.Fill, '#' + color);
         });
     }
 
@@ -89,10 +91,10 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.font.subscribe((font) => {
-            this.updateStyle(HTML_ATTRIBUTE.font_family, font);
+            this.updateStyle(HTML_ATTRIBUTE.FontFamily, font);
         });
         this.attributesManagerService.fontSize.subscribe((size) => {
-            this.updateStyle(HTML_ATTRIBUTE.font_size, size.toString());
+            this.updateStyle(HTML_ATTRIBUTE.FontSize, size.toString());
         });
         this.attributesManagerService.fontAlign.subscribe((align) => {
             this.updateAlign(align);
@@ -108,25 +110,25 @@ export class TextToolService extends AbstractToolService {
         });
     }
 
-    updateStyle(attribute: HTML_ATTRIBUTE, value: string) {
+    private updateStyle(attribute: HTML_ATTRIBUTE, value: string) {
         switch (attribute) {
-            case HTML_ATTRIBUTE.fill:
+            case HTML_ATTRIBUTE.Fill:
                 this.fontInfo.fontColor = value;
                 break;
-            case HTML_ATTRIBUTE.font_family:
+            case HTML_ATTRIBUTE.FontFamily:
                 this.fontInfo.fontFamily = value;
                 break;
-            case HTML_ATTRIBUTE.font_size:
+            case HTML_ATTRIBUTE.FontSize:
                 this.fontInfo.fontSize = value;
                 break;
         }
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, attribute, value);
+            this.renderer.setAttribute(this.gWrap, attribute, value);
             this.updatePreviewBox();
         }
     }
 
-    updateAlign(align: FONT_ALIGN): void {
+    private updateAlign(align: FONT_ALIGN): void {
         this.fontInfo.fontAlign = align;
         if (this.isWriting) {
             switch (align) {
@@ -144,29 +146,29 @@ export class TextToolService extends AbstractToolService {
             }
 
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                this.renderer.setAttribute(tspan, 'x', this.textBoxXPosition.toString());
+                this.renderer.setAttribute(tspan, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
             });
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.TextAnchor, this.fontInfo.fontAlign);
         }
     }
 
-    updateItalic(isItalic: boolean): void {
+    private updateItalic(isItalic: boolean): void {
         this.fontInfo.fontStyle = isItalic ? FONT_STYLE.Italic : FONT_STYLE.Normal;
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.FontStyle, this.fontInfo.fontStyle);
             this.updatePreviewBox();
         }
     }
 
-    updateBold(isBold: boolean): void {
+    private updateBold(isBold: boolean): void {
         this.fontInfo.fontWeight = isBold ? FONT_WEIGHT.Bold : FONT_WEIGHT.Normal;
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.FontWeight, this.fontInfo.fontWeight);
             this.updatePreviewBox();
         }
     }
 
-    ifClickInTextBox(x: number, y: number): boolean {
+    private ifClickInTextBox(x: number, y: number): boolean {
         return (
             x >= this.bBoxAnchorLeft &&
             x <= this.bBoxAnchorLeft + this.bBoxWidth &&
@@ -175,39 +177,39 @@ export class TextToolService extends AbstractToolService {
         );
     }
 
-    updatePreviewBox(): void {
+    private updatePreviewBox(): void {
         const textBBox = this.textBox.getBBox();
         this.bBoxAnchorLeft = textBBox.x;
         this.bBoxWidth = textBBox.width;
         this.bBoxHeight = textBBox.height;
 
-        this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.height, textBBox.height.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Y, textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Height, textBBox.height.toString());
+
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Y, textBBox.y.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Height, textBBox.height.toString());
     }
 
-    initPreviewRect(): void {
+    private initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_width, '1');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.fill, 'none');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeColor);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeWidth, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Width);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, TEXT_PREVIEW_BOX_ATTRIBUTES.FillColor);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeDasharray);
     }
 
-    createTextBox(x: number, y: number): void {
+    private createTextBox(x: number, y: number): void {
         this.textBox = this.renderer.createElement('text', SVG_NS);
-        this.renderer.setAttribute(this.textBox, 'x', x.toString());
-        this.renderer.setAttribute(this.textBox, 'y', y.toString());
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_family, this.fontInfo.fontFamily);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_size, this.fontInfo.fontSize);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
-        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.X, x.toString());
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.Y, y.toString());
     }
 
-    createNewLine(): void {
+    private createNewLine(): void {
         const remainingRightText = this.textCursor.rightSideText();
         const tsSpanStackIsNotEmpty = this.tspans.length !== 0;
         let refChilpos = 0;
@@ -215,14 +217,14 @@ export class TextToolService extends AbstractToolService {
         if (tsSpanStackIsNotEmpty) {
             refChilpos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
             this.text = this.textCursor.isAtStartOfLine() ? TEXT_LINEBREAK : this.textCursor.leftSideText();
-            this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+            this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
         }
 
         this.text = TEXT_CURSOR + remainingRightText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
-        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
 
         if (tsSpanStackIsNotEmpty) {
             this.renderer.insertBefore(this.textBox, this.currentLine, this.tspans[refChilpos + 1]);
@@ -233,7 +235,7 @@ export class TextToolService extends AbstractToolService {
         }
     }
 
-    removeLine(): void {
+    private removeLine(): void {
         this.renderer.removeChild(this.textBox, this.currentLine);
         const toRemoveChildPos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
         this.tspans.splice(toRemoveChildPos, 1);
@@ -245,7 +247,7 @@ export class TextToolService extends AbstractToolService {
             textContent === TEXT_LINEBREAK ? TEXT_CURSOR + lastLineText : textContent + TEXT_CURSOR + lastLineText;
     }
 
-    erase(): void {
+    private erase(): void {
         if (this.textCursor.isAtStartOfLine() && this.tspans[0] !== this.currentLine) {
             this.removeLine();
         } else {
@@ -271,6 +273,13 @@ export class TextToolService extends AbstractToolService {
             this.createNewLine();
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Title, TOOL_NAME.Text);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Fill, this.fontInfo.fontColor);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontFamily, this.fontInfo.fontFamily);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontSize, this.fontInfo.fontSize);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontStyle, this.fontInfo.fontStyle);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontWeight, this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.TextAnchor, this.fontInfo.fontAlign);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);
@@ -293,7 +302,7 @@ export class TextToolService extends AbstractToolService {
         } else {
             this.addText(event.key);
         }
-        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
         setTimeout(() => {
             this.updatePreviewBox();
         }, 0);
@@ -307,7 +316,7 @@ export class TextToolService extends AbstractToolService {
             } else {
                 this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
                 this.text = this.textCursor.erase();
-                this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+                this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
                 setTimeout(() => {
                     this.drawStack.push(this.gWrap);
                 }, 0);
@@ -319,7 +328,7 @@ export class TextToolService extends AbstractToolService {
             this.shortCutManagerService.changeIsOnInput(false);
         }
     }
-    moveCursor(key: string): void {
+    private moveCursor(key: string): void {
         const currentLineRef: SVGTSpanElement[] = [this.currentLine];
         if (key === KEYS.ArrowLeft) {
             this.text = this.textCursor.isAtStartOfLine()
@@ -332,7 +341,7 @@ export class TextToolService extends AbstractToolService {
         }
         this.currentLine = currentLineRef[0];
     }
-    addText(key: string): void {
+    private addText(key: string): void {
         if (key.length > 1) {
             return;
         } else if (key === KEYS.Space) {
@@ -342,8 +351,8 @@ export class TextToolService extends AbstractToolService {
         this.text = newLeftSideText + TEXT_CURSOR + this.textCursor.rightSideText();
     }
 
-    openSnackBar(): void {
-        this.snackBar.open(`Le carractères ${KEYS.SmallerThan}  n'est malheureusement pas disponible`, '', {
+    private openSnackBar(): void {
+        this.snackBar.open(`Le caractère ${KEYS.SmallerThan} n'est malheureusement pas disponible`, '', {
             duration: SNACKBAR_DURATION,
         });
     }

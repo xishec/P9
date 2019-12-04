@@ -8,6 +8,9 @@ import { ShortcutManagerService } from '../shortcut-manager/shortcut-manager.ser
 import { AbstractToolService } from '../tools/abstract-tools/abstract-tool.service';
 import { GridToolService } from '../tools/grid-tool/grid-tool.service';
 import { LineToolService } from '../tools/line-tool/line-tool.service';
+import { MagnetismToolService } from '../tools/magnetism-tool/magnetism-tool.service';
+import { QuillToolService } from '../tools/quill-tool/quill-tool.service';
+import { SelectionToolService } from '../tools/selection-tool/selection-tool.service';
 import { StampToolService } from '../tools/stamp-tool/stamp-tool.service';
 import { ToolSelectorService } from '../tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
@@ -31,6 +34,7 @@ export class EventListenerService {
         private drawingLoaderService: DrawingLoaderService,
         private undoRedoerService: UndoRedoerService,
         private clipboardService: ClipboardService,
+        private magnetismToolService: MagnetismToolService,
     ) {
         this.toolSelectorService.currentToolName.subscribe((toolName) => {
             this.toolName = toolName;
@@ -78,7 +82,12 @@ export class EventListenerService {
         });
 
         this.renderer.listen(this.workZoneSVGRef.nativeElement, 'wheel', (event: WheelEvent) => {
-            if (this.currentTool instanceof StampToolService && this.shouldAllowEvent()) {
+            if (
+                (this.currentTool instanceof StampToolService ||
+                    this.currentTool instanceof SelectionToolService ||
+                    this.currentTool instanceof QuillToolService) &&
+                this.shouldAllowEvent()
+            ) {
                 this.currentTool.onWheel(event);
             }
         });
@@ -90,21 +99,16 @@ export class EventListenerService {
         });
 
         this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-            // If control is pressed
             if (this.currentTool !== undefined && event.ctrlKey) {
                 event.preventDefault();
 
-                // Control tools : new drawing, save, export, open...
                 if (CONTROL_SHORTCUTS.has(event.key)) {
                     this.toolSelectorService.changeTool(CONTROL_SHORTCUTS.get(event.key) as TOOL_NAME);
                 }
 
-                // Undo Redo
                 if (event.key === KEYS.z) {
-                    this.currentTool.cleanUp();
                     this.undoRedoerService.undo();
                 } else if (event.key === KEYS.Z) {
-                    this.currentTool.cleanUp();
                     this.undoRedoerService.redo();
                 } else if (event.key === KEYS.x) {
                     this.clipboardService.cut();
@@ -121,12 +125,10 @@ export class EventListenerService {
                 }
             }
 
-            // Call the onKeyDown of the current tool, if the current tool doesn't do anything
             if (this.currentTool !== undefined && this.shouldAllowEvent()) {
                 this.currentTool.onKeyDown(event);
             }
 
-            // If the key is a shortcut for a tool, change current tool
             if (this.shouldAllowShortcuts() && TOOL_NAME_SHORTCUTS.has(event.key) && !event.ctrlKey) {
                 // tslint:disable-next-line: no-non-null-assertion
                 this.toolSelectorService.changeTool(TOOL_NAME_SHORTCUTS.get(event.key) as TOOL_NAME);
@@ -136,15 +138,19 @@ export class EventListenerService {
                 this.gridToolService.switchState();
             }
 
-            if (event.key === KEYS.plus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.Plus && this.shouldAllowShortcuts()) {
                 this.gridToolService.incrementSize();
             }
 
-            if (event.key === KEYS.minus && this.shouldAllowShortcuts()) {
+            if (event.key === KEYS.Minus && this.shouldAllowShortcuts()) {
                 this.gridToolService.decrementSize();
             }
 
-            if (event.key === KEYS.delete) {
+            if (event.key === KEYS.m && this.shouldAllowShortcuts()) {
+                this.magnetismToolService.switchState();
+            }
+
+            if (event.key === KEYS.Delete) {
                 this.clipboardService.delete();
             }
         });

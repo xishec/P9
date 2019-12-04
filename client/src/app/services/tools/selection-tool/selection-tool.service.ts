@@ -2,32 +2,39 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
-import { MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
+import {
+    CURSOR_STYLES,
+    DEFAULT_RADIX,
+    HTML_ATTRIBUTE,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
+    ROTATION_ANGLE,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+} from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ManipulatorService } from '../../manipulator/manipulator.service';
 import { UndoRedoerService } from '../../undo-redoer/undo-redoer.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    lastMouseCoords: Coords2D = new Coords2D(0, 0);
-    initialMouseCoords: Coords2D = new Coords2D(0, 0);
-    currentTarget = 0;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private lastMouseCoords: Coords2D = new Coords2D(0, 0);
+    private initialMouseCoords: Coords2D = new Coords2D(0, 0);
+    private currentTarget = 0;
 
-    isTheCurrentTool = false;
-    isSelecting = false;
-    isOnTarget = false;
-    isLeftMouseDown = false;
-    isRightMouseDown = false;
-    isLeftMouseDragging = false;
-    isTranslatingSelection = false;
-    isRightMouseDragging = false;
+    private isSelecting = false;
+    private isOnTarget = false;
+    private isLeftMouseDown = false;
+    private isRightMouseDown = false;
+    private isTranslatingSelection = false;
+    private isScalingSelection = false;
+    shouldBeNotified = false;
 
     selection: Selection;
 
@@ -39,8 +46,9 @@ export class SelectionToolService extends AbstractToolService {
 
     constructor(
         public clipBoard: ClipboardService,
-        public manipulator: ManipulatorService,
+        private manipulator: ManipulatorService,
         private undoRedoerService: UndoRedoerService,
+        private magnetismService: MagnetismToolService,
     ) {
         super();
     }
@@ -50,19 +58,35 @@ export class SelectionToolService extends AbstractToolService {
         for (const el of this.drawStack.drawStack) {
             this.selection.addToSelection(el);
         }
+        this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
+    }
+
+    private updateCursorStyleOnSelectionBox(): void {
+        if (this.selection.mouseIsInControlPoint(this.currentMouseCoords) || this.selection.isInputOnControlPoint) {
+            return;
+        }
+        if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords)) {
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Move);
+        } else {
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
+        }
     }
 
     cleanUp(): void {
         this.selection.cleanUp();
+        this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
         this.isLeftMouseDown = false;
         this.isRightMouseDown = false;
         this.isSelecting = false;
-        this.isLeftMouseDragging = false;
-        this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
+        this.isScalingSelection = false;
+        this.magnetismService.totalDeltaY = 0;
+        this.magnetismService.totalDeltaX = 0;
+        this.shouldBeNotified = false;
     }
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService): void {
@@ -73,8 +97,9 @@ export class SelectionToolService extends AbstractToolService {
 
         this.selectionRectangle = this.renderer.createElement('rect', SVG_NS);
         this.selection = new Selection(this.renderer, this.elementRef);
+        this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.targetPosition !== undefined && this.isTheCurrentTool) {
+            if (stackTarget.isValid() && this.shouldBeNotified) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
@@ -83,47 +108,71 @@ export class SelectionToolService extends AbstractToolService {
         this.clipBoard.initializeService(this.elementRef, this.renderer, this.drawStack, this.selection);
     }
 
-    updateSelectionRectangle(): void {
+    private updateSelectionRectangle(): void {
         let deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         let deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
 
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
+            this.renderer.setAttribute(
+                this.selectionRectangle,
+                HTML_ATTRIBUTE.X,
+                (this.initialMouseCoords.x - deltaX).toString(),
+            );
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.X, this.initialMouseCoords.x.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
+            this.renderer.setAttribute(
+                this.selectionRectangle,
+                HTML_ATTRIBUTE.Y,
+                (this.initialMouseCoords.y - deltaY).toString(),
+            );
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Y, this.initialMouseCoords.y.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.Fill,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillColor,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.FillOpacity,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillOpacity,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.Stroke,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeColor,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.StrokeDasharray,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeDasharray,
+        );
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
-            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
+    private getStrokeWidth(el: SVGGElement): number {
+        if (el.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string, DEFAULT_RADIX);
         }
 
         return 0;
     }
 
-    isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    private isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
         const boxTop = selectionBox.y + window.scrollY;
@@ -151,24 +200,30 @@ export class SelectionToolService extends AbstractToolService {
         return true;
     }
 
-    singlySelect(stackPosition: number): void {
+    private isAbleToRotate(): boolean {
+        return (
+            !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection && this.selection.isAppended
+        );
+    }
+
+    private singlySelect(stackPosition: number): void {
         this.selection.emptySelection();
         this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
-    singlySelectInvert(stackPosition: number): void {
+    private singlySelectInvert(stackPosition: number): void {
         this.selection.invertAddToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
-    startSelection(): void {
+    private startSelection(): void {
         this.isSelecting = true;
         this.updateSelectionRectangle();
         this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
 
-    checkSelection(): void {
+    private checkSelection(): void {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
@@ -176,7 +231,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    checkSelectionInverse(): void {
+    private checkSelectionInverse(): void {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
@@ -184,19 +239,38 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleLeftMouseDrag(): void {
-        this.isLeftMouseDragging = true;
+    private isAbleToScale(): boolean {
+        return (
+            this.selection.mouseIsInControlPoint(this.currentMouseCoords) &&
+            !this.isSelecting &&
+            !this.isTranslatingSelection
+        );
+    }
 
+    private isAbleToTranslate(): boolean {
+        return (
+            this.selection.mouseIsInSelectionBox(this.currentMouseCoords) &&
+            !this.isSelecting &&
+            !this.isScalingSelection
+        );
+    }
+
+    private handleLeftMouseDrag(): void {
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
-        } else if (
-            (this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting) ||
-            this.isTranslatingSelection
-        ) {
+        } else if (this.isScalingSelection || this.isAbleToScale()) {
+            this.isScalingSelection = true;
+            this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+        } else if (this.isTranslatingSelection || this.isAbleToTranslate()) {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
-            this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            if (this.magnetismService.isMagnetic.value) {
+                const magnetizedCoords = this.magnetismService.magnetizeXY(deltaX, deltaY);
+                this.manipulator.translateSelection(magnetizedCoords.x, magnetizedCoords.y, this.selection);
+            } else {
+                this.manipulator.translateSelection(deltaX, deltaY, this.selection);
+            }
         } else {
             this.startSelection();
             this.updateSelectionRectangle();
@@ -204,9 +278,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleRightMouseDrag(): void {
-        this.isRightMouseDragging = true;
-
+    private handleRightMouseDrag(): void {
         this.startSelection();
         this.updateSelectionRectangle();
         this.checkSelectionInverse();
@@ -223,15 +295,45 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isRightMouseDown && !this.isLeftMouseDown) {
             this.handleRightMouseDrag();
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
-    handleLeftMouseDown(): void {
+    private handleLeftMouseDown(): void {
         this.isLeftMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
+
+        if (this.selection.mouseIsInControlPoint(this.currentMouseCoords)) {
+            this.saveOriginalSelectionBoxState();
+            this.manipulator.initTransformMatrix(this.selection);
+            this.selection.isInputOnControlPoint = true;
+            this.renderer.setStyle(
+                this.elementRef.nativeElement,
+                HTML_ATTRIBUTE.Cursor,
+                SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(
+                    parseInt(this.selection.activeControlPoint.getAttribute('controlPointId') as string, DEFAULT_RADIX),
+                ),
+            );
+        }
     }
 
-    handleRightMouseDown(): void {
+    private saveOriginalSelectionBoxState(): void {
+        this.selection.ogSelectionBoxHeight = this.getDOMRect(this.selection.selectionBox).height;
+        this.selection.ogSelectionBoxWidth = this.getDOMRect(this.selection.selectionBox).width;
+
+        this.selection.ogSelectionBoxPositions = new Coords2D(
+            this.getDOMRect(this.selection.selectionBox).left - SIDEBAR_WIDTH + window.scrollX,
+            this.getDOMRect(this.selection.selectionBox).top + window.scrollY,
+        );
+
+        this.selection.ogActiveControlPointCoords = new Coords2D(
+            this.selection.getControlPointCx(this.selection.activeControlPoint) + window.scrollX,
+            this.selection.getControlPointCy(this.selection.activeControlPoint) + window.scrollY,
+        );
+    }
+
+    private handleRightMouseDown(): void {
         this.isRightMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
@@ -253,27 +355,34 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
-    handleLeftMouseUp(): void {
+    private handleLeftMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
-        } else if (this.isOnTarget && !this.isTranslatingSelection) {
+        } else if (this.isOnTarget && !this.isTranslatingSelection && !this.isScalingSelection) {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
+            this.saveState();
+        } else if (this.isScalingSelection) {
+            this.isScalingSelection = false;
             this.saveState();
         } else {
             this.selection.emptySelection();
         }
 
+        this.selection.isInputOnControlPoint = false;
+        this.renderer.setStyle(this.elementRef.nativeElement, 'Cursor', CURSOR_STYLES.Default);
+
         this.isLeftMouseDown = false;
-        this.isLeftMouseDragging = false;
         this.isOnTarget = false;
     }
 
-    handleRightMouseUp(): void {
+    private handleRightMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
 
         if (this.isSelecting) {
@@ -282,7 +391,6 @@ export class SelectionToolService extends AbstractToolService {
             this.singlySelectInvert(this.currentTarget);
         }
         this.isRightMouseDown = false;
-        this.isRightMouseDragging = false;
         this.isOnTarget = false;
     }
 
@@ -306,26 +414,81 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
     }
 
-    saveState() {
-        setTimeout(() => {
-            this.selection.removeFullSelectionBox();
-        }, 0);
-        setTimeout(() => {
-            this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
-        }, 0);
-        setTimeout(() => {
-            this.selection.appendFullSelectionBox();
-        }, 0);
+    private saveState() {
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
     // tslint:disable-next-line: no-empty
     onMouseEnter(event: MouseEvent): void {}
     // tslint:disable-next-line: no-empty
     onMouseLeave(event: MouseEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onKeyDown(event: KeyboardEvent): void {}
-    // tslint:disable-next-line: no-empty
-    onKeyUp(event: KeyboardEvent): void {}
+
+    onKeyDown(event: KeyboardEvent): void {
+        const key = event.key;
+        if (key === KEYS.Shift) {
+            event.preventDefault();
+            this.manipulator.isShiftDown = true;
+            this.manipulator.isRotateOnSelf = true;
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
+            }
+        } else if (key === KEYS.Alt) {
+            event.preventDefault();
+            this.manipulator.isAltDown = true;
+            this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
+            }
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        const key = event.key;
+        if (key === KEYS.Shift) {
+            event.preventDefault();
+            this.manipulator.isRotateOnSelf = false;
+            this.manipulator.isShiftDown = false;
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
+            }
+        } else if (key === KEYS.Alt) {
+            event.preventDefault();
+            this.manipulator.rotationStep = ROTATION_ANGLE.Base;
+            this.manipulator.isAltDown = false;
+            if (this.isScalingSelection) {
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
+            }
+        }
+    }
+
+    onWheel(event: WheelEvent): void {
+        if (this.isAbleToRotate()) {
+            event.preventDefault();
+            this.manipulator.rotateSelection(event, this.selection);
+            this.clipBoard.restartDuplication();
+            this.saveState();
+        }
+        this.updateCursorStyleOnSelectionBox();
+    }
 }

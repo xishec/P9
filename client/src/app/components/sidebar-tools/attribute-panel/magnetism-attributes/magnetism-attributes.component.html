@@ -1,0 +1,60 @@
+<div id="container">
+    <div id="attribute-header">
+        {{ toolName }}
+    </div>
+
+    <form [formGroup]="magnetismAttributesForm">
+        <div class="attribute">
+            <label for="activateMagnetism">
+                Activer le magnétisme
+                <i
+                    class="fas fa-info-circle"
+                    matTooltip="Appuyez sur 'M' comme raccourci"
+                    matTooltipPosition="after"
+                ></i>
+            </label>
+            <br />
+            <mat-slide-toggle formControlName="state" [checked]="onStateChange()" color="primary"></mat-slide-toggle>
+        </div>
+
+        <div class="attribute">
+            <label for="controlPoint">Sélection du point d'ancrage</label>
+            <div>
+                <br />
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let TOP_MAGNETISM_POINT of TOP_CONTROL_POINTS"
+                        [value]="TOP_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === TOP_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(TOP_MAGNETISM_POINT.point)"
+                        ><img src="{{ TOP_MAGNETISM_POINT.imageSource }}"
+                    /></mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <div>
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let CENTER_MAGNETISM_POINT of CENTER_CONTROL_POINTS"
+                        [value]="CENTER_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === CENTER_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(CENTER_MAGNETISM_POINT.point)"
+                        ><img src="{{ CENTER_MAGNETISM_POINT.imageSource }}"
+                    /></mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <div>
+                <mat-button-toggle-group>
+                    <mat-button-toggle
+                        *ngFor="let BOTTOM_MAGNETISM_POINT of BOTTOM_CONTROL_POINTS"
+                        [value]="BOTTOM_MAGNETISM_POINT.point"
+                        [checked]="this.magnetismService.currentPoint === BOTTOM_MAGNETISM_POINT.point"
+                        (click)="setMagnetismPoint(BOTTOM_MAGNETISM_POINT.point)"
+                        ><img src="{{ BOTTOM_MAGNETISM_POINT.imageSource }}"
+                    /></mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+    </form>
+</div>

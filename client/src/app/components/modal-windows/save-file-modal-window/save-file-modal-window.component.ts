@@ -7,8 +7,9 @@ import { filter, take } from 'rxjs/operators';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
-import { NameAndLabels } from 'src/classes/NameAndLabels';
+import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { MAX_NB_LABELS } from 'src/constants/constants';
+import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-save-file-modal-window',
@@ -22,10 +23,12 @@ export class SaveFileModalWindowComponent implements OnInit {
     formBuilderLocal: FormBuilder;
     drawingLabels: string[] = ['Art Abstrait', 'Art Contemporain', 'Expressionnisme', 'Minimalisme'];
     selectedLabels: string[] = [];
-    errorMesaage: string;
+    errorMessage: string;
     isSaving: boolean;
     saveFileUrl: SafeResourceUrl = '';
     filename = '';
+    createdAt = 0;
+    lastModified = 0;
 
     constructor(
         formBuilderServer: FormBuilder,
@@ -43,16 +46,18 @@ export class SaveFileModalWindowComponent implements OnInit {
     ngOnInit() {
         this.initializeForm();
         this.drawingLoaderService.currentDrawing.subscribe((currentDrawing) => {
-            this.saveFileModalForm.controls.name.setValue(currentDrawing.name);
-            currentDrawing.labels.forEach((label) => {
+            this.saveFileModalForm.controls.name.setValue(currentDrawing.drawingInfo.name);
+            currentDrawing.drawingInfo.labels.forEach((label: string) => {
                 if (!this.drawingLabels.includes(label)) {
                     this.drawingLabels.push(label);
                 }
             });
-            this.selectedLabels = Array.from(currentDrawing.labels);
+            this.selectedLabels = Array.from(currentDrawing.drawingInfo.labels);
+            this.createdAt = currentDrawing.drawingInfo.createdAt === null ? 0 : currentDrawing.drawingInfo.createdAt;
+            this.lastModified = currentDrawing.drawingInfo.lastModified;
         });
-        this.drawingSaverService.currentErrorMesaage.subscribe((errorMesaage) => {
-            this.errorMesaage = errorMesaage;
+        this.drawingSaverService.currentErrorMessage.subscribe((errorMessage) => {
+            this.errorMessage = errorMessage;
         });
         this.isSaving = false;
     }
@@ -76,9 +81,13 @@ export class SaveFileModalWindowComponent implements OnInit {
     }
 
     saveToServer(): void {
-        this.drawingSaverService.sendFileToServer(
-            new NameAndLabels(this.saveFileModalForm.value.name, this.selectedLabels),
-        );
+        const drawingSavingInfo: DrawingSavingInfo = {
+            name: this.saveFileModalForm.value.name,
+            drawingLabels: this.selectedLabels,
+            createdAt: this.createdAt,
+            lastModified: this.lastModified,
+        };
+        this.drawingSaverService.sendFileToServer(drawingSavingInfo);
         this.isSaving = true;
 
         this.drawingSaverService.currentIsSaved
@@ -86,10 +95,14 @@ export class SaveFileModalWindowComponent implements OnInit {
             .pipe(take(1))
             .subscribe((drawingIsSaved) => {
                 if (drawingIsSaved) {
-                    this.snackBar.open('Sauvegarde réussie!', 'OK');
+                    this.snackBar.open('Sauvegarde réussie!', 'OK', {
+                        duration: SNACKBAR_DURATION,
+                    });
                     this.closeDialog();
                 } else {
-                    this.snackBar.open(`Sauvegarde échouée...\n${this.errorMesaage}`, 'OK');
+                    this.snackBar.open(`Sauvegarde échouée...\n${this.errorMessage}`, 'OK', {
+                        duration: SNACKBAR_DURATION,
+                    });
                 }
                 this.isSaving = false;
                 this.drawingSaverService.currentIsSaved.next(undefined);
@@ -98,10 +111,20 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     saveToLocal(): boolean {
         if (this.drawingLoaderService.emptyDrawStack.value) {
-            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans le zone de travail!', 'OK');
+            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans la zone de travail!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
             return false;
         }
-        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
+
+        const drawingSavingInfo: DrawingSavingInfo = {
+            name: this.saveFileLocalModalForm.value.filename,
+            drawingLabels: this.selectedLabels,
+            createdAt: this.createdAt,
+            lastModified: this.lastModified,
+        };
+
+        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl(drawingSavingInfo);
         this.filename = this.saveFileLocalModalForm.value.filename;
         this.closeDialog();
         return true;
@@ -109,7 +132,9 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     addLabel(newLabel: string): void {
         if (this.selectedLabels.length >= MAX_NB_LABELS) {
-            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK');
+            this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
             return;
         }
         this.drawingLabels.push(newLabel);
@@ -129,7 +154,9 @@ export class SaveFileModalWindowComponent implements OnInit {
 
     select(label: string): void {
         this.selectedLabels.length >= MAX_NB_LABELS
-            ? this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK')
+            ? this.snackBar.open(`Veuillez choisir au maximum ${MAX_NB_LABELS} étiquettes.`, 'OK', {
+                  duration: SNACKBAR_DURATION,
+              })
             : this.selectedLabels.push(label);
     }
 }

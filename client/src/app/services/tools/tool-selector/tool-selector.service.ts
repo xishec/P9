@@ -18,12 +18,16 @@ import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 import { EllipsisToolService } from '../ellipsis-tool/ellipsis-tool.service';
 import { EraserToolService } from '../eraser-tool/eraser-tool.service';
 import { ExportToolService } from '../export-tool/export-tool.service';
+import { FillToolService } from '../fill-tool/fill-tool.service';
 import { LineToolService } from '../line-tool/line-tool.service';
+import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
 import { PenToolService } from '../pen-tool/pen-tool.service';
 import { PencilToolService } from '../pencil-tool/pencil-tool.service';
 import { PolygonToolService } from '../polygon-tool/polygon-tool.service';
+import { QuillToolService } from '../quill-tool/quill-tool.service';
 import { RectangleToolService } from '../rectangle-tool/rectangle-tool.service';
 import { SelectionToolService } from '../selection-tool/selection-tool.service';
+import { SprayCanToolService } from '../spray-can-tool/spray-can-tool.service';
 import { StampToolService } from '../stamp-tool/stamp-tool.service';
 import { TextToolService } from '../text-tool/text-tool.service';
 
@@ -37,8 +41,8 @@ export class ToolSelectorService {
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
     drawStack: DrawStackService;
-    TOOLS_MAP: Map<TOOL_NAME, AbstractToolService>;
-    WORKZONE_TOOLS_MAP: Map<TOOL_NAME, () => void>;
+    private TOOLS_MAP: Map<TOOL_NAME, AbstractToolService>;
+    private WORKZONE_TOOLS_MAP: Map<TOOL_NAME, () => void>;
 
     constructor(
         private dialog: MatDialog,
@@ -48,9 +52,11 @@ export class ToolSelectorService {
         private ellipsisTool: EllipsisToolService,
         private pencilTool: PencilToolService,
         private penTool: PenToolService,
+        private quillTool: QuillToolService,
         private brushTool: BrushToolService,
         private stampTool: StampToolService,
         private dropperTool: DropperToolService,
+        private fillTool: FillToolService,
         private colorApplicatorTool: ColorApplicatorToolService,
         private polygonTool: PolygonToolService,
         private lineTool: LineToolService,
@@ -58,6 +64,8 @@ export class ToolSelectorService {
         private exportTool: ExportToolService,
         private eraserTool: EraserToolService,
         private undoRedoerService: UndoRedoerService,
+        private magnetismTool: MagnetismToolService,
+        private sprayCanTool: SprayCanToolService,
     ) {
         this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed) => {
             this.modalIsDisplayed = modalIsDisplayed;
@@ -75,11 +83,15 @@ export class ToolSelectorService {
 
         this.penTool.initializeService(ref, renderer, drawStack);
 
+        this.quillTool.initializeService(ref, renderer, drawStack);
+
         this.brushTool.initializeService(ref, renderer, drawStack);
 
         this.stampTool.initializeService(ref, renderer, drawStack);
 
-        this.dropperTool.initializeService(ref, renderer, drawStack);
+        this.dropperTool.initializeService(ref, renderer);
+
+        this.fillTool.initializeService(ref, renderer, drawStack);
 
         this.colorApplicatorTool.initializeService(ref, renderer, drawStack);
 
@@ -93,6 +105,8 @@ export class ToolSelectorService {
 
         this.eraserTool.initializeService(ref, renderer, drawStack);
 
+        this.sprayCanTool.initializeService(ref, renderer, drawStack);
+
         this.TOOLS_MAP = new Map([
             [TOOL_NAME.Selection, this.selectionTool as AbstractToolService],
             [TOOL_NAME.Rectangle, this.rectangleTool as AbstractToolService],
@@ -105,10 +119,10 @@ export class ToolSelectorService {
             [TOOL_NAME.Line, this.lineTool as AbstractToolService],
             [TOOL_NAME.Dropper, this.dropperTool as AbstractToolService],
             [TOOL_NAME.Pen, this.penTool as AbstractToolService],
+            [TOOL_NAME.Quill, this.quillTool as AbstractToolService],
             [TOOL_NAME.Eraser, this.eraserTool as AbstractToolService],
-            [TOOL_NAME.Quill, this.selectionTool as AbstractToolService],
-            [TOOL_NAME.SprayCan, this.selectionTool as AbstractToolService],
-            [TOOL_NAME.Fill, this.selectionTool as AbstractToolService],
+            [TOOL_NAME.SprayCan, this.sprayCanTool as AbstractToolService],
+            [TOOL_NAME.Fill, this.fillTool as AbstractToolService],
             [TOOL_NAME.Text, this.textTool as AbstractToolService],
         ]);
 
@@ -177,7 +191,7 @@ export class ToolSelectorService {
 
     displayOpenFileModal(): void {
         const openFileDialogRef = this.dialog.open(OpenFileModalWindowComponent, {
-            panelClass: 'myapp-min-width-dialog',
+            panelClass: 'myapp-open-file-modal-dialog',
             disableClose: true,
             autoFocus: false,
         });
@@ -223,6 +237,10 @@ export class ToolSelectorService {
         return this.penTool;
     }
 
+    getQuillTool(): QuillToolService {
+        return this.quillTool;
+    }
+
     getRectangleTool(): RectangleToolService {
         return this.rectangleTool;
     }
@@ -241,6 +259,10 @@ export class ToolSelectorService {
 
     getDropperTool(): DropperToolService {
         return this.dropperTool;
+    }
+
+    getFillTool(): FillToolService {
+        return this.fillTool;
     }
 
     getColorApplicatorTool(): ColorApplicatorToolService {
@@ -263,15 +285,25 @@ export class ToolSelectorService {
         return this.eraserTool;
     }
 
+    getMagnetismTool(): MagnetismToolService {
+        return this.magnetismTool;
+    }
+
+    getSprayCanTool(): SprayCanToolService {
+        return this.sprayCanTool;
+    }
+
     changeTool(tooltipName: TOOL_NAME): void {
         if (this.currentTool) {
             this.currentTool.cleanUp();
-            if (this.currentTool instanceof SelectionToolService) {
-                this.selectionTool.isTheCurrentTool = false;
-            }
         }
 
         if (tooltipName === TOOL_NAME.Grid) {
+            this.changeCurrentToolName(tooltipName);
+            return;
+        }
+
+        if (tooltipName === TOOL_NAME.Magnetism) {
             this.changeCurrentToolName(tooltipName);
             return;
         }
@@ -280,8 +312,8 @@ export class ToolSelectorService {
         if (tool !== undefined) {
             this.currentTool = tool;
             this.changeCurrentToolName(tooltipName);
-            if (this.currentTool instanceof SelectionToolService) {
-                this.selectionTool.isTheCurrentTool = true;
+            if ((this.currentTool instanceof SelectionToolService) || (this.currentTool instanceof ColorApplicatorToolService)) {
+                this.currentTool.shouldBeNotified = true;
             }
             return;
         }

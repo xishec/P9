@@ -66,9 +66,9 @@ describe('ColorToolService', () => {
 
     it('#changeselectedColorType should change selectedColorType to backgroundColor type', () => {
         const selectedColorType: BehaviorSubject<COLOR_TYPE> = new BehaviorSubject<COLOR_TYPE>(
-            COLOR_TYPE.backgroundColor,
+            COLOR_TYPE.BackgroundColor,
         );
-        service.changeSelectedColorType(COLOR_TYPE.backgroundColor);
+        service.changeSelectedColorType(COLOR_TYPE.BackgroundColor);
         expect(service.selectedColorType).toEqual(selectedColorType);
     });
 
@@ -80,42 +80,42 @@ describe('ColorToolService', () => {
     });
 
     it(`#changeColorOnFocus should change the background color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.backgroundColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.BackgroundColor);
         service.changeColorOnFocus(focusColor);
         expect(service.backgroundColor).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should change the primaryColor color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.primaryColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.PrimaryColor);
         service.changeColorOnFocus(focusColor);
         expect(service.primaryColor).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should change the secondaryColor color to the focused color ${focusColor}`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.secondaryColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.SecondaryColor);
         service.changeColorOnFocus(focusColor);
         expect(service.secondaryColor).toEqual(new BehaviorSubject<string>(focusColor));
     });
 
     it(`#changeColorOnFocus should not change the seconday color if the primary color is selected`, () => {
         const tmpSecondayColor: BehaviorSubject<string> = service.secondaryColor;
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.primaryColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.PrimaryColor);
         service.changeColorOnFocus(focusColor);
         expect(service.secondaryColor).toEqual(tmpSecondayColor);
     });
 
     it(`#getColorOnFocus should return ${backgroundColor} when backgroundColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.backgroundColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.BackgroundColor);
         expect(service.getColorOnFocus()).toEqual(backgroundColor);
     });
 
     it(`#getColorOnFocus should return ${primaryColor} when primaryColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.primaryColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.PrimaryColor);
         expect(service.getColorOnFocus()).toEqual(primaryColor);
     });
 
     it(`#getColorOnFocus should return ${secondaryColor} when secondaryColor is focused`, () => {
-        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.secondaryColor);
+        service.selectedColorType = new BehaviorSubject<COLOR_TYPE>(COLOR_TYPE.SecondaryColor);
         expect(service.getColorOnFocus()).toEqual(secondaryColor);
     });
 
@@ -144,16 +144,16 @@ describe('ColorToolService', () => {
         expect(service.translateRGBToHex(184, 130, 130, 0)).toBe('b8828200');
     });
 
-    it('#DecimalToHex should return 25 if number is 37', () => {
-        expect(service.DecimalToHex(37)).toBe('25');
+    it('#decimalToHex should return 25 if number is 37', () => {
+        expect(service.decimalToHex(37)).toBe('25');
     });
 
-    it('#DecimalToHex should return 00 if number is negative', () => {
-        expect(service.DecimalToHex(-10)).toBe('00');
+    it('#decimalToHex should return 00 if number is negative', () => {
+        expect(service.decimalToHex(-10)).toBe('00');
     });
 
-    it('#DecimalToHex should return ff if number is higher than 255', () => {
-        expect(service.DecimalToHex(999)).toBe('ff');
+    it('#decimalToHex should return ff if number is higher than 255', () => {
+        expect(service.decimalToHex(999)).toBe('ff');
     });
 
     it('#switchPrimarySecondary should change primaryColor to secondaryColor after colors switch', () => {

@@ -9,6 +9,12 @@
     <p>
         Inversez la sélection en effectuant un glisser-déposer du clique droit.
     </p>
+    <p>
+        Tournez la sélection en faisant rouler la roulette de la souris.
+    </p>
+    <p>
+        Redimensionnez la sélection en effectuant un glisser-déposer du clique gauche sur les points de contrôles.
+    </p>
 
     <div id="clipboard-options">
         <p>
@@ -31,7 +37,7 @@
             >
                 <i *ngIf="!isClippingsEmpty; else inactive_paste" class="{{ PASTE_BUTTON.iconName }}"></i>
                 <ng-template #inactive_paste
-                    ><i style="color:grey;" class="{{ PASTE_BUTTON.iconName }}"></i
+                    ><i style="color:silver;" class="{{ PASTE_BUTTON.iconName }}"></i
                 ></ng-template>
             </mat-button-toggle>
             <mat-button-toggle
@@ -44,7 +50,7 @@
             >
                 <i *ngIf="isActiveSelection; else inactive_icon" class="{{ CLIPBOARD_BUTTON.iconName }}"></i>
                 <ng-template #inactive_icon
-                    ><i style="color:grey;" class="{{ CLIPBOARD_BUTTON.iconName }}"></i
+                    ><i style="color:silver;" class="{{ CLIPBOARD_BUTTON.iconName }}"></i
                 ></ng-template>
             </mat-button-toggle>
         </mat-button-toggle-group>

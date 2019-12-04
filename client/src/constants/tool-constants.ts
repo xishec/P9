@@ -1,15 +1,71 @@
 import { FontType } from 'src/classes/FontType';
+import { MagnetismPoint } from 'src/classes/MagnetismPoint';
 import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
-const CONTROL_POINT_RADIUS = 5;
-const SELECTION_COLOR = '#ff5722';
+const CONTROL_POINT_RADIUS = 10;
+const SELECTION_OUTLINE_COLOR = '#ff5722';
+const SELECTION_FILL_COLOR = '#ffffff';
+const SELECTION_FILL_OPACITY = '0.1';
+const CONTROL_POINT_FILL_COLOR = '#ffffff';
+
+enum CURSOR_STYLES {
+    Default = 'default',
+    None = 'none',
+    Move = 'move',
+    Crosshair = 'crosshair',
+    NotAllowed = 'not-allowed',
+    NwResize = 'nw-resize',
+    NResize = 'n-resize',
+    NeResize = 'ne-resize',
+    EResize = 'e-resize',
+    SeResize = 'se-resize',
+    SResize = 's-resize',
+    SwResize = 'sw-resize',
+    WResize = 'w-resize',
+}
+
+const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
+    [0, CURSOR_STYLES.NwResize],
+    [1, CURSOR_STYLES.NResize],
+    [2, CURSOR_STYLES.NeResize],
+    [3, CURSOR_STYLES.EResize],
+    [4, CURSOR_STYLES.SeResize],
+    [5, CURSOR_STYLES.SResize],
+    [6, CURSOR_STYLES.SwResize],
+    [7, CURSOR_STYLES.WResize],
+]);
+
+enum PREVIEW_RECTANGLE_ATTRIBUTES {
+    StrokeColor = 'black',
+    StrokeDasharray = '5 5',
+    FillColor = '#ffffff',
+    FillOpacity = '0.3',
+}
+
+enum TEXT_PREVIEW_BOX_ATTRIBUTES {
+    StrokeColor = 'black',
+    Stroke_Width = '1',
+    StrokeDasharray = '5 5',
+    FillColor = 'none',
+}
 
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
-const STAMP_BASE_ROTATION = 15;
-const STAMP_ALTER_ROTATION = 1;
+
+enum ROTATION_ANGLE {
+    Base = 15,
+    Alter = 1,
+    Min = -360,
+    Default = 0,
+    Max = 360,
+}
+
+enum QUILL_STROKE_WIDTH {
+    InitialValue = '1',
+    Preview = '2',
+}
 
 const OFFSET_STEP = 10;
 
@@ -45,11 +101,18 @@ enum TOOL_NAME {
     Save = 'Sauvegarder',
     ArtGallery = 'Gallerie de dessin',
     Export = 'Exporter',
+    Magnetism = 'Magnétisme',
 }
 
 enum THICKNESS {
-    Min = 1,
-    Default = 5,
+    Min = 2,
+    Default = 10,
+    Max = 100,
+}
+
+enum TOLERANCE {
+    Min = 0,
+    Default = 0,
     Max = 100,
 }
 
@@ -83,7 +146,7 @@ enum POLYGON_SIDES {
 enum GRID_SIZE {
     Min = 5,
     Default = 10,
-    Max = 200,
+    Max = 100,
 }
 
 enum GRID_OPACITY {
@@ -106,6 +169,7 @@ const TOOLS_BUTTON_INFO: SidebarButtonInfo[] = [
     { iconName: 'fas fa-eye-dropper', tooltipName: TOOL_NAME.Dropper, shortcut: '(I)' },
     { iconName: 'fas fa-stamp', tooltipName: TOOL_NAME.Stamp, shortcut: '' },
     { iconName: 'fas fa-border-all', tooltipName: TOOL_NAME.Grid, shortcut: '' },
+    { iconName: 'fas fa-magnet', tooltipName: TOOL_NAME.Magnetism, shortcut: '(M)' },
 ];
 
 const TRACING_BUTTON_INFO: SidebarButtonInfo[] = [
@@ -141,14 +205,14 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 enum BRUSH_STYLE {
-    type1 = 1,
-    type2 = 2,
-    type3 = 3,
-    type4 = 4,
-    type5 = 5,
+    Type1 = 1,
+    Type2 = 2,
+    Type3 = 3,
+    Type4 = 4,
+    Type5 = 5,
 }
 
-const BRUSH_STYLES = [BRUSH_STYLE.type1, BRUSH_STYLE.type2, BRUSH_STYLE.type3, BRUSH_STYLE.type4, BRUSH_STYLE.type5];
+const BRUSH_STYLES = [BRUSH_STYLE.Type1, BRUSH_STYLE.Type2, BRUSH_STYLE.Type3, BRUSH_STYLE.Type4, BRUSH_STYLE.Type5];
 
 const POLYGON_RADIUS_CORRECTION: Map<number, number> = new Map([
     [3, 0.13],
@@ -180,12 +244,6 @@ enum STAMP_SCALING {
     Min = 0.1,
     Default = 1.0,
     Max = 10.0,
-}
-
-enum STAMP_ANGLE_ORIENTATION {
-    Min = -360,
-    Default = 0,
-    Max = 360,
 }
 
 enum ERASER_SIZE {
@@ -248,8 +306,8 @@ BASE64_STAMPS_MAP.set(
 
 enum LINE_STROKE_TYPE {
     Continuous = 1,
-    Dotted_line = 2,
-    Dotted_circle = 3,
+    DottedLine = 2,
+    DottedCircle = 3,
 }
 
 enum LINE_JOINT_TYPE {
@@ -259,43 +317,49 @@ enum LINE_JOINT_TYPE {
 }
 
 enum HTML_ATTRIBUTE {
-    width = 'width',
-    height = 'height',
-    fill = 'fill',
-    stroke = 'stroke',
-    opacity = 'opacity',
-    stroke_width = 'stroke-width',
-    cx = 'cx',
-    cy = 'cy',
-    rx = 'rx',
-    ry = 'ry',
-    numOctaves = 'numOctaves',
-    baseFrequency = 'baseFrequency',
-    filter = 'filter',
-    points = 'points',
-    stroke_dasharray = 'stroke-dasharray',
-    stroke_linejoin = 'stroke-linejoin',
-    title = 'title',
-    canvas = 'canvas',
-    a = 'a',
-    img = 'img',
-    download = 'download',
-    href = 'href',
-    src = 'src',
-    viewBox = 'viewBox',
-    font_family = 'font-family',
-    font_size = 'font-size',
-    font_weight = 'font-weight',
-    font_style = 'font-style',
-    text_anchor = 'text-anchor',
-    innerHTML = 'innerHTML',
+    Width = 'width',
+    Height = 'height',
+    Fill = 'fill',
+    Stroke = 'stroke',
+    Opacity = 'opacity',
+    StrokeWidth = 'stroke-width',
+    FillOpacity = 'fill-opacity',
+    R = 'r',
+    X = 'x',
+    Y = 'y',
+    Cx = 'cx',
+    Cy = 'cy',
+    Rx = 'rx',
+    Ry = 'ry',
+    NumOctaves = 'numOctaves',
+    BaseFrequency = 'baseFrequency',
+    Filter = 'filter',
+    Points = 'points',
+    StrokeDasharray = 'stroke-dasharray',
+    StrokeLinejoin = 'stroke-linejoin',
+    StrokeLinecap = 'stroke-linecap',
+    Title = 'title',
+    Canvas = 'canvas',
+    A = 'a',
+    Img = 'img',
+    Download = 'download',
+    Href = 'href',
+    Src = 'src',
+    ViewBox = 'viewBox',
+    FontFamily = 'font-family',
+    FontSize = 'font-size',
+    Cursor = 'cursor',
+    FontWeight = 'font-weight',
+    FontStyle = 'font-style',
+    TextAnchor = 'text-anchor',
+    InnerHTML = 'innerHTML',
 }
 
 const TOOL_NAME_SHORTCUTS: Map<string, TOOL_NAME> = new Map([
     ['c', TOOL_NAME.Pencil],
     ['w', TOOL_NAME.Brush],
     ['p', TOOL_NAME.Quill],
-    ['y', TOOL_NAME.Pen],
+    [HTML_ATTRIBUTE.Y, TOOL_NAME.Pen],
     ['a', TOOL_NAME.SprayCan],
     ['1', TOOL_NAME.Rectangle],
     ['2', TOOL_NAME.Ellipsis],
@@ -329,7 +393,6 @@ const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
 const FONTS: FontType[] = [
-    { fontName: 'Times', fontFamily: 'Times, serif' },
     { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
     { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
 
@@ -351,7 +414,7 @@ enum FONT_SIZE {
 const TEXT_CURSOR = '█';
 const TEXT_SPACE = '\xa0';
 const TEXT_LINEBREAK = '⠀';
-const SNACKBAR_DURATION = 3000;
+const SNACKBAR_DURATION = 1000;
 
 enum FONT_ALIGN {
     Middle = 'middle',
@@ -369,7 +432,77 @@ enum FONT_WEIGHT {
     Normal = 'normal',
 }
 
+enum CONTROL_POINTS {
+    TopLeft = 0,
+    TopMiddle = 1,
+    TopRight = 2,
+    CenterLeft = 7,
+    CenterMiddle = 8,
+    CenterRight = 3,
+    BottomLeft = 6,
+    BottomMiddle = 5,
+    BottomRight = 4,
+}
+
+const TOP_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.TopLeft, imageSource: '../../../assets/controlPoints/topleft.png' },
+    { point: CONTROL_POINTS.TopMiddle, imageSource: '../../../assets/controlPoints/top.png' },
+    { point: CONTROL_POINTS.TopRight, imageSource: '../../../assets/controlPoints/topright.png' },
+];
+
+const CENTER_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.CenterLeft, imageSource: '../../../assets/controlPoints/left.png' },
+    { point: CONTROL_POINTS.CenterMiddle, imageSource: '../../../assets/controlPoints/center.png' },
+    { point: CONTROL_POINTS.CenterRight, imageSource: '../../../assets/controlPoints/right.png' },
+];
+
+const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
+    { point: CONTROL_POINTS.BottomLeft, imageSource: '../../../assets/controlPoints/bottomleft.png' },
+    { point: CONTROL_POINTS.BottomMiddle, imageSource: '../../../assets/controlPoints/bottom.png' },
+    { point: CONTROL_POINTS.BottomRight, imageSource: '../../../assets/controlPoints/bottomright.png' },
+];
+
+enum MAGNETISM_STATE {
+    Active = 'maintenant activé',
+    Inactive = 'désactivé',
+}
+
+const MAX_NORMAL_LENGTH = 5;
+const FILL_STROKE_WIDTH = '4';
+
+const MAX_PERCENTAGE = 100;
+const MAX_PATH_DISTANCE = 100;
+
+enum SPRAY_DIAMETER {
+    Min = 20,
+    Default = 30,
+    Max = 100,
+}
+
+enum SPRAY_INTERVAL {
+    Min = 0,
+    Default = 20,
+    Max = 1000,
+}
+
+enum SPRAY_PARTICLE_THICKNESS {
+    Min = 1,
+    Default = 2.5,
+    Max = 5,
+}
+
+const SPRAYER_STROKE_WIDTH = '3';
+
+const MAX_CHARS_IN_PATH = 10000;
+
+const CIRCLES_TO_APPEND = 20;
+
 export {
+    MAX_PERCENTAGE,
+    MAX_PATH_DISTANCE,
+    TOLERANCE,
+    FILL_STROKE_WIDTH,
+    MAX_NORMAL_LENGTH,
     CONTROL_SHORTCUTS,
     TOOL_NAME_SHORTCUTS,
     HTML_ATTRIBUTE,
@@ -389,7 +522,6 @@ export {
     POLYGON_RADIUS_CORRECTION,
     POLYGON_OFFSET_ANGLES,
     STAMP_SCALING,
-    STAMP_ANGLE_ORIENTATION,
     STAMP_TYPES,
     STAMPS_MAP,
     NO_STAMP,
@@ -422,9 +554,27 @@ export {
     SNACKBAR_DURATION,
     STAMP_BASE_HEIGHT,
     STAMP_BASE_WIDTH,
-    STAMP_BASE_ROTATION,
-    STAMP_ALTER_ROTATION,
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
-    SELECTION_COLOR,
+    SELECTION_OUTLINE_COLOR,
+    SELECTION_FILL_COLOR,
+    SELECTION_FILL_OPACITY,
+    CONTROL_POINT_FILL_COLOR,
+    CONTROL_POINTS,
+    TOP_CONTROL_POINTS,
+    CENTER_CONTROL_POINTS,
+    BOTTOM_CONTROL_POINTS,
+    MAGNETISM_STATE,
+    ROTATION_ANGLE,
+    QUILL_STROKE_WIDTH,
+    SPRAY_DIAMETER,
+    SPRAY_INTERVAL,
+    SPRAYER_STROKE_WIDTH,
+    SPRAY_PARTICLE_THICKNESS,
+    MAX_CHARS_IN_PATH,
+    CIRCLES_TO_APPEND,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+    CURSOR_STYLES,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
 };

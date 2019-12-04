@@ -14,6 +14,7 @@ enum KEYS {
     g = 'g',
     i = 'i',
     l = 'l',
+    m = 'm',
     o = 'o',
     p = 'p',
     r = 'r',
@@ -26,9 +27,9 @@ enum KEYS {
     x = 'x',
     v = 'v',
     d = 'd',
-    plus = '+',
-    minus = '-',
-    delete = 'Delete',
+    Plus = '+',
+    Minus = '-',
+    Delete = 'Delete',
     Escape = 'Escape',
     Backspace = 'Backspace',
     Enter = 'Enter',
@@ -45,6 +46,13 @@ enum MOUSE {
     RightButton = 2,
 }
 
+enum NUMBER_OF_MS {
+    Day = 100000 * 36 * 24,
+    Hours = 100000 * 36,
+    Minutes = 1000 * 60,
+    Seconds = 1000,
+}
+
 const SIDEBAR_WIDTH = 360;
 
 const ELEMENTS_BEFORE_LAST_CIRCLE = 1;
@@ -59,6 +67,8 @@ const GIFS = ['/assets/gifs/love.gif', '/assets/gifs/money.gif', '/assets/gifs/r
 
 const MAX_NB_LABELS = 6;
 
+const TITLE_ELEMENT_TO_REMOVE = 'element-to-remove';
+
 export {
     MAX_NB_LABELS,
     GIFS,
@@ -69,4 +79,6 @@ export {
     MOUSE,
     PREDICATE,
     ELEMENTS_BEFORE_LAST_CIRCLE,
+    NUMBER_OF_MS,
+    TITLE_ELEMENT_TO_REMOVE,
 };

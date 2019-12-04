@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
+import { MatSnackBar } from '@angular/material';
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { ClipboardService } from 'src/app/services/clipboard/clipboard.service';
 import { EventListenerService } from 'src/app/services/event-listener/event-listener.service';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
@@ -8,12 +10,19 @@ import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawi
 import { ShortcutManagerService } from 'src/app/services/shortcut-manager/shortcut-manager.service';
 import { ColorToolService } from 'src/app/services/tools/color-tool/color-tool.service';
 import { GridToolService } from 'src/app/services/tools/grid-tool/grid-tool.service';
+import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magnetism-tool.service';
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GRID_OPACITY, GRID_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
-import { Drawing } from '../../../../../common/communication/Drawing';
+import {
+    CURSOR_STYLES,
+    GRID_OPACITY,
+    GRID_SIZE,
+    HTML_ATTRIBUTE,
+    SNACKBAR_DURATION,
+    TOOL_NAME,
+} from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -24,8 +33,9 @@ import { DrawingModalWindowService } from '../../services/drawing-modal-window/d
     styleUrls: ['./work-zone.component.scss'],
 })
 export class WorkZoneComponent implements OnInit {
-    drawingInfo: DrawingInfo = new DrawingInfo(0, 0, DEFAULT_WHITE);
+    drawingInfo: DrawingInfo = { width: 0, height: 0, color: DEFAULT_WHITE } as DrawingInfo;
     gridIsActive = false;
+    modalIsDisplayed: boolean;
 
     gridSize = GRID_SIZE.Default;
     gridOpacity = GRID_OPACITY.Max;
@@ -49,6 +59,8 @@ export class WorkZoneComponent implements OnInit {
         private drawingSaverService: DrawingSaverService,
         private undoRedoerService: UndoRedoerService,
         private clipboard: ClipboardService,
+        private snackBar: MatSnackBar,
+        private magnetismToolService: MagnetismToolService,
     ) {}
 
     ngOnInit(): void {
@@ -96,17 +108,20 @@ export class WorkZoneComponent implements OnInit {
             this.setRectangleBackgroundStyle();
         });
 
-        this.gridToolService.currentState.subscribe((state: boolean) => {
+        this.gridToolService.state.subscribe((state: boolean) => {
             this.gridIsActive = state;
         });
 
-        this.gridToolService.currentSize.subscribe((size: number) => {
+        this.gridToolService.size.subscribe((size: number) => {
             this.gridSize = size;
         });
-        this.gridToolService.currentOpacity.subscribe((opacity: number) => {
+        this.gridToolService.opacity.subscribe((opacity: number) => {
             this.gridOpacity = opacity;
         });
 
+        this.modalManagerService.currentModalIsDisplayed.subscribe((modalIsDisplayed: boolean) => {
+            this.modalIsDisplayed = modalIsDisplayed;
+        });
         this.setDefaultWorkZoneProperties();
     }
 
@@ -128,9 +143,9 @@ export class WorkZoneComponent implements OnInit {
     }
 
     appendDrawingToView(selectedDrawing: Drawing) {
-        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
+        this.renderer.setProperty(this.refSVG.nativeElement, HTML_ATTRIBUTE.InnerHTML, selectedDrawing.svg);
 
-        const idStack = Object.values(selectedDrawing.idStack);
+        const idStack = Object.values(selectedDrawing.drawingInfo.idStack);
         idStack.forEach((id) => {
             const children: SVGElement[] = Array.from(this.refSVG.nativeElement.children) as SVGElement[];
             const child: SVGElement = children.filter((filterChild) => {
@@ -151,6 +166,7 @@ export class WorkZoneComponent implements OnInit {
             this.drawingLoaderService,
             this.undoRedoerService,
             this.clipboard,
+            this.magnetismToolService,
         );
         this.eventListenerService.addEventListeners();
     }
@@ -168,17 +184,20 @@ export class WorkZoneComponent implements OnInit {
 
     onClickRectangle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            alert('Veuillez créer un nouveau dessin!');
+            this.snackBar.open('Veuillez créer un nouveau dessin!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
         }
     }
 
     getCursorStyle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            return { cursor: 'not-allowed' };
+            return { cursor: CURSOR_STYLES.NotAllowed };
         }
         switch (this.toolName) {
             case TOOL_NAME.Eraser:
-                return { cursor: 'none' };
+            case TOOL_NAME.Quill:
+                return { cursor: CURSOR_STYLES.None };
             case TOOL_NAME.Brush:
             case TOOL_NAME.Pencil:
             case TOOL_NAME.Rectangle:
@@ -187,12 +206,11 @@ export class WorkZoneComponent implements OnInit {
             case TOOL_NAME.Polygon:
             case TOOL_NAME.ColorApplicator:
             case TOOL_NAME.Line:
-            case TOOL_NAME.Quill:
             case TOOL_NAME.SprayCan:
             case TOOL_NAME.Fill:
-                return { cursor: 'crosshair' };
+                return { cursor: CURSOR_STYLES.Crosshair };
             default:
-                return { cursor: 'default' };
+                return { cursor: CURSOR_STYLES.Default };
         }
     }
 
@@ -205,8 +223,16 @@ export class WorkZoneComponent implements OnInit {
 
     setRectangleBackgroundStyle() {
         if (this.drawingInfo.width > 0 || this.drawingInfo.height > 0) {
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'height', this.drawingInfo.height + 'px');
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'width', this.drawingInfo.width + 'px');
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Height,
+                this.drawingInfo.height + 'px',
+            );
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Width,
+                this.drawingInfo.width + 'px',
+            );
 
             this.renderer.setAttribute(
                 this.refSVG.nativeElement.children[0],

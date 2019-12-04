@@ -11,7 +11,7 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { LINE_JOINT_TYPE, LINE_STROKE_TYPE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, LINE_JOINT_TYPE, LINE_STROKE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { LineToolService } from './line-tool.service';
@@ -90,16 +90,16 @@ describe('LineToolService', () => {
 
         service.initializeAttributesManagerService(new AttributesManagerService());
 
-        expect(service.currentStrokeWidth).toEqual(strokeWidth.value);
-        expect(service.currentStrokeType).toEqual(strokeType.value);
-        expect(service.currentJointType).toEqual(jointType.value);
-        expect(service.circleJointDiameter).toEqual(jointDiameter.value);
+        expect(service[`currentStrokeWidth`]).toEqual(strokeWidth.value);
+        expect(service[`currentStrokeType`]).toEqual(strokeType.value);
+        expect(service[`currentJointType`]).toEqual(jointType.value);
+        expect(service[`circleJointDiameter`]).toEqual(jointDiameter.value);
     });
 
     it('getXPos should return clientX - BOUNDLEFT', () => {
         const clientX = 10;
 
-        const resXPos = service.getXPos(clientX);
+        const resXPos = service[`getXPos`](clientX);
 
         expect(resXPos).toBe(clientX - BOUNDLEFT);
     });
@@ -107,14 +107,14 @@ describe('LineToolService', () => {
     it('getYPos should return clientY - BOUNDTOP', () => {
         const clientY = 10;
 
-        const resYPos = service.getYPos(clientY);
+        const resYPos = service[`getYPos`](clientY);
 
         expect(resYPos).toBe(clientY - BOUNDTOP);
     });
 
     it('should call startLine onMouseDown if MOUSE.LeftButton and !isDrawing', () => {
-        const spyOnStartLine = spyOn(service, 'startLine');
-        service.isDrawing = false;
+        const spyOnStartLine = spyOn<any>(service, 'startLine');
+        service[`isDrawing`] = false;
 
         service.onMouseDown(mockLeftButton);
 
@@ -122,8 +122,8 @@ describe('LineToolService', () => {
     });
 
     it('should call appendLine onMouseDown if MOUSE.LeftButton and isDrawing', () => {
-        const spyOnAppendLine = spyOn(service, 'appendLine');
-        service.isDrawing = true;
+        const spyOnAppendLine = spyOn<any>(service, 'appendLine');
+        service[`isDrawing`] = true;
 
         service.onMouseDown(mockLeftButton);
 
@@ -131,8 +131,8 @@ describe('LineToolService', () => {
     });
 
     it('should call appendCircle onMouseDown if MOUSE.LeftButton and currentJointType is Circle', () => {
-        const spyOnAppendCircle = spyOn(service, 'appendCircle');
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        const spyOnAppendCircle = spyOn<any>(service, 'appendCircle');
+        service[`currentJointType`] = LINE_JOINT_TYPE.Circle;
 
         service.onMouseDown(mockLeftButton);
 
@@ -140,25 +140,25 @@ describe('LineToolService', () => {
     });
 
     it('isMouseDown should be true when onMouseDown', () => {
-        service.isMouseDown = false;
+        service[`isMouseDown`] = false;
 
         service.onMouseDown(mockLeftButton);
 
-        expect(service.isMouseDown).toBeTruthy();
+        expect(service[`isMouseDown`]).toBeTruthy();
     });
 
     it('isMouseDown should be false when onMouseUp', () => {
-        service.isMouseDown = true;
+        service[`isMouseDown`] = true;
 
         service.onMouseUp(mockLeftButton);
 
-        expect(service.isMouseDown).toBeFalsy();
+        expect(service[`isMouseDown`]).toBeFalsy();
     });
 
     it('should call previewLine when onMouseMove with isDrawing and !isMouseDown', () => {
-        service.isDrawing = true;
-        service.isMouseDown = false;
-        const spyOnPreviewLine = spyOn(service, 'previewLine');
+        service[`isDrawing`] = true;
+        service[`isMouseDown`] = false;
+        const spyOnPreviewLine = spyOn<any>(service, 'previewLine');
 
         service.onMouseMove(mockLeftButton);
 
@@ -170,7 +170,7 @@ describe('LineToolService', () => {
 
         service.onKeyDown(mockShift);
 
-        expect(service.shouldCloseLine).toBeTruthy();
+        expect(service[`shouldCloseLine`]).toBeTruthy();
     });
 
     it('should call renderer.removeChild() when onKeyDown with escape', () => {
@@ -183,47 +183,47 @@ describe('LineToolService', () => {
     });
 
     it('should remove last point when onKeyDown with Backspace and pointsArray.length > 1', () => {
-        service.pointsArray.push('0,0');
+        service[`pointsArray`].push('0,0');
         const pointToPop = '1,1';
-        service.pointsArray.push(pointToPop);
-        const arrayLengthBefore = service.pointsArray.length;
+        service[`pointsArray`].push(pointToPop);
+        const arrayLengthBefore = service[`pointsArray`].length;
 
         const mockBackspace = createKeyBoardEvent(KEYS.Backspace);
 
         service.onKeyDown(mockBackspace);
 
-        const arrayLengthAfter = service.pointsArray.length;
+        const arrayLengthAfter = service[`pointsArray`].length;
         expect(arrayLengthAfter).toBe(arrayLengthBefore - 1);
-        expect(service.pointsArray).not.toContain(pointToPop);
+        expect(service[`pointsArray`]).not.toContain(pointToPop);
     });
 
     it('should remove last jointCircle when onKeyDown with Backspace and pointsArray.length > 1 and jointType is circle', () => {
         const circle1 = createMockSVGCircle();
         const circle2 = createMockSVGCircle();
-        service.pointsArray.push('0,0');
-        service.pointsArray.push('1,1');
-        service.jointCircles.push(circle1);
-        service.jointCircles.push(circle2);
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        service[`pointsArray`].push('0,0');
+        service[`pointsArray`].push('1,1');
+        service[`jointCircles`].push(circle1);
+        service[`jointCircles`].push(circle2);
+        service[`currentJointType`] = LINE_JOINT_TYPE.Circle;
 
         const mockBackspace = createKeyBoardEvent(KEYS.Backspace);
 
         service.onKeyDown(mockBackspace);
 
-        expect(service.jointCircles).not.toContain(circle2);
+        expect(service[`jointCircles`]).not.toContain(circle2);
     });
 
     it('shouldCloseLine should be true when onKeyUp with shift', () => {
         const mockShift = createKeyBoardEvent(KEYS.Shift);
-        service.shouldCloseLine = true;
+        service[`shouldCloseLine`] = true;
 
         service.onKeyUp(mockShift);
 
-        expect(service.shouldCloseLine).toBeFalsy();
+        expect(service[`shouldCloseLine`]).toBeFalsy();
     });
 
     it('should push to the drawStack the gWrap when onDblClick if isDrawing', () => {
-        service.isDrawing = true;
+        service[`isDrawing`] = true;
         const spyOnDrawStackPush = spyOn(drawStackMock, 'push');
 
         service.onDblClick(mockLeftButton);
@@ -232,13 +232,13 @@ describe('LineToolService', () => {
     });
 
     it('should vall pointsArray.push when onDblClick if isDrawing and shouldCloseLine and pointsArray.length > 3', () => {
-        service.isDrawing = true;
-        service.shouldCloseLine = true;
-        service.pointsArray.push('0,0');
-        service.pointsArray.push('1,1');
-        service.pointsArray.push('2,2');
-        service.pointsArray.push('3,3');
-        const spyOnPointsArrayPush = spyOn(service.pointsArray, 'push');
+        service[`isDrawing`] = true;
+        service[`shouldCloseLine`] = true;
+        service[`pointsArray`].push('0,0');
+        service[`pointsArray`].push('1,1');
+        service[`pointsArray`].push('2,2');
+        service[`pointsArray`].push('3,3');
+        const spyOnPointsArrayPush = spyOn(service[`pointsArray`], 'push');
 
         service.onDblClick(mockLeftButton);
 
@@ -246,40 +246,40 @@ describe('LineToolService', () => {
     });
 
     // tslint:disable-next-line: max-line-length
-    it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is Dotted_line', () => {
-        service.currentStrokeType = LINE_STROKE_TYPE.Dotted_line;
-        service.currentJointType = LINE_JOINT_TYPE.Straight;
+    it('should call renderer.setAttribute with currentLine, stroke-dasharray, currentStrokeWidth when startLine if LineStroke is DottedLine', () => {
+        service[`currentStrokeType`] = LINE_STROKE_TYPE.DottedLine;
+        service[`currentJointType`] = LINE_JOINT_TYPE.Straight;
         const mockCurrentStrokeWidth = 10;
-        service.currentStrokeWidth = mockCurrentStrokeWidth;
+        service[`currentStrokeWidth`] = mockCurrentStrokeWidth;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0, 0);
+        service[`startLine`](0, 0);
 
         // tslint:disable-next-line: max-line-length
         expect(spyOnSetAttribute).toHaveBeenCalledWith(
             MOCK_LINE,
-            'stroke-dasharray',
+            HTML_ATTRIBUTE.StrokeDasharray,
             `${mockCurrentStrokeWidth}, ${mockCurrentStrokeWidth / 2}`,
         );
     });
 
-    it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is Dotted_circle', () => {
-        service.currentStrokeType = LINE_STROKE_TYPE.Dotted_circle;
-        service.currentJointType = LINE_JOINT_TYPE.Straight;
+    it('should call renderer.setAttribute with currentLine, stroke-linecap, round when startLine if LineStroke is DottedCircle', () => {
+        service[`currentStrokeType`] = LINE_STROKE_TYPE.DottedCircle;
+        service[`currentJointType`] = LINE_JOINT_TYPE.Straight;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0, 0);
+        service[`startLine`](0, 0);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linecap', 'round');
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.StrokeLinecap, 'round');
     });
 
     it('should call renderer.setAttribute with currentLine, stroke-linejoin, round when startLine if jointType is Circle', () => {
-        service.currentJointType = LINE_JOINT_TYPE.Circle;
+        service[`currentJointType`] = LINE_JOINT_TYPE.Circle;
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.startLine(0, 0);
+        service[`startLine`](0, 0);
 
-        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'stroke-linejoin', 'round');
+        expect(spyOnSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
     });
 
     it('should call renderer.setAttribute with currentLine, points, arrayToStringLine + currentMousePosition when previewLine', () => {
@@ -287,52 +287,52 @@ describe('LineToolService', () => {
         const y = 10;
         const mousePosition = `${x.toString()},${y.toString()}`;
         const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
-        service.pointsArray.push('0,0');
-        const stringPointsArray = service.arrayToStringLine();
-        service.currentLine = MOCK_LINE;
+        service[`pointsArray`].push('0,0');
+        const stringPointsArray = service[`arrayToStringLine`]();
+        service[`currentLine`] = MOCK_LINE;
 
-        service.previewLine(x, y);
+        service[`previewLine`](x, y);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(
             MOCK_LINE,
-            'points',
+            HTML_ATTRIBUTE.Points,
             `${stringPointsArray} ${mousePosition}`,
         );
     });
 
     it('should call renderer.setAttribute with currentLine, points, arrayToStringLine when appendLine', () => {
         const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
-        service.pointsArray.push('0,0');
-        service.currentLine = MOCK_LINE;
+        service[`pointsArray`].push('0,0');
+        service[`currentLine`] = MOCK_LINE;
 
-        service.appendLine(10, 10);
+        service[`appendLine`](10, 10);
 
-        const stringPointsArray = service.arrayToStringLine();
-        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, 'points', `${stringPointsArray}`);
+        const stringPointsArray = service[`arrayToStringLine`]();
+        expect(spyOnRendererSetAttribute).toHaveBeenCalledWith(MOCK_LINE, HTML_ATTRIBUTE.Points, `${stringPointsArray}`);
     });
 
     it('should call renderer.appendChild when appendCircle', () => {
         const spyOnRendererSetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        service.appendCircle(0, 0);
+        service[`appendCircle`](0, 0);
 
         expect(spyOnRendererSetAttribute).toHaveBeenCalled();
     });
 
     it('should return all points join with space when arrayToString', () => {
-        service.pointsArray.push('0,0');
-        service.pointsArray.push('1,1');
+        service[`pointsArray`].push('0,0');
+        service[`pointsArray`].push('1,1');
         const expectedString = '0,0 1,1';
 
-        const resultString = service.arrayToStringLine();
+        const resultString = service[`arrayToStringLine`]();
 
         expect(resultString).toBe(expectedString);
     });
 
     it('should call renderer.removeChild when cleanUp if !isLineInStack', () => {
-        service.isLineInStack = false;
+        service[`isLineInStack`] = false;
         const spyOnRemoveChild = spyOn(rendererMock, 'removeChild');
-        service.gWrap = createMockSVGGElement();
+        service[`gWrap`] = createMockSVGGElement();
 
         service.cleanUp();
 

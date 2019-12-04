@@ -16,6 +16,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     private primaryColor = '';
     private secondaryColor = '';
     isOnTarget = false;
+    shouldBeNotified = false;
 
     elementRef: ElementRef<SVGElement>;
     renderer: Renderer2;
@@ -37,8 +38,10 @@ export class ColorApplicatorToolService extends AbstractToolService {
         this.drawStack = drawStack;
 
         this.drawStack.currentStackTarget.subscribe((stackTarget) => {
-            this.currentStackTarget = stackTarget;
-            this.isOnTarget = true;
+            if (this.shouldBeNotified) {
+                this.currentStackTarget = stackTarget;
+                this.isOnTarget = true;
+            }
         });
     }
 
@@ -52,25 +55,33 @@ export class ColorApplicatorToolService extends AbstractToolService {
         });
     }
 
-    isStackTargetShape(): boolean {
+    isShape(): boolean {
         const isRectangle = this.currentStackTarget.toolName === TOOL_NAME.Rectangle;
         const isEllipsis = this.currentStackTarget.toolName === TOOL_NAME.Ellipsis;
         const isPolygon = this.currentStackTarget.toolName === TOOL_NAME.Polygon;
         return isRectangle || isEllipsis || isPolygon;
     }
 
+    isText(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Text;
+    }
+
+    isBucketFill(): boolean {
+        return this.currentStackTarget.toolName === TOOL_NAME.Fill;
+    }
+
     changeFillColorOnShape(): void {
         if (
             (this.drawStack
                 .getElementByPosition(this.currentStackTarget.targetPosition)
-                .getAttribute('fill') as string) === 'none'
+                .getAttribute(HTML_ATTRIBUTE.Fill) as string) === 'none'
         ) {
             return;
         }
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             this.primaryColor,
         );
 
@@ -80,10 +91,31 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeStrokeColorOnShape(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             this.secondaryColor,
         );
 
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeFillColorOnBucketFill(): void {
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
+            this.currentStackTarget.targetPosition,
+        );
+        if (filledShapeWrap.children[0] && filledShapeWrap.children[0].getAttribute(HTML_ATTRIBUTE.Title) === 'body') {
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.Stroke, this.primaryColor);
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.Fill, this.primaryColor);
+        }
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnBucketFill(): void {
+        const filledShapeWrap: SVGGElement = this.drawStack.getElementByPosition(
+            this.currentStackTarget.targetPosition,
+        );
+        if (filledShapeWrap.children[2] && filledShapeWrap.children[2].getAttribute(HTML_ATTRIBUTE.Title) === HTML_ATTRIBUTE.Stroke) {
+            this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.Stroke, this.secondaryColor);
+        }
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
@@ -93,22 +125,40 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             color,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             color,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.opacity,
+            HTML_ATTRIBUTE.Opacity,
             opacity,
         );
 
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeFillColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.Fill,
+            this.primaryColor,
+        );
+        this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
+    }
+
+    changeStrokeColorOnText(): void {
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
+            HTML_ATTRIBUTE.Stroke,
+            this.secondaryColor,
+        );
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 
@@ -125,15 +175,23 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         switch (button) {
             case MOUSE.LeftButton:
-                if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeFillColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeFillColorOnShape();
+                } else if (this.isText()) {
+                    this.changeFillColorOnText();
                 } else {
                     this.changeColorOnTrace();
                 }
                 break;
             case MOUSE.RightButton:
-                if (this.isStackTargetShape()) {
+                if (this.isBucketFill()) {
+                    this.changeStrokeColorOnBucketFill();
+                } else if (this.isShape()) {
                     this.changeStrokeColorOnShape();
+                } else if (this.isText()) {
+                    this.changeStrokeColorOnText();
                 }
                 break;
             default:
@@ -141,7 +199,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
         }
         this.isOnTarget = false;
     }
-    // tslint:disable-next-line: no-empty
+
     onMouseUp(event: MouseEvent): void {
         this.isOnTarget = false;
     }
@@ -153,6 +211,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
     onKeyDown(event: KeyboardEvent): void {}
     // tslint:disable-next-line: no-empty
     onKeyUp(event: KeyboardEvent): void {}
-    // tslint:disable-next-line: no-empty
-    cleanUp(): void {}
+
+    cleanUp(): void {
+        this.shouldBeNotified = false;
+    }
 }

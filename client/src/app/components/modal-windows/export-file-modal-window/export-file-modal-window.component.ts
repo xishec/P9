@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { ExportToolService } from 'src/app/services/tools/export-tool/export-tool.service';
-import { FILE_TYPE } from 'src/constants/tool-constants';
+import { FILE_TYPE, SNACKBAR_DURATION } from 'src/constants/tool-constants';
 
 @Component({
     selector: 'app-export-file-modal-window',
@@ -14,8 +14,10 @@ import { FILE_TYPE } from 'src/constants/tool-constants';
 })
 export class ExportFileModalWindowComponent implements OnInit {
     exportFileModalForm: FormGroup;
-    formBuilder: FormBuilder;
+    private formBuilder: FormBuilder;
     workZoneIsEmpty = true;
+    filename = '';
+    selected = 'svg';
 
     readonly FILE_TYPE = FILE_TYPE;
 
@@ -25,20 +27,25 @@ export class ExportFileModalWindowComponent implements OnInit {
         private modalManagerService: ModalManagerService,
         private exportToolService: ExportToolService,
         private drawingLoaderService: DrawingLoaderService,
+        private snackBar: MatSnackBar,
     ) {
         this.formBuilder = formBuilder;
     }
 
     ngOnInit() {
         this.initializeForm();
-        this.drawingLoaderService.emptyDrawStack.subscribe((isEmpty) => {
+        this.drawingLoaderService.untouchedWorkZone.subscribe((isEmpty: boolean) => {
             this.workZoneIsEmpty = isEmpty;
         });
     }
 
     initializeForm(): void {
         this.exportFileModalForm = this.formBuilder.group({
-            fileType: [FILE_TYPE.SVG],
+            fileType: [FILE_TYPE.SVG, Validators.required],
+            filename: [
+                '',
+                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:)$')],
+            ],
         });
     }
 
@@ -48,7 +55,16 @@ export class ExportFileModalWindowComponent implements OnInit {
     }
 
     onSubmit(): void {
-        this.exportToolService.saveFile(this.exportFileModalForm.controls.fileType.value);
+
+        if (this.drawingLoaderService.emptyDrawStack.value) {
+            this.snackBar.open('Sauvegarde échouée...\nAucun dessin dans la zone de travail!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
+            return;
+        }
+        this.exportToolService.saveFile(this.exportFileModalForm.value.fileType, this.exportFileModalForm.value.filename);
+        this.filename = this.exportFileModalForm.controls.filename.value;
         this.closeDialog();
+        return;
     }
 }

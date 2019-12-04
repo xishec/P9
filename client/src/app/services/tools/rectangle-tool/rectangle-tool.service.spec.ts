@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TRACE_TYPE } from 'src/constants/tool-constants';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';
@@ -75,7 +75,7 @@ describe('RectangleToolService', () => {
         rectangleTool = injector.get(RectangleToolService);
         rectangleTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         rectangleTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
-        rectangleTool.drawRectangle = (mockDrawRect as unknown) as SVGRectElement;
+        rectangleTool[`drawRectangle`] = (mockDrawRect as unknown) as SVGRectElement;
 
         spyPreviewRectWidth = spyOnProperty(rectangleTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
@@ -217,16 +217,16 @@ describe('RectangleToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:
@@ -253,16 +253,16 @@ describe('RectangleToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:
@@ -281,14 +281,14 @@ describe('RectangleToolService', () => {
     });
 
     it('should be square when shift is down', () => {
-        const spy = spyOn(rectangleTool, 'updatePreviewSquare');
+        const spy = spyOn<any>(rectangleTool, 'updatePreviewSquare');
 
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
         rectangleTool.onMouseDown(MOUSEDOWN_EVENT);
         rectangleTool.onMouseMove(MOUSEMOVE_EVENT);
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
 
-        expect(rectangleTool.isSquarePreview).toBeTruthy();
+        expect(rectangleTool[`isSquarePreview`]).toBeTruthy();
         expect(rectangleTool.drawRectangleWidth).toEqual(rectangleTool.drawRectangleWidth);
         expect(rectangleTool.drawRectangleHeight).toEqual(rectangleTool.drawRectangleHeight);
         expect(spy).toHaveBeenCalled();
@@ -384,7 +384,7 @@ describe('RectangleToolService', () => {
         rectangleTool.onKeyDown(KEYDOWN_EVENT_SHIFT_KEY);
         rectangleTool.onKeyUp(KEYUP_EVENT_SHIFT_KEY);
 
-        expect(rectangleTool.isSquarePreview).toBeFalsy();
+        expect(rectangleTool[`isSquarePreview`]).toBeFalsy();
     });
 
     it('should cleanup correctly when creating a full rectangle', () => {
@@ -397,7 +397,7 @@ describe('RectangleToolService', () => {
         jasmine.clock().tick(1);
 
         expect(rectangleTool.isPreviewing).toBeFalsy();
-        expect(rectangleTool.isSquarePreview).toBeFalsy();
+        expect(rectangleTool[`isSquarePreview`]).toBeFalsy();
         expect(spyRemove).toHaveBeenCalledTimes(2);
     });
 
@@ -413,19 +413,19 @@ describe('RectangleToolService', () => {
     });
 
     it('should be able to update tracetype', () => {
-        rectangleTool.updateTraceType(TRACE_TYPE.Both);
-        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Both);
+        rectangleTool[`updateTraceType`](TRACE_TYPE.Both);
+        expect(rectangleTool[`traceType`]).toEqual(TRACE_TYPE.Both);
 
-        rectangleTool.updateTraceType(TRACE_TYPE.Full);
-        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Full);
+        rectangleTool[`updateTraceType`](TRACE_TYPE.Full);
+        expect(rectangleTool[`traceType`]).toEqual(TRACE_TYPE.Full);
 
-        rectangleTool.updateTraceType(TRACE_TYPE.Outline);
-        expect(rectangleTool.traceType).toEqual(TRACE_TYPE.Outline);
+        rectangleTool[`updateTraceType`](TRACE_TYPE.Outline);
+        expect(rectangleTool[`traceType`]).toEqual(TRACE_TYPE.Outline);
     });
 
     it('should create SVGRect and cleanUp when left mouse up in work zone with a valid rectangle', () => {
         spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => true);
-        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => true);
+        spyOn<any>(rectangleTool, 'isValidRectangle').and.callFake(() => true);
         const spyOnCreate = spyOn(rectangleTool, 'createSVG');
         const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
 
@@ -437,7 +437,7 @@ describe('RectangleToolService', () => {
 
     it('should only cleanUp when left mouse up out of work zone with a invalid rectangle', () => {
         spyOn(rectangleTool, 'isMouseInRef').and.callFake(() => false);
-        spyOn(rectangleTool, 'isValidRectangle').and.callFake(() => false);
+        spyOn<any>(rectangleTool, 'isValidRectangle').and.callFake(() => false);
         const spyOnCreate = spyOn(rectangleTool, 'createSVG');
         const spyOnCleanUp = spyOn(rectangleTool, 'cleanUp');
 
@@ -481,7 +481,7 @@ describe('RectangleToolService', () => {
         newRectangleTool.userStrokeWidth = 0;
 
         const spy = spyOn(rendererMock, 'setAttribute');
-        rectangleTool.copyPreviewRectangleAttributes();
+        rectangleTool[`copyPreviewRectangleAttributes`]();
         expect(spy).toHaveBeenCalledTimes(4);
     });
 
@@ -519,7 +519,7 @@ describe('RectangleToolService', () => {
         newRectangleTool.userStrokeWidth = 20;
 
         const spy = spyOn(rendererMock, 'setAttribute');
-        rectangleTool.copyPreviewRectangleAttributes();
+        rectangleTool[`copyPreviewRectangleAttributes`]();
         expect(spy).toHaveBeenCalledTimes(4);
     });
 
@@ -530,11 +530,9 @@ describe('RectangleToolService', () => {
         const spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
         const spyOnPush = spyOn(drawStackMock, 'push');
 
-        rectangleTool.userFillColor = RED_COLOR;
+        rectangleTool[`userFillColor`] = RED_COLOR;
         rectangleTool.createSVG();
 
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
         jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();
@@ -550,11 +548,9 @@ describe('RectangleToolService', () => {
         const spyCreateElement = spyOn(rendererMock, 'createElement');
         const spyOnPush = spyOn(drawStackMock, 'push');
 
-        rectangleTool.userFillColor = NONE_COLOR;
+        rectangleTool[`userFillColor`] = NONE_COLOR;
         rectangleTool.createSVG();
 
-        jasmine.clock().tick(1);
-        jasmine.clock().tick(1);
         jasmine.clock().tick(1);
 
         expect(spyOnAppend).toHaveBeenCalled();

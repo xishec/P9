@@ -1,8 +1,10 @@
 import { ElementRef, Injectable } from '@angular/core';
-
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import { Drawing } from 'src/../../common/communication/Drawing';
 import { DrawingState } from 'src/classes/DrawingState';
-import { Drawing } from '../../../../../common/communication/Drawing';
+import { TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawingModalWindowService } from '../drawing-modal-window/drawing-modal-window.service';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
@@ -14,14 +16,14 @@ export class UndoRedoerService {
     undos = new Array<DrawingState>();
     redos = new Array<DrawingState>();
 
-    workzoneRef: ElementRef<SVGElement>;
-    currentDrawingInfos: DrawingInfo;
+    private workzoneRef: ElementRef<SVGElement>;
+    private currentDrawingInfo: DrawingInfo;
 
     fromLoader = false;
 
-    pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
-    duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
-    clipping: BehaviorSubject<Set<SVGElement>> = new BehaviorSubject(new Set<SVGElement>());
+    private pasteOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    private duplicateOffset: BehaviorSubject<number> = new BehaviorSubject(0);
+    private clipping: BehaviorSubject<Set<SVGElement>> = new BehaviorSubject(new Set<SVGElement>());
 
     currentPasteOffset: Observable<number> = this.pasteOffset.asObservable();
     currentDuplicateOffset: Observable<number> = this.duplicateOffset.asObservable();
@@ -35,7 +37,7 @@ export class UndoRedoerService {
     initializeService(workzoneRef: ElementRef<SVGElement>) {
         this.workzoneRef = workzoneRef;
         this.drawingModalWindowService.drawingInfo.subscribe((drawingInfo) => {
-            this.currentDrawingInfos = drawingInfo;
+            this.currentDrawingInfo = drawingInfo;
         });
     }
 
@@ -44,21 +46,47 @@ export class UndoRedoerService {
         this.redos = [];
     }
 
-    createDrawing(idStackArray: string[]): Drawing {
-        const drawing: Drawing = new Drawing(
-            '',
-            [],
-            this.workzoneRef.nativeElement.innerHTML,
-            idStackArray,
-            this.currentDrawingInfos,
-        );
+    private getCleanInnerHTML(): string {
+        const cloneWorkzone = this.workzoneRef.nativeElement.cloneNode(true) as SVGElement;
+
+        const elToRemove = new Array<SVGElement>();
+
+        cloneWorkzone.childNodes.forEach((childNode: ChildNode) => {
+            if ((childNode as SVGElement).getAttribute(HTML_ATTRIBUTE.Title) === TITLE_ELEMENT_TO_REMOVE) {
+                elToRemove.push(childNode as SVGElement);
+            }
+        });
+
+        elToRemove.forEach((el: SVGElement) => {
+            cloneWorkzone.removeChild(el);
+        });
+
+        return cloneWorkzone.innerHTML;
+    }
+
+    private createDrawing(idStackArray: string[]): Drawing {
+        const cleanedInnerHTML = this.getCleanInnerHTML();
+        const drawing: Drawing = {
+            svg: cleanedInnerHTML,
+            drawingInfo: {
+                name: '',
+                labels: [],
+                idStack: idStackArray,
+                height: this.currentDrawingInfo.height,
+                width: this.currentDrawingInfo.width,
+                color: this.currentDrawingInfo.color,
+                createdAt: 0,
+                lastModified: 0,
+            } as DrawingInfo,
+        } as Drawing;
+
         return drawing;
     }
 
     saveStateAndDuplicateOffset(idStackArray: string[], duplicateOffset: number) {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = new DrawingState(currentDrawing);
+        const currentState: DrawingState = { drawing: currentDrawing } as DrawingState;
         currentState.duplicateOffset = duplicateOffset;
 
         this.saveState(currentState);
@@ -67,7 +95,7 @@ export class UndoRedoerService {
     saveStateFromPaste(idStackArray: string[], pasteOffset: number, clippingState: Set<SVGElement>) {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = new DrawingState(currentDrawing);
+        const currentState: DrawingState = { drawing: currentDrawing } as DrawingState;
         currentState.pasteOffset = pasteOffset;
         currentState.clippings = new Set<SVGElement>(clippingState);
 
@@ -77,12 +105,12 @@ export class UndoRedoerService {
     saveCurrentState(idStackArray: string[]): void {
         const currentDrawing = this.createDrawing(idStackArray.slice(0));
 
-        const currentState: DrawingState = new DrawingState(currentDrawing);
+        const currentState: DrawingState = { drawing: currentDrawing } as DrawingState;
 
         this.saveState(currentState);
     }
 
-    saveState(state: DrawingState) {
+    private saveState(state: DrawingState) {
         this.undos.push(state);
         if (this.redos.length > 0) {
             this.redos = [];

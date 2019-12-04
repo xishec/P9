@@ -52,13 +52,13 @@ export class ColorToolService {
 
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case COLOR_TYPE.BackgroundColor:
                 this.backgroundColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.primaryColor:
+            case COLOR_TYPE.PrimaryColor:
                 this.primaryColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.secondaryColor:
+            case COLOR_TYPE.SecondaryColor:
                 this.secondaryColor.next(colorOnFocus);
                 break;
             default:
@@ -76,11 +76,11 @@ export class ColorToolService {
 
     getColorOnFocus(): string {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case COLOR_TYPE.BackgroundColor:
                 return this.backgroundColor.value;
-            case COLOR_TYPE.primaryColor:
+            case COLOR_TYPE.PrimaryColor:
                 return this.primaryColor.value;
-            case COLOR_TYPE.secondaryColor:
+            case COLOR_TYPE.SecondaryColor:
                 return this.secondaryColor.value;
             default:
                 return DEFAULT_WHITE;
@@ -88,17 +88,17 @@ export class ColorToolService {
     }
 
     translateRGBToHex(R: number, G: number, B: number, A?: number): string {
-        const r: string = this.DecimalToHex(R);
-        const g: string = this.DecimalToHex(G);
-        const b: string = this.DecimalToHex(B);
+        const r: string = this.decimalToHex(R);
+        const g: string = this.decimalToHex(G);
+        const b: string = this.decimalToHex(B);
         if (A !== undefined) {
-            const a = this.DecimalToHex(A * 255);
+            const a = this.decimalToHex(A * 255);
             return r + g + b + a;
         }
         return r + g + b;
     }
 
-    DecimalToHex(RGBNumber: number): string {
+    decimalToHex(RGBNumber: number): string {
         let correctedRGBNumber = '';
         if (RGBNumber > MAX_RGB_NUMBER) {
             correctedRGBNumber = 'ff';

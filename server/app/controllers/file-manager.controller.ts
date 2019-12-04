@@ -2,6 +2,8 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { MongoError } from 'mongodb';
 
+import { Drawing } from '../../../common/communication/Drawing';
+import { DrawingInfo } from '../../../common/communication/DrawingInfo';
 import { FileManagerService } from '../services/file-manager.service';
 import Types from '../types';
 
@@ -20,35 +22,32 @@ export class FileManagerController {
         this.router = Router();
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-            this.fileManagerService
-                .getAllDrawings()
-                .then(async (drawings: any) => {
-                    res.json(drawings);
-                })
-                .catch((error: MongoError) => {
-                    throw error;
-                });
+            const drawing = (await this.fileManagerService.getAllDrawingInfos()) as Drawing[];
+            res.json(drawing);
         });
 
         this.router.post('/save', (req: Request, res: Response, next: NextFunction) => {
+            const drawing: Drawing = req.body;
             this.fileManagerService
-                .addDrawing(req.body)
-                .then((drawing: any) => {
-                    res.json(drawing);
+                .addDrawingInfo(drawing)
+                .then((newDrawingInfo: DrawingInfo) => {
+                    drawing.drawingInfo = newDrawingInfo;
                 })
                 .catch((error: MongoError) => {
                     throw error;
                 });
+            res.json(drawing);
         });
 
-        this.router.post('/delete', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.delete('/:id', async (req: Request, res: Response, nex: NextFunction) => {
+            const id: string = req.params.id;
             this.fileManagerService
-                .deleteDrawing(req.body)
-                .then((drawing: any) => {
-                    res.json(drawing);
+                .deleteDrawingInfo(id)
+                .then(() => {
+                    res.json(Number(id));
                 })
                 .catch((error: MongoError) => {
-                    res.json(error);
+                    throw error;
                 });
         });
     }

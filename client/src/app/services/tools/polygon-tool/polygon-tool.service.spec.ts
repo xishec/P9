@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers.spec';
 import { MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PolygonToolService } from './polygon-tool.service';
 
@@ -71,7 +71,7 @@ describe('PolygonToolService', () => {
         polygonTool = injector.get(PolygonToolService);
         polygonTool.initializeService(elementRefMock, rendererMock, drawStackMock);
         polygonTool.previewRectangle = (mockPreviewRect as unknown) as SVGRectElement;
-        polygonTool.drawPolygon = (mockDrawPolygon as unknown) as SVGPolygonElement;
+        polygonTool[`drawPolygon`] = (mockDrawPolygon as unknown) as SVGPolygonElement;
 
         spyPreviewRectWidth = spyOnProperty(polygonTool, 'previewRectangleWidth', 'get').and.callFake(() => {
             return mockPreviewRect.width;
@@ -90,7 +90,7 @@ describe('PolygonToolService', () => {
     it('should make an invalid polygon by setting null attributes when calling makeInvalidPolygon', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute');
 
-        polygonTool.makeInvalidPolygon();
+        polygonTool[`makeInvalidPolygon`]();
 
         expect(spySetAttribute).toHaveBeenCalled();
     });
@@ -100,13 +100,14 @@ describe('PolygonToolService', () => {
             x: number;
             y: number;
         }
-        polygonTool.radius = 5;
+        polygonTool[`radius`] = 5;
         polygonTool.currentMouseCoords.x = 10;
         polygonTool.currentMouseCoords.y = 10;
 
         let vertex: Vertex;
-        vertex = polygonTool.calculateVertex(5);
-        expect(vertex).toEqual({ x: 0.6698729810778055, y: 7.499999999999999 });
+        vertex = polygonTool[`calculateVertex`](5);
+        expect(vertex.x).toEqual(0.6698729810778055);
+        expect(vertex.y).toEqual(7.499999999999999);
     });
 
     it('should not call the renderer when clicking outside of workzone', () => {
@@ -125,7 +126,7 @@ describe('PolygonToolService', () => {
     it('should appendChild when createSVG is called', () => {
         const spyAppendChild = spyOn(rendererMock, 'appendChild');
 
-        polygonTool.createSVG();
+        polygonTool[`createSVG`]();
 
         expect(spyAppendChild).toHaveBeenCalled();
     });
@@ -144,19 +145,19 @@ describe('PolygonToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
-                    case 'points':
+                    case HTML_ATTRIBUTE.Points:
                         el.points = String(value);
                         break;
                     default:
@@ -165,15 +166,15 @@ describe('PolygonToolService', () => {
             },
         );
         spyOn(polygonTool, 'isMouseInRef').and.callFake(() => true);
-        polygonTool.userFillColor = 'none';
+        polygonTool[`userFillColor`] = 'none';
         polygonTool.onMouseEnter(MOUSEENTER_EVENT);
         polygonTool.onMouseDown(MOUSEDOWN_EVENT);
         polygonTool.onMouseMove(MOUSEMOVE_EVENT);
 
         expect(polygonTool.isPreviewing).toBeTruthy();
         expect(spySetAttribute).toHaveBeenCalled();
-        expect(polygonTool.radius * 2).toEqual(polygonTool.previewRectangleWidth);
-        expect(polygonTool.radius * 2).toEqual(polygonTool.previewRectangleHeight);
+        expect(polygonTool[`radius`] * 2).toEqual(polygonTool.previewRectangleWidth);
+        expect(polygonTool[`radius`] * 2).toEqual(polygonTool.previewRectangleHeight);
     });
 
     it('should define drawRectangle and previewRectangle', () => {
@@ -184,14 +185,14 @@ describe('PolygonToolService', () => {
     });
 
     it('should be able to update tracetype', () => {
-        polygonTool.updateTraceType(TRACE_TYPE.Both);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Both);
+        polygonTool[`updateTraceType`](TRACE_TYPE.Both);
+        expect(polygonTool[`traceType`]).toEqual(TRACE_TYPE.Both);
 
-        polygonTool.updateTraceType(TRACE_TYPE.Full);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Full);
+        polygonTool[`updateTraceType`](TRACE_TYPE.Full);
+        expect(polygonTool[`traceType`]).toEqual(TRACE_TYPE.Full);
 
-        polygonTool.updateTraceType(TRACE_TYPE.Outline);
-        expect(polygonTool.traceType).toEqual(TRACE_TYPE.Outline);
+        polygonTool[`updateTraceType`](TRACE_TYPE.Outline);
+        expect(polygonTool[`traceType`]).toEqual(TRACE_TYPE.Outline);
     });
 
     it('should cleanup correctly when creating a polygon', () => {
@@ -213,16 +214,16 @@ describe('PolygonToolService', () => {
         const spySetAttribute = spyOn(rendererMock, 'setAttribute').and.callFake(
             (el: any, name: string, value: string) => {
                 switch (name) {
-                    case 'x':
+                    case HTML_ATTRIBUTE.X:
                         el.x = Number(value);
                         break;
-                    case 'y':
+                    case HTML_ATTRIBUTE.Y:
                         el.y = Number(value);
                         break;
-                    case 'width':
+                    case HTML_ATTRIBUTE.Width:
                         el.width = Number(value);
                         break;
-                    case 'height':
+                    case HTML_ATTRIBUTE.Height:
                         el.height = Number(value);
                         break;
                     default:

@@ -3,8 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
-import { NameAndLabels } from 'src/classes/NameAndLabels';
-import { DEFAULT_WHITE } from 'src/constants/color-constants';
+import { DrawingSavingInfo } from 'src/classes/DrawingSavingInfo';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../drawing-modal-window/drawing-modal-window.service';
@@ -18,6 +17,13 @@ describe('DrawingSaverService', () => {
     let drawStackMock: DrawStackService;
     let drawingLoaderService: DrawingLoaderService;
     let elementRefMock: ElementRef<SVGElement>;
+
+    const TEST_DRAWING_SAVING_INFO: DrawingSavingInfo = {
+            name: 'mona lisa',
+            drawingLabels: ['Italy', 'Louvre', 'Paris'],
+            createdAt: 1000,
+            lastModified: 1500,
+    } as DrawingSavingInfo;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -48,7 +54,16 @@ describe('DrawingSaverService', () => {
                 {
                     provide: DrawingModalWindowService,
                     useValue: {
-                        drawingInfo: new BehaviorSubject(new DrawingInfo(0, 0, DEFAULT_WHITE)),
+                        drawingInfo: new BehaviorSubject({
+                            name: '',
+                            createdAt: 0,
+                            lastModified: 0,
+                            labels: [],
+                            idStack: [],
+                            width: 0,
+                            height: 0,
+                            color: '',
+                        } as DrawingInfo),
                     },
                 },
                 {
@@ -86,38 +101,38 @@ describe('DrawingSaverService', () => {
     });
 
     it('should create and return a url to download drawing file', () => {
-        const url = service.getLocalFileDownloadUrl();
+        const url = service.getLocalFileDownloadUrl(TEST_DRAWING_SAVING_INFO);
 
         expect(url).toEqual('safeString');
     });
 
     it('should display error message if draw stack is empty on sendFileToServer call', () => {
-        const nameAndLabels = new NameAndLabels('name', ['label1', 'label2']);
+        const drawingSavingInfo = { name: 'name', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(true);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
-        expect(service.currentErrorMesaage.value).toEqual('Aucun dessin dans le zone de travail!');
+        expect(service.currentErrorMessage.value).toEqual('Aucun dessin dans la zone de travail!');
     });
 
     it('should post valid name and labels if draw stack is not empty on sendFileToServer call', () => {
         const SPY = spyOn(service, 'postDrawing');
 
-        const nameAndLabels = new NameAndLabels('name', ['label1', 'label2']);
+        const drawingSavingInfo = { name: 'name', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(false);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
-        expect(SPY).toHaveBeenCalledWith(nameAndLabels);
+        expect(SPY).toHaveBeenCalledWith(drawingSavingInfo);
     });
 
     it('should do nothing if draw stack is not empty and name and lables is not valid on sendFileToServer call', () => {
         const SPY = spyOn(service, 'postDrawing');
 
-        const nameAndLabels = new NameAndLabels('', ['label1', 'label2']);
+        const drawingSavingInfo = { name: '', drawingLabels: ['label1', 'label2'] } as DrawingSavingInfo;
         drawingLoaderService.emptyDrawStack.next(false);
 
-        service.sendFileToServer(nameAndLabels);
+        service.sendFileToServer(drawingSavingInfo);
 
         expect(SPY).not.toHaveBeenCalled();
     });

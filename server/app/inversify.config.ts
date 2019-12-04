@@ -3,6 +3,7 @@ import { Container } from 'inversify';
 import { Application } from './app';
 import { FileManagerController } from './controllers/file-manager.controller';
 import { Server } from './server';
+import { CloudService } from './services/cloud.service';
 import { FileManagerService } from './services/file-manager.service';
 import Types from './types';
 
@@ -13,5 +14,6 @@ container.bind(Types.Application).to(Application);
 
 container.bind(Types.FileManagerController).to(FileManagerController);
 container.bind(Types.FileManagerService).to(FileManagerService);
+container.bind(Types.CloudService).to(CloudService);
 
 export { container };
