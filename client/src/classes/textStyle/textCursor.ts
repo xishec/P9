@@ -4,7 +4,7 @@ import { HTML_ATTRIBUTE, TEXT_CURSOR, TEXT_LINEBREAK } from 'src/constants/tool-
 
 export class TextCursor {
     currentCursorIndex = 0;
-    text: string;
+    private text: string;
     constructor(private renderer: Renderer2, textObservable: BehaviorSubject<string>) {
         textObservable.subscribe((text) => {
             this.text = text;

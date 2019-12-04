@@ -74,9 +74,8 @@ describe('ClipboardService', () => {
         service = injector.get(ClipboardService);
         service.initializeService(elementRefMock, rendererMock, drawStackMock, selection);
 
-        spyOnAppendChild = spyOn(service.renderer, 'appendChild').and.returnValue();
-        spyOnRemoveChild = spyOn(service.renderer, 'removeChild').and.returnValue();
-
+        spyOnAppendChild = spyOn(service[`renderer`], 'appendChild').and.returnValue();
+        spyOnRemoveChild = spyOn(service[`renderer`], 'removeChild').and.returnValue();
     });
 
     it('should be created', () => {
@@ -88,21 +87,21 @@ describe('ClipboardService', () => {
 
         mockService.initializeService(elementRefMock, rendererMock, drawStackMock, selection);
 
-        expect(mockService.renderer).toBeTruthy();
-        expect(mockService.drawStack).toBeTruthy();
-        expect(mockService.selection).toBeTruthy();
-        expect(mockService.elementRef).toBeTruthy();
+        expect(mockService[`renderer`]).toBeTruthy();
+        expect(mockService[`drawStack`]).toBeTruthy();
+        expect(mockService[`selection`]).toBeTruthy();
+        expect(mockService[`elementRef`]).toBeTruthy();
     });
 
     it('should add selection to duplicationBuffer and set firstDuplication to true if calling restartDuplication', () => {
-        const spyOnClear = spyOn(service.duplicationBuffer, 'clear');
-        const spyOnAdd = spyOn(service.duplicationBuffer, 'add');
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        const spyOnClear = spyOn(service[`duplicationBuffer`], 'clear');
+        const spyOnAdd = spyOn(service[`duplicationBuffer`], 'add');
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
         service.restartDuplication();
 
         expect(spyOnClear).toHaveBeenCalled();
         expect(spyOnAdd).toHaveBeenCalled();
-        expect(service.firstDuplication).toBeTruthy();
+        expect(service[`firstDuplication`]).toBeTruthy();
     });
 
     it('should clone the selection to workzone and update the selection when calling clone', () => {
@@ -115,11 +114,11 @@ describe('ClipboardService', () => {
         elementsToClone.add((elementToClone as unknown) as SVGGElement);
 
         const spyOnPush = spyOn(drawStackMock, 'push');
-        const spyOnUpdateSelection = spyOn(service, 'updateSelection');
+        const spyOnUpdateSelection = spyOn<any>(service, 'updateSelection');
         const spyOnTranslate = spyOn(manipulator, 'translateElement');
         const spyOnUpdateOrigins = spyOn(manipulator, 'updateOrigins').and.callFake(() => null);
 
-        service.clone(elementsToClone, 0);
+        service[`clone`](elementsToClone, 0);
 
         expect(spyOnAppendChild).toHaveBeenCalled();
         expect(spyOnPush).toHaveBeenCalled();
@@ -132,10 +131,10 @@ describe('ClipboardService', () => {
         const newElements: Set<SVGGElement> = new Set<SVGGElement>();
         newElements.add(TestHelpers.createMockSVGGElement());
 
-        const spyOnEmptySelection = spyOn(service.selection, 'emptySelection');
-        const spyOnAddToSelection = spyOn(service.selection, 'addToSelection');
+        const spyOnEmptySelection = spyOn(service[`selection`], 'emptySelection');
+        const spyOnAddToSelection = spyOn(service[`selection`], 'addToSelection');
 
-        service.updateSelection(newElements);
+        service[`updateSelection`](newElements);
 
         expect(spyOnEmptySelection).toHaveBeenCalled();
         expect(spyOnAddToSelection).toHaveBeenCalled();
@@ -155,15 +154,15 @@ describe('ClipboardService', () => {
             },
         };
 
-        service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
+        service[`selection`].selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
-        spyOn(service.selection.selectionBox, 'getBoundingClientRect').and.returnValue(
+        spyOn(service[`selection`].selectionBox, 'getBoundingClientRect').and.returnValue(
             (mockDOMRect as unknown) as DOMRect,
         );
 
-        service.fetchSelectionBounds();
+        service[`fetchSelectionBounds`]();
 
-        expect(service.clippingsBound).toEqual((mockDOMRect as unknown) as DOMRect);
+        expect(service[`clippingsBound`]).toEqual((mockDOMRect as unknown) as DOMRect);
     });
 
     it('should return true if clippingsBound is inside the workzone when calling isInBounds', () => {
@@ -180,12 +179,12 @@ describe('ClipboardService', () => {
             width: 10,
             height: 10,
         };
-        service.clippingsBound = (mockClippingsBound as unknown) as DOMRect;
-        spyOn(service.elementRef.nativeElement, 'getBoundingClientRect').and.returnValue(
+        service[`clippingsBound`] = (mockClippingsBound as unknown) as DOMRect;
+        spyOn(service[`elementRef`].nativeElement, 'getBoundingClientRect').and.returnValue(
             (mockDOMRect as unknown) as DOMRect,
         );
 
-        const res = service.isInBounds();
+        const res = service[`isInBounds`]();
 
         expect(res).toBeTruthy();
     });
@@ -204,21 +203,21 @@ describe('ClipboardService', () => {
             width: 10,
             height: 10,
         };
-        service.clippingsBound = (mockClippingsBound as unknown) as DOMRect;
-        spyOn(service.elementRef.nativeElement, 'getBoundingClientRect').and.returnValue(
+        service[`clippingsBound`] = (mockClippingsBound as unknown) as DOMRect;
+        spyOn(service[`elementRef`].nativeElement, 'getBoundingClientRect').and.returnValue(
             (mockDOMRect as unknown) as DOMRect,
         );
 
-        const res = service.isInBounds();
+        const res = service[`isInBounds`]();
 
         expect(res).toBeFalsy();
     });
 
     it('should reset the pasteOffsetValue if not in bounds when calling handlePasteOutOfBounds', () => {
-        const spyOnIsInBounds = spyOn(service, 'isInBounds').and.callFake(() => {
+        const spyOnIsInBounds = spyOn<any>(service, 'isInBounds').and.callFake(() => {
             return false;
         });
-        const spyOnFetchSelectionBounds = spyOn(service, 'fetchSelectionBounds');
+        const spyOnFetchSelectionBounds = spyOn<any>(service, 'fetchSelectionBounds');
         const mockDOMRect = {
             x: 0,
             y: 0,
@@ -230,21 +229,21 @@ describe('ClipboardService', () => {
                 return (mockDOMRect as unknown) as DOMRect;
             },
         };
-        service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
+        service[`selection`].selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
-        service.increasePasteOffsetValue();
-        service.handlePasteOutOfBounds();
+        service[`increasePasteOffsetValue`]();
+        service[`handlePasteOutOfBounds`]();
 
         expect(spyOnIsInBounds).toHaveBeenCalled();
         expect(spyOnFetchSelectionBounds).toHaveBeenCalled();
-        expect(service.pasteOffsetValue).toEqual(0);
+        expect(service[`pasteOffsetValue`]).toEqual(0);
     });
 
     it('should not do anything if in bounds when calling handlePasteOutOfBounds', () => {
-        const spyOnIsInBounds = spyOn(service, 'isInBounds').and.callFake(() => {
+        const spyOnIsInBounds = spyOn<any>(service, 'isInBounds').and.callFake(() => {
             return true;
         });
-        const spyOnFetchSelectionBounds = spyOn(service, 'fetchSelectionBounds');
+        const spyOnFetchSelectionBounds = spyOn<any>(service, 'fetchSelectionBounds');
         const mockDOMRect = {
             x: 0,
             y: 0,
@@ -256,21 +255,21 @@ describe('ClipboardService', () => {
                 return (mockDOMRect as unknown) as DOMRect;
             },
         };
-        service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
+        service[`selection`].selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
-        service.increasePasteOffsetValue();
-        service.handlePasteOutOfBounds();
+        service[`increasePasteOffsetValue`]();
+        service[`handlePasteOutOfBounds`]();
 
         expect(spyOnIsInBounds).toHaveBeenCalled();
         expect(spyOnFetchSelectionBounds).toHaveBeenCalled();
-        expect(service.pasteOffsetValue).toEqual(OFFSET_STEP);
+        expect(service[`pasteOffsetValue`]).toEqual(OFFSET_STEP);
     });
 
     it('should reset the duplicateOffsetValue if not in bounds when calling handleDuplicateOutOfBounds', () => {
-        const spyOnIsInBounds = spyOn(service, 'isInBounds').and.callFake(() => {
+        const spyOnIsInBounds = spyOn<any>(service, 'isInBounds').and.callFake(() => {
             return false;
         });
-        const spyOnFetchSelectionBounds = spyOn(service, 'fetchSelectionBounds');
+        const spyOnFetchSelectionBounds = spyOn<any>(service, 'fetchSelectionBounds');
         const mockDOMRect = {
             x: 0,
             y: 0,
@@ -282,21 +281,21 @@ describe('ClipboardService', () => {
                 return (mockDOMRect as unknown) as DOMRect;
             },
         };
-        service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
+        service[`selection`].selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
-        service.increaseDuplicateOffsetValue();
-        service.handleDuplicateOutOfBounds();
+        service[`increaseDuplicateOffsetValue`]();
+        service[`handleDuplicateOutOfBounds`]();
 
         expect(spyOnIsInBounds).toHaveBeenCalled();
         expect(spyOnFetchSelectionBounds).toHaveBeenCalled();
-        expect(service.duplicateOffsetValue).toEqual(0);
+        expect(service[`duplicateOffsetValue`]).toEqual(0);
     });
 
     it('should not do anything if in bounds when calling handleDuplicateOutOfBounds', () => {
-        const spyOnIsInBounds = spyOn(service, 'isInBounds').and.callFake(() => {
+        const spyOnIsInBounds = spyOn<any>(service, 'isInBounds').and.callFake(() => {
             return true;
         });
-        const spyOnFetchSelectionBounds = spyOn(service, 'fetchSelectionBounds');
+        const spyOnFetchSelectionBounds = spyOn<any>(service, 'fetchSelectionBounds');
         const mockDOMRect = {
             x: 0,
             y: 0,
@@ -308,33 +307,37 @@ describe('ClipboardService', () => {
                 return (mockDOMRect as unknown) as DOMRect;
             },
         };
-        service.selection.selectionBox = (mockSVGRect as unknown) as SVGRectElement;
+        service[`selection`].selectionBox = (mockSVGRect as unknown) as SVGRectElement;
 
-        service.increaseDuplicateOffsetValue();
-        service.handleDuplicateOutOfBounds();
+        service[`increaseDuplicateOffsetValue`]();
+        service[`handleDuplicateOutOfBounds`]();
 
         expect(spyOnIsInBounds).toHaveBeenCalled();
         expect(spyOnFetchSelectionBounds).toHaveBeenCalled();
-        expect(service.duplicateOffsetValue).toEqual(OFFSET_STEP);
+        expect(service[`duplicateOffsetValue`]).toEqual(OFFSET_STEP);
     });
 
     it('should increase the pasteOffsetValue of OFFSET_STEP when calling increasePasteOffsetValue', () => {
-        service.increasePasteOffsetValue();
+        service[`increasePasteOffsetValue`]();
 
-        expect(service.pasteOffsetValue).toEqual(OFFSET_STEP);
+        expect(service[`pasteOffsetValue`]).toEqual(OFFSET_STEP);
     });
 
     it('should increase the duplicateOffsetValue of OFFSET_STEP when calling increaseDuplicateOffsetValue', () => {
-        service.increaseDuplicateOffsetValue();
+        service[`increaseDuplicateOffsetValue`]();
 
-        expect(service.duplicateOffsetValue).toEqual(OFFSET_STEP);
+        expect(service[`duplicateOffsetValue`]).toEqual(OFFSET_STEP);
     });
 
     it('should not do anything when no items are selected on duplicate', () => {
-        const spyOnHandleDuplicateOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => true);
-        const spyOnIncreaseDuplicateOffsetValue = spyOn(service, 'increaseDuplicateOffsetValue').and.callFake(() => null);
-        const spyOnClone = spyOn(service, 'clone').and.callFake(() => null);
-        const spyOnSaveState = spyOn(service, 'saveStateFromDuplicate').and.callFake(() => null);
+        const spyOnHandleDuplicateOutOfBounds = spyOn<any>(service, 'handleDuplicateOutOfBounds').and.callFake(
+            () => true,
+        );
+        const spyOnIncreaseDuplicateOffsetValue = spyOn<any>(service, 'increaseDuplicateOffsetValue').and.callFake(
+            () => null,
+        );
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake(() => null);
+        const spyOnSaveState = spyOn<any>(service, 'saveStateFromDuplicate').and.callFake(() => null);
 
         service.duplicate();
 
@@ -345,19 +348,19 @@ describe('ClipboardService', () => {
     });
 
     it('should remove cut elements from workzone, clear the selection and add them to a cleared clippings when calling cut', () => {
-        const spyOnFetch = spyOn(service, 'fetchSelectionBounds').and.callFake(() => null);
-        const spyOnClearClippings = spyOn(service.clippings, 'clear');
-        const spyOnAddClippings = spyOn(service.clippings, 'add');
-        const spyOnClearDuplicationBuffer = spyOn(service.duplicationBuffer, 'clear');
-        const spyOnDeleteDrawStack = spyOn(service.drawStack, 'delete').and.callFake((el: SVGGElement) => null);
-        const spyOnEmptySelection = spyOn(service.selection, 'emptySelection');
+        const spyOnFetch = spyOn<any>(service, 'fetchSelectionBounds').and.callFake(() => null);
+        const spyOnClearClippings = spyOn(service[`clippings`], 'clear');
+        const spyOnAddClippings = spyOn(service[`clippings`], 'add');
+        const spyOnClearDuplicationBuffer = spyOn(service[`duplicationBuffer`], 'clear');
+        const spyOnDeleteDrawStack = spyOn(service[`drawStack`], 'delete').and.callFake((el: SVGGElement) => null);
+        const spyOnEmptySelection = spyOn(service[`selection`], 'emptySelection');
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.cut();
 
-        expect(service.firstDuplication).toBeTruthy();
-        expect(service.pasteOffsetValue).toEqual(0);
+        expect(service[`firstDuplication`]).toBeTruthy();
+        expect(service[`pasteOffsetValue`]).toEqual(0);
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
         expect(spyOnClearClippings).toHaveBeenCalled();
         expect(spyOnFetch).toHaveBeenCalled();
@@ -368,17 +371,17 @@ describe('ClipboardService', () => {
     });
 
     it('should add copied elements to a cleared clippings', () => {
-        const spyOnFetch = spyOn(service, 'fetchSelectionBounds').and.callFake(() => null);
-        const spyOnClearClippings = spyOn(service.clippings, 'clear');
-        const spyOnAddClippings = spyOn(service.clippings, 'add');
-        const spyOnClearDuplicationBuffer = spyOn(service.duplicationBuffer, 'clear');
+        const spyOnFetch = spyOn<any>(service, 'fetchSelectionBounds').and.callFake(() => null);
+        const spyOnClearClippings = spyOn(service[`clippings`], 'clear');
+        const spyOnAddClippings = spyOn(service[`clippings`], 'add');
+        const spyOnClearDuplicationBuffer = spyOn(service[`duplicationBuffer`], 'clear');
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.copy();
 
-        expect(service.firstDuplication).toBeTruthy();
-        expect(service.pasteOffsetValue).toEqual(0);
+        expect(service[`firstDuplication`]).toBeTruthy();
+        expect(service[`pasteOffsetValue`]).toEqual(0);
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
         expect(spyOnClearClippings).toHaveBeenCalled();
         expect(spyOnFetch).toHaveBeenCalled();
@@ -386,12 +389,14 @@ describe('ClipboardService', () => {
     });
 
     it('should call clone and handleDuplicateOutOfBounds when calling duplicate', () => {
-        const spyOnIncreaseDuplicateOffsetValue = spyOn(service, 'increaseDuplicateOffsetValue').and.callFake(() => null);
-        const spyOnSaveState = spyOn(service, 'saveStateFromDuplicate').and.callFake(() => null);
-        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
+        const spyOnIncreaseDuplicateOffsetValue = spyOn<any>(service, 'increaseDuplicateOffsetValue').and.callFake(
+            () => null,
+        );
+        const spyOnSaveState = spyOn<any>(service, 'saveStateFromDuplicate').and.callFake(() => null);
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
 
         expect(spyOnClone).toHaveBeenCalled();
@@ -401,46 +406,46 @@ describe('ClipboardService', () => {
     });
 
     it('should replace duplicationBuffer for selection and only increase duplicateOffsetValue once when first calling duplicate', () => {
-        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
-        const spyOnClearDuplicationBuffer = spyOn(service.duplicationBuffer, 'clear');
-        const spyOnAddDuplicationBuffer = spyOn(service.duplicationBuffer, 'add');
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
+        const spyOnClearDuplicationBuffer = spyOn(service[`duplicationBuffer`], 'clear');
+        const spyOnAddDuplicationBuffer = spyOn(service[`duplicationBuffer`], 'add');
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
         service.duplicate();
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
         expect(spyOnAddDuplicationBuffer).toHaveBeenCalled();
-        expect(service.firstDuplication).toBeFalsy();
-        expect(service.duplicateOffsetValue).toEqual(OFFSET_STEP);
+        expect(service[`firstDuplication`]).toBeFalsy();
+        expect(service[`duplicateOffsetValue`]).toEqual(OFFSET_STEP);
     });
 
     it('should call clone and handleOutOfBounds when calling paste', () => {
-        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
-        service.clippings.add(TestHelpers.createMockSVGElement());
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+        service[`clippings`].add(TestHelpers.createMockSVGElement());
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.paste();
 
         expect(spyOnClone).toHaveBeenCalled();
         expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
-        expect(service.firstDuplication).toBeTruthy();
+        expect(service[`firstDuplication`]).toBeTruthy();
     });
 
     it('should remove selection from workzone, clear the selection and clear duplicationBuffer when calling delete', () => {
-        const spyOnClearDuplicationBuffer = spyOn(service.duplicationBuffer, 'clear');
-        const spyOnDeleteDrawStack = spyOn(service.drawStack, 'delete').and.callFake((el: SVGGElement) => null);
-        const spyOnEmptySelection = spyOn(service.selection, 'emptySelection');
+        const spyOnClearDuplicationBuffer = spyOn(service[`duplicationBuffer`], 'clear');
+        const spyOnDeleteDrawStack = spyOn(service[`drawStack`], 'delete').and.callFake((el: SVGGElement) => null);
+        const spyOnEmptySelection = spyOn(service[`selection`], 'emptySelection');
 
-        service.selection.selectedElements.add(TestHelpers.createMockSVGGElement());
+        service[`selection`].selectedElements.add(TestHelpers.createMockSVGGElement());
 
         service.delete();
 
-        expect(service.firstDuplication).toBeTruthy();
+        expect(service[`firstDuplication`]).toBeTruthy();
         expect(spyOnClearDuplicationBuffer).toHaveBeenCalled();
         expect(spyOnRemoveChild).toHaveBeenCalled();
         expect(spyOnDeleteDrawStack).toHaveBeenCalled();
@@ -450,7 +455,7 @@ describe('ClipboardService', () => {
     it('should notify true when clippings is empty', () => {
         const spy = spyOn(service.isClippingsEmpty, 'next');
 
-        service.notifyClippingsState();
+        service[`notifyClippingsState`]();
 
         expect(spy).toHaveBeenCalledWith(true);
     });
@@ -458,18 +463,18 @@ describe('ClipboardService', () => {
     it('should notify false when clippings is not empty', () => {
         const spy = spyOn(service.isClippingsEmpty, 'next');
 
-        spyOnProperty(service.clippings, 'size', 'get').and.returnValue(10);
-        service.notifyClippingsState();
+        spyOnProperty(service[`clippings`], 'size', 'get').and.returnValue(10);
+        service[`notifyClippingsState`]();
 
         expect(spy).toHaveBeenCalledWith(false);
     });
 
     it('should return if clippings is empty on paste', () => {
-        spyOnProperty(service.clippings, 'size', 'get').and.returnValue(0);
-        const spyOnIncreasePasteOffsetValue = spyOn(service, 'increasePasteOffsetValue').and.callFake(() => null);
-        const spyOnSaveState = spyOn(service, 'saveStateFromPaste').and.callFake(() => null);
-        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+        spyOnProperty(service[`clippings`], 'size', 'get').and.returnValue(0);
+        const spyOnIncreasePasteOffsetValue = spyOn<any>(service, 'increasePasteOffsetValue').and.callFake(() => null);
+        const spyOnSaveState = spyOn<any>(service, 'saveStateFromDuplicate').and.callFake(() => null);
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
 
         service.paste();
 
@@ -480,12 +485,12 @@ describe('ClipboardService', () => {
     });
 
     it('should not increase offset on initial cut on paste', () => {
-        service.clippings.add(TestHelpers.createMockSVGGElement());
-        service.isFromInitialCut = true;
-        const spyOnIncreasePasteOffsetValue = spyOn(service, 'increasePasteOffsetValue').and.callFake(() => null);
-        const spyOnSaveState = spyOn(service, 'saveStateFromPaste').and.callFake(() => null);
-        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+        service[`clippings`].add(TestHelpers.createMockSVGGElement());
+        service[`isFromInitialCut`] = true;
+        const spyOnIncreasePasteOffsetValue = spyOn<any>(service, 'increasePasteOffsetValue').and.callFake(() => null);
+        const spyOnSaveState = spyOn<any>(service, 'saveStateFromPaste').and.callFake(() => null);
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handlePasteOutOfBounds').and.callFake(() => null);
 
         service.paste();
 
@@ -501,7 +506,7 @@ describe('ClipboardService', () => {
 
         const mockClippings2: Set<SVGGElement> = new Set<SVGGElement>();
 
-        const res = service.compareClipings(mockClippings1, mockClippings2);
+        const res = service[`compareClipings`](mockClippings1, mockClippings2);
 
         expect(res).toBeFalsy();
     });
@@ -513,7 +518,7 @@ describe('ClipboardService', () => {
         const mockClippings2: Set<SVGGElement> = new Set<SVGGElement>();
         mockClippings2.add(TestHelpers.createMockSVGGElement());
 
-        const res = service.compareClipings(mockClippings1, mockClippings2);
+        const res = service[`compareClipings`](mockClippings1, mockClippings2);
 
         expect(res).toBeFalsy();
     });
@@ -526,16 +531,16 @@ describe('ClipboardService', () => {
         const mockClippings2: Set<SVGGElement> = new Set<SVGGElement>();
         mockClippings2.add(sameElement);
 
-        const res = service.compareClipings(mockClippings1, mockClippings2);
+        const res = service[`compareClipings`](mockClippings1, mockClippings2);
 
         expect(res).toBeTruthy();
     });
 
     it('should return if selection is empty on delete', () => {
-        spyOnProperty(service.selection.selectedElements, 'size', 'get').and.returnValue(0);
-        const spyOnClear = spyOn(service.duplicationBuffer, 'clear').and.callFake(() => null);
-        const spyOnDelete = spyOn(service.drawStack, 'delete').and.callFake(() => null);
-        const spyOnSelection = spyOn(service.selection, 'emptySelection').and.callFake(() => null);
+        spyOnProperty(service[`selection`].selectedElements, 'size', 'get').and.returnValue(0);
+        const spyOnClear = spyOn(service[`duplicationBuffer`], 'clear').and.callFake(() => null);
+        const spyOnDelete = spyOn(service[`drawStack`], 'delete').and.callFake(() => null);
+        const spyOnSelection = spyOn(service[`selection`], 'emptySelection').and.callFake(() => null);
 
         service.delete();
 

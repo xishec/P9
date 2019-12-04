@@ -94,8 +94,8 @@ describe('FillToolService', () => {
             return false;
         };
         service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(true);
-        service.mouseDown = false;
-        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
+        service[`mouseDown`] = false;
+        const bool = service[`shouldNotFill`](createMouseEvent(0, 0, 21));
         expect(bool).toEqual(true);
     });
     it('should return false on call shouldNotFill', () => {
@@ -103,8 +103,8 @@ describe('FillToolService', () => {
             return true;
         };
         service[`modalManagerService`].modalIsDisplayed = new BehaviorSubject(false);
-        service.mouseDown = true;
-        const bool = service.shouldNotFill(createMouseEvent(0, 0, 21));
+        service[`mouseDown`] = true;
+        const bool = service[`shouldNotFill`](createMouseEvent(0, 0, 21));
         expect(bool).toEqual(false);
     });
 
@@ -122,7 +122,7 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return true;
         };
-        const spy = spyOn(service, 'updateCanvas');
+        const spy = spyOn<any>(service, 'updateCanvas');
         service.onMouseDown(createMouseEvent(0, 0, 21));
 
         expect(spy).toHaveBeenCalled();
@@ -131,34 +131,34 @@ describe('FillToolService', () => {
         service.isMouseInRef = (event: MouseEvent, elementRef: ElementRef): boolean => {
             return false;
         };
-        const spy = spyOn(service, 'updateCanvas');
+        const spy = spyOn<any>(service, 'updateCanvas');
         service.onMouseDown(createMouseEvent(0, 0, 21));
 
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should not call fill onMouseUp', () => {
-        service.shouldNotFill = (event: MouseEvent): boolean => {
+        service[`shouldNotFill`] = (event: MouseEvent): boolean => {
             return true;
         };
-        const spy = spyOn(service, 'fill');
+        const spy = spyOn<any>(service, 'fill');
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).not.toHaveBeenCalled();
     });
     it('should call updateCanvas onMouseUp', () => {
-        service.shouldNotFill = (event: MouseEvent): boolean => {
+        service[`shouldNotFill`] = (event: MouseEvent): boolean => {
             return false;
         };
-        service.updateCanvas = () => null;
-        service.updateMousePosition = () => null;
-        service.createBFSHelper = () => {
-            service.bfsHelper = {} as BFSHelper;
-            service.bfsHelper.computeBFS = () => null;
+        service[`updateCanvas`] = () => null;
+        service[`updateMousePosition`] = () => null;
+        service[`createBFSHelper`] = () => {
+            service[`bfsHelper`] = {} as BFSHelper;
+            service[`bfsHelper`].computeBFS = () => null;
         };
-        service.fill = () => null;
+        service[`fill`] = () => null;
 
-        const spy = spyOn(service, 'fill');
+        const spy = spyOn<any>(service, 'fill');
         service.onMouseUp(createMouseEvent(0, 0, 21));
 
         expect(spy).toHaveBeenCalled();
@@ -170,105 +170,105 @@ describe('FillToolService', () => {
             thickness: new BehaviorSubject(1),
             traceType: new BehaviorSubject(TRACE_TYPE.Both),
         } as AttributesManagerService);
-        service.createBFSHelper();
-        expect(service.bfsHelper).toBeTruthy();
+        service[`createBFSHelper`]();
+        expect(service[`bfsHelper`]).toBeTruthy();
     });
 
     it('should update mouse position on call updateMousePosition', () => {
-        service.currentMouseCoords.x = 0;
-        service.currentMouseCoords.y = 0;
-        service.elementRef.nativeElement = {
+        service[`currentMouseCoords`].x = 0;
+        service[`currentMouseCoords`].y = 0;
+        service[`elementRef`].nativeElement = {
             getBoundingClientRect: () => {
                 return { left: 123, top: 123 } as DOMRect;
             },
         } as SVGElement;
-        service.updateMousePosition(createMouseEvent(10, 10, 21));
+        service[`updateMousePosition`](createMouseEvent(10, 10, 21));
 
-        expect(service.currentMouseCoords.x).not.toEqual(0);
-        expect(service.currentMouseCoords.y).not.toEqual(0);
+        expect(service[`currentMouseCoords`].x).not.toEqual(0);
+        expect(service[`currentMouseCoords`].y).not.toEqual(0);
     });
 
     it('should fillStroke when TRACE_TYPE.Outline on call fill', () => {
-        service.createSVGWrapper = () => null;
-        service.createFillPath = () => '';
-        service.fillStroke = () => null;
-        service.fillBody = () => {
+        service[`createSVGWrapper`] = () => null;
+        service[`createFillPath`] = () => '';
+        service[`fillStroke`] = () => null;
+        service[`fillBody`] = () => {
             return {} as SVGGElement;
         };
-        const spy = spyOn(service, 'fillStroke');
+        const spy = spyOn<any>(service, 'fillStroke');
 
-        service.traceType = TRACE_TYPE.Outline;
-        service.fill();
+        service[`traceType`] = TRACE_TYPE.Outline;
+        service[`fill`]();
 
         expect(spy).toHaveBeenCalled();
     });
     it('should fillBody when TRACE_TYPE.Full on call fill', () => {
-        service.createSVGWrapper = () => null;
-        service.createFillPath = () => '';
-        service.fillStroke = () => null;
-        service.fillBody = () => {
+        service[`createSVGWrapper`] = () => null;
+        service[`createFillPath`] = () => '';
+        service[`fillStroke`] = () => null;
+        service[`fillBody`] = () => {
             return {} as SVGGElement;
         };
-        const spy = spyOn(service, 'fillBody');
+        const spy = spyOn<any>(service, 'fillBody');
 
-        service.traceType = TRACE_TYPE.Full;
-        service.fill();
+        service[`traceType`] = TRACE_TYPE.Full;
+        service[`fill`]();
 
         expect(spy).toHaveBeenCalled();
     });
     it('should fillBody when TRACE_TYPE.Both on call fill', () => {
-        service.createSVGWrapper = () => null;
-        service.createFillPath = () => '';
-        service.fillStroke = () => null;
-        service.fillBody = () => {
+        service[`createSVGWrapper`] = () => null;
+        service[`createFillPath`] = () => '';
+        service[`fillStroke`] = () => null;
+        service[`fillBody`] = () => {
             return {} as SVGGElement;
         };
-        const spy1 = spyOn(service, 'fillBody');
-        const spy2 = spyOn(service, 'fillStroke');
+        const spy1 = spyOn<any>(service, 'fillBody');
+        const spy2 = spyOn<any>(service, 'fillStroke');
 
-        service.traceType = TRACE_TYPE.Both;
-        service.fill();
+        service[`traceType`] = TRACE_TYPE.Both;
+        service[`fill`]();
 
         expect(spy1).toHaveBeenCalled();
         expect(spy2).toHaveBeenCalled();
     });
 
     it('should create SVG Wrapper on call createSVGWrapper', () => {
-        const spy = spyOn(service.renderer, 'setAttribute');
-        service.createSVGWrapper();
+        const spy = spyOn(service[`renderer`], 'setAttribute');
+        service[`createSVGWrapper`]();
         expect(spy).toHaveBeenCalledTimes(1);
     });
 
     it('should update Canvas on call updateCanvas', () => {
         XMLSerializer.prototype.serializeToString = () => 'null';
-        service.elementRef.nativeElement = {
+        service[`elementRef`].nativeElement = {
             getBoundingClientRect: () => {
                 return { width: 1, height: 1 } as ClientRect;
             },
         } as SVGElement;
-        const spy = spyOn(service.renderer, 'setProperty');
-        service.updateCanvas();
+        const spy = spyOn(service[`renderer`], 'setProperty');
+        service[`updateCanvas`]();
         expect(spy).toHaveBeenCalledTimes(3);
     });
 
     it('should create Fill Path on call createFillPath', () => {
         const pixel1 = new Coords2D(0, 1);
         const pixel2 = new Coords2D(0, 2);
-        service.bfsHelper = {} as BFSHelper;
-        service.bfsHelper.pathsToFill = [[pixel1, pixel2]] as Coords2D[][];
+        service[`bfsHelper`] = {} as BFSHelper;
+        service[`bfsHelper`].pathsToFill = [[pixel1, pixel2]] as Coords2D[][];
 
-        expect(service.createFillPath()).toEqual(' M0.5 1.5 L0.5 2.5 z');
+        expect(service[`createFillPath`]()).toEqual(' M0.5 1.5 L0.5 2.5 z');
     });
 
     it('should append Mask on call appendMask', () => {
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.appendMask('', {} as SVGGElement, '');
+        const spy = spyOn(service[`renderer`], 'appendChild');
+        service[`appendMask`]('', {} as SVGGElement, '');
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('should fill Stroke on call fillStroke', () => {
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.fillStroke('', {
+        const spy = spyOn(service[`renderer`], 'appendChild');
+        service[`fillStroke`]('', {
             cloneNode: () => {
                 return {} as Node;
             },
@@ -277,8 +277,8 @@ describe('FillToolService', () => {
     });
 
     it('should fill Body on call fillBody', () => {
-        const spy = spyOn(service.renderer, 'appendChild');
-        service.fillBody('');
+        const spy = spyOn(service[`renderer`], 'appendChild');
+        service[`fillBody`]('');
         expect(spy).toHaveBeenCalledTimes(2);
     });
 });

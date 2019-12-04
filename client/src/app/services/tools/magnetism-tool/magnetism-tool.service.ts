@@ -13,15 +13,16 @@ import { GridToolService } from '../grid-tool/grid-tool.service';
 })
 export class MagnetismToolService {
     currentPoint: CONTROL_POINTS;
-    currentPointPosition: Coords2D;
-    currentGridSize: number;
+
+    private currentPointPosition: Coords2D;
+    private currentGridSize: number;
 
     totalDeltaX = 0;
     totalDeltaY = 0;
-    alignX = 0;
-    alignY = 0;
+    private alignX = 0;
+    private alignY = 0;
 
-    selection: Selection;
+    private selection: Selection;
 
     isMagnetic: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -43,7 +44,7 @@ export class MagnetismToolService {
         this.selection = selection;
     }
 
-    updateControlPointPosition(): void {
+    private updateControlPointPosition(): void {
         if (this.currentPoint === CONTROL_POINTS.CenterMiddle) {
             const selectionBox: SVGRectElement = this.selection.selectionBox;
             const x = selectionBox.x.baseVal.value + selectionBox.width.baseVal.value / 2;
@@ -89,7 +90,7 @@ export class MagnetismToolService {
         return magnetizedCoords;
     }
 
-    magnetizeX(deltaX: number): number {
+    private magnetizeX(deltaX: number): number {
         this.totalDeltaX += deltaX;
 
         if (Math.round(this.alignX) !== 0) {
@@ -112,7 +113,7 @@ export class MagnetismToolService {
         }
     }
 
-    magnetizeY(deltaY: number): number {
+    private magnetizeY(deltaY: number): number {
         this.totalDeltaY += deltaY;
 
         if (Math.round(this.alignY) !== 0) {

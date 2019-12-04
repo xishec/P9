@@ -20,13 +20,13 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class SprayCanToolService extends TracingToolService {
-    radius = SPRAY_DIAMETER.Default;
-    event: MouseEvent;
-    interval: NodeJS.Timer;
-    intervalTime = SPRAY_INTERVAL.Default;
-    sprayer: SVGCircleElement;
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    isSprayerAppended = false;
+    private radius = SPRAY_DIAMETER.Default;
+    private event: MouseEvent;
+    private interval: NodeJS.Timer;
+    private intervalTime = SPRAY_INTERVAL.Default;
+    private sprayer: SVGCircleElement;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private isSprayerAppended = false;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -78,7 +78,7 @@ export class SprayCanToolService extends TracingToolService {
         }
     }
 
-    spray(): void {
+    private spray(): void {
         for (let i = 0; i < CIRCLES_TO_APPEND; ++i) {
             const angle = Math.random() * (2 * Math.PI);
             const radius = Math.random() * this.radius;
@@ -116,7 +116,7 @@ export class SprayCanToolService extends TracingToolService {
         this.setSprayerToMouse(event);
     }
 
-    setSprayerToMouse(event: MouseEvent): void {
+    private setSprayerToMouse(event: MouseEvent): void {
         this.currentMouseCoords.x = this.getXPos(event.clientX);
         this.currentMouseCoords.y = this.getYPos(event.clientY);
 
@@ -128,7 +128,7 @@ export class SprayCanToolService extends TracingToolService {
         }
     }
 
-    appendSprayer(): void {
+    private appendSprayer(): void {
         this.renderer.appendChild(this.elementRef.nativeElement, this.sprayer);
         this.isSprayerAppended = true;
     }
@@ -145,7 +145,7 @@ export class SprayCanToolService extends TracingToolService {
         this.isSprayerAppended = false;
     }
 
-    createSVGWrapper(): void {
+    protected createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
@@ -155,14 +155,14 @@ export class SprayCanToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
-    createSVGPath(): void {
+    protected createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_width, this.currentWidth.toString());
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
-    updateSVGPath(): void {
+    protected updateSVGPath(): void {
         if (this.currentPath.length > MAX_CHARS_IN_PATH) {
             this.currentPath = '';
             this.createSVGPath();

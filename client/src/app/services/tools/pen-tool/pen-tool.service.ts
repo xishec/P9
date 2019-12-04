@@ -10,15 +10,13 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class PenToolService extends TracingToolService {
-    oldTimeStamp = -1;
-    lastMouseX: number;
-    lastMouseY: number;
-    speedX: number;
-    oldSpeedX = 0;
-    oldSpeedY = 0;
-    speedY: number;
-    maxThickness: number;
-    minThickness: number;
+    private oldTimeStamp = -1;
+    private lastMouseX: number;
+    private lastMouseY: number;
+    private speedX: number;
+    private speedY: number;
+    private maxThickness: number;
+    private minThickness: number;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -31,7 +29,7 @@ export class PenToolService extends TracingToolService {
         super.initializeService(elementRef, renderer, drawStack);
     }
 
-    createSVGCircle(x: number, y: number): SVGCircleElement {
+    protected createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle = super.createSVGCircle(x, y);
         return circle;
     }
@@ -57,12 +55,10 @@ export class PenToolService extends TracingToolService {
             this.currentPath = `M${x} ${y}`;
             this.createSVGPath();
         }
-        this.oldSpeedX = this.speedX;
-        this.oldSpeedY = this.speedY;
         return;
     }
 
-    calculateSpeed(e: MouseEvent): void {
+    private calculateSpeed(e: MouseEvent): void {
         if (this.oldTimeStamp === -1) {
             this.speedX = 0;
             this.speedY = 0;

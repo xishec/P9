@@ -13,31 +13,24 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class QuillToolService extends TracingToolService {
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private gWrap: SVGGElement;
 
-    gWrap: SVGGElement;
+    private previousCoords: Coords2D[] = new Array<Coords2D>(2);
+    private currentCoords: Coords2D[] = new Array<Coords2D>(2);
 
-    previousCoords: Coords2D[] = new Array<Coords2D>(2);
-    currentCoords: Coords2D[] = new Array<Coords2D>(2);
+    private preview: SVGLineElement;
+    private previewEnabled = false;
 
-    preview: SVGLineElement;
-    previewEnabled = false;
-
-    offsets: Offset[] = [
+    private offsets: Offset[] = [
         { x: 0, y: 0 },
         { x: 0, y: 0 },
     ];
 
-    thickness = 80;
-    angle = 80;
-    currentMousePosition: Coords2D = new Coords2D(0, 0);
-    counter = 0;
-    isAlterRotation: boolean;
-    isDrawing: boolean;
-
-    attributesManagerService: AttributesManagerService;
+    private thickness = 80;
+    private angle = 80;
+    private currentMousePosition: Coords2D = new Coords2D(0, 0);
+    private counter = 0;
+    private isAlterRotation: boolean;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -102,7 +95,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
-    appendPreview(): void {
+    private appendPreview(): void {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.title, 'element-to-remove');
@@ -111,12 +104,12 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
     }
 
-    removePreview(): void {
+    private removePreview(): void {
         this.previewEnabled = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
     }
 
-    updatePreview() {
+    private updatePreview() {
         this.renderer.setAttribute(this.preview, 'x1', `${this.currentMousePosition.x + this.offsets[0].x}`);
         this.renderer.setAttribute(this.preview, 'y1', `${this.currentMousePosition.y + this.offsets[0].y}`);
         this.renderer.setAttribute(this.preview, 'x2', `${this.currentMousePosition.x + this.offsets[1].x}`);
@@ -152,7 +145,7 @@ export class QuillToolService extends TracingToolService {
         this.previousCoords = this.currentCoords.slice(0);
     }
 
-    takeOneOnTwoPoints(): boolean {
+    private takeOneOnTwoPoints(): boolean {
         this.counter++;
         return this.counter % 2 === 1;
     }
@@ -188,7 +181,7 @@ export class QuillToolService extends TracingToolService {
         this.saveState();
     }
 
-    tracePolygon(): void {
+    private tracePolygon(): void {
         const polygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
 
         const points: string =
@@ -202,7 +195,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.gWrap, polygon);
     }
 
-    computeOffset(): void {
+    private computeOffset(): void {
         this.offsets[0].x = (this.thickness / 2) * Math.sin(this.degreesToRadians(this.angle));
         this.offsets[0].y = (this.thickness / 2) * Math.cos(this.degreesToRadians(this.angle));
 
@@ -210,7 +203,7 @@ export class QuillToolService extends TracingToolService {
         this.offsets[1].y = this.offsets[0].y === 0 ? 0 : -this.offsets[0].y;
     }
 
-    degreesToRadians(degrees: number): number {
+    private degreesToRadians(degrees: number): number {
         return degrees * (Math.PI / 180);
     }
 
