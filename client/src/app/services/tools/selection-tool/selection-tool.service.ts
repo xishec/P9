@@ -4,10 +4,10 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
 import {
+    CURSOR_STYLES,
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
     ROTATION_ANGLE,
-    CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
