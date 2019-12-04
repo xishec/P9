@@ -17,8 +17,8 @@ import { ERASER_SIZE, TOOL_NAME } from 'src/constants/tool-constants';
 export class EraserAttributesComponent implements OnInit {
     toolName = TOOL_NAME.Eraser;
 
-    private eraserAttributesForm: FormGroup;
-    private eraserToolService: EraserToolService;
+    eraserAttributesForm: FormGroup;
+    eraserToolService: EraserToolService;
     readonly eraserSize = ERASER_SIZE;
 
     constructor(
