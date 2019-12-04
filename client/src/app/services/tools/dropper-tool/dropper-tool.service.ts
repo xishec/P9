@@ -2,7 +2,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE } from 'src/constants/constants';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -10,25 +9,21 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class DropperToolService extends AbstractToolService {
-    svg: SVGElement;
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    pixelColor: string;
-    canvas: HTMLCanvasElement;
-    context2D: CanvasRenderingContext2D;
-    SVGImg: HTMLImageElement;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private canvas: HTMLCanvasElement;
+    private context2D: CanvasRenderingContext2D;
+    private SVGImg: HTMLImageElement;
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
 
     constructor(private colorToolService: ColorToolService) {
         super();
     }
 
-    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2) {
         this.elementRef = elementRef;
         this.renderer = renderer;
-        this.drawStack = drawStack;
 
         this.canvas = this.renderer.createElement('canvas');
         this.SVGImg = this.renderer.createElement('img');

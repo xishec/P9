@@ -39,7 +39,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
     abstract onKeyDown(event: KeyboardEvent): void;
     abstract onKeyUp(event: KeyboardEvent): void;
     abstract cleanUp(): void;
-    abstract createSVG(): void;
+    protected abstract createSVG(): void;
 
     get previewRectangleX(): number {
         return this.previewRectangle.x.baseVal.value;
@@ -57,7 +57,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         return this.previewRectangle.height.baseVal.value;
     }
 
-    updatePreviewRectangle(): void {
+    protected updatePreviewRectangle(): void {
         let deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         let deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
 
