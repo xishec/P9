@@ -3,7 +3,6 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { KEYS } from 'src/constants/constants';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 
@@ -84,11 +83,10 @@ describe('DropperToolService', () => {
         injector = getTestBed();
         service = injector.get(DropperToolService);
         const rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
-        const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
         const elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
 
         colorToolService = injector.get<ColorToolService>(ColorToolService as Type<ColorToolService>);
-        service.initializeService(elementRefMock, rendererMock, drawStackMock);
+        service.initializeService(elementRefMock, rendererMock);
 
         positiveMouseEvent = createMouseEvent(10, 10, 0);
         negativeMouseEvent = createMouseEvent(-10, -10, 0);

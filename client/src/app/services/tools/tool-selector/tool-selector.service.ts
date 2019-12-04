@@ -89,7 +89,7 @@ export class ToolSelectorService {
 
         this.stampTool.initializeService(ref, renderer, drawStack);
 
-        this.dropperTool.initializeService(ref, renderer, drawStack);
+        this.dropperTool.initializeService(ref, renderer);
 
         this.fillTool.initializeService(ref, renderer, drawStack);
 
