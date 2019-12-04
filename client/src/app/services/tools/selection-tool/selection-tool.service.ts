@@ -51,10 +51,23 @@ export class SelectionToolService extends AbstractToolService {
             this.selection.addToSelection(el);
         }
         this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
+    }
+
+    updateCursorStyleOnSelectionBox(): void {
+        if (this.selection.mouseIsInControlPoint(this.currentMouseCoords) || this.selection.isInputOnControlPoint) {
+            return;
+        }
+        if(this.selection.mouseIsInSelectionBox(this.currentMouseCoords)){
+            this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'move');
+        } else {
+            this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
+        }
     }
 
     cleanUp(): void {
         this.selection.cleanUp();
+        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
@@ -249,6 +262,8 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isRightMouseDown && !this.isLeftMouseDown) {
             this.handleRightMouseDrag();
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private handleLeftMouseDown(): void {
@@ -301,6 +316,8 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private handleLeftMouseUp(): void {
@@ -360,6 +377,7 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private saveState() {
@@ -432,5 +450,6 @@ export class SelectionToolService extends AbstractToolService {
             this.clipBoard.restartDuplication();
             this.saveState();
         }
+        this.updateCursorStyleOnSelectionBox();
     }
 }
