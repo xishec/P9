@@ -45,7 +45,7 @@ export class ExportFileModalWindowComponent implements OnInit {
             fileType: [[FILE_TYPE.SVG], Validators.required],
             filename: [
                 '',
-                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:|.txt)$')],
+                [Validators.required, Validators.minLength(1), Validators.pattern('([a-zA-Z0-9s_\\():])+(?:)$')],
             ],
         });
     }
@@ -63,9 +63,6 @@ export class ExportFileModalWindowComponent implements OnInit {
             });
             return;
         }
-        console.log(this.exportFileModalForm.value.fileType);
-        console.log(this.exportFileModalForm.value.filename);
-        
         this.exportToolService.saveFile(this.exportFileModalForm.value.fileType, this.exportFileModalForm.value.filename);
         this.filename = this.exportFileModalForm.controls.filename.value;
         this.closeDialog();
