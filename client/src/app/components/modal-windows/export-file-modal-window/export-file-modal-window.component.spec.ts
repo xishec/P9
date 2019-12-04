@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { ExportFileModalWindowComponent } from './export-file-modal-window.component';
@@ -39,6 +39,12 @@ describe('ExportFileModalWindowComponent', () => {
                             provide: ModalManagerService,
                             useValue: {
                                 setModalIsDisplayed: () => null,
+                            },
+                        },
+                        {
+                            provide: MatSnackBar,
+                            useValue: {
+                                open: () => null,
                             },
                         },
                     ],
