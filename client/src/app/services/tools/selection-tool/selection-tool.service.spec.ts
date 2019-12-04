@@ -53,6 +53,8 @@ describe('SelectionToolService', () => {
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {

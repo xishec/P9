@@ -30,6 +30,7 @@ describe('Selection', () => {
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        listen: () => null,
                     },
                 },
                 {
