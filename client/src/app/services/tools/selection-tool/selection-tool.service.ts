@@ -350,7 +350,7 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         this.selection.isInputOnControlPoint = false;
-        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
+        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', CURSOR_STYLES.Default);
 
         this.isLeftMouseDown = false;
         this.isOnTarget = false;

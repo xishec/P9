@@ -185,7 +185,7 @@ export class WorkZoneComponent implements OnInit {
 
     getCursorStyle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            return { cursor: CURSOR_STYLES.Not_Allowed };
+            return { cursor: CURSOR_STYLES.NotAllowed };
         }
         switch (this.toolName) {
             case TOOL_NAME.Eraser:

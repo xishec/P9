@@ -199,7 +199,7 @@ describe('SelectionToolService', () => {
 
         expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
         expect(spyOnMouseIsInSelectionBox).toHaveBeenCalled();
-        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', 'default');
+        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', CURSOR_STYLES.Default);
     });
 
     it('should update cursor style if mouse is in selection box and is not in control point or not inputIsOnControlPoint', () => {
@@ -212,7 +212,7 @@ describe('SelectionToolService', () => {
 
         expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
         expect(spyOnMouseIsInSelectionBox).toHaveBeenCalled();
-        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', 'move');
+        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', CURSOR_STYLES.Move);
     });
 
     it('should call setAttribute 8 times when calling updateSelectionRectangle', () => {
