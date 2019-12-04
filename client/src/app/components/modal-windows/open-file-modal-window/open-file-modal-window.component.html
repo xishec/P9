@@ -106,7 +106,7 @@
                             type="button"
                             (click)="onDelete()"
                             *ngIf="selectedOption !== ''"
-                            [disabled]="serverFormIsInvalid()"
+                            disabled="{{ this.openFileModalForm.value.selectedDrawing[0] === undefined }}"
                         >
                             Supprimer
                         </button>
@@ -182,15 +182,15 @@
                         </button>
                     </div>
                     <div class="confirmation" [hidden]="emptyDrawStack" [formGroup]="openLocalFileModalForm">
-                            <mat-error class="error-message">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Un dessin existe déja dans votre zone de travail!
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </mat-error>
-                            <mat-checkbox color="warn" formControlName="confirm" required>
-                                Je confirme que je ne veux pas sauvegarder le dessin existant.
-                            </mat-checkbox>
-                        </div>
+                        <mat-error class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Un dessin existe déja dans votre zone de travail!
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </mat-error>
+                        <mat-checkbox color="warn" formControlName="confirm" required>
+                            Je confirme que je ne veux pas sauvegarder le dessin existant.
+                        </mat-checkbox>
+                    </div>
                 </div>
             </mat-dialog-actions>
         </div>
