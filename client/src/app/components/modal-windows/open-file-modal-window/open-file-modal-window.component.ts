@@ -56,7 +56,7 @@ export class OpenFileModalWindowComponent implements OnInit {
             .pipe(
                 filter((subject) => {
                     if (subject === undefined) {
-                        this.snackBar.open('Erreur de chargement! Le serveur n\'est peut-être pas ouvert.', 'OK', {
+                        this.snackBar.open("Erreur de chargement! Le serveur n'est peut-être pas ouvert.", 'OK', {
                             duration: SNACKBAR_DURATION,
                         });
                         this.isLoading = false;
@@ -136,30 +136,68 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     loadLocalFile(): void {
         this.initializeUndoRedoStacks();
+
+        if (!this.fileToLoad) {
+            this.snackBar.open(`Veuillez choisir un fichier valide.`, 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
+            return;
+        }
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }
 
-    getFileToLoad(event: Event): void {
+    getLocalFileToLoad(event: Event): void {
         const reader = new FileReader();
         const target = event.target as HTMLInputElement;
-        const files = target.files as FileList;
-        if (files.length !== 0) {
-            reader.readAsText(files[0]);
-            reader.onload = () => {
-                try {
-                    const localFileContent = JSON.parse(reader.result as string);
-                    this.fileToLoad = localFileContent as Drawing;
-                    this.localFileName = this.fileToLoad.drawingInfo.name;
-                } catch (error) {
-                    this.fileToLoad = null;
-                    this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
-                        duration: SNACKBAR_DURATION,
-                    });
-                }
-            };
+
+        if (target.files && target.files.length) {
+            const file = target.files[0];
+            reader.readAsText(file);
+            reader.onload = this.getLocalFileLoadCallback(file, reader);
         }
+    }
+
+    getLocalFileLoadCallback(file: File, reader: FileReader): () => void {
+        return () => {
+            try {
+                console.log(file);
+                
+                const drawingFromFile = JSON.parse(reader.result as string) as Drawing;
+
+                if (!this.isValidFile(file) || !this.isValidDrawing(drawingFromFile)) {
+                    throw Error('Invalid file');
+                }
+
+                this.fileToLoad = drawingFromFile;
+                this.localFileName = this.fileToLoad.drawingInfo.name;
+            } catch {
+                this.fileToLoad = null;
+                this.localFileName = '';
+                this.snackBar.open("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
+                    duration: SNACKBAR_DURATION,
+                });
+            }
+        };
+    }
+
+    isValidFile(file: File): boolean {
+        return file.type === 'text/plain';
+    }
+
+    isValidDrawing(drawing: Drawing): boolean {
+        return (
+            this.isValidDrawingInfo(drawing.drawingInfo) &&
+            (drawing.svg.indexOf('height') && drawing.svg.indexOf('width')) !== -1
+        );
+    }
+
+    isValidDrawingInfo(drawingInfo: DrawingInfo): boolean {
+        return (
+            (drawingInfo.width && drawingInfo.height) !== 0 &&
+            drawingInfo.color !== undefined &&
+            drawingInfo.idStack.length >= 1
+        );
     }
 
     serverFormIsInvalid(): boolean {
@@ -189,11 +227,11 @@ export class OpenFileModalWindowComponent implements OnInit {
                 this.snackBar.open('Suppression réussie!', 'OK', {
                     duration: SNACKBAR_DURATION,
                 });
-            } else {
-                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK', {
-                    duration: SNACKBAR_DURATION,
-                });
+                return;
             }
+            this.snackBar.open('Erreur de suppression du côté serveur!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
         });
     }
 
@@ -207,6 +245,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     getViewBox(drawingName: string): string {
         const dimensions = this.getDimensions(drawingName);
+
         return `0 0 ${dimensions[0]} ${dimensions[1]}`;
     }
 
@@ -224,6 +263,7 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     getSVG(drawingName: string): string {
         const i: number = this.findIndexByName(drawingName);
+
         return this.drawingsFromServer[i].svg;
     }
 
