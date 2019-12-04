@@ -232,41 +232,39 @@ export class OpenFileModalWindowComponent implements OnInit {
         });
     }
 
-    getDimensions(drawingName: string): number[] {
-        const i: number = this.findIndexByName(drawingName);
+    getDimensions(drawingId: number): number[] {
+        const i: number = this.findIndexByName(drawingId);
         const height: number = this.drawingsFromServer[i].drawingInfo.height;
         const width: number = this.drawingsFromServer[i].drawingInfo.width;
 
         return [width, height];
     }
 
-    getViewBox(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
-
+    getViewBox(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
         return `0 0 ${dimensions[0]} ${dimensions[1]}`;
     }
 
-    getWidth(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
+    getWidth(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
 
         return dimensions[0] > dimensions[1] ? '100%' : '60px';
     }
 
-    getHeight(drawingName: string): string {
-        const dimensions = this.getDimensions(drawingName);
+    getHeight(drawingId: number): string {
+        const dimensions = this.getDimensions(drawingId);
 
         return dimensions[0] < dimensions[1] ? '100%' : '60px';
     }
 
-    getSVG(drawingName: string): string {
-        const i: number = this.findIndexByName(drawingName);
-
+    getSVG(drawingId: number): string {
+        const i: number = this.findIndexByName(drawingId);
         return this.drawingsFromServer[i].svg;
     }
 
-    findIndexByName(drawingName: string): number {
+    findIndexByName(drawingId: number): number {
         const drawing: Drawing = this.drawingsFromServer.find((el: Drawing) => {
-            return el.drawingInfo.name === drawingName;
+            return el.drawingInfo.createdAt === drawingId;
         }) as Drawing;
         return this.drawingsFromServer.indexOf(drawing);
     }
