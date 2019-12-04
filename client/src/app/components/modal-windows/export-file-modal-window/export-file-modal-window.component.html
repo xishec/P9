@@ -3,7 +3,7 @@
 <div id="wrapper">
     <mat-dialog-content class="mat-typography" [formGroup]="exportFileModalForm">
         <mat-label id="input-description">
-            Le nom de fichier ne doit pas contenir de '.' ou de '-' et doit être de type .txt
+            Le nom de fichier ne doit pas contenir de caractères spéciaux ('.' ou '-')
         </mat-label>
         <input
             autocomplete="off"
@@ -28,7 +28,7 @@
         </div>
         <mat-label class="file-name-title">Nom du fichier</mat-label>
     </mat-dialog-content>
-    
+
     <mat-dialog-actions align="end">
         <div class="footer">
             <div class="submit-button-group">
