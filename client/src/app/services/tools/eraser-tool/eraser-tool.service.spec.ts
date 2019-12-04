@@ -394,7 +394,6 @@ describe('EraserToolService', () => {
         service[`drawStack`].drawStack[0] = service[`renderer`].createElement('rect', SVG_NS);
         service[`changedElements`].set(0, {} as SVGGElementInfo);
         const spyOnrestoreBorder: jasmine.Spy = spyOn<any>(service, 'restoreBorder');
-        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
         service[`removeBorder`]('0', '');
 
