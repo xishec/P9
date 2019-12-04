@@ -2,7 +2,6 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE } from 'src/constants/constants';
-import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
 
@@ -17,14 +16,12 @@ export class DropperToolService extends AbstractToolService {
 
     private elementRef: ElementRef<SVGElement>;
     private renderer: Renderer2;
-    // @ts-ignore
-    private drawStack: DrawStackService;
 
     constructor(private colorToolService: ColorToolService) {
         super();
     }
 
-    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
+    initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2) {
         this.elementRef = elementRef;
         this.renderer = renderer;
 
