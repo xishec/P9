@@ -16,12 +16,12 @@ import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.serv
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
 import {
+    CURSOR_STYLES,
     GRID_OPACITY,
     GRID_SIZE,
     HTML_ATTRIBUTE,
     SNACKBAR_DURATION,
     TOOL_NAME,
-    CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
