@@ -35,6 +35,7 @@ describe('ClipboardService', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                         listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {

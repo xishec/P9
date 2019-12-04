@@ -5,6 +5,7 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 const CONTROL_POINTS_AMOUNT = 8;
 const CONTROL_POINT_RADIUS = 10;
 const SELECTION_COLOR = '#ff5722';
+const CONTROL_POINT_FILL_COLOR = '#ffffff';
 
 const SELECTION_BOX_CURSOR_STYLES: Map<number, string> = new Map([
     [0, 'nw-resize'],
@@ -289,6 +290,7 @@ enum HTML_ATTRIBUTE {
     fill = 'fill',
     stroke = 'stroke',
     opacity = 'opacity',
+    fill_opacity = 'fill-opacity',
     stroke_width = 'stroke-width',
     x = 'x',
     y = 'y',
@@ -522,6 +524,7 @@ export {
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
     SELECTION_COLOR,
+    CONTROL_POINT_FILL_COLOR,
     CONTROL_POINTS,
     TOP_CONTROL_POINTS,
     CENTER_CONTROL_POINTS,

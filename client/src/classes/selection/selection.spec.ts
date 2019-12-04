@@ -32,6 +32,7 @@ describe('Selection', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                         listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {

@@ -44,6 +44,7 @@ describe('ManipulatorService', () => {
                         appendChild: () => null,
                         removeChild: () => null,
                         listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {

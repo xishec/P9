@@ -7,6 +7,7 @@ import {
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
     SELECTION_COLOR,
+    CONTROL_POINT_FILL_COLOR,
     SELECTION_BOX_CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
@@ -48,14 +49,16 @@ export class Selection {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, '#ffffff');
+        this.renderer.setAttribute(this.selectionBox, 'fill-opacity', '0.1');
+        this.renderer.setStyle(this.selectionBox, 'pointer-events', 'none');
 
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
             this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, CONTROL_POINT_FILL_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
             this.renderer.listen(this.controlPoints[i], 'mouseover', () => {
                 const currentControlPointId = i;

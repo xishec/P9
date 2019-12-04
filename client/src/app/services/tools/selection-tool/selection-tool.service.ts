@@ -54,7 +54,7 @@ export class SelectionToolService extends AbstractToolService {
         this.updateCursorStyleOnSelectionBox();
     }
 
-    updateCursorStyleOnSelectionBox(): void {
+    private updateCursorStyleOnSelectionBox(): void {
         if (this.selection.mouseIsInControlPoint(this.currentMouseCoords) || this.selection.isInputOnControlPoint) {
             return;
         }
