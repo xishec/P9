@@ -16,7 +16,7 @@ import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
 
-fdescribe('OpenFileModalWindowComponent', () => {
+describe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
     let fixture: ComponentFixture<OpenFileModalWindowComponent>;
 
