@@ -135,6 +135,7 @@ export class SprayCanToolService extends TracingToolService {
 
     cleanUp() {
         super.cleanUp();
+        clearInterval(this.interval);
         this.renderer.removeChild(this.elementRef, this.sprayer);
         this.isSprayerAppended = false;
     }
