@@ -467,9 +467,9 @@ describe('ClipboardService', () => {
     it('should return if clippings is empty on paste', () => {
         spyOnProperty(service.clippings, 'size', 'get').and.returnValue(0);
         const spyOnIncreasePasteOffsetValue = spyOn(service, 'increasePasteOffsetValue').and.callFake(() => null);
-        const spyOnSaveState = spyOn(service, 'saveStateFromDuplicate').and.callFake(() => null);
+        const spyOnSaveState = spyOn(service, 'saveStateFromPaste').and.callFake(() => null);
         const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
-        const spyOnHandleOutOfBounds = spyOn(service, 'handleDuplicateOutOfBounds').and.callFake(() => null);
+        const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
 
         service.paste();
 
@@ -477,6 +477,22 @@ describe('ClipboardService', () => {
         expect(spyOnHandleOutOfBounds).not.toHaveBeenCalled();
         expect(spyOnIncreasePasteOffsetValue).not.toHaveBeenCalled();
         expect(spyOnSaveState).not.toHaveBeenCalled();
+    });
+
+    it('should not increase offset on initial cut on paste', () => {
+        service.clippings.add(TestHelpers.createMockSVGGElement());
+        service.isFromInitialCut = true;
+        const spyOnIncreasePasteOffsetValue = spyOn(service, 'increasePasteOffsetValue').and.callFake(() => null);
+        const spyOnSaveState = spyOn(service, 'saveStateFromPaste').and.callFake(() => null);
+        const spyOnClone = spyOn(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+
+        service.paste();
+
+        expect(spyOnClone).toHaveBeenCalled();
+        expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
+        expect(spyOnIncreasePasteOffsetValue).not.toHaveBeenCalled();
+        expect(spyOnSaveState).toHaveBeenCalled();
     });
 
     it('should return false is clippings are different size on compareClippings', () => {
@@ -503,7 +519,6 @@ describe('ClipboardService', () => {
     });
 
     it('should return true is clippings are equal on compareClippings', () => {
-
         const sameElement = TestHelpers.createMockSVGGElement();
         const mockClippings1: Set<SVGGElement> = new Set<SVGGElement>();
         mockClippings1.add(sameElement);

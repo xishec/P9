@@ -24,6 +24,7 @@ export class ClipboardService {
     duplicateOffsetValue = 0;
 
     firstDuplication = true;
+    isFromInitialCut = false;
     isClippingsEmpty: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     clippingsBound: DOMRect;
@@ -156,6 +157,7 @@ export class ClipboardService {
         }
         this.selection.emptySelection();
         this.notifyClippingsState();
+        this.isFromInitialCut = true;
 
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
@@ -202,7 +204,11 @@ export class ClipboardService {
         }
         this.firstDuplication = true;
         this.handlePasteOutOfBounds();
-        this.increasePasteOffsetValue();
+        if(!this.isFromInitialCut){
+            this.increasePasteOffsetValue();
+        } else {
+            this.isFromInitialCut = false;
+        }
         this.clone(this.clippings, this.pasteOffsetValue);
 
         this.saveStateFromPaste();
