@@ -18,6 +18,13 @@ describe('DrawingSaverService', () => {
     let drawingLoaderService: DrawingLoaderService;
     let elementRefMock: ElementRef<SVGElement>;
 
+    const TEST_DRAWING_SAVING_INFO: DrawingSavingInfo = {
+            name: 'mona lisa',
+            drawingLabels: ['Italy', 'Louvre', 'Paris'],
+            createdAt: 1000,
+            lastModified: 1500,
+    } as DrawingSavingInfo;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -94,7 +101,7 @@ describe('DrawingSaverService', () => {
     });
 
     it('should create and return a url to download drawing file', () => {
-        const url = service.getLocalFileDownloadUrl();
+        const url = service.getLocalFileDownloadUrl(TEST_DRAWING_SAVING_INFO);
 
         expect(url).toEqual('safeString');
     });
