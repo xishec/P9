@@ -9,6 +9,7 @@ import {
     HTML_ATTRIBUTE,
     ROTATION_ANGLE,
     SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
 } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
@@ -127,10 +128,10 @@ export class SelectionToolService extends AbstractToolService {
         }
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill_opacity, '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill_opacity, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray);
     }
 
     private getDOMRect(el: SVGGElement): DOMRect {

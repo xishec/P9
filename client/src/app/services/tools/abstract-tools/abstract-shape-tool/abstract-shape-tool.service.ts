@@ -2,7 +2,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { Coords2D } from 'src/classes/Coords2D';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, PREVIEW_RECTANGLE_ATTRIBUTES } from 'src/constants/tool-constants';
 import { SVG_NS, TITLE_ELEMENT_TO_REMOVE } from '../../../../../constants/constants';
 import { AbstractToolService } from '../abstract-tool.service';
 
@@ -81,9 +81,9 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill_opacity, '0.3');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill_opacity, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke_dasharray, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray);
     }
 }

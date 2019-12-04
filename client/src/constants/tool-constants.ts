@@ -36,6 +36,13 @@ const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
     [7, CURSOR_STYLES.W_Resize],
 ]);
 
+enum PREVIEW_RECTANGLE_ATTRIBUTES  {
+    Stroke_Color = 'black',
+    Stroke_Dasharray = '5 5',
+    Fill_Color = '#ffffff',
+    Fill_Opacity = '0.3',
+}
+
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
@@ -562,4 +569,5 @@ export {
     CIRCLES_TO_APPEND,
     SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
     CURSOR_STYLES,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
 };
