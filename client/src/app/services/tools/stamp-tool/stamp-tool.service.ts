@@ -23,7 +23,7 @@ export class StampToolService extends AbstractToolService {
     private currentMouseCoords: Coords2D = new Coords2D(0, 0);
     private stampCoords: Coords2D = new Coords2D(0, 0);
 
-    private angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
+    angle: ROTATION_ANGLE = ROTATION_ANGLE.Default;
     private scaling: STAMP_SCALING = STAMP_SCALING.Default;
 
     private stampLink = NO_STAMP;
