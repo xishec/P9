@@ -127,7 +127,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
 
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill_opacity, '0.3');
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
     }

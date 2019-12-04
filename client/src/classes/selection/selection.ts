@@ -50,7 +50,7 @@ export class Selection {
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, '#ffffff');
-        this.renderer.setAttribute(this.selectionBox, 'fill-opacity', '0.1');
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill_opacity, '0.1');
         this.renderer.setStyle(this.selectionBox, 'pointer-events', 'none');
 
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
