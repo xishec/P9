@@ -3,7 +3,14 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import {
+    CURSOR_STYLES,
+    DEFAULT_RADIX,
+    HTML_ATTRIBUTE,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
+    ROTATION_ANGLE,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+} from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -51,10 +58,23 @@ export class SelectionToolService extends AbstractToolService {
             this.selection.addToSelection(el);
         }
         this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
+    }
+
+    private updateCursorStyleOnSelectionBox(): void {
+        if (this.selection.mouseIsInControlPoint(this.currentMouseCoords) || this.selection.isInputOnControlPoint) {
+            return;
+        }
+        if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords)) {
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Move);
+        } else {
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
+        }
     }
 
     cleanUp(): void {
         this.selection.cleanUp();
+        this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
@@ -93,25 +113,25 @@ export class SelectionToolService extends AbstractToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, (this.initialMouseCoords.x - deltaX).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, this.initialMouseCoords.x.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, (this.initialMouseCoords.y - deltaY).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, this.initialMouseCoords.y.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
-        this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill_opacity, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color);
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray);
     }
 
     private getDOMRect(el: SVGGElement): DOMRect {
@@ -249,6 +269,8 @@ export class SelectionToolService extends AbstractToolService {
         } else if (this.isRightMouseDown && !this.isLeftMouseDown) {
             this.handleRightMouseDrag();
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private handleLeftMouseDown(): void {
@@ -259,6 +281,14 @@ export class SelectionToolService extends AbstractToolService {
         if (this.selection.mouseIsInControlPoint(this.currentMouseCoords)) {
             this.saveOriginalSelectionBoxState();
             this.manipulator.initTransformMatrix(this.selection);
+            this.selection.isInputOnControlPoint = true;
+            this.renderer.setStyle(
+                this.elementRef.nativeElement,
+                HTML_ATTRIBUTE.cursor,
+                SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(
+                    parseInt(this.selection.activeControlPoint.getAttribute('controlPointId') as string, DEFAULT_RADIX),
+                ),
+            );
         }
     }
 
@@ -299,6 +329,8 @@ export class SelectionToolService extends AbstractToolService {
             default:
                 break;
         }
+
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private handleLeftMouseUp(): void {
@@ -316,6 +348,9 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.selection.emptySelection();
         }
+
+        this.selection.isInputOnControlPoint = false;
+        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', CURSOR_STYLES.Default);
 
         this.isLeftMouseDown = false;
         this.isOnTarget = false;
@@ -355,6 +390,7 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         this.manipulator.updateOrigins(this.selection);
+        this.updateCursorStyleOnSelectionBox();
     }
 
     private saveState() {
@@ -427,5 +463,6 @@ export class SelectionToolService extends AbstractToolService {
             this.clipBoard.restartDuplication();
             this.saveState();
         }
+        this.updateCursorStyleOnSelectionBox();
     }
 }
