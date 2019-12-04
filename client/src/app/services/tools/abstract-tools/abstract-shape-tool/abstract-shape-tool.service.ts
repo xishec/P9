@@ -89,21 +89,21 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Fill, PREVIEW_RECTANGLE_ATTRIBUTES.FillColor);
         this.renderer.setAttribute(
             this.previewRectangle,
             HTML_ATTRIBUTE.FillOpacity,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillOpacity,
         );
         this.renderer.setAttribute(
             this.previewRectangle,
             HTML_ATTRIBUTE.Stroke,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeColor,
         );
         this.renderer.setAttribute(
             this.previewRectangle,
             HTML_ATTRIBUTE.StrokeDasharray,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeDasharray,
         );
     }
 }

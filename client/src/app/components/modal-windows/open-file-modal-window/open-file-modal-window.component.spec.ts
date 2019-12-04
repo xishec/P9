@@ -275,7 +275,7 @@ describe('OpenFileModalWindowComponent', () => {
 
         expect(component.fileToLoad).toEqual(null);
         expect(component.localFileName).toEqual('');
-        expect(SPY).toHaveBeenCalledWith('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+        expect(SPY).toHaveBeenCalledWith("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
             duration: SNACKBAR_DURATION,
         });
     });
@@ -362,8 +362,8 @@ describe('OpenFileModalWindowComponent', () => {
     });
 
     it('should correctly return the number of days between two values in milliseconds', () => {
-        const firstValue = 3 * NUMBER_OF_MS.day + 7 * NUMBER_OF_MS.hours;
-        const secondValue = 9 * NUMBER_OF_MS.day + 1 * NUMBER_OF_MS.minutes;
+        const firstValue = 3 * NUMBER_OF_MS.Day + 7 * NUMBER_OF_MS.Hours;
+        const secondValue = 9 * NUMBER_OF_MS.Day + 1 * NUMBER_OF_MS.Minutes;
 
         expect(component.numberOfDaysBetween(firstValue, secondValue)).toEqual(6);
     });
@@ -385,7 +385,7 @@ describe('OpenFileModalWindowComponent', () => {
 
     it('should correctly convert number of ms to days, hours and minutes format', () => {
         const expectedResult = '1 jour, 3 heures et 24 minutes';
-        const numberOfMs = 1 * NUMBER_OF_MS.day + 3 * NUMBER_OF_MS.hours + 24 * NUMBER_OF_MS.minutes;
+        const numberOfMs = 1 * NUMBER_OF_MS.Day + 3 * NUMBER_OF_MS.Hours + 24 * NUMBER_OF_MS.Minutes;
 
         expect(component.msToDaysHoursMinutes(numberOfMs)).toEqual(expectedResult);
     });

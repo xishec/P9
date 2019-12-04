@@ -37,17 +37,17 @@ const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
 ]);
 
 enum PREVIEW_RECTANGLE_ATTRIBUTES {
-    Stroke_Color = 'black',
-    Stroke_Dasharray = '5 5',
-    Fill_Color = '#ffffff',
-    Fill_Opacity = '0.3',
+    StrokeColor = 'black',
+    StrokeDasharray = '5 5',
+    FillColor = '#ffffff',
+    FillOpacity = '0.3',
 }
 
 enum TEXT_PREVIEW_BOX_ATTRIBUTES {
-    Stroke_Color = 'black',
+    StrokeColor = 'black',
     Stroke_Width = '1',
-    Stroke_Dasharray = '5 5',
-    Fill_Color = 'none',
+    StrokeDasharray = '5 5',
+    FillColor = 'none',
 }
 
 const NO_STAMP = '';

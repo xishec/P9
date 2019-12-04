@@ -139,22 +139,22 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(
             this.selectionRectangle,
             HTML_ATTRIBUTE.Fill,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillColor,
         );
         this.renderer.setAttribute(
             this.selectionRectangle,
             HTML_ATTRIBUTE.FillOpacity,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillOpacity,
         );
         this.renderer.setAttribute(
             this.selectionRectangle,
             HTML_ATTRIBUTE.Stroke,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeColor,
         );
         this.renderer.setAttribute(
             this.selectionRectangle,
             HTML_ATTRIBUTE.StrokeDasharray,
-            PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeDasharray,
         );
     }
 

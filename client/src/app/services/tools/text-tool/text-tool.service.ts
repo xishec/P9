@@ -197,10 +197,10 @@ export class TextToolService extends AbstractToolService {
     private initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Color);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeColor);
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeWidth, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Width);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, TEXT_PREVIEW_BOX_ATTRIBUTES.Fill_Color);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Dasharray);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, TEXT_PREVIEW_BOX_ATTRIBUTES.FillColor);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeDasharray);
     }
 
     private createTextBox(x: number, y: number): void {
