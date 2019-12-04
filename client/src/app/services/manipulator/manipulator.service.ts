@@ -29,39 +29,30 @@ export class ManipulatorService {
     scaleSelection(currentMouseCoords: Coords2D, fromControlPoint: SVGCircleElement, selection: Selection): void {
         switch (Number(fromControlPoint.getAttribute('controlPointId') as string)) {
             case CONTROL_POINTS.TopLeft:
-                console.log('top left');
                 this.applyScaleCorner(currentMouseCoords, selection, LEFT, TOP);
                 break;
             case CONTROL_POINTS.TopMiddle:
-                    console.log('top middle');
                 this.applyScaleY(currentMouseCoords, selection, TOP);
                 break;
             case CONTROL_POINTS.TopRight:
-                    console.log('top right');
                 this.applyScaleCorner(currentMouseCoords, selection, RIGHT, TOP);
                 break;
             case CONTROL_POINTS.CenterRight:
-                    console.log('center right');
                 this.applyScaleX(currentMouseCoords, selection, RIGHT);
                 break;
             case CONTROL_POINTS.BottomRight:
-                    console.log('bottom right');
                 this.applyScaleCorner(currentMouseCoords, selection, RIGHT, BOTTOM);
                 break;
             case CONTROL_POINTS.BottomMiddle:
-                    console.log('bottom middle');
                 this.applyScaleY(currentMouseCoords, selection, BOTTOM);
                 break;
             case CONTROL_POINTS.BottomLeft:
-                    console.log('bottom left');
                 this.applyScaleCorner(currentMouseCoords, selection, LEFT, BOTTOM);
                 break;
             case CONTROL_POINTS.CenterLeft:
-                    console.log('center left');
                 this.applyScaleX(currentMouseCoords, selection, LEFT);
                 break;
             default:
-                    console.log('default');
                 break;
         }
     }
