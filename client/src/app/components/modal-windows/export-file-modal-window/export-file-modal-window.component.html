@@ -1,24 +1,50 @@
 <h1 mat-dialog-title>Exporter le dessin</h1>
 
-<mat-dialog-content class="mat-typography"> </mat-dialog-content>
-<form [formGroup]="exportFileModalForm">
-    <div *ngIf="!workZoneIsEmpty">
-        Veuillez choisir le format de l'image à exporter :
-        <mat-form-field>
-            <mat-select formControlName="fileType">
-                <mat-option value="{{ FILE_TYPE.SVG }}">SVG</mat-option>
-                <mat-option value="{{ FILE_TYPE.BMP }}">BMP</mat-option>
-                <mat-option value="{{ FILE_TYPE.JPG }}">JPG</mat-option>
-                <mat-option value="{{ FILE_TYPE.PNG }}">PNG</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-</form>
-<div *ngIf="workZoneIsEmpty">Vous devez tout d'abord créer un dessin pour pouvoir l'exporter ! <br /></div>
-
-<mat-dialog-actions id="footer" align="end">
-    <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">Annuler</button>
-    <button class="actionButton" mat-stroked-button type="submit" (click)="onSubmit()" *ngIf="!workZoneIsEmpty">
-        Exporter
-    </button>
-</mat-dialog-actions>
+<div id="wrapper">
+    <mat-dialog-content class="mat-typography" [formGroup]="exportFileModalForm">
+        <mat-label id="input-description">
+            Le nom de fichier ne doit pas contenir de '.' ou de '-' et doit être de type .txt
+        </mat-label>
+        <input
+            autocomplete="off"
+            matInput
+            class="file-name-input"
+            formControlName="filename"
+            #input
+            placeholder="Nom du fichier"
+        />
+        <div class="file-type-field">
+            <mat-form-field>
+                <mat-label class="file-type-label">
+                    Type de fichier
+                </mat-label>
+                <mat-select [(value)]="selected" formControlName="fileType">
+                    <mat-option value="{{ FILE_TYPE.SVG }}">SVG</mat-option>
+                    <mat-option value="{{ FILE_TYPE.BMP }}">BMP</mat-option>
+                    <mat-option value="{{ FILE_TYPE.JPG }}">JPG</mat-option>
+                    <mat-option value="{{ FILE_TYPE.PNG }}">PNG</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-label class="file-name-title">Nom du fichier</mat-label>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+        <div class="footer">
+            <div class="submit-button-group">
+                <button class="actionButton" mat-stroked-button type="button" (click)="closeDialog()">
+                    Annuler
+                </button>
+                <button
+                    class="actionButton"
+                    mat-stroked-button
+                    type="submit"
+                    [disabled]="exportFileModalForm.controls.filename.invalid"
+                    (click)="onSubmit()"
+                >
+                    Exporter
+                </button>
+            </div>
+        </div>
+    </mat-dialog-actions>
+</div>

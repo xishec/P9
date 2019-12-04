@@ -14,10 +14,14 @@ export class ExportToolService {
     private renderer: Renderer2;
     private img: HTMLImageElement;
     private fileType: FILE_TYPE;
+    private filename: string;
     private canvasToBMP: CanvasToBMP;
 
     private launchDownload(): void {
-        this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.download, 'untitled.' + this.fileType);
+        if (typeof(this.fileType) !== 'string') {
+            this.fileType = FILE_TYPE.SVG;
+        }
+        this.renderer.setAttribute(this.anchor, HTML_ATTRIBUTE.download, `${this.filename}.${this.fileType}`);
         this.anchor.click();
     }
 
@@ -38,8 +42,9 @@ export class ExportToolService {
         this.img = this.renderer.createElement(HTML_ATTRIBUTE.img);
     }
 
-    saveFile(fileType: FILE_TYPE): void {
+    saveFile(fileType: FILE_TYPE, filename: string): void {
         this.fileType = fileType;
+        this.filename = filename;
         this.resizeCanvas();
         this.canvasToBMP = new CanvasToBMP();
         if (this.fileType === FILE_TYPE.SVG) {
