@@ -89,19 +89,19 @@ describe('SprayCanToolService', () => {
     });
 
     it('onMouseDown should set the event to be a left click if the event is left click', () => {
-        service.event = rightMouseEvent;
+        service[`event`] = rightMouseEvent;
 
         service.onMouseDown(leftMouseEvent);
 
-        expect(service.event).toEqual(leftMouseEvent);
+        expect(service[`event`]).toEqual(leftMouseEvent);
     });
 
     it('onMouseDown should not set the event to be a right click if the event is right click', () => {
-        service.event = leftMouseEvent;
+        service[`event`] = leftMouseEvent;
 
         service.onMouseDown(rightMouseEvent);
 
-        expect(service.event).not.toEqual(rightMouseEvent);
+        expect(service[`event`]).not.toEqual(rightMouseEvent);
     });
 
     it('onMouseUp should not call clearInterval if mouse event is not left', () => {
@@ -121,7 +121,7 @@ describe('SprayCanToolService', () => {
     });
 
     it('onMouseMove should call setSprayerToMouse', () => {
-        const spyOnsetSprayerToMouse = spyOn(service, 'setSprayerToMouse');
+        const spyOnsetSprayerToMouse = spyOn<any>(service, 'setSprayerToMouse');
 
         service.onMouseMove(leftMouseEvent);
 
@@ -129,36 +129,36 @@ describe('SprayCanToolService', () => {
     });
 
     it('setSprayerToMouse should call appendSprayer if isSprayerAppended is false', () => {
-        service.isSprayerAppended = false;
-        const spyOnsappendSprayer = spyOn(service, 'appendSprayer');
+        service[`isSprayerAppended`] = false;
+        const spyOnsappendSprayer = spyOn<any>(service, 'appendSprayer');
 
-        service.setSprayerToMouse(leftMouseEvent);
+        service[`setSprayerToMouse`](leftMouseEvent);
 
         expect(spyOnsappendSprayer).toHaveBeenCalled();
     });
 
     it('setSprayerToMouse should not call appendSprayer if isSprayerAppended is true', () => {
-        service.isSprayerAppended = true;
-        const spyOnsappendSprayer = spyOn(service, 'appendSprayer');
+        service[`isSprayerAppended`] = true;
+        const spyOnsappendSprayer = spyOn<any>(service, 'appendSprayer');
 
-        service.setSprayerToMouse(leftMouseEvent);
+        service[`setSprayerToMouse`](leftMouseEvent);
 
         expect(spyOnsappendSprayer).not.toHaveBeenCalled();
     });
 
     it('cleanUp should set isSprayerAppended to false', () => {
-        service.isSprayerAppended = true;
+        service[`isSprayerAppended`] = true;
 
         service.cleanUp();
 
-        expect(service.isSprayerAppended).toEqual(false);
+        expect(service[`isSprayerAppended`]).toEqual(false);
     });
 
     it('onMouseLeave should set isSprayerAppended to false', () => {
-        service.isSprayerAppended = true;
+        service[`isSprayerAppended`] = true;
 
         service.onMouseLeave(leftMouseEvent);
 
-        expect(service.isSprayerAppended).toEqual(false);
+        expect(service[`isSprayerAppended`]).toEqual(false);
     });
 });

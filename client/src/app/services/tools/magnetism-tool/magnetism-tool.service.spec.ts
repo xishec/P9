@@ -13,7 +13,7 @@ import { MagnetismToolService } from './magnetism-tool.service';
 describe('MagnetismToolService', () => {
     let injector: TestBed;
     let service: MagnetismToolService;
-
+    let spyOnupdateControlPointPosition: jasmine.Spy;
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -45,6 +45,7 @@ describe('MagnetismToolService', () => {
 
         injector = getTestBed();
         service = injector.get(MagnetismToolService);
+        spyOnupdateControlPointPosition = spyOn<any>(service, 'updateControlPointPosition');
     });
 
     it('should be created', () => {
@@ -86,7 +87,6 @@ describe('MagnetismToolService', () => {
     });
 
     it('magnetizeXY should change lastControlPoint to the currentPoint', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
         service.currentPoint = 10;
 
         service.magnetizeXY(1, 1);
@@ -95,60 +95,54 @@ describe('MagnetismToolService', () => {
     });
 
     it('magnetizeXY should return a new Coords2D with x and y elements equal to (currentGridSize - remainder)', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
-
-        service.currentGridSize = 10;
-        service.currentPointPosition.x = 9;
-        service.currentPointPosition.y = 9;
+        service[`currentGridSize`] = 10;
+        service[`currentPointPosition`].x = 9;
+        service[`currentPointPosition`].y = 9;
 
         expect(service.magnetizeXY(1, 1)).toEqual(
-            new Coords2D(service.currentGridSize - 9, service.currentGridSize - 9),
+            new Coords2D(service[`currentGridSize`] - 9, service[`currentGridSize`] - 9),
         );
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
     it('magnetizeXY should return a new Coords2D with 0,0 if totalDelta < currentGridSize', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
-        service.currentGridSize = 10;
+        service[`currentGridSize`] = 10;
 
         expect(service.magnetizeXY(1, 1)).toEqual(new Coords2D(0, 0));
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
     it('magnetizeXY should return a new Coords2D with 10,10 if totalDelta >= currentGridSize', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
-        service.currentGridSize = 10;
+        service[`currentGridSize`] = 10;
 
         expect(service.magnetizeXY(10, 10)).toEqual(new Coords2D(10, 10));
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
     it('magnetizeXY should return a new Coords2D with -10,-10 if delta X and Y are -10', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
-        service.currentGridSize = 10;
+        service[`currentGridSize`] = 10;
 
         expect(service.magnetizeXY(-10, -10)).toEqual(new Coords2D(-10, -10));
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
     it('magnetizeXY should change the totalDelta X and Y to grid size - totalDelta', () => {
-        const spyOnupdateControlPointPosition = spyOn(service, 'updateControlPointPosition');
-        service.currentGridSize = 10;
+        service[`currentGridSize`] = 10;
         service.totalDeltaX = 15;
         service.totalDeltaY = 15;
         const tempTotalDeltaX = service.totalDeltaX;
         const tempTotalDeltaY = service.totalDeltaY;
 
-        expect(service.magnetizeXY(0, 0)).toEqual(new Coords2D(service.currentGridSize, service.currentGridSize));
+        expect(service.magnetizeXY(0, 0)).toEqual(new Coords2D(service[`currentGridSize`], service[`currentGridSize`]));
 
-        expect(service.totalDeltaX).toEqual(tempTotalDeltaX - service.currentGridSize);
-        expect(service.totalDeltaY).toEqual(tempTotalDeltaY - service.currentGridSize);
+        expect(service.totalDeltaX).toEqual(tempTotalDeltaX - service[`currentGridSize`]);
+        expect(service.totalDeltaY).toEqual(tempTotalDeltaY - service[`currentGridSize`]);
         expect(spyOnupdateControlPointPosition).toHaveBeenCalled();
     });
 
     it('initializeService should ', () => {
         service.initializeService(createMockSVGElement());
 
-        expect(service.selection).toBeDefined();
+        expect(service[`selection`]).toBeDefined();
     });
 });

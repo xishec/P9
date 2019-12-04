@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { Offset } from 'src/classes/Offset';
 import { KEYS, MOUSE, SVG_NS } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, QUILL_STROKE_WIDTH, ROTATION_ANGLE, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
@@ -13,31 +13,24 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class QuillToolService extends TracingToolService {
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private gWrap: SVGGElement;
 
-    gWrap: SVGGElement;
+    private previousCoords: Coords2D[] = new Array<Coords2D>(2);
+    private currentCoords: Coords2D[] = new Array<Coords2D>(2);
 
-    previousCoords: Coords2D[] = new Array<Coords2D>(2);
-    currentCoords: Coords2D[] = new Array<Coords2D>(2);
+    private preview: SVGLineElement;
+    private previewEnabled = false;
 
-    preview: SVGLineElement;
-    previewEnabled = false;
-
-    offsets: Offset[] = [
+    private offsets: Offset[] = [
         { x: 0, y: 0 },
         { x: 0, y: 0 },
     ];
 
-    thickness = 80;
-    angle = 80;
-    currentMousePosition: Coords2D = new Coords2D(0, 0);
-    counter = 0;
-    isAlterRotation: boolean;
-    isDrawing: boolean;
-
-    attributesManagerService: AttributesManagerService;
+    private thickness = 80;
+    private angle = 80;
+    private currentMousePosition: Coords2D = new Coords2D(0, 0);
+    private counter = 0;
+    private isAlterRotation: boolean;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -98,10 +91,11 @@ export class QuillToolService extends TracingToolService {
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Quill);
         this.renderer.appendChild(this.elementRef.nativeElement, this.gWrap);
     }
 
-    appendPreview(): void {
+    private appendPreview(): void {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.title, 'element-to-remove');
@@ -110,12 +104,12 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
     }
 
-    removePreview(): void {
+    private removePreview(): void {
         this.previewEnabled = false;
         this.renderer.removeChild(this.elementRef.nativeElement, this.preview);
     }
 
-    updatePreview() {
+    private updatePreview() {
         this.renderer.setAttribute(this.preview, 'x1', `${this.currentMousePosition.x + this.offsets[0].x}`);
         this.renderer.setAttribute(this.preview, 'y1', `${this.currentMousePosition.y + this.offsets[0].y}`);
         this.renderer.setAttribute(this.preview, 'x2', `${this.currentMousePosition.x + this.offsets[1].x}`);
@@ -151,15 +145,15 @@ export class QuillToolService extends TracingToolService {
         this.previousCoords = this.currentCoords.slice(0);
     }
 
-    takeOneOnTwoPoints(): boolean {
+    private takeOneOnTwoPoints(): boolean {
         this.counter++;
-        return (this.counter % 2 === 1);
+        return this.counter % 2 === 1;
     }
 
     onWheel(event: WheelEvent): void {
         let val = this.isAlterRotation ? ROTATION_ANGLE.Alter : ROTATION_ANGLE.Base;
-        val = (event.deltaY < 0 ? -val : val);
-        this.angle = ( this.angle + val ) % 360;
+        val = event.deltaY < 0 ? -val : val;
+        this.angle = (this.angle + val) % 360;
 
         this.computeOffset();
         this.updatePreview();
@@ -172,7 +166,7 @@ export class QuillToolService extends TracingToolService {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if ( event.key === KEYS.Alt) {
+        if (event.key === KEYS.Alt) {
             this.isAlterRotation = false;
         }
     }
@@ -187,7 +181,7 @@ export class QuillToolService extends TracingToolService {
         this.saveState();
     }
 
-    tracePolygon(): void {
+    private tracePolygon(): void {
         const polygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
 
         const points: string =
@@ -201,7 +195,7 @@ export class QuillToolService extends TracingToolService {
         this.renderer.appendChild(this.gWrap, polygon);
     }
 
-    computeOffset(): void {
+    private computeOffset(): void {
         this.offsets[0].x = (this.thickness / 2) * Math.sin(this.degreesToRadians(this.angle));
         this.offsets[0].y = (this.thickness / 2) * Math.cos(this.degreesToRadians(this.angle));
 
@@ -209,7 +203,7 @@ export class QuillToolService extends TracingToolService {
         this.offsets[1].y = this.offsets[0].y === 0 ? 0 : -this.offsets[0].y;
     }
 
-    degreesToRadians(degrees: number): number {
+    private degreesToRadians(degrees: number): number {
         return degrees * (Math.PI / 180);
     }
 

@@ -111,16 +111,16 @@ describe('TextToolService', () => {
 
         attServ = injector.get<AttributesManagerService>(AttributesManagerService as Type<AttributesManagerService>);
 
-        service.attributesManagerService = attServ;
+        service[`attributesManagerService`] = attServ;
 
-        service.textBox = createMockSVGTextElement();
+        service[`textBox`] = createMockSVGTextElement();
         leftMouseEvent = createMouseEvent(10, 10, 0);
         rightMouseEvent = createMouseEvent(10, 10, 2);
         enterKeyboardEvent = createKeyBoardEvent(KEYS.Enter);
         backspaceKeyboardEvent = createKeyBoardEvent(KEYS.Backspace);
 
-        spyOnsetAttribute = spyOn(service.renderer, 'setAttribute').and.returnValue();
-        spyOnsetProperty = spyOn(service.renderer, 'setProperty');
+        spyOnsetAttribute = spyOn(service[`renderer`], 'setAttribute').and.returnValue();
+        spyOnsetProperty = spyOn(service[`renderer`], 'setProperty');
     });
 
     it('should be created', () => {
@@ -137,98 +137,98 @@ describe('TextToolService', () => {
     });
 
     it('updateStyle with fill should change the fontColor of fontInfo', () => {
-        service.updateStyle(HTML_ATTRIBUTE.fill, '#' + 'ffffff');
+        service[`updateStyle`](HTML_ATTRIBUTE.fill, '#' + 'ffffff');
 
-        expect(service.fontInfo.fontColor).toEqual('#ffffff');
+        expect(service[`fontInfo`].fontColor).toEqual('#ffffff');
     });
 
     it('updateStyle with font_family should change the fontType', () => {
-        service.updateStyle(HTML_ATTRIBUTE.font_family, 'Times');
+        service[`updateStyle`](HTML_ATTRIBUTE.font_family, 'Times');
 
-        expect(service.fontInfo.fontFamily).toEqual('Times');
+        expect(service[`fontInfo`].fontFamily).toEqual('Times');
     });
 
     it('updateStyle with font_size should change the fontSize', () => {
-        service.updateStyle(HTML_ATTRIBUTE.font_size, '15');
+        service[`updateStyle`](HTML_ATTRIBUTE.font_size, '15');
 
-        expect(service.fontInfo.fontSize).toEqual('15');
+        expect(service[`fontInfo`].fontSize).toEqual('15');
     });
 
     it('updateStyle should call updatePreviewBox if isWriting is true', () => {
-        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.isWriting = true;
+        const spyOnupdatePreviewBox = spyOn<any>(service, 'updatePreviewBox');
+        service[`isWriting`] = true;
 
-        service.updateStyle(HTML_ATTRIBUTE.font_family, 'Times');
+        service[`updateStyle`](HTML_ATTRIBUTE.font_family, 'Times');
 
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
     it('updateAlign middle should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth / 2', () => {
-        service.isWriting = true;
-        service.bBoxAnchorLeft = 2;
-        service.bBoxWidth = 2;
+        service[`isWriting`] = true;
+        service[`bBoxAnchorLeft`] = 2;
+        service[`bBoxWidth`] = 2;
 
-        service.updateAlign(FONT_ALIGN.Middle);
+        service[`updateAlign`](FONT_ALIGN.Middle);
 
-        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth / 2);
+        expect(service[`textBoxXPosition`]).toEqual(service[`bBoxAnchorLeft`] + service[`bBoxWidth`] / 2);
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('updateAlign start should change the textBoxXPosition to bBoxAnchorLeft', () => {
-        service.isWriting = true;
-        service.bBoxAnchorLeft = 2;
+        service[`isWriting`] = true;
+        service[`bBoxAnchorLeft`] = 2;
 
-        service.updateAlign(FONT_ALIGN.Start);
+        service[`updateAlign`](FONT_ALIGN.Start);
 
-        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft);
+        expect(service[`textBoxXPosition`]).toEqual(service[`bBoxAnchorLeft`]);
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('updateAlign end should change the textBoxXPosition to bBoxAnchorLeft + bBoxWidth', () => {
-        service.isWriting = true;
-        service.bBoxAnchorLeft = 2;
-        service.bBoxWidth = 2;
+        service[`isWriting`] = true;
+        service[`bBoxAnchorLeft`] = 2;
+        service[`bBoxWidth`] = 2;
 
-        service.updateAlign(FONT_ALIGN.End);
+        service[`updateAlign`](FONT_ALIGN.End);
 
-        expect(service.textBoxXPosition).toEqual(service.bBoxAnchorLeft + service.bBoxWidth);
+        expect(service[`textBoxXPosition`]).toEqual(service[`bBoxAnchorLeft`] + service[`bBoxWidth`]);
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('updateItalic should change the fontStyle', () => {
-        service.updateItalic(true);
+        service[`updateItalic`](true);
 
-        expect(service.fontInfo.fontStyle).toEqual('italic');
+        expect(service[`fontInfo`].fontStyle).toEqual('italic');
     });
 
     it('updateItalic should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
-        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.isWriting = true;
+        const spyOnupdatePreviewBox = spyOn<any>(service, 'updatePreviewBox');
+        service[`isWriting`] = true;
 
-        service.updateItalic(false);
+        service[`updateItalic`](false);
 
-        expect(service.fontInfo.fontStyle).toEqual('normal');
+        expect(service[`fontInfo`].fontStyle).toEqual('normal');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
     it('updateBold should change the fontStyle', () => {
-        service.updateBold(true);
+        service[`updateBold`](true);
 
-        expect(service.fontInfo.fontWeight).toEqual('bold');
+        expect(service[`fontInfo`].fontWeight).toEqual('bold');
     });
 
     it('updateBold should change the fontStyle and call updatePreviewBox if isWriting is true', () => {
-        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.isWriting = true;
+        const spyOnupdatePreviewBox = spyOn<any>(service, 'updatePreviewBox');
+        service[`isWriting`] = true;
 
-        service.updateBold(false);
+        service[`updateBold`](false);
 
-        expect(service.fontInfo.fontWeight).toEqual('normal');
+        expect(service[`fontInfo`].fontWeight).toEqual('normal');
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });
 
     it('ifClickInTextBox return false if not clicked in textBox', () => {
-        expect(service.ifClickInTextBox(1, 1)).toEqual(false);
+        expect(service[`ifClickInTextBox`](1, 1)).toEqual(false);
     });
 
     it('onMouseMove should return undefined if onMouseMove is not implemented', () => {
@@ -236,61 +236,61 @@ describe('TextToolService', () => {
     });
 
     it('updatePreviewBox should call setAttribute', () => {
-        service.updatePreviewBox();
+        service[`updatePreviewBox`]();
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('initPreviewRect should call setAttribute', () => {
-        service.initPreviewRect();
+        service[`initPreviewRect`]();
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('createTextBox should call setAttribute', () => {
-        service.fontInfo.fontSize = '12';
-        service.createTextBox(3, 3);
+        service[`fontInfo`].fontSize = '12';
+        service[`createTextBox`](3, 3);
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('createNewLine should call setAttribute', () => {
-        service.textBoxXPosition = 1;
+        service[`textBoxXPosition`] = 1;
 
-        service.createNewLine();
+        service[`createNewLine`]();
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
     });
 
     it('createNewLine should call setAttribute and setProperty if tspanStack.length is not zero', () => {
-        service.tspans.push(createMockSVGTSpanElement());
-        service.textBoxXPosition = 1;
+        service[`tspans`].push(createMockSVGTSpanElement());
+        service[`textBoxXPosition`] = 1;
 
-        service.createNewLine();
+        service[`createNewLine`]();
 
         expect(spyOnsetAttribute).toHaveBeenCalled();
         expect(spyOnsetProperty).toHaveBeenCalled();
     });
 
     it('removeLine should call removeChild', () => {
-        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
-        const spyOnfindLinePosition = spyOn(service.textCursor, 'findLinePosition').and.returnValue(1);
-        service.tspans.push(createMockSVGTSpanElement());
-        service.tspans.push(createMockSVGTSpanElement());
-        service.currentLine = createMockSVGTSpanElement();
+        const spyOnremoveChild = spyOn(service[`renderer`], 'removeChild');
+        const spyOnfindLinePosition = spyOn(service[`textCursor`], 'findLinePosition').and.returnValue(1);
+        service[`tspans`].push(createMockSVGTSpanElement());
+        service[`tspans`].push(createMockSVGTSpanElement());
+        service[`currentLine`] = createMockSVGTSpanElement();
 
-        service.removeLine();
+        service[`removeLine`]();
 
         expect(spyOnremoveChild).toHaveBeenCalled();
         expect(spyOnfindLinePosition).toHaveBeenCalled();
     });
 
     it('erase should call removeLine', () => {
-        const spyOnremoveLine = spyOn(service, 'removeLine');
+        const spyOnremoveLine = spyOn<any>(service, 'removeLine');
         service.text = 'test';
-        service.currentLine = createMockSVGTSpanElement();
+        service[`currentLine`] = createMockSVGTSpanElement();
 
-        service.erase();
+        service[`erase`]();
 
         expect(spyOnremoveLine).toHaveBeenCalled();
     });
@@ -298,16 +298,16 @@ describe('TextToolService', () => {
     it('erase should change text', () => {
         service.text = 'test';
 
-        service.erase();
+        service[`erase`]();
 
         expect('test').not.toEqual(service.text);
     });
 
     it('onMouseDown should call updatePreviewBox if isWriting is false and left button is clicked', () => {
-        service.isWriting = false;
-        const spyOnupdatePreviewBox = spyOn(service, 'updatePreviewBox');
-        service.fontInfo.fontSize = '10';
-        spyOn(service, 'createTextBox').withArgs(9, 9);
+        service[`isWriting`] = false;
+        const spyOnupdatePreviewBox = spyOn<any>(service, 'updatePreviewBox');
+        service[`fontInfo`].fontSize = '10';
+        spyOn<any>(service, 'createTextBox').withArgs(9, 9);
 
         service.onMouseDown(leftMouseEvent);
 
@@ -315,8 +315,8 @@ describe('TextToolService', () => {
     });
 
     it('onMouseDown should call cleanUp ifClickInTextBox is false ', () => {
-        service.isWriting = true;
-        const spyOnuifClickInTextBox = spyOn(service, 'ifClickInTextBox').and.returnValue(false);
+        service[`isWriting`] = true;
+        const spyOnuifClickInTextBox = spyOn<any>(service, 'ifClickInTextBox').and.returnValue(false);
         const spyOncleanUp = spyOn(service, 'cleanUp');
 
         service.onMouseDown(rightMouseEvent);
@@ -342,8 +342,8 @@ describe('TextToolService', () => {
     });
 
     it('onKeyDown should call createNewLine if key is enter', () => {
-        service.isWriting = true;
-        service.textBoxXPosition = 2;
+        service[`isWriting`] = true;
+        service[`textBoxXPosition`] = 2;
 
         service.onKeyDown(enterKeyboardEvent);
 
@@ -351,7 +351,7 @@ describe('TextToolService', () => {
     });
 
     it('onKeyDown should stop execution if isWriting is false', () => {
-        service.isWriting = false;
+        service[`isWriting`] = false;
 
         service.onKeyDown(backspaceKeyboardEvent);
 
@@ -359,40 +359,40 @@ describe('TextToolService', () => {
     });
 
     it('moveCursor should call swapToAnotherLine if isAtStartOfLine is true', () => {
-        const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(true);
-        const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
+        const spyOnisAtStartOfLine = spyOn(service[`textCursor`], 'isAtStartOfLine').and.returnValue(true);
+        const spyOnswapToAnotherLine = spyOn(service[`textCursor`], 'swapToAnotherLine');
 
-        service.moveCursor(KEYS.ArrowLeft);
+        service[`moveCursor`](KEYS.ArrowLeft);
 
         expect(spyOnisAtStartOfLine).toHaveBeenCalled();
         expect(spyOnswapToAnotherLine).toHaveBeenCalled();
     });
 
     it('moveCursor should call swapInCurrentLine if isAtStartOfLine is false', () => {
-        const spyOnisAtStartOfLine = spyOn(service.textCursor, 'isAtStartOfLine').and.returnValue(false);
-        const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
+        const spyOnisAtStartOfLine = spyOn(service[`textCursor`], 'isAtStartOfLine').and.returnValue(false);
+        const spyOnswapInCurrentLine = spyOn(service[`textCursor`], 'swapInCurrentLine');
 
-        service.moveCursor(KEYS.ArrowLeft);
+        service[`moveCursor`](KEYS.ArrowLeft);
 
         expect(spyOnisAtStartOfLine).toHaveBeenCalled();
         expect(spyOnswapInCurrentLine).toHaveBeenCalled();
     });
 
     it('moveCursor should call swapToAnotherLine if isAtEndOfLine is true and if key is not ArrowLeft', () => {
-        const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(true);
-        const spyOnswapToAnotherLine = spyOn(service.textCursor, 'swapToAnotherLine');
+        const spyOnisAtEndOfLine = spyOn(service[`textCursor`], 'isAtEndOfLine').and.returnValue(true);
+        const spyOnswapToAnotherLine = spyOn(service[`textCursor`], 'swapToAnotherLine');
 
-        service.moveCursor(KEYS.ArrowRight);
+        service[`moveCursor`](KEYS.ArrowRight);
 
         expect(spyOnisAtEndOfLine).toHaveBeenCalled();
         expect(spyOnswapToAnotherLine).toHaveBeenCalled();
     });
 
     it('moveCursor should call swapInCurrentLine if isAtEndOfLine is false and if key is not ArrowLeft', () => {
-        const spyOnisAtEndOfLine = spyOn(service.textCursor, 'isAtEndOfLine').and.returnValue(false);
-        const spyOnswapInCurrentLine = spyOn(service.textCursor, 'swapInCurrentLine');
+        const spyOnisAtEndOfLine = spyOn(service[`textCursor`], 'isAtEndOfLine').and.returnValue(false);
+        const spyOnswapInCurrentLine = spyOn(service[`textCursor`], 'swapInCurrentLine');
 
-        service.moveCursor(KEYS.ArrowRight);
+        service[`moveCursor`](KEYS.ArrowRight);
 
         expect(spyOnisAtEndOfLine).toHaveBeenCalled();
         expect(spyOnswapInCurrentLine).toHaveBeenCalled();
@@ -401,7 +401,7 @@ describe('TextToolService', () => {
     it('addText should stop execution if the length of the key is longer than 1', () => {
         service.text = 'test';
 
-        service.addText(KEYS.Enter);
+        service[`addText`](KEYS.Enter);
 
         expect(service.text).toEqual('test');
     });
@@ -409,7 +409,7 @@ describe('TextToolService', () => {
     it('addText should change text if the length of the key is equal to 1', () => {
         service.text = 'test';
 
-        service.addText(KEYS.a);
+        service[`addText`](KEYS.a);
 
         expect(service.text.length).toBeGreaterThan('test'.length);
     });
@@ -417,7 +417,7 @@ describe('TextToolService', () => {
     it('openSnackBar should call open on snackBar', () => {
         const spyOnopen = spyOn(service.snackBar, 'open');
 
-        service.openSnackBar();
+        service[`openSnackBar`]();
 
         expect(spyOnopen).toHaveBeenCalled();
     });
@@ -432,9 +432,9 @@ describe('TextToolService', () => {
 
     it('cleanUp should call removeChild on gWrap twice if the last char is the cursor', () => {
         service.text = TEXT_CURSOR;
-        service.tspans.push(createMockSVGTSpanElement());
-        service.gWrap = createMockSVGElement();
-        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+        service[`tspans`].push(createMockSVGTSpanElement());
+        service[`gWrap`] = createMockSVGElement();
+        const spyOnremoveChild = spyOn(service[`renderer`], 'removeChild');
 
         service.cleanUp();
 
@@ -444,9 +444,9 @@ describe('TextToolService', () => {
 
     it('cleanUp should call removeChild on gWrap once if the last char is the cursor', () => {
         service.text = 'test';
-        service.tspans.push(createMockSVGTSpanElement());
-        service.gWrap = createMockSVGElement();
-        const spyOnremoveChild = spyOn(service.renderer, 'removeChild');
+        service[`tspans`].push(createMockSVGTSpanElement());
+        service[`gWrap`] = createMockSVGElement();
+        const spyOnremoveChild = spyOn(service[`renderer`], 'removeChild');
 
         service.cleanUp();
 

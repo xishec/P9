@@ -89,7 +89,7 @@ describe('AbstractShapeToolService', () => {
 
     it('should call setAttribute 8 times when calling updatePreviewRectangle', () => {
         spyOnSetAttribute = spyOn(rendererMock, 'setAttribute');
-        service.updatePreviewRectangle();
+        service[`updatePreviewRectangle`]();
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(8);
     });
 
@@ -119,7 +119,7 @@ describe('AbstractShapeToolService', () => {
                 }
             },
         );
-        service.updatePreviewRectangle();
+        service[`updatePreviewRectangle`]();
         expect(mockRect.width).toBeGreaterThan(0);
         expect(mockRect.height).toBeGreaterThan(0);
     });

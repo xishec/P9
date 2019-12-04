@@ -50,8 +50,8 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with newDrawing tool then displayNewDrawingModal is called', () => {
         const spyOnDisplayNewDrawingModal = spyOn(service, 'displayNewDrawingModal').and.returnValue();
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.NewDrawing,
                 () => {
@@ -68,7 +68,7 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with pencil changeCurrentToolName should be call with pencil', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
         service.changeTool(TOOL_NAME.Pencil);
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(TOOL_NAME.Pencil);
@@ -76,7 +76,7 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with retangle changeCurrentToolName should be call with rectangle', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Rectangle, service[`rectangleTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Rectangle, service[`rectangleTool`]]]);
         service.changeTool(TOOL_NAME.Rectangle);
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(TOOL_NAME.Rectangle);
@@ -84,7 +84,7 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with brush changeCurrentToolName should be call with brush', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Brush, service[`brushTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Brush, service[`brushTool`]]]);
         service.changeTool(TOOL_NAME.Brush);
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(TOOL_NAME.Brush);
@@ -92,7 +92,7 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with colorApplicator changeCurrentToolName should be call with colorApplicator', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
-        service.TOOLS_MAP = new Map([[TOOL_NAME.ColorApplicator, service[`colorApplicatorTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.ColorApplicator, service[`colorApplicatorTool`]]]);
         service.changeTool(TOOL_NAME.ColorApplicator);
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(TOOL_NAME.ColorApplicator);
@@ -100,7 +100,7 @@ describe('ToolSelectorService', () => {
 
     it('when changeTool with tool not implemented yet changeCurrentToolName should be call with his name', () => {
         spyOnChangeCurrentToolName = spyOn(service, 'changeCurrentToolName').and.returnValue();
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Polygon, service[`polygonTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Polygon, service[`polygonTool`]]]);
         service.changeTool(TOOL_NAME.Polygon);
 
         expect(spyOnChangeCurrentToolName).toHaveBeenCalledWith(TOOL_NAME.Polygon);
@@ -162,67 +162,67 @@ describe('ToolSelectorService', () => {
 
     // switch case tests
     it('should change to selection tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Selection, service[`selectionTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Selection, service[`selectionTool`]]]);
         service.changeTool(TOOL_NAME.Selection);
         expect(service.currentTool).toEqual(service[`selectionTool`]);
     });
 
     it('should change to pencil tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
         service.changeTool(TOOL_NAME.Pencil);
         expect(service.currentTool).toEqual(service[`pencilTool`]);
     });
 
     it('should change to pen tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Pen, service[`penTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Pen, service[`penTool`]]]);
         service.changeTool(TOOL_NAME.Pen);
         expect(service.currentTool).toEqual(service[`penTool`]);
     });
 
     it('should change to rectangle tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Rectangle, service[`rectangleTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Rectangle, service[`rectangleTool`]]]);
         service.changeTool(TOOL_NAME.Rectangle);
         expect(service.currentTool).toEqual(service[`rectangleTool`]);
     });
 
     it('should change to ellipsis tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Ellipsis, service[`ellipsisTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Ellipsis, service[`ellipsisTool`]]]);
         service.changeTool(TOOL_NAME.Ellipsis);
         expect(service.currentTool).toEqual(service[`ellipsisTool`]);
     });
 
     it('should change to brush tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Brush, service[`brushTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Brush, service[`brushTool`]]]);
         service.changeTool(TOOL_NAME.Brush);
         expect(service.currentTool).toEqual(service[`brushTool`]);
     });
 
     it('should change to stamp tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Stamp, service[`stampTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Stamp, service[`stampTool`]]]);
         service.changeTool(TOOL_NAME.Stamp);
         expect(service.currentTool).toEqual(service[`stampTool`]);
     });
 
     it('should change to dropper tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Dropper, service[`dropperTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Dropper, service[`dropperTool`]]]);
         service.changeTool(TOOL_NAME.Dropper);
         expect(service.currentTool).toEqual(service[`dropperTool`]);
     });
 
     it('should change to color applicator tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.ColorApplicator, service[`colorApplicatorTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.ColorApplicator, service[`colorApplicatorTool`]]]);
         service.changeTool(TOOL_NAME.ColorApplicator);
         expect(service.currentTool).toEqual(service[`colorApplicatorTool`]);
     });
 
     it('should change to polygon tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Polygon, service[`polygonTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Polygon, service[`polygonTool`]]]);
         service.changeTool(TOOL_NAME.Polygon);
         expect(service.currentTool).toEqual(service[`polygonTool`]);
     });
 
     it('should change to line tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Line, service[`lineTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Line, service[`lineTool`]]]);
         service.changeTool(TOOL_NAME.Line);
         expect(service.currentTool).toEqual(service[`lineTool`]);
     });
@@ -235,8 +235,8 @@ describe('ToolSelectorService', () => {
 
     it('should not change to export tool if modal Is not Displayed', () => {
         const spy = spyOn(service, 'displayExportFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.Export,
                 () => {
@@ -253,8 +253,8 @@ describe('ToolSelectorService', () => {
 
     it('should not change to export tool if modal Is Displayed', () => {
         const spy = spyOn(service, 'displayExportFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.Export,
                 () => {
@@ -270,15 +270,15 @@ describe('ToolSelectorService', () => {
     });
 
     it('should change to eraser tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Eraser, service[`eraserTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Eraser, service[`eraserTool`]]]);
         service.changeTool(TOOL_NAME.Eraser);
         expect(service.currentTool).toEqual(service[`eraserTool`]);
     });
 
     it('should call displaySaveFileModal on change to Save tool if modal Is not Displayed', () => {
         const spy = spyOn(service, 'displaySaveFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.Save,
                 () => {
@@ -294,8 +294,8 @@ describe('ToolSelectorService', () => {
     });
     it('should not call displaySaveFileModal on change to Save tool if modal Is Displayed', () => {
         const spy = spyOn(service, 'displaySaveFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.Save,
                 () => {
@@ -312,8 +312,8 @@ describe('ToolSelectorService', () => {
 
     it('should not call displaySaveFileModal on change to Save tool if not modalIsDisplayed', () => {
         const spy = spyOn(service, 'displaySaveFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.Save,
                 () => {
@@ -330,8 +330,8 @@ describe('ToolSelectorService', () => {
 
     it('should call displayOpenFileModal on change tool if modalIsDisplayed', () => {
         const spy = spyOn(service, 'displayOpenFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.ArtGallery,
                 () => {
@@ -348,8 +348,8 @@ describe('ToolSelectorService', () => {
 
     it('should not call displayOpenFileModal on change to ArtGallery tool if not modalIsDisplayed', () => {
         const spy = spyOn(service, 'displayOpenFileModal');
-        service.TOOLS_MAP = new Map();
-        service.WORKZONE_TOOLS_MAP = new Map([
+        service[`TOOLS_MAP`] = new Map();
+        service[`WORKZONE_TOOLS_MAP`] = new Map([
             [
                 TOOL_NAME.ArtGallery,
                 () => {
@@ -365,7 +365,7 @@ describe('ToolSelectorService', () => {
     });
 
     it('should call cleanUp on changeTool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
         service.currentTool = service.getBrushTool();
         service.currentTool.cleanUp = () => null;
         const spy = spyOn(service.currentTool, 'cleanUp');
@@ -373,7 +373,7 @@ describe('ToolSelectorService', () => {
         expect(spy).toHaveBeenCalled();
     });
     it('should not call cleanUp on changeTool is not current Tool', () => {
-        service.TOOLS_MAP = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
+        service[`TOOLS_MAP`] = new Map([[TOOL_NAME.Pencil, service[`pencilTool`]]]);
         service.currentTool = service.getBrushTool();
         service.currentTool.cleanUp = () => null;
         const spy = spyOn(service.currentTool, 'cleanUp');

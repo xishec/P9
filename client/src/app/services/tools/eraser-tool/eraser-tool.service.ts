@@ -4,7 +4,13 @@ import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { SVGGElementInfo } from 'src/classes/svggelement-info';
 import { DEFAULT_GRAY_0, DEFAULT_RED, DEFAULT_WHITE } from 'src/constants/color-constants';
-import { ELEMENTS_BEFORE_LAST_CIRCLE, MOUSE, SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
+import {
+    ELEMENTS_BEFORE_LAST_CIRCLE,
+    MOUSE,
+    SIDEBAR_WIDTH,
+    SVG_NS,
+    TITLE_ELEMENT_TO_REMOVE,
+} from 'src/constants/constants';
 import {
     ADDITIONAL_BORDER_WIDTH,
     DEFAULT_RADIX,
@@ -23,25 +29,27 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class EraserToolService extends AbstractToolService {
-    eraser: SVGRectElement;
-    attributesManagerService: AttributesManagerService;
-    currentTarget = 0;
-    currentSize = ERASER_SIZE.Default;
-    isOnTarget = false;
-    isLeftMouseDown = false;
-    isEraserAppended = false;
-    lastElementColoredNumber = RESET_POSITION_NUMBER;
-    lastToolName = '';
-    erasedSomething = false;
+    private eraser: SVGRectElement;
+    private textBorder: SVGRectElement;
+    private attributesManagerService: AttributesManagerService;
+    private currentTarget = 0;
+    private currentSize = ERASER_SIZE.Default;
+    private isOnTarget = false;
+    private isLeftMouseDown = false;
+    private isEraserAppended = false;
+    private lastElementColoredNumber = RESET_POSITION_NUMBER;
+    private lastToolName = '';
+    private erasedSomething = false;
+    private isHoveringText = false;
 
-    // the string represents the id_element
-    changedElements: Map<string, SVGGElementInfo> = new Map([]);
+    // the number represents the id_element
+    changedElements: Map<number, SVGGElementInfo> = new Map([]);
 
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
     constructor(private undoRedoerService: UndoRedoerService) {
         super();
@@ -84,7 +92,7 @@ export class EraserToolService extends AbstractToolService {
         this.setEraserToMouse(event);
     }
 
-    setEraserToMouse(event: MouseEvent): void {
+    private setEraserToMouse(event: MouseEvent): void {
         this.currentMouseCoords.x =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
         this.currentMouseCoords.y =
@@ -98,7 +106,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    appendEraser(): void {
+    private appendEraser(): void {
         this.renderer.appendChild(this.elementRef.nativeElement, this.eraser);
         this.isEraserAppended = true;
     }
@@ -117,14 +125,18 @@ export class EraserToolService extends AbstractToolService {
                 this.drawStack.getElementByPosition(this.currentTarget),
             );
 
+            if (this.isHoveringText) {
+                this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+            }
+
             this.drawStack.delete(this.drawStack.drawStack[this.currentTarget]);
 
             this.erasedSomething = true;
 
             if (this.currentTarget + 1) {
                 this.changedElements.set(
-                    this.currentTarget.toString(),
-                    this.changedElements.get((this.currentTarget + 1).toString()) as SVGGElementInfo,
+                    this.currentTarget,
+                    this.changedElements.get(this.currentTarget + 1) as SVGGElementInfo,
                 );
             }
             this.checkElementsToErase();
@@ -133,7 +145,7 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
     }
 
-    needToBeErased(button: number): boolean {
+    private needToBeErased(button: number): boolean {
         return (
             this.isOnTarget &&
             this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
@@ -141,7 +153,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    isEraserTouchingElement(eraserBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    private isEraserTouchingElement(eraserBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = eraserBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = eraserBox.x + window.scrollX - SIDEBAR_WIDTH + eraserBox.width;
         const boxTop = eraserBox.y + window.scrollY;
@@ -169,7 +181,7 @@ export class EraserToolService extends AbstractToolService {
         return true;
     }
 
-    checkElementsToErase(): void {
+    private checkElementsToErase(): void {
         const eraserBox = this.getDOMRect(this.eraser);
 
         let enteredInSelection = false;
@@ -199,7 +211,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number) {
+    private updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
         if (this.lastElementColoredNumber !== topElement) {
             this.addElementToMap(svgGElement);
 
@@ -222,90 +234,48 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    addElementToMap(svgGElement: SVGGElement) {
-        if (!this.changedElements.get(svgGElement.getAttribute('id_element') as string)) {
-            this.changedElements.set(
-                svgGElement.getAttribute('id_element') as string,
-                new SVGGElementInfo(
-                    svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
-                    svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
-                ),
-            );
+    private addElementToMap(svgGElement: SVGGElement): void {
+        if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
+            this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
+                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
+            } as SVGGElementInfo);
         }
     }
 
-    colorBorder(idElement: number, borderWidth: string | null, tool: string): void {
+    private colorBorder(idElement: number, borderWidth: string | null, tool: string): void {
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
             borderWidth = ADDITIONAL_BORDER_WIDTH.toString();
         }
 
-        this.checkIfPen(idElement, tool, '#' + DEFAULT_RED);
+        const borderColor = '#' + DEFAULT_RED;
 
-        this.checkIfStamp(idElement, tool, '#' + DEFAULT_RED);
+        switch (tool) {
+            case TOOL_NAME.Text:
+                this.changeBorderOnText(idElement, borderColor, borderWidth);
+                return;
 
-        this.checkIfLine(idElement, tool, '#' + DEFAULT_RED);
+            case TOOL_NAME.Pen:
+                this.changeBorderOnPen(idElement, borderColor);
+                break;
 
-        this.renderer.setAttribute(
-            this.drawStack.getElementByPosition(idElement),
-            HTML_ATTRIBUTE.stroke,
-            '#' + DEFAULT_RED,
-        );
-        this.renderer.setAttribute(
-            this.drawStack.getElementByPosition(idElement),
-            HTML_ATTRIBUTE.stroke_width,
-            borderWidth,
-        );
-    }
+            case TOOL_NAME.Quill:
+                this.changeBorderOnQuill(idElement, borderColor);
+                break;
 
-    checkIfPen(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.Pen) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[
-                    childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE
-                ],
-                HTML_ATTRIBUTE.fill,
-                borderColor,
-            );
+            case TOOL_NAME.Stamp:
+                this.changeBorderOnStamp(idElement, borderColor);
+                break;
+
+            case TOOL_NAME.Line:
+                this.changeBorderOnLine(idElement, borderColor);
+                break;
+
+            default:
+                break;
         }
-    }
-
-    checkIfStamp(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.Stamp) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            this.renderer.setAttribute(
-                this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
-                HTML_ATTRIBUTE.stroke,
-                borderColor,
-            );
-        }
-    }
-
-    checkIfLine(idElement: number, tool: string, borderColor: string) {
-        if (tool === TOOL_NAME.Line && this.drawStack.getElementByPosition(idElement).childElementCount > 1) {
-            const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
-            const children = this.drawStack.getElementByPosition(idElement).childNodes;
-
-            for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
-                this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
-            }
-        }
-    }
-
-    restoreBorder(idElement: number, borderColor: string | null, borderWidth: string | null, tool: string): void {
-        if (borderColor === null) {
-            borderColor = '';
-        }
-
-        if (borderWidth === null) {
-            borderWidth = '0';
-        }
-
-        this.checkIfPen(idElement, tool, borderColor);
-
-        this.checkIfLine(idElement, tool, borderColor);
 
         this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
         this.renderer.setAttribute(
@@ -315,21 +285,141 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    removeBorder(position: string, tool: string): void {
+    private changeBorderOnPen(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE],
+            HTML_ATTRIBUTE.fill,
+            borderColor,
+        );
+    }
+
+    private changeBorderOnQuill(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+        for (let childIndex = 0; childIndex < childrenCount; childIndex++) {
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
+        }
+    }
+
+    private changeBorderOnText(idElement: number, borderColor: string, borderWidth: string): void {
+        if (borderWidth === '0') {
+            this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
+            this.isHoveringText = false;
+            return;
+        }
+
+        this.isHoveringText = true;
+
+        this.appendTextBorder(idElement, borderColor, borderWidth);
+
+        this.appendEraser();
+    }
+
+    private appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
+        const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
+        const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
+
+        const x = parseInt(
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.x) as string,
+            DEFAULT_RADIX,
+        );
+        const y = parseInt(
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.y) as string,
+            DEFAULT_RADIX,
+        );
+
+        this.textBorder = this.renderer.createElement('rect', SVG_NS);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.width, width);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.height, height);
+
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.fill, 'none');
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke, borderColor);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke_width, borderWidth);
+
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
+        this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
+    }
+
+    private changeBorderOnStamp(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
+            HTML_ATTRIBUTE.stroke,
+            borderColor,
+        );
+    }
+
+    private changeBorderOnLine(idElement: number, borderColor: string): void {
+        const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+        const children = this.drawStack.getElementByPosition(idElement).childNodes;
+
+        for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
+        }
+    }
+
+    private restoreBorder(
+        idElement: number,
+        borderColor: string | null,
+        borderWidth: string | null,
+        tool: string,
+    ): void {
+        if (borderColor === null) {
+            borderColor = '';
+        }
+
+        if (borderWidth === null) {
+            borderWidth = '0';
+        }
+
+        switch (tool) {
+            case TOOL_NAME.Text:
+                this.changeBorderOnText(idElement, borderColor, borderWidth);
+                return;
+
+            case TOOL_NAME.Pen:
+                this.changeBorderOnPen(idElement, borderColor);
+                break;
+
+            case TOOL_NAME.Quill:
+                this.changeBorderOnQuill(idElement, borderColor);
+                break;
+
+            case TOOL_NAME.Line:
+                this.changeBorderOnLine(idElement, borderColor);
+                break;
+
+            default:
+                break;
+        }
+
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
+        this.renderer.setAttribute(
+            this.drawStack.getElementByPosition(idElement),
+            HTML_ATTRIBUTE.stroke_width,
+            borderWidth,
+        );
+    }
+
+    private removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            const element = this.changedElements.get(position) as SVGGElementInfo;
+            const element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
             if (element !== undefined) {
                 this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
-                this.changedElements.delete(position);
+                this.changedElements.delete(parseInt(position, DEFAULT_RADIX));
             }
         }
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
+    private getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
             return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
@@ -345,10 +435,10 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
 
         if (this.currentTarget !== undefined) {
-            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget.toString()) !== undefined;
+            const currentChangedTargetIsValid = this.changedElements.get(this.currentTarget) !== undefined;
 
             if (this.erasedSomething && currentChangedTargetIsValid) {
-                const currentChangedTarget = this.changedElements.get(this.currentTarget.toString()) as SVGGElementInfo;
+                const currentChangedTarget = this.changedElements.get(this.currentTarget) as SVGGElementInfo;
                 this.renderer.removeChild(this.elementRef, this.eraser);
                 this.restoreBorder(
                     this.currentTarget,
