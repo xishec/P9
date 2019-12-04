@@ -12,6 +12,7 @@ import {
     TOOL_NAME,
 } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
+import { ShortcutManagerService } from '../../shortcut-manager/shortcut-manager.service';
 import { TracingToolService } from '../abstract-tools/tracing-tool/tracing-tool.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
@@ -28,7 +29,7 @@ export class SprayCanToolService extends TracingToolService {
     private currentMouseCoords: Coords2D = new Coords2D(0, 0);
     private isSprayerAppended = false;
 
-    constructor(private colorToolService: ColorToolService) {
+    constructor(private colorToolService: ColorToolService, private shortcutService: ShortcutManagerService) {
         super();
         this.colorToolService.primaryColor.subscribe((currentColor: string) => {
             this.currentColorAndOpacity = currentColor;
@@ -62,6 +63,7 @@ export class SprayCanToolService extends TracingToolService {
 
     onMouseDown(event: MouseEvent) {
         if (event.button === MOUSE.LeftButton) {
+            this.shortcutService.changeIsOnInput(true);
             this.setColorAndOpacity();
             this.event = event;
             this.isDrawing = true;
@@ -98,6 +100,7 @@ export class SprayCanToolService extends TracingToolService {
             this.currentPath = '';
 
             clearInterval(this.interval);
+            this.shortcutService.changeIsOnInput(false);
 
             setTimeout(() => {
                 this.drawStack.push(this.svgWrap);
@@ -135,12 +138,14 @@ export class SprayCanToolService extends TracingToolService {
 
     cleanUp() {
         super.cleanUp();
+        this.shortcutService.changeIsOnInput(false);
         this.renderer.removeChild(this.elementRef, this.sprayer);
         this.isSprayerAppended = false;
     }
 
     onMouseLeave(event: MouseEvent) {
         super.onMouseLeave(event);
+        this.shortcutService.changeIsOnInput(false);
         this.renderer.removeChild(this.elementRef, this.sprayer);
         this.isSprayerAppended = false;
     }
