@@ -67,6 +67,7 @@
                         </mat-selection-list>
                         <div
                             class="hidden-info"
+                            id="no-drawing-display"
                             *ngIf="
                                 (drawingsFromServer | nameFilter: nameFilter | labelFilter: labelFilter).length === 0
                             "
