@@ -4,18 +4,36 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
 const CONTROL_POINT_RADIUS = 10;
-const SELECTION_COLOR = '#ff5722';
+const SELECTION_OUTLINE_COLOR = '#ff5722';
+const SELECTION_FILL_COLOR = '#ffffff';
+const SELECTION_FILL_OPACITY = '0.1';
 const CONTROL_POINT_FILL_COLOR = '#ffffff';
 
-const SELECTION_BOX_CURSOR_STYLES: Map<number, string> = new Map([
-    [0, 'nw-resize'],
-    [1, 'n-resize'],
-    [2, 'ne-resize'],
-    [3, 'e-resize'],
-    [4, 'se-resize'],
-    [5, 's-resize'],
-    [6, 'sw-resize'],
-    [7, 'w-resize'],
+enum CURSOR_STYLES {
+    Default = 'default',
+    None = 'none',
+    Move = 'move',
+    Crosshair = 'crosshair',
+    Not_Allowed = 'not-allowed',
+    Nw_resize = 'nw-resize',
+    N_Resize = 'n-resize',
+    Ne_Resize = 'ne-resize',
+    E_Resize = 'e-resize',
+    Se_Resize = 'se-resize',
+    S_Resize = 's-resize',
+    Sw_Resize = 'sw-resize',
+    W_Resize = 'w-resize',
+}
+
+const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
+    [0, CURSOR_STYLES.Nw_resize],
+    [1, CURSOR_STYLES.N_Resize],
+    [2, CURSOR_STYLES.Ne_Resize],
+    [3, CURSOR_STYLES.E_Resize],
+    [4, CURSOR_STYLES.Se_Resize],
+    [5, CURSOR_STYLES.S_Resize],
+    [6, CURSOR_STYLES.Sw_Resize],
+    [7, CURSOR_STYLES.W_Resize],
 ]);
 
 const NO_STAMP = '';
@@ -292,12 +310,14 @@ enum HTML_ATTRIBUTE {
     opacity = 'opacity',
     fill_opacity = 'fill-opacity',
     stroke_width = 'stroke-width',
+    cursor = 'cursor',
     x = 'x',
     y = 'y',
     cx = 'cx',
     cy = 'cy',
     rx = 'rx',
     ry = 'ry',
+    r = 'r',
     numOctaves = 'numOctaves',
     baseFrequency = 'baseFrequency',
     filter = 'filter',
@@ -523,7 +543,9 @@ export {
     STAMP_BASE_WIDTH,
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
-    SELECTION_COLOR,
+    SELECTION_OUTLINE_COLOR,
+    SELECTION_FILL_COLOR,
+    SELECTION_FILL_OPACITY,
     CONTROL_POINT_FILL_COLOR,
     CONTROL_POINTS,
     TOP_CONTROL_POINTS,
@@ -538,5 +560,6 @@ export {
     SPRAY_PARTICLE_THICKNESS,
     MAX_CHARS_IN_PATH,
     CIRCLES_TO_APPEND,
-    SELECTION_BOX_CURSOR_STYLES,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+    CURSOR_STYLES,
 };

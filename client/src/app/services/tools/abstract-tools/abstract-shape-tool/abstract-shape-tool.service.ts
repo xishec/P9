@@ -64,20 +64,20 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.x, (this.initialMouseCoords.x - deltaX).toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.x, this.initialMouseCoords.x.toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.y, (this.initialMouseCoords.y - deltaY).toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.y, this.initialMouseCoords.y.toString());
             this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
         }
 

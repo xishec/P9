@@ -7,7 +7,7 @@ import {
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
     ROTATION_ANGLE,
-    SELECTION_BOX_CURSOR_STYLES,
+    CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
@@ -64,15 +64,15 @@ export class SelectionToolService extends AbstractToolService {
             return;
         }
         if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords)) {
-            this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'move');
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Move);
         } else {
-            this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
         }
     }
 
     cleanUp(): void {
         this.selection.cleanUp();
-        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
+        this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
@@ -111,18 +111,18 @@ export class SelectionToolService extends AbstractToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, (this.initialMouseCoords.x - deltaX).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, this.initialMouseCoords.x.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, (this.initialMouseCoords.y - deltaY).toString());
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, this.initialMouseCoords.y.toString());
         }
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
 
