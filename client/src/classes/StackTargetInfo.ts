@@ -10,4 +10,8 @@ export class StackTargetInfo {
             this.toolName = toolName;
         }
     }
+
+    isValide(): boolean {
+        return this.targetPosition !== undefined;
+    }
 }

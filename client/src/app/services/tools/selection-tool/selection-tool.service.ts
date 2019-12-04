@@ -81,7 +81,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selection = new Selection(this.renderer, this.elementRef);
         this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.targetPosition !== undefined) {
+            if (stackTarget.isValide()) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
@@ -159,7 +159,9 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isAbleToRotate(): boolean {
-        return !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection && this.selection.isAppended;
+        return (
+            !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection && this.selection.isAppended
+        );
     }
 
     singlySelect(stackPosition: number): void {
@@ -196,11 +198,19 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     isAbleToScale(): boolean {
-        return this.selection.mouseIsInControlPoint(this.currentMouseCoords) && !this.isSelecting && !this.isTranslatingSelection;
+        return (
+            this.selection.mouseIsInControlPoint(this.currentMouseCoords) &&
+            !this.isSelecting &&
+            !this.isTranslatingSelection
+        );
     }
 
     isAbleToTranslate(): boolean {
-        return this.selection.mouseIsInSelectionBox(this.currentMouseCoords) && !this.isSelecting && !this.isScalingSelection;
+        return (
+            this.selection.mouseIsInSelectionBox(this.currentMouseCoords) &&
+            !this.isSelecting &&
+            !this.isScalingSelection
+        );
     }
 
     handleLeftMouseDrag(): void {
@@ -210,11 +220,8 @@ export class SelectionToolService extends AbstractToolService {
             this.singlySelect(this.currentTarget);
         } else if (this.isScalingSelection || this.isAbleToScale()) {
             this.isScalingSelection = true;
-            this.manipulator.scaleSelection(
-                this.currentMouseCoords,
-                this.selection.activeControlPoint,
-                this.selection);
-        } else if (this.isTranslatingSelection ||  this.isAbleToTranslate()) {
+            this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+        } else if (this.isTranslatingSelection || this.isAbleToTranslate()) {
             this.isTranslatingSelection = true;
             const deltaX = this.currentMouseCoords.x - this.lastMouseCoords.x;
             const deltaY = this.currentMouseCoords.y - this.lastMouseCoords.y;
@@ -306,7 +313,7 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
-        } else if (this.isOnTarget && (!this.isTranslatingSelection && !this.isScalingSelection)) {
+        } else if (this.isOnTarget && !this.isTranslatingSelection && !this.isScalingSelection) {
             this.singlySelect(this.currentTarget);
         } else if (this.isTranslatingSelection) {
             this.isTranslatingSelection = false;
@@ -376,14 +383,22 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isShiftDown = true;
             this.manipulator.isRotateOnSelf = true;
             if (this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.manipulator.isAltDown = true;
             this.manipulator.rotationStep = ROTATION_ANGLE.Alter;
             if (this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
             }
         }
     }
@@ -395,14 +410,22 @@ export class SelectionToolService extends AbstractToolService {
             this.manipulator.isRotateOnSelf = false;
             this.manipulator.isShiftDown = false;
             if (this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
             }
         } else if (key === KEYS.Alt) {
             event.preventDefault();
             this.manipulator.rotationStep = ROTATION_ANGLE.Base;
             this.manipulator.isAltDown = false;
             if (this.isScalingSelection) {
-                this.manipulator.scaleSelection(this.currentMouseCoords, this.selection.activeControlPoint, this.selection);
+                this.manipulator.scaleSelection(
+                    this.currentMouseCoords,
+                    this.selection.activeControlPoint,
+                    this.selection,
+                );
             }
         }
     }
