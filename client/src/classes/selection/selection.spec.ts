@@ -19,6 +19,7 @@ describe('Selection', () => {
     let spyOnAppendChild: jasmine.Spy;
     let spyOnRemoveChild: jasmine.Spy;
     let spyOnCreateElement: jasmine.Spy;
+    let spyOnListen: jasmine.Spy;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -31,6 +32,8 @@ describe('Selection', () => {
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {
@@ -56,6 +59,7 @@ describe('Selection', () => {
         elementRefMock = injector.get<ElementRef>(ElementRef as Type<ElementRef>);
         proxy = new Selection(rendererMock, elementRefMock);
 
+        spyOnListen = spyOn(proxy[`renderer`], 'listen');
         spyOnSetAttribute = spyOn(proxy[`renderer`], 'setAttribute').and.returnValue();
         spyOnAppendChild = spyOn(proxy[`renderer`], 'appendChild').and.returnValue();
         spyOnRemoveChild = spyOn(proxy[`renderer`], 'removeChild').and.returnValue();
@@ -88,6 +92,7 @@ describe('Selection', () => {
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
         expect(spyOnCreateElement).toHaveBeenCalled();
+        expect(spyOnListen).toHaveBeenCalled();
     });
 
     it('should remove the fullselection box, empty the selection and set isAppended to false when calling cleanUp', () => {

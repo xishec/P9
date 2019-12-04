@@ -15,7 +15,14 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { GRID_OPACITY, GRID_SIZE, HTML_ATTRIBUTE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
+import {
+    GRID_OPACITY,
+    GRID_SIZE,
+    HTML_ATTRIBUTE,
+    SNACKBAR_DURATION,
+    TOOL_NAME,
+    CURSOR_STYLES,
+} from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -185,12 +192,12 @@ export class WorkZoneComponent implements OnInit {
 
     getCursorStyle() {
         if (this.drawingLoaderService.untouchedWorkZone.value) {
-            return { cursor: 'not-allowed' };
+            return { cursor: CURSOR_STYLES.NotAllowed };
         }
         switch (this.toolName) {
             case TOOL_NAME.Eraser:
             case TOOL_NAME.Quill:
-                return { cursor: 'none' };
+                return { cursor: CURSOR_STYLES.None };
             case TOOL_NAME.Brush:
             case TOOL_NAME.Pencil:
             case TOOL_NAME.Rectangle:
@@ -201,9 +208,9 @@ export class WorkZoneComponent implements OnInit {
             case TOOL_NAME.Line:
             case TOOL_NAME.SprayCan:
             case TOOL_NAME.Fill:
-                return { cursor: 'crosshair' };
+                return { cursor: CURSOR_STYLES.Crosshair };
             default:
-                return { cursor: 'default' };
+                return { cursor: CURSOR_STYLES.Default };
         }
     }
 
@@ -216,8 +223,16 @@ export class WorkZoneComponent implements OnInit {
 
     setRectangleBackgroundStyle() {
         if (this.drawingInfo.width > 0 || this.drawingInfo.height > 0) {
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], HTML_ATTRIBUTE.Height, this.drawingInfo.height + 'px');
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], HTML_ATTRIBUTE.Width, this.drawingInfo.width + 'px');
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Height,
+                this.drawingInfo.height + 'px',
+            );
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Width,
+                this.drawingInfo.width + 'px',
+            );
 
             this.renderer.setAttribute(
                 this.refSVG.nativeElement.children[0],

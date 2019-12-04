@@ -36,7 +36,9 @@ export class DrawingSaverService {
         });
     }
 
-    getLocalFileDownloadUrl(): SafeResourceUrl {
+    getLocalFileDownloadUrl(drawingSavingInfo: DrawingSavingInfo): SafeResourceUrl {
+        this.updateCurrentDrawingInfo(drawingSavingInfo);
+
         const jsonObj: string = JSON.stringify({
             svg: this.workZoneRef.nativeElement.innerHTML,
             drawingInfo: this.currentDrawingInfo,
@@ -55,11 +57,8 @@ export class DrawingSaverService {
     }
 
     postDrawing(drawingSavingInfo: DrawingSavingInfo) {
-        this.currentDrawingInfo.name = drawingSavingInfo.name;
-        this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
-        this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
-        this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
-        this.currentDrawingInfo.idStack = this.drawStackService.idStack;
+        this.updateCurrentDrawingInfo(drawingSavingInfo);
+
         const drawing: Drawing = {
             drawingInfo: this.currentDrawingInfo,
             svg: this.workZoneRef.nativeElement.innerHTML,
@@ -91,5 +90,13 @@ export class DrawingSaverService {
                     this.currentIsSaved.next(false);
                 }
             });
+    }
+
+    updateCurrentDrawingInfo(drawingSavingInfo: DrawingSavingInfo): void {
+        this.currentDrawingInfo.name = drawingSavingInfo.name;
+        this.currentDrawingInfo.labels = drawingSavingInfo.drawingLabels;
+        this.currentDrawingInfo.createdAt = drawingSavingInfo.createdAt;
+        this.currentDrawingInfo.lastModified = drawingSavingInfo.lastModified;
+        this.currentDrawingInfo.idStack = this.drawStackService.idStack;
     }
 }

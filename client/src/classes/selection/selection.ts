@@ -2,11 +2,16 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SIDEBAR_WIDTH, SVG_NS, TITLE_ELEMENT_TO_REMOVE } from 'src/constants/constants';
 import {
+    CONTROL_POINT_FILL_COLOR,
     CONTROL_POINT_RADIUS,
     CONTROL_POINTS_AMOUNT,
+    CURSOR_STYLES,
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
-    SELECTION_COLOR,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+    SELECTION_FILL_COLOR,
+    SELECTION_FILL_OPACITY,
+    SELECTION_OUTLINE_COLOR,
 } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
 
@@ -28,6 +33,7 @@ export class Selection {
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     isAppended = false;
+    isInputOnControlPoint = false;
 
     constructor(renderer: Renderer2, svgReference: ElementRef<SVGElement>) {
         this.renderer = renderer;
@@ -45,15 +51,37 @@ export class Selection {
     private initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Stroke, SELECTION_COLOR);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Fill, 'none');
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Stroke, SELECTION_OUTLINE_COLOR);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Fill, SELECTION_FILL_COLOR);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.FillOpacity, SELECTION_FILL_OPACITY);
+        this.renderer.setStyle(this.selectionBox, 'pointer-events', 'none');
+
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
-            this.renderer.setAttribute(this.controlPoints[i], 'r', CONTROL_POINT_RADIUS.toString());
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Stroke, SELECTION_COLOR);
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Fill, SELECTION_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.R, CONTROL_POINT_RADIUS.toString());
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Stroke, SELECTION_OUTLINE_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Fill, CONTROL_POINT_FILL_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
+            this.renderer.listen(this.controlPoints[i], 'mouseover', () => {
+                const currentControlPointId = i;
+                if (!this.isInputOnControlPoint) {
+                    this.renderer.setStyle(
+                        this.svgRef.nativeElement,
+                        HTML_ATTRIBUTE.Cursor,
+                        SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(currentControlPointId),
+                    );
+                }
+            });
+            this.renderer.listen(this.controlPoints[i], 'mouseout', () => {
+                if (!this.isInputOnControlPoint) {
+                    this.renderer.setStyle(this.svgRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
+                }
+            });
+            this.renderer.listen(this.controlPoints[i], 'mousedown', () => {
+                const currentControlPoint = this.controlPoints[i];
+                this.activeControlPoint = currentControlPoint;
+            });
         }
     }
 
@@ -132,7 +160,6 @@ export class Selection {
             const distY = currentMouseCoords.y - cy;
 
             if (Math.abs(distX) <= r && Math.abs(distY) <= r && this.isAppended) {
-                this.activeControlPoint = ctrlPt;
                 return true;
             }
         }

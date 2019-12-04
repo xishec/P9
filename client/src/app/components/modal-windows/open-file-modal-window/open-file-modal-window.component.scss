@@ -8,13 +8,14 @@
 
 #content-wrapper {
     display: grid;
-    grid-template-rows: minmax(428px, auto) 19px;
+    grid-template-rows: minmax(428px, auto) 24px;
 }
 
 .mat-typography,
 .mat-typography-local {
     align-self: center;
     height: 428px;
+    padding-bottom: 6px;
 
     :focus {
         outline: none;
@@ -140,23 +141,18 @@ mat-list-option[aria-selected='true'] {
     color: #8f8f8f;
 }
 
-.center {
-    display: flex;
-    align-self: center;
-    justify-content: center;
-}
-
 #loading-div {
-    max-height: 600px;
-    margin: 20px;
-    text-align: center;
     #img {
         width: 150px;
     }
 }
 
-.confirmation {
-    margin-top: 20px;
+#no-drawing-display, #loading-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 120px;
 }
 
 #content-local-wrapper {
@@ -228,10 +224,12 @@ mat-list-option[aria-selected='true'] {
     font-size: 24px;
 }
 
-.submit-button-group-wrapper {
+.footer {
     height: 100%;
+    width: 100%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: row-reverse;
+    justify-content: space-between;
 }
 
 .submit-button-group {
@@ -240,6 +238,16 @@ mat-list-option[aria-selected='true'] {
         cursor: pointer;
         text-decoration: underline;
     }
+}
+
+.confirmation {
+    font-size: 14px;
+    padding-left: 16px;
+}
+
+.error-message {
+    display: flex;
+    justify-content: center;
 }
 
 #clickable {

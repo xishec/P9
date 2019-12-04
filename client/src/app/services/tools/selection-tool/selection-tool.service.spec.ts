@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import * as TestHelpers from 'src/classes/test-helpers.spec';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE,CURSOR_STYLES, ROTATION_ANGLE } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -53,6 +53,8 @@ describe('SelectionToolService', () => {
                         setAttribute: () => null,
                         appendChild: () => null,
                         removeChild: () => null,
+                        listen: () => null,
+                        setStyle: () => null,
                     },
                 },
                 {
@@ -100,6 +102,7 @@ describe('SelectionToolService', () => {
         const spyOnAddToSelection = spyOn(service.selection, 'addToSelection');
         const spyOnUpdateOrigins = spyOn(service[`manipulator`], 'updateOrigins').and.callFake(() => null);
         const spyOnRestartDuplication = spyOn(service[`clipBoard`], 'restartDuplication').and.callFake(() => null);
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         spyOn(service.drawStack, 'getDrawStackLength').and.callFake(() => service.drawStack.drawStack.length);
 
         service.drawStack.drawStack.push(TestHelpers.createMockSVGGElement());
@@ -110,6 +113,7 @@ describe('SelectionToolService', () => {
         expect(spyOnAddToSelection).toHaveBeenCalledTimes(service.drawStack.getDrawStackLength());
         expect(spyOnUpdateOrigins).toHaveBeenCalled();
         expect(spyOnRestartDuplication).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('should initialize the selectionRectangle and Selection on creation', () => {
@@ -161,6 +165,54 @@ describe('SelectionToolService', () => {
         service[`updateSelectionRectangle`]();
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
+    });
+
+    it('should not update cursor style if mouse is in control point or inputIsOnControlPoint', () => {
+        service[`selection`][`isInputOnControlPoint`] = true;
+        const spyOnMouseIsInControlPoint = spyOn<any>(service.selection, 'mouseIsInControlPoint').and.callFake(() => false);
+        const spyOnMouseIsInSelectionBox = spyOn<any>(service.selection, 'mouseIsInSelectionBox').and.callFake(() => false);
+        const spyOnStyle = spyOn<any>(service.renderer, 'setStyle');
+
+        service[`updateCursorStyleOnSelectionBox`]();
+
+        expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
+        expect(spyOnMouseIsInSelectionBox).not.toHaveBeenCalled();
+        expect(spyOnStyle).not.toHaveBeenCalled();
+
+        service[`selection`][`isInputOnControlPoint`] = false;
+        spyOnMouseIsInControlPoint.and.callFake(() => true);
+
+        service[`updateCursorStyleOnSelectionBox`]();
+
+        expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
+        expect(spyOnMouseIsInSelectionBox).not.toHaveBeenCalled();
+        expect(spyOnStyle).not.toHaveBeenCalled();
+    });
+
+    it('should not update cursor style if mouse is not in selection box', () => {
+        service[`selection`][`isInputOnControlPoint`] = false;
+        const spyOnMouseIsInControlPoint = spyOn<any>(service.selection, 'mouseIsInControlPoint').and.callFake(() => false);
+        const spyOnMouseIsInSelectionBox = spyOn<any>(service.selection, 'mouseIsInSelectionBox').and.callFake(() => false);
+        const spyOnStyle = spyOn<any>(service.renderer, 'setStyle');
+
+        service[`updateCursorStyleOnSelectionBox`]();
+
+        expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
+        expect(spyOnMouseIsInSelectionBox).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', CURSOR_STYLES.Default);
+    });
+
+    it('should update cursor style if mouse is in selection box and is not in control point or not inputIsOnControlPoint', () => {
+        service[`selection`][`isInputOnControlPoint`] = false;
+        const spyOnMouseIsInControlPoint = spyOn<any>(service.selection, 'mouseIsInControlPoint').and.callFake(() => false);
+        const spyOnMouseIsInSelectionBox = spyOn<any>(service.selection, 'mouseIsInSelectionBox').and.callFake(() => true);
+        const spyOnStyle = spyOn<any>(service.renderer, 'setStyle');
+
+        service[`updateCursorStyleOnSelectionBox`]();
+
+        expect(spyOnMouseIsInControlPoint).toHaveBeenCalled();
+        expect(spyOnMouseIsInSelectionBox).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalledWith(service[`elementRef`].nativeElement, 'cursor', CURSOR_STYLES.Move);
     });
 
     it('should call setAttribute 8 times when calling updateSelectionRectangle', () => {
@@ -352,22 +404,26 @@ describe('SelectionToolService', () => {
 
     it('onMouseMove should call handleLeftMouseDrag if isLeftMouseDown', () => {
         const spy = spyOn<any>(service, 'handleLeftMouseDrag');
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         service[`isLeftMouseDown`] = true;
         service[`isRightMouseDown`] = false;
 
         service.onMouseMove(MOCK_LEFT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('onMouseMove should call handleRightMouseDrag if isRightMouseDown', () => {
         const spy = spyOn<any>(service, 'handleRightMouseDrag');
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         service[`isRightMouseDown`] = true;
         service[`isLeftMouseDown`] = false;
 
         service.onMouseMove(MOCK_RIGHT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('handleRightMouseDown should clear the invert selection buffer of Selection', () => {
@@ -379,11 +435,13 @@ describe('SelectionToolService', () => {
     });
 
     it('onMouseDown should call handleLeftMouseDown if mouseEvent is left button', () => {
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         const spy = spyOn<any>(service, 'handleLeftMouseDown');
 
         service.onMouseDown(MOCK_LEFT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('should set the initialMouseCoords to currentMouseCoords and isLeftMouseDOwn to true when calling handleLeftMouseDown', () => {
@@ -400,11 +458,13 @@ describe('SelectionToolService', () => {
     });
 
     it('onMouseDown should call handleRightMouseDown if mouseEvent is right button', () => {
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         const spy = spyOn<any>(service, 'handleRightMouseDown');
 
         service.onMouseDown(MOCK_RIGHT_CLICK);
 
         expect(spy).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('should remove the selection rectangle when handling a right mouse up', () => {
@@ -474,6 +534,7 @@ describe('SelectionToolService', () => {
     it('onMouseUp should call handleLeftMouseUp and restartDuplication from clipboard if event.button is Left Button', () => {
         const spy = spyOn<any>(service, 'handleLeftMouseUp');
         const spyClipboard = spyOn(service[`clipBoard`], 'restartDuplication').and.callFake(() => null);
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
         spyOn(service[`manipulator`], 'updateOrigins').and.callFake(() => null);
 
@@ -481,20 +542,24 @@ describe('SelectionToolService', () => {
 
         expect(spy).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('onMouseUp should not do anything if mouse is not in workzone', () => {
         const spy = spyOn<any>(service, 'handleLeftMouseUp');
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         spyOn(service, 'isMouseInRef').and.callFake(() => false);
 
         service.onMouseUp(MOCK_LEFT_CLICK);
 
         expect(spy).not.toHaveBeenCalled();
+        expect(spyOnStyle).not.toHaveBeenCalled();
     });
 
     it('onMouseUp should call handleRightMouseUp if event.button is Right Button', () => {
         const spy = spyOn<any>(service, 'handleRightMouseUp');
         const spyClipboard = spyOn(service[`clipBoard`], 'restartDuplication').and.callFake(() => null);
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         spyOn(service, 'isMouseInRef').and.callFake(() => true);
         spyOn(service[`manipulator`], 'updateOrigins').and.callFake(() => null);
 
@@ -502,12 +567,14 @@ describe('SelectionToolService', () => {
 
         expect(spy).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('should not do anything if translating or selecting on mouse wheel', () => {
         const spyUndoRedo = spyOn<any>(service, 'saveState').and.callFake(() => null);
         const spyManipulator = spyOn(service[`manipulator`], 'rotateSelection').and.callFake(() => null);
         const spyClipboard = spyOn(service[`clipBoard`], 'restartDuplication').and.callFake(() => null);
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         service[`isTranslatingSelection`] = true;
         service[`isSelecting`] = true;
 
@@ -516,12 +583,14 @@ describe('SelectionToolService', () => {
         expect(spyUndoRedo).not.toHaveBeenCalled();
         expect(spyManipulator).not.toHaveBeenCalled();
         expect(spyClipboard).not.toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
     it('should rotate selection if not translating and not selecting on mouse wheel', () => {
         const spyUndoRedo = spyOn<any>(service, 'saveState').and.callFake(() => null);
         const spyManipulator = spyOn(service[`manipulator`], 'rotateSelection').and.callFake(() => null);
         const spyClipboard = spyOn(service[`clipBoard`], 'restartDuplication').and.callFake(() => null);
+        const spyOnStyle = spyOn<any>(service, 'updateCursorStyleOnSelectionBox').and.callFake(() => null);
         service[`isTranslatingSelection`] = false;
         service[`isSelecting`] = false;
         service.selection.isAppended = true;
@@ -531,29 +600,50 @@ describe('SelectionToolService', () => {
         expect(spyUndoRedo).toHaveBeenCalled();
         expect(spyManipulator).toHaveBeenCalled();
         expect(spyClipboard).toHaveBeenCalled();
+        expect(spyOnStyle).toHaveBeenCalled();
     });
 
-    it('should set rotate on self to true when keydown on shift', () => {
+    it('should set isRotateOnSelf, isShiftDown to true and scaleSelection if scaling when keydown on shift', () => {
+        const spyOnManipulator = spyOn(service[`manipulator`], 'scaleSelection').and.callFake(() => null);
+        service[`isScalingSelection`] = true;
         service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Shift));
 
         expect(service[`manipulator`].isRotateOnSelf).toBeTruthy();
+        expect(service[`manipulator`].isShiftDown).toBeTruthy();
+        expect(spyOnManipulator).toHaveBeenCalled();
+        expect(service[`manipulator`].isRotateOnSelf).toBeTruthy();
     });
 
-    it('should set rotate step to ALTER_ROTATION when keydown on alt', () => {
+    it('should set rotationStep to ROTATION_ANGLE.Alter, isAltDown to true and scaleSelection if scaling when keydown on alt', () => {
+        const spyOnManipulator = spyOn(service[`manipulator`], 'scaleSelection').and.callFake(() => null);
+        service[`isScalingSelection`] = true;
         service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
         expect(service[`manipulator`].rotationStep).toEqual(ROTATION_ANGLE.Alter);
+        expect(service[`manipulator`].isAltDown).toBeTruthy();
+        expect(spyOnManipulator).toHaveBeenCalled();
+        expect(service[`manipulator`].rotationStep).toEqual(ROTATION_ANGLE.Alter);
     });
 
-    it('should set rotate on self to false when keyup on shift', () => {
+    it('should set isRotateOnSelf, isShiftDown to false and scaleSelection if scaling when keyup on shift', () => {
+        const spyOnManipulator = spyOn(service[`manipulator`], 'scaleSelection').and.callFake(() => null);
+        service[`isScalingSelection`] = true;
         service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Shift));
 
         expect(service[`manipulator`].isRotateOnSelf).toBeFalsy();
+        expect(service[`manipulator`].isShiftDown).toBeFalsy();
+        expect(spyOnManipulator).toHaveBeenCalled();
+        expect(service[`manipulator`].isRotateOnSelf).toBeFalsy();
     });
 
-    it('should set rotate step to BASE_ROTATION when keyup on alt', () => {
+    it('should set rotationStep to ROTATION_ANGLE.Base, isAltDown to false and scaleSelection if scaling when keyup on alt', () => {
+        const spyOnManipulator = spyOn(service[`manipulator`], 'scaleSelection').and.callFake(() => null);
+        service[`isScalingSelection`] = true;
         service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
+        expect(service[`manipulator`].rotationStep).toEqual(ROTATION_ANGLE.Base);
+        expect(service[`manipulator`].isAltDown).toBeFalsy();
+        expect(spyOnManipulator).toHaveBeenCalled();
         expect(service[`manipulator`].rotationStep).toEqual(ROTATION_ANGLE.Base);
     });
 });

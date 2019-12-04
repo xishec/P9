@@ -13,6 +13,7 @@ import {
     SNACKBAR_DURATION,
     TEXT_CURSOR,
     TEXT_LINEBREAK,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
     TEXT_SPACE,
     TOOL_NAME,
 } from 'src/constants/tool-constants';
@@ -196,10 +197,10 @@ export class TextToolService extends AbstractToolService {
     private initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
         this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, 'black');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeWidth, '1');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, 'none');
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, '5 5');
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Color);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeWidth, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Width);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, TEXT_PREVIEW_BOX_ATTRIBUTES.Fill_Color);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Dasharray);
     }
 
     private createTextBox(x: number, y: number): void {

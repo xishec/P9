@@ -4,7 +4,51 @@ import { SidebarButtonInfo } from '../classes/SidebarButtonInfo';
 
 const CONTROL_POINTS_AMOUNT = 8;
 const CONTROL_POINT_RADIUS = 10;
-const SELECTION_COLOR = '#ff5722';
+const SELECTION_OUTLINE_COLOR = '#ff5722';
+const SELECTION_FILL_COLOR = '#ffffff';
+const SELECTION_FILL_OPACITY = '0.1';
+const CONTROL_POINT_FILL_COLOR = '#ffffff';
+
+enum CURSOR_STYLES {
+    Default = 'default',
+    None = 'none',
+    Move = 'move',
+    Crosshair = 'crosshair',
+    NotAllowed = 'not-allowed',
+    NwResize = 'nw-resize',
+    NResize = 'n-resize',
+    NeResize = 'ne-resize',
+    EResize = 'e-resize',
+    SeResize = 'se-resize',
+    SResize = 's-resize',
+    SwResize = 'sw-resize',
+    WResize = 'w-resize',
+}
+
+const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
+    [0, CURSOR_STYLES.NwResize],
+    [1, CURSOR_STYLES.NResize],
+    [2, CURSOR_STYLES.NeResize],
+    [3, CURSOR_STYLES.EResize],
+    [4, CURSOR_STYLES.SeResize],
+    [5, CURSOR_STYLES.SResize],
+    [6, CURSOR_STYLES.SwResize],
+    [7, CURSOR_STYLES.WResize],
+]);
+
+enum PREVIEW_RECTANGLE_ATTRIBUTES {
+    Stroke_Color = 'black',
+    Stroke_Dasharray = '5 5',
+    Fill_Color = '#ffffff',
+    Fill_Opacity = '0.3',
+}
+
+enum TEXT_PREVIEW_BOX_ATTRIBUTES {
+    Stroke_Color = 'black',
+    Stroke_Width = '1',
+    Stroke_Dasharray = '5 5',
+    Fill_Color = 'none',
+}
 
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
@@ -279,6 +323,8 @@ enum HTML_ATTRIBUTE {
     Stroke = 'stroke',
     Opacity = 'opacity',
     StrokeWidth = 'stroke-width',
+    FillOpacity = 'fill-opacity',
+    R = 'r',
     X = 'x',
     Y = 'y',
     Cx = 'cx',
@@ -302,6 +348,7 @@ enum HTML_ATTRIBUTE {
     ViewBox = 'viewBox',
     FontFamily = 'font-family',
     FontSize = 'font-size',
+    Cursor = 'cursor',
     FontWeight = 'font-weight',
     FontStyle = 'font-style',
     TextAnchor = 'text-anchor',
@@ -346,7 +393,6 @@ const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
 const FONTS: FontType[] = [
-    { fontName: 'Times', fontFamily: 'Times, serif' },
     { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
     { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
 
@@ -510,7 +556,10 @@ export {
     STAMP_BASE_WIDTH,
     CONTROL_POINTS_AMOUNT,
     CONTROL_POINT_RADIUS,
-    SELECTION_COLOR,
+    SELECTION_OUTLINE_COLOR,
+    SELECTION_FILL_COLOR,
+    SELECTION_FILL_OPACITY,
+    CONTROL_POINT_FILL_COLOR,
     CONTROL_POINTS,
     TOP_CONTROL_POINTS,
     CENTER_CONTROL_POINTS,
@@ -524,4 +573,8 @@ export {
     SPRAY_PARTICLE_THICKNESS,
     MAX_CHARS_IN_PATH,
     CIRCLES_TO_APPEND,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
+    CURSOR_STYLES,
+    PREVIEW_RECTANGLE_ATTRIBUTES,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
 };

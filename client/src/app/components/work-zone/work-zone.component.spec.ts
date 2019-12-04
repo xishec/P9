@@ -17,7 +17,7 @@ import { MagnetismToolService } from 'src/app/services/tools/magnetism-tool/magn
 import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-selector.service';
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_WHITE } from 'src/constants/color-constants';
-import { TOOL_NAME } from 'src/constants/tool-constants';
+import { CURSOR_STYLES, TOOL_NAME } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { WorkZoneComponent } from './work-zone.component';
@@ -169,7 +169,7 @@ describe('WorkZoneComponent', () => {
         drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = TOOL_NAME.Brush;
 
-        expect(component.getCursorStyle().cursor).toEqual('crosshair');
+        expect(component.getCursorStyle().cursor).toEqual(CURSOR_STYLES.Crosshair);
     });
 
     it('should return cursor style crosshair when toolName is Pencil', () => {
@@ -177,7 +177,7 @@ describe('WorkZoneComponent', () => {
         drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = TOOL_NAME.Pencil;
 
-        expect(component.getCursorStyle().cursor).toEqual('crosshair');
+        expect(component.getCursorStyle().cursor).toEqual(CURSOR_STYLES.Crosshair);
     });
 
     it('should return cursor style crosshair when toolName is Rectangle', () => {
@@ -185,7 +185,7 @@ describe('WorkZoneComponent', () => {
         drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = TOOL_NAME.Rectangle;
 
-        expect(component.getCursorStyle().cursor).toEqual('crosshair');
+        expect(component.getCursorStyle().cursor).toEqual(CURSOR_STYLES.Crosshair);
     });
 
     it('should return cursor style default by default', () => {
@@ -193,6 +193,6 @@ describe('WorkZoneComponent', () => {
         drawingLoaderService.untouchedWorkZone.next(false);
         component.toolName = TOOL_NAME.NewDrawing;
 
-        expect(component.getCursorStyle().cursor).toEqual('default');
+        expect(component.getCursorStyle().cursor).toEqual(CURSOR_STYLES.Default);
     });
 });
