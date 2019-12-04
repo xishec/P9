@@ -87,7 +87,7 @@ export class QuillToolService extends TracingToolService {
 
         this.setColorAndOpacity();
 
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.initialValue);
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.InitialValue);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
         this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Opacity, this.currentOpacity);
@@ -99,7 +99,7 @@ export class QuillToolService extends TracingToolService {
         this.previewEnabled = true;
         this.preview = this.renderer.createElement('line', SVG_NS);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.Title, 'element-to-remove');
-        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.preview);
+        this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.StrokeWidth, QUILL_STROKE_WIDTH.Preview);
         this.renderer.setAttribute(this.preview, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
         this.renderer.appendChild(this.elementRef.nativeElement, this.preview);
     }

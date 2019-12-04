@@ -19,8 +19,8 @@ enum ROTATION_ANGLE {
 }
 
 enum QUILL_STROKE_WIDTH {
-    initialValue = '1',
-    preview = '2',
+    InitialValue = '1',
+    Preview = '2',
 }
 
 const OFFSET_STEP = 10;
@@ -161,14 +161,14 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 enum BRUSH_STYLE {
-    type1 = 1,
-    type2 = 2,
-    type3 = 3,
-    type4 = 4,
-    type5 = 5,
+    Type1 = 1,
+    Type2 = 2,
+    Type3 = 3,
+    Type4 = 4,
+    Type5 = 5,
 }
 
-const BRUSH_STYLES = [BRUSH_STYLE.type1, BRUSH_STYLE.type2, BRUSH_STYLE.type3, BRUSH_STYLE.type4, BRUSH_STYLE.type5];
+const BRUSH_STYLES = [BRUSH_STYLE.Type1, BRUSH_STYLE.Type2, BRUSH_STYLE.Type3, BRUSH_STYLE.Type4, BRUSH_STYLE.Type5];
 
 const POLYGON_RADIUS_CORRECTION: Map<number, number> = new Map([
     [3, 0.13],
@@ -417,8 +417,8 @@ const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
 ];
 
 enum MAGNETISM_STATE {
-    active = 'maintenant activé',
-    inactive = 'désactivé',
+    Active = 'maintenant activé',
+    Inactive = 'désactivé',
 }
 
 const MAX_NORMAL_LENGTH = 5;

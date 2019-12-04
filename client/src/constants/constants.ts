@@ -47,10 +47,10 @@ enum MOUSE {
 }
 
 enum NUMBER_OF_MS {
-    day = 100000 * 36 * 24,
-    hours = 100000 * 36,
-    minutes = 1000 * 60,
-    seconds = 1000,
+    Day = 100000 * 36 * 24,
+    Hours = 100000 * 36,
+    Minutes = 1000 * 60,
+    Seconds = 1000,
 }
 
 const SIDEBAR_WIDTH = 360;

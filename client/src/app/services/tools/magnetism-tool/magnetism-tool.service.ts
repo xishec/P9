@@ -67,7 +67,7 @@ export class MagnetismToolService {
 
     switchState(): void {
         this.isMagnetic.value ? this.changeState(false) : this.changeState(true);
-        const stateTranslation = this.isMagnetic.value ? MAGNETISM_STATE.active : MAGNETISM_STATE.inactive;
+        const stateTranslation = this.isMagnetic.value ? MAGNETISM_STATE.Active : MAGNETISM_STATE.Inactive;
         this.snackBar.open(`Le magnétisme est ${stateTranslation}`, '', {
             duration: SNACKBAR_DURATION,
         });
