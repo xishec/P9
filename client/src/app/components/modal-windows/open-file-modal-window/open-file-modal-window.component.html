@@ -53,10 +53,10 @@
                                     </div>
                                     <div id="drawing-thumbnail">
                                         <svg
-                                            [attr.width]="getWidth(drawing.drawingInfo.name)"
-                                            [attr.height]="getHeight(drawing.drawingInfo.name)"
-                                            [attr.viewBox]="getViewBox(drawing.drawingInfo.name)"
-                                            [innerHTML]="getSVG(drawing.drawingInfo.name) | toTrustHtml"
+                                            [attr.width]="getWidth(drawing.drawingInfo.createdAt)"
+                                            [attr.height]="getHeight(drawing.drawingInfo.createdAt)"
+                                            [attr.viewBox]="getViewBox(drawing.drawingInfo.createdAt)"
+                                            [innerHTML]="getSVG(drawing.drawingInfo.createdAt) | toTrustHtml"
                                         ></svg>
                                     </div>
                                     <div id="drawing-created-at">
