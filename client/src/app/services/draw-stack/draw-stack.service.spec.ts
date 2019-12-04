@@ -71,25 +71,6 @@ describe('DrawStackService', () => {
         expect(service[`drawStack`]).toContain(mockSVGGElement);
     });
 
-    it('when pop return the last element and drawStack does not contain element', () => {
-        service[`drawStack`].push(mockSVGGElement);
-
-        const popElement = service.pop();
-
-        expect(popElement).toEqual(mockSVGGElement);
-        expect(service[`drawStack`]).not.toContain(mockSVGGElement);
-    });
-
-    it('when pop return the last element and idStack.length is not zero', () => {
-        service[`drawStack`].push(mockSVGGElement);
-        service.makeTargetable(mockSVGGElement);
-
-        const popElement = service.pop();
-
-        expect(popElement).toEqual(mockSVGGElement);
-        expect(service.idStack.length).toBeGreaterThan(0);
-    });
-
     it('when reset then drawStack is empty and length zero', () => {
         for (let i = 0; i < NB_PUSH; i++) {
             service[`drawStack`].push(mockSVGGElement);

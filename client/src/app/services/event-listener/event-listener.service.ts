@@ -107,10 +107,8 @@ export class EventListenerService {
                 }
 
                 if (event.key === KEYS.z) {
-                    this.currentTool.cleanUp();
                     this.undoRedoerService.undo();
                 } else if (event.key === KEYS.Z) {
-                    this.currentTool.cleanUp();
                     this.undoRedoerService.redo();
                 } else if (event.key === KEYS.x) {
                     this.clipboardService.cut();
