@@ -52,6 +52,20 @@ fdescribe('OpenFileModalWindowComponent', () => {
         } as DrawingInfo,
     };
 
+    const TEST_DRAWING3: Drawing = {
+        svg: '<rect _ngcontent-smx-c2="" height="798px" width="586px" style="fill: #ffffffff;"></rect>',
+        drawingInfo: {
+            width: 100,
+            height: 100,
+            color: 'ffffff',
+            name: 'mona lisa',
+            labels: ['Italy', 'Louvre', 'Paris'],
+            idStack: ['work-zone', 'background', 'rect1'],
+            createdAt: 1000,
+            lastModified: 1500,
+        } as DrawingInfo,
+    };
+
     const dialogMock = {
         close: () => null,
     };
@@ -202,6 +216,29 @@ fdescribe('OpenFileModalWindowComponent', () => {
         expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
     });
 
+    it('should load the right drawing from local file if file to load exists', () => {
+        const SPY = spyOn(drawingLoaderService.currentDrawing, 'next');
+        const SPY_DIALOG = spyOn(component, 'closeDialog');
+
+        component.fileToLoad = TEST_DRAWING;
+
+        component.loadLocalFile();
+
+        expect(SPY).toHaveBeenCalledWith(TEST_DRAWING);
+        expect(SPY_DIALOG).toHaveBeenCalledWith();
+    });
+
+    it('should open a snackBar if there is no file to load', () => {
+        const SPY_DIALOG = spyOn(component[`snackBar`], 'open');
+        component.fileToLoad = null;
+
+        component.loadLocalFile();
+
+        expect(SPY_DIALOG).toHaveBeenCalledWith(`Veuillez choisir un fichier valide.`, 'OK', {
+            duration: SNACKBAR_DURATION,
+        });
+    });
+
     it('should call callback method with the right file and reader', () => {
         const mockFile = new File([''], 'filename', { type: 'text/plain' });
         const mockEvent = { target: { files: [mockFile] } };
@@ -217,19 +254,18 @@ fdescribe('OpenFileModalWindowComponent', () => {
     });
 
     it('should set the right drawing information when valid drawing is sent as input', () => {
-        const mockReader = { result: JSON.stringify(TEST_DRAWING) } as FileReader;
+        const mockReader = { result: JSON.stringify(TEST_DRAWING3) } as FileReader;
         const mockFile = new File([''], 'test.txt', { type: 'text/plain' });
         const callback: () => void = component.getLocalFileLoadCallback(mockFile, mockReader);
-        
+
         callback();
 
-        expect(component.fileToLoad).toEqual(TEST_DRAWING);
+        expect(component.fileToLoad).toEqual(TEST_DRAWING3);
         expect(component.localFileName).toEqual('test.txt');
     });
 
     it('should not set any drawing information when drawing input is invalid but instead open a snackBar', () => {
-        const result = jasmine.createSpyObj('result', [JSON.stringify(TEST_DRAWING)]);
-        const mockReader: FileReader = { result } as FileReader;
+        const mockReader = { result: JSON.stringify(TEST_DRAWING) } as FileReader;
         const mockFile = new File([''], 'filename', { type: 'text/plain' });
         const callback: () => void = component.getLocalFileLoadCallback(mockFile, mockReader);
 

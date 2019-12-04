@@ -160,17 +160,14 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     getLocalFileLoadCallback(file: File, reader: FileReader): () => void {
         return () => {
-            try {
-                console.log(file);
-                
+            try {                
                 const drawingFromFile = JSON.parse(reader.result as string) as Drawing;
 
                 if (!this.isValidFile(file) || !this.isValidDrawing(drawingFromFile)) {
                     throw Error('Invalid file');
                 }
-
                 this.fileToLoad = drawingFromFile;
-                this.localFileName = this.fileToLoad.drawingInfo.name;
+                this.localFileName = file.name;
             } catch {
                 this.fileToLoad = null;
                 this.localFileName = '';
