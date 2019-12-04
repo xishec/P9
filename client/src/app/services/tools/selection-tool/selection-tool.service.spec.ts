@@ -539,27 +539,43 @@ describe('SelectionToolService', () => {
         expect(spyClipboard).toHaveBeenCalled();
     });
 
-    it('should set rotate on self to true when keydown on shift', () => {
+    it('should set isRotateOnSelf, isShiftDown to true and scaleSelection if scaling when keydown on shift', () => {
+        const spyOnManipulator = spyOn(service.manipulator, 'scaleSelection').and.callFake(() => null);
+        service.isScalingSelection = true;
         service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Shift));
 
         expect(service.manipulator.isRotateOnSelf).toBeTruthy();
+        expect(service.manipulator.isShiftDown).toBeTruthy();
+        expect(spyOnManipulator).toHaveBeenCalled();
     });
 
-    it('should set rotate step to ALTER_ROTATION when keydown on alt', () => {
+    it('should set rotationStep to ROTATION_ANGLE.Alter, isAltDown to true and scaleSelection if scaling when keydown on alt', () => {
+        const spyOnManipulator = spyOn(service.manipulator, 'scaleSelection').and.callFake(() => null);
+        service.isScalingSelection = true;
         service.onKeyDown(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
         expect(service.manipulator.rotationStep).toEqual(ROTATION_ANGLE.Alter);
+        expect(service.manipulator.isAltDown).toBeTruthy();
+        expect(spyOnManipulator).toHaveBeenCalled();
     });
 
-    it('should set rotate on self to false when keyup on shift', () => {
+    it('should set isRotateOnSelf, isShiftDown to false and scaleSelection if scaling when keyup on shift', () => {
+        const spyOnManipulator = spyOn(service.manipulator, 'scaleSelection').and.callFake(() => null);
+        service.isScalingSelection = true;
         service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Shift));
 
         expect(service.manipulator.isRotateOnSelf).toBeFalsy();
+        expect(service.manipulator.isShiftDown).toBeFalsy();
+        expect(spyOnManipulator).toHaveBeenCalled();
     });
 
-    it('should set rotate step to BASE_ROTATION when keyup on alt', () => {
+    it('should set rotationStep to ROTATION_ANGLE.Base, isAltDown to false and scaleSelection if scaling when keyup on alt', () => {
+        const spyOnManipulator = spyOn(service.manipulator, 'scaleSelection').and.callFake(() => null);
+        service.isScalingSelection = true;
         service.onKeyUp(TestHelpers.createKeyBoardEvent(KEYS.Alt));
 
         expect(service.manipulator.rotationStep).toEqual(ROTATION_ANGLE.Base);
+        expect(service.manipulator.isAltDown).toBeFalsy();
+        expect(spyOnManipulator).toHaveBeenCalled();
     });
 });
