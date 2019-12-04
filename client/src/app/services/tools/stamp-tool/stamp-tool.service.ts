@@ -213,6 +213,8 @@ export class StampToolService extends AbstractToolService {
             return;
         }
 
+        event.preventDefault();
+
         if (this.isAlterRotation) {
             this.alterRotateStamp(event.deltaY);
         } else {
