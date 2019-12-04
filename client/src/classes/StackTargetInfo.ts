@@ -11,7 +11,7 @@ export class StackTargetInfo {
         }
     }
 
-    isValide(): boolean {
+    isValid(): boolean {
         return this.targetPosition !== undefined;
     }
 }

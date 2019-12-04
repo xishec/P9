@@ -81,7 +81,7 @@ export class SelectionToolService extends AbstractToolService {
         this.selection = new Selection(this.renderer, this.elementRef);
         this.magnetismService.initializeService(this.selection);
         this.drawStack.currentStackTarget.subscribe((stackTarget: StackTargetInfo) => {
-            if (stackTarget.isValide()) {
+            if (stackTarget.isValid()) {
                 this.currentTarget = stackTarget.targetPosition;
                 this.isOnTarget = true;
             }
