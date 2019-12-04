@@ -484,6 +484,22 @@ describe('ClipboardService', () => {
         expect(spyOnSaveState).not.toHaveBeenCalled();
     });
 
+    it('should not increase offset on initial cut on paste', () => {
+        service[`clippings`].add(TestHelpers.createMockSVGGElement());
+        service[`isFromInitialCut`] = true;
+        const spyOnIncreasePasteOffsetValue = spyOn<any>(service, 'increasePasteOffsetValue').and.callFake(() => null);
+        const spyOnSaveState = spyOn<any>(service, 'saveStateFromPaste').and.callFake(() => null);
+        const spyOnClone = spyOn<any>(service, 'clone').and.callFake((set: Set<SVGGElement>) => null);
+        const spyOnHandleOutOfBounds = spyOn<any>(service, 'handlePasteOutOfBounds').and.callFake(() => null);
+
+        service.paste();
+
+        expect(spyOnClone).toHaveBeenCalled();
+        expect(spyOnHandleOutOfBounds).toHaveBeenCalled();
+        expect(spyOnIncreasePasteOffsetValue).not.toHaveBeenCalled();
+        expect(spyOnSaveState).toHaveBeenCalled();
+    });
+
     it('should return false is clippings are different size on compareClippings', () => {
         const mockClippings1: Set<SVGGElement> = new Set<SVGGElement>();
         mockClippings1.add(TestHelpers.createMockSVGGElement());
