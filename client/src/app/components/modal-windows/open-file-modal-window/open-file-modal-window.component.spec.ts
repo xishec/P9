@@ -318,31 +318,31 @@ describe('OpenFileModalWindowComponent', () => {
     it('should return the size of the viewbox of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getViewBox('harry potter')).toEqual('0 0 50 40');
+        expect(component.getViewBox(500)).toEqual('0 0 50 40');
     });
 
     it('should return the width of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getWidth('harry potter')).toEqual('100%');
+        expect(component.getWidth(500)).toEqual('100%');
     });
 
     it('should return the height of the svg to display of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getHeight('harry potter')).toEqual('60px');
+        expect(component.getHeight(500)).toEqual('60px');
     });
 
     it('should return the svg of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.getSVG('harry potter')).toEqual('test-svg2');
+        expect(component.getSVG(500)).toEqual('test-svg2');
     });
 
     it('should return the index of the first file that contains the searched name', () => {
         component.drawingsFromServer = [TEST_DRAWING, TEST_DRAWING2];
 
-        expect(component.findIndexByName('harry potter')).toEqual(1);
+        expect(component.findIndexByName(500)).toEqual(1);
     });
 
     it('should load the right drawing from local file when loadLocalFile is called', () => {
