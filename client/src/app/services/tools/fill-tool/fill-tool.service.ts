@@ -114,9 +114,9 @@ export class FillToolService extends AbstractToolService {
         switch (this.traceType) {
             case TRACE_TYPE.Outline: {
                 const bodyWrap: SVGGElement = this.fillBody(d);
-                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'none');
-                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'none');
-                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, '');
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Fill, 'none');
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Stroke, 'none');
+                this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Title, '');
                 this.fillStroke(d, bodyWrap);
                 break;
             }
@@ -136,16 +136,16 @@ export class FillToolService extends AbstractToolService {
 
     private fillBody(d: string): SVGGElement {
         const bodyWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, this.fillColor);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, this.fillColor);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke_width, '1');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.title, 'body');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Fill, this.fillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Stroke, this.fillColor);
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.StrokeWidth, '1');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Title, 'body');
 
         const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(path, 'd', d);
         this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.StrokeLinecap, 'round');
 
         this.renderer.appendChild(bodyWrap, path);
         this.renderer.appendChild(this.svgWrap, bodyWrap);
@@ -157,24 +157,24 @@ export class FillToolService extends AbstractToolService {
 
         const strokeWrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
         this.renderer.setAttribute(strokeWrap, 'mask', `url(#${id})`);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.title, 'stroke');
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.fill, 'none');
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke, this.strokeColor);
-        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.stroke_width, (this.strokeWidth * 2).toString());
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Title, 'stroke');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Fill, 'none');
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.Stroke, this.strokeColor);
+        this.renderer.setAttribute(strokeWrap, HTML_ATTRIBUTE.StrokeWidth, (this.strokeWidth * 2).toString());
 
         const path: SVGPathElement = this.renderer.createElement('path', SVG_NS);
         this.renderer.setAttribute(path, 'd', d);
         this.renderer.setAttribute(path, 'fill-rule', 'evenodd');
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(path, HTML_ATTRIBUTE.stroke_linecap, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
+        this.renderer.setAttribute(path, HTML_ATTRIBUTE.StrokeLinecap, 'round');
 
         this.renderer.appendChild(strokeWrap, path);
         this.renderer.appendChild(this.svgWrap, strokeWrap);
     }
     private appendMask(d: string, bodyWrap: SVGGElement, id: string): void {
         const mask: SVGMaskElement = this.renderer.createElement('mask', SVG_NS);
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.stroke, 'white');
-        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Stroke, 'white');
+        this.renderer.setAttribute(bodyWrap, HTML_ATTRIBUTE.Fill, 'white');
         this.renderer.setAttribute(mask, 'id', id);
         this.renderer.appendChild(mask, bodyWrap);
         this.renderer.appendChild(this.svgWrap, mask);
@@ -196,12 +196,12 @@ export class FillToolService extends AbstractToolService {
         this.renderer.setProperty(this.SVGImg, 'src', 'data:image/svg+xml,' + encodeURIComponent(serializedSVG));
         this.renderer.setProperty(
             this.canvas,
-            HTML_ATTRIBUTE.width,
+            HTML_ATTRIBUTE.Width,
             this.elementRef.nativeElement.getBoundingClientRect().width,
         );
         this.renderer.setProperty(
             this.canvas,
-            HTML_ATTRIBUTE.height,
+            HTML_ATTRIBUTE.Height,
             this.elementRef.nativeElement.getBoundingClientRect().height,
         );
         this.context2D = this.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -210,7 +210,7 @@ export class FillToolService extends AbstractToolService {
 
     private createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Fill);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Title, TOOL_NAME.Fill);
         this.svgWrap = wrap;
     }
 

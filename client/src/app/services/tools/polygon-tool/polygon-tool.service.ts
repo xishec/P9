@@ -75,8 +75,8 @@ export class PolygonToolService extends AbstractShapeToolService {
     }
 
     private makeInvalidPolygon(): void {
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, '0');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, '0');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, '0');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, '0');
     }
 
     private calculateVertex(n: number): Coords2D {
@@ -116,7 +116,7 @@ export class PolygonToolService extends AbstractShapeToolService {
             vertices += vertex.x + ',' + vertex.y + ' ';
         }
 
-        this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.points, vertices);
+        this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Points, vertices);
     }
 
     updatePreviewRectangle(): void {
@@ -129,38 +129,38 @@ export class PolygonToolService extends AbstractShapeToolService {
 
         if (deltaX < 0) {
             this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - minLength).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, minLength.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, minLength.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, minLength.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, minLength.toString());
         }
 
         if (deltaY < 0) {
             this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - minLength).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, minLength.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, minLength.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, minLength.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, minLength.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Fill, 'white');
         this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Stroke, 'black');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.StrokeDasharray, '5 5');
     }
 
     private renderdrawPolygon(drawPolygon: SVGPolygonElement = this.drawPolygon): void {
         if (this.isValidPolygon()) {
             this.userFillColor === 'none'
-                ? this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.fill, this.userFillColor)
-                : this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.stroke, '#' + this.userStrokeColor);
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.stroke_width, this.userStrokeWidth.toString());
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+                ? this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Fill, this.userFillColor)
+                : this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Fill, '#' + this.userFillColor);
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Stroke, '#' + this.userStrokeColor);
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.StrokeWidth, this.userStrokeWidth.toString());
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
         } else {
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.fill, 'none');
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.stroke, 'none');
-            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.stroke_width, '0');
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Fill, 'none');
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.Stroke, 'none');
+            this.renderer.setAttribute(drawPolygon, HTML_ATTRIBUTE.StrokeWidth, '0');
         }
     }
 
@@ -169,13 +169,13 @@ export class PolygonToolService extends AbstractShapeToolService {
         const drawPolygon: SVGPolygonElement = this.renderer.createElement('polygon', SVG_NS);
         this.copyPreviewRectangleAttributes(drawPolygon);
 
-        this.renderer.setAttribute(el, HTML_ATTRIBUTE.title, TOOL_NAME.Polygon);
-        this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_width, this.userStrokeWidth.toString());
-        this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke_linejoin, 'round');
-        this.renderer.setAttribute(el, HTML_ATTRIBUTE.stroke, '#' + this.userStrokeColor);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.Title, TOOL_NAME.Polygon);
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.StrokeWidth, this.userStrokeWidth.toString());
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
+        this.renderer.setAttribute(el, HTML_ATTRIBUTE.Stroke, '#' + this.userStrokeColor);
         this.userFillColor === 'none'
-            ? this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, this.userFillColor)
-            : this.renderer.setAttribute(el, HTML_ATTRIBUTE.fill, '#' + this.userFillColor);
+            ? this.renderer.setAttribute(el, HTML_ATTRIBUTE.Fill, this.userFillColor)
+            : this.renderer.setAttribute(el, HTML_ATTRIBUTE.Fill, '#' + this.userFillColor);
 
         this.renderer.appendChild(el, drawPolygon);
         this.renderer.appendChild(this.elementRef.nativeElement, el);

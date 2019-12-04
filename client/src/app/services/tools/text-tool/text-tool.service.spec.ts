@@ -137,19 +137,19 @@ describe('TextToolService', () => {
     });
 
     it('updateStyle with fill should change the fontColor of fontInfo', () => {
-        service[`updateStyle`](HTML_ATTRIBUTE.fill, '#' + 'ffffff');
+        service[`updateStyle`](HTML_ATTRIBUTE.Fill, '#' + 'ffffff');
 
         expect(service[`fontInfo`].fontColor).toEqual('#ffffff');
     });
 
     it('updateStyle with font_family should change the fontType', () => {
-        service[`updateStyle`](HTML_ATTRIBUTE.font_family, 'Times');
+        service[`updateStyle`](HTML_ATTRIBUTE.FontFamily, 'Times');
 
         expect(service[`fontInfo`].fontFamily).toEqual('Times');
     });
 
     it('updateStyle with font_size should change the fontSize', () => {
-        service[`updateStyle`](HTML_ATTRIBUTE.font_size, '15');
+        service[`updateStyle`](HTML_ATTRIBUTE.FontSize, '15');
 
         expect(service[`fontInfo`].fontSize).toEqual('15');
     });
@@ -158,7 +158,7 @@ describe('TextToolService', () => {
         const spyOnupdatePreviewBox = spyOn<any>(service, 'updatePreviewBox');
         service[`isWriting`] = true;
 
-        service[`updateStyle`](HTML_ATTRIBUTE.font_family, 'Times');
+        service[`updateStyle`](HTML_ATTRIBUTE.FontFamily, 'Times');
 
         expect(spyOnupdatePreviewBox).toHaveBeenCalled();
     });

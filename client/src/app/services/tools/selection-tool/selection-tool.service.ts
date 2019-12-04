@@ -97,7 +97,7 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'x', this.initialMouseCoords.x.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
@@ -106,12 +106,12 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.renderer.setAttribute(this.selectionRectangle, 'y', this.initialMouseCoords.y.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Fill, 'white');
         this.renderer.setAttribute(this.selectionRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Stroke, 'black');
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.StrokeDasharray, '5 5');
     }
 
     private getDOMRect(el: SVGGElement): DOMRect {
@@ -119,8 +119,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     private getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
-            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string, DEFAULT_RADIX);
         }
 
         return 0;

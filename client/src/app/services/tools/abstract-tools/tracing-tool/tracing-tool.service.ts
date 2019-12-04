@@ -100,36 +100,36 @@ export abstract class TracingToolService extends AbstractToolService {
 
     protected createSVGWrapper(): void {
         const wrap: SVGGElement = this.renderer.createElement('g', SVG_NS);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.stroke, '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.opacity, this.currentOpacity);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
-        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.title, TOOL_NAME.Pen);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Stroke, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Opacity, this.currentOpacity);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
+        this.renderer.setAttribute(wrap, HTML_ATTRIBUTE.Title, TOOL_NAME.Pen);
         this.svgWrap = wrap;
         this.renderer.appendChild(this.elementRef.nativeElement, wrap);
     }
 
     protected createSVGCircle(x: number, y: number): SVGCircleElement {
         const circle: SVGCircleElement = this.renderer.createElement('circle', SVG_NS);
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.stroke, 'none');
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cx, x.toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.cy, y.toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.Stroke, 'none');
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.Cx, x.toString());
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.Cy, y.toString());
         this.renderer.setAttribute(circle, 'r', (this.currentWidth / 2).toString());
-        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.fill, '#' + this.currentColor);
+        this.renderer.setAttribute(circle, HTML_ATTRIBUTE.Fill, '#' + this.currentColor);
         return circle;
     }
 
     protected createSVGPath(): void {
         this.svgPath = this.renderer.createElement('path', SVG_NS);
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.fill, 'none');
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_width, this.currentWidth.toString());
-        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.stroke_linejoin, 'round');
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.Fill, 'none');
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeWidth, this.currentWidth.toString());
+        this.renderer.setAttribute(this.svgPath, HTML_ATTRIBUTE.StrokeLinejoin, 'round');
         this.renderer.setAttribute(this.svgPath, 'stroke-linecap', 'round');
         this.renderer.appendChild(this.svgWrap, this.svgPath);
     }
 
     protected updatePreviewCircle(x: number, y: number): void {
-        this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.cx, x.toString());
-        this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.cy, y.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.Cx, x.toString());
+        this.renderer.setAttribute(this.svgPreviewCircle, HTML_ATTRIBUTE.Cy, y.toString());
     }
 
     protected updateSVGPath(): void {

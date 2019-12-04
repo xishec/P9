@@ -66,21 +66,21 @@ export class EraserToolService extends AbstractToolService {
         });
 
         this.eraser = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.width, this.currentSize.toString());
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.height, this.currentSize.toString());
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Width, this.currentSize.toString());
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Height, this.currentSize.toString());
 
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.fill, '#' + DEFAULT_WHITE);
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.stroke, '#' + DEFAULT_GRAY_0);
-        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.stroke_width, ERASER_STROKE_WIDTH);
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Fill, '#' + DEFAULT_WHITE);
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Stroke, '#' + DEFAULT_GRAY_0);
+        this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.StrokeWidth, ERASER_STROKE_WIDTH);
     }
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService): void {
         this.attributesManagerService = attributesManagerService;
         this.attributesManagerService.eraserSize.subscribe((newSize) => {
             this.currentSize = newSize;
-            this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.width, this.currentSize.toString());
-            this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.height, this.currentSize.toString());
+            this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Width, this.currentSize.toString());
+            this.renderer.setAttribute(this.eraser, HTML_ATTRIBUTE.Height, this.currentSize.toString());
         });
     }
 
@@ -228,7 +228,7 @@ export class EraserToolService extends AbstractToolService {
 
             this.colorBorder(
                 this.currentTarget,
-                this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.stroke_width),
+                this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth),
                 this.lastToolName,
             );
         }
@@ -237,8 +237,8 @@ export class EraserToolService extends AbstractToolService {
     private addElementToMap(svgGElement: SVGGElement): void {
         if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
             this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
-                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
-                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
+                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
+                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
             } as SVGGElementInfo);
         }
     }
@@ -277,10 +277,10 @@ export class EraserToolService extends AbstractToolService {
                 break;
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.Stroke, borderColor);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTML_ATTRIBUTE.stroke_width,
+            HTML_ATTRIBUTE.StrokeWidth,
             borderWidth,
         );
     }
@@ -289,7 +289,7 @@ export class EraserToolService extends AbstractToolService {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE],
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             borderColor,
         );
     }
@@ -299,7 +299,7 @@ export class EraserToolService extends AbstractToolService {
         const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
         for (let childIndex = 0; childIndex < childrenCount; childIndex++) {
-            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.Fill, borderColor);
         }
     }
 
@@ -318,29 +318,29 @@ export class EraserToolService extends AbstractToolService {
     }
 
     private appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
-        const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
-        const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
+        const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.Width) as string;
+        const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.Height) as string;
 
         const x = parseInt(
-            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.x) as string,
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.X) as string,
             DEFAULT_RADIX,
         );
         const y = parseInt(
-            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.y) as string,
+            this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.Y) as string,
             DEFAULT_RADIX,
         );
 
         this.textBorder = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.width, width);
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.height, height);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Width, width);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Height, height);
 
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.fill, 'none');
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke, borderColor);
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.stroke_width, borderWidth);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Fill, 'none');
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Stroke, borderColor);
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.StrokeWidth, borderWidth);
 
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.x, x.toString());
-        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.y, y.toString());
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.X, x.toString());
+        this.renderer.setAttribute(this.textBorder, HTML_ATTRIBUTE.Y, y.toString());
         this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
     }
 
@@ -348,7 +348,7 @@ export class EraserToolService extends AbstractToolService {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             borderColor,
         );
     }
@@ -358,7 +358,7 @@ export class EraserToolService extends AbstractToolService {
         const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
         for (let childIndex = 1; childIndex < childrenCount; childIndex++) {
-            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.fill, borderColor);
+            this.renderer.setAttribute(children[childIndex], HTML_ATTRIBUTE.Fill, borderColor);
         }
     }
 
@@ -397,10 +397,10 @@ export class EraserToolService extends AbstractToolService {
                 break;
         }
 
-        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.stroke, borderColor);
+        this.renderer.setAttribute(this.drawStack.getElementByPosition(idElement), HTML_ATTRIBUTE.Stroke, borderColor);
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement),
-            HTML_ATTRIBUTE.stroke_width,
+            HTML_ATTRIBUTE.StrokeWidth,
             borderWidth,
         );
     }
@@ -420,8 +420,8 @@ export class EraserToolService extends AbstractToolService {
     }
 
     private getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
-            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string, DEFAULT_RADIX);
         }
         return 0;
     }

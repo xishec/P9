@@ -78,7 +78,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             this.primaryColor,
         );
 
@@ -88,7 +88,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeStrokeColorOnShape(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             this.secondaryColor,
         );
 
@@ -100,8 +100,8 @@ export class ColorApplicatorToolService extends AbstractToolService {
             this.currentStackTarget.targetPosition,
         );
         if (filledShapeWrap.children[0] && filledShapeWrap.children[0].getAttribute('title') === 'body') {
-            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.stroke, this.primaryColor);
-            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.fill, this.primaryColor);
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.Stroke, this.primaryColor);
+            this.renderer.setAttribute(filledShapeWrap.children[0], HTML_ATTRIBUTE.Fill, this.primaryColor);
         }
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
@@ -111,7 +111,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
             this.currentStackTarget.targetPosition,
         );
         if (filledShapeWrap.children[2] && filledShapeWrap.children[2].getAttribute('title') === 'stroke') {
-            this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.stroke, this.secondaryColor);
+            this.renderer.setAttribute(filledShapeWrap.children[2], HTML_ATTRIBUTE.Stroke, this.secondaryColor);
         }
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
@@ -122,19 +122,19 @@ export class ColorApplicatorToolService extends AbstractToolService {
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             color,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             color,
         );
 
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.opacity,
+            HTML_ATTRIBUTE.Opacity,
             opacity,
         );
 
@@ -144,7 +144,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeFillColorOnText(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.fill,
+            HTML_ATTRIBUTE.Fill,
             this.primaryColor,
         );
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
@@ -153,7 +153,7 @@ export class ColorApplicatorToolService extends AbstractToolService {
     changeStrokeColorOnText(): void {
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(this.currentStackTarget.targetPosition),
-            HTML_ATTRIBUTE.stroke,
+            HTML_ATTRIBUTE.Stroke,
             this.secondaryColor,
         );
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);

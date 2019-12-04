@@ -28,7 +28,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         this.renderer = renderer;
         this.drawStack = drawStack;
         this.previewRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
     }
 
     abstract onMouseMove(event: MouseEvent): void;
@@ -65,25 +65,25 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         if (deltaX < 0) {
             deltaX *= -1;
             this.renderer.setAttribute(this.previewRectangle, 'x', (this.initialMouseCoords.x - deltaX).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'x', this.initialMouseCoords.x.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
             this.renderer.setAttribute(this.previewRectangle, 'y', (this.initialMouseCoords.y - deltaY).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
         } else {
             this.renderer.setAttribute(this.previewRectangle, 'y', this.initialMouseCoords.y.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill, 'white');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Fill, 'white');
         this.renderer.setAttribute(this.previewRectangle, 'fill-opacity', '0.3');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke, 'black');
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Stroke, 'black');
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.StrokeDasharray, '5 5');
     }
 }
