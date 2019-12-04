@@ -234,7 +234,7 @@ describe('EraserToolService', () => {
         spyOn<any>(service, 'getDOMRect').and.returnValue(new DOMRect(0, 0, 0, 0));
         spyOn(service[`drawStack`], 'getDrawStackLength').and.returnValue(1);
         spyOn<any>(service, 'isEraserTouchingElement').and.returnValue(true);
-        const spyOnget: jasmine.Spy = spyOn(service[`changedElements`], 'get').and.returnValue(new SVGGElementInfo());
+        const spyOnget: jasmine.Spy = spyOn(service[`changedElements`], 'get').and.returnValue({} as SVGGElementInfo);
         const spyOnset: jasmine.Spy = spyOn(service[`changedElements`], 'set');
 
         service[`drawStack`].drawStack[0] = createMockSVGGElementWithAttribute('id_element');
@@ -389,11 +389,11 @@ describe('EraserToolService', () => {
     });
 
     it('removeBorder should call restoreBorder if element is not undefined', () => {
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue({} as SVGGElementInfo);
         service[`currentTarget`] = 0;
         service[`drawStack`].drawStack[0] = service[`renderer`].createElement('rect', SVG_NS);
-        service[`changedElements`].set(0, new SVGGElementInfo());
+        service[`changedElements`].set(0, {} as SVGGElementInfo);
         const spyOnrestoreBorder: jasmine.Spy = spyOn<any>(service, 'restoreBorder');
-        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
 
         service[`removeBorder`]('0', '');
 
@@ -404,7 +404,7 @@ describe('EraserToolService', () => {
     it('removeBorder should call get of changedElements if currentTraget is not undefined', () => {
         service[`currentTarget`] = 0;
         service[`drawStack`].drawStack[0] = service[`renderer`].createElement('rect', SVG_NS);
-        service[`changedElements`].set(0, new SVGGElementInfo());
+        service[`changedElements`].set(0, {} as SVGGElementInfo);
         const spyOnrestoreBorder: jasmine.Spy = spyOn<any>(service, 'restoreBorder');
         const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(undefined);
 
@@ -465,7 +465,7 @@ describe('EraserToolService', () => {
     it('onMouseUp should  call removeChild if erasedSomething is true and currentChangedTargetIsValid is also true', () => {
         service[`erasedSomething`] = true;
         service[`currentTarget`] = 0;
-        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue(new SVGGElementInfo());
+        const spyOnget: jasmine.Spy = spyOn(service.changedElements, 'get').and.returnValue({} as SVGGElementInfo);
 
         service.onMouseUp(leftMouseEvent);
 

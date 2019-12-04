@@ -236,13 +236,10 @@ export class EraserToolService extends AbstractToolService {
 
     private addElementToMap(svgGElement: SVGGElement): void {
         if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
-            this.changedElements.set(
-                parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX),
-                new SVGGElementInfo(
-                    svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
-                    svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
-                ),
-            );
+            this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke) as string,
+                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.stroke_width) as string,
+            } as SVGGElementInfo);
         }
     }
 
