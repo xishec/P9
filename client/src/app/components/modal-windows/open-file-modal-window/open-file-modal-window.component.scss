@@ -117,14 +117,22 @@ mat-list-option[aria-selected='true'] {
     width: 626px;
     align-self: center;
     margin-right: 42px;
+
+    input::placeholder {
+        color: #6a737d;
+        opacity: 0.54;
+    }
 }
 
 .filter {
     height: 24px;
+    width: 626px;
+
     padding: 2px 4px 2px 40px;
-    margin: 4px 0;
+    margin: 3px 0;
 
     color: #586069;
+    font-size: 12px;
 
     border: 1px solid #d1d5da;
     border-radius: 3px;
@@ -139,6 +147,7 @@ mat-list-option[aria-selected='true'] {
 .hidden-info {
     text-align: center;
     color: #8f8f8f;
+    font-size: 14px;
 }
 
 #loading-div {
