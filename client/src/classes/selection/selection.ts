@@ -7,6 +7,7 @@ import {
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
     SELECTION_COLOR,
+    SELECTION_BOX_CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { Coords2D } from '../Coords2D';
 
@@ -28,6 +29,7 @@ export class Selection {
     isActiveSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     isAppended = false;
+    isInputOnControlPoint = false;
 
     constructor(renderer: Renderer2, svgReference: ElementRef<SVGElement>) {
         this.renderer = renderer;
@@ -54,6 +56,21 @@ export class Selection {
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, SELECTION_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
+            this.renderer.listen(this.controlPoints[i], 'mouseover', () => {
+                const currentControlPointId = i;
+                if(!this.isInputOnControlPoint){
+                    this.renderer.setStyle(this.svgRef.nativeElement, 'cursor', SELECTION_BOX_CURSOR_STYLES.get(currentControlPointId));
+                }
+            });
+            this.renderer.listen(this.controlPoints[i], 'mouseout', () => {
+                if(!this.isInputOnControlPoint){
+                    this.renderer.setStyle(this.svgRef.nativeElement, 'cursor', 'default');
+                }
+            });
+            this.renderer.listen(this.controlPoints[i], 'mousedown', () => {
+                const currentControlPoint = this.controlPoints[i];
+                this.activeControlPoint = currentControlPoint;
+            });
         }
     }
 
@@ -132,7 +149,6 @@ export class Selection {
             const distY = currentMouseCoords.y - cy;
 
             if (Math.abs(distX) <= r && Math.abs(distY) <= r && this.isAppended) {
-                this.activeControlPoint = ctrlPt;
                 return true;
             }
         }

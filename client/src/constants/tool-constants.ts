@@ -6,7 +6,7 @@ const CONTROL_POINTS_AMOUNT = 8;
 const CONTROL_POINT_RADIUS = 10;
 const SELECTION_COLOR = '#ff5722';
 
-const SELECTIONBOX_CURSOR_STYLES: Map<number, string> = new Map([
+const SELECTION_BOX_CURSOR_STYLES: Map<number, string> = new Map([
     [0, 'nw-resize'],
     [1, 'n-resize'],
     [2, 'ne-resize'],
@@ -535,5 +535,5 @@ export {
     SPRAY_PARTICLE_THICKNESS,
     MAX_CHARS_IN_PATH,
     CIRCLES_TO_APPEND,
-    SELECTIONBOX_CURSOR_STYLES,
+    SELECTION_BOX_CURSOR_STYLES,
 };

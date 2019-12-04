@@ -3,7 +3,7 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import { Coords2D } from 'src/classes/Coords2D';
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
 import { KEYS, MOUSE, SIDEBAR_WIDTH, SVG_NS } from 'src/constants/constants';
-import { DEFAULT_RADIX, HTML_ATTRIBUTE, ROTATION_ANGLE } from 'src/constants/tool-constants';
+import { DEFAULT_RADIX, HTML_ATTRIBUTE, ROTATION_ANGLE, SELECTION_BOX_CURSOR_STYLES } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
@@ -260,6 +260,8 @@ export class SelectionToolService extends AbstractToolService {
         if (this.selection.mouseIsInControlPoint(this.currentMouseCoords)) {
             this.saveOriginalSelectionBoxState();
             this.manipulator.initTransformMatrix(this.selection);
+            this.selection.isInputOnControlPoint = true;
+            this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', SELECTION_BOX_CURSOR_STYLES.get(parseInt(this.selection.activeControlPoint.getAttribute('controlPointId') as string)));
         }
     }
 
@@ -317,6 +319,9 @@ export class SelectionToolService extends AbstractToolService {
         } else {
             this.selection.emptySelection();
         }
+
+        this.selection.isInputOnControlPoint = false;
+        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'default');
 
         this.isLeftMouseDown = false;
         this.isLeftMouseDragging = false;
