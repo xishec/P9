@@ -21,7 +21,10 @@ describe('CloudService', () => {
 
     it('should download test string from firebase on call download', () => {
         const cloudService = new CloudService();
-        cloudService.download('test');
+        cloudService.save('test', 'test');
+        setTimeout(() => {
+            cloudService.download('test');
+        }, 1000);
         expect(cloudService).eql(cloudService);
     });
 
