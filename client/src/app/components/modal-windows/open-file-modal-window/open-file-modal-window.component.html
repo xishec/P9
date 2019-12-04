@@ -108,6 +108,7 @@
                             type="button"
                             (click)="onDelete()"
                             *ngIf="selectedOption !== ''"
+                            [disabled]="serverFormIsInvalid()"
                         >
                             Supprimer
                         </button>
