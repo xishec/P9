@@ -3,6 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { createKeyBoardEvent, createMouseEvent } from 'src/classes/test-helpers.spec';
 import { KEYS } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { ColorToolService } from '../color-tool/color-tool.service';
 import { DropperToolService } from '../dropper-tool/dropper-tool.service';
 
@@ -22,7 +23,7 @@ describe('DropperToolService', () => {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
-                            if (elem === 'canvas') {
+                            if (elem === HTML_ATTRIBUTE.Canvas) {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {

@@ -50,32 +50,32 @@ export class Selection {
 
     private initFullSelectionBox(): void {
         this.selectionBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.stroke, SELECTION_OUTLINE_COLOR);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill, SELECTION_FILL_COLOR);
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.fill_opacity, SELECTION_FILL_OPACITY);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Stroke, SELECTION_OUTLINE_COLOR);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Fill, SELECTION_FILL_COLOR);
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.FillOpacity, SELECTION_FILL_OPACITY);
         this.renderer.setStyle(this.selectionBox, 'pointer-events', 'none');
 
         for (let i = 0; i < CONTROL_POINTS_AMOUNT; i++) {
             this.controlPoints[i] = this.renderer.createElement('circle', SVG_NS);
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.r, CONTROL_POINT_RADIUS.toString());
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.stroke, SELECTION_OUTLINE_COLOR);
-            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.fill, CONTROL_POINT_FILL_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.R, CONTROL_POINT_RADIUS.toString());
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Stroke, SELECTION_OUTLINE_COLOR);
+            this.renderer.setAttribute(this.controlPoints[i], HTML_ATTRIBUTE.Fill, CONTROL_POINT_FILL_COLOR);
             this.renderer.setAttribute(this.controlPoints[i], 'controlPointId', i.toString());
             this.renderer.listen(this.controlPoints[i], 'mouseover', () => {
                 const currentControlPointId = i;
                 if (!this.isInputOnControlPoint) {
                     this.renderer.setStyle(
                         this.svgRef.nativeElement,
-                        HTML_ATTRIBUTE.cursor,
+                        HTML_ATTRIBUTE.Cursor,
                         SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(currentControlPointId),
                     );
                 }
             });
             this.renderer.listen(this.controlPoints[i], 'mouseout', () => {
                 if (!this.isInputOnControlPoint) {
-                    this.renderer.setStyle(this.svgRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
+                    this.renderer.setStyle(this.svgRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
                 }
             });
             this.renderer.listen(this.controlPoints[i], 'mousedown', () => {
@@ -124,8 +124,8 @@ export class Selection {
     }
 
     private getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
-            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string, DEFAULT_RADIX);
         }
 
         return 0;
@@ -225,10 +225,10 @@ export class Selection {
         const top = this.findTopMostCoord();
         const bottom = this.findBottomMostCoord();
 
-        this.renderer.setAttribute(this.selectionBox, 'x', left.toString());
-        this.renderer.setAttribute(this.selectionBox, 'y', top.toString());
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.width, (right - left).toString());
-        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.height, (bottom - top).toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.X, left.toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Y, top.toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Width, (right - left).toString());
+        this.renderer.setAttribute(this.selectionBox, HTML_ATTRIBUTE.Height, (bottom - top).toString());
 
         this.updateControlPoints();
     }
@@ -272,12 +272,12 @@ export class Selection {
         for (let index = 0; index < CONTROL_POINTS_AMOUNT; ++index) {
             this.renderer.setAttribute(
                 this.controlPoints[index],
-                HTML_ATTRIBUTE.cx,
+                HTML_ATTRIBUTE.Cx,
                 (positionMap.get(index) as [string, string])[0],
             );
             this.renderer.setAttribute(
                 this.controlPoints[index],
-                HTML_ATTRIBUTE.cy,
+                HTML_ATTRIBUTE.Cy,
                 (positionMap.get(index) as [string, string])[1],
             );
         }

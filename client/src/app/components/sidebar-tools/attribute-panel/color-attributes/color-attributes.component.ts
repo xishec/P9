@@ -37,20 +37,20 @@ export class ColorAttributesComponent implements OnInit {
     }
 
     onClickBackgroundColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.backgroundColor);
+        this.colorToolService.changeSelectedColorType(COLOR_TYPE.BackgroundColor);
         this.colorToolService.changeShowColorPalette(true);
     }
     onClickPrimaryColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.primaryColor);
+        this.colorToolService.changeSelectedColorType(COLOR_TYPE.PrimaryColor);
         this.colorToolService.changeShowColorPalette(true);
     }
     onClickSecondaryColor(): void {
-        this.colorToolService.changeSelectedColorType(COLOR_TYPE.secondaryColor);
+        this.colorToolService.changeSelectedColorType(COLOR_TYPE.SecondaryColor);
         this.colorToolService.changeShowColorPalette(true);
     }
 
     getBackgroundColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.backgroundColor) {
+        if (this.selectedColorType === COLOR_TYPE.BackgroundColor) {
             return {
                 backgroundColor: '#' + this.backgroundColor,
                 border: 'solid 1px black',
@@ -62,7 +62,7 @@ export class ColorAttributesComponent implements OnInit {
         };
     }
     getPrimaryColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.primaryColor) {
+        if (this.selectedColorType === COLOR_TYPE.PrimaryColor) {
             return {
                 backgroundColor: '#' + this.primaryColor,
                 border: 'solid 1px black',
@@ -74,7 +74,7 @@ export class ColorAttributesComponent implements OnInit {
         };
     }
     getSecondaryColorIcon(): ColorStyle {
-        if (this.selectedColorType === COLOR_TYPE.secondaryColor) {
+        if (this.selectedColorType === COLOR_TYPE.SecondaryColor) {
             return {
                 backgroundColor: '#' + this.secondaryColor,
                 border: 'solid 1px black',

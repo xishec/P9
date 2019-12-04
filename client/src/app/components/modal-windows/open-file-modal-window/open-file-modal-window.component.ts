@@ -302,16 +302,16 @@ export class OpenFileModalWindowComponent implements OnInit {
     }
 
     numberOfDaysBetween(timestamp1: number, timestamp2: number): number {
-        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.day);
-        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.day);
+        const numberDaysDate1 = Math.floor(timestamp1 / NUMBER_OF_MS.Day);
+        const numberDaysDate2 = Math.floor(timestamp2 / NUMBER_OF_MS.Day);
 
         return numberDaysDate2 - numberDaysDate1;
     }
 
     msToDaysHoursMinutes(differenceInMs: number): string {
-        const days = Math.floor(differenceInMs / NUMBER_OF_MS.day);
-        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.day) / NUMBER_OF_MS.hours);
-        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.hours) / NUMBER_OF_MS.minutes);
+        const days = Math.floor(differenceInMs / NUMBER_OF_MS.Day);
+        const hours = Math.floor((differenceInMs % NUMBER_OF_MS.Day) / NUMBER_OF_MS.Hours);
+        const minutes = Math.floor((differenceInMs % NUMBER_OF_MS.Hours) / NUMBER_OF_MS.Minutes);
 
         const daysDisplay = days <= 1 ? ' jour, ' : ' jours, ';
         const hoursDisplay = hours <= 1 ? ' heure et ' : ' heures et ';

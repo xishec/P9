@@ -156,7 +156,7 @@ describe('ColorNumericValuesComponent', () => {
                         return DEFAULT_WHITE;
                     };
                     expect(component.previewColor).toBeDefined();
-                    colorToolService.selectedColorType.next(COLOR_TYPE.backgroundColor);
+                    colorToolService.selectedColorType.next(COLOR_TYPE.BackgroundColor);
                     return fixture.whenStable();
                 })
                 .then(() => {

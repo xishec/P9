@@ -28,7 +28,7 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         this.renderer = renderer;
         this.drawStack = drawStack;
         this.previewRectangle = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
     }
 
     abstract onMouseMove(event: MouseEvent): void;
@@ -64,26 +64,46 @@ export abstract class AbstractShapeToolService extends AbstractToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.x, (this.initialMouseCoords.x - deltaX).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+            this.renderer.setAttribute(
+                this.previewRectangle,
+                HTML_ATTRIBUTE.X,
+                (this.initialMouseCoords.x - deltaX).toString(),
+            );
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.x, this.initialMouseCoords.x.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.X, this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
         }
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.y, (this.initialMouseCoords.y - deltaY).toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+            this.renderer.setAttribute(
+                this.previewRectangle,
+                HTML_ATTRIBUTE.Y,
+                (this.initialMouseCoords.y - deltaY).toString(),
+            );
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
         } else {
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.y, this.initialMouseCoords.y.toString());
-            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Y, this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
         }
 
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.fill_opacity, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color);
-        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.stroke_dasharray, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray);
+        this.renderer.setAttribute(this.previewRectangle, HTML_ATTRIBUTE.Fill, PREVIEW_RECTANGLE_ATTRIBUTES.FillColor);
+        this.renderer.setAttribute(
+            this.previewRectangle,
+            HTML_ATTRIBUTE.FillOpacity,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillOpacity,
+        );
+        this.renderer.setAttribute(
+            this.previewRectangle,
+            HTML_ATTRIBUTE.Stroke,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeColor,
+        );
+        this.renderer.setAttribute(
+            this.previewRectangle,
+            HTML_ATTRIBUTE.StrokeDasharray,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeDasharray,
+        );
     }
 }

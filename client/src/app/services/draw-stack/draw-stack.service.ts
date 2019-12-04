@@ -2,6 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
 
@@ -65,7 +66,7 @@ export class DrawStackService {
 
     makeTargetable(el: SVGGElement): SVGGElement {
         const position = this.drawStack.length;
-        const tool = el.getAttribute('title');
+        const tool = el.getAttribute(HTML_ATTRIBUTE.Title);
         this.renderer.setAttribute(el, 'id_element', position.toString());
         this.idStack.push(el.getAttribute('id_element') as string);
 

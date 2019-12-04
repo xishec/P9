@@ -73,7 +73,7 @@ export class TextToolService extends AbstractToolService {
     ) {
         super();
         this.colorToolService.primaryColor.subscribe((color: string) => {
-            this.updateStyle(HTML_ATTRIBUTE.fill, '#' + color);
+            this.updateStyle(HTML_ATTRIBUTE.Fill, '#' + color);
         });
     }
 
@@ -91,10 +91,10 @@ export class TextToolService extends AbstractToolService {
         this.attributesManagerService = attributeManagerService;
 
         this.attributesManagerService.font.subscribe((font) => {
-            this.updateStyle(HTML_ATTRIBUTE.font_family, font);
+            this.updateStyle(HTML_ATTRIBUTE.FontFamily, font);
         });
         this.attributesManagerService.fontSize.subscribe((size) => {
-            this.updateStyle(HTML_ATTRIBUTE.font_size, size.toString());
+            this.updateStyle(HTML_ATTRIBUTE.FontSize, size.toString());
         });
         this.attributesManagerService.fontAlign.subscribe((align) => {
             this.updateAlign(align);
@@ -112,13 +112,13 @@ export class TextToolService extends AbstractToolService {
 
     private updateStyle(attribute: HTML_ATTRIBUTE, value: string) {
         switch (attribute) {
-            case HTML_ATTRIBUTE.fill:
+            case HTML_ATTRIBUTE.Fill:
                 this.fontInfo.fontColor = value;
                 break;
-            case HTML_ATTRIBUTE.font_family:
+            case HTML_ATTRIBUTE.FontFamily:
                 this.fontInfo.fontFamily = value;
                 break;
-            case HTML_ATTRIBUTE.font_size:
+            case HTML_ATTRIBUTE.FontSize:
                 this.fontInfo.fontSize = value;
                 break;
         }
@@ -146,16 +146,16 @@ export class TextToolService extends AbstractToolService {
             }
 
             this.textBox.childNodes.forEach((tspan: SVGTSpanElement) => {
-                this.renderer.setAttribute(tspan, 'x', this.textBoxXPosition.toString());
+                this.renderer.setAttribute(tspan, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
             });
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.TextAnchor, this.fontInfo.fontAlign);
         }
     }
 
     private updateItalic(isItalic: boolean): void {
         this.fontInfo.fontStyle = isItalic ? FONT_STYLE.Italic : FONT_STYLE.Normal;
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.FontStyle, this.fontInfo.fontStyle);
             this.updatePreviewBox();
         }
     }
@@ -163,7 +163,7 @@ export class TextToolService extends AbstractToolService {
     private updateBold(isBold: boolean): void {
         this.fontInfo.fontWeight = isBold ? FONT_WEIGHT.Bold : FONT_WEIGHT.Normal;
         if (this.isWriting) {
-            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.FontWeight, this.fontInfo.fontWeight);
             this.updatePreviewBox();
         }
     }
@@ -183,30 +183,30 @@ export class TextToolService extends AbstractToolService {
         this.bBoxWidth = textBBox.width;
         this.bBoxHeight = textBBox.height;
 
-        this.renderer.setAttribute(this.previewBox, 'x', this.bBoxAnchorLeft.toString());
-        this.renderer.setAttribute(this.previewBox, 'y', textBBox.y.toString());
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.height, textBBox.height.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Y, textBBox.y.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Height, textBBox.height.toString());
 
-        this.renderer.setAttribute(this.gWrap, 'x', this.bBoxAnchorLeft.toString());
-        this.renderer.setAttribute(this.gWrap, 'y', textBBox.y.toString());
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.width, this.bBoxWidth.toString());
-        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.height, textBBox.height.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.X, this.bBoxAnchorLeft.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Y, textBBox.y.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Width, this.bBoxWidth.toString());
+        this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Height, textBBox.height.toString());
     }
 
     private initPreviewRect(): void {
         this.previewBox = this.renderer.createElement('rect', SVG_NS);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.title, TITLE_ELEMENT_TO_REMOVE);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Color);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_width, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Width);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.fill, TEXT_PREVIEW_BOX_ATTRIBUTES.Fill_Color);
-        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.stroke_dasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Dasharray);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Title, TITLE_ELEMENT_TO_REMOVE);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Stroke, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeColor);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeWidth, TEXT_PREVIEW_BOX_ATTRIBUTES.Stroke_Width);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.Fill, TEXT_PREVIEW_BOX_ATTRIBUTES.FillColor);
+        this.renderer.setAttribute(this.previewBox, HTML_ATTRIBUTE.StrokeDasharray, TEXT_PREVIEW_BOX_ATTRIBUTES.StrokeDasharray);
     }
 
     private createTextBox(x: number, y: number): void {
         this.textBox = this.renderer.createElement('text', SVG_NS);
-        this.renderer.setAttribute(this.textBox, 'x', x.toString());
-        this.renderer.setAttribute(this.textBox, 'y', y.toString());
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.X, x.toString());
+        this.renderer.setAttribute(this.textBox, HTML_ATTRIBUTE.Y, y.toString());
     }
 
     private createNewLine(): void {
@@ -217,14 +217,14 @@ export class TextToolService extends AbstractToolService {
         if (tsSpanStackIsNotEmpty) {
             refChilpos = this.textCursor.findLinePosition(this.currentLine, this.tspans);
             this.text = this.textCursor.isAtStartOfLine() ? TEXT_LINEBREAK : this.textCursor.leftSideText();
-            this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+            this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
         }
 
         this.text = TEXT_CURSOR + remainingRightText;
         this.currentLine = this.renderer.createElement('tspan', SVG_NS);
-        this.renderer.setAttribute(this.currentLine, 'x', this.textBoxXPosition.toString());
+        this.renderer.setAttribute(this.currentLine, HTML_ATTRIBUTE.X, this.textBoxXPosition.toString());
         this.renderer.setAttribute(this.currentLine, 'dy', '1em');
-        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
 
         if (tsSpanStackIsNotEmpty) {
             this.renderer.insertBefore(this.textBox, this.currentLine, this.tspans[refChilpos + 1]);
@@ -273,13 +273,13 @@ export class TextToolService extends AbstractToolService {
             this.createNewLine();
 
             this.gWrap = this.renderer.createElement('g', SVG_NS);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.title, TOOL_NAME.Text);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.fill, this.fontInfo.fontColor);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_family, this.fontInfo.fontFamily);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_size, this.fontInfo.fontSize);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_style, this.fontInfo.fontStyle);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.font_weight, this.fontInfo.fontWeight);
-            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.text_anchor, this.fontInfo.fontAlign);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Title, TOOL_NAME.Text);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.Fill, this.fontInfo.fontColor);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontFamily, this.fontInfo.fontFamily);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontSize, this.fontInfo.fontSize);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontStyle, this.fontInfo.fontStyle);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.FontWeight, this.fontInfo.fontWeight);
+            this.renderer.setAttribute(this.gWrap, HTML_ATTRIBUTE.TextAnchor, this.fontInfo.fontAlign);
 
             this.renderer.appendChild(this.gWrap, this.previewBox);
             this.renderer.appendChild(this.gWrap, this.textBox);
@@ -302,7 +302,7 @@ export class TextToolService extends AbstractToolService {
         } else {
             this.addText(event.key);
         }
-        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+        this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
         setTimeout(() => {
             this.updatePreviewBox();
         }, 0);
@@ -316,7 +316,7 @@ export class TextToolService extends AbstractToolService {
             } else {
                 this.textCursor.currentCursorIndex = this.text.indexOf(TEXT_CURSOR);
                 this.text = this.textCursor.erase();
-                this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.innerHTML, this.text);
+                this.renderer.setProperty(this.currentLine, HTML_ATTRIBUTE.InnerHTML, this.text);
                 setTimeout(() => {
                     this.drawStack.push(this.gWrap);
                 }, 0);

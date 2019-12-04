@@ -29,7 +29,7 @@ export class TextCursor {
             this.text += TEXT_LINEBREAK;
         }
 
-        this.renderer.setProperty(currentLineRef[0], HTML_ATTRIBUTE.innerHTML, this.text);
+        this.renderer.setProperty(currentLineRef[0], HTML_ATTRIBUTE.InnerHTML, this.text);
         currentLineRef[0] = tspans[nextLinePosition];
         this.text = currentLineRef[0].textContent as string;
         if (this.text === TEXT_LINEBREAK) {

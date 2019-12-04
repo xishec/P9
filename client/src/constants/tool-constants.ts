@@ -37,17 +37,17 @@ const SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES: Map<number, string> = new Map([
 ]);
 
 enum PREVIEW_RECTANGLE_ATTRIBUTES {
-    Stroke_Color = 'black',
-    Stroke_Dasharray = '5 5',
-    Fill_Color = '#ffffff',
-    Fill_Opacity = '0.3',
+    StrokeColor = 'black',
+    StrokeDasharray = '5 5',
+    FillColor = '#ffffff',
+    FillOpacity = '0.3',
 }
 
 enum TEXT_PREVIEW_BOX_ATTRIBUTES {
-    Stroke_Color = 'black',
+    StrokeColor = 'black',
     Stroke_Width = '1',
-    Stroke_Dasharray = '5 5',
-    Fill_Color = 'none',
+    StrokeDasharray = '5 5',
+    FillColor = 'none',
 }
 
 const NO_STAMP = '';
@@ -63,8 +63,8 @@ enum ROTATION_ANGLE {
 }
 
 enum QUILL_STROKE_WIDTH {
-    initialValue = '1',
-    preview = '2',
+    InitialValue = '1',
+    Preview = '2',
 }
 
 const OFFSET_STEP = 10;
@@ -205,14 +205,14 @@ const FILES_BUTTON_INFO: SidebarButtonInfo[] = [
 ];
 
 enum BRUSH_STYLE {
-    type1 = 1,
-    type2 = 2,
-    type3 = 3,
-    type4 = 4,
-    type5 = 5,
+    Type1 = 1,
+    Type2 = 2,
+    Type3 = 3,
+    Type4 = 4,
+    Type5 = 5,
 }
 
-const BRUSH_STYLES = [BRUSH_STYLE.type1, BRUSH_STYLE.type2, BRUSH_STYLE.type3, BRUSH_STYLE.type4, BRUSH_STYLE.type5];
+const BRUSH_STYLES = [BRUSH_STYLE.Type1, BRUSH_STYLE.Type2, BRUSH_STYLE.Type3, BRUSH_STYLE.Type4, BRUSH_STYLE.Type5];
 
 const POLYGON_RADIUS_CORRECTION: Map<number, number> = new Map([
     [3, 0.13],
@@ -306,8 +306,8 @@ BASE64_STAMPS_MAP.set(
 
 enum LINE_STROKE_TYPE {
     Continuous = 1,
-    Dotted_line = 2,
-    Dotted_circle = 3,
+    DottedLine = 2,
+    DottedCircle = 3,
 }
 
 enum LINE_JOINT_TYPE {
@@ -317,49 +317,49 @@ enum LINE_JOINT_TYPE {
 }
 
 enum HTML_ATTRIBUTE {
-    width = 'width',
-    height = 'height',
-    fill = 'fill',
-    stroke = 'stroke',
-    opacity = 'opacity',
-    fill_opacity = 'fill-opacity',
-    stroke_width = 'stroke-width',
-    cursor = 'cursor',
-    x = 'x',
-    y = 'y',
-    cx = 'cx',
-    cy = 'cy',
-    rx = 'rx',
-    ry = 'ry',
-    r = 'r',
-    numOctaves = 'numOctaves',
-    baseFrequency = 'baseFrequency',
-    filter = 'filter',
-    points = 'points',
-    stroke_dasharray = 'stroke-dasharray',
-    stroke_linejoin = 'stroke-linejoin',
-    stroke_linecap = 'stroke-linecap',
-    title = 'title',
-    canvas = 'canvas',
-    a = 'a',
-    img = 'img',
-    download = 'download',
-    href = 'href',
-    src = 'src',
-    viewBox = 'viewBox',
-    font_family = 'font-family',
-    font_size = 'font-size',
-    font_weight = 'font-weight',
-    font_style = 'font-style',
-    text_anchor = 'text-anchor',
-    innerHTML = 'innerHTML',
+    Width = 'width',
+    Height = 'height',
+    Fill = 'fill',
+    Stroke = 'stroke',
+    Opacity = 'opacity',
+    StrokeWidth = 'stroke-width',
+    FillOpacity = 'fill-opacity',
+    R = 'r',
+    X = 'x',
+    Y = 'y',
+    Cx = 'cx',
+    Cy = 'cy',
+    Rx = 'rx',
+    Ry = 'ry',
+    NumOctaves = 'numOctaves',
+    BaseFrequency = 'baseFrequency',
+    Filter = 'filter',
+    Points = 'points',
+    StrokeDasharray = 'stroke-dasharray',
+    StrokeLinejoin = 'stroke-linejoin',
+    StrokeLinecap = 'stroke-linecap',
+    Title = 'title',
+    Canvas = 'canvas',
+    A = 'a',
+    Img = 'img',
+    Download = 'download',
+    Href = 'href',
+    Src = 'src',
+    ViewBox = 'viewBox',
+    FontFamily = 'font-family',
+    FontSize = 'font-size',
+    Cursor = 'cursor',
+    FontWeight = 'font-weight',
+    FontStyle = 'font-style',
+    TextAnchor = 'text-anchor',
+    InnerHTML = 'innerHTML',
 }
 
 const TOOL_NAME_SHORTCUTS: Map<string, TOOL_NAME> = new Map([
     ['c', TOOL_NAME.Pencil],
     ['w', TOOL_NAME.Brush],
     ['p', TOOL_NAME.Quill],
-    ['y', TOOL_NAME.Pen],
+    [HTML_ATTRIBUTE.Y, TOOL_NAME.Pen],
     ['a', TOOL_NAME.SprayCan],
     ['1', TOOL_NAME.Rectangle],
     ['2', TOOL_NAME.Ellipsis],
@@ -393,7 +393,6 @@ const TRACING_TOOL_POSITION = 1;
 const SHAPE_TOOL_POSITION = 2;
 
 const FONTS: FontType[] = [
-    { fontName: 'Times', fontFamily: 'Times, serif' },
     { fontName: 'Times New Roman', fontFamily: 'Times New Roman, serif' },
     { fontName: 'Georgia', fontFamily: 'Georgia, serif' },
 
@@ -464,8 +463,8 @@ const BOTTOM_CONTROL_POINTS: MagnetismPoint[] = [
 ];
 
 enum MAGNETISM_STATE {
-    active = 'maintenant activé',
-    inactive = 'désactivé',
+    Active = 'maintenant activé',
+    Inactive = 'désactivé',
 }
 
 const MAX_NORMAL_LENGTH = 5;

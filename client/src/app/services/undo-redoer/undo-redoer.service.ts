@@ -52,7 +52,7 @@ export class UndoRedoerService {
         const elToRemove = new Array<SVGElement>();
 
         cloneWorkzone.childNodes.forEach((childNode: ChildNode) => {
-            if ((childNode as SVGElement).getAttribute(HTML_ATTRIBUTE.title) === TITLE_ELEMENT_TO_REMOVE) {
+            if ((childNode as SVGElement).getAttribute(HTML_ATTRIBUTE.Title) === TITLE_ELEMENT_TO_REMOVE) {
                 elToRemove.push(childNode as SVGElement);
             }
         });

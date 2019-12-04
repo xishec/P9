@@ -66,15 +66,15 @@ export class SelectionToolService extends AbstractToolService {
             return;
         }
         if (this.selection.mouseIsInSelectionBox(this.currentMouseCoords)) {
-            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Move);
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Move);
         } else {
-            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
+            this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
         }
     }
 
     cleanUp(): void {
         this.selection.cleanUp();
-        this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.cursor, CURSOR_STYLES.Default);
+        this.renderer.setStyle(this.elementRef.nativeElement, HTML_ATTRIBUTE.Cursor, CURSOR_STYLES.Default);
         if (this.isSelecting) {
             this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         }
@@ -113,25 +113,49 @@ export class SelectionToolService extends AbstractToolService {
         // adjust x
         if (deltaX < 0) {
             deltaX *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, (this.initialMouseCoords.x - deltaX).toString());
+            this.renderer.setAttribute(
+                this.selectionRectangle,
+                HTML_ATTRIBUTE.X,
+                (this.initialMouseCoords.x - deltaX).toString(),
+            );
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.x, this.initialMouseCoords.x.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.X, this.initialMouseCoords.x.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.width, deltaX.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Width, deltaX.toString());
 
         // adjust y
         if (deltaY < 0) {
             deltaY *= -1;
-            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, (this.initialMouseCoords.y - deltaY).toString());
+            this.renderer.setAttribute(
+                this.selectionRectangle,
+                HTML_ATTRIBUTE.Y,
+                (this.initialMouseCoords.y - deltaY).toString(),
+            );
         } else {
-            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.y, this.initialMouseCoords.y.toString());
+            this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Y, this.initialMouseCoords.y.toString());
         }
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.height, deltaY.toString());
+        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.Height, deltaY.toString());
 
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Color);
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.fill_opacity, PREVIEW_RECTANGLE_ATTRIBUTES.Fill_Opacity);
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Color);
-        this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, PREVIEW_RECTANGLE_ATTRIBUTES.Stroke_Dasharray);
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.Fill,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillColor,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.FillOpacity,
+            PREVIEW_RECTANGLE_ATTRIBUTES.FillOpacity,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.Stroke,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeColor,
+        );
+        this.renderer.setAttribute(
+            this.selectionRectangle,
+            HTML_ATTRIBUTE.StrokeDasharray,
+            PREVIEW_RECTANGLE_ATTRIBUTES.StrokeDasharray,
+        );
     }
 
     private getDOMRect(el: SVGGElement): DOMRect {
@@ -139,8 +163,8 @@ export class SelectionToolService extends AbstractToolService {
     }
 
     private getStrokeWidth(el: SVGGElement): number {
-        if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
-            return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
+        if (el.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) {
+            return parseInt(el.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string, DEFAULT_RADIX);
         }
 
         return 0;
@@ -284,7 +308,7 @@ export class SelectionToolService extends AbstractToolService {
             this.selection.isInputOnControlPoint = true;
             this.renderer.setStyle(
                 this.elementRef.nativeElement,
-                HTML_ATTRIBUTE.cursor,
+                HTML_ATTRIBUTE.Cursor,
                 SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(
                     parseInt(this.selection.activeControlPoint.getAttribute('controlPointId') as string, DEFAULT_RADIX),
                 ),
@@ -350,7 +374,7 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         this.selection.isInputOnControlPoint = false;
-        this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', CURSOR_STYLES.Default);
+        this.renderer.setStyle(this.elementRef.nativeElement, 'Cursor', CURSOR_STYLES.Default);
 
         this.isLeftMouseDown = false;
         this.isOnTarget = false;

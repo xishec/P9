@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { FILE_TYPE } from 'src/constants/tool-constants';
+import { FILE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { ExportToolService } from './export-tool.service';
 
 describe('ExportToolService', () => {
@@ -22,7 +22,7 @@ describe('ExportToolService', () => {
                     provide: Renderer2,
                     useValue: {
                         createElement: (elem: string) => {
-                            if (elem === 'canvas') {
+                            if (elem === HTML_ATTRIBUTE.Canvas) {
                                 const mockCanvas = {
                                     getContext: (dimention: string) => {
                                         const mockContext = {
@@ -41,7 +41,7 @@ describe('ExportToolService', () => {
                                     },
                                 };
                                 return (mockCanvas as unknown) as HTMLCanvasElement;
-                            } else if (elem === 'img') {
+                            } else if (elem === HTML_ATTRIBUTE.Img) {
                                 const mockImg = {};
                                 return mockImg as HTMLImageElement;
                             } else {

@@ -52,13 +52,13 @@ export class ColorToolService {
 
     changeColorOnFocus(colorOnFocus: string) {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case COLOR_TYPE.BackgroundColor:
                 this.backgroundColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.primaryColor:
+            case COLOR_TYPE.PrimaryColor:
                 this.primaryColor.next(colorOnFocus);
                 break;
-            case COLOR_TYPE.secondaryColor:
+            case COLOR_TYPE.SecondaryColor:
                 this.secondaryColor.next(colorOnFocus);
                 break;
             default:
@@ -76,11 +76,11 @@ export class ColorToolService {
 
     getColorOnFocus(): string {
         switch (this.selectedColorType.value) {
-            case COLOR_TYPE.backgroundColor:
+            case COLOR_TYPE.BackgroundColor:
                 return this.backgroundColor.value;
-            case COLOR_TYPE.primaryColor:
+            case COLOR_TYPE.PrimaryColor:
                 return this.primaryColor.value;
-            case COLOR_TYPE.secondaryColor:
+            case COLOR_TYPE.SecondaryColor:
                 return this.secondaryColor.value;
             default:
                 return DEFAULT_WHITE;

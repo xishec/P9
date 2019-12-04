@@ -15,7 +15,14 @@ import { ToolSelectorService } from 'src/app/services/tools/tool-selector/tool-s
 import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
 import { DEFAULT_TRANSPARENT, DEFAULT_WHITE } from 'src/constants/color-constants';
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
-import { CURSOR_STYLES, GRID_OPACITY, GRID_SIZE, SNACKBAR_DURATION, TOOL_NAME } from 'src/constants/tool-constants';
+import {
+    CURSOR_STYLES,
+    GRID_OPACITY,
+    GRID_SIZE,
+    HTML_ATTRIBUTE,
+    SNACKBAR_DURATION,
+    TOOL_NAME,
+} from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../common/communication/DrawingInfo';
 import { DrawStackService } from '../../services/draw-stack/draw-stack.service';
 import { DrawingModalWindowService } from '../../services/drawing-modal-window/drawing-modal-window.service';
@@ -136,7 +143,7 @@ export class WorkZoneComponent implements OnInit {
     }
 
     appendDrawingToView(selectedDrawing: Drawing) {
-        this.renderer.setProperty(this.refSVG.nativeElement, 'innerHTML', selectedDrawing.svg);
+        this.renderer.setProperty(this.refSVG.nativeElement, HTML_ATTRIBUTE.InnerHTML, selectedDrawing.svg);
 
         const idStack = Object.values(selectedDrawing.drawingInfo.idStack);
         idStack.forEach((id) => {
@@ -216,8 +223,16 @@ export class WorkZoneComponent implements OnInit {
 
     setRectangleBackgroundStyle() {
         if (this.drawingInfo.width > 0 || this.drawingInfo.height > 0) {
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'height', this.drawingInfo.height + 'px');
-            this.renderer.setAttribute(this.refSVG.nativeElement.children[0], 'width', this.drawingInfo.width + 'px');
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Height,
+                this.drawingInfo.height + 'px',
+            );
+            this.renderer.setAttribute(
+                this.refSVG.nativeElement.children[0],
+                HTML_ATTRIBUTE.Width,
+                this.drawingInfo.width + 'px',
+            );
 
             this.renderer.setAttribute(
                 this.refSVG.nativeElement.children[0],
