@@ -9,12 +9,12 @@ import { Drawing } from 'src/../../common/communication/Drawing';
 import { ModalManagerService } from 'src/app/services/modal-manager/modal-manager.service';
 import { DrawingLoaderService } from 'src/app/services/server/drawing-loader/drawing-loader.service';
 import { DrawingSaverService } from 'src/app/services/server/drawing-saver/drawing-saver.service';
+import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
+import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
+import { GIFS, NUMBER_OF_MS } from 'src/constants/constants';
+import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 import { DrawingInfo } from '../../../../../../common/communication/DrawingInfo';
 import { OpenFileModalWindowComponent } from './open-file-modal-window.component';
-import { UndoRedoerService } from 'src/app/services/undo-redoer/undo-redoer.service';
-import { NUMBER_OF_MS, GIFS } from 'src/constants/constants';
-import { FileManagerService } from 'src/app/services/server/file-manager/file-manager.service';
-import { SNACKBAR_DURATION } from 'src/constants/tool-constants';
 
 fdescribe('OpenFileModalWindowComponent', () => {
     let component: OpenFileModalWindowComponent;
@@ -275,7 +275,7 @@ fdescribe('OpenFileModalWindowComponent', () => {
 
         expect(component.fileToLoad).toEqual(null);
         expect(component.localFileName).toEqual('');
-        expect(SPY).toHaveBeenCalledWith("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
+        expect(SPY).toHaveBeenCalledWith('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
             duration: SNACKBAR_DURATION,
         });
     });
@@ -375,6 +375,7 @@ fdescribe('OpenFileModalWindowComponent', () => {
         expect(component.convertTimeStampToDate(timestamp)).toEqual(expectedResult);
     });
 
+    // tslint:disable-next-line: max-line-length
     it('should correctly convert a timestamp into a message relative to current time when drawing has been created less than 7 days ago', () => {
         const timestamp = new Date('December 01, 2019 03:24:00').getTime();
         const expectedResult = 'Créé il y a 2 jours, 13 heures et 14 minutes';
