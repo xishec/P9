@@ -213,9 +213,9 @@ export class EraserToolService extends AbstractToolService {
 
     private updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
         if (this.lastElementColoredNumber !== topElement) {
-            this.addElementToMap(svgGElement);
-
             this.lastToolName = svgGElement.getAttribute(HTML_ATTRIBUTE.Title) as string;
+
+            this.addElementToMap(svgGElement, this.lastToolName, this.currentTarget);
 
             this.drawStack.changeTargetElement(
                 new StackTargetInfo(
@@ -226,20 +226,46 @@ export class EraserToolService extends AbstractToolService {
 
             this.lastElementColoredNumber = index;
 
-            this.colorBorder(
-                this.currentTarget,
-                this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth),
-                this.lastToolName,
-            );
+            let borderWidth = this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+
+            if (this.lastToolName === TOOL_NAME.Fill) {
+                const childrenCount = this.drawStack.getElementByPosition(this.currentTarget).childElementCount;
+                const borderElement = this.drawStack.getElementByPosition(this.currentTarget).childNodes[
+                    childrenCount - 1
+                ] as SVGGElement;
+                borderWidth = borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+            }
+
+            this.colorBorder(this.currentTarget, borderWidth, this.lastToolName);
         }
     }
 
-    private addElementToMap(svgGElement: SVGGElement): void {
+    private addElementToMap(svgGElement: SVGGElement, tool: string, idElement: number): void {
         if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
-            this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
-                borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
-                borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
-            } as SVGGElementInfo);
+            if (tool === TOOL_NAME.Fill) {
+                const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
+                const borderElement = this.drawStack.getElementByPosition(idElement).childNodes[
+                    childrenCount - 1
+                ] as SVGGElement;
+
+                console.log('add fill element to changedElements');
+                console.log(('borderColor: ' + borderElement.getAttribute(HTML_ATTRIBUTE.Stroke)) as string);
+                console.log(('borderWidth: ' + borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth)) as string);
+
+                this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                    borderColor: borderElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
+                    borderWidth: borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
+                } as SVGGElementInfo);
+            } else {
+                this.changedElements.set(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX), {
+                    borderColor: svgGElement.getAttribute(HTML_ATTRIBUTE.Stroke) as string,
+                    borderWidth: svgGElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth) as string,
+                } as SVGGElementInfo);
+            }
+            // console.log('added element');
+            // console.log(
+            //     this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX)),
+            // );
         }
     }
 
@@ -251,6 +277,9 @@ export class EraserToolService extends AbstractToolService {
         }
 
         const borderColor = '#' + DEFAULT_RED;
+
+        console.log('borderWidth: ' + borderWidth);
+        console.log('borderColor: ' + borderColor);
 
         switch (tool) {
             case TOOL_NAME.Text:
@@ -393,6 +422,8 @@ export class EraserToolService extends AbstractToolService {
         if (borderWidth === null) {
             borderWidth = '0';
         }
+        console.log('restore borderWidth: ' + borderWidth);
+        console.log(' restore borderColor: ' + borderColor);
 
         switch (tool) {
             case TOOL_NAME.Text:
@@ -429,7 +460,18 @@ export class EraserToolService extends AbstractToolService {
 
     private removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
-            const element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
+            //let borderWidth = this.drawStack.drawStack[this.currentTarget].getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+            let element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
+
+            // if (this.lastToolName === TOOL_NAME.Fill) {
+            //     const childrenCount = this.drawStack.getElementByPosition(this.currentTarget).childElementCount;
+
+            //     element = this.drawStack.getElementByPosition(this.currentTarget).childNodes[
+            //         childrenCount - 1
+            //     ] as SVGGElement;
+            //     //  borderWidth = borderElement.getAttribute(HTML_ATTRIBUTE.StrokeWidth);
+            // }
+
             if (element !== undefined) {
                 this.restoreBorder(parseInt(position, DEFAULT_RADIX), element.borderColor, element.borderWidth, tool);
                 this.changedElements.delete(parseInt(position, DEFAULT_RADIX));
