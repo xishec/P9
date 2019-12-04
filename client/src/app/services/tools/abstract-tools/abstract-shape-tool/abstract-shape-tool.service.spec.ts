@@ -3,9 +3,9 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { DrawStackService } from 'src/app/services/draw-stack/draw-stack.service';
 import { provideAutoMock } from 'src/classes/test.helper.msTeams.spec';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { MockRect } from '../../../../../classes/test-helpers.spec';
 import { AbstractShapeToolService } from './abstract-shape-tool.service';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('AbstractShapeToolService', () => {
     let injector: TestBed;

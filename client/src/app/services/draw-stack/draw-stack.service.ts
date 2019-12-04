@@ -2,9 +2,9 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { StackTargetInfo } from 'src/classes/StackTargetInfo';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { DrawingLoaderService } from '../server/drawing-loader/drawing-loader.service';
 import { UndoRedoerService } from '../undo-redoer/undo-redoer.service';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',

@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { ElementRef, Renderer2, Type } from '@angular/core';
 import { createMouseEvent, MockPolygon, MockRect } from 'src/classes/test-helpers.spec';
 import { MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TRACE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { PolygonToolService } from './polygon-tool.service';
 

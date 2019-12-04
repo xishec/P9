@@ -2,7 +2,7 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { TRACE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, TRACE_TYPE } from 'src/constants/tool-constants';
 import { createKeyBoardEvent, createMouseEvent, MockRect } from '../../../../classes/test-helpers.spec';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { RectangleToolService } from './rectangle-tool.service';

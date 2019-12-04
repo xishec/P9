@@ -4,9 +4,9 @@ import { ElementRef, Renderer2, Type } from '@angular/core';
 import { Selection } from './selection';
 
 import { SIDEBAR_WIDTH } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import * as TestHelpers from '../../classes/test-helpers.spec';
 import { Coords2D } from '../Coords2D';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 describe('Selection', () => {
     let injector: TestBed;

@@ -11,7 +11,7 @@ import {
     createMouseEvent,
 } from 'src/classes/test-helpers.spec';
 import { KEYS, MOUSE } from 'src/constants/constants';
-import { LINE_JOINT_TYPE, LINE_STROKE_TYPE, HTML_ATTRIBUTE } from 'src/constants/tool-constants';
+import { HTML_ATTRIBUTE, LINE_JOINT_TYPE, LINE_STROKE_TYPE } from 'src/constants/tool-constants';
 import { DrawStackService } from '../../draw-stack/draw-stack.service';
 import { AttributesManagerService } from '../attributes-manager/attributes-manager.service';
 import { LineToolService } from './line-tool.service';

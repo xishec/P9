@@ -2,9 +2,9 @@ import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 import { Coords2D } from 'src/classes/Coords2D';
 import { MOUSE } from 'src/constants/constants';
+import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 import { AbstractToolService } from '../abstract-tools/abstract-tool.service';
 import { ColorToolService } from '../color-tool/color-tool.service';
-import { HTML_ATTRIBUTE } from 'src/constants/tool-constants';
 
 @Injectable({
     providedIn: 'root',
