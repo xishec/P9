@@ -8,6 +8,7 @@ import {
     DEFAULT_RADIX,
     HTML_ATTRIBUTE,
     ROTATION_ANGLE,
+    SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
 } from 'src/constants/tool-constants';
 import { Selection } from '../../../../classes/selection/selection';
 import { ClipboardService } from '../../clipboard/clipboard.service';
@@ -282,8 +283,8 @@ export class SelectionToolService extends AbstractToolService {
             this.selection.isInputOnControlPoint = true;
             this.renderer.setStyle(
                 this.elementRef.nativeElement,
-                'cursor',
-                SELECTION_BOX_CURSOR_STYLES.get(
+                HTML_ATTRIBUTE.cursor,
+                SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES.get(
                     parseInt(this.selection.activeControlPoint.getAttribute('controlPointId') as string, DEFAULT_RADIX),
                 ),
             );
