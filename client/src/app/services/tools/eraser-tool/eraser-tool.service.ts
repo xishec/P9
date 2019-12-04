@@ -29,27 +29,27 @@ import { AttributesManagerService } from '../attributes-manager/attributes-manag
     providedIn: 'root',
 })
 export class EraserToolService extends AbstractToolService {
-    eraser: SVGRectElement;
-    textBorder: SVGRectElement;
-    attributesManagerService: AttributesManagerService;
-    currentTarget = 0;
-    currentSize = ERASER_SIZE.Default;
-    isOnTarget = false;
-    isLeftMouseDown = false;
-    isEraserAppended = false;
-    lastElementColoredNumber = RESET_POSITION_NUMBER;
-    lastToolName = '';
-    erasedSomething = false;
-    isHoveringText = false;
+    private eraser: SVGRectElement;
+    private textBorder: SVGRectElement;
+    private attributesManagerService: AttributesManagerService;
+    private currentTarget = 0;
+    private currentSize = ERASER_SIZE.Default;
+    private isOnTarget = false;
+    private isLeftMouseDown = false;
+    private isEraserAppended = false;
+    private lastElementColoredNumber = RESET_POSITION_NUMBER;
+    private lastToolName = '';
+    private erasedSomething = false;
+    private isHoveringText = false;
 
     // the number represents the id_element
     changedElements: Map<number, SVGGElementInfo> = new Map([]);
 
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
     constructor(private undoRedoerService: UndoRedoerService) {
         super();
@@ -92,7 +92,7 @@ export class EraserToolService extends AbstractToolService {
         this.setEraserToMouse(event);
     }
 
-    setEraserToMouse(event: MouseEvent): void {
+    private setEraserToMouse(event: MouseEvent): void {
         this.currentMouseCoords.x =
             event.clientX - this.elementRef.nativeElement.getBoundingClientRect().left - this.currentSize / 2;
         this.currentMouseCoords.y =
@@ -106,7 +106,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    appendEraser(): void {
+    private appendEraser(): void {
         this.renderer.appendChild(this.elementRef.nativeElement, this.eraser);
         this.isEraserAppended = true;
     }
@@ -145,7 +145,7 @@ export class EraserToolService extends AbstractToolService {
         this.isOnTarget = false;
     }
 
-    needToBeErased(button: number): boolean {
+    private needToBeErased(button: number): boolean {
         return (
             this.isOnTarget &&
             this.drawStack.getElementByPosition(this.currentTarget) !== undefined &&
@@ -153,7 +153,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    isEraserTouchingElement(eraserBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    private isEraserTouchingElement(eraserBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = eraserBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = eraserBox.x + window.scrollX - SIDEBAR_WIDTH + eraserBox.width;
         const boxTop = eraserBox.y + window.scrollY;
@@ -181,7 +181,7 @@ export class EraserToolService extends AbstractToolService {
         return true;
     }
 
-    checkElementsToErase(): void {
+    private checkElementsToErase(): void {
         const eraserBox = this.getDOMRect(this.eraser);
 
         let enteredInSelection = false;
@@ -211,7 +211,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
+    private updateElementToColor(topElement: number, svgGElement: SVGGElement, index: number): void {
         if (this.lastElementColoredNumber !== topElement) {
             this.addElementToMap(svgGElement);
 
@@ -234,7 +234,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    addElementToMap(svgGElement: SVGGElement): void {
+    private addElementToMap(svgGElement: SVGGElement): void {
         if (!this.changedElements.get(parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX))) {
             this.changedElements.set(
                 parseInt(svgGElement.getAttribute('id_element') as string, DEFAULT_RADIX),
@@ -246,7 +246,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    colorBorder(idElement: number, borderWidth: string | null, tool: string): void {
+    private colorBorder(idElement: number, borderWidth: string | null, tool: string): void {
         if (borderWidth !== '0' && borderWidth !== null) {
             borderWidth = (parseInt(borderWidth, DEFAULT_RADIX) + ADDITIONAL_BORDER_WIDTH).toString();
         } else {
@@ -288,7 +288,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    changeBorderOnPen(idElement: number, borderColor: string): void {
+    private changeBorderOnPen(idElement: number, borderColor: string): void {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1 - ELEMENTS_BEFORE_LAST_CIRCLE],
@@ -297,7 +297,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    changeBorderOnQuill(idElement: number, borderColor: string): void {
+    private changeBorderOnQuill(idElement: number, borderColor: string): void {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
@@ -306,7 +306,7 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    changeBorderOnText(idElement: number, borderColor: string, borderWidth: string): void {
+    private changeBorderOnText(idElement: number, borderColor: string, borderWidth: string): void {
         if (borderWidth === '0') {
             this.renderer.removeChild(this.elementRef.nativeElement, this.textBorder);
             this.isHoveringText = false;
@@ -320,7 +320,7 @@ export class EraserToolService extends AbstractToolService {
         this.appendEraser();
     }
 
-    appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
+    private appendTextBorder(idElement: number, borderColor: string, borderWidth: string): void {
         const width = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.width) as string;
         const height = this.drawStack.getElementByPosition(idElement).getAttribute(HTML_ATTRIBUTE.height) as string;
 
@@ -347,7 +347,7 @@ export class EraserToolService extends AbstractToolService {
         this.renderer.appendChild(this.elementRef.nativeElement, this.textBorder);
     }
 
-    changeBorderOnStamp(idElement: number, borderColor: string): void {
+    private changeBorderOnStamp(idElement: number, borderColor: string): void {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         this.renderer.setAttribute(
             this.drawStack.getElementByPosition(idElement).childNodes[childrenCount - 1],
@@ -356,7 +356,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    changeBorderOnLine(idElement: number, borderColor: string): void {
+    private changeBorderOnLine(idElement: number, borderColor: string): void {
         const childrenCount = this.drawStack.getElementByPosition(idElement).childElementCount;
         const children = this.drawStack.getElementByPosition(idElement).childNodes;
 
@@ -365,7 +365,12 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    restoreBorder(idElement: number, borderColor: string | null, borderWidth: string | null, tool: string): void {
+    private restoreBorder(
+        idElement: number,
+        borderColor: string | null,
+        borderWidth: string | null,
+        tool: string,
+    ): void {
         if (borderColor === null) {
             borderColor = '';
         }
@@ -403,7 +408,7 @@ export class EraserToolService extends AbstractToolService {
         );
     }
 
-    removeBorder(position: string, tool: string): void {
+    private removeBorder(position: string, tool: string): void {
         if (this.drawStack.drawStack[this.currentTarget] !== undefined) {
             const element = this.changedElements.get(parseInt(position, DEFAULT_RADIX)) as SVGGElementInfo;
             if (element !== undefined) {
@@ -413,11 +418,11 @@ export class EraserToolService extends AbstractToolService {
         }
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
+    private getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
             return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }

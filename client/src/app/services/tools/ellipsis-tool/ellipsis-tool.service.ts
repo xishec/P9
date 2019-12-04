@@ -10,19 +10,19 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class EllipsisToolService extends AbstractShapeToolService {
-    attributesManagerService: AttributesManagerService;
+    private attributesManagerService: AttributesManagerService;
 
-    traceType = '';
-    userStrokeWidth = 0;
-    strokeWidth = 0;
-    userStrokeColor = '';
-    strokeColor = '';
-    userFillColor = '';
-    fillColor = '';
+    private traceType = '';
+    private userStrokeWidth = 0;
+    private strokeWidth = 0;
+    private userStrokeColor = '';
+    private strokeColor = '';
+    private userFillColor = '';
+    private fillColor = '';
 
-    isCirclePreview = false;
+    private isCirclePreview = false;
 
-    drawEllipse: SVGEllipseElement;
+    private drawEllipse: SVGEllipseElement;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -52,19 +52,19 @@ export class EllipsisToolService extends AbstractShapeToolService {
         });
     }
 
-    isValidllipse(): boolean {
+    private isValidllipse(): boolean {
         const isValidRadiusX = this.previewRectangleWidth >= 2 * this.userStrokeWidth;
         const isValidRadiusY = this.previewRectangleHeight >= 2 * this.userStrokeWidth;
 
         return isValidRadiusX && isValidRadiusY && (this.drawEllipseRadiusX > 0 || this.drawEllipseRadiusY > 0);
     }
 
-    makeEllipseInvalid(): void {
+    private makeEllipseInvalid(): void {
         this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.rx, '0');
         this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.ry, '0');
     }
 
-    updateTraceType(traceType: string): void {
+    private updateTraceType(traceType: string): void {
         this.traceType = traceType;
         switch (traceType) {
             case TRACE_TYPE.Outline: {
@@ -88,7 +88,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         }
     }
 
-    copyRectanglePreview(): void {
+    private copyRectanglePreview(): void {
         this.renderer.setAttribute(
             this.drawEllipse,
             HTML_ATTRIBUTE.rx,
@@ -112,7 +112,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         );
     }
 
-    updatePreviewCircle(): void {
+    private updatePreviewCircle(): void {
         const deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         const deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
         const minLength = Math.min(this.previewRectangleWidth, this.previewRectangleHeight);
@@ -157,7 +157,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         );
     }
 
-    renderDrawEllipsis(): void {
+    private renderDrawEllipsis(): void {
         if (this.isValidllipse()) {
             this.userFillColor === 'none'
                 ? this.renderer.setAttribute(this.drawEllipse, HTML_ATTRIBUTE.fill, this.userFillColor)
@@ -171,7 +171,7 @@ export class EllipsisToolService extends AbstractShapeToolService {
         }
     }
 
-    updateDrawing(): void {
+    private updateDrawing(): void {
         this.updatePreviewRectangle();
         if (!this.isCirclePreview) {
             this.copyRectanglePreview();
