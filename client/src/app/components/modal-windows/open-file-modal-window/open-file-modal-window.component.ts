@@ -136,30 +136,65 @@ export class OpenFileModalWindowComponent implements OnInit {
 
     loadLocalFile(): void {
         this.initializeUndoRedoStacks();
+
+        if (!this.fileToLoad) {
+            this.snackBar.open(`Veuillez choisir un fichier valide.`, 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
+            return;
+        }
         this.drawingLoaderService.currentDrawing.next(this.fileToLoad as Drawing);
         this.closeDialog();
     }
 
-    getFileToLoad(event: Event): void {
+    getLocalFileToLoad(event: Event): void {
         const reader = new FileReader();
         const target = event.target as HTMLInputElement;
-        const files = target.files as FileList;
-        if (files.length !== 0) {
-            reader.readAsText(files[0]);
-            reader.onload = () => {
-                try {
-                    const localFileContent = JSON.parse(reader.result as string);
-                    this.fileToLoad = localFileContent as Drawing;
-                    this.localFileName = this.fileToLoad.drawingInfo.name;
-                } catch (error) {
-                    this.fileToLoad = null;
-                    this.localFileName = '';
-                    this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
-                        duration: SNACKBAR_DURATION,
-                    });
-                }
-            };
+
+        if (target.files && target.files.length) {
+            const file = target.files[0];
+            reader.readAsText(file);
+            reader.onload = this.getLocalFileLoadCallback(file, reader);
         }
+    }
+
+    getLocalFileLoadCallback(file: File, reader: FileReader): () => void {
+        return () => {
+            try {
+                const drawingFromFile = JSON.parse(reader.result as string) as Drawing;
+
+                if (!this.isValidFile(file) || !this.isValidDrawing(drawingFromFile)) {
+                    throw Error('Invalid file');
+                }
+                this.fileToLoad = drawingFromFile;
+                this.localFileName = file.name;
+            } catch {
+                this.fileToLoad = null;
+                this.localFileName = '';
+                this.snackBar.open('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
+                    duration: SNACKBAR_DURATION,
+                });
+            }
+        };
+    }
+
+    isValidFile(file: File): boolean {
+        return file.type === 'text/plain';
+    }
+
+    isValidDrawing(drawing: Drawing): boolean {
+        return (
+            this.isValidDrawingInfo(drawing.drawingInfo) &&
+            (drawing.svg.indexOf('height') && drawing.svg.indexOf('width')) !== -1
+        );
+    }
+
+    isValidDrawingInfo(drawingInfo: DrawingInfo): boolean {
+        return (
+            (drawingInfo.width && drawingInfo.height) !== 0 &&
+            drawingInfo.color !== undefined &&
+            drawingInfo.idStack.length >= 1
+        );
     }
 
     serverFormIsInvalid(): boolean {
@@ -189,11 +224,11 @@ export class OpenFileModalWindowComponent implements OnInit {
                 this.snackBar.open('Suppression réussie!', 'OK', {
                     duration: SNACKBAR_DURATION,
                 });
-            } else {
-                this.snackBar.open('Erreur de suppression du côté serveur!', 'OK', {
-                    duration: SNACKBAR_DURATION,
-                });
+                return;
             }
+            this.snackBar.open('Erreur de suppression du côté serveur!', 'OK', {
+                duration: SNACKBAR_DURATION,
+            });
         });
     }
 
@@ -247,11 +282,23 @@ export class OpenFileModalWindowComponent implements OnInit {
         }
         const date = new Date(timestamp);
 
-        const creationDate =
-            `${date.getFullYear}/${date.getMonth}/${date.getDay} à ` +
-            `${date.getHours}:${date.getMinutes}:${date.getSeconds}}`;
+        const year = this.adjustValues(date.getFullYear());
+        const month = this.adjustValues(date.getMonth() + 1);
+        const day = this.adjustValues(date.getDate());
+        const hour = this.adjustValues(date.getHours());
+        const minutes = this.adjustValues(date.getMinutes());
+        const seconds = this.adjustValues(date.getSeconds());
+
+        const creationDate = `${year}/${month}/${day} à ${hour}:${minutes}:${seconds}`;
 
         return 'Créé le ' + creationDate;
+    }
+
+    adjustValues(timeValue: number): string {
+        if (timeValue === 0) {
+            return '00';
+        }
+        return timeValue < 10 ? `0${timeValue.toString()}` : timeValue.toString();
     }
 
     numberOfDaysBetween(timestamp1: number, timestamp2: number): number {

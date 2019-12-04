@@ -116,7 +116,15 @@ export class SaveFileModalWindowComponent implements OnInit {
             });
             return false;
         }
-        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl();
+
+        const drawingSavingInfo: DrawingSavingInfo = {
+            name: this.saveFileLocalModalForm.value.filename,
+            drawingLabels: this.selectedLabels,
+            createdAt: this.createdAt,
+            lastModified: this.lastModified,
+        };
+
+        this.saveFileUrl = this.drawingSaverService.getLocalFileDownloadUrl(drawingSavingInfo);
         this.filename = this.saveFileLocalModalForm.value.filename;
         this.closeDialog();
         return true;
