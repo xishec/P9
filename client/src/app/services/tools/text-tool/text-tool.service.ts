@@ -32,7 +32,7 @@ export class TextToolService extends AbstractToolService {
 
     attributesManagerService: AttributesManagerService;
 
-    fontInfo: FontInfo = new FontInfo();
+    fontInfo: FontInfo = {} as FontInfo;
 
     gWrap: SVGGElement;
     previewBox: SVGRectElement;
