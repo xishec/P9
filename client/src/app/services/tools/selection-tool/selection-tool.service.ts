@@ -16,19 +16,17 @@ import { MagnetismToolService } from '../magnetism-tool/magnetism-tool.service';
     providedIn: 'root',
 })
 export class SelectionToolService extends AbstractToolService {
-    currentMouseCoords: Coords2D = new Coords2D(0, 0);
-    lastMouseCoords: Coords2D = new Coords2D(0, 0);
-    initialMouseCoords: Coords2D = new Coords2D(0, 0);
-    currentTarget = 0;
+    private currentMouseCoords: Coords2D = new Coords2D(0, 0);
+    private lastMouseCoords: Coords2D = new Coords2D(0, 0);
+    private initialMouseCoords: Coords2D = new Coords2D(0, 0);
+    private currentTarget = 0;
 
-    isSelecting = false;
-    isOnTarget = false;
-    isLeftMouseDown = false;
-    isRightMouseDown = false;
-    isLeftMouseDragging = false;
-    isTranslatingSelection = false;
-    isScalingSelection = false;
-    isRightMouseDragging = false;
+    private isSelecting = false;
+    private isOnTarget = false;
+    private isLeftMouseDown = false;
+    private isRightMouseDown = false;
+    private isTranslatingSelection = false;
+    private isScalingSelection = false;
 
     selection: Selection;
 
@@ -40,9 +38,9 @@ export class SelectionToolService extends AbstractToolService {
 
     constructor(
         public clipBoard: ClipboardService,
-        public manipulator: ManipulatorService,
-        public undoRedoerService: UndoRedoerService,
-        public magnetismService: MagnetismToolService,
+        private manipulator: ManipulatorService,
+        private undoRedoerService: UndoRedoerService,
+        private magnetismService: MagnetismToolService,
     ) {
         super();
     }
@@ -63,8 +61,6 @@ export class SelectionToolService extends AbstractToolService {
         this.isLeftMouseDown = false;
         this.isRightMouseDown = false;
         this.isSelecting = false;
-        this.isLeftMouseDragging = false;
-        this.isRightMouseDragging = false;
         this.isTranslatingSelection = false;
         this.isScalingSelection = false;
         this.magnetismService.totalDeltaY = 0;
@@ -90,7 +86,7 @@ export class SelectionToolService extends AbstractToolService {
         this.clipBoard.initializeService(this.elementRef, this.renderer, this.drawStack, this.selection);
     }
 
-    updateSelectionRectangle(): void {
+    private updateSelectionRectangle(): void {
         let deltaX = this.currentMouseCoords.x - this.initialMouseCoords.x;
         let deltaY = this.currentMouseCoords.y - this.initialMouseCoords.y;
 
@@ -118,11 +114,11 @@ export class SelectionToolService extends AbstractToolService {
         this.renderer.setAttribute(this.selectionRectangle, HTML_ATTRIBUTE.stroke_dasharray, '5 5');
     }
 
-    getDOMRect(el: SVGGElement): DOMRect {
+    private getDOMRect(el: SVGGElement): DOMRect {
         return el.getBoundingClientRect() as DOMRect;
     }
 
-    getStrokeWidth(el: SVGGElement): number {
+    private getStrokeWidth(el: SVGGElement): number {
         if (el.getAttribute(HTML_ATTRIBUTE.stroke_width)) {
             return parseInt(el.getAttribute(HTML_ATTRIBUTE.stroke_width) as string, DEFAULT_RADIX);
         }
@@ -130,7 +126,7 @@ export class SelectionToolService extends AbstractToolService {
         return 0;
     }
 
-    isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
+    private isInSelection(selectionBox: DOMRect, elementBox: DOMRect, strokeWidth?: number): boolean {
         const boxLeft = selectionBox.x + window.scrollX - SIDEBAR_WIDTH;
         const boxRight = selectionBox.x + window.scrollX - SIDEBAR_WIDTH + selectionBox.width;
         const boxTop = selectionBox.y + window.scrollY;
@@ -158,30 +154,30 @@ export class SelectionToolService extends AbstractToolService {
         return true;
     }
 
-    isAbleToRotate(): boolean {
+    private isAbleToRotate(): boolean {
         return (
             !this.isTranslatingSelection && !this.isSelecting && !this.isScalingSelection && this.selection.isAppended
         );
     }
 
-    singlySelect(stackPosition: number): void {
+    private singlySelect(stackPosition: number): void {
         this.selection.emptySelection();
         this.selection.addToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
-    singlySelectInvert(stackPosition: number): void {
+    private singlySelectInvert(stackPosition: number): void {
         this.selection.invertAddToSelection(this.drawStack.drawStack[stackPosition]);
         this.isOnTarget = false;
     }
 
-    startSelection(): void {
+    private startSelection(): void {
         this.isSelecting = true;
         this.updateSelectionRectangle();
         this.renderer.appendChild(this.elementRef.nativeElement, this.selectionRectangle);
     }
 
-    checkSelection(): void {
+    private checkSelection(): void {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
@@ -189,7 +185,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    checkSelectionInverse(): void {
+    private checkSelectionInverse(): void {
         const selectionBox = this.getDOMRect(this.selectionRectangle);
         for (const el of this.drawStack.drawStack) {
             const elBox = this.getDOMRect(el);
@@ -197,7 +193,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    isAbleToScale(): boolean {
+    private isAbleToScale(): boolean {
         return (
             this.selection.mouseIsInControlPoint(this.currentMouseCoords) &&
             !this.isSelecting &&
@@ -205,7 +201,7 @@ export class SelectionToolService extends AbstractToolService {
         );
     }
 
-    isAbleToTranslate(): boolean {
+    private isAbleToTranslate(): boolean {
         return (
             this.selection.mouseIsInSelectionBox(this.currentMouseCoords) &&
             !this.isSelecting &&
@@ -213,9 +209,7 @@ export class SelectionToolService extends AbstractToolService {
         );
     }
 
-    handleLeftMouseDrag(): void {
-        this.isLeftMouseDragging = true;
-
+    private handleLeftMouseDrag(): void {
         if (this.isOnTarget && !this.selection.selectedElements.has(this.drawStack.drawStack[this.currentTarget])) {
             this.singlySelect(this.currentTarget);
         } else if (this.isScalingSelection || this.isAbleToScale()) {
@@ -238,9 +232,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleRightMouseDrag(): void {
-        this.isRightMouseDragging = true;
-
+    private handleRightMouseDrag(): void {
         this.startSelection();
         this.updateSelectionRectangle();
         this.checkSelectionInverse();
@@ -259,7 +251,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleLeftMouseDown(): void {
+    private handleLeftMouseDown(): void {
         this.isLeftMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
@@ -270,7 +262,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    saveOriginalSelectionBoxState(): void {
+    private saveOriginalSelectionBoxState(): void {
         this.selection.ogSelectionBoxHeight = this.getDOMRect(this.selection.selectionBox).height;
         this.selection.ogSelectionBoxWidth = this.getDOMRect(this.selection.selectionBox).width;
 
@@ -285,7 +277,7 @@ export class SelectionToolService extends AbstractToolService {
         );
     }
 
-    handleRightMouseDown(): void {
+    private handleRightMouseDown(): void {
         this.isRightMouseDown = true;
         this.initialMouseCoords.x = this.currentMouseCoords.x;
         this.initialMouseCoords.y = this.currentMouseCoords.y;
@@ -309,7 +301,7 @@ export class SelectionToolService extends AbstractToolService {
         }
     }
 
-    handleLeftMouseUp(): void {
+    private handleLeftMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
         if (this.isSelecting) {
             this.isSelecting = false;
@@ -326,11 +318,10 @@ export class SelectionToolService extends AbstractToolService {
         }
 
         this.isLeftMouseDown = false;
-        this.isLeftMouseDragging = false;
         this.isOnTarget = false;
     }
 
-    handleRightMouseUp(): void {
+    private handleRightMouseUp(): void {
         this.renderer.removeChild(this.elementRef.nativeElement, this.selectionRectangle);
 
         if (this.isSelecting) {
@@ -339,7 +330,6 @@ export class SelectionToolService extends AbstractToolService {
             this.singlySelectInvert(this.currentTarget);
         }
         this.isRightMouseDown = false;
-        this.isRightMouseDragging = false;
         this.isOnTarget = false;
     }
 
@@ -367,7 +357,7 @@ export class SelectionToolService extends AbstractToolService {
         this.manipulator.updateOrigins(this.selection);
     }
 
-    saveState() {
+    private saveState() {
         this.undoRedoerService.saveCurrentState(this.drawStack.idStack);
     }
 

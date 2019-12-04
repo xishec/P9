@@ -41,8 +41,8 @@ export class ToolSelectorService {
     currentTool: AbstractToolService | undefined;
     modalIsDisplayed = false;
     drawStack: DrawStackService;
-    TOOLS_MAP: Map<TOOL_NAME, AbstractToolService>;
-    WORKZONE_TOOLS_MAP: Map<TOOL_NAME, () => void>;
+    private TOOLS_MAP: Map<TOOL_NAME, AbstractToolService>;
+    private WORKZONE_TOOLS_MAP: Map<TOOL_NAME, () => void>;
 
     constructor(
         private dialog: MatDialog,
@@ -89,7 +89,7 @@ export class ToolSelectorService {
 
         this.stampTool.initializeService(ref, renderer, drawStack);
 
-        this.dropperTool.initializeService(ref, renderer, drawStack);
+        this.dropperTool.initializeService(ref, renderer);
 
         this.fillTool.initializeService(ref, renderer, drawStack);
 

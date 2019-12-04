@@ -11,33 +11,33 @@ import { ColorToolService } from '../color-tool/color-tool.service';
     providedIn: 'root',
 })
 export class LineToolService extends AbstractToolService {
-    attributesManagerService: AttributesManagerService;
+    private attributesManagerService: AttributesManagerService;
 
-    currentColorAndOpacity = '';
-    currentColor = '';
-    currentOpacity = '';
-    currentStrokeWidth = 0;
-    circleJointDiameter = 0;
+    private currentColorAndOpacity = '';
+    private currentColor = '';
+    private currentOpacity = '';
+    private currentStrokeWidth = 0;
+    private circleJointDiameter = 0;
 
-    currentStrokeType = LINE_STROKE_TYPE.Continuous;
-    currentJointType = LINE_JOINT_TYPE.Curvy;
+    private currentStrokeType = LINE_STROKE_TYPE.Continuous;
+    private currentJointType = LINE_JOINT_TYPE.Curvy;
 
-    pointsArray = new Array();
-    jointCircles = new Array();
+    private pointsArray = new Array();
+    private jointCircles = new Array();
 
-    currentMousePosition = '';
+    private currentMousePosition = '';
 
-    shouldCloseLine = false;
-    isDrawing = false;
-    isLineInStack = false;
-    isMouseDown = false;
+    private shouldCloseLine = false;
+    private isDrawing = false;
+    private isLineInStack = false;
+    private isMouseDown = false;
 
-    gWrap: SVGGElement;
-    currentLine: SVGPolylineElement;
+    private gWrap: SVGGElement;
+    private currentLine: SVGPolylineElement;
 
-    elementRef: ElementRef<SVGElement>;
-    renderer: Renderer2;
-    drawStack: DrawStackService;
+    private elementRef: ElementRef<SVGElement>;
+    private renderer: Renderer2;
+    private drawStack: DrawStackService;
 
     constructor(private colorToolService: ColorToolService) {
         super();
@@ -46,8 +46,8 @@ export class LineToolService extends AbstractToolService {
         });
     }
 
-    getXPos = (clientX: number) => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
-    getYPos = (clientY: number) => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
+    private getXPos = (clientX: number): number => clientX - this.elementRef.nativeElement.getBoundingClientRect().left;
+    private getYPos = (clientY: number): number => clientY - this.elementRef.nativeElement.getBoundingClientRect().top;
 
     initializeService(elementRef: ElementRef<SVGElement>, renderer: Renderer2, drawStack: DrawStackService) {
         this.elementRef = elementRef;
@@ -57,7 +57,7 @@ export class LineToolService extends AbstractToolService {
 
     initializeAttributesManagerService(attributesManagerService: AttributesManagerService) {
         this.attributesManagerService = attributesManagerService;
-        this.attributesManagerService.thickness.subscribe((thickness) => {
+        this.attributesManagerService.thickness.subscribe((thickness: number) => {
             this.currentStrokeWidth = thickness;
         });
         this.attributesManagerService.lineStrokeType.subscribe((strokeType) => {
@@ -66,7 +66,7 @@ export class LineToolService extends AbstractToolService {
         this.attributesManagerService.lineJointType.subscribe((jointType) => {
             this.currentJointType = jointType;
         });
-        this.attributesManagerService.circleJointDiameter.subscribe((circleJointDiameter) => {
+        this.attributesManagerService.circleJointDiameter.subscribe((circleJointDiameter: number) => {
             this.circleJointDiameter = circleJointDiameter;
         });
     }

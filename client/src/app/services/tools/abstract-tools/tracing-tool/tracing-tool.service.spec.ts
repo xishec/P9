@@ -67,8 +67,8 @@ describe('TracingToolService', () => {
         injector = getTestBed();
         service = injector.get(TracingToolService);
 
-        spyOn(service, 'getXPos').and.returnValue(MOCK_X);
-        spyOn(service, 'getYPos').and.returnValue(MOCK_Y);
+        spyOn<any>(service, 'getXPos').and.returnValue(MOCK_X);
+        spyOn<any>(service, 'getYPos').and.returnValue(MOCK_Y);
 
         rendererMock = injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
         const drawStackMock = injector.get<DrawStackService>(DrawStackService as Type<DrawStackService>);
@@ -84,9 +84,9 @@ describe('TracingToolService', () => {
     });
 
     it('when onMouseDown isDrawing should be true', () => {
-        spyOn(service, 'createSVGWrapper').and.returnValue();
-        spyOn(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
-        spyOn(service, 'createSVGPath').and.returnValue();
+        spyOn<any>(service, 'createSVGWrapper');
+        spyOn<any>(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
+        spyOn<any>(service, 'createSVGPath');
 
         service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
 
@@ -94,9 +94,9 @@ describe('TracingToolService', () => {
     });
 
     it('when onMouseDown currentPath contain M and mouse position', () => {
-        spyOn(service, 'createSVGWrapper').and.returnValue();
-        spyOn(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
-        spyOn(service, 'createSVGPath').and.returnValue();
+        spyOn<any>(service, 'createSVGWrapper');
+        spyOn<any>(service, 'createSVGCircle').and.returnValue((null as unknown) as SVGCircleElement);
+        spyOn<any>(service, 'createSVGPath');
 
         service.onMouseDown(MOCK_LEFT_MOUSE_BUTTON_CLICK);
 
@@ -113,8 +113,8 @@ describe('TracingToolService', () => {
 
     it('when onMouseMove if isDrawing currentPath contain L and mouse position', () => {
         spyOn(service, 'getIsDrawing').and.returnValue(true);
-        spyOn(service, 'updateSVGPath').and.returnValue();
-        spyOn(service, 'updatePreviewCircle').and.returnValue();
+        spyOn<any>(service, 'updateSVGPath');
+        spyOn<any>(service, 'updatePreviewCircle');
 
         service.onMouseMove(MOCK_LEFT_MOUSE_BUTTON_CLICK);
 
@@ -138,31 +138,31 @@ describe('TracingToolService', () => {
     });
 
     it('when createSVGWrapper is called renderer.setAttribute is called before appendChild', () => {
-        service.createSVGWrapper();
+        service[`createSVGWrapper`]();
 
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);
     });
 
     it('when updatePreviewCircle then renderer.setAttribute is called twice', () => {
-        service.updatePreviewCircle(MOCK_X, MOCK_Y);
+        service[`updatePreviewCircle`](MOCK_X, MOCK_Y);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(2);
     });
 
     it('when updateSVGPath then renderer.setAttribute is called', () => {
-        service.updateSVGPath();
+        service[`updateSVGPath`]();
 
         expect(spyOnSetAttribute).toHaveBeenCalled();
     });
 
     it('when createSVGCircle setAttribute is called 5 times', () => {
-        service.createSVGCircle(MOCK_X, MOCK_Y);
+        service[`createSVGCircle`](MOCK_X, MOCK_Y);
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(5);
     });
 
     it('when createSVGPath then setAttribute is called 4 times and before appendChild', () => {
-        service.createSVGPath();
+        service[`createSVGPath`]();
 
         expect(spyOnSetAttribute).toHaveBeenCalledTimes(4);
         expect(spyOnSetAttribute).toHaveBeenCalledBefore(spyOnAppendChild);

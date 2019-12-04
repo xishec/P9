@@ -101,14 +101,14 @@ export class WorkZoneComponent implements OnInit {
             this.setRectangleBackgroundStyle();
         });
 
-        this.gridToolService.currentState.subscribe((state: boolean) => {
+        this.gridToolService.state.subscribe((state: boolean) => {
             this.gridIsActive = state;
         });
 
-        this.gridToolService.currentSize.subscribe((size: number) => {
+        this.gridToolService.size.subscribe((size: number) => {
             this.gridSize = size;
         });
-        this.gridToolService.currentOpacity.subscribe((opacity: number) => {
+        this.gridToolService.opacity.subscribe((opacity: number) => {
             this.gridOpacity = opacity;
         });
 
