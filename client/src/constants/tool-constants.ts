@@ -43,6 +43,13 @@ enum PREVIEW_RECTANGLE_ATTRIBUTES  {
     Fill_Opacity = '0.3',
 }
 
+enum TEXT_PREVIEW_BOX_ATTRIBUTES {
+    Stroke_Color = 'black',
+    Stroke_Width = '1',
+    Stroke_Dasharray = '5 5',
+    Fill_Color = 'none',
+}
+
 const NO_STAMP = '';
 const STAMP_BASE_WIDTH = 50;
 const STAMP_BASE_HEIGHT = 50;
@@ -570,4 +577,5 @@ export {
     SELECTION_BOX_CONTROL_POINT_CURSOR_STYLES,
     CURSOR_STYLES,
     PREVIEW_RECTANGLE_ATTRIBUTES,
+    TEXT_PREVIEW_BOX_ATTRIBUTES,
 };
