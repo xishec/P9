@@ -275,7 +275,7 @@ describe('OpenFileModalWindowComponent', () => {
 
         expect(component.fileToLoad).toEqual(null);
         expect(component.localFileName).toEqual('');
-        expect(SPY).toHaveBeenCalledWith("Le fichier choisi n'est pas valide, veuillez réessayer.", 'OK', {
+        expect(SPY).toHaveBeenCalledWith('Le fichier choisi n\'est pas valide, veuillez réessayer.', 'OK', {
             duration: SNACKBAR_DURATION,
         });
     });
