@@ -105,7 +105,6 @@
                             color="warn"
                             type="button"
                             (click)="onDelete()"
-                            *ngIf="selectedOption !== ''"
                             disabled="{{ this.openFileModalForm.value.selectedDrawing[0] === undefined }}"
                         >
                             Supprimer
