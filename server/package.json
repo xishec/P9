@@ -71,7 +71,7 @@
         "@types/sinon": "^7.0.3",
         "chai": "~4.2.0",
         "concurrently": "^4.0.1",
-        "mocha": "~6.2.0",
+        "mocha": "~10.2.0",
         "nyc": "^14.1.1",
         "rimraf": "3.0.0",
         "sinon": "^7.5.0",
