@@ -45,7 +45,7 @@
         "cors": "2.8.5",
         "debug": "^4.1.1",
         "express": "~4.17.1",
-        "firebase-admin": "^8.8.0",
+        "firebase-admin": "^11.4.1",
         "inversify": "^5.0.1",
         "mongodb": "^3.3.0",
         "mongoose": "^5.7.9",
